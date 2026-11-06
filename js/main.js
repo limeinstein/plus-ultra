@@ -320,10 +320,13 @@
   Game.checkTitle = function () {
     var S = Game.state; if (!S || !S.player) return;
     var t = R.fameTitle(S.player.fame);
-    if (!S.titleSeen) { S.titleSeen = t; return; }
+    if (!S.titleSeen) { S.titleSeen = S.titleBest = t; return; }
     if (t === S.titleSeen) return;
     var titles = G.BALANCE.fameTitleNames;
-    if (titles.indexOf(t) > titles.indexOf(S.titleSeen)) {
+    // 한 번 오른 칭호는 기억한다(titleBest) — 명성이 경계 아래로 잠깐 내려갔다 다시 넘어도 같은 축하를 두 번 하지 않는다 (2026-11-06 연출 QA #B)
+    if (!S.titleBest || titles.indexOf(S.titleBest) < titles.indexOf(S.titleSeen)) S.titleBest = S.titleSeen;
+    if (titles.indexOf(t) > titles.indexOf(S.titleBest)) {
+      S.titleBest = t;
       UI.toast('명성이 드높아졌다 — 이제 세상은 제독을 「' + t + '」' + U.jx(t, '이라/라') + ' 부른다!', 'laurel', 6500);
       G.State.log('「' + t + '」' + U.jx(t, '으로/로') + ' 불리게 되었다. (명성 ' + U.num(S.player.fame) + ')');
       if (G.Audio) G.Audio.sfx('discover');

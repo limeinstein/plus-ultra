@@ -55,25 +55,25 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       s = fresh(1686, 9, 1, 'london'); picks = ['gold', 'mediate']; join = false; await NT.check();
       out.prin2 = { fund: s.newton.fund, hooke: s.newton.hooke, dis: asks[1].o.includes('mediate!'), gold: 30000 - s.player.gold, hired: hired() };
       // ③ 주식의 나락
-      out.price = [17200101, 17200410, 17200624, 17200915, 17201231, 17210601].map(t => NT.price(t));
-      s = fresh(1720, 1, 10, 'london'); picks = ['buy10000']; await NT.check();
+      out.price = [16900101, 16900410, 16900624, 16900915, 16901231, 16910601].map(t => NT.price(t));
+      s = fresh(1690, 1, 10, 'london'); picks = ['buy10000']; await NT.check();
       const B = s.newton.bubble; out.buy = { shares: +B.shares.toFixed(2), want: +(9700 / NT.price()).toFixed(2), cost: B.cost, gold: s.player.gold, again: NT.pending() };
-      s.portVisit++; s.date = { y: 1720, m: 6, d: 24 }; picks = ['sell']; await NT.check();
+      s.portVisit++; s.date = { y: 1690, m: 6, d: 24 }; picks = ['sell']; await NT.check();
       out.sell = { gold: s.player.gold, shares: B.shares, gain: B.sold };
-      s.portVisit++; s.date = { y: 1720, m: 7, d: 1 }; s.player.sk.speech = 3; picks = ['buy10000']; asks.length = 0; await NT.check();
+      s.portVisit++; s.date = { y: 1690, m: 7, d: 1 }; s.player.sk.speech = 3; picks = ['buy10000']; asks.length = 0; await NT.check();
       out.top = { cap: asks[0].o, shares: +B.shares.toFixed(2) };
       s.portVisit++; picks = ['warn']; await NT.check(); out.warn = { ok: s.newton.bubbleNewtonOk, buyDis: asks[asks.length - 1].o.filter(x => /^buy/.test(x)).every(x => x.endsWith('!')) };
       out.html = NT.html().replace(/<[^>]+>/g, ' ');
-      s.portVisit++; s.date = { y: 1720, m: 10, d: 1 }; picks = ['watch']; join = true; said.length = 0; await NT.check();
+      s.portVisit++; s.date = { y: 1690, m: 10, d: 1 }; picks = ['watch']; join = true; said.length = 0; await NT.check();
       out.fall = { quote: said.some(t => /광기는 계산할 수 없/.test(t)), hired: hired(), shares: +B.shares.toFixed(2) };
-      s.portVisit++; s.date = { y: 1721, m: 3, d: 1 }; out.lateOpen = NT.pending(); const sold0 = B.sold; picks = ['sell']; await NT.check(); out.late = { gain: B.sold - sold0, shares: B.shares, gold: s.player.gold };
+      s.portVisit++; s.date = { y: 1691, m: 3, d: 1 }; out.lateOpen = NT.pending(); const sold0 = B.sold; picks = ['sell']; await NT.check(); out.late = { gain: B.sold - sold0, shares: B.shares, gold: s.player.gold };
       // 소식 — 붕괴(말린 덕에 절반) · 죽음 (동료였으면 배를 떠난다)
-      s.date = { y: 1720, m: 9, d: 19 }; s.newton.told.crash = 0; delete s.newton.told.crash; const n2 = []; for (let i = 0; i < 3; i++) { s.date = G.U.addDays(s.date, 1); NT.daily().forEach(x => n2.push(x.text)); }
+      s.date = { y: 1690, m: 9, d: 19 }; s.newton.told.crash = 0; delete s.newton.told.crash; const n2 = []; for (let i = 0; i < 3; i++) { s.date = G.U.addDays(s.date, 1); NT.daily().forEach(x => n2.push(x.text)); }
       out.crash = n2.find(t => /남해 회사의 붕괴/.test(t)) || '';
       s.date = { y: 1727, m: 3, d: 19 }; NT.daily(); s.date = { y: 1727, m: 3, d: 20 }; const n3 = NT.daily().map(x => x.text);
       out.death = { gone: !hired() && !!s.flags.gone_newton, news: n3.some(t => /뉴턴의 죽음/.test(t) && /배/.test(t)) };
-      // 미뤘다가 1720년 9월 20일 뒤 런던에서 다시
-      s = fresh(1721, 1, 1, 'london'); s.newton = { met: 1, told: {}, bubble: { shares: 0, cost: 0 } }; join = true; out.reoffer = NT.pending(); await NT.check(); out.reHired = hired();
+      // 미뤘다가 1690년 9월 20일 뒤 런던에서 다시
+      s = fresh(1691, 1, 1, 'london'); s.newton = { met: 1, told: {}, bubble: { shares: 0, cost: 0 } }; join = true; out.reoffer = NT.pending(); await NT.check(); out.reHired = hired();
       // 옛 저장(1750): 소식 몰아서 없음
       s = fresh(1750, 1, 1, 'london'); NT.daily(); s.newton.met = 1; out.old = NT.daily().length;
       return out;
@@ -92,10 +92,10 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
     ok(r.top.cap.includes('buy10000') && r.warn.ok && r.warn.buyDis, '들인 돈은 합쳐 10,000까지 · 웅변 3으로 뉴턴을 말린다');
     ok(/남해 회사 주식/.test(r.html), '수첩에 가진 주식과 값');
     ok(r.fall.quote && r.fall.hired, '가을의 나락: 「사람들의 광기는 계산할 수 없다」 · 무너진 뒤 동료 제안');
-    ok(r.lateOpen && r.late.shares === 0 && r.late.gain < 0, '1720년이 지나도 들고 있으면 150에 판다 — 손해 ' + r.late.gain);
+    ok(r.lateOpen && r.late.shares === 0 && r.late.gain < 0, '1690년이 지나도 들고 있으면 150에 판다 — 손해 ' + r.late.gain);
     ok(/절반/.test(r.crash), '붕괴 소식: 말린 덕에 뉴턴이 절반만 잃었다');
     ok(r.death.gone && r.death.news, '1727.3.20 뉴턴이 세상을 떠나 배를 떠난다');
-    ok(r.reoffer && r.reHired, '미뤘으면 1720년 9월 20일 뒤 런던에서 다시 묻는다');
+    ok(r.reoffer && r.reHired, '미뤘으면 1690년 9월 20일 뒤 런던에서 다시 묻는다');
     ok(r.old === 0, '옛 저장은 지난 소식을 몰아서 알리지 않는다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
     console.log(fail ? '\n실패 ' + fail : '\n통과');

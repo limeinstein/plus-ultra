@@ -449,5 +449,19 @@
    "title": "시험 하네스 쪽 발견",
    "text": "forcelib F.base 가 1600 저장의 로미오와 줄리엣 2부(s.romeo)를 지우지 않아 베네치아·밀라노 입항마다 끼어든다 · F.enter 는 입항 검사(토르데시야스)를 건너뛴다 · 왕궁 왕명 창에서 「다른 왕명을 본다」를 계속 눌러 멈춤 — tools/qa_event_shots/forcelib2.js 에서 우회."
   }
+ ],
+ "fixed": [
+  {
+   "item": 4,
+   "what": "#A 장면 그림·대화 중에는 알림을 띄우지 않고 접었다가 끝나면 다시 (js/ui/ui.js foldNotices · picQuietMs)"
+  },
+  {
+   "item": "참고 2",
+   "what": "#B 큰 알림 같은 말 10초 안 겹침 막기 · titleBest"
+  },
+  {
+   "item": 20,
+   "what": "뉴턴 남해 회사·재제안 1720 → 1690"
+  }
  ]
 }

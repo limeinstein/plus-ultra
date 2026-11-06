@@ -7,13 +7,13 @@
         인쇄비를 대거나(printFund) · 『물고기의 역사』 스무 권을 사 주거나(fishPrice) · 지나친다. 후크가 「거리의 제곱에 반비례」는 내 생각이라며 끼어든다 —
         웅변 2 이상이면 제독이 두 사람을 달래 셋째 권 「세계의 체계」가 빠지지 않게 한다 (아니면 핼리가 달랜다). 끝나면 동료 제안.
         돈을 댔으면 1687.7.5 책이 나오는 날 초판(principia)이 제독에게 온다.
-   ■ ③ 주식의 나락 (1720년, 런던): 남해 회사 주식 값이 날마다 바뀐다(price — 1월 128 → 6월 24일 1,050 → 12월 150).
-        런던에 들어설 때마다 한 번 사거나(stake, 들인 돈 합 stakeMax까지) 모두 판다(수수료 fee). 1720년이 지나도 들고 있으면 150에 판다.
+   ■ ③ 주식의 나락 (1690년, 런던): 남해 회사 주식 값이 날마다 바뀐다(price — 1월 128 → 6월 24일 1,050 → 12월 150).
+        런던에 들어설 때마다 한 번 사거나(stake, 들인 돈 합 stakeMax까지) 모두 판다(수수료 fee). 1690년이 지나도 들고 있으면 150에 판다.
         뉴턴: 봄에 이익을 보고 팔았다가, 여름 꼭대기에서 전 재산을 다시 사고, 가을에 무너진다 —
         「나는 천체의 움직임은 계산할 수 있지만, 사람들의 광기는 계산할 수 없다」. 6~8월에 웅변 3으로 말리면 절반만 잃는다(소식이 달라진다). 9월 20일 뒤에는 동료 제안.
-   ■ 동료: 위 장면이 끝날 때마다 묻는다. 미루면 1720년 9월 20일부터 런던에서 reOffer일마다 다시. 동료여도 ②③은 런던에서 그대로 일어난다(그 자리에 함께 있다).
+   ■ 동료: 위 장면이 끝날 때마다 묻는다. 미루면 1690년 9월 20일부터 런던에서 reOffer일마다 다시. 동료여도 ②③은 런던에서 그대로 일어난다(그 자리에 함께 있다).
         1727.3.20 뉴턴이 세상을 떠난다 — 동료였으면 배를 떠난다.
-   ■ 소식 (만난 사람만): 『프린키피아』(1687.7.5) · 조폐국장(1699) · 왕립 학회장(1703) · 기사 작위(1705) · 경도법(1714) · 남해 회사의 붕괴(1720.9) · 뉴턴의 죽음(1727.3)
+   ■ 소식 (만난 사람만): 『프린키피아』(1687.7.5) · 조폐국장(1699) · 왕립 학회장(1703) · 기사 작위(1705) · 경도법(1714) · 남해 회사의 붕괴(1690.9) · 뉴턴의 죽음(1727.3)
    ■ 장면 그림 (없으면 건너뜀): images/legend-events/nt_*.webp — images/legend-events/NEWTON_PROMPT.md
    ■ 저장: s.newton = { met, apple, moon, prin, fund: 'gold'|'fish', hooke, got, bubble: {shares, cost, lastVisit, newtonWarned}, offerAt, told: {} } */
 (function (G) {
@@ -25,7 +25,7 @@
   function today() { return U.dateNum(S().date); }
   function inR(a, b) { var t = today(); return t >= a && t <= b; }
   var NEWS = ['principia', 'mint', 'royal', 'knight', 'longitude', 'crash', 'death'];
-  var NEWS_AT = { principia: 16870705, mint: 16991223, royal: 17031130, knight: 17050416, longitude: 17140708, crash: 17200920, death: 17270320 };
+  var NEWS_AT = { principia: 16870705, mint: 16991223, royal: 17031130, knight: 17050416, longitude: 17140708, crash: 16900920, death: 17270320 };
   function st() {
     var s = S(); if (!s) return null;
     if (!s.newton) { s.newton = { told: {} }; NEWS.forEach(function (k) { if (U.dateNum(s.date) > NEWS_AT[k]) s.newton.told[k] = 1; }); }
@@ -65,7 +65,7 @@
   function offerOpen() {
     var b = st(), t = today();
     if (!b || !b.met || row() || gone() || cityNow() !== K().london) return false;
-    if (t < 17200920 || t >= K().death) return false;
+    if (t < 16900920 || t >= K().death) return false;
     return !b.offerAt || U.dayIndex(S().date) - dayIdx(b.offerAt) >= K().reOffer;
   }
   function dayIdx(n) { return U.dayIndex({ y: Math.floor(n / 10000), m: Math.floor(n / 100) % 100, d: n % 100 }); }
@@ -163,7 +163,7 @@
     refresh();
   }
 
-  // ================================================================ ③ 주식의 나락 (1720, 런던)
+  // ================================================================ ③ 주식의 나락 (1690, 런던)
   NT.price = function (t) {
     var P = K().price; t = t || today();
     if (t <= P[0][0]) return P[0][1];
@@ -174,7 +174,7 @@
     }
     return P[P.length - 1][1];
   };
-  function phase() { var t = today(); return t < 17200501 ? 'rise' : t < 17200901 ? 'top' : 'fall'; }
+  function phase() { var t = today(); return t < 16900501 ? 'rise' : t < 16900901 ? 'top' : 'fall'; }
   function bubbleOpen() {
     var b = st(), s = S(); if (!b || cityNow() !== K().london) return false;
     var B = b.bubble, t = today();
@@ -187,11 +187,11 @@
     var b = st(), s = S(), B = b.bubble, p = NT.price(), ph = phase(), first = !b.bubbleSeen;
     b.met = 1; b.bubbleSeen = 1; B.lastVisit = s.portVisit;
     var late = today() > K().bubbleTo;
-    await withPic('nt_bubble', '익스체인지 앨리 (1720)', function () { return play([
+    await withPic('nt_bubble', '익스체인지 앨리 (1690)', function () { return play([
       [null, late ? '익스체인지 앨리의 커피집들은 이제 조용하다. 남해 회사 주식은 한 주 금화 ' + U.num(p) + '닢 언저리에서 꿈쩍도 않는다.' :
         '런던 익스체인지 앨리. 좁은 골목의 커피집마다 사람들이 미어터진다. 공작부인도, 하녀도, 목사도 「남해 회사」를 외친다. 칠판에 적힌 값 — 한 주 금화 ' + U.num(p) + '닢.'],
       first && !late ? ['broker', '남해 회사요, 선장! 남아메리카 무역을 독차지한 회사 — 은광과 노예와 설탕이 쏟아져 들어올 거요! 1월에 백이십팔이던 것이 보시오, 지금 ' + U.num(p) + '! 오늘 사면 내일 부자요!'] : null,
-      !late && ph === 'rise' ? ['newton', (row() ? '(곁에서 낮게) ' : '(커피집 구석의 백발 노인 — 왕립 조폐국장 뉴턴이다) ') + '나도 조금 샀다가 벌써 팔았소. 이익을 꽤 남겼지. 이 값은 셈이 맞지 않소. 회사가 실제로 버는 돈으로는 이 값의 반의반도 안 나오오.'] : null,
+      !late && ph === 'rise' ? ['newton', (row() ? '(곁에서 낮게) ' : '(커피집 구석에 긴 가발을 쓴 사내 — 『프린키피아』의 뉴턴이다) ') + '나도 조금 샀다가 벌써 팔았소. 이익을 꽤 남겼지. 이 값은 셈이 맞지 않소. 회사가 실제로 버는 돈으로는 이 값의 반의반도 안 나오오.'] : null,
       !late && ph === 'top' ? ['newton', (row() ? '(곁에서 초조하게) ' : '(커피집 구석의 뉴턴이 창백한 얼굴로 증서를 쥐고 있다) ') + '…내가 판 뒤로 값이 세 배가 됐소. 내 조카도, 하인도 부자가 됐는데 나만 바보가 됐지. 그래서 다시 샀소. 이번엔… 거의 전 재산을.'] : null,
       !late && ph === 'fall' ? ['newton', (row() ? '(곁에서 증서를 구기며) ' : '(텅 빈 커피집 구석에 뉴턴이 무너지듯 앉아 있다) ') + '나는 천체의 움직임은 계산할 수 있소. 하지만 사람들의 광기는 계산할 수 없었소. …이만 파운드요. 평생 모은 것이.'] : null
     ]); });
@@ -223,7 +223,7 @@
       else await play([['newton', '선장, 당신은 바다를 알지 셈은 모르오. 이 값은 아직 오르오. 모두가 그렇게 말하잖소.']]);
     }
     // 무너진 뒤에는 동료 제안
-    if (!late && phase() === 'fall' && today() >= 17200920 && !row() && !gone()) await offer('…선장. 이 도시에 있으면 숨이 막히오. 남은 날은 사람이 아니라 별과 바다를 셈하고 싶소. 경도를 재는 일 — 의회가 상금을 걸었지만 아무도 못 푼 문제요. 당신 배에서라면 달의 표를 바다 위에서 맞춰 볼 수 있을 거요. 늙은이 하나 태워 주겠소?');
+    if (!late && phase() === 'fall' && today() >= 16900920 && !row() && !gone()) await offer('…선장. 이 도시에 있으면 숨이 막히오. 이제부터는 사람이 아니라 별과 바다를 셈하고 싶소. 경도를 재는 일 — 뱃사람이라면 누구나 바라지만 아직 아무도 못 푼 문제요. 당신 배에서라면 달의 표를 바다 위에서 맞춰 볼 수 있을 거요. 셈쟁이 학자 하나 태워 주겠소?');
     refresh();
   }
 

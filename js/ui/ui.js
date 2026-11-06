@@ -197,7 +197,7 @@
     toastEl = U.el('div', 'toasts'); root.appendChild(toastEl);
     fadeEl = U.el('div', 'fade-black'); root.appendChild(fadeEl);
     // 창이 열리고 닫히거나 바다·도시가 바뀌면 떠 있는 알림도 그 장면의 자리로 옮긴다 (알림 정리 2026-11-01)
-    if (window.MutationObserver) { var zmo = new MutationObserver(function () { if (UI.noticeZone && toastEl.children.length) UI.noticeZone(); }); zmo.observe(modalRoot, { childList: true }); zmo.observe(root, { attributes: true, attributeFilter: ['class'] }); zmo.observe(toastEl, { childList: true }); }
+    if (window.MutationObserver) { var zmo = new MutationObserver(function () { if (UI.foldNotices) UI.foldNotices(); if (UI.noticeZone && toastEl.children.length) UI.noticeZone(); }); zmo.observe(modalRoot, { childList: true }); zmo.observe(root, { attributes: true, attributeFilter: ['class'] }); zmo.observe(toastEl, { childList: true }); }
     if (G.HudPin) G.HudPin.pin(toastEl, 'notices', '알림', { reset: false, layout: noticeLayout, enabled: noticeMovable });
     if (window.ResizeObserver) { var nro = new ResizeObserver(function () { if (toastEl.children.length) setZone(); }); nro.observe(root); nro.observe(toastEl); }
     // 상태판을 펼치거나 접으면 알림도 그 아래의 빈 공간을 다시 찾는다.
@@ -431,6 +431,7 @@
     setZone();
     var lead = icon && typeof icon === 'object' ? (icon.src ? '<img class="toast-pic" src="' + icon.src + '" alt="">' : G.icon(icon.icon || 'chest')) : G.icon(icon || 'rose');
     var t = U.el('div', 'toast wood t-' + tier, lead + '<div class="tt">' + text + '</div>');
+    t._n = { text: text, icon: icon, ms: ms, tier: tier, key: noticeKey(text) };
     var gone = false;
     function close() { if (gone) return; gone = true; t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 520); }
     t.addEventListener('click', function (e) { e.stopPropagation(); close(); });
@@ -443,12 +444,37 @@
     if (toastEl.scrollHeight > toastEl.clientHeight) toastEl.scrollTop = toastEl.scrollHeight;   // 공간이 작아도 새 소식부터 읽을 수 있게
     setTimeout(close, lifeMs(text, ms));
   }
-  var flushTimer = null;
+  /* 장면 그림(가족·전설 사건의 액자 그림 · 자택 장면 — #ui.homeart-on)이 떠 있는 동안에도 알림을 띄우지 않는다.
+     그림 왼쪽 위와 제독 얼굴을 가리던 것 (2026-11-06 연출 QA #A). 대화·그림이 시작될 때 이미 떠 있던 알림도 접어 두었다가(foldNotices)
+     끝나면 다시 띄운다. 그림만 남고 대화·창이 없는 채로 오래(picQuietMs) 있으면 그때는 띄운다 — 그림을 걷지 않은 사건이 알림을 영영 막지 않게. */
+  function picOn() { return !!(root && root.classList.contains('homeart-on')); }
+  function busyNow() { return talkingNow() || picOn(); }
+  function noticeKey(text) { return String(text).replace(/<[^>]+>/g, '').replace(/[0-9,.]+/g, '#').slice(0, 80); }
+  var wasTalk = false, wasPic = false;
+  /** 대화나 장면 그림이 막 시작될 때(꺼짐 → 켜짐) 떠 있던 알림을 접는다 — 그림만 오래 남아 다시 띄운 알림은 접지 않는다 */
+  function foldNotices() {
+    var tk = talkingNow(), pc = picOn(), go = (tk && !wasTalk) || (pc && !wasPic);
+    wasTalk = tk; wasPic = pc;
+    if (!toastEl || !go) return;
+    var live = [].filter.call(toastEl.children, function (x) { return x._n && !x.classList.contains('out'); });
+    if (!live.length) return;
+    live.forEach(function (x) {
+      if (!held.some(function (h) { return noticeKey(h.text) === x._n.key; })) { held.push(x._n); unseen++; }
+      if (x.parentNode) x.parentNode.removeChild(x);
+    });
+    badge(); flushLater();
+  }
+  UI.foldNotices = foldNotices;
+  var flushTimer = null, quietTicks = 0;
   function flushLater() {
     if (flushTimer) return;
+    quietTicks = 0;
     flushTimer = setInterval(function () {
       if (!held.length) { clearInterval(flushTimer); flushTimer = null; return; }
-      if (talkingNow()) return;
+      // 한마디와 다음 한마디 사이의 짧은 틈에 튀어나왔다 다시 접히지 않게, 조용한 때가 이어져야 띄운다
+      if (talkingNow() || (root && root.querySelector('.modal-back > .win') && picOn())) { quietTicks = 0; return; }
+      quietTicks++;
+      if (quietTicks < (picOn() ? Math.ceil((NK().picQuietMs || 5000) / 400) : 2)) return;
       // 대화가 끝났다 — 최근 것부터 셋까지 (큰 일 먼저), 나머지는 「지난 소식」에
       var list = held.splice(0), pick = list.filter(function (x) { return x.tier === 'big'; }).concat(list.filter(function (x) { return x.tier !== 'big'; })).slice(0, 3);
       pick.forEach(function (x, i) { setTimeout(function () { showToast(x.text, x.icon, x.ms, x.tier); }, i * 350); });
@@ -465,10 +491,14 @@
     if (tier === 'state' || tier === 'quiet') return;
     if (tier === 'line' && NS().noticeHideLine) return;   // 설정: 여느 소식은 「지난 소식」에만
     // 같은 말(숫자만 다른 것 포함)이 1분 안에 또 오면 다시 띄우지 않는다
-    var key = plain.replace(/[0-9,.]+/g, '#').slice(0, 80), now = Date.now();
+    var key = noticeKey(text), now = Date.now();
     if (seenAt[key] && now - seenAt[key] < (NK().repeatMs || 60000) && tier !== 'big') return;
+    // 큰 일도 똑같은 말이 지금 떠 있거나 모아 둔 데 있거나 방금(bigRepeatMs) 띄웠으면 겹쳐 띄우지 않는다 (2026-11-06 연출 QA #B — 「명성이 드높아졌다」 두 장)
+    if (tier === 'big' && ((seenAt[key] && now - seenAt[key] < (NK().bigRepeatMs || 10000)) ||
+        held.some(function (h) { return noticeKey(h.text) === key; }) ||
+        [].some.call(toastEl ? toastEl.children : [], function (x) { return x._n && x._n.key === key && !x.classList.contains('out'); }))) return;
     seenAt[key] = now;
-    if (talkingNow()) { held.push({ text: text, icon: icon, ms: ms, tier: tier }); unseen++; badge(); flushLater(); return; }
+    if (busyNow()) { held.push({ text: text, icon: icon, ms: ms, tier: tier }); unseen++; badge(); flushLater(); return; }
     showToast(text, icon, ms, tier);
   };
   /** 지난 소식 (최근 것부터) — 윗줄 왼쪽 나침반 단추 */

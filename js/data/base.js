@@ -568,7 +568,7 @@
     // 알림(갈색 쪽지 — js/ui/ui.js UI.toast): 보이는 시간 = baseMs + 글자 수×perChar (minMs~maxMs) · 같은 말 다시 띄우지 않는 시간 · 「지난 소식」에 남기는 수
     // 민족 발견물에서 나서는 동료 (js/systems/folkjoin.js): 민족 발견마다 chance로 · 품삯은 철새 셈의 payK배
     folkJoin: { chance: 0.03, payK: 0.8 },
-    notice: { baseMs: 1800, perChar: 60, minMs: 2500, maxMs: 8000, repeatMs: 60000, keep: 40 },
+    notice: { baseMs: 1800, perChar: 60, minMs: 2500, maxMs: 8000, repeatMs: 60000, bigRepeatMs: 10000, picQuietMs: 5000, keep: 40 },
     // 대항해시대의 끝 (js/systems/eraend.js): 이날이 되면 세월이 멈추고 나레이션과 「항해의 끝」 결산으로 게임이 끝난다
     eraEnd: { y: 1700, m: 1, d: 1 },
     // 야영지에서 배 고치기 (js/scenes/land.js camp): 배가 보이는 곳(landPack.near)에서, 자재가 있을 때.
