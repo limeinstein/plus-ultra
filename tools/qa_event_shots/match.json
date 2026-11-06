@@ -1,0 +1,2586 @@
+{
+ "events": [
+  {
+   "id": "globe_tale",
+   "name": "셰익스피어 — 폭풍의 이야기 (템페스트)",
+   "when": "1610-01-01 ~ 1611-10-31",
+   "where": "London (city 38) on city entry",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "셰익스피어에게 바다의 폭풍",
+    "decline: 셰익스피어"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "globe_anne_fire",
+   "name": "앤 해서웨이 · 글로브 극장의 불",
+   "when": "1613-06-01 ~ 1613-06-29 (29-day window); fire scene 1613-06-29 (passDays to 6/28 if \"stay\")",
+   "where": "London (38) on city entry",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "글로브 극장이 불탄 날",
+    "declined stay:",
+    "join: 앤 해서웨이가 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "globe_songs",
+   "name": "갑판 위의 무대 (셰익스피어·앤 노래)",
+   "when": "any day after 1613-06-29 join",
+   "where": "at sea",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "갑판 위의 무대 — 피로"
+   ],
+   "ui_only": true
+  },
+  {
+   "id": "globe_news",
+   "name": "글로브 소식 (템페스트·불·새 글로브·장례·첫 전집)",
+   "when": "1611-11-01, 1613-06-30, 1614-06-01, 1616-04-23, 1623-11-08",
+   "where": "anywhere (news)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "화이트홀 궁전에서 셰익스피",
+    "글로브 극장이 한 시간 만",
+    "불탄 자리에 글로브 극장이",
+    "헤밍스와 콘델이 그의 극 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "sky_kep",
+   "name": "케플러와 나침반 (하늘을 재는 사람들 ②)",
+   "when": "offer 1600-02-01 ~ 1608-12-31; deadline 2 years",
+   "where": "Prague (53, inland) — or anywhere if Kepler aboard; then compass readings in 3 of 4 seas (G.BALANCE.sky.seas), back to Prague",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "케플러의 부탁 — 네 바다",
+    "reading:",
+    "done: 프라하에서 케플"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "sky_gal",
+   "name": "갈릴레이의 망원경 (별의 전령 ③)",
+   "when": "offer 1609-07-01 ~ 1610-12-31; deadline 2 years",
+   "where": "Venice (29); Florence (30) from 1610-09-01; or anywhere if Galileo aboard; test at sea ≥4 days from port; report Venice/Florence",
+   "status": "ok",
+   "hits": {
+    "1": 16110321
+   },
+   "alts": [
+    "먼 바다에서 목성의 달을 ",
+    "test: 바다에서 갈릴레",
+    "done: 갈릴레이에게 바"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "sky_trial",
+   "name": "갈릴레이의 재판 (④)",
+   "when": "1633-04-12 ~ 1633-06-22",
+   "where": "Rome (33, inland)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "로마에서 갈릴레이의 재판을"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "sky_ms",
+   "name": "『새로운 두 과학』 원고 (④)",
+   "when": "offer 1636-01-01 ~ 1638-06-30; deadline 540 days",
+   "where": "Florence(30)/Venice(29) → Amsterdam (24)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "갈릴레이의 『새로운 두 과",
+    "done: 암스테르담의 엘"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "sky_news",
+   "name": "하늘 소식 (새 천문학·금서·제3법칙·루돌프 표·케플러/갈릴레이의 죽음·뉴턴 탄생)",
+   "when": "1609-09-01 … 1643-01-04",
+   "where": "news",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "케플러가 『새 천문학』을 ",
+    "케플러의 「루돌프 표」가 ",
+    "피렌체에서 갈릴레이의 『두"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "huguenot_call",
+   "name": "위그노 내전 — 국왕의 전령 (라로셸 포위)",
+   "when": "year ≥ 1562, no upper bound (1620+ besieger = 리슐리외)",
+   "where": "any city owned by 프랑스 (R.cityOwner) on entry",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "국왕의 전령이 총사 넷을 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "huguenot_rochelle",
+   "name": "라로셸 앞바다 — 왕의 편 / 굶주린 성 / 화평",
+   "when": "after call; any year",
+   "where": "sea box lon -1.8~-1.0, lat 45.9~46.4 (La Rochelle)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "라로셸 포위 —",
+    "retreat: 라로셸 앞"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "nzinga_emb",
+   "name": "은징가 ① 앉을 자리 없는 방",
+   "when": "1621-10-01 ~ 1622-06-30",
+   "where": "Luanda (city 100 「르완다」) on entry",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "루안다 총독 관저에서"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "nzinga_guns",
+   "name": "은징가 ② 킨동가의 섬 (키푼지의 총)",
+   "when": "1624-04-10 ~ 1626-06-30",
+   "where": "Luanda (100)",
+   "status": "ok",
+   "hits": {
+    "5": 16471201
+   },
+   "alts": [
+    "은징가의 동생 키푼지"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "nzinga_court",
+   "name": "은징가 ③ 마탐바의 왕",
+   "when": "1632-01-01 ~ 1641-08-25",
+   "where": "Luanda (100) → kilombo scene",
+   "status": "ok",
+   "hits": {
+    "1": 16631217,
+    "2": 16631217,
+    "3": 16631217,
+    "4": 16631217,
+    "5": 16410328
+   },
+   "alts": [
+    "마탐바의"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "nzinga_kombi",
+   "name": "은징가 ④ 콤비 전투",
+   "when": "1647-09-01 ~ 1647-10-31",
+   "where": "Luanda (100, Dutch-owned then)",
+   "status": "ok",
+   "hits": {},
+   "alts": [],
+   "ui_only": false
+  },
+  {
+   "id": "nzinga_sa",
+   "name": "은징가 ⑤ 사의 함대",
+   "when": "1648-08-01 ~ 1648-08-23",
+   "where": "Luanda (100)",
+   "status": "ok",
+   "hits": {
+    "1": 16480824,
+    "2": 16480824,
+    "3": 16480824,
+    "4": 16480824,
+    "5": 16480824
+   },
+   "alts": [
+    "포르투갈 함대가 루안다를 ",
+    "살바도르 코헤이아 드 사의"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "nzinga_ransom",
+   "name": "은징가 ⑥ 캄부의 몸값",
+   "when": "1655-01-01 ~ 1656-10-11",
+   "where": "Luanda (100)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "은징가의 동생 캄부의 몸값"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "nzinga_news",
+   "name": "은징가 소식 (세례·즉위·킨동가·마탐바·네덜란드·콤비·루안다 탈환·강화·죽음)",
+   "when": "1622-07-01 … 1663-12-17",
+   "where": "news",
+   "status": "ok",
+   "hits": {
+    "1": 16311001,
+    "2": 16311001,
+    "3": 16311001,
+    "4": 16311001,
+    "5": 16311001
+   },
+   "alts": [
+    "은징가가 임방갈라 전사들과",
+    "살바도르 코헤이아 드 사의",
+    "마탐바의 왕 은징가가 여든"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "mingfall_night",
+   "name": "명의 멸망 ① 매산의 밤 (숭정제의 편지)",
+   "when": "1644-03-20 ~ 1644-04-24",
+   "where": "Beijing (188, inland, flag X)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "매산의 홰나무 아래에서 숭",
+    "decline: 매산에서 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "mingfall_maid",
+   "name": "명의 멸망 ② 늙은 궁녀",
+   "when": "1644-04-25 ~ 1646-12-31",
+   "where": "Beijing (188)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "늙은 궁녀에게 숭정제의 마",
+    "refuse: 궁녀의 부탁"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "mingfall_deliver",
+   "name": "명의 멸망 ③ 마지막 편지 → 진원원 합류",
+   "when": "1644-04-25 ~ 1646-12-31",
+   "where": "Beijing (188) (or any city if 진원원 already aboard)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "숭정제의 마지막 편지를 진",
+    "배 위에서 진원원에게",
+    "fail: 유종민의 저택 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "mingfall_again",
+   "name": "명의 멸망 ④ 매산 아래 절 (다시 청함)",
+   "when": "≤1646-12-31",
+   "where": "Beijing (188)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "진원원이 동료가 되었다",
+    "제독의 배에 올랐다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "mingfall_news",
+   "name": "명·청 소식 (대순·북경 함락·산해관·자금성의 불·청의 입관·순치제·남경)",
+   "when": "1644-02-08 … 1645-06-08",
+   "where": "news",
+   "status": "ok",
+   "hits": {
+    "1": 16440604,
+    "2": 16440604,
+    "3": 16440604,
+    "4": 16440604,
+    "5": 16440604
+   },
+   "alts": [
+    "이자성이 서둘러 황제의 자",
+    "여섯 살 순치제가",
+    "청군이 양자강을 건너 남경"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "westphalia_oath",
+   "name": "베스트팔렌 ① 뮌스터의 맹세",
+   "when": "1648-03-01 ~ 1648-05-14",
+   "where": "Amsterdam (24)",
+   "status": "ok",
+   "hits": {
+    "1": 16480515,
+    "2": 16480515,
+    "3": 16480515,
+    "4": 16480515,
+    "5": 16480515
+   },
+   "alts": [
+    "뮌스터 시청에서 에스파냐와",
+    "decline: 뮌스터로 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "westphalia_feast",
+   "name": "베스트팔렌 ①' 평화의 종",
+   "when": "1648-05-15 ~ 1648-08-31",
+   "where": "Amsterdam (24)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "여든 해 만의 평화를 알리"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "westphalia_table",
+   "name": "베스트팔렌 ② 1624년의 교회 (페르덴 청원서)",
+   "when": "1648-06-01 ~ 1648-10-23",
+   "where": "Bremen (46)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "페르덴 마을 교회"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "westphalia_news",
+   "name": "베스트팔렌 소식 (뮌스터 조약·맹세·평화의 종·조약·교황의 항의) + 시장 사건 westphaliapeace",
+   "when": "1648-01-30 … 1648-11-26",
+   "where": "news",
+   "status": "ok",
+   "hits": {
+    "1": 16480130,
+    "2": 16480130,
+    "3": 16480130,
+    "4": 16480130,
+    "5": 16480130
+   },
+   "alts": [
+    "베스트팔렌의 뮌스터에서 에",
+    "교황 인노첸시오 10세가"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "glory_o_call",
+   "name": "명예혁명 — 오라녜 공의 부름",
+   "when": "1688-07-10 ~ 1688-11-30",
+   "where": "Amsterdam (24)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "오라녜 공 빌럼의 부름에 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "glory_o_wind",
+   "name": "명예혁명 — 개신교의 바람 (토베이)",
+   "when": "≥1688-11-11, fails after 1689-01-31",
+   "where": "English Channel box lat 49.3~52.0, lon -6.0~2.2",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "오라녜 공의 함대와 함께 ",
+    "fail(UI): 오라녜 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "glory_j_call",
+   "name": "명예혁명 — 제임스 2세의 부름",
+   "when": "1688-09-01 ~ 1688-11-30",
+   "where": "London (38)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "제임스 2세의 부름에 응했"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "glory_j_wind",
+   "name": "명예혁명 — 동풍에 묶인 함대",
+   "when": "≥1688-11-11 ~ 1689-01-31",
+   "where": "Channel box",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "동풍에 묶인 국왕의 함대 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "glory_j_flight",
+   "name": "명예혁명 — 국새와 국왕의 탈출",
+   "when": "1688-12-11 ~ 1689-01-20",
+   "where": "London (38)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "로체스터 강가에서 제임스 ",
+    "refuse: 달아나는 제"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "glory_j_france",
+   "name": "명예혁명 — 바다 건너의 왕",
+   "when": "until 1689-03-31",
+   "where": "any French-owned PORT",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "에서 제임스 2세를 프랑스"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "glory_decl",
+   "name": "권리 선언 (화이트홀)",
+   "when": "1689-02-23 ~ 1689-12-25",
+   "where": "London (38)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "화이트홀 연회장에서 권리 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "glory_bill",
+   "name": "권리장전의 날 (면세증 무효·의회 교역 증서)",
+   "when": "1689-12-26",
+   "where": "news",
+   "status": "ok",
+   "hits": {
+    "1": 16891226,
+    "2": 16891226,
+    "3": 16891226,
+    "4": 16891226,
+    "5": 16891226
+   },
+   "alts": [
+    "권리장전」을 법으로 정했다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "glory_news",
+   "name": "명예혁명 소식 (왕자 탄생·일곱 주교·토베이·국새·생제르맹·권리 선언·대관식·권리장전 / 통치론·보인·잉글랜드 은행)",
+   "when": "1688-06-20 … 1694-07-27",
+   "where": "news (G.State.log)",
+   "status": "ok",
+   "hits": {
+    "1": 16880620,
+    "2": 16880620,
+    "3": 16880620,
+    "4": 16880620,
+    "5": 16880620
+   },
+   "alts": [
+    "제임스 2세 왕비가 아들을",
+    "주교 일곱 사람이 무죄로 ",
+    "국새를 템스강에 던졌다고 ",
+    "함께 대관식을 올렸다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "newton_apple",
+   "name": "뉴턴과 사과 (울즈소프)",
+   "when": "1665-06-01 ~ 1667-04-30",
+   "where": "land exploration within 0.6° of Woolsthorpe (lon -0.63, lat 52.81)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "울즈소프의 사과나무 아래에",
+    "join: 아이작 뉴턴이 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "newton_principia",
+   "name": "『프린키피아』 (왕립 학회)",
+   "when": "1686-04-28 ~ 1687-07-04",
+   "where": "London (38)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "뉴턴의 『프린키피아』 원고"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "newton_principia_book",
+   "name": "『프린키피아』 초판 도착",
+   "when": "1687-07-05",
+   "where": "news",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "런던에서 상자 하나가 왔다"
+   ],
+   "ui_only": true
+  },
+  {
+   "id": "newton_news",
+   "name": "뉴턴 소식 (프린키피아 1687·조폐국장 1699-12-23 / 학회장 1703·기사 1705·경도법 1714·주식 1720·죽음 1727)",
+   "when": "1687-07-05 … 1727-03-20",
+   "where": "news",
+   "status": "partly-after-1700",
+   "hits": {},
+   "alts": [
+    "자연철학의 수학적 원리』가",
+    "아이작 뉴턴이 왕립 조폐국"
+   ],
+   "ui_only": true
+  },
+  {
+   "id": "newton_reoffer",
+   "name": "뉴턴 — 런던에서 다시 동료 제안",
+   "when": "1720-09-20 ~ 1727-03-20",
+   "where": "London (38)",
+   "status": "after-1700-only",
+   "hits": {},
+   "alts": [
+    "아이작 뉴턴을 동료로 맞이"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "newton_bubble",
+   "name": "남해 회사 주식의 나락",
+   "when": "1720-01-01 ~ 1720-12-31",
+   "where": "London (38)",
+   "status": "after-1700-only",
+   "hits": {},
+   "alts": [
+    "남해 회사 주식"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "elmina_door",
+   "name": "엘미나 ⑥ 돌아오지 않는 문",
+   "when": "≥1637-09-01, open-ended, once",
+   "where": "San Jorge/Elmina (city 97, Dutch from 1637)",
+   "status": "ok",
+   "hits": {
+    "2": 16441209,
+    "5": 16400215
+   },
+   "alts": [
+    "엘미나 성의 지하 감옥"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "elmina_news_dutch",
+   "name": "엘미나 함락 소식",
+   "when": "1637-08-29",
+   "where": "news",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "(text varies w"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "pocahontas",
+   "name": "포카혼타스의 중재",
+   "when": "≥1521-08-13, open-ended",
+   "where": "any N./Central American or Caribbean PORT (PC.isPort: region 10, lat≥7.2, lon<-50, excl. S.American Caribbean coast) — ~40 ports",
+   "status": "ok",
+   "hits": {
+    "4": 16160812
+   },
+   "alts": [
+    "포와탄의 딸 포카혼타스가 ",
+    "포카혼타스가 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "coven_curse",
+   "name": "마녀 모임 — 신을 저주하는 세 목소리",
+   "when": "any; repeat every 30 days",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "신을 저주하는 세 목소리 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "coven_potion",
+   "name": "마녀 모임 — 마녀들의 회복 포션",
+   "when": "any; repeat every 20 days",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "마녀들의 회복 포션 —"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "coven_new_fashion_party",
+   "name": "마녀 모임 — 사라진 금화와 신상 파티",
+   "when": "any; repeat every 60 days",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "사라진 금화와 신상 파티 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "coven_charm",
+   "name": "마녀 모임 — 열 마녀의 매혹",
+   "when": "any; repeat every 30 days",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "열 마녀의 매혹 —"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "coven_coven_oath",
+   "name": "마녀 모임 — 열셋의 결속",
+   "when": "any; repeat every once days",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "열셋의 결속 —"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "coven_wage_waiver",
+   "name": "마녀 모임 — 열여섯 마녀의 무급 선언",
+   "when": "any; repeat every once days",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "열여섯 마녀의 무급 선언 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "tale_cinderella",
+   "name": "신데렐라",
+   "when": "any",
+   "where": "land: forest within 2.5° of a 프랑스-owned city",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "신데렐라가 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "tale_snow_white",
+   "name": "백설공주",
+   "when": "any",
+   "where": "land: French forest",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "백설공주가 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "tale_sleeping_beauty",
+   "name": "잠자는 숲속의 공주",
+   "when": "any",
+   "where": "camp in forest within 3° of a German-owned city",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "잠자는 숲속의 공주가 동료"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "tale_little_mermaid",
+   "name": "인어공주",
+   "when": "any",
+   "where": "camp + hunt on Danish isles (Funen/Zealand/Lolland-Falster/Bornholm boxes)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "인어공주가 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "joan",
+   "name": "오를레앙의 처녀 잔",
+   "when": "any; cool after failure",
+   "where": "camp in French forest, 약초를 캔다 and find herbs",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "오를레앙의 처녀 잔을 화형",
+    "마녀로 몰린 처녀를"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "snowqueen_gerda",
+   "name": "눈의 여왕 ① 게르다",
+   "when": "any; 50% per camp; 45-day cool after refusal",
+   "where": "camp near one of 12 Nordic lakes (within 1°)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "동생 카이를 찾는 소녀 게"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "snowqueen_moscow",
+   "name": "눈의 여왕 ② 크렘린의 수수께끼",
+   "when": "any",
+   "where": "Moscow (60, inland)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "눈의 여왕」 엘리자베타의 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "snowqueen_stow",
+   "name": "눈의 여왕 ③ 몰래 탄 엘리자베타",
+   "when": "any",
+   "where": "next land day / other city after Moscow",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "엘리자베타가 몰래 배에 올"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "pinocchio_rescue",
+   "name": "피노키오 ① 고래 배 속의 제페토",
+   "when": "any",
+   "where": "open ocean (Atlantic/Pacific/Indian) whale encounter",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "고래에게 삼켜진 어촌의 목"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "pinocchio_join",
+   "name": "피노키오 ② 제페토가 맡기다",
+   "when": "any",
+   "where": "any city after rescue",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "제페토가 아들 피노키오를 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "peter_lost",
+   "name": "피터 팬 ① 섬에서 사라진 아이",
+   "when": "any",
+   "where": "land on small Scottish isles (Hebrides/Skye/Mull/Coll/Tiree/Islay/Jura/Orkney/Shetland boxes)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "사라졌다 (full lin",
+    "딸 <name>이 사라졌다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "peter_return",
+   "name": "피터 팬 ② 아이를 되찾다",
+   "when": "any",
+   "where": "camp on the same isle, 약초를 캔다",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "피터 팬이 따라왔다",
+    "lost at succes"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "mowgli",
+   "name": "정글북 — 모글리",
+   "when": "any; 30-day cool on failure",
+   "where": "land within 3° of Delhi (145, inland)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "늑대 손에 자란 청년"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "tarzan",
+   "name": "정글의 사내 — 타잔",
+   "when": "any",
+   "where": "camp + hunt in jungle/forest east of Sierra Leone (91), lat 7.2~9.9, lon to +2.6°",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "시에라리온 동쪽 밀림에서"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "tam",
+   "name": "떰 (베트남)",
+   "when": "any",
+   "where": "Vietnamese coastal sea lon 104.3~109.8, lat 8.3~21.7",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "처녀 떰에게",
+    "pass: 빈 바구니를 안"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "maria",
+   "name": "마리아 (필리핀)",
+   "when": "≥1565",
+   "where": "camp + hunt on Philippine islands",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "처녀 마리아의 말에 창을 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "littleprince_meet",
+   "name": "어린 왕자 ① 사막의 야영지",
+   "when": "any",
+   "where": "camp in desert terrain, 정찰한다",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "어린 왕자에게 음식을 나눠",
+    "sent away: 배고픈"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "littleprince_well",
+   "name": "어린 왕자 ② 숨은 우물 · 정체",
+   "when": "any",
+   "where": "desert well from the map",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "숨은 우물을 찾아",
+    "왕자로 다니던 소녀였다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "legend_tao",
+   "name": "도원의 세 형제 (유비·관우·장비)",
+   "when": "any",
+   "where": "Zhuo field (115.97,39.49 r0.45) on land, or Chinese-city taverns (3 drinks per visit)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "유비가 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "legend_zhuge",
+   "name": "제갈량",
+   "when": "any",
+   "where": "any inn",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "제갈량이 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "legend_dartagnan",
+   "name": "달타냥",
+   "when": "any",
+   "where": "French-owned city market",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "달타냥이 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "legend_musketeers",
+   "name": "삼총사 (아토스→포르토스→아라미스)",
+   "when": "any",
+   "where": "tavern of each NEW city visited with d_artagnan",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "아토스가 동료가 되었다",
+    "포르토스가 동료가 되었다",
+    "아라미스가 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "legend_scheherazade",
+   "name": "셰헤라자드",
+   "when": "any",
+   "where": "library of an Islamic (rel I) city",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "셰헤라자드가 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "legend_lamp",
+   "name": "알라딘 · 알리바바",
+   "when": "any",
+   "where": "Ottoman-owned city",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "알라딘이 동료가 되었다",
+    "알리바바가 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "fivetigers",
+   "name": "갑판 위의 오호장군",
+   "when": "any",
+   "where": "sea day (12%) or port entry (30%)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "이 배의 오호장군」을 정했"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "quixote_meet",
+   "name": "돈키호테와 산초 — 풍차 언덕",
+   "when": "any; 60-day cool after refusal (no log)",
+   "where": "Toledo (4, inland)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "라 만차의 풍차 언덕에서 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "quixote_tours",
+   "name": "순례 — 투르 생마르탱",
+   "when": "any",
+   "where": "Tours (16, inland)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "순례 — 투르의 생마르탱 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "quixote_toulouse",
+   "name": "순례 — 툴루즈 생세르냉",
+   "when": "any",
+   "where": "Toulouse (19, inland)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "순례 — 툴루즈의 생세르냉"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "quixote_santiago",
+   "name": "산티아고 순례 완료",
+   "when": "any",
+   "where": "La Coruña (2)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "산티아고 데 콤포스텔라에서",
+    "산티아고 순례를 마치고 헤"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "simcheong",
+   "name": "공양미 삼백 석 — 심청",
+   "when": "any",
+   "where": "Hanyang (190) / Dongnae (226) / Hansando (229)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "공양미 삼백 석 —",
+    "pass: 인당수 제물로 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "gyeonwoo_offer",
+   "name": "견우와 직녀 — 오작 할멈의 부탁",
+   "when": "any; 30-day retry on refusal (no log)",
+   "where": "any 조선-owned city",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "오작 할멈에게서 견우와 직"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "gyeonwoo_chain",
+   "name": "견우와 직녀 — 항주 → 사카이 → 한산도 혼례",
+   "when": "any",
+   "where": "Hangzhou (177, X-closed; GW.letIn opens it during stage 1) → Sakai (192) → Hansando (229)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "항주에서 견우를 배에 태웠",
+    "사카이에서 직녀를 배에 태",
+    "견우와 직녀가 부부로 부하",
+    "직녀에게서 일본도를 받았다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "napoleon_rescue",
+   "name": "나폴레옹 ① 코르시카 바다의 소년",
+   "when": "≥1510",
+   "where": "sea box lon 7.6~10.4, lat 40.7~43.6 (Corsica)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "바다에 빠진 소년 나폴레옹"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "napoleon_family",
+   "name": "나폴레옹 ② 가족 구출 → 동료",
+   "when": "any",
+   "where": "any sea",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "짐칸에 갇혀 있던 나폴레옹"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "napoleon_salon",
+   "name": "나폴레옹 ③ 오스트리아의 살롱 — 조제핀",
+   "when": "any",
+   "where": "Austria-owned city (Prague 53, Vienna 54; Budapest 63 from 1686) — all inland",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "오스트리아의 살롱에서 조제",
+    "lost: 나폴레옹과 일기"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "princess_call",
+   "name": "사라진 에스파냐 왕녀 — 부름",
+   "when": "any",
+   "where": "news",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "왕녀가 사라졌다는 흉한 소"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "princess_quest",
+   "name": "사라진 왕녀 — 특명·레반트 해적·수에즈 요새·귀환·혼인",
+   "when": "3-year deadline",
+   "where": "Seville palace → Levant seas (Alexandria 78/Beirut 121/Antioch 118) → Suez den (29.15,32.55) → Seville",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "의 특명을 받았다 — 해적",
+    "바르바리 해적 함대를 쳐부",
+    "수에즈 만의 해적 요새에서",
+    "모셔 왔다 — 하사금",
+    "에스파냐 국왕의 부마가 되",
+    "fail: 「사라진 왕녀」"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "castaway_wilson",
+   "name": "윌슨 (같은 야영지)",
+   "when": "any, once",
+   "where": "repeated camps at one site (r 0.6°)",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "윌슨」이 새 동료가 되었다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "castaway_journal",
+   "name": "표류기",
+   "when": "any, once",
+   "where": "same camp site",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "표류기」를 써 냈다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "colony_call",
+   "name": "새 도시 개척 — 국왕의 부름",
+   "when": "any",
+   "where": "news → home palace",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "새 도시를 세울 사람을 찾"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "mirage",
+   "name": "신기루 (1600+ 미래 건물)",
+   "when": "≥1600",
+   "where": "near a not-yet-built wonder",
+   "status": "ok",
+   "hits": {
+    "1": 16300703,
+    "4": 16960103
+   },
+   "alts": [
+    "신기루를 보았다 —"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "family_osa",
+   "name": "소꿉친구 재회·고백·혼례 (2대부터)",
+   "when": "generation ≥2",
+   "where": "home port on return by sea",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "에서 소꿉친구",
+    "서로 마음을 확인했다",
+    "성당에서 혼례를 올렸다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "family_heirplan_friend",
+   "name": "아들의 소꿉친구가 찾아오다",
+   "when": "any",
+   "where": "home",
+   "status": "ok",
+   "hits": {
+    "2": 16800412,
+    "5": 16411028
+   },
+   "alts": [
+    "의 소꿉친구"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "family_firstlove",
+   "name": "첫사랑 (여성 소꿉친구)",
+   "when": "any",
+   "where": "sea/ports",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "첫 항해의 밤 —"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "family_kidwed",
+   "name": "열여덟 살 딸의 혼례",
+   "when": "any",
+   "where": "home",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "왕세자비가 되었다",
+    "혼례를 올렸다. (지참금"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "romance_wedding",
+   "name": "부하 커플의 혼례",
+   "when": "any",
+   "where": "port",
+   "status": "ok",
+   "hits": {
+    "1": 16280703,
+    "4": 16290827
+   },
+   "alts": [
+    "혼례를 올렸다. (금화"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "eraend_warnings",
+   "name": "대항해시대의 끝 — 1년 전·1달 전 소식 / 막을 내림",
+   "when": "1699-01-01, 1699-12-01, 1700-01-01",
+   "where": "news",
+   "status": "ok",
+   "hits": {
+    "1": 16990101,
+    "2": 16990101,
+    "3": 16990101,
+    "4": 16990101,
+    "5": 16990101
+   },
+   "alts": [
+    "대항해시대에 남은 날은 이",
+    "다음 새해가 밝으면 대항해",
+    "end (journal):"
+   ],
+   "ui_only": true
+  },
+  {
+   "id": "eventrumors",
+   "name": "사건 소문 (마을 사람 5%)",
+   "when": "per rumor window",
+   "where": "street folk in cities near each rumor point",
+   "status": "ok",
+   "hits": {},
+   "alts": [
+    "소문 ("
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "rel_ib_restore",
+   "name": "포르투갈 왕정복고",
+   "when": "1640-12-01",
+   "where": "news (anywhere)",
+   "status": "ok",
+   "hits": {
+    "1": 16401201,
+    "2": 16401201,
+    "3": 16401201,
+    "4": 16401201,
+    "5": 16401201
+   },
+   "alts": [
+    "브라간사 공작을 주앙 4세"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "rel_cr_vienna2",
+   "name": "빈 전투",
+   "when": "1683-09-12",
+   "where": "news (anywhere)",
+   "status": "ok",
+   "hits": {
+    "1": 16830912,
+    "2": 16830912,
+    "3": 16830912,
+    "4": 16830912,
+    "5": 16830912
+   },
+   "alts": [
+    "얀 3세 소비에스키가 이끄"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "rel_rf_defenest",
+   "name": "프라하 창문 투척 사건",
+   "when": "1618-05-23",
+   "where": "news (anywhere)",
+   "status": "ok",
+   "hits": {
+    "1": 16180523,
+    "2": 16180523,
+    "3": 16180523,
+    "4": 16180523,
+    "5": 16180523
+   },
+   "alts": [
+    "황제의 관리들을 성의 창문"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "rel_rf_westphalia",
+   "name": "베스트팔렌 조약",
+   "when": "1648-10-24",
+   "where": "news (anywhere)",
+   "status": "ok",
+   "hits": {
+    "1": 16481024,
+    "2": 16481024,
+    "3": 16481024,
+    "4": 16481024,
+    "5": 16481024
+   },
+   "alts": [
+    "뮌스터와 오스나브뤼크에서 "
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "rel_fe_henriette",
+   "name": "찰스 1세와 앙리에트 마리의 혼례",
+   "when": "1625-06-13",
+   "where": "news (anywhere)",
+   "status": "ok",
+   "hits": {
+    "1": 16250613,
+    "2": 16250613,
+    "3": 16250613,
+    "4": 16250613,
+    "5": 16250613
+   },
+   "alts": [
+    "앙리에트 마리가 잉글랜드의"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "rel_no_gustav",
+   "name": "구스타브 아돌프의 독일 상륙",
+   "when": "1630-07-06",
+   "where": "news (anywhere)",
+   "status": "ok",
+   "hits": {
+    "1": 16300706,
+    "2": 16300706,
+    "3": 16300706,
+    "4": 16300706,
+    "5": 16300706
+   },
+   "alts": [
+    "포메른에 상륙했다"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "rel_ea_moscow1610",
+   "name": "폴란드군의 모스크바 입성",
+   "when": "1610-07-04",
+   "where": "news (anywhere)",
+   "status": "ok",
+   "hits": {
+    "1": 16100704,
+    "2": 16100704,
+    "3": 16100704,
+    "4": 16100704,
+    "5": 16100704
+   },
+   "alts": [
+    "폴란드군이 모스크바 크렘린"
+   ],
+   "ui_only": false
+  },
+  {
+   "id": "rel_ea_romanov",
+   "name": "로마노프 왕조",
+   "when": "1613-02-21",
+   "where": "news (anywhere)",
+   "status": "ok",
+   "hits": {
+    "1": 16130221,
+    "2": 16130221,
+    "3": 16130221,
+    "4": 16130221,
+    "5": 16130221
+   },
+   "alts": [
+    "미하일 로마노프를 차르로 "
+   ],
+   "ui_only": false
+  }
+ ],
+ "disasters": [
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1600-02-19",
+   "marker": "와이나푸티나 대분화",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1604-11-24",
+   "marker": "아리카 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1604-12-29",
+   "marker": "취안저우 앞바다 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1605-02-03",
+   "marker": "게이초 쓰나미",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1607-01-30",
+   "marker": "브리스틀 해협 홍수",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1610-01-15",
+   "marker": "레온 비에호 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1611-12-02",
+   "marker": "게이초 산리쿠 쓰나미",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1618-09-04",
+   "marker": "피우로 산사태",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1629-09-21",
+   "marker": "멕시코시티 대홍수",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1631-12-16",
+   "marker": "베수비오 대분화",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1634-10-11",
+   "marker": "부르하르디 홍수",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1638-03-27",
+   "marker": "칼라브리아 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1640-07-31",
+   "marker": "홋카이도 고마가타케 분화",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1642-10-09",
+   "marker": "카이펑 대홍수",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1643-07-24",
+   "marker": "울산 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1645-11-30",
+   "marker": "루손 대지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1647-05-13",
+   "marker": "산티아고 대지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1650-03-31",
+   "marker": "쿠스코 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1654-07-21",
+   "marker": "톈수이 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1658-02-27",
+   "marker": "파리 대홍수",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1660-10-27",
+   "marker": "피친차 분화",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1667-11-25",
+   "marker": "샤마히 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1668-07-25",
+   "marker": "탄청 대지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1669-03-11",
+   "marker": "에트나 대분화",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1674-02-17",
+   "marker": "암본 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1679-09-02",
+   "marker": "싼허·핑구 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1681-06-26",
+   "marker": "강원 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1687-10-20",
+   "marker": "리마 대지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1688-07-10",
+   "marker": "스미르나 지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1692-06-07",
+   "marker": "포트로열 대지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_disasters_1600_1699",
+   "date": "1693-01-11",
+   "marker": "시칠리아 대지진",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1604-08",
+   "marker": "유럽 시장: 네덜란드가 나포한 포르투갈 상선의 중국 자기가 암스테르",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1610-06",
+   "marker": "유럽 시장: 네덜란드 상인들이 처음으로 차를 유럽에 들여왔다",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1615-03",
+   "marker": "유럽 시장: 베네치아에 커피가 들어왔다",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1618-06",
+   "marker": "유럽 시장: 보헤미아에서 시작된 전쟁이 독일 땅 전체로 번진다(30",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1621-05",
+   "marker": "유럽 시장: 네덜란드가 반다 제도를 무력으로 차지했다",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1625-01",
+   "marker": "유럽 시장: 잉글랜드·네덜란드 동인도회사의 배가 후추를 잔뜩 실어 ",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1626-06",
+   "marker": "유럽 시장: 비버 털로 만든 모자가 유행이다",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1645-01",
+   "marker": "유럽 시장: 바베이도스의 사탕수수 농장이 설탕을 쏟아 내기 시작했다",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1652-05",
+   "marker": "유럽 시장: 런던에 첫 커피하우스가 문을 열었다",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1657-06",
+   "marker": "유럽 시장: 런던에 초콜릿을 파는 집이 생겼다",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1662-05",
+   "marker": "유럽 시장: 포르투갈 공주 브라간사의 카타리나가 잉글랜드 왕비가 되",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1664-01",
+   "marker": "유럽 시장: 동인도회사가 들여온 인도 면직물이 날개 돋친 듯 팔린다",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1683-10",
+   "marker": "유럽 시장: 빈을 에워쌌던 오스만 군대가 물러가며 커피 자루를 남기",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1686-10",
+   "marker": "유럽 시장: 프랑스가 인도 무늬 직물을 금지했지만 귀부인들은 몰래 ",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "kind": "auto_era_news_1600_1699",
+   "date": "1688-01",
+   "marker": "유럽 시장: 일본 칠기를 흉내 내는 「재패닝」 안내서가 나왔다",
+   "hits": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  }
+ ],
+ "runs": {
+  "1": {
+   "found": [
+    [
+     "bitterorange",
+     null,
+     "land"
+    ],
+    [
+     "azahara",
+     null,
+     "land"
+    ],
+    [
+     "baiae",
+     null,
+     "sea"
+    ],
+    [
+     "cyclops",
+     null,
+     "land"
+    ],
+    [
+     "falcon",
+     null,
+     "land"
+    ],
+    [
+     "pavlopetri",
+     null,
+     "sea"
+    ],
+    [
+     "antikythera",
+     null,
+     "sea"
+    ],
+    [
+     "corinthcanal",
+     null,
+     "sea"
+    ],
+    [
+     "fig",
+     null,
+     "land"
+    ],
+    [
+     "delphi",
+     null,
+     "land"
+    ],
+    [
+     "milos",
+     null,
+     "sea"
+    ],
+    [
+     "venusmilo",
+     null,
+     "sea"
+    ],
+    [
+     "santorini",
+     null,
+     "sea"
+    ],
+    [
+     "bosphorusbridge",
+     null,
+     "sea"
+    ],
+    [
+     "blacksea",
+     null,
+     "sea"
+    ],
+    [
+     "ponte25abril",
+     null,
+     "sea"
+    ],
+    [
+     "forthbridge",
+     null,
+     "sea"
+    ],
+    [
+     "mallard",
+     null,
+     "land"
+    ],
+    [
+     "majoroak",
+     null,
+     "land"
+    ],
+    [
+     "whiterose",
+     null,
+     "land"
+    ],
+    [
+     "oceanomonaco",
+     null,
+     "sea"
+    ],
+    [
+     "canchoroano",
+     null,
+     "land"
+    ],
+    [
+     "otter",
+     null,
+     "land"
+    ],
+    [
+     "nessie",
+     null,
+     "land"
+    ]
+   ],
+   "era": {
+    "date": "1700.1.1",
+    "scene": "city"
+   },
+   "logN": 11699
+  },
+  "2": {
+   "found": [
+    [
+     "zanzibar",
+     null,
+     "sea"
+    ],
+    [
+     "kuwaittowers",
+     null,
+     "sea"
+    ],
+    [
+     "gatewayindia",
+     null,
+     "sea"
+    ],
+    [
+     "hirebenakal",
+     null,
+     "land"
+    ],
+    [
+     "coconut",
+     null,
+     "land"
+    ],
+    [
+     "chilika",
+     null,
+     "sea"
+    ],
+    [
+     "socotra",
+     null,
+     "sea"
+    ],
+    [
+     "azores",
+     null,
+     "sea"
+    ],
+    [
+     "ponte25abril",
+     null,
+     "sea"
+    ],
+    [
+     "ranikivav",
+     null,
+     "land"
+    ],
+    [
+     "jackfruit",
+     null,
+     "land"
+    ],
+    [
+     "asianelephant",
+     null,
+     "land"
+    ],
+    [
+     "kola",
+     null,
+     "land"
+    ],
+    [
+     "chimp",
+     null,
+     "land"
+    ],
+    [
+     "gedi",
+     null,
+     "land"
+    ]
+   ],
+   "era": {
+    "date": "1700.1.1",
+    "scene": "city"
+   },
+   "logN": 9142
+  },
+  "3": {
+   "found": [
+    [
+     "milkysea",
+     null,
+     "sea"
+    ],
+    [
+     "spiceis",
+     null,
+     "sea"
+    ],
+    [
+     "socotra",
+     null,
+     "sea"
+    ],
+    [
+     "raffles",
+     null,
+     "sea"
+    ],
+    [
+     "phongnha",
+     null,
+     "land"
+    ],
+    [
+     "bochinatower",
+     null,
+     "sea"
+    ],
+    [
+     "putuo",
+     null,
+     "sea"
+    ],
+    [
+     "shiri",
+     null,
+     "land"
+    ],
+    [
+     "crane",
+     null,
+     "land"
+    ],
+    [
+     "gumiho",
+     null,
+     "land"
+    ],
+    [
+     "vinousbird",
+     null,
+     "land"
+    ],
+    [
+     "moonbear",
+     null,
+     "land"
+    ],
+    [
+     "squirrel",
+     null,
+     "land"
+    ],
+    [
+     "seongsan",
+     null,
+     "sea"
+    ],
+    [
+     "kuroshio",
+     null,
+     "sea"
+    ],
+    [
+     "akashibridge",
+     null,
+     "sea"
+    ],
+    [
+     "carambola",
+     null,
+     "land"
+    ],
+    [
+     "salak",
+     null,
+     "land"
+    ],
+    [
+     "giraffestag",
+     null,
+     "land"
+    ],
+    [
+     "clownfish",
+     null,
+     "sea"
+    ],
+    [
+     "krakatau",
+     null,
+     "sea"
+    ],
+    [
+     "phangnga",
+     null,
+     "sea"
+    ],
+    [
+     "phuket",
+     null,
+     "sea"
+    ],
+    [
+     "kyaiktiyo",
+     null,
+     "land"
+    ],
+    [
+     "gedi",
+     null,
+     "land"
+    ],
+    [
+     "bitterorange",
+     null,
+     "land"
+    ],
+    [
+     "azahara",
+     null,
+     "land"
+    ],
+    [
+     "ponte25abril",
+     null,
+     "sea"
+    ],
+    [
+     "dragon",
+     null,
+     "sea"
+    ],
+    [
+     "hyeonmu",
+     null,
+     "land"
+    ]
+   ],
+   "era": {
+    "date": "1700.1.1",
+    "scene": "city"
+   },
+   "logN": 9975
+  },
+  "4": {
+   "found": [
+    [
+     "gulfstream",
+     null,
+     "sea"
+    ],
+    [
+     "lobster",
+     null,
+     "sea"
+    ],
+    [
+     "icebergs",
+     null,
+     "sea"
+    ],
+    [
+     "azores",
+     null,
+     "sea"
+    ],
+    [
+     "ponte25abril",
+     null,
+     "sea"
+    ],
+    [
+     "bermuda",
+     null,
+     "sea"
+    ],
+    [
+     "canchoroano",
+     null,
+     "land"
+    ],
+    [
+     "passionflower",
+     null,
+     "land"
+    ],
+    [
+     "fundy",
+     null,
+     "sea"
+    ],
+    [
+     "mermaid",
+     null,
+     "sea"
+    ],
+    [
+     "bahamas",
+     null,
+     "sea"
+    ],
+    [
+     "folk_powhatan",
+     null,
+     "land"
+    ],
+    [
+     "raccoon",
+     null,
+     "land"
+    ],
+    [
+     "lunamoth",
+     null,
+     "land"
+    ],
+    [
+     "beaver",
+     null,
+     "land"
+    ],
+    [
+     "sugarmaple",
+     null,
+     "land"
+    ],
+    [
+     "folk_stlawrence",
+     null,
+     "land"
+    ],
+    [
+     "wtc",
+     null,
+     "sea"
+    ],
+    [
+     "opossum",
+     null,
+     "land"
+    ]
+   ],
+   "era": {
+    "date": "1700.1.1",
+    "scene": "city"
+   },
+   "logN": 9563
+  },
+  "5": {
+   "found": [
+    [
+     "milkysea",
+     null,
+     "sea"
+    ],
+    [
+     "spiceis",
+     null,
+     "sea"
+    ],
+    [
+     "hirebenakal",
+     null,
+     "land"
+    ],
+    [
+     "raffles",
+     null,
+     "sea"
+    ],
+    [
+     "krakatau",
+     null,
+     "sea"
+    ],
+    [
+     "bochinatower",
+     null,
+     "sea"
+    ],
+    [
+     "iwatoyama",
+     null,
+     "land"
+    ],
+    [
+     "socotra",
+     null,
+     "sea"
+    ],
+    [
+     "teak",
+     null,
+     "land"
+    ],
+    [
+     "asianelephant",
+     null,
+     "land"
+    ],
+    [
+     "durian",
+     null,
+     "land"
+    ],
+    [
+     "fireflyriver",
+     null,
+     "land"
+    ],
+    [
+     "sunbear",
+     null,
+     "land"
+    ],
+    [
+     "atlasmoth",
+     null,
+     "land"
+    ],
+    [
+     "cashew",
+     null,
+     "land"
+    ],
+    [
+     "coconut",
+     null,
+     "land"
+    ]
+   ],
+   "era": {
+    "date": "1700.1.1",
+    "scene": "city"
+   },
+   "logN": 9480
+  }
+ }
+}

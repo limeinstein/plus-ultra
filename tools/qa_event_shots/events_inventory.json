@@ -1,0 +1,1618 @@
+{
+ "generated": "2026-11-01T00:49:20.500Z",
+ "source": "/home/claude/pu_full (read-only analysis)",
+ "history_1600_1699": {
+  "count": 0,
+  "total": 35,
+  "last_year": 1588,
+  "file": "js/data/people.js:404 (G.HISTORY)"
+ },
+ "notes": [
+  "Markers: \"|\" separates alternative substrings (outcomes). Strings are copied from G.State.log calls unless tagged [UI-only].",
+  "News items with history:true are NOT journaled by default; they reach the journal only via Journal.SOURCES wraps (journal.js:190-215: Rel, Dominion, Treaty, Barb, Tudor, Aztec, IncaFall, GoaMal, Mina, MingFall, Westphalia, Nzinga, Potosi, RomeSack, GalPisa, Imjin, Globe, Succession, Disaster, Econ, Era) or explicit G.State.log. Journal text = raw (【title】 → \"title — \"); window text = UI.tidyNews (header dropped, \" — \" → \", \").",
+  "Journal is capped at 800 lines (journal.js J.trim); trimmed lines move to s.logArc.old (logbooks.js) — grep both.",
+  "Declines that log nothing: skylore offers, glory calls, gyeonwoo offer, quixote meet, snowqueen refusal → \"declined\" is indistinguishable from \"never met\" in the journal."
+ ],
+ "events": [
+  {
+   "id": "globe_tale",
+   "file": "js/systems/globe.js:72 (taleOpen) / 73 tale()",
+   "name": "셰익스피어 — 폭풍의 이야기 (템페스트)",
+   "where": "London (city 38) on city entry",
+   "when": "1610-01-01 ~ 1611-10-31",
+   "pre": "Shakespeare (G.MATE.shakespeare) must NOT be aboard; s.globe.tale unset; one scene per entry (anne has priority)",
+   "how": "enter London → tavern scene, choose wreck/monster/decline",
+   "marker": "셰익스피어에게 바다의 폭풍 이야기를 들려주었다 | decline: 셰익스피어가 바다 이야기를 청했지만 사양했다",
+   "status": "ok",
+   "risk": "If Shakespeare was hired (tavern mate y=[1590,1600]) and is aboard, this stage silently never opens (globe.js:72 !row(shakespeare)). Tempest news (1611-11-01) only if tale given."
+  },
+  {
+   "id": "globe_anne_fire",
+   "file": "js/systems/globe.js:95 (anneOpen) / 96 anne() / 129 fire()",
+   "name": "앤 해서웨이 · 글로브 극장의 불",
+   "where": "London (38) on city entry",
+   "when": "1613-06-01 ~ 1613-06-29 (29-day window); fire scene 1613-06-29 (passDays to 6/28 if \"stay\")",
+   "pre": "s.globe.anne unset; not (Shakespeare AND Anne both aboard)",
+   "how": "enter London in June 1613 → choose stay → fire → rescue → offer both as mates",
+   "marker": "글로브 극장이 불탄 날 | declined stay: 글로브의 첫 공연에는 가지 않았다 | join: 앤 해서웨이가 동료가 되었다",
+   "status": "ok",
+   "risk": "Very narrow window (29 days, one city). Choosing \"머물 수 없다\" ends it (b.anne=1, never re-offered)."
+  },
+  {
+   "id": "globe_songs",
+   "file": "js/systems/globe.js:217 GL.seaDay (hooked into Romance.seaDay)",
+   "name": "갑판 위의 무대 (셰익스피어·앤 노래)",
+   "where": "at sea",
+   "when": "any day after 1613-06-29 join",
+   "pre": "both shakespeare & anne_hathaway aboard; 6%/day, gap 20 days",
+   "how": "automatic sea-day scene",
+   "marker": "갑판 위의 무대 — 피로 (toast only) [toast/UI only, no journal]",
+   "status": "ok",
+   "risk": "No G.State.log — undetectable from journal."
+  },
+  {
+   "id": "globe_news",
+   "file": "js/systems/globe.js:59 GL.daily",
+   "name": "글로브 소식 (템페스트·불·새 글로브·장례·첫 전집)",
+   "where": "anywhere (news)",
+   "when": "1611-11-01, 1613-06-30, 1614-06-01, 1616-04-23, 1623-11-08",
+   "pre": "b.met (met Shakespeare in tale/anne); tempest needs tale≠no",
+   "how": "automatic news; journaled via Journal wrap of Globe.daily (grade B)",
+   "marker": "화이트홀 궁전에서 셰익스피어의 새 연극 | 글로브 극장이 한 시간 만에 타 버렸다 | 불탄 자리에 글로브 극장이 다시 섰다 | 헤밍스와 콘델이 그의 극 서른여섯 편",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "sky_kep",
+   "file": "js/systems/skylore.js:110 (SK.arrival) / 168 kepOffer / 184 kepDone; data js/data/skylore.js:29",
+   "name": "케플러와 나침반 (하늘을 재는 사람들 ②)",
+   "where": "Prague (53, inland) — or anywhere if Kepler aboard; then compass readings in 3 of 4 seas (G.BALANCE.sky.seas), back to Prague",
+   "when": "offer 1600-02-01 ~ 1608-12-31; deadline 2 years",
+   "pre": "compass or variation compass in items for readings; decline → retry after 60 days (no log)",
+   "how": "enter Prague → accept → sail with compass → return to Prague",
+   "marker": "케플러의 부탁 — 네 바다 가운데 세 곳에서 | reading: (D.read text) | done: 프라하에서 케플러에게 세 바다의 나침반 기록을 전했다",
+   "status": "ok",
+   "risk": "Declining logs nothing (skylore.js:113 offer()) — \"not met\" and \"declined\" look the same in the journal. Prague is inland (land expedition needed)."
+  },
+  {
+   "id": "sky_gal",
+   "file": "js/systems/skylore.js:107-109 / galOffer ~198 / atSea test ~218 / galReport ~231",
+   "name": "갈릴레이의 망원경 (별의 전령 ③)",
+   "where": "Venice (29); Florence (30) from 1610-09-01; or anywhere if Galileo aboard; test at sea ≥4 days from port; report Venice/Florence",
+   "when": "offer 1609-07-01 ~ 1610-12-31; deadline 2 years",
+   "pre": "none for offer; decline → 60-day retry (no log)",
+   "how": "enter Venice → accept telescope → far sea test (scene at sea day end) → report",
+   "marker": "먼 바다에서 목성의 달을 겨누어 본다 (기한 | test: 바다에서 갈릴레이의 망원경으로 목성의 달을 겨누어 보았다 | done: 갈릴레이에게 바다에서 본 목성의 달을 알렸다",
+   "status": "ok",
+   "risk": "Florence is inland (port 0)."
+  },
+  {
+   "id": "sky_trial",
+   "file": "js/systems/skylore.js:112 (arrival) / trial ~245",
+   "name": "갈릴레이의 재판 (④)",
+   "where": "Rome (33, inland)",
+   "when": "1633-04-12 ~ 1633-06-22",
+   "pre": "s.sky.gal === \"done\" (sky_gal completed by ~1612)",
+   "how": "enter Rome in window",
+   "marker": "로마에서 갈릴레이의 재판을 지켜보았다",
+   "status": "ok",
+   "risk": "Chain-gated: impossible unless sky_gal done in 1609-1612."
+  },
+  {
+   "id": "sky_ms",
+   "file": "js/systems/skylore.js:113-114 / msOffer ~261 / msDone ~275",
+   "name": "『새로운 두 과학』 원고 (④)",
+   "where": "Florence(30)/Venice(29) → Amsterdam (24)",
+   "when": "offer 1636-01-01 ~ 1638-06-30; deadline 540 days",
+   "pre": "gal === \"done\"",
+   "how": "enter Florence/Venice → accept → Amsterdam",
+   "marker": "갈릴레이의 『새로운 두 과학』 원고를 맡았다 | done: 암스테르담의 엘제비르에게 갈릴레이의 원고를 전했다",
+   "status": "ok",
+   "risk": "Chain-gated on sky_gal."
+  },
+  {
+   "id": "sky_news",
+   "file": "js/systems/skylore.js:319 SK.daily; js/data/skylore.js:233-243",
+   "name": "하늘 소식 (새 천문학·금서·제3법칙·루돌프 표·케플러/갈릴레이의 죽음·뉴턴 탄생)",
+   "where": "news",
+   "when": "1609-09-01 … 1643-01-04",
+   "pre": "only for those who completed kep / gal (need flags)",
+   "how": "automatic; G.State.log of the news text",
+   "marker": "케플러가 『새 천문학』을 펴냈다 | 케플러의 「루돌프 표」가 울름에서 | 피렌체에서 갈릴레이의 『두 우주 체계에 관한 대화』",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "huguenot_call",
+   "file": "js/systems/huguenot.js:61 HG.pending / 72 call()",
+   "name": "위그노 내전 — 국왕의 전령 (라로셸 포위)",
+   "where": "any city owned by 프랑스 (R.cityOwner) on entry",
+   "when": "year ≥ 1562, no upper bound (1620+ besieger = 리슐리외)",
+   "pre": "d_artagnan, athos, porthos, aramis ALL aboard and not hidden; s.huguenot.phase unset",
+   "how": "enter French city",
+   "marker": "국왕의 전령이 총사 넷을 라로셸 진영으로 불렀다",
+   "status": "ok",
+   "risk": "Requires completing the legends chain (d_artagnan via 3 market buys + loan in French city; then 3 tavern duels) first."
+  },
+  {
+   "id": "huguenot_rochelle",
+   "file": "js/systems/huguenot.js:92 seaPending / 103 rochelle() / 222 finish()",
+   "name": "라로셸 앞바다 — 왕의 편 / 굶주린 성 / 화평",
+   "where": "sea box lon -1.8~-1.0, lat 45.9~46.4 (La Rochelle)",
+   "when": "after call; any year",
+   "pre": "phase=call, all four aboard; 30-day wait only after a retreat",
+   "how": "sail into box → choose side → land battle / sea battle / persuasion",
+   "marker": "라로셸 포위 — | retreat: 라로셸 앞바다에서 물러났다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "nzinga_emb",
+   "file": "js/systems/nzinga.js:125 embOpen",
+   "name": "은징가 ① 앉을 자리 없는 방",
+   "where": "Luanda (city 100 「르완다」) on entry",
+   "when": "1621-10-01 ~ 1622-06-30",
+   "pre": "b.emb unset",
+   "how": "enter Luanda",
+   "marker": "루안다 총독 관저에서",
+   "status": "ok",
+   "risk": "Treaty entry block (treaty.js:59-66, no end date) stops SPANISH admirals entering Portuguese Luanda without bribe/sneak (all Nzinga stages except 1641-08~1648-08 Dutch period)."
+  },
+  {
+   "id": "nzinga_guns",
+   "file": "js/systems/nzinga.js:163 gunsOpen",
+   "name": "은징가 ② 킨동가의 섬 (키푼지의 총)",
+   "where": "Luanda (100)",
+   "when": "1624-04-10 ~ 1626-06-30",
+   "pre": "b.guns unset; selling needs 60 guns in cargo",
+   "how": "enter Luanda",
+   "marker": "은징가의 동생 키푼지",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "nzinga_court",
+   "file": "js/systems/nzinga.js:210 courtOpen",
+   "name": "은징가 ③ 마탐바의 왕",
+   "where": "Luanda (100) → kilombo scene",
+   "when": "1632-01-01 ~ 1641-08-25",
+   "pre": "b.court unset; guns !== \"betray\"",
+   "how": "enter Luanda",
+   "marker": "마탐바의",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "nzinga_kombi",
+   "file": "js/systems/nzinga.js:253 kombiOpen",
+   "name": "은징가 ④ 콤비 전투",
+   "where": "Luanda (100, Dutch-owned then)",
+   "when": "1647-09-01 ~ 1647-10-31",
+   "pre": "b.kombi unset",
+   "how": "enter Luanda",
+   "marker": "콤비",
+   "status": "ok",
+   "risk": "2-month window."
+  },
+  {
+   "id": "nzinga_sa",
+   "file": "js/systems/nzinga.js:294 saOpen",
+   "name": "은징가 ⑤ 사의 함대",
+   "where": "Luanda (100)",
+   "when": "1648-08-01 ~ 1648-08-23",
+   "pre": "b.sa unset",
+   "how": "enter Luanda",
+   "marker": "포르투갈 함대가 루안다를 에워쌌을 때 | 살바도르 코헤이아 드 사의 함대가 성채를",
+   "status": "ok",
+   "risk": "23-day window."
+  },
+  {
+   "id": "nzinga_ransom",
+   "file": "js/systems/nzinga.js:316 ransomOpen",
+   "name": "은징가 ⑥ 캄부의 몸값",
+   "where": "Luanda (100)",
+   "when": "1655-01-01 ~ 1656-10-11",
+   "pre": "b.ransom unset",
+   "how": "enter Luanda",
+   "marker": "은징가의 동생 캄부의 몸값",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "nzinga_news",
+   "file": "js/systems/nzinga.js:94 NZ.daily",
+   "name": "은징가 소식 (세례·즉위·킨동가·마탐바·네덜란드·콤비·루안다 탈환·강화·죽음)",
+   "where": "news",
+   "when": "1622-07-01 … 1663-12-17",
+   "pre": "some need b.met; matamba(1631-10-01), kombi, retake, peace, death are unconditional",
+   "how": "automatic, journaled via Nzinga.daily wrap",
+   "marker": "은징가가 임방갈라 전사들과 | 살바도르 코헤이아 드 사의 함대가 루안다를 되찾았다 | 마탐바의 왕 은징가가 여든 살로",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "mingfall_night",
+   "file": "js/systems/mingfall.js:116 nightOpen",
+   "name": "명의 멸망 ① 매산의 밤 (숭정제의 편지)",
+   "where": "Beijing (188, inland, flag X)",
+   "when": "1644-03-20 ~ 1644-04-24",
+   "pre": "no letter yet",
+   "how": "reach Beijing overland and get through the gate",
+   "marker": "매산의 홰나무 아래에서 숭정제에게 | decline: 매산에서 숭정제의 마지막 부탁을 사양했다",
+   "status": "ok",
+   "risk": "Beijing is inland (port 0) and has flag X: city.js:583 blocks entry unless s.flags.mingTrade — which NOTHING sets (grep) — so every visit needs bribe/sneak (pass lasts 365 days). Still X-closed under 청 after 1644."
+  },
+  {
+   "id": "mingfall_maid",
+   "file": "js/systems/mingfall.js:154 maidOpen",
+   "name": "명의 멸망 ② 늙은 궁녀",
+   "where": "Beijing (188)",
+   "when": "1644-04-25 ~ 1646-12-31",
+   "pre": "no letter, b.maid!==\"take\", 30-day cool after refusal",
+   "how": "enter Beijing",
+   "marker": "늙은 궁녀에게 숭정제의 마지막 편지를 받았다 | refuse: 궁녀의 부탁을 거절했다",
+   "status": "ok",
+   "risk": "same X-gate/inland issue as mingfall_night"
+  },
+  {
+   "id": "mingfall_deliver",
+   "file": "js/systems/mingfall.js:182 deliverOpen / deliver() ~200-283",
+   "name": "명의 멸망 ③ 마지막 편지 → 진원원 합류",
+   "where": "Beijing (188) (or any city if 진원원 already aboard)",
+   "when": "1644-04-25 ~ 1646-12-31",
+   "pre": "holding letter chongzhen_letter; wall cooldown 20 days after failure",
+   "how": "enter Beijing with letter",
+   "marker": "숭정제의 마지막 편지를 진원원에게 전했다 | 배 위에서 진원원에게 | fail: 유종민의 저택 담을 넘다가",
+   "status": "ok",
+   "risk": "h_chenyuanyuan y=[1640,1680]; eventOnly getter releases her to Suzhou tavern after 1646."
+  },
+  {
+   "id": "mingfall_again",
+   "file": "js/systems/mingfall.js:287 againOpen",
+   "name": "명의 멸망 ④ 매산 아래 절 (다시 청함)",
+   "where": "Beijing (188)",
+   "when": "≤1646-12-31",
+   "pre": "letter done, \"아직은\" chosen",
+   "how": "enter Beijing",
+   "marker": "진원원이 동료가 되었다 (via Legend.join) | 제독의 배에 올랐다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "mingfall_news",
+   "file": "js/systems/mingfall.js:98 MF.daily",
+   "name": "명·청 소식 (대순·북경 함락·산해관·자금성의 불·청의 입관·순치제·남경)",
+   "where": "news",
+   "when": "1644-02-08 … 1645-06-08",
+   "pre": "mostly unconditional",
+   "how": "automatic, journaled via MingFall.daily wrap",
+   "marker": "이자성이 서둘러 황제의 자리 | 여섯 살 순치제가 | 청군이 양자강을 건너 남경을",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "westphalia_oath",
+   "file": "js/systems/westphalia.js:110 oathOpen",
+   "name": "베스트팔렌 ① 뮌스터의 맹세",
+   "where": "Amsterdam (24)",
+   "when": "1648-03-01 ~ 1648-05-14",
+   "pre": "b.oath unset (no nation requirement)",
+   "how": "enter Amsterdam → go/decline",
+   "marker": "뮌스터 시청에서 에스파냐와 네덜란드의 평화 맹세를 | decline: 뮌스터로 가는 네덜란드 대표단의 초대를 사양했다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "westphalia_feast",
+   "file": "js/systems/westphalia.js:167 feastOpen",
+   "name": "베스트팔렌 ①' 평화의 종",
+   "where": "Amsterdam (24)",
+   "when": "1648-05-15 ~ 1648-08-31",
+   "pre": "oath !== \"go\"",
+   "how": "enter Amsterdam",
+   "marker": "여든 해 만의 평화를 알리는 종소리를 들었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "westphalia_table",
+   "file": "js/systems/westphalia.js:186 tableOpen",
+   "name": "베스트팔렌 ② 1624년의 교회 (페르덴 청원서)",
+   "where": "Bremen (46)",
+   "when": "1648-06-01 ~ 1648-10-23",
+   "pre": "b.church unset",
+   "how": "enter Bremen",
+   "marker": "페르덴 마을 교회",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "westphalia_news",
+   "file": "js/systems/westphalia.js:84 WP.daily",
+   "name": "베스트팔렌 소식 (뮌스터 조약·맹세·평화의 종·조약·교황의 항의) + 시장 사건 westphaliapeace",
+   "where": "news",
+   "when": "1648-01-30 … 1648-11-26",
+   "pre": "unconditional",
+   "how": "automatic, journaled",
+   "marker": "베스트팔렌의 뮌스터에서 에스파냐와 네덜란드 연방의 대표들이 | 교황 인노첸시오 10세가",
+   "status": "ok",
+   "risk": "DUPLICATE: westphalia.js:96 sets s.rel.seen.rf_westphalia to suppress the REL_EVENTS news, but world.js:32 Rel.daily runs BEFORE world.js:49 Westphalia.daily on 1648-10-24, so rf_westphalia has already fired → two 「베스트팔렌 조약」 news the same day."
+  },
+  {
+   "id": "glory_o_call",
+   "file": "js/systems/glory.js:63 (arrival) / 73 oCall; js/data/glory.js:20-26",
+   "name": "명예혁명 — 오라녜 공의 부름",
+   "where": "Amsterdam (24)",
+   "when": "1688-07-10 ~ 1688-11-30",
+   "pre": "neither o nor j taken; decline → retry 30 days (no log)",
+   "how": "enter Amsterdam",
+   "marker": "오라녜 공 빌럼의 부름에 응했다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "glory_o_wind",
+   "file": "js/systems/glory.js:95 atSea / oWind",
+   "name": "명예혁명 — 개신교의 바람 (토베이)",
+   "where": "English Channel box lat 49.3~52.0, lon -6.0~2.2",
+   "when": "≥1688-11-11, fails after 1689-01-31",
+   "pre": "o === 1",
+   "how": "sail into Channel",
+   "marker": "오라녜 공의 함대와 함께 영국 해협을 건너 토베이에 닿았다 | fail(UI): 오라녜 공의 함대는 제독 없이",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "glory_j_call",
+   "file": "js/systems/glory.js:65 / jCall",
+   "name": "명예혁명 — 제임스 2세의 부름",
+   "where": "London (38)",
+   "when": "1688-09-01 ~ 1688-11-30",
+   "pre": "neither o nor j taken",
+   "how": "enter London",
+   "marker": "제임스 2세의 부름에 응했다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "glory_j_wind",
+   "file": "js/systems/glory.js:jWind",
+   "name": "명예혁명 — 동풍에 묶인 함대",
+   "where": "Channel box",
+   "when": "≥1688-11-11 ~ 1689-01-31",
+   "pre": "j === 1",
+   "how": "sail into Channel",
+   "marker": "동풍에 묶인 국왕의 함대 곁에서",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "glory_j_flight",
+   "file": "js/systems/glory.js:66 / jFlight",
+   "name": "명예혁명 — 국새와 국왕의 탈출",
+   "where": "London (38)",
+   "when": "1688-12-11 ~ 1689-01-20",
+   "pre": "j === 2",
+   "how": "enter London",
+   "marker": "로체스터 강가에서 제임스 2세를 배에 모셨다 | refuse: 달아나는 제임스 2세를 바다 건너로 모시는 일을 거절했다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "glory_j_france",
+   "file": "js/systems/glory.js:69 / jFrance",
+   "name": "명예혁명 — 바다 건너의 왕",
+   "where": "any French-owned PORT",
+   "when": "until 1689-03-31",
+   "pre": "j === 3",
+   "how": "enter French port",
+   "marker": "에서 제임스 2세를 프랑스 땅에 내려 드렸다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "glory_decl",
+   "file": "js/systems/glory.js:67 / decl",
+   "name": "권리 선언 (화이트홀)",
+   "where": "London (38)",
+   "when": "1689-02-23 ~ 1689-12-25",
+   "pre": "anyone, once",
+   "how": "enter London",
+   "marker": "화이트홀 연회장에서 권리 선언이 읽히고",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "glory_bill",
+   "file": "js/systems/glory.js:241 bill()",
+   "name": "권리장전의 날 (면세증 무효·의회 교역 증서)",
+   "where": "news",
+   "when": "1689-12-26",
+   "pre": "charter only if decl seen and oath≠no",
+   "how": "automatic",
+   "marker": "「권리장전」을 법으로 정했다 | (charterGot text in js/data/glory.js)",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "glory_news",
+   "file": "js/systems/glory.js:198 GL.daily; js/data/glory.js:162-172",
+   "name": "명예혁명 소식 (왕자 탄생·일곱 주교·토베이·국새·생제르맹·권리 선언·대관식·권리장전 / 통치론·보인·잉글랜드 은행)",
+   "where": "news (G.State.log)",
+   "when": "1688-06-20 … 1694-07-27",
+   "pre": "\"all\" items unconditional; \"part\" items (1690-1694) only for participants",
+   "how": "automatic",
+   "marker": "제임스 2세 왕비가 아들을 낳았다 | 주교 일곱 사람이 무죄로 풀려났다 | 국새를 템스강에 던졌다고 한다 | 함께 대관식을 올렸다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "newton_apple",
+   "file": "js/systems/newton.js:75 appleOpen / 76 onLand; js/data/newton.js:10-11",
+   "name": "뉴턴과 사과 (울즈소프)",
+   "where": "land exploration within 0.6° of Woolsthorpe (lon -0.63, lat 52.81)",
+   "when": "1665-06-01 ~ 1667-04-30",
+   "pre": "b.apple unset",
+   "how": "land from the Wash / east coast and walk near Woolsthorpe (js/scenes/land.js:469)",
+   "marker": "울즈소프의 사과나무 아래에서 젊은 아이작 뉴턴을 만났다 | join: 아이작 뉴턴이 동료가 되었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "newton_principia",
+   "file": "js/systems/newton.js:119 prinOpen; js/data/newton.js:12",
+   "name": "『프린키피아』 (왕립 학회)",
+   "where": "London (38)",
+   "when": "1686-04-28 ~ 1687-07-04",
+   "pre": "b.prin unset",
+   "how": "enter London",
+   "marker": "뉴턴의 『프린키피아』 원고를 보았다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "newton_principia_book",
+   "file": "js/systems/newton.js:234 NT.daily",
+   "name": "『프린키피아』 초판 도착",
+   "where": "news",
+   "when": "1687-07-05",
+   "pre": "paid printFund in newton_principia",
+   "how": "automatic",
+   "marker": "런던에서 상자 하나가 왔다 [UI-only: news window / sea-news box, NOT written to journal]",
+   "status": "ok",
+   "risk": "NT.daily is hooked by wrapping World.daily (newton.js:283), not via Journal SOURCES → its news never reach the journal (same for dutchwar/newworld/reformation/romeojuliet/mughal/junglebook/tarzan daily news)."
+  },
+  {
+   "id": "newton_news",
+   "file": "js/systems/newton.js:248-253",
+   "name": "뉴턴 소식 (프린키피아 1687·조폐국장 1699-12-23 / 학회장 1703·기사 1705·경도법 1714·주식 1720·죽음 1727)",
+   "where": "news",
+   "when": "1687-07-05 … 1727-03-20",
+   "pre": "b.met",
+   "how": "automatic",
+   "marker": "자연철학의 수학적 원리』가 런던에서 나왔다 | 아이작 뉴턴이 왕립 조폐국장이 되었다 [UI-only: news window / sea-news box, NOT written to journal]",
+   "status": "partly-after-1700",
+   "risk": "5 of 7 news are after 1700 (NEWS_AT in newton.js:28)."
+  },
+  {
+   "id": "newton_reoffer",
+   "file": "js/systems/newton.js:65 offerOpen",
+   "name": "뉴턴 — 런던에서 다시 동료 제안",
+   "where": "London (38)",
+   "when": "1720-09-20 ~ 1727-03-20",
+   "pre": "met, not hired",
+   "how": "enter London",
+   "marker": "아이작 뉴턴을 동료로 맞이하겠습니까 (confirm UI)",
+   "status": "after-1700-only",
+   "risk": "Hard floor t < 17200920 (newton.js:68): if the offer is refused at apple/principia, Newton can never be recruited before the 1700 end."
+  },
+  {
+   "id": "newton_bubble",
+   "file": "js/systems/newton.js:178 bubbleOpen; js/data/newton.js:14-16",
+   "name": "남해 회사 주식의 나락",
+   "where": "London (38)",
+   "when": "1720-01-01 ~ 1720-12-31",
+   "pre": "-",
+   "how": "enter London",
+   "marker": "남해 회사 주식",
+   "status": "after-1700-only",
+   "risk": "Dead content since the 1700 end; eventrumors.js newton_bubble rumor (d 17200101-17200831) also dead."
+  },
+  {
+   "id": "elmina_door",
+   "file": "js/systems/elmina.js:375 doorOpen / 376 door()",
+   "name": "엘미나 ⑥ 돌아오지 않는 문",
+   "where": "San Jorge/Elmina (city 97, Dutch from 1637)",
+   "when": "≥1637-09-01, open-ended, once",
+   "pre": "b.door unset (stages ①-⑤ NOT required)",
+   "how": "enter city 97",
+   "marker": "엘미나 성의 지하 감옥",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "elmina_news_dutch",
+   "file": "js/systems/elmina.js:151 (news dutch)",
+   "name": "엘미나 함락 소식",
+   "where": "news",
+   "when": "1637-08-29",
+   "pre": "unconditional",
+   "how": "automatic, journaled via Mina.daily wrap",
+   "marker": "(text varies with b.door) — grep 엘미나",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "pocahontas",
+   "file": "js/systems/pocahontas.js:56 PC.ready / 72 pending / meet()",
+   "name": "포카혼타스의 중재",
+   "where": "any N./Central American or Caribbean PORT (PC.isPort: region 10, lat≥7.2, lon<-50, excl. S.American Caribbean coast) — ~40 ports",
+   "when": "≥1521-08-13, open-ended",
+   "pre": "this generation never bought/sold slaves (s.slaver.gen); not done; 90-day cool after decline; no Aztec/Inca scene same day",
+   "how": "enter such a port (no random roll — fires at first eligible port)",
+   "marker": "포와탄의 딸 포카혼타스가 나서서 말렸다 | 포카혼타스가 동료가 되었다",
+   "status": "ok",
+   "risk": "Any slave trade in this generation permanently blocks it (until succession)."
+  },
+  {
+   "id": "coven_curse",
+   "file": "js/systems/coven.js:21 C.due / 51 C.play; data G.COVEN_EVENTS",
+   "name": "마녀 모임 — 신을 저주하는 세 목소리",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "when": "any; repeat every 30 days",
+   "pre": "3+ witch mates (G.MATE[].witch) aboard; 3-day gap between coven events",
+   "how": "automatic",
+   "marker": "신을 저주하는 세 목소리 — ",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "coven_potion",
+   "file": "js/systems/coven.js:21 C.due / 51 C.play; data G.COVEN_EVENTS",
+   "name": "마녀 모임 — 마녀들의 회복 포션",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "when": "any; repeat every 20 days",
+   "pre": "5+ witch mates (G.MATE[].witch) aboard; 3-day gap between coven events",
+   "how": "automatic",
+   "marker": "마녀들의 회복 포션 — ",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "coven_new_fashion_party",
+   "file": "js/systems/coven.js:21 C.due / 51 C.play; data G.COVEN_EVENTS",
+   "name": "마녀 모임 — 사라진 금화와 신상 파티",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "when": "any; repeat every 60 days",
+   "pre": "7+ witch mates (G.MATE[].witch) aboard; 3-day gap between coven events",
+   "how": "automatic",
+   "marker": "사라진 금화와 신상 파티 — ",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "coven_charm",
+   "file": "js/systems/coven.js:21 C.due / 51 C.play; data G.COVEN_EVENTS",
+   "name": "마녀 모임 — 열 마녀의 매혹",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "when": "any; repeat every 30 days",
+   "pre": "10+ witch mates (G.MATE[].witch) aboard; 3-day gap between coven events",
+   "how": "automatic",
+   "marker": "열 마녀의 매혹 — ",
+   "status": "ok",
+   "risk": "Needs 10 witches aboard together: in 1600-1699 only possible by keeping early-1600s witches (max 8 hireable 1600-1603) until befana/gowdie/voisin/tituba appear (1610/1640/1655/1670) — very unlikely."
+  },
+  {
+   "id": "coven_coven_oath",
+   "file": "js/systems/coven.js:21 C.due / 51 C.play; data G.COVEN_EVENTS",
+   "name": "마녀 모임 — 열셋의 결속",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "when": "any; repeat every once days",
+   "pre": "13+ witch mates (G.MATE[].witch) aboard; 3-day gap between coven events",
+   "how": "automatic",
+   "marker": "열셋의 결속 — ",
+   "status": "ok",
+   "risk": "UNREACHABLE in a 1600-1699 run: only 12 witches have y-ranges touching 1600-1699 (w_medea..w_tituba) and at most 8 overlap at once (1600-1603); 13 aboard is impossible unless witches hired before 1600 are kept."
+  },
+  {
+   "id": "coven_wage_waiver",
+   "file": "js/systems/coven.js:21 C.due / 51 C.play; data G.COVEN_EVENTS",
+   "name": "마녀 모임 — 열여섯 마녀의 무급 선언",
+   "where": "any (city/sea/land idle tick, main.js:257)",
+   "when": "any; repeat every once days",
+   "pre": "16+ witch mates (G.MATE[].witch) aboard; 3-day gap between coven events",
+   "how": "automatic",
+   "marker": "열여섯 마녀의 무급 선언 — ",
+   "status": "ok",
+   "risk": "UNREACHABLE in a 1600-1699 run: only 12 witches have y-ranges touching 1600-1699 (w_medea..w_tituba) and at most 8 overlap at once (1600-1603); 16 aboard is impossible unless witches hired before 1600 are kept."
+  },
+  {
+   "id": "tale_cinderella",
+   "file": "js/systems/fairytales.js:242 T.onLand / 127 cinderella",
+   "name": "신데렐라",
+   "where": "land: forest within 2.5° of a 프랑스-owned city",
+   "when": "any",
+   "pre": "glass ≥1 in cargo + craft skill ≥1; 30%/land day",
+   "how": "walk French forests",
+   "marker": "신데렐라가 동료가 되었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "tale_snow_white",
+   "file": "js/systems/fairytales.js:242 / 154 snowWhite",
+   "name": "백설공주",
+   "where": "land: French forest",
+   "when": "any",
+   "pre": "exactly 6 mates, all male; win duel vs huntsman",
+   "how": "walk French forests",
+   "marker": "백설공주가 동료가 되었다",
+   "status": "ok",
+   "risk": "Strict \"exactly 6 male mates\" condition (fairytales.js:112)."
+  },
+  {
+   "id": "tale_sleeping_beauty",
+   "file": "js/systems/fairytales.js:255 T.onCamp / 194",
+   "name": "잠자는 숲속의 공주",
+   "where": "camp in forest within 3° of a German-owned city",
+   "when": "any",
+   "pre": "med skill ≥1 + found dragon/reddragon/blackdragon (book-only legendary discoveries)",
+   "how": "camp",
+   "marker": "잠자는 숲속의 공주가 동료가 되었다",
+   "status": "ok",
+   "risk": "Needs a legendary (bookOnly) dragon discovery first."
+  },
+  {
+   "id": "tale_little_mermaid",
+   "file": "js/systems/fairytales.js:258 / 221",
+   "name": "인어공주",
+   "where": "camp + hunt on Danish isles (Funen/Zealand/Lolland-Falster/Bornholm boxes)",
+   "when": "any",
+   "pre": "-",
+   "how": "land on isle, camp, 사냥한다",
+   "marker": "인어공주가 동료가 되었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "joan",
+   "file": "js/systems/joan.js:37 ready / onCamp",
+   "name": "오를레앙의 처녀 잔",
+   "where": "camp in French forest, 약초를 캔다 and find herbs",
+   "when": "any; cool after failure",
+   "pre": "flagship has an EMPTY chapel cabin",
+   "how": "camp → herbs → duel witch-hunter",
+   "marker": "오를레앙의 처녀 잔을 화형대에서 구했다 | 마녀로 몰린 처녀를",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "snowqueen_gerda",
+   "file": "js/systems/snowqueen.js:56 ready / ~176 camp hook",
+   "name": "눈의 여왕 ① 게르다",
+   "where": "camp near one of 12 Nordic lakes (within 1°)",
+   "when": "any; 50% per camp; 45-day cool after refusal",
+   "pre": "gerda not aboard/gone",
+   "how": "camp by lake",
+   "marker": "동생 카이를 찾는 소녀 게르다를 만나",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "snowqueen_moscow",
+   "file": "js/systems/snowqueen.js:89 SQ.moscow",
+   "name": "눈의 여왕 ② 크렘린의 수수께끼",
+   "where": "Moscow (60, inland)",
+   "when": "any",
+   "pre": "stage escort (gerda aboard); Hanoi puzzle ★3",
+   "how": "enter Moscow",
+   "marker": "「눈의 여왕」 엘리자베타의 수수께끼를 풀었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "snowqueen_stow",
+   "file": "js/systems/snowqueen.js:~146 reveal",
+   "name": "눈의 여왕 ③ 몰래 탄 엘리자베타",
+   "where": "next land day / other city after Moscow",
+   "when": "any",
+   "pre": "stage stow",
+   "how": "automatic",
+   "marker": "엘리자베타가 몰래 배에 올라 따라나섰다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "pinocchio_rescue",
+   "file": "js/systems/pinocchio.js:56-62 / meet",
+   "name": "피노키오 ① 고래 배 속의 제페토",
+   "where": "open ocean (Atlantic/Pacific/Indian) whale encounter",
+   "when": "any",
+   "pre": "≥5 earlier whale encounters (sea event 「고래 떼」 or whale discoveries)",
+   "how": "sail",
+   "marker": "고래에게 삼켜진 어촌의 목수 제페토를 구했다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "pinocchio_join",
+   "file": "js/systems/pinocchio.js:~150",
+   "name": "피노키오 ② 제페토가 맡기다",
+   "where": "any city after rescue",
+   "when": "any",
+   "pre": "stage carry",
+   "how": "enter any city",
+   "marker": "제페토가 아들 피노키오를 맡겼다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "peter_lost",
+   "file": "js/systems/peterpan.js:58 ready / onLanding",
+   "name": "피터 팬 ① 섬에서 사라진 아이",
+   "where": "land on small Scottish isles (Hebrides/Skye/Mull/Coll/Tiree/Islay/Jura/Orkney/Shetland boxes)",
+   "when": "any",
+   "pre": "apprentice child aboard (k.aboard, age < adult 16)",
+   "how": "land on isle",
+   "marker": "사라졌다 (full line: <isle>에서 아들|딸 <name>이 사라졌다.)",
+   "status": "ok",
+   "risk": "Needs a child aged 12-15 aboard as apprentice — family must exist (≥ ~12 years of play)."
+  },
+  {
+   "id": "peter_return",
+   "file": "js/systems/peterpan.js:onCamp ~145",
+   "name": "피터 팬 ② 아이를 되찾다",
+   "where": "camp on the same isle, 약초를 캔다",
+   "when": "any",
+   "pre": "phase lost",
+   "how": "camp + herbs",
+   "marker": "피터 팬이 따라왔다 | lost at succession: 사라진 아이는 끝내 돌아오지 않았다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "mowgli",
+   "file": "js/systems/junglebook.js:32 ready / 38 forest / onLand",
+   "name": "정글북 — 모글리",
+   "where": "land within 3° of Delhi (145, inland)",
+   "when": "any; 30-day cool on failure",
+   "pre": "≥10 bananas in cargo + ≥1 female mate",
+   "how": "walk near Delhi for several days",
+   "marker": "늑대 손에 자란 청년",
+   "status": "ok",
+   "risk": "Bananas only sold in W/E Africa & SE Asia ports; Delhi deep inland."
+  },
+  {
+   "id": "tarzan",
+   "file": "js/systems/tarzan.js:31 ready / 37 jungle / onCamp",
+   "name": "정글의 사내 — 타잔",
+   "where": "camp + hunt in jungle/forest east of Sierra Leone (91), lat 7.2~9.9, lon to +2.6°",
+   "when": "any",
+   "pre": "capture by duel needs a medic (med≥1)",
+   "how": "camp → 사냥한다 → land battle → choice",
+   "marker": "시에라리온 동쪽 밀림에서",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "tam",
+   "file": "js/systems/seamaidens.js:50 vietCoast / 68 ready / afterFish",
+   "name": "떰 (베트남)",
+   "where": "Vietnamese coastal sea lon 104.3~109.8, lat 8.3~21.7",
+   "when": "any",
+   "pre": "cloth goods in cargo + craft ≥1; triggered only AFTER the fishing minigame (js/games/fishing.js:134)",
+   "how": "fish off Annam/Champa",
+   "marker": "처녀 떰에게 | pass: 빈 바구니를 안고 우는 처녀를 보고 지나쳤다",
+   "status": "ok",
+   "risk": "Only reachable via the fishing minigame — automated runs that never fish cannot trigger it."
+  },
+  {
+   "id": "maria",
+   "file": "js/systems/seamaidens.js:131 philippines / 136 ready / 138 onCamp",
+   "name": "마리아 (필리핀)",
+   "where": "camp + hunt on Philippine islands",
+   "when": "≥1565",
+   "pre": "crocodile discovery found by me",
+   "how": "camp → 사냥한다 → croc battle",
+   "marker": "처녀 마리아의 말에 창을 거두었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "littleprince_meet",
+   "file": "js/systems/littleprince.js:46 ready / onCamp",
+   "name": "어린 왕자 ① 사막의 야영지",
+   "where": "camp in desert terrain, 정찰한다",
+   "when": "any",
+   "pre": "fame ≥ 70,000",
+   "how": "camp → scout",
+   "marker": "어린 왕자에게 음식을 나눠 주고 | sent away: 배고픈 어린 왕자를 만났지만 그냥 보냈다",
+   "status": "ok",
+   "risk": "High fame threshold (70k)."
+  },
+  {
+   "id": "littleprince_well",
+   "file": "js/systems/littleprince.js:~240 onLand",
+   "name": "어린 왕자 ② 숨은 우물 · 정체",
+   "where": "desert well from the map",
+   "when": "any",
+   "pre": "met",
+   "how": "walk to marked well",
+   "marker": "숨은 우물을 찾아 | 왕자로 다니던 소녀였다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "legend_tao",
+   "file": "js/systems/legends.js:~120 LG.onLand / tavernBuy",
+   "name": "도원의 세 형제 (유비·관우·장비)",
+   "where": "Zhuo field (115.97,39.49 r0.45) on land, or Chinese-city taverns (3 drinks per visit)",
+   "when": "any",
+   "pre": "meet in 3 different places",
+   "how": "drink in Chinese taverns / walk Zhuo",
+   "marker": "유비가 동료가 되었다",
+   "status": "ok",
+   "risk": "Most Chinese cities carry flag X (closed, mingTrade never set) — needs bribe/sneak."
+  },
+  {
+   "id": "legend_zhuge",
+   "file": "js/systems/legends.js:~140 innVisit",
+   "name": "제갈량",
+   "where": "any inn",
+   "when": "any",
+   "pre": "liu_bei aboard as 부관(first); 3 inn visits",
+   "how": "visit inns",
+   "marker": "제갈량이 동료가 되었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "legend_dartagnan",
+   "file": "js/systems/legends.js:~156 marketBuy",
+   "name": "달타냥",
+   "where": "French-owned city market",
+   "when": "any",
+   "pre": "3 purchases in one visit; lend 2,000 gold",
+   "how": "buy in French market",
+   "marker": "달타냥이 동료가 되었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "legend_musketeers",
+   "file": "js/systems/legends.js:~196 muskDuel",
+   "name": "삼총사 (아토스→포르토스→아라미스)",
+   "where": "tavern of each NEW city visited with d_artagnan",
+   "when": "any",
+   "pre": "d_artagnan aboard; win duel",
+   "how": "enter taverns",
+   "marker": "아토스가 동료가 되었다 | 포르토스가 동료가 되었다 | 아라미스가 동료가 되었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "legend_scheherazade",
+   "file": "js/systems/legends.js:~235 bookRead",
+   "name": "셰헤라자드",
+   "where": "library of an Islamic (rel I) city",
+   "when": "any",
+   "pre": "5 books read in one visit",
+   "how": "read in library",
+   "marker": "셰헤라자드가 동료가 되었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "legend_lamp",
+   "file": "js/systems/legends.js:~258 ottomanCheck",
+   "name": "알라딘 · 알리바바",
+   "where": "Ottoman-owned city",
+   "when": "any",
+   "pre": "scheherazade as 통역(interp) role + investment level ≥5 in that city",
+   "how": "enter city",
+   "marker": "알라딘이 동료가 되었다 | 알리바바가 동료가 되었다",
+   "status": "ok",
+   "risk": "Investment level 5 per city is a heavy requirement."
+  },
+  {
+   "id": "fivetigers",
+   "file": "js/systems/fivetigers.js:~90 TG.play (hooked into Romance.seaDay/arrival)",
+   "name": "갑판 위의 오호장군",
+   "where": "sea day (12%) or port entry (30%)",
+   "when": "any",
+   "pre": "guan_yu, zhang_fei, athos, porthos, aramis all aboard ≥ together days",
+   "how": "automatic",
+   "marker": "「이 배의 오호장군」을 정했다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "quixote_meet",
+   "file": "js/systems/quixote.js:52 pending / meet",
+   "name": "돈키호테와 산초 — 풍차 언덕",
+   "where": "Toledo (4, inland)",
+   "when": "any; 60-day cool after refusal (no log)",
+   "pre": "not met",
+   "how": "enter Toledo",
+   "marker": "라 만차의 풍차 언덕에서 돈키호테와 산초 판사를 만났다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "quixote_tours",
+   "file": "js/systems/quixote.js:65 tours",
+   "name": "순례 — 투르 생마르탱",
+   "where": "Tours (16, inland)",
+   "when": "any",
+   "pre": "stage pilgrim",
+   "how": "enter Tours",
+   "marker": "순례 — 투르의 생마르탱 대성당에 들렀다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "quixote_toulouse",
+   "file": "js/systems/quixote.js:66 toulouse",
+   "name": "순례 — 툴루즈 생세르냉",
+   "where": "Toulouse (19, inland)",
+   "when": "any",
+   "pre": "stage pilgrim",
+   "how": "enter Toulouse",
+   "marker": "순례 — 툴루즈의 생세르냉 대성당에 들렀다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "quixote_santiago",
+   "file": "js/systems/quixote.js:67 santiago",
+   "name": "산티아고 순례 완료",
+   "where": "La Coruña (2)",
+   "when": "any",
+   "pre": "tours + toulouse done",
+   "how": "enter La Coruña",
+   "marker": "산티아고 데 콤포스텔라에서 순례를 마쳤다 | 산티아고 순례를 마치고 헤어졌다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "simcheong",
+   "file": "js/systems/simcheong.js:38 pending",
+   "name": "공양미 삼백 석 — 심청",
+   "where": "Hanyang (190) / Dongnae (226) / Hansando (229)",
+   "when": "any",
+   "pre": "rice ≥300 in cargo; cool after passing",
+   "how": "enter Korean port with rice",
+   "marker": "공양미 삼백 석 — | pass: 인당수 제물로 팔려 가는 처녀 심청을 보았다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "gyeonwoo_offer",
+   "file": "js/systems/gyeonwoo.js:48 GW.ready / 74 offer",
+   "name": "견우와 직녀 — 오작 할멈의 부탁",
+   "where": "any 조선-owned city",
+   "when": "any; 30-day retry on refusal (no log)",
+   "pre": "flagship = 거북선 (geobukseon, 62,000 gold, Korean yards tech 5); Hangzhou(177) and Sakai(192) known",
+   "how": "enter Korean city",
+   "marker": "오작 할멈에게서 견우와 직녀를",
+   "status": "ok",
+   "risk": "Turtle-ship flagship requirement."
+  },
+  {
+   "id": "gyeonwoo_chain",
+   "file": "js/systems/gyeonwoo.js:62-64",
+   "name": "견우와 직녀 — 항주 → 사카이 → 한산도 혼례",
+   "where": "Hangzhou (177, X-closed; GW.letIn opens it during stage 1) → Sakai (192) → Hansando (229)",
+   "when": "any",
+   "pre": "stages 1→3",
+   "how": "enter cities in order",
+   "marker": "항주에서 견우를 배에 태웠다 | 사카이에서 직녀를 배에 태웠다 | 견우와 직녀가 부부로 부하가 되었다 | 직녀에게서 일본도를 받았다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "napoleon_rescue",
+   "file": "js/systems/napoleon.js:49 afterBattle",
+   "name": "나폴레옹 ① 코르시카 바다의 소년",
+   "where": "sea box lon 7.6~10.4, lat 40.7~43.6 (Corsica)",
+   "when": "≥1510",
+   "pre": "win vs pirates by gunfire only (sinking, no boarding)",
+   "how": "pirate battle near Corsica",
+   "marker": "바다에 빠진 소년 나폴레옹 보나파르트를 건졌다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "napoleon_family",
+   "file": "js/systems/napoleon.js:58",
+   "name": "나폴레옹 ② 가족 구출 → 동료",
+   "where": "any sea",
+   "when": "any",
+   "pre": "phase rescued; win a pirate battle by boarding",
+   "how": "board a pirate ship",
+   "marker": "짐칸에 갇혀 있던 나폴레옹의 가족을 구했다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "napoleon_salon",
+   "file": "js/systems/napoleon.js:108 pending",
+   "name": "나폴레옹 ③ 오스트리아의 살롱 — 조제핀",
+   "where": "Austria-owned city (Prague 53, Vienna 54; Budapest 63 from 1686) — all inland",
+   "when": "any",
+   "pre": "napoleon aboard (phase joined/met)",
+   "how": "enter city → duel",
+   "marker": "오스트리아의 살롱에서 조제핀 드 보아르네를 만났다 | lost: 나폴레옹과 일기토를 벌였으나 졌다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "princess_call",
+   "file": "js/systems/princess.js:66 P.daily",
+   "name": "사라진 에스파냐 왕녀 — 부름",
+   "where": "news",
+   "when": "any",
+   "pre": "fame ≥ 50,000, unmarried male admiral, Castile crown sponsor present (any nation)",
+   "how": "automatic news",
+   "marker": "왕녀가 사라졌다는 흉한 소문",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "princess_quest",
+   "file": "js/systems/princess.js:110 audience / levant / den / return",
+   "name": "사라진 왕녀 — 특명·레반트 해적·수에즈 요새·귀환·혼인",
+   "where": "Seville palace → Levant seas (Alexandria 78/Beirut 121/Antioch 118) → Suez den (29.15,32.55) → Seville",
+   "when": "3-year deadline",
+   "pre": "accepted at palace",
+   "how": "palace audience then sea/land battles",
+   "marker": "의 특명을 받았다 — 해적에게 납치된 | 바르바리 해적 함대를 쳐부쉈다 | 수에즈 만의 해적 요새에서 | 모셔 왔다 — 하사금 | 에스파냐 국왕의 부마가 되었다 | fail: 「사라진 왕녀」를",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "castaway_wilson",
+   "file": "js/systems/castaway.js:~60",
+   "name": "윌슨 (같은 야영지)",
+   "where": "repeated camps at one site (r 0.6°)",
+   "when": "any, once",
+   "pre": "wilsonCamps camps within wilsonDays",
+   "how": "camp repeatedly",
+   "marker": "「윌슨」이 새 동료가 되었다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "castaway_journal",
+   "file": "js/systems/castaway.js:~75",
+   "name": "표류기",
+   "where": "same camp site",
+   "when": "any, once",
+   "pre": "journalCamps camps over journalDays",
+   "how": "camp repeatedly",
+   "marker": "「표류기」를 써 냈다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "colony_call",
+   "file": "js/systems/colony.js:~108 daily",
+   "name": "새 도시 개척 — 국왕의 부름",
+   "where": "news → home palace",
+   "when": "any",
+   "pre": "fame ≥200,000 (2nd: 400,000); free site for nation (ES America / PT Africa-Asia)",
+   "how": "automatic",
+   "marker": "새 도시를 세울 사람을 찾으신다며",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "mirage",
+   "file": "js/systems/mirage.js:81",
+   "name": "신기루 (1600+ 미래 건물)",
+   "where": "near a not-yet-built wonder",
+   "when": "≥1600",
+   "pre": "wonder built later than now",
+   "how": "sail/walk near site or enter city",
+   "marker": "신기루를 보았다 — 「",
+   "status": "ok",
+   "risk": "13 discoveries built 1700-1799 (yale 1701, chengde 1703, sfsalvador 1723, upenn 1740, princeton 1746, columbia 1754, hermitage 1764, brown 1764, pomeranian 1767, dartmouth 1769, potosimint 1773, brandenburg 1791, hwaseong 1796) can now never be found: D.isFuture (discovery.js:110) only makes ≥1800 builds mirage-findable and D.built (discovery.js:130-134) blocks the rest → encyclopedia ruin/creature completion (encyclopedia.js:29-31) unreachable."
+  },
+  {
+   "id": "family_osa",
+   "file": "js/systems/osa.js:214-286",
+   "name": "소꿉친구 재회·고백·혼례 (2대부터)",
+   "where": "home port on return by sea",
+   "when": "generation ≥2",
+   "pre": "heir has succeeded",
+   "how": "return home",
+   "marker": "에서 소꿉친구 | 서로 마음을 확인했다 | 성당에서 혼례를 올렸다",
+   "status": "ok",
+   "risk": "Needs a succession during the run."
+  },
+  {
+   "id": "family_heirplan_friend",
+   "file": "js/systems/heirplan.js:120",
+   "name": "아들의 소꿉친구가 찾아오다",
+   "where": "home",
+   "when": "any",
+   "pre": "adult son 16-30",
+   "how": "visit home",
+   "marker": "의 소꿉친구 (join: 함대에 합류했다)",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "family_firstlove",
+   "file": "js/systems/firstlove.js:80-117",
+   "name": "첫사랑 (여성 소꿉친구)",
+   "where": "sea/ports",
+   "when": "any",
+   "pre": "female childhood-friend mate of current admiral aboard",
+   "how": "automatic chain",
+   "marker": "첫 항해의 밤 — | 첫사랑",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "family_kidwed",
+   "file": "js/systems/kidwed.js:88-136",
+   "name": "열여덟 살 딸의 혼례",
+   "where": "home",
+   "when": "any",
+   "pre": "unmarried daughter ≥18",
+   "how": "enter home",
+   "marker": "왕세자비가 되었다 | 혼례를 올렸다. (지참금",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "romance_wedding",
+   "file": "js/systems/romance.js:245",
+   "name": "부하 커플의 혼례",
+   "where": "port",
+   "when": "any",
+   "pre": "male+female mates ≥3 years aboard, heat thresholds",
+   "how": "automatic",
+   "marker": "혼례를 올렸다. (금화",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "eraend_warnings",
+   "file": "js/systems/eraend.js:33-44",
+   "name": "대항해시대의 끝 — 1년 전·1달 전 소식 / 막을 내림",
+   "where": "news",
+   "when": "1699-01-01, 1699-12-01, 1700-01-01",
+   "pre": "-",
+   "how": "automatic",
+   "marker": "대항해시대에 남은 날은 이제 한 해뿐이다 | 다음 새해가 밝으면 대항해시대도 막을 내린다 [UI-only, World.daily is not journal-wrapped] | end (journal): 대항해시대가 막을 내렸다",
+   "status": "ok",
+   "risk": "Warnings are pushed from Game.newDay (main.js:383) outside any Journal wrap → not in the journal; only the 1700-01-01 line is logged."
+  },
+  {
+   "id": "eventrumors",
+   "file": "js/systems/eventrumor.js:85; js/data/eventrumors.js",
+   "name": "사건 소문 (마을 사람 5%)",
+   "where": "street folk in cities near each rumor point",
+   "when": "per rumor window",
+   "pre": "language understood; 90-day gap",
+   "how": "talk to street folk",
+   "marker": "소문 (",
+   "status": "ok",
+   "risk": "In-window rumors: globe, sky_kep, sky_gal, nzinga, westphalia, mingfall, glory_o, glory_j, newton_apple, pocahontas + all open-ended legend rumors. newton_bubble (d 17200101-17200831) is dead."
+  },
+  {
+   "id": "rel_ib_restore",
+   "file": "js/data/relevents.js (G.REL_EVENTS) → js/systems/relations.js:141-153",
+   "name": "포르투갈 왕정복고",
+   "where": "news (anywhere)",
+   "when": "1640-12-01",
+   "pre": "automatic; shown/logged only if ≤60 days late",
+   "how": "automatic news (journal grade B via Rel.daily wrap)",
+   "marker": "브라간사 공작을 주앙 4세로 세웠다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "rel_cr_vienna2",
+   "file": "js/data/relevents.js (G.REL_EVENTS) → js/systems/relations.js:141-153",
+   "name": "빈 전투",
+   "where": "news (anywhere)",
+   "when": "1683-09-12",
+   "pre": "automatic; shown/logged only if ≤60 days late; changes relations [[\"HRE\",\"PL\",70],[\"PA\",\"PL\",70]]",
+   "how": "automatic news (journal grade B via Rel.daily wrap)",
+   "marker": "얀 3세 소비에스키가 이끄는",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "rel_rf_defenest",
+   "file": "js/data/relevents.js (G.REL_EVENTS) → js/systems/relations.js:141-153",
+   "name": "프라하 창문 투척 사건",
+   "where": "news (anywhere)",
+   "when": "1618-05-23",
+   "pre": "automatic; shown/logged only if ≤60 days late",
+   "how": "automatic news (journal grade B via Rel.daily wrap)",
+   "marker": "황제의 관리들을 성의 창문 밖으로 내던졌다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "rel_rf_westphalia",
+   "file": "js/data/relevents.js (G.REL_EVENTS) → js/systems/relations.js:141-153",
+   "name": "베스트팔렌 조약",
+   "where": "news (anywhere)",
+   "when": "1648-10-24",
+   "pre": "automatic; shown/logged only if ≤60 days late",
+   "how": "automatic news (journal grade B via Rel.daily wrap)",
+   "marker": "뮌스터와 오스나브뤼크에서 30년 전쟁이 끝났다",
+   "status": "ok",
+   "risk": "Westphalia.daily tries to suppress this (westphalia.js:96) but runs after Rel.daily → both fire."
+  },
+  {
+   "id": "rel_fe_henriette",
+   "file": "js/data/relevents.js (G.REL_EVENTS) → js/systems/relations.js:141-153",
+   "name": "찰스 1세와 앙리에트 마리의 혼례",
+   "where": "news (anywhere)",
+   "when": "1625-06-13",
+   "pre": "automatic; shown/logged only if ≤60 days late; changes relations [[\"FR\",\"EN\",30]]",
+   "how": "automatic news (journal grade B via Rel.daily wrap)",
+   "marker": "앙리에트 마리가 잉글랜드의 찰스 1세에게 시집갔다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "rel_no_gustav",
+   "file": "js/data/relevents.js (G.REL_EVENTS) → js/systems/relations.js:141-153",
+   "name": "구스타브 아돌프의 독일 상륙",
+   "where": "news (anywhere)",
+   "when": "1630-07-06",
+   "pre": "automatic; shown/logged only if ≤60 days late; changes relations [[\"SW\",\"HRE\",-85]]",
+   "how": "automatic news (journal grade B via Rel.daily wrap)",
+   "marker": "포메른에 상륙했다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "rel_ea_moscow1610",
+   "file": "js/data/relevents.js (G.REL_EVENTS) → js/systems/relations.js:141-153",
+   "name": "폴란드군의 모스크바 입성",
+   "where": "news (anywhere)",
+   "when": "1610-07-04",
+   "pre": "automatic; shown/logged only if ≤60 days late",
+   "how": "automatic news (journal grade B via Rel.daily wrap)",
+   "marker": "폴란드군이 모스크바 크렘린에 들어갔다",
+   "status": "ok",
+   "risk": ""
+  },
+  {
+   "id": "rel_ea_romanov",
+   "file": "js/data/relevents.js (G.REL_EVENTS) → js/systems/relations.js:141-153",
+   "name": "로마노프 왕조",
+   "where": "news (anywhere)",
+   "when": "1613-02-21",
+   "pre": "automatic; shown/logged only if ≤60 days late",
+   "how": "automatic news (journal grade B via Rel.daily wrap)",
+   "marker": "미하일 로마노프를 차르로 뽑았다",
+   "status": "ok",
+   "risk": ""
+  }
+ ],
+ "auto_disasters_1600_1699": {
+  "file": "js/data/disasters.js (G.DISASTERS) → js/systems/disaster.js:60-61 (always journaled: \"name — place (kind)\" or Journal.add \"...소식이 들려온다\")",
+  "count": 31,
+  "list": [
+   {
+    "date": "1600-02-19",
+    "marker": "와이나푸티나 대분화",
+    "place": "페루 아레키파",
+    "kind": "volcano",
+    "sev": 3
+   },
+   {
+    "date": "1604-11-24",
+    "marker": "아리카 지진",
+    "place": "페루 아리카",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1604-12-29",
+    "marker": "취안저우 앞바다 지진",
+    "place": "명나라 푸젠 해안",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1605-02-03",
+    "marker": "게이초 쓰나미",
+    "place": "일본 난카이 해안",
+    "kind": "tsunami",
+    "sev": 2
+   },
+   {
+    "date": "1607-01-30",
+    "marker": "브리스틀 해협 홍수",
+    "place": "브리스틀 해협",
+    "kind": "flood",
+    "sev": 2
+   },
+   {
+    "date": "1610-01-15",
+    "marker": "레온 비에호 지진",
+    "place": "니카라과 레온",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1611-12-02",
+    "marker": "게이초 산리쿠 쓰나미",
+    "place": "일본 산리쿠 해안",
+    "kind": "tsunami",
+    "sev": 3
+   },
+   {
+    "date": "1618-09-04",
+    "marker": "피우로 산사태",
+    "place": "알프스 키아벤나",
+    "kind": "landslide",
+    "sev": 2
+   },
+   {
+    "date": "1629-09-21",
+    "marker": "멕시코시티 대홍수",
+    "place": "멕시코시티",
+    "kind": "flood",
+    "sev": 3
+   },
+   {
+    "date": "1631-12-16",
+    "marker": "베수비오 대분화",
+    "place": "나폴리 베수비오",
+    "kind": "volcano",
+    "sev": 3
+   },
+   {
+    "date": "1634-10-11",
+    "marker": "부르하르디 홍수",
+    "place": "북프리슬란트",
+    "kind": "flood",
+    "sev": 3
+   },
+   {
+    "date": "1638-03-27",
+    "marker": "칼라브리아 지진",
+    "place": "칼라브리아",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1640-07-31",
+    "marker": "홋카이도 고마가타케 분화",
+    "place": "에조 고마가타케",
+    "kind": "volcano",
+    "sev": 2
+   },
+   {
+    "date": "1642-10-09",
+    "marker": "카이펑 대홍수",
+    "place": "명나라 허난 카이펑",
+    "kind": "flood",
+    "sev": 3
+   },
+   {
+    "date": "1643-07-24",
+    "marker": "울산 지진",
+    "place": "조선 경상도",
+    "kind": "quake",
+    "sev": 1
+   },
+   {
+    "date": "1645-11-30",
+    "marker": "루손 대지진",
+    "place": "마닐라",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1647-05-13",
+    "marker": "산티아고 대지진",
+    "place": "칠레 산티아고",
+    "kind": "quake",
+    "sev": 3
+   },
+   {
+    "date": "1650-03-31",
+    "marker": "쿠스코 지진",
+    "place": "쿠스코",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1654-07-21",
+    "marker": "톈수이 지진",
+    "place": "청나라 간쑤",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1658-02-27",
+    "marker": "파리 대홍수",
+    "place": "파리",
+    "kind": "flood",
+    "sev": 2
+   },
+   {
+    "date": "1660-10-27",
+    "marker": "피친차 분화",
+    "place": "키토",
+    "kind": "volcano",
+    "sev": 2
+   },
+   {
+    "date": "1667-11-25",
+    "marker": "샤마히 지진",
+    "place": "시르반 샤마히",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1668-07-25",
+    "marker": "탄청 대지진",
+    "place": "청나라 산둥",
+    "kind": "quake",
+    "sev": 3
+   },
+   {
+    "date": "1669-03-11",
+    "marker": "에트나 대분화",
+    "place": "시칠리아 카타니아",
+    "kind": "volcano",
+    "sev": 3
+   },
+   {
+    "date": "1674-02-17",
+    "marker": "암본 지진",
+    "place": "몰루카 암본",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1679-09-02",
+    "marker": "싼허·핑구 지진",
+    "place": "베이징 동쪽",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1681-06-26",
+    "marker": "강원 지진",
+    "place": "조선 강원도",
+    "kind": "quake",
+    "sev": 1
+   },
+   {
+    "date": "1687-10-20",
+    "marker": "리마 대지진",
+    "place": "리마·카야오",
+    "kind": "quake",
+    "sev": 3
+   },
+   {
+    "date": "1688-07-10",
+    "marker": "스미르나 지진",
+    "place": "스미르나",
+    "kind": "quake",
+    "sev": 2
+   },
+   {
+    "date": "1692-06-07",
+    "marker": "포트로열 대지진",
+    "place": "자메이카 포트로열",
+    "kind": "quake",
+    "sev": 3
+   },
+   {
+    "date": "1693-01-11",
+    "marker": "시칠리아 대지진",
+    "place": "시칠리아 노토 골짜기",
+    "kind": "quake",
+    "sev": 3
+   }
+  ]
+ },
+ "auto_era_news_1600_1699": {
+  "file": "js/data/eratrade.js (G.ERA_NEWS) → js/systems/era.js:93-94",
+  "count": 15,
+  "list": [
+   {
+    "date": "1604-08",
+    "marker": "유럽 시장: 네덜란드가 나포한 포르투갈 상선의 중국 자기가 암스테르"
+   },
+   {
+    "date": "1610-06",
+    "marker": "유럽 시장: 네덜란드 상인들이 처음으로 차를 유럽에 들여왔다"
+   },
+   {
+    "date": "1615-03",
+    "marker": "유럽 시장: 베네치아에 커피가 들어왔다"
+   },
+   {
+    "date": "1618-06",
+    "marker": "유럽 시장: 보헤미아에서 시작된 전쟁이 독일 땅 전체로 번진다(30"
+   },
+   {
+    "date": "1621-05",
+    "marker": "유럽 시장: 네덜란드가 반다 제도를 무력으로 차지했다"
+   },
+   {
+    "date": "1625-01",
+    "marker": "유럽 시장: 잉글랜드·네덜란드 동인도회사의 배가 후추를 잔뜩 실어 "
+   },
+   {
+    "date": "1626-06",
+    "marker": "유럽 시장: 비버 털로 만든 모자가 유행이다"
+   },
+   {
+    "date": "1645-01",
+    "marker": "유럽 시장: 바베이도스의 사탕수수 농장이 설탕을 쏟아 내기 시작했다"
+   },
+   {
+    "date": "1652-05",
+    "marker": "유럽 시장: 런던에 첫 커피하우스가 문을 열었다"
+   },
+   {
+    "date": "1657-06",
+    "marker": "유럽 시장: 런던에 초콜릿을 파는 집이 생겼다"
+   },
+   {
+    "date": "1662-05",
+    "marker": "유럽 시장: 포르투갈 공주 브라간사의 카타리나가 잉글랜드 왕비가 되"
+   },
+   {
+    "date": "1664-01",
+    "marker": "유럽 시장: 동인도회사가 들여온 인도 면직물이 날개 돋친 듯 팔린다"
+   },
+   {
+    "date": "1683-10",
+    "marker": "유럽 시장: 빈을 에워쌌던 오스만 군대가 물러가며 커피 자루를 남기"
+   },
+   {
+    "date": "1686-10",
+    "marker": "유럽 시장: 프랑스가 인도 무늬 직물을 금지했지만 귀부인들은 몰래 "
+   },
+   {
+    "date": "1688-01",
+    "marker": "유럽 시장: 일본 칠기를 흉내 내는 「재패닝」 안내서가 나왔다"
+   }
+  ]
+ },
+ "before1600": [
+  "aztec (js/systems/aztec.js, 1517-1521, news to 1526)",
+  "barbarossa (js/systems/barbarossa.js, 1543-1544)",
+  "dutchwar ①-⑤ (js/systems/dutchwar.js, 1566-1575; VOC 1602 / truce 1609 news only for participants)",
+  "elmina ①-⑤ (js/systems/elmina.js, 1481-1483; ⑥ door is in-window)",
+  "galpisa (js/systems/galpisa.js, 1583-1592; 1612/1654 news only for participants)",
+  "goamalacca (js/systems/goamalacca.js, 1509-1511)",
+  "imjin (js/systems/imjin.js, 1592-1598)",
+  "incafall (js/systems/incafall.js, 1524-1537, price-revolution news to 1572)",
+  "kongo ep1/ep2 (js/systems/kongo.js, 1482-1491)",
+  "leonardo (js/systems/leonardo.js, 1482-1518)",
+  "medici (js/systems/medici.js, ≤1492-04-08)",
+  "mughal (js/systems/mughal.js, 1504-1526)",
+  "newworld (js/systems/newworld.js, 1491-1511)",
+  "potosi (js/systems/potosi.js, 1545-1550)",
+  "reformation (js/systems/reformation.js, 1499-1510)",
+  "romeojuliet p1/p2 (js/systems/romeojuliet.js, p1 1480-1590; p2 needs p1)",
+  "romesack (js/systems/romesack.js, 1527)",
+  "teppo (js/systems/teppo.js, 1554-1581 + 2y)",
+  "tudor: henry divorce / elizabeth tower / knight / drake raids / armada (js/systems/tudor.js, 1527-1588)",
+  "treaty windows Tordesillas 1494 / Zaragoza 1529 (js/systems/treaty.js — rules stay active to 1700)",
+  "sky_cop Copernicus (js/systems/skylore.js, 1539-1543)",
+  "naming new continent (js/systems/naming.js, ≤1507)",
+  "eventrumors: imjin, galpisa, romesack, potosi, leonardo, medici, barbarossa, kongo, dutchwar, nwpox, nwcolon, reform, romeo, teppo, henry, elizabeth, calais, aztec, inca, goamal, mina, sky_cop (js/data/eventrumors.js)",
+  "tutorial (js/systems/tutorial.js — tutorial mode only, 1480s)",
+  "story 「아버지의 사진」 (js/systems/story.js — story mode only)"
+ ]
+}
