@@ -97,7 +97,7 @@ def main():
         output = PREVIEW if region is None else PREVIEW.with_name(PREVIEW.stem.replace('-preview', '-' + {'중국':'china','동남아':'seasia','폴리네시아':'polynesia'}[region] + '-preview') + '.jpg')
         output.parent.mkdir(parents=True, exist_ok=True)
         preview.save(output, quality=94)
-    PLAN.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    PLAN.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     (ART / 'asset-checks.json').write_text(json.dumps(checks, indent=2) + '\n', encoding='utf-8')
     (ART / 'keys.json').write_text(json.dumps(list(keys), indent=2) + '\n', encoding='utf-8')
     with zipfile.ZipFile(ART / 'folk-asia-pacific-women-20261107.zip', 'w', zipfile.ZIP_DEFLATED) as archive:

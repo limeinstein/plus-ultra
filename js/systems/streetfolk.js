@@ -73,6 +73,8 @@
       if (D().types[t].animal) { if (animal) continue; animal = true; pool = pool.filter(function (x) { return !D().types[x].animal; }); }
       out.push(SF.make(t, c, streetW, heroX, ground, (seed || 0) + ':' + out.length + ':' + t + ':' + Math.floor(U.rng() * 1e6)));
     }
+    // 거리를 거니는 동료 한 명 (입항마다 10% — js/systems/matestroll.js)
+    if (G.MateStroll) { try { var mf = G.MateStroll.folk(c, streetW, heroX, ground, seed || 0); if (mf) out.push(mf); } catch (e) { console.error(e); } }
     // 서로·제독과 너무 붙지 않게 띄워 놓는다
     var lo = 120, hi = Math.max(lo + 200, streetW - 120);
     var near = Math.min(out.length, U.ri(1, 2));     // 한두 사람은 거리에 나서자마자 보이는 곳에
@@ -83,7 +85,7 @@
         f.x = x;
       }
       f.target = f.x;
-      if (G.StreetCulture) G.StreetCulture.attach(f, c, i);
+      if (G.StreetCulture && !f.mate) G.StreetCulture.attach(f, c, i);   // 거니는 동료는 그 고장 사람이 아니다
     });
     SF.warm(out);
     return out;
@@ -176,7 +178,9 @@
     var x = f.x - cam; if (x < -120 || x > 1720) return;
     var moving = f.state === 'walk';
     if (f.frames) {
-      var I = G.Img, idx = moving ? Math.floor(f.ph * f.frames.length) % f.frames.length : 0, fr = f.frames[idx], img = I.get(fr.k);
+      var I = G.Img, idx = moving ? Math.floor(f.ph * f.frames.length) % f.frames.length : 0, fr = f.frames[idx];
+      if (I.want) I.want(fr.k);   // 큰 도시 그림을 준비하며 캐시에서 빠졌어도 보행 시트를 다시 읽는다.
+      var img = I.get(fr.k);
       if (img) {
         // 한 칸(380×444)은 어른 키에 맞춰 그렸고, 아이·짐승은 칸 안에서 이미 작다 (tools/npc_walks.py displayScale) — 칸 높이는 모두 같게
         var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height, cw = fr.c != null ? iw / 4 : iw, ch = fr.c != null ? ih / 2 : ih;
@@ -318,6 +322,7 @@
   SF.INFO = INFO;
   /** 말을 건다 (js/scenes/city.js C.chatFolk) */
   SF.talk = async function (f, c) {
+    if (f.mate && G.MateStroll) return G.MateStroll.talk(f, c);   // 거리를 거니는 동료
     var sp = f.face || SF.speaker(f, c), lines = D().lines[f.type] || ['……'];
     if (!R.facilities(c).church || (c.flags && c.flags.indexOf('T') >= 0)) { var nl = lines.filter(function (l) { return l.indexOf('{church}') < 0; }); if (nl.length) lines = nl; }   // 교회가 없거나 작은 사당뿐인 마을
     var cl = R.cityLang(c); if (!f.animal) { sp.lang = cl.lv; sp.li = cl.li; } else { sp.lang = 3; sp.li = null; }   // 말은 지금 일행의 실력으로

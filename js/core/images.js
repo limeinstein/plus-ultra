@@ -680,6 +680,11 @@
     return !k ? null : /_f$/.test(k) ? 'f' : /_m$/.test(k) ? 'm' : null;
   };
   K.mate = function (id) { return ['portraits/mates/' + id]; };
+  /** 동료의 전용 보행 시트: 동료 ID로 같은 인물의 4열×2줄 그림을 찾는다. */
+  K.mateWalk = function (id) {
+    var d = (G.MATE_WALKS || {})[typeof id === 'string' ? id : id && id.id];
+    return d ? [d.key] : [];
+  };
   /** 새 항해사·후원자를 만들 때 쓰는 국가별 얼굴 묶음. 번호는 1~10이다. */
   K.peoplePool = function (kind, nation, gender, index) {
     return ['portraits/pools/' + kind + '/' + nation + '/' + gender + '/' + String(Math.max(1, Math.min(10, index || 1))).padStart(2, '0')];

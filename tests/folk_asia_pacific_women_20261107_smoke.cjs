@@ -33,8 +33,8 @@ const plan = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/folk_asia_pacific
         check(p.f.includes(d.name) && p.types.includes(d.type) && d.lg[p.lang[0]] === 3, row.id + ' 이름·솜씨·말');
         G.Game.state.wander.defs[d.id] = d;
         G.Game.state.mates.push({id: d.id, role: 'none', loyal: 80});
-        // 지역 공용 초상으로 저장한 동료도 새 민족 전용 한 쌍을 선택한다.
-        d.face = 'portraits/npc-roles/' + p.style + '/maid';
+        // 재제작 8종은 이전 v2 저장, 나머지는 v1 저장에서 최신 한 쌍으로 복원한다.
+        d.face = /_v3$/.test(base) ? base.replace(/_v3$/, '_v2') : base.replace(/_v2$/, '_v1');
         d.halfKey = d.face + '_half';
         G.Game.state = G.State.deserialize(G.State.serialize()); G.Wander.apply();
         const restored = G.MATE[d.id];

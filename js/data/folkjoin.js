@@ -135,7 +135,10 @@
     var p = G.FOLK_JOIN[id];
     if (!p) return;
     p.portraits = p.portraits || {};
-    p.portraits.f = ['portraits/folk-join/' + id + '_f_20261107_v1'];
+    // 원 캡처의 몸 방향·동작·성인 비율을 다시 그린 8종.
+    var poseV3 = ['folk_manchu', 'folk_miao', 'folk_yao', 'folk_zhuang', 'folk_lolo', 'folk_lachi', 'folk_shui', 'folk_lue'];
+    var version = poseV3.indexOf(id) >= 0 ? 'v3' : 'v2';
+    p.portraits.f = ['portraits/folk-join/' + id + '_f_20261107_' + version];
   });
   // 갈래마다 나서며 하는 말 ({who} = 그 민족)
   G.FOLK_JOIN_LINES = {
