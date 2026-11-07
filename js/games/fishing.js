@@ -12,7 +12,8 @@
   var U = G.U, UI = G.UI, R = G.R;
   var F = G.Fishing = {};
   G.BALANCE = G.BALANCE || {};
-  G.BALANCE.fishing = G.BALANCE.fishing || { bait: 3, food: 0.04, junk: 0.07, hintK: 2, rareSci: 0.25 };
+  // pity: 단서를 얻은 진귀한 물고기를 제 바다·제 깊이에서 노리다 놓칠 때마다(그 고기가 걸리지 않은 던지기) 걸릴 확률이 이 비율씩 더해진다 — 낚으면 끝 (베타 피드백 #157)
+  G.BALANCE.fishing = G.BALANCE.fishing || { bait: 3, food: 0.04, junk: 0.07, hintK: 2, rareSci: 0.25, pity: 0.5 };
   function B() { return G.BALANCE.fishing; }
   function S() { return G.Game.state; }
 
@@ -88,15 +89,25 @@
     return F.FISH.filter(function (f) { return f.c.indexOf(c) >= 0 && f.b.indexOf(b) >= 0; })
       .map(function (f) { return { f: f, w: f.w * (f.d === depth ? 2.2 : Math.abs(f.d - depth) === 1 ? 1 : 0.35) }; });
   };
+  /** 진귀한 물고기가 한 번 던질 때 걸릴 확률: 기본 × 단서(겹칠수록) × 과학 × 깊이 × 끈기(단서가 있을 때, 제 깊이에서 놓친 횟수) */
+  F.rareP = function (x, depth, sci) {
+    var s = S(), id = x.d.id, hint = s.hints[id];
+    if (sci == null) sci = R.skillRead ? R.skillRead('sci') : R.skill('sci');
+    var p = x.f.p * (hint ? B().hintK + (G.Disc.hintLv(id) - 1) * G.Disc.clueStack().fish : 1) * (1 + sci * B().rareSci) * (x.f.depth === depth ? 1.5 : Math.abs(x.f.depth - depth) === 1 ? 0.8 : 0.4);
+    if (hint && x.f.depth === depth) p *= 1 + ((s.fishMiss && s.fishMiss[id]) || 0) * (B().pity == null ? 0.5 : B().pity);
+    return Math.min(0.9, p);
+  };
   /** 무엇이 걸릴지 고른다 (던진 거리 power 0~1 → 깊이) */
   F.pick = function (lon, lat, power) {
     var depth = power < 0.36 ? 0 : power < 0.72 ? 1 : 2;
     var s = S(), sci = R.skillRead ? R.skillRead('sci') : R.skill('sci');
-    var rares = F.rareHere(lon, lat);
+    var rares = F.rareHere(lon, lat), miss = s.fishMiss || (s.fishMiss = {});
     for (var i = 0; i < rares.length; i++) {
-      var x = rares[i], p = x.f.p * (s.hints[x.d.id] ? B().hintK + (G.Disc.hintLv(x.d.id) - 1) * G.Disc.clueStack().fish : 1) * (1 + sci * B().rareSci) * (x.f.depth === depth ? 1.5 : Math.abs(x.f.depth - depth) === 1 ? 0.8 : 0.4);
+      var x = rares[i], p = F.rareP(x, depth, sci);
       if (U.chance(p)) return { rare: x.d, n: x.d.name, kg: U.rf(x.f.kg[0], x.f.kg[1]), diff: x.f.diff, depth: x.f.depth };
     }
+    // 단서를 얻은 고기를 제 깊이에서 노렸는데 걸리지 않았다 → 다음 던지기에 조금 더 잘 걸린다
+    rares.forEach(function (x) { if (s.hints[x.d.id] && x.f.depth === depth) miss[x.d.id] = (miss[x.d.id] || 0) + 1; });
     if (U.chance(B().junk)) {
       var c = F.climate(lat), b = F.basin(lon, lat);
       var js = F.JUNK.filter(function (j) { return (!j.b || j.b.indexOf(b) >= 0) && (!j.c || j.c.indexOf(c) >= 0); });
@@ -187,12 +198,14 @@
           if (G.Audio) try { G.Audio.sfx('click'); } catch (e) { /* */ }
           return;
         }
-        if (st.ph === 'wait' || st.ph === 'fly') { say('너무 일찍 챘다! 고기가 놀라 달아났다.'); toAim(); return; }
+        if (st.ph === 'wait' || st.ph === 'fly') { lost('너무 일찍 챘다! 고기가 놀라 달아났다.'); return; }
         if (st.ph === 'bite') { st.ph = 'reel'; st.t = 0; st.tension = 0.45; st.prog = 0.08; st.hold = true; st.runT = U.rf(1, 2.5); say('걸렸다! 누르고 있으면 감깁니다.', 2); return; }
         if (st.ph === 'reel') { st.hold = true; return; }
         if (st.ph === 'done') { toAim(); }
       }
       function toAim() { st.ph = 'aim'; st.t = 0; st.hook = null; st.hold = false; }
+      /** 고기를 놓쳤다 — 진귀한 물고기였다면 그렇다고 알려 준다 (헛걸음인지 아닌지 알 수 있게) */
+      function lost(t, ms) { var rare = st.hook && st.hook.rare; say(t + (rare ? ' …방금 그건 보통 고기가 아니었다! 커다란 그림자가 깊은 곳으로 사라졌다.' : ''), rare ? 6 : ms); toAim(); }
       function zone() {
         var dd = st.hook ? st.hook.diff : 1, z = dd === 1 ? [0.18, 0.86] : dd === 2 ? [0.28, 0.8] : [0.36, 0.76];
         var k = ops * 0.02; return [z[0] - k, z[1] + k];
@@ -235,7 +248,7 @@
         if (st.ph === 'aim') st.pow = 0.5 - 0.5 * Math.cos(st.t * 2.6);
         else if (st.ph === 'fly') { if (st.t > 0.6) { st.ph = 'wait'; st.t = 0; } }
         else if (st.ph === 'wait') { if (st.t >= st.wait) { st.ph = 'bite'; st.t = 0; st.bite = [1.0, 0.78, 0.58][st.hook.diff - 1] + ops * 0.05; } }
-        else if (st.ph === 'bite') { if (st.t >= st.bite) { say('미끼만 빼앗겼다... 찌가 잠기면 곧바로 챕시다.'); toAim(); } }
+        else if (st.ph === 'bite') { if (st.t >= st.bite) lost('미끼만 빼앗겼다... 찌가 잠기면 곧바로 챕시다.'); }
         else if (st.ph === 'reel') {
           var h = st.hook, dd = h.diff, z = zone();
           st.runT -= dt;
@@ -244,10 +257,10 @@
           st.tension += (st.hold ? upK : -downK) * dt + st.run * dt + Math.sin(st.t * 7) * 0.04 * dt * dd;
           st.tension = Math.max(0, st.tension);
           var need = [4, 7, 10][dd - 1] * (1 + Math.min(1, h.kg / 400) * 0.4);
-          if (st.tension >= 1) { say('툭! 줄이 끊어졌다... 고기가 너무 세게 당길 때는 손을 놓아 줄을 풀어 주십시오.', 4.5); toAim(); return; }
-          if (st.tension > z[1]) { st.strain += dt; if (st.strain > 1.0) { say('줄이 버티지 못하고 끊어졌다...', 4); toAim(); return; } }
+          if (st.tension >= 1) { lost('툭! 줄이 끊어졌다... 고기가 너무 세게 당길 때는 손을 놓아 줄을 풀어 주십시오.', 4.5); return; }
+          if (st.tension > z[1]) { st.strain += dt; if (st.strain > 1.0) { lost('줄이 버티지 못하고 끊어졌다...', 4); return; } }
           else st.strain = Math.max(0, st.strain - dt);
-          if (st.tension < z[0]) { st.slack += dt; st.prog = Math.max(0, st.prog - 0.06 * dt); if (st.slack > 2.0) { say('줄이 느슨해진 사이 고기가 바늘을 털고 달아났다.', 4); toAim(); return; } }
+          if (st.tension < z[0]) { st.slack += dt; st.prog = Math.max(0, st.prog - 0.06 * dt); if (st.slack > 2.0) { lost('줄이 느슨해진 사이 고기가 바늘을 털고 달아났다.', 4); return; } }
           else st.slack = Math.max(0, st.slack - dt * 0.5);
           if (st.hold && st.tension >= z[0] && st.tension <= z[1]) st.prog += dt / need;
           if (st.prog >= 1) catchIt();
