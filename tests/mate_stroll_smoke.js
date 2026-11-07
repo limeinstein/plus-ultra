@@ -10,7 +10,7 @@ const ROOT = path.resolve(__dirname, '..');
 let passed = 0;
 function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓ ' + msg); }
 (async function () {
-  const opt = { args: ['--no-sandbox', '--allow-file-access-from-files'] };
+  const opt = { args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] };
   if (process.env.BROWSER_EXE) opt.executablePath = process.env.BROWSER_EXE;
   const browser = await chromium.launch(opt);
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
@@ -23,6 +23,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     await page.evaluate(async () => {
       await G.Game.ensureGeo();
       G.State.newGame({ name: '시험', nation: 'PT', job: 'explorer', age: 24, birth: { m: 1, d: 1 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk: {}, lg: [], diff: 'normal' });
+      G.Game.state.settings.res = 0.35;
     });
     // 1) 일행에 없으면 나오지 않는다
     const a = await page.evaluate(() => {
@@ -47,6 +48,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     // 4) 실제 거리: 리스본에 들어가면 한 명이 걷는다
     await page.evaluate(() => { G.BALANCE.mateStroll.chance = 1; G.Game.go('city', { cityId: 0 }); });
     await page.waitForFunction(() => G.Game.sceneName === 'city' && G.Town.active() && G.Town.folks().length > 0, null, { timeout: 120000 });
+    // 화면 밖의 동료는 그릴 때 다시 읽는다. 실제 화면 안으로 옮겨 표시를 확인한다.
+    await page.evaluate(() => { const f=G.Town.folks().find(f=>f.mate),h=G.Town._hero(); f.x=h.x+170; f.target=f.x; f.state='idle'; f.timer=99; });
     await page.waitForTimeout(2500);
     await page.waitForFunction(()=>{const f=G.Town.folks().find(f=>f.mate);return f&&f.frames&&f.frames.length===8&&G.Img.get(f.frames[0].k);},null,{timeout:20000,polling:100});
     const b = await page.evaluate(() => {
@@ -58,6 +61,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
       const f = mates()[0], h = G.Town._hero(); f.x = h.x + 170; f.target = f.x; f.state = 'idle'; f.timer = 99; f.dir = -1;
       return out;
     });
+    console.log(JSON.stringify(b));
     ok(b.n === 1 && b.frames && b.img && b.others >= 3, '리스본 거리: 마을 사람 ' + b.others + '명 + 동료 「' + b.name + '」 한 명 (전용 걷는 그림 8칸)');
     ok(b.respawn.every(x => x === b.id), '건물에서 나와 거리 사람을 새로 풀어도 같은 한 명: ' + b.respawn.join(' · '));
     if (process.env.SHOT) { await page.waitForTimeout(600); await page.screenshot({ path: process.env.SHOT }); }
@@ -78,6 +82,6 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     ok(d.mates.length === 1 && d.mates[0] !== b.id, '다음 도시(' + d.city + '): 다른 사람 「' + d.mates[0] + '」 (지난번 ' + b.id + ')');
     ok(errors.length === 0, '콘솔 오류 0' + (errors.length ? ' — ' + errors.slice(0, 3).join(' | ') : ''));
     console.log('통과 ' + passed);
-  } catch (e) { console.log('실패: ' + e.message); if (errors.length) console.log(errors.join('\n')); process.exitCode = 1; }
+  } catch (e) { console.log('실패: ' + e.message); console.log(await page.evaluate(()=>({scene:G.Game.sceneName,hidden:G.Town.hidden(),cache:G.Img.cacheStats(),mate:G.Town.folks().filter(f=>f.mate).map(f=>({id:f.mate,x:f.x,frames:!!f.frames,status:f.frames&&G.Img.status(f.frames[0].k)}))}))); if (errors.length) console.log(errors.join('\n')); process.exitCode = 1; }
   finally { await browser.close(); }
 })();

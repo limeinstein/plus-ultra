@@ -119,7 +119,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const mate0 = G.Scenes.city.mate; G.Scenes.city.mate = async (t) => { said.cur.push({ t, who: '부관' }); };
       s.fleet.fatigue = 70; s.date = { y: 1494, m: 7, d: 1 };
       for (const t of Object.keys(G.STREET_FOLK.types)) {
-        said.cur = []; const f = SF.make(t, c, 6000, 1000, 768, 'talk' + t); await SF.talk(f, c); said[t] = said.cur;
+        said.cur = []; const f = SF.make(t, c, 6000, 1000, 768, 'talk' + t);
+        // 첫 대화는 지역 인사나 소문일 수 있다. 이어서 실제 실용 정보를 듣는 흐름까지 확인한다.
+        for (let i = 0; i < 5; i++) { await SF.talk(f, c); if (f.used || !SF.INFO[t]) break; }
+        said[t] = said.cur;
       }
       // 말이 통하지 않는 도시
       const far = G.CITY_DATA.find(x => x.name === '캘리컷'); s.player.lg = G.LANGS.map(() => 0); s.mates.forEach(m => { m.role = 'none'; });
@@ -131,7 +134,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const show = Object.keys(talk).filter(k => k !== 'cur' && k !== 'deafUsed').map(k => k + ': ' + (talk[k][0] ? talk[k][0].t : '')).join('\n    ');
     console.log('    ' + show);
     ok(Object.keys(talk).filter(k => Array.isArray(talk[k]) && k !== 'cur' && k !== 'deaf').every(k => talk[k].length >= 1 && talk[k][0].t.length > 8), '14종 모두 대화가 나온다');
-    ok(/금화 [0-9]+닢/.test(talk.innkeeper[0].t) && /피로|쉬/.test(talk.grandma[0].t) && talk.innkeeper[0].face && talk.librarian[0].face && !talk.dog[0].face, '여관 주인은 방값, 할머니는 지친 선원 걱정 · 사람은 얼굴, 짐승은 얼굴 없이');
+    ok(talk.innkeeper.some(x => /금화 [0-9]+닢/.test(x.t)) && talk.grandma.some(x => /피로|쉬/.test(x.t)) && talk.innkeeper[0].face && talk.librarian[0].face && !talk.dog[0].face, '지역 인사 뒤 여관 주인은 방값, 할머니는 지친 선원 걱정 · 사람은 얼굴, 짐승은 얼굴 없이');
     ok(talk.deaf.length === 2 && /알아듣지 못했/.test(talk.deaf[1].t) && talk.deafUsed === false, '말이 통하지 않으면 「알아듣지 못했다」 — 쓸모 있는 이야기는 아껴 둔다');
 
     // ⑥ 문화권마다 다른 모습
