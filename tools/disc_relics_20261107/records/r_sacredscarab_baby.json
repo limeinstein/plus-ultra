@@ -1,0 +1,17 @@
+{
+  "id": "r_sacredscarab_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-5eda9839-db69-4bf0-8f5b-6dfd5c667834.png",
+  "target": "tools/disc_relics_20261107/sources/r_sacredscarab_baby.png",
+  "file": "images/relics/r_sacredscarab_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "16e9241a88ee1fe512f16392bc2a2ed837240e06dcd36385b6fc023ae0d07da8",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

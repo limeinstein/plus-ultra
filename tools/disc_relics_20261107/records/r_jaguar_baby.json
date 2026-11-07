@@ -1,0 +1,17 @@
+{
+  "id": "r_jaguar_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-8129b221-bb5e-4786-8851-3458686cb0a3.png",
+  "target": "tools/disc_relics_20261107/sources/r_jaguar_baby.png",
+  "file": "images/relics/r_jaguar_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "5650da4fcf2c96167e781172cd8121722d229b583dbe98ab303b34757f8faa61",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

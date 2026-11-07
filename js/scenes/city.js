@@ -190,6 +190,9 @@
       if (G.BeauxIS && G.BeauxIS.pending()) await G.BeauxIS.check();   // 미남 항해사 — 사이드(말린디)·와이나(툼베스) (js/systems/beauxis.js)
       if (G.Donglin && G.Donglin.pending()) await G.Donglin.check();   // 천계제의 궁궐과 동림당 — 북경·항주·소주 (js/systems/donglin.js)
       if (G.NingChong && G.NingChong.pending()) await G.NingChong.check();   // 영원성의 여포수 · 수방의 장부 — 요동·북경·오문 (js/systems/ningchong.js)
+      if (G.SpiceMactan && G.SpiceMactan.pending()) await G.SpiceMactan.check();   // 향료제도와 막탄 — 말라카·암보이나·테르나테·브루나이 (js/systems/spicemactan.js)
+      if (G.MacDang && G.MacDang.pending()) await G.MacDang.check();   // 막 왕조의 성립 — 교도(탕롱)·유에 (js/systems/macdang.js)
+      if (G.SundaJohor && G.SundaJohor.pending()) await G.SundaJohor.check();   // 순다클라파와 자야카르타 · 조호르 — 반탐·말라카 (js/systems/sundajohor.js)
       if (G.Imjin && G.Imjin.pending()) await G.Imjin.check();   // 임진왜란 — 동래·한양·한산도 (js/systems/imjin.js)
       if (G.Globe && G.Globe.pending()) await G.Globe.check();   // 셰익스피어와 글로브의 불 — 앤 해서웨이 (js/systems/globe.js)
       if (G.GalPisa && G.GalPisa.pending()) await G.GalPisa.check();   // 갈릴레오와 피사의 사탑 (js/systems/galpisa.js)
@@ -215,6 +218,7 @@
       if (G.ColonyCo && G.ColonyCo.pending()) await G.ColonyCo.check();   // 식민지 경쟁의 회사들 — 서인도 회사·프랑스 동인도 회사·신스웨덴·다리엔 청약 (js/systems/colonyco.js)
       if (G.Rovers && G.Rovers.pending()) await G.Rovers.check();   // 메이플라워(물자·첫 겨울·왐파노아그·추수 잔치) · 한양의 박연 (js/systems/rovers.js)
       if (G.WifeFeud && G.WifeFeud.pending()) await G.WifeFeud.check();   // 두 부인이 한 도시에 — 질투와 부부싸움 (js/systems/wifefeud.js)
+      if (G.SEAsia && G.SEAsia.pending()) await G.SEAsia.check();   // 16세기 동남아 — 바인나웅 · 란쌍 · 우르다네타 · 아유타야 함락 (js/systems/seasia16.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;

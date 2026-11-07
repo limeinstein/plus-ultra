@@ -638,6 +638,14 @@
     seaAuto: { on: true, ms: 5000 },
     batchDeal: { base: 0.03, perAcct: 0.015, purser: 0.015, bulkPer: 2000, bulkMax: 0.03, cap: 0.22, sellK: 0.7, fade: 0.8, floor: 0.8, ceil: 1.2 },   // floor·ceil: 값 깎기와 일괄 흥정을 합쳐 사는 값은 시세 ×0.8 아래로, 파는 값은 ×1.2 위로 가지 않는다 (QA 2026-10-23)
     questLate: { k: 0.5, min: 20, max: 60 },
+    /* 의뢰(조합 의뢰·상선 호위·회사 임무)의 기한과 보수 (2026-11-07 베타 피드백 #156 「밀수 선단을 쫓다 기한이 끝난다」 — js/core/rules.js R.questDays·R.questDeadline·R.questFloor)
+       · 날수는 직선거리가 아니라 실제 뱃길(G.Nav.path) ÷ 초심자 선속. 초심자 카라벨(상인·항해술 0·기본 선원)로 리스본에서 실제로 자동 항해해 잰 값:
+         발렌시아 뱃길 13.1° 16일 · 런던 21.2° 24일 · 제노바 22.4° 30일 (예전 셈은 8·15·18일이었다)
+       · 기한 = 뱃길 날수 × slack + port (보급·날씨·길 헤맴·입항 여유). 예전에 주던 기한보다 짧아지지는 않는다
+       · 보수는 적어도 「기한 동안의 식량·물 값 × supplyK」 — 선원은 지금 선원·최저 인원·refCrew 가운데 큰 수로 센다
+       · quarrySea·quarryBattle: 의뢰로 쫓는 배(회사 임무의 밀수선단·경쟁사 화물선, 왕명의 나포 대상)는 바다에서 초심자 선속의 quarrySea배로만 달아나고,
+         해전에서는 배 속력이 quarryBattle배 — 짐을 가득 실은 배다. 한 번 누르면 붙을 때까지 따라간다 (js/scenes/sea.js chase) */
+    quest: { refSpeed: 0.75, slack: 1.5, port: 10, supplyK: 3, refCrew: 40, quarrySea: 0.55, quarryBattle: 0.65 },
     // 늦게 나온 책의 필사본: 1700년 전부터 있던 발견물인데 실린 책이 모두 after년 뒤에 나오면, 그 가운데 첫 책을 from년부터 도서관에서 읽는다 (js/data/clues.js G.bookOpenY)
     bookEarly: { from: 1580, after: 1700 },
     // 거절해도 다시 찾아오는 사건(돈키호테·심청·포카혼타스·무굴 디우의 포술장)이 다시 묻기까지의 날 수 — 첫 거절 뒤 30일, 두 번째 90일, 세 번째 1년, 그 뒤로는 5년마다 (js/core/util.js U.reaskDays)

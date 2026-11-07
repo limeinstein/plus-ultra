@@ -1,0 +1,17 @@
+{
+  "id": "r_hvalsey_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-8684f036-a04a-4f00-8360-63a525f2ebd8.png",
+  "target": "tools/disc_relics_20261107/sources/r_hvalsey_holy.png",
+  "file": "images/relics/r_hvalsey_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "7489aa9419e6ec52dc5fa4b1a4d3f7105be4f9764c1595949dd6a4c3f7b1676b",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

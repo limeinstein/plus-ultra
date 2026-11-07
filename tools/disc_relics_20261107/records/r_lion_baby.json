@@ -1,0 +1,17 @@
+{
+  "id": "r_lion_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-6e67de26-8980-4286-909f-e95fbb6eaa0c.png",
+  "target": "tools/disc_relics_20261107/sources/r_lion_baby.png",
+  "file": "images/relics/r_lion_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "dc303cb8c047a7ee5257c39e0d800828be0cbdd7fa6743ddee89a27f39637339",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

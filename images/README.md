@@ -1,5 +1,12 @@
 # images — 그림 교체 폴더
 
+발견·전설 선수상 중 발견 장면을 대신 쓰던 37종에 `figureheads/<ID>.webp`의 192×192 투명 전용 조각 그림을 추가했다.
+기존 원화 75종을 포함해 전체 선수상 112종이 해당 물건의 그림을 쓴다. [전체 미리보기·원본·생성 프롬프트·검증](../docs/art/figureheads-20261107.md).
+
+동남아 네 사건 묶음의 새 인물 37명은 `portraits/history/{sa,md,sm,sj}_*`·`portraits/mates/{md,sm,sj}_*`의 얼굴상 448×448과 `_half` 무릎상 1024×1536을 쓴다. 얼굴은 같은 투명 원화에서 추출한다. 사건샷 40종은 `legend-events/{sa,md,sm,sj}_*.webp`(1881×836)다. [인물·장면 미리보기·생성 지시문·검증](../docs/art/seasia-event-art-20261107.md).
+
+일곱 해적섬 여급은 `portraits/npc/pirate-islands/<지역>/servant_ref20261107_v1.webp`(얼굴 448×448)와 `_ref20261107_v1_half.webp`(무릎 1024×1536)를 사용한다. 기존 `servant`·`servant_half` 논리 키와 `tools/images.py`의 우선 교체 목록에 연결한다. 이전 원화는 보존한다. [참고 얼굴·표정·자세·화려한 의상과 검증](../docs/art/pirate-island-maids-20261107.md).
+
 중국·동남아·폴리네시아 여성 후보 20종 중 만주·묘족·야오·좡족·로로·라찌·수족·루 8종은 원 캡처의 몸 방향·동작·머리 비율을 반영한 `portraits/folk-join/<ID>_f_20261107_v3.webp`와 `_v3_half.webp`를 쓴다. 나머지 12종은 v2를 유지한다. 얼굴은 448×448, 무릎상은 1024×1536이며 이전 버전도 보존한다. [최신 자세·얼굴 비교와 제작 명세](../docs/art/folk-asia-pose-20261107.md) · [이전 v2 기록](../docs/art/folk-asia-pacific-faces-20261107.md).
 
 브리지드 버크의 최신 얼굴상·무릎상은 `portraits/rivals/탑성의 여주인 브리지드 버크_corsair20261107.webp`와 `_corsair20261107_half.webp`다. [새 첨부 얼굴·해적 복장 수정](../docs/art/brigid-corsair-20261107.md).

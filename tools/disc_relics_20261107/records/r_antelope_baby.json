@@ -1,0 +1,17 @@
+{
+  "id": "r_antelope_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-2074cc3a-3a7c-439b-a49d-e0164c90f918.png",
+  "target": "tools/disc_relics_20261107/sources/r_antelope_baby.png",
+  "file": "images/relics/r_antelope_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "feb0a5afd83dd08bf53e889399c9783abcdcd755d7b428fbb058da6ebdb4e25e",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_f_swordfish_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-f579e4e0-fbee-467a-a1d2-433a0e6b5837.png",
+  "target": "tools/disc_relics_20261107/sources/r_f_swordfish_baby.png",
+  "file": "images/relics/r_f_swordfish_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "1ca0623430686c8ab0514bd3b464089a4e7e7775dea8685e11dc5fe633458146",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

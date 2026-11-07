@@ -1,0 +1,17 @@
+{
+  "id": "r_arthurtomb_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-fca5817d-4b0c-4a43-9dff-cbf097fc79c2.png",
+  "target": "tools/disc_relics_20261107/sources/r_arthurtomb_holy.png",
+  "file": "images/relics/r_arthurtomb_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "b27814ef60d7e23de9c7e6ef181243262732be8f356dd7a98a486f5ff933f74a",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

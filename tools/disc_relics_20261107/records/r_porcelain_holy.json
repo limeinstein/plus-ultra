@@ -1,0 +1,17 @@
+{
+  "id": "r_porcelain_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-d4b83be2-2e59-4729-b480-d9a814baa986.png",
+  "target": "tools/disc_relics_20261107/sources/r_porcelain_holy.png",
+  "file": "images/relics/r_porcelain_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "10f2e7833be53643a58a9f0668099a087ce6e0047fd71ffe3861ce695d8121c1",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

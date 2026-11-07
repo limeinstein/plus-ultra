@@ -1,0 +1,17 @@
+{
+  "id": "r_putuo_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-4edd7c77-e90b-4178-b87e-6b30df10d528.png",
+  "target": "tools/disc_relics_20261107/sources/r_putuo_holy.png",
+  "file": "images/relics/r_putuo_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "c7589389c596540fc3bb88794e0da781b9e6224a33d102c4839edd0ddbd1305d",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_persian_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-ecde28c7-c2fa-4482-bf09-e3aa5ed22566.png",
+  "target": "tools/disc_relics_20261107/sources/r_persian_baby.png",
+  "file": "images/relics/r_persian_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "7b4d5c6e69283fdb92ec09625539f786d95e807560b24875ef227c83e427ef9f",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

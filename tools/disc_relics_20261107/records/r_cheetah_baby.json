@@ -1,0 +1,17 @@
+{
+  "id": "r_cheetah_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-87115ecd-e446-47f6-9f1a-d986dea1a167.png",
+  "target": "tools/disc_relics_20261107/sources/r_cheetah_baby.png",
+  "file": "images/relics/r_cheetah_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "8565240b5a6d62a1b3b1fffa49c634cb3a5282c5f3603adc01e7825550e57c46",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

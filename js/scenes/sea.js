@@ -432,6 +432,7 @@
   }
   SEA.leaveAuto = leaveAuto;
   function setTarget(lon, lat, city) {
+    if (st) st.chase = null;          // 다른 곳을 고르면 쫓던 배는 놓는다 (approachNpc가 다시 건다)
     var s = S(), RT = G.Routes;
     var auto = !!(city && RT.isOpen(RT.origin(), city.id));      // 자동항해(×4)는 익숙한 항로의 항구만
     if (!auto) leaveAuto();
@@ -457,6 +458,7 @@
   SEA.setTarget = setTarget;
   /** 침로: 목적지 쪽으로 곧장 간다 (뭍을 돌아가는 뱃길은 찾지 않는다) */
   function setCourse(lon, lat, city) {
+    if (st) st.chase = null;
     var s = S(), l = s.loc;
     leaveAuto();
     monsoonWarn(lon, lat);
@@ -815,6 +817,30 @@
       return;
     }
   }
+  /* 의뢰로 쫓는 배 (2026-11-07 베타 피드백 #156 「밀수선단이 너무 빨라 쫓다가 기한이 끝난다」):
+     회사 임무의 밀수선단·경쟁사 화물선(n.quarry), 왕명의 나포 대상(n.court 'capture'·'marque') — 짐을 가득 실어
+     초심자 함대 선속(G.BALANCE.quest.refSpeed와 지금 함대 가운데 느린 쪽)의 quarrySea배로만 달아난다 */
+  function isQuarry(n) { return !!(n && !n.hostile && (n.quarry || n.court === 'capture' || n.court === 'marque')); }
+  SEA.isQuarry = isQuarry;
+  SEA.chase = function (n) { if (st && n && st.npcs.indexOf(n) >= 0) approachNpc(n); };   // 배를 누른 것과 같다 (시험·튜토리얼용)
+  function quarryV() {
+    var day = S().day;
+    if (st.qv && st.qv.day === day) return st.qv.v;
+    var K = R.questK(), v = Math.min(K.refSpeed, G.Plan ? G.Plan.avgSpeed() : K.refSpeed) * K.quarrySea;
+    st.qv = { day: day, v: v }; return v;
+  }
+  /* 배를 한 번 누르면 붙을 때까지 따라간다 (st.chase) — 신호를 주고받을 만큼(0.8°) 다가가면 「신호」 창.
+     다른 곳을 누르거나 손으로 몰면 그만둔다 (setTarget·setCourse가 st.chase를 지우고, 길이 지워지면 멈춘다) */
+  function chaseStep() {
+    var n = st.chase; if (!n) return;
+    if (st.npcs.indexOf(n) < 0 || !st.target) { st.chase = null; return; }
+    var l = S().loc, d = G.Geo.dist(l.lon, l.lat, n.lon, n.lat);
+    if (d <= 0.8) { st.chase = null; approachNpc(n); return; }
+    if (G.Geo.dist(st.target.lon, st.target.lat, n.lon, n.lat) < 0.12) return;
+    var path = (G.Nav.seaPath || G.Nav.path)(l.lon, l.lat, n.lon, n.lat);
+    if (!path) { st.path = [[l.lon, l.lat], [n.lon, n.lat]]; st.direct = true; } else { st.path = path; st.direct = false; }
+    st.pathI = 1; st.target = { lon: n.lon, lat: n.lat, city: null };
+  }
   function updateNpcs(days) {
     var s = S(), l = s.loc;
     for (var i = st.npcs.length - 1; i >= 0; i--) {
@@ -823,7 +849,7 @@
       if (n.exp && G.SeaFolk && G.SeaFolk.place(n, st.dayAcc)) { if (n.gone || d > 9) st.npcs.splice(i, 1); continue; }   // 탐험 함대는 날짜대로 항로를 간다
       if (n.hostile && d < (n.hunt || n.chaser ? 8 : 4.5) && !n.fled) n.heading = Math.atan2(l.lat - n.lat, G.Geo.wrapLon(l.lon - n.lon));
       else if ((n.kind === 'merchant' || n.awed) && d < 1.2) { n.heading = Math.atan2(n.lat - l.lat, G.Geo.wrapLon(n.lon - l.lon)); if (n.awed && !n.awedTold) { n.awedTold = true; UI.toast(G.Ships.pirateLabel(n.zone) + '의 배가 ' + s.fleet.ships[0].name + '호의 거대한 모습을 보고 달아난다.', 'ship', 3600); } }
-      var sp = n.spd * days;
+      var sp = (isQuarry(n) ? Math.min(n.spd, quarryV()) : n.spd) * days;
       var nl = n.lon + Math.cos(n.heading) * sp, nt = n.lat + Math.sin(n.heading) * sp;
       if (G.Geo.isSea(nl, nt, 0.5)) { n.lon = nl; n.lat = nt; } else n.heading += U.rf(1, 2.5);
       if (d > 9) st.npcs.splice(i, 1);
@@ -932,7 +958,7 @@
   }
   function approachNpc(n) {
     var s = S();
-    if (G.Geo.dist(s.loc.lon, s.loc.lat, n.lon, n.lat) > 0.8) { setTarget(n.lon, n.lat, null); return; }
+    if (G.Geo.dist(s.loc.lon, s.loc.lat, n.lon, n.lat) > 0.8) { setTarget(n.lon, n.lat, null); st.chase = n; return; }   // 붙을 때까지 따라간다 (chaseStep)
     if (!n.hostile && !n.awed && !n.calm) { hail(n); return; }   // calm: 처음 몇 해 먼저 덤비지 않는 이름난 해적 — 다가가면 싸울지 고른다
     encounter(n, true);
   }
@@ -1013,6 +1039,7 @@
         move(subD, subT);
         if (l.lon !== chartLon || l.lat !== chartLat) G.State.surveyChart(l.lon, l.lat, chartR());
         updateNpcs(subD);
+        if (st.chase) { chaseStep(); if (st.busy) break; }
         st.dayAcc += subD;
         if (st.dayAcc >= 1 && !dayDue) { st.dayAcc -= 1; dayDue = true; }   // 하루가 지났다 — 이 장면의 남은 걸음을 마저 간 뒤에 처리 (걸음을 잃지 않게)
       }
@@ -1620,6 +1647,7 @@
       if (G.WangMerch && G.WangMerch.seaPending()) await G.WangMerch.atSea();   // 중국 근해: 마대인과 딸 지나의 금봉호 (js/systems/wangmerchant.js)
       if (G.ColonyCo && G.ColonyCo.seaPending()) await G.ColonyCo.atSea();   // 트랑케바르·퐁디셰리·토바고·다리엔 앞바다 (js/systems/colonyco.js)
       if (G.Rovers && G.Rovers.seaPending()) await G.Rovers.atSea();   // 스페르베르·하멜 · 해적(오말리·보니와 리드·검은 수염) (js/systems/rovers.js)
+      if (G.SEAsia && G.SEAsia.seaPending()) await G.SEAsia.atSea();   // 세부의 레가스피 · 마닐라 만 (js/systems/seasia16.js)
       if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);

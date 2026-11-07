@@ -1,5 +1,13 @@
 # 07 발견 유물 그림 411장 — 동물의 새끼 · 전설 생물의 물건 · 종교 성물 (2026-11-07 사용자 요청)
 
+## 완료 (2026-11-07)
+- ImageGen으로 411장 제작: 전설 물건 46장 · 동물의 새끼 209장 · 종교 성물 156장. 원본 PNG와 256×256 투명 WebP 저장 완료.
+- `images/manifest.js`와 제작 기록을 갱신했다. 제작 기록은 기존 387개를 포함해 총 798개다.
+- 밝은 배경과 어두운 배경에서 전체 아이콘을 검수했다. 새끼의 형태·색과 펼친 경전 10종을 보정하고, 배경 흔적이 남은 4종을 수정했다. 수정 전 그림은 작업 폴더의 `revisions/`에 보관했다.
+- `node tests/disc_relics_smoke.js`: 13개 통과. `ART=1 node tests/disc_relics_smoke.js`: 14개 통과(411개 그림 모두 있음).
+- 호랑이·인어·노트르담을 실제 발견 처리해 발견 카드와 소지품 화면 6장을 확인했다. 콘솔 오류 0건, 검사용 브라우저 종료 완료.
+- [전체 점검판](../art/disc-relics-20261107-preview.jpg) · [게임 화면 및 검증 결과](../art/disc-relics-20261107-game/verification.json) · 재현 도구 `tools/disc_relics_20261107/verify_game.js`.
+
 ## 왜
 발견물을 찾으면 손에 넣는 유물을 세 갈래로 늘렸다 (규칙·글은 Claude가 끝냄 — `js/data/discrelics.js`, `js/data/relics.js`, `js/systems/discovery.js`).
 

@@ -1,0 +1,19 @@
+{
+  "id": "r_arcticwolf_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-d39df92a-9cb1-47fb-8b2d-6998e8072dd2.png",
+  "target": "tools/disc_relics_20261107/sources/r_arcticwolf_baby.png",
+  "file": "images/relics/r_arcticwolf_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "9f5ac3cd07e1a6409a700f8bfcb45502d023c472736aab92827d511d326e3181",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "note": "검수: 피사체 뒤에 남은 반투명 배경 제거",
+  "prompt": "Edit the provided inventory icon to remove EVERY part of the white and gray cloudy background, especially at the top and in all corners and all gaps and loops. Preserve the single white arctic wolf pup, its exact natural face and eyes, seated pose, fur strands and tail. Preserve the hand-painted realistic watercolor and fine-ink style. Make all space outside the physical subject true transparent alpha: no white haze, gray halo, floor, scenery, cast shadow, glow, colored rectangle or backdrop. Preserve fine subject edges cleanly. Keep the entire subject fully visible and centered on a square canvas with clear margins, no text or watermark."
+}

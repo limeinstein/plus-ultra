@@ -1,0 +1,17 @@
+{
+  "id": "r_philae_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-d4cb6ecd-65ee-4c98-a6b9-f5a808aef2fc.png",
+  "target": "tools/disc_relics_20261107/sources/r_philae_holy.png",
+  "file": "images/relics/r_philae_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "60b8500a80fbfb311dd12cbb1513d3543d4e688ab72232e3f41587a44c48a175",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

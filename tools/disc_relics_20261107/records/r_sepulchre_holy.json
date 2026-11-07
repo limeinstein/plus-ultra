@@ -1,0 +1,17 @@
+{
+  "id": "r_sepulchre_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-4ac43b83-21b2-4f71-9912-ce2b7e98b7d0.png",
+  "target": "tools/disc_relics_20261107/sources/r_sepulchre_holy.png",
+  "file": "images/relics/r_sepulchre_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "ae83f0b04e64c4f9f4c2745c7b34f0436737c247af72f720b2ab86a63ec4ad9f",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

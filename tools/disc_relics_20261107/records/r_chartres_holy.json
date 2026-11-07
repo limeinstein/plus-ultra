@@ -1,0 +1,17 @@
+{
+  "id": "r_chartres_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-faabd9df-bd57-438f-9fca-5012041e667f.png",
+  "target": "tools/disc_relics_20261107/sources/r_chartres_holy.png",
+  "file": "images/relics/r_chartres_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "0750a1b66a2034b2281b7b40ce161a5a4c31530b7f346ab12a4f3e49c6d209c3",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_qufu_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-c8ea37a8-ec5a-41dc-94f9-1559579044c3.png",
+  "target": "tools/disc_relics_20261107/sources/r_qufu_holy.png",
+  "file": "images/relics/r_qufu_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "fbd21143504e7c59238989c9678016ea07a39532334115308d3ce01281edd573",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

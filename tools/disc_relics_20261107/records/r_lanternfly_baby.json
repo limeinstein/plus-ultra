@@ -1,0 +1,19 @@
+{
+  "id": "r_lanternfly_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-b27c320b-a2d9-4957-92cd-6f6120884a2d.png",
+  "target": "tools/disc_relics_20261107/sources/r_lanternfly_baby.png",
+  "file": "images/relics/r_lanternfly_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "6006d358b19d365e37e366a91c7e87ac9e00ace1b016ac62ff33e4b3d0d40eaa",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "note": "검수: 꽃매미의 어린 약충을 여섯 다리의 실제 곤충 형태로 수정",
+  "prompt": "Create one isolated transparent square inventory icon for an Age of Discovery exploration game. One juvenile peanut-headed lanternfly, Fulgora laternaria, a wingless late-instar planthopper nymph resting on ONE fresh green leaf. Natural mottled tan, brown and cream coloration, a squat insect body, emerging wing pads, six slender jointed insect legs, modest anterior head process, small compound eyes. True sap-sucking insect anatomy; closed mouth and a slender sucking rostrum underneath. No open jaws, no reptile face, no vertebrate teeth, no crocodile mouth, no caterpillar prolegs. One subject only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink, warm natural highlights, crisp silhouette at small inventory sizes, matching an old maritime adventure game. Genuinely transparent background, no floor, no scenery, no shadow plate, no text, no labels, no border, no frame, no logo, no watermark."
+}

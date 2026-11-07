@@ -1,0 +1,17 @@
+{
+  "id": "r_vittala_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-5cb443f2-8586-4b80-90ae-26f1b80482ce.png",
+  "target": "tools/disc_relics_20261107/sources/r_vittala_holy.png",
+  "file": "images/relics/r_vittala_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "2e46f43de44f1b77cfe303855c24948aa5c8849535ffea9cd9dcce6f11acf52a",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_manta_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-c26cd9d4-3494-4736-9799-3aad029f53a1.png",
+  "target": "tools/disc_relics_20261107/sources/r_manta_baby.png",
+  "file": "images/relics/r_manta_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "0a6dec0d6116bd958a09720dd446c634a9660abc872c4312f1d0dfb60c8a913f",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

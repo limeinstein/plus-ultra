@@ -1,0 +1,17 @@
+{
+  "id": "r_sanagustin_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-c33264ed-6ebe-4271-ba2b-8365e854df35.png",
+  "target": "tools/disc_relics_20261107/sources/r_sanagustin_holy.png",
+  "file": "images/relics/r_sanagustin_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "682c50af676ad17cf18ac602eba83613927a262b2be4b7b5fdb99d97855ef786",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

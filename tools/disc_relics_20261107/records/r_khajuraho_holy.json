@@ -1,0 +1,17 @@
+{
+  "id": "r_khajuraho_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-281c9df4-8d34-4021-8f48-c21586e852a2.png",
+  "target": "tools/disc_relics_20261107/sources/r_khajuraho_holy.png",
+  "file": "images/relics/r_khajuraho_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "fc39bfa98c1e0580448a3014c2139b775265c192c510419a51bba54b9e4c8a28",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

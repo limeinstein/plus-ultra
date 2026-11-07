@@ -1,0 +1,17 @@
+{
+  "id": "r_lastsupper_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-03c8c9f3-809e-4fc1-965e-09203dc7d802.png",
+  "target": "tools/disc_relics_20261107/sources/r_lastsupper_holy.png",
+  "file": "images/relics/r_lastsupper_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "bceab9292123c5d52c7ea2638e9512f3fd7352d0dafc7eb182b805dd0befea6d",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

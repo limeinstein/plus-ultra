@@ -1,0 +1,17 @@
+{
+  "id": "r_banteaysrei_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-8c42f1e9-aeee-4323-a522-1d12b3de249b.png",
+  "target": "tools/disc_relics_20261107/sources/r_banteaysrei_holy.png",
+  "file": "images/relics/r_banteaysrei_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "9e0336d95953f9276e9bbfba1e93d0fe275dde9d03bb5a2b737ae8f989dff7f0",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_man-eating-shark_legend",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-d3435b17-1a3d-4aaa-a4d3-e877631140f9.png",
+  "target": "tools/disc_relics_20261107/sources/r_man-eating-shark_legend.png",
+  "file": "images/relics/r_man-eating-shark_legend.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "103bb33315c1286020c6cbf376ba0302992981d7ec7fa445b7e81952fec6b5fa",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

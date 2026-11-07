@@ -1,0 +1,345 @@
+{
+  "date": "2026-11-07",
+  "tool": "built-in image_gen",
+  "size": [
+    192,
+    192
+  ],
+  "background": "transparent",
+  "total": 37,
+  "assets": [
+    {
+      "id": "r_narwhal2",
+      "name": "일각고래 엄니 충각상",
+      "description": "나선으로 꼬인 긴 엄니를 뱃머리 아래에 박아 넣은 충각 장식. 북쪽 사람들은 일각수의 뿔이라 부르며 독과 괴물을 물리친다고 믿었다.",
+      "previous": "discovery-ends/narwhal",
+      "source": "artifacts/figureheads-20261107/sources/r_narwhal2.png",
+      "file": "images/figureheads/r_narwhal2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A long spiraling ivory narwhal tusk used as a ram ornament, fixed horizontally into a compact carved dark oak bow bracket with aged bronze straps. Just the tusk and mounting, no whale."
+    },
+    {
+      "id": "r_humpback",
+      "name": "혹등고래 선수상",
+      "description": "긴 가슴지느러미를 펼치고 물 위로 솟구치는 혹등고래를 깎은 상. 고래처럼 큰 파도를 타고 넘는다.",
+      "previous": "discovery-ends/humpback",
+      "source": "artifacts/figureheads-20261107/sources/r_humpback.png",
+      "file": "images/figureheads/r_humpback.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A carved humpback whale breaching upward, with distinctly long pectoral fins, knobbled head and fluked tail; blue-gray painted oak and restrained bronze fittings."
+    },
+    {
+      "id": "r_manatee",
+      "name": "바다소 선수상",
+      "description": "뱃사람들이 멀리서 보고 인어로 착각하던 순한 바다소를 깎은 상. 잔잔한 물길만 골라 간다고 한다.",
+      "previous": "discovery-ends/manatee",
+      "source": "artifacts/figureheads-20261107/sources/r_manatee.png",
+      "file": "images/figureheads/r_manatee.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A gentle manatee carved from warm walnut wood, rounded blunt snout, tiny flippers and broad rounded paddle tail, mounted upright on a curved bow bracket."
+    },
+    {
+      "id": "r_mermaid",
+      "name": "인어 선수상",
+      "description": "긴 머리를 바람에 날리는 인어를 깎은 상. 인어가 뱃머리에 있으면 바다가 배를 삼키지 않는다고 뱃사람들은 믿는다.",
+      "previous": "discovery-ends/mermaid",
+      "source": "artifacts/figureheads-20261107/sources/r_mermaid.png",
+      "file": "images/figureheads/r_mermaid.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A graceful carved mermaid with long wind-swept wooden hair and one curling fishtail, modest sculpted shell bodice, teal painted scales and worn gold accents, fixed to a curved oak bow bracket. This is an inanimate wooden carving."
+    },
+    {
+      "id": "r_kraken",
+      "name": "크라켄 촉수 선수상",
+      "description": "뱃머리를 휘감는 거대한 촉수를 깎은 상. 바다 괴물들이 제 우두머리가 탄 배로 알고 피해 간다.",
+      "previous": "discovery-ends/kraken",
+      "source": "artifacts/figureheads-20261107/sources/r_kraken.png",
+      "file": "images/figureheads/r_kraken.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: One huge carved curled kraken tentacle winding around a short oak bow bracket, clearly modeled suction cups, dark red-brown wood with muted copper highlights. No full octopus or sea scene."
+    },
+    {
+      "id": "r_leviathan",
+      "name": "레비아탄 비늘 선수상",
+      "description": "방패만 한 검푸른 비늘을 겹겹이 붙여 만든 뱃머리 장식. 어떤 작살도 뚫지 못했다는 옛 짐승의 비늘이라 한다.",
+      "previous": "discovery-ends/leviathan",
+      "source": "artifacts/figureheads-20261107/sources/r_leviathan.png",
+      "file": "images/figureheads/r_leviathan.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A compact overlapping arrangement of enormous dark blue-black leviathan scales resembling a shield on an oak prow mount, iridescent mineral texture, small bronze rivets. Only scales and mounting, no creature."
+    },
+    {
+      "id": "r_dolphin",
+      "name": "청동 돌고래 선수상",
+      "description": "옛 그리스 배의 뱃머리를 꾸미던 청동 돌고래. 돌고래가 배를 이끌면 길을 잃지 않는다.",
+      "previous": "discovery-ends/dolphin",
+      "source": "artifacts/figureheads-20261107/sources/r_dolphin.png",
+      "file": "images/figureheads/r_dolphin.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An antique Greek bronze dolphin in a lively upward arch, long beak and curved dorsal fin, green patina in recessed details and worn golden bronze highlights, fixed to a compact timber bow mount."
+    },
+    {
+      "id": "r_sealion",
+      "name": "바다사자 선수상",
+      "description": "바위 위에서 고개를 들고 우짖는 바다사자를 깎은 상. 선원들이 그 울음처럼 힘을 낸다.",
+      "previous": "discovery-ends/sealion",
+      "source": "artifacts/figureheads-20261107/sources/r_sealion.png",
+      "file": "images/figureheads/r_sealion.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A proud sea lion with head raised and muzzle whiskers carved in dark polished wood, clearly separate foreflippers, warm amber paint accents, on a curved bow bracket."
+    },
+    {
+      "id": "r_sailfish",
+      "name": "돛새치 선수상",
+      "description": "등지느러미를 돛처럼 펼친 돛새치. 바다에서 가장 빠른 물고기라 배도 덩달아 빨라진다.",
+      "previous": "discovery-ends/sailfish",
+      "source": "artifacts/figureheads-20261107/sources/r_sailfish.png",
+      "file": "images/figureheads/r_sailfish.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A fast sailfish sculpture with tall fan-like ridged dorsal sail, long pointed bill and forked tail, carved blue-green painted wood with silver-blue highlights, tilted upward on an oak bow bracket."
+    },
+    {
+      "id": "r_f_marlin",
+      "name": "청새치 부리 선수상",
+      "description": "창처럼 뻗은 청새치의 부리를 뱃머리에 단 것. 파도를 가르고 적의 배에 먼저 닿는다.",
+      "previous": "discovery-ends/f_marlin",
+      "source": "artifacts/figureheads-20261107/sources/r_f_marlin.png",
+      "file": "images/figureheads/r_f_marlin.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A single extremely long tapered marlin bill with a small carved blue marlin head at its base, integrated into a sturdy diagonal oak prow bracket with bronze bands. No bottle, no live fish."
+    },
+    {
+      "id": "r_manta",
+      "name": "만타가오리 선수상",
+      "description": "날개처럼 넓은 지느러미로 물속을 나는 가오리를 깎은 상. 너울 위를 미끄러지듯 넘는다.",
+      "previous": "discovery-ends/manta",
+      "source": "artifacts/figureheads-20261107/sources/r_manta.png",
+      "file": "images/figureheads/r_manta.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A wide manta ray carved in dark blue painted oak, broad wing-shaped pectoral fins and two curled cephalic lobes, graceful upswept wings, understated bronze trim, fixed to a compact prow mounting."
+    },
+    {
+      "id": "r_walrus",
+      "name": "바다코끼리 엄니 선수상",
+      "description": "얼음을 찍고 올라서던 두 엄니를 그대로 단 뱃머리 장식. 얼음 바다에서도 배가 쉬이 부서지지 않는다.",
+      "previous": "discovery-ends/walrus",
+      "source": "artifacts/figureheads-20261107/sources/r_walrus.png",
+      "file": "images/figureheads/r_walrus.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: Two long pale ivory walrus tusks curving downward symmetrically from a carved dark wooden bow mount, bronze binding collars, ice-worn material details. No live walrus."
+    },
+    {
+      "id": "r_eagle",
+      "name": "검독수리 날개 선수상",
+      "description": "두 날개를 활짝 편 검독수리를 깎은 상. 먼 바다의 적을 먼저 찾아낸다.",
+      "previous": "discovery-ends/eagle",
+      "source": "artifacts/figureheads-20261107/sources/r_eagle.png",
+      "file": "images/figureheads/r_eagle.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A golden eagle figurehead with two fully spread layered carved wings, hooked beak and intense small carved eyes, golden-brown wood, restrained gold leaf at wing tips, short diagonal timber prow mounting."
+    },
+    {
+      "id": "r_tiger2",
+      "name": "범 머리 선수상",
+      "description": "앞발을 들고 포효하는 범의 머리를 깎은 상. 적 선원이 보기만 해도 움츠러든다.",
+      "previous": "discovery-ends/tiger",
+      "source": "artifacts/figureheads-20261107/sources/r_tiger2.png",
+      "file": "images/figureheads/r_tiger2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A roaring tiger head and raised forepaws carved from golden oak, strong orange and black painted stripes, ivory carved teeth, detailed whisker grooves, compact curved timber prow bracket. Inanimate sculpture."
+    },
+    {
+      "id": "r_peacock",
+      "name": "공작 꼬리 선수상",
+      "description": "꼬리를 부채처럼 펼친 공작을 금박으로 꾸민 상. 항구마다 사람들이 구경하러 몰려든다.",
+      "previous": "discovery-ends/peacock",
+      "source": "artifacts/figureheads-20261107/sources/r_peacock.png",
+      "file": "images/figureheads/r_peacock.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A gilded carved peacock with a spectacular fan-shaped tail of layered eye-pattern feathers, teal and blue painted wood, gold leaf feather borders, compact diagonal bow mounting."
+    },
+    {
+      "id": "r_hornbill",
+      "name": "코뿔새 선수상",
+      "description": "보르네오 사람들이 하늘과 땅을 잇는 새로 모시는 코뿔새를 깎은 상. 길한 바람을 불러온다.",
+      "previous": "discovery-ends/hornbill",
+      "source": "artifacts/figureheads-20261107/sources/r_hornbill.png",
+      "file": "images/figureheads/r_hornbill.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A Bornean rhinoceros hornbill carved from dark wood, distinctive large curved yellow-orange casque and down-curved beak, black and cream painted feathers, partly open wings, compact bow bracket."
+    },
+    {
+      "id": "r_paradise2",
+      "name": "극락조 깃털 선수상",
+      "description": "발이 없어 땅에 내리지 않는다고 믿던 극락조의 깃털로 꾸민 상. 배가 바람을 타고 떠가는 듯하다.",
+      "previous": "discovery-ends/paradise",
+      "source": "artifacts/figureheads-20261107/sources/r_paradise2.png",
+      "file": "images/figureheads/r_paradise2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An elaborate bird-of-paradise feather prow ornament: small carved golden-brown bird with long sweeping golden-yellow and russet carved ornamental plumes flowing backward in an airy fan, on an oak bow bracket."
+    },
+    {
+      "id": "r_dragon2",
+      "name": "청룡 선수상",
+      "description": "구름을 감고 여의주를 쫓는 푸른 용을 깎은 상. 비바람을 부리는 용이 뱃머리에 있으니 폭풍도 길을 비킨다.",
+      "previous": "discovery-ends/dragon",
+      "source": "artifacts/figureheads-20261107/sources/r_dragon2.png",
+      "file": "images/figureheads/r_dragon2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An East Asian azure dragon carved in blue-green wood, long serpentine curling neck, antler-like horns, flowing whiskers and a luminous pearl held near its claw, worn gold details, compact diagonal prow mount."
+    },
+    {
+      "id": "r_phoenix",
+      "name": "오동나무 봉황 선수상",
+      "description": "봉황은 오동나무에만 깃든다 하여 오동나무로 깎은 상. 태평한 세상의 새라 배 안이 화목해진다.",
+      "previous": "discovery-ends/phoenix",
+      "source": "artifacts/figureheads-20261107/sources/r_phoenix.png",
+      "file": "images/figureheads/r_phoenix.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An East Asian fenghuang phoenix carved from light paulownia wood, elegant long neck, layered wings and long flowing tail feathers, warm cream and muted red gold-painted details, compact prow bracket. No fire."
+    },
+    {
+      "id": "r_phoenixw",
+      "name": "불사조 깃 선수상",
+      "description": "불에 타고도 재 속에서 다시 일어선다는 새의 깃을 붉게 칠한 상. 크게 다친 배도 다시 일어선다고 믿는다.",
+      "previous": "discovery-ends/phoenixw",
+      "source": "artifacts/figureheads-20261107/sources/r_phoenixw.png",
+      "file": "images/figureheads/r_phoenixw.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A fiery phoenix-feather figurehead, rising carved crimson and gold wings and plumes shaped like curling flames, bright worn gold leaf, ruby-red painted wood, physical sculpture without actual fire, compact oak bow mount."
+    },
+    {
+      "id": "r_folk_maori2",
+      "name": "와카 뱃머리 조각 (타우이후)",
+      "description": "마오리 전투 카누의 뱃머리를 꾸미던 소용돌이 조각. 혀를 내민 얼굴이 바다 건너 적을 노려본다.",
+      "previous": "discovery-ends/folk_maori",
+      "source": "artifacts/figureheads-20261107/sources/r_folk_maori2.png",
+      "file": "images/figureheads/r_folk_maori2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A Maori waka taua tauihu prow carving: dark reddish carved wood with distinctive intertwined double spirals, openwork koru shapes and a stylized ancestral face with protruding tongue, small pale shell inset eyes, a compact authentic canoe prow ornament. No person or full canoe."
+    },
+    {
+      "id": "r_folk_hawaii2",
+      "name": "쿠 신 선수상",
+      "description": "전쟁과 고기잡이의 신 쿠를 깎은 나무상. 하와이 사람들은 큰 카누를 띄울 때 쿠에게 빌었다.",
+      "previous": "discovery-ends/folk_hawaii",
+      "source": "artifacts/figureheads-20261107/sources/r_folk_hawaii2.png",
+      "file": "images/figureheads/r_folk_hawaii2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A Hawaiian Ku deity carved wooden canoe figurehead, upright squat stylized guardian with strongly angular face, large carved mouth, bent knees and defined geometric arms, dark reddish koa-like wood, visible tool marks, fixed to a compact canoe bow bracket. Inanimate traditional sculpture."
+    },
+    {
+      "id": "r_folk_bajau2",
+      "name": "레파 배의 뱃머리 조각",
+      "description": "바다에서 나고 바다에서 사는 바자우 사람들이 집 삼아 사는 배의 뱃머리 조각. 덩굴과 새가 얽혀 있다.",
+      "previous": "discovery-ends/folk_bajau",
+      "source": "artifacts/figureheads-20261107/sources/r_folk_bajau2.png",
+      "file": "images/figureheads/r_folk_bajau2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A Bajau lepa boat prow carving, elongated curling openwork vine patterns interlaced with a stylized bird motif, warm golden wood with red and turquoise paint details, compact ornate upswept bow ornament without the whole boat."
+    },
+    {
+      "id": "r_moai2",
+      "name": "모아이 얼굴 선수상",
+      "description": "섬사람이 화산석으로 작게 깎아 준 모아이의 얼굴. 바다를 등지고 마을을 지키던 조상의 눈길이 이제 배를 지킨다.",
+      "previous": "discovery-ends/moai",
+      "source": "artifacts/figureheads-20261107/sources/r_moai2.png",
+      "file": "images/figureheads/r_moai2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A small Easter Island moai face carved from gray-brown volcanic stone, long rectangular head, heavy brow, long nose and solemn lips, irregular stone tool texture, securely bound to a short dark wooden prow bracket. No landscape."
+    },
+    {
+      "id": "r_trelleborg2",
+      "name": "바이킹 소용돌이 뱃머리",
+      "description": "요새 곁의 배 무덤에서 나온 소용돌이 꼴 뱃머리. 높이 말려 올라간 끝이 파도를 가른다.",
+      "previous": "discovery-ends/trelleborg",
+      "source": "artifacts/figureheads-20261107/sources/r_trelleborg2.png",
+      "file": "images/figureheads/r_trelleborg2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An ancient Viking ship prow ornament, tall curling spiral-shaped carved oak tip, restrained Nordic interlace grooves, weathered dark honey wood with a few iron fastenings. Spiral geometry, no dragon animal head."
+    },
+    {
+      "id": "r_byrsa2",
+      "name": "페니키아 말머리 뱃머리",
+      "description": "카르타고 사람들의 배를 꾸미던 말머리 장식. 바다 끝까지 장사하러 가던 그들은 이 말이 배를 끈다고 믿었다.",
+      "previous": "discovery-ends/byrsa",
+      "source": "artifacts/figureheads-20261107/sources/r_byrsa2.png",
+      "file": "images/figureheads/r_byrsa2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An ancient Phoenician horse-head ship prow ornament, graceful arched neck, short carved mane and alert ears, red-brown cedar with bronze eye and bridle fittings, curved timber bracket."
+    },
+    {
+      "id": "r_gadir",
+      "name": "멜카르트 청동상",
+      "description": "가디르 신전에 바치던 바닷사람들의 신 멜카르트의 작은 청동상. 대서양으로 나가는 배는 이 신에게 빌었다.",
+      "previous": "discovery-ends/gadir",
+      "source": "artifacts/figureheads-20261107/sources/r_gadir.png",
+      "file": "images/figureheads/r_gadir.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A small antique bronze Melqart sea-protector statuette, a bearded adult male deity wearing a simple conical cap and short ancient tunic, muscular stylized stance holding a short club, weathered dark bronze with turquoise patina, mounted on a small ship prow bracket. Inanimate antiquity, no lettering."
+    },
+    {
+      "id": "r_antikythera2",
+      "name": "난파선의 청동 말 머리",
+      "description": "이천 년 전 가라앉은 배의 짐 속에서 건진 청동 말의 머리. 바다 밑에서 살아 돌아온 것이라 운이 좋다고 한다.",
+      "previous": "discovery-ends/antikythera",
+      "source": "artifacts/figureheads-20261107/sources/r_antikythera2.png",
+      "file": "images/figureheads/r_antikythera2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An ancient shipwreck bronze horse head and short arched neck, realistic equine muzzle and ears, broken lower edge, marine green patina and worn bronze highlights, secured on a short dark timber prow mount. No living horse, no seabed."
+    },
+    {
+      "id": "r_flordelamar2",
+      "name": "난파선의 뱃머리 성모상",
+      "description": "말라카의 보물을 싣고 가라앉은 배의 뱃머리에 서 있던 성모상. 배는 잃었어도 성모는 물 위로 떠올랐다.",
+      "previous": "discovery-ends/flordelamar",
+      "source": "artifacts/figureheads-20261107/sources/r_flordelamar2.png",
+      "file": "images/figureheads/r_flordelamar2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A weathered Portuguese shipwreck Virgin Mary figurehead, adult woman carved in wood wearing a long ivory robe and muted blue mantle, hands open in a protective gesture, restrained gold edging and worn salt-stained painted grain, attached to compact curved oak mounting. Inanimate sculpture, no baby."
+    },
+    {
+      "id": "r_mahabali",
+      "name": "바닷가 사원의 나가 석상",
+      "description": "파도가 들이치는 사원 계단을 지키던 머리 일곱 달린 뱀신. 물의 신이라 바다가 사납지 않다.",
+      "previous": "discovery-ends/mahabali",
+      "source": "artifacts/figureheads-20261107/sources/r_mahabali.png",
+      "file": "images/figureheads/r_mahabali.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An ancient Indian seven-headed naga stone figurehead, exactly seven cobra hoods arranged as a fan above a single coiled serpent trunk, weathered warm gray granite with shallow decorative carving, secured to a short timber bow mounting. Physical stone carving, no living snakes."
+    },
+    {
+      "id": "r_tanahlot2",
+      "name": "바다뱀 수호상",
+      "description": "바위 사원 밑 동굴을 지키는 성스러운 바다뱀을 깎은 상. 사원을 해치려는 것을 물리친다고 한다.",
+      "previous": "discovery-ends/tanahlot",
+      "source": "artifacts/figureheads-20261107/sources/r_tanahlot2.png",
+      "file": "images/figureheads/r_tanahlot2.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A Balinese sacred sea-snake guardian carving, one black and ivory banded serpent coiled around a compact curving dark wood prow mounting, stylized ornamental head with restrained gold accents. Inanimate wood sculpture, no scenery."
+    },
+    {
+      "id": "r_poompuhar",
+      "name": "마카라 선수상",
+      "description": "바다에 잠긴 옛 항구에서 건진, 악어 몸에 코끼리 코를 한 바다 짐승 마카라의 상. 강과 바다의 문을 지킨다.",
+      "previous": "discovery-ends/poompuhar",
+      "source": "artifacts/figureheads-20261107/sources/r_poompuhar.png",
+      "file": "images/figureheads/r_poompuhar.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An ancient Indian makara ship prow sculpture with a crocodilian body and curling elephant trunk, carved warm reddish wood, elaborate curling fin and foliage details, worn gold accents, sturdy compact bow mount. Inanimate hybrid sculpture, no living animal."
+    },
+    {
+      "id": "r_munmu",
+      "name": "동해 용의 돌비늘",
+      "description": "바다 무덤 둘레에서 주운 비늘 무늬 돌. 죽어서 용이 되어 바다를 지키겠다던 왕의 이야기가 서려 있다.",
+      "previous": "discovery-ends/munmu",
+      "source": "artifacts/figureheads-20261107/sources/r_munmu.png",
+      "file": "images/figureheads/r_munmu.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A single large weathered gray stone scale with a clearly incised Korean dragon-scale pattern, irregular mineral edges, secured to a compact dark timber bow mount by bronze bands. Stone object only, no dragon."
+    },
+    {
+      "id": "zarashell",
+      "name": "자라탄 등딱지 선수상",
+      "description": "섬인 줄 알고 내렸던 거대한 거북 자라탄의 등딱지 한 조각을 깎은 상. 금이 가도 며칠이면 저절로 아물어 있다.",
+      "previous": "discovery-ends/zaratan",
+      "source": "artifacts/figureheads-20261107/sources/zarashell.png",
+      "file": "images/figureheads/zarashell.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An impressive curved fragment of the giant zaratan turtle shell mounted as a shield-shaped prow ornament, deep brown and moss-green hexagonal scutes, naturally weathered shell texture, strong bronze mounting bands on dark oak. Only the shell fragment, no turtle or island."
+    },
+    {
+      "id": "jormring",
+      "name": "요르문간드 고리 선수상",
+      "description": "세상을 한 바퀴 감고 제 꼬리를 문 뱀, 요르문간드의 비늘로 엮은 고리 모양 상. 온 바다를 감던 뱀이라 먼 바다의 일을 속삭인다고 한다.",
+      "previous": "discovery-ends/jormungandr",
+      "source": "artifacts/figureheads-20261107/sources/jormring.png",
+      "file": "images/figureheads/jormring.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An imposing circular ouroboros prow sculpture made of interlinked dark emerald serpent scales, a single stylized carved serpent head biting its own tail to close the ring, aged gold edge fittings, tiny blue stone insets, short carved oak prow bracket. A physical ring sculpture, not a living snake."
+    },
+    {
+      "id": "isonadetail",
+      "name": "이소나데 꼬리 선수상",
+      "description": "갈고리 꼬리로 배를 끌어 가던 일본 바다의 괴물 이소나데의 꼬리지느러미를 단 상. 이제는 함대 전체를 앞으로 끌어 준다.",
+      "previous": "discovery-ends/isonade",
+      "source": "artifacts/figureheads-20261107/sources/isonadetail.png",
+      "file": "images/figureheads/isonadetail.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: A hooked sharklike monster tail-fin prow ornament, one powerful sweeping curved fin with sharp backward-facing hooks along its edge, dark slate-blue painted carved wood and worn silver-bronze accents, compact diagonal oak bow mounting. Tail fragment only, no monster body."
+    },
+    {
+      "id": "cipactooth",
+      "name": "시팍틀리 이빨 선수상",
+      "description": "마디마다 입이 달렸다는 태초의 악어 시팍틀리의 이빨을 줄줄이 박은 상. 적 포수들이 그 이빨을 보면 손이 떨린다.",
+      "previous": "discovery-ends/cipactli",
+      "source": "artifacts/figureheads-20261107/sources/cipactooth.png",
+      "file": "images/figureheads/cipactooth.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE ship figurehead inventory icon for an Age of Discovery maritime adventure game, readable at 192x192. A PHYSICAL INANIMATE SCULPTURE or crafted prow ornament, never a living creature or person. Detailed realistic hand-painted antique object illustration, matching warm carved wood, patinated bronze, stone and worn gold leaf of existing icons. Single centered compact object, three-quarter museum catalog view, entire ornament and short mounting bracket fully visible, 10 percent clear margin on all sides, square canvas. Soft warm key light upper left and crisp material edges. TRUE transparent alpha background in all empty spaces and holes. No white/gray background haze, no floor, no cast-shadow plate, no sea, no ship hull, no scenery, no readable text, no label, no border, no frame, no watermark. Subject: An imposing ancient Mesoamerican prow ornament with a compact horizontal carved crocodilian jaw-shaped holder studded with a row of oversized ivory stone fangs, ochre and dark jade colors, geometric carved grooves, small bronze binding bands and timber mount. Only tooth ornament, no complete creature."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_nalanda_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-ebe0860a-caa3-4b22-a164-5105fc4eedd2.png",
+  "target": "tools/disc_relics_20261107/sources/r_nalanda_holy.png",
+  "file": "images/relics/r_nalanda_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "285288cc7154eea5ac77d38617f3b1e2c86587844f82d24f6d74058eb1fef9e4",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

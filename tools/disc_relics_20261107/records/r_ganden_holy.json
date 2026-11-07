@@ -1,0 +1,17 @@
+{
+  "id": "r_ganden_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-267e9c9a-e3ab-4523-a8b0-0fc9d640edeb.png",
+  "target": "tools/disc_relics_20261107/sources/r_ganden_holy.png",
+  "file": "images/relics/r_ganden_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "a3c138fcc59f421c880c6206829ed9d079c1e115f4f6640861a93d66f602902a",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

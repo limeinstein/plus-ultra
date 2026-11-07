@@ -3,7 +3,8 @@
 const assert = require('assert/strict'), fs = require('fs'), path = require('path');
 const { pathToFileURL } = require('url');
 const { chromium } = require('../tools/procedural_art/node_modules/playwright-core');
-const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/figureheads-20261029');
+const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/figureheads-20261107');
+const NEW = JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/art/figureheads-prompts-20261107.json'), 'utf8')).assets;
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe',
     args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
@@ -45,13 +46,22 @@ const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/fig
       return { rows, fallbacks, relicKey: G.Img.pick(G.Img.chain.figurehead(relic)), relicId: relic.id,
         missing: G.Img.figureheadSrc('missing_figurehead') };
     });
-    assert.equal(report.rows.length, 36);
+    assert.equal(report.rows.length, 36 + NEW.length);
     for (const row of report.rows) {
       assert.equal(row.key, 'figureheads/' + row.id);
       assert(row.width === 192 && row.height === 192 && row.clear > 5000 && row.solid > 1000, JSON.stringify(row));
     }
-    assert.equal(report.fallbacks.length, 4);
-    assert(report.fallbacks.every(row => /^(discovery-ends|discoveries|sea-monsters)\//.test(row.key)), JSON.stringify(report.fallbacks));
+    assert.equal(report.fallbacks.length, 0);
+    const newChains = await page.evaluate(ids => ids.map(id => {
+      const f = G.FIGUREHEAD[id], r = G.RELIC[id], it = G.ITEM[id];
+      return { id, figurehead: G.Img.pick(G.Img.chain.figurehead(f)),
+        relic: r ? G.Img.pick(G.Img.chain.relic(r)) : null, item: G.Img.pick(G.Img.chain.item(it)) };
+    }), NEW.map(a => a.id));
+    for (const row of newChains) {
+      assert.equal(row.figurehead, 'figureheads/' + row.id);
+      assert.equal(row.item, 'figureheads/' + row.id);
+      if (row.relic) assert.equal(row.relic, 'figureheads/' + row.id);
+    }
     assert.equal(report.relicKey, 'figureheads/' + report.relicId); assert.equal(report.missing, null);
     await page.evaluate(() => {
       const s = G.Game.state = G.State.newGame({ name: '선수상 검사', nation: 'PT', job: 'merchant', age: 30, birth: { m: 1, d: 1 },
@@ -59,7 +69,7 @@ const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/fig
       s.settings.res = .35; s.player.gold = 50000; s.flags.prologue = true;
       s.fleet.ships[0].fig = 'goddess';
       const f = G.FIGUREHEADS.find(f => f.relic);
-      s.player.items.push({ id: f.id });
+      s.player.items.push({ id: f.id }, { id: 'r_mermaid' });
       s.tech = s.tech || {}; s.tech[0] = 200000;
       G.Scenes.city.B.shipyard.refit(G.CITY_DATA[0]);
     });
@@ -73,7 +83,7 @@ const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/fig
       await Promise.all(rows.map(r => r.querySelector('img')).filter(Boolean).map(img => img.decode()));
       return rows.map(r => ({ label: r.innerText, src: r.querySelector('img')?.getAttribute('src') }));
     });
-    assert(choices.some(r => r.src?.includes('figureheads/')));
+    assert(choices.some(r => r.src?.includes('figureheads/r_mermaid.webp') && r.label.includes('달기 150닢')));
     assert(choices.filter(r => r.label.includes('닢')).every(r => r.src));
     await page.screenshot({ path: path.join(OUT, 'shipyard-runtime.png') });
     const buyIndex = choices.findIndex(r => r.src?.includes('figureheads/') && /\d[\d,]*닢/.test(r.label) && !r.label.includes('달기 150닢'));
@@ -85,19 +95,32 @@ const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/fig
     const after = await page.evaluate(() => G.Game.state.player.gold);
     assert.equal(before - after, await page.evaluate(id => G.FIGUREHEAD[id].price, id));
     await page.locator('.win .title .x').last().click();
+    await page.evaluate(() => { G.Scenes.city.B.shipyard.refit(G.CITY_DATA[0]); });
+    await page.locator('.choice').first().click();
+    await page.locator('.choice').filter({ hasText: '선수상' }).click();
+    const install = page.locator('.choice').filter({ hasText: '인어 선수상' });
+    await install.locator('img').evaluate(img => img.decode());
+    assert((await install.locator('img').getAttribute('src')).includes('figureheads/r_mermaid.webp'));
+    await install.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: path.join(OUT, 'shipyard-new-figurehead.png') });
+    const installBefore = await page.evaluate(() => G.Game.state.player.gold);
+    await install.click();
+    await page.waitForFunction(() => G.Game.state.fleet.ships[0].fig === 'r_mermaid');
+    assert.equal(installBefore - await page.evaluate(() => G.Game.state.player.gold), 150);
     const catalog = await browser.newPage({ viewport: { width: 1280, height: 900 } }); watch(catalog);
     await catalog.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({ body: '', contentType: 'text/css' }));
     await catalog.goto(pathToFileURL(path.join(ROOT, 'catalog.html')).href + '#figureheads');
-    await catalog.locator('#q').fill('해신상');
-    const card = catalog.locator('.card').filter({ hasText: '해신상' });
+    await catalog.locator('#q').fill('인어 선수상');
+    const card = catalog.locator('.card').filter({ hasText: '인어 선수상' });
     await card.locator('.thumb canvas').waitFor(); await card.click();
-    assert((await catalog.locator('#detail').innerText()).includes('images/figureheads/seagod.webp'));
+    assert((await catalog.locator('#detail').innerText()).includes('images/figureheads/r_mermaid.webp'));
+    await catalog.screenshot({ path: path.join(OUT, 'catalog-new-figurehead.png') });
     await catalog.locator('#detail').evaluate(d => d.close());
     await catalog.locator('#q').fill('');
     await catalog.waitForFunction(() => document.querySelectorAll('.card').length === G.FIGUREHEADS.length);
     await catalog.screenshot({ path: path.join(OUT, 'catalog-runtime.png') });
     assert.deepEqual(errors, []);
-    fs.writeFileSync(path.join(OUT, 'browser-report.json'), JSON.stringify({ ...report, choices, bought: id, errors }, null, 2));
-    console.log('선수상 36종: 192×192 투명 그림·실제 읽기·유물 연결·조선소 장착·도감·콘솔 오류 0 확인');
+    fs.writeFileSync(path.join(OUT, 'browser-report.json'), JSON.stringify({ ...report, newChains, choices, bought: id, installed: 'r_mermaid', errors }, null, 2));
+    console.log('선수상 ' + report.rows.length + '종: 192×192 투명 그림·신규 ' + NEW.length + '종 유물/소지품 연결·조선소 장착·도감·콘솔 오류 0 확인');
   } finally { clearTimeout(timeout); await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });

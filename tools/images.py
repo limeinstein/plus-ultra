@@ -39,6 +39,12 @@ PREFERRED_FILES = {
     'portraits/mates/nc_okran_half': 'portraits/mates/nc_okran_ref20261106_half.webp',
 }
 
+# 일곱 해적섬 여급의 참고 얼굴·화려한 의상 수정본. 원본 파일과 논리 키는 보존한다.
+for pirate_maid_zone in ('med', 'atl', 'north', 'amer', 'ind', 'sea', 'east'):
+    pirate_maid_key = 'portraits/npc/pirate-islands/' + pirate_maid_zone + '/servant'
+    for pirate_maid_suffix in ('', '_half'):
+        PREFERRED_FILES[pirate_maid_key + pirate_maid_suffix] = pirate_maid_key + '_ref20261107_v1' + pirate_maid_suffix + '.webp'
+
 
 def read(rel):
     with open(os.path.join(ROOT, rel), encoding='utf-8') as f:

@@ -1,0 +1,17 @@
+{
+  "id": "r_pufferfish_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-261f1b5c-9f79-4b18-bb12-502bfe5cc4ba.png",
+  "target": "tools/disc_relics_20261107/sources/r_pufferfish_baby.png",
+  "file": "images/relics/r_pufferfish_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "9a6e0f2a568a6d65b146c4284e4a4213c2edc9896adef35d2435966f9ef5e7ba",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

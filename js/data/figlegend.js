@@ -3,7 +3,7 @@
    - 소지품으로 들어오고, 조선소 「개조 → 선수상」에서 품삯 150닢에 단다. 배를 팔거나 파기하면 소지품으로 돌려받는다
    - 보통 덕(spd·hp·luck·storm·monster·morale·battle)이 크고, 저마다 다른 선수상에 없는 「전설의 힘」(sp) 하나가 있다 — 효과 글은 js/systems/figfx.js
    - 마왕상만은 저주가 깃들어 있다: 성스러운 선수상(holy — 천사상·바다의 별 성모상·대천사 미카엘상·성 니콜라스상)이 함대에 있으면 저주가 막힌다
-   - 그림은 따로 없다 — 그 괴물의 발견 그림으로 보인다 (js/core/images.js K.item)
+   - 전용 조각 그림은 images/figureheads/ 에 두고, 없을 때 그 괴물의 발견 그림으로 대신 보인다 (js/core/images.js).
    글은 이 게임을 위해 새로 썼다. */
 (function (G) {
   'use strict';

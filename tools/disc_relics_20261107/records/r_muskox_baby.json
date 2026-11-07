@@ -1,0 +1,19 @@
+{
+  "id": "r_muskox_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-217972b4-14f6-4dd9-bf05-7de50bd0cf36.png",
+  "target": "tools/disc_relics_20261107/sources/r_muskox_baby.png",
+  "file": "images/relics/r_muskox_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "3378e57a727c9b6b3376bbc077c88a91fd9e7ad2e28d1e6cb5f8e677d8f08dce",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "note": "검수: 사향소 성체의 큰 뿔·이마판 대신 작은 뿔눈 적용",
+  "prompt": "Create one isolated transparent square inventory icon for an Age of Discovery exploration game. A very young musk ox calf curled with legs folded, soft dense rusty chocolate brown wool, short rounded muzzle, small dark head, small ears, short sturdy hooves, only tiny horn buds. No adult horn boss, no long curved horns. One subject only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink, warm natural highlights, crisp silhouette at small inventory sizes, matching an old maritime adventure game. Genuinely transparent background, no floor, no scenery, no shadow plate, no text, no labels, no border, no frame, no logo, no watermark."
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_proboscis_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-b0d8958d-f8e5-4e73-a01e-23b8573bf70d.png",
+  "target": "tools/disc_relics_20261107/sources/r_proboscis_baby.png",
+  "file": "images/relics/r_proboscis_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "999fc9c6253247edd3d0f4a105e46e1d25f3e4cc62bd02990c84eb2bb21adbd6",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_koreancat_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-d5f1ad7a-fbc7-4e38-af42-7c96cc5fb407.png",
+  "target": "tools/disc_relics_20261107/sources/r_koreancat_baby.png",
+  "file": "images/relics/r_koreancat_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "64960670fb58d7962e0dad2ddb05debdeb9d98d388e3bc2a78a284a2c8d77c8b",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

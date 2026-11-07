@@ -1,0 +1,17 @@
+{
+  "id": "r_stbasil_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-4829d117-e30b-4c8e-b76b-e92ee143ac1b.png",
+  "target": "tools/disc_relics_20261107/sources/r_stbasil_holy.png",
+  "file": "images/relics/r_stbasil_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "460eac27cc6d647bd619e717470290b5464974c2aa0a38fef8a3f8bd73eb5e1e",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

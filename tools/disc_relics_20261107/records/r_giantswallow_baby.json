@@ -1,0 +1,17 @@
+{
+  "id": "r_giantswallow_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-ce6a157f-9d3d-4d62-96ab-4578b1a398aa.png",
+  "target": "tools/disc_relics_20261107/sources/r_giantswallow_baby.png",
+  "file": "images/relics/r_giantswallow_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "f540cbecde24469fb9c1807d8b48d5ddaa1f09d046cb2e028b77f238e04d22b9",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

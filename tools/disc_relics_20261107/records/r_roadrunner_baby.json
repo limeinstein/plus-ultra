@@ -1,0 +1,17 @@
+{
+  "id": "r_roadrunner_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-055c5b29-96c2-4555-bb87-9a964096d114.png",
+  "target": "tools/disc_relics_20261107/sources/r_roadrunner_baby.png",
+  "file": "images/relics/r_roadrunner_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "aaa7a829aed9c9382c6e13e290e7abe0b7768aee4dddf208cc82a3021ae62ed5",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

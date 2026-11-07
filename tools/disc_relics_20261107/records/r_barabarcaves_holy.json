@@ -1,0 +1,17 @@
+{
+  "id": "r_barabarcaves_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-b80c8386-5031-4e53-a429-66abaa717be2.png",
+  "target": "tools/disc_relics_20261107/sources/r_barabarcaves_holy.png",
+  "file": "images/relics/r_barabarcaves_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "57b7c36f4d72ff3af70b062418b2866028d5f4dffc0d917b8ec595c060936edf",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

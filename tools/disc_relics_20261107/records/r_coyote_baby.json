@@ -1,0 +1,17 @@
+{
+  "id": "r_coyote_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-775d805f-6310-46b0-a635-c73f2f74cf07.png",
+  "target": "tools/disc_relics_20261107/sources/r_coyote_baby.png",
+  "file": "images/relics/r_coyote_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "d6b540fd10776beb2815a235eec3cd2727bd0356c5d89abe6341badfdbd9b999",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

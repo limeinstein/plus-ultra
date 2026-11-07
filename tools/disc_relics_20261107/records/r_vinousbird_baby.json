@@ -1,0 +1,17 @@
+{
+  "id": "r_vinousbird_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-abf1ad4c-4a62-469e-9650-387c080bae7d.png",
+  "target": "tools/disc_relics_20261107/sources/r_vinousbird_baby.png",
+  "file": "images/relics/r_vinousbird_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "eb71ae2a7607bc8d6c7ef6f66845f097e581c36d6daa2bf3ee9a80e24c7330ee",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

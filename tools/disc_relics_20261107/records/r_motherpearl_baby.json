@@ -1,0 +1,19 @@
+{
+  "id": "r_motherpearl_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-4e0fafe8-bb11-4c46-9e0e-8070c9b3c8a5.png",
+  "target": "tools/disc_relics_20261107/sources/r_motherpearl_baby.png",
+  "file": "images/relics/r_motherpearl_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "881eca7c04862782799b4957e97a4f4b1de271618b59ee171727b7decca968b5",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "note": "검수: 진주모나비 애벌레에 성충의 진주빛 날개 특징이 옮겨간 것을 수정",
+  "prompt": "Create one isolated transparent square inventory icon for an Age of Discovery exploration game. One biologically realistic clouded mother-of-pearl butterfly caterpillar, Protogoniomorpha anacardii, resting on ONE fresh green leaf. Dark blackish segmented body with warm orange patches and rows of fine branched dark spines, small dark head capsule, three pairs of tiny thoracic legs and normal fleshy caterpillar prolegs. Natural larval coloration. No pearlescent white body, no large doll eyes, no butterfly wings or feathery antennae. One subject only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink, warm natural highlights, crisp silhouette at small inventory sizes, matching an old maritime adventure game. Genuinely transparent background, no floor, no scenery, no shadow plate, no text, no labels, no border, no frame, no logo, no watermark."
+}

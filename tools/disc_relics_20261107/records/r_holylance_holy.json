@@ -1,0 +1,17 @@
+{
+  "id": "r_holylance_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-3a483f4b-569b-4b5f-b674-5cb5658265b5.png",
+  "target": "tools/disc_relics_20261107/sources/r_holylance_holy.png",
+  "file": "images/relics/r_holylance_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "29a5dc90d480108bbe002a35037777000f3faa5d68b6fd8f9008c68f42f61bf7",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

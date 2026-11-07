@@ -1,0 +1,17 @@
+{
+  "id": "r_anaconda_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-82718648-46e6-4da2-8392-360d106c343d.png",
+  "target": "tools/disc_relics_20261107/sources/r_anaconda_baby.png",
+  "file": "images/relics/r_anaconda_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "f974689b4c6d2a45f007226d74539c0e93f7aaa3b37b34b8ab52e588033b522b",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

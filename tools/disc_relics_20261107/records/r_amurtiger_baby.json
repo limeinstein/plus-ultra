@@ -1,0 +1,17 @@
+{
+  "id": "r_amurtiger_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-f038cb0f-e62a-4f75-a655-edca3020642a.png",
+  "target": "tools/disc_relics_20261107/sources/r_amurtiger_baby.png",
+  "file": "images/relics/r_amurtiger_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "7addfc5aa48a4ed0cb060a692cbb14aebddaa1433870ab8ff412277ea99881b6",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

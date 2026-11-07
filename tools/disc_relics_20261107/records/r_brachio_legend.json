@@ -1,0 +1,17 @@
+{
+  "id": "r_brachio_legend",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-95578b4b-34f9-4743-af67-99f7ac72b4ef.png",
+  "target": "tools/disc_relics_20261107/sources/r_brachio_legend.png",
+  "file": "images/relics/r_brachio_legend.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "e291255dfc172671e27e38435bd2b7792b8350d743ee1bc31db0e2f345c7abe9",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

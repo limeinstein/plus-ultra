@@ -1,0 +1,17 @@
+{
+  "id": "r_hercules_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-6126d500-fa9a-4abe-9ce3-6221268e9e9b.png",
+  "target": "tools/disc_relics_20261107/sources/r_hercules_baby.png",
+  "file": "images/relics/r_hercules_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "d2ee3e751aa7fadddd74fea50dc7b6dfe96c7d07eebc8d5584ddd071a80dcc65",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

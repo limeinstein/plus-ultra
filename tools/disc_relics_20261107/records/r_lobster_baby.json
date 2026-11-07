@@ -1,0 +1,17 @@
+{
+  "id": "r_lobster_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-8957b87e-8c7c-4e18-a0fb-714f8a777b25.png",
+  "target": "tools/disc_relics_20261107/sources/r_lobster_baby.png",
+  "file": "images/relics/r_lobster_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "1824575e031005ae8392760c3e89e9aa3d6471f7ac89e2d4dbc07b8b16577ee8",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

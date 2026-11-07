@@ -20,10 +20,11 @@
   };
 
   // ---------------------------------------------------------------- 거리·기한
-  function days(a, b) {
-    var d = G.Geo.dist(a.lon, a.lat, b.lon, b.lat);   // 도(°) 단위
-    return Math.max(6, Math.round(d / 1.05));
-  }
+  /* 2026-11-07 (베타 피드백 #156): 예전에는 직선거리 1.05°를 하루로 쳐서, 뭍을 돌아가는 뱃길과 초심자 배의 실제 선속(약 0.75°/일)보다
+     한참 짧게 셌다(리스본→제노바 18일 — 실제 30일). 이제 실제 뱃길 ÷ 초심자 선속 (R.questDays · G.BALANCE.quest).
+     기한은 R.questDeadline, 사례금은 적어도 「기한 동안의 식량·물 값 + 사야 할 물건값」 × 3 (R.questFloor) */
+  function oldDays(a, b) { return Math.max(6, Math.round(G.Geo.dist(a.lon, a.lat, b.lon, b.lat) / 1.05)); }
+  function days(a, b) { return Math.max(oldDays(a, b), R.questDays(a, b)); }
   /** 조합이 있는 도시라야 의뢰를 주고받을 수 있다 */
   function hasGuild(c) { return c.flags.indexOf('G') >= 0 || c.size >= 3; }
   Q.hasGuild = hasGuild;
@@ -79,7 +80,7 @@
       var good = g[Math.floor(rng() * g.length)];
       var qty = 15 + Math.floor(rng() * 26);
       q.to = to.id; q.good = good; q.qty = qty; q.load = qty;
-      q.dayNeed = days(c, to);
+      q.dayNeed = days(c, to); q.dayNeed0 = oldDays(c, to);
       q.pay = Math.round(G.GOOD[good].p * qty * (0.35 + rng() * 0.15) + q.dayNeed * 42 + qty * 14);
       q.fame = 3 + Math.round(q.dayNeed / 14);
       q.title = to.name + '까지 ' + G.GOOD[good].name + ' ' + qty + '통 수송';
@@ -95,7 +96,9 @@
       var good2 = gs[Math.floor(rng() * gs.length)];
       var qty2 = 10 + Math.floor(rng() * 21);
       q.good = good2; q.qty = qty2; q.to = c.id;
-      q.dayNeed = U.clamp(days(c, src) * 2, 24, 150);
+      q.dayNeed = U.clamp(days(c, src) * 2 + 3, 24, 220);     // 갔다 오는 뱃길 + 사는 날
+      q.dayNeed0 = U.clamp(oldDays(c, src) * 2, 24, 150);
+      q.goodsCost = Math.round(R.buyPrice ? R.buyPrice(src, good2) * qty2 : G.GOOD[good2].p * qty2);   // 산지 값으로 사는 물건값 (물자비에 든다)
       q.pay = Math.round(G.GOOD[good2].p * qty2 * (1.35 + rng() * 0.45) + q.dayNeed * 18);
       q.fame = 3 + Math.round(q.dayNeed / 18);
       q.title = G.GOOD[good2].name + ' ' + qty2 + '통을 구해 온다';
@@ -106,7 +109,7 @@
       var lady = rng() < 0.3;
       q.who = (lady ? LADY : NAMES)[Math.floor(rng() * (lady ? LADY.length : NAMES.length))];
       q.to = to2.id; q.load = 1;
-      q.dayNeed = days(c, to2);
+      q.dayNeed = days(c, to2); q.dayNeed0 = oldDays(c, to2);
       q.pay = Math.round(320 + q.dayNeed * 52 + rng() * 420);
       q.fame = 4 + Math.round(q.dayNeed / 12);
       q.title = q.who + U.jx(q.who, '을/를') + ' ' + to2.name + '까지 모신다';
@@ -123,12 +126,17 @@
       q.who = NAMES[Math.floor(rng() * NAMES.length)];
       q.at = to3.id; q.to = c.id;
       q.amount = Math.round((900 + rng() * 2600) * (1 + c.size * 0.2));
-      q.dayNeed = days(c, to3) * 2 + 10;
+      q.dayNeed = days(c, to3) * 2 + 10; q.dayNeed0 = oldDays(c, to3) * 2 + 10;
       q.pay = Math.round(q.amount * (0.2 + rng() * 0.12) + q.dayNeed * 22);
       q.fame = 4 + Math.round(q.dayNeed / 16);
       q.title = to3.name + '의 ' + q.who + '에게서 빚을 받아 온다';
     }
-    q.limit = Math.max(14, Math.round(q.dayNeed * 1.7) + 8);
+    // 기한: 초심자 기준(뱃길 날수 × 1.5 + 10일) — 예전 기한보다 짧게 하지는 않는다
+    q.limit = Math.max(14, Math.round((q.dayNeed0 || q.dayNeed) * 1.7) + 8, R.questDeadline(q.dayNeed));
+    delete q.dayNeed0;
+    // 물자비 = 기한 동안의 식량·물 값 + 사야 할 물건값. 사례금은 적어도 그 3배
+    q.supply = Math.round(R.supplyDay(c) * q.limit) + (q.goodsCost || 0);
+    q.pay = Math.max(q.pay, Math.ceil(q.supply * R.questK().supplyK / 10) * 10);
     q.reward = q.pay;
     return q;
   }

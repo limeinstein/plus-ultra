@@ -966,6 +966,42 @@
   /** 물·자재 한 통 값 */
   R.waterCost = function (c) { return Math.max(1, Math.round(R.supplyCost(c) * ((G.BALANCE && G.BALANCE.waterPrice) || 0.5))); };
   R.matCost = function (c) { return Math.max(2, Math.round(R.supplyCost(c) * ((G.BALANCE && G.BALANCE.matPrice) || 3) * (R.facilities(c).shipyard ? 0.85 : 1) * R.catIndex(c, 'misc'))); };
+  // ---------------------------------------------------------------- 의뢰의 날수·기한·보수 (G.BALANCE.quest — 2026-11-07 베타 피드백 #156)
+  R.questK = function () { return (G.BALANCE && G.BALANCE.quest) || { refSpeed: 0.75, slack: 1.5, port: 10, supplyK: 3, refCrew: 40, quarrySea: 0.55, quarryBattle: 0.65 }; };
+  var routeCache = {};
+  function seaPt(c) {
+    if (c.dock) return [c.dock[1], c.dock[0]];
+    if (c.port || !G.Nav || !G.Nav.nearestSea) return [c.lon, c.lat];
+    return G.Nav.nearestSea(c.lon, c.lat, 16) || [c.lon, c.lat];      // 내륙 도시는 가장 가까운 바닷가까지
+  }
+  /** 두 도시 사이의 실제 뱃길 길이(°) — 길을 못 찾으면 직선거리 × 1.4 */
+  R.routeLen = function (a, b) {
+    var key = (a.id != null ? a.id : a.lon + ',' + a.lat) + '>' + (b.id != null ? b.id : b.lon + ',' + b.lat);
+    if (routeCache[key] != null) return routeCache[key];
+    var straight = G.Geo.dist(a.lon, a.lat, b.lon, b.lat) * 1.4, L = null;
+    if (G.Nav && G.Nav.ready && G.Nav.ready()) {
+      var p0 = seaPt(a), p1 = seaPt(b), p = (G.Nav.seaPath || G.Nav.path)(p0[0], p0[1], p1[0], p1[1], 4e6);
+      if (p) { L = 0; for (var i = 1; i < p.length; i++) L += Math.hypot(G.Geo.wrapLon(p[i][0] - p[i - 1][0]), p[i][1] - p[i - 1][1]); }
+      routeCache[key] = L != null ? Math.max(L, straight / 1.4) : straight;
+      return routeCache[key];
+    }
+    return straight;                                                     // 지도를 아직 못 읽었으면 어림 (적어 두지 않는다)
+  };
+  /** 초심자 함대가 a에서 b까지 가는 날수 — 지금 함대가 더 느리면(호위하는 상선 등) 그 선속으로. v를 주면 그 선속(°/일)으로 */
+  R.questDays = function (a, b, v) {
+    var K = R.questK(), sp = v || K.refSpeed;
+    if (!v && G.Plan && G.Plan.avgSpeed && R.S() && R.S().fleet && R.S().fleet.ships.length) sp = Math.min(sp, G.Plan.avgSpeed());
+    return Math.max(3, Math.ceil(R.routeLen(a, b) / Math.max(0.2, sp)));
+  };
+  /** 뱃길 날수 → 기한 (초심자가 보급·날씨·길 헤맴을 겪어도 닿게) */
+  R.questDeadline = function (tripDays) { var K = R.questK(); return Math.ceil(tripDays * K.slack + K.port); };
+  /** 하루 식량·물 값 (c 항구 값 · 선원은 지금 선원·최저 인원·refCrew 가운데 큰 수) */
+  R.supplyDay = function (c) {
+    var f = R.S().fleet, crew = Math.max(f ? f.crew : 0, f && f.ships.length ? R.crewMin() : 0, R.questK().refCrew);
+    return R.dailyUse(crew) * (R.supplyCost(c) + R.waterCost(c));
+  };
+  /** 의뢰 보수의 바닥: days일 동안의 식량·물 값 × supplyK (10닢 단위로 올림) */
+  R.questFloor = function (days, c) { return Math.ceil(R.supplyDay(c) * days * R.questK().supplyK / 10) * 10; };
   /** 보급품 한 통 값 (k = food·water·mat) */
   R.supplyPrice = function (c, k) { return k === 'mat' ? R.matCost(c) : k === 'water' ? R.waterCost(c) : R.supplyCost(c); };
   // 보급을 줄여 되팔 때 싼 항구에서 사서 비싼 항구에서 되팔면 남던 것 — 산 값(평균)을 적어 두고 그 값을 넘지 않게 (QA 2026-10-23)

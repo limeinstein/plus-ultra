@@ -1,0 +1,17 @@
+{
+  "id": "r_iguana_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-549a1962-7758-4412-8c2c-4f76884a3351.png",
+  "target": "tools/disc_relics_20261107/sources/r_iguana_baby.png",
+  "file": "images/relics/r_iguana_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "3193ef13c0d9a3e16fbe5e1e35df0385538ab881ff4ff945e6ae4577d7944e09",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

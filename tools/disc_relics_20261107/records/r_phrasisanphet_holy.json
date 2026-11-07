@@ -1,0 +1,17 @@
+{
+  "id": "r_phrasisanphet_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-3ca02129-40b5-4d30-ba73-96714a5edb6d.png",
+  "target": "tools/disc_relics_20261107/sources/r_phrasisanphet_holy.png",
+  "file": "images/relics/r_phrasisanphet_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "40fdbfa70b258cc96dc3628f374e0dd7192932c24d388fec29a6523f6a664a88",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

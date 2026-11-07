@@ -1,0 +1,17 @@
+{
+  "id": "r_titanus_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-a118fe92-cc24-47e7-a38a-0fb8574ed297.png",
+  "target": "tools/disc_relics_20261107/sources/r_titanus_baby.png",
+  "file": "images/relics/r_titanus_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "271e25e62aa49102215eb13dbae66b4c9677cc817efd68922c38d118033fb9bf",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

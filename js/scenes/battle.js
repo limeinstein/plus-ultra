@@ -344,6 +344,8 @@
       vel: null, spd: 0, lat: 0, turnRate: 0,
       fx: G.SeaFX ? G.SeaFX.create({ spacing: BFX.wakeSpacing, kz: 1 }) : null   // 해전 좌표(px), 수명은 실제 초
     };
+    // 의뢰로 쫓는 배(밀수선단·경쟁사 화물선·나포 대상)는 짐을 가득 실어 느리다 — 해전에서도 따라잡을 수 있게 (2026-11-07 베타 피드백 #156)
+    if (side === 'en' && st && st.npc && G.Scenes.sea && G.Scenes.sea.isQuarry && G.Scenes.sea.isQuarry(st.npc)) b.loadSlow = R.questK().quarryBattle;   // speedOf가 곱한다
     b.reloadTotal = b.reload.slice();
     if (src.monster && G.SeaMonsters) G.SeaMonsters.decorate(b, src);
     return b;
@@ -1211,7 +1213,7 @@
     var hpF = 0.5 + 0.5 * b.hp / b.maxHp, crF = 0.4 + 0.6 * crewF;
     var sail = 34 * t.spd * (0.35 + th * 0.9) * hpF * crF;
     if (t.oar) sail = Math.max(sail, 34 * t.oar * 1.5 * hpF * crF);     // 노: 바람과 상관없이 움직인다
-    return sail * battleSpeedK();
+    return sail * (b.loadSlow || 1) * battleSpeedK();
   }
   /** 해전의 배 속력 배수 (G.BALANCE.navalControl.speed — 2026-11-02 「해전의 배의 속도감을 높여줘」, 양쪽 모두) */
   function battleSpeedK() { return (G.BALANCE.navalControl && G.BALANCE.navalControl.speed) || 1; }

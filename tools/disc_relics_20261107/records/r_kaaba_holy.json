@@ -1,0 +1,17 @@
+{
+  "id": "r_kaaba_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-66227e08-a7ef-4ec8-a58d-133a0004d77a.png",
+  "target": "tools/disc_relics_20261107/sources/r_kaaba_holy.png",
+  "file": "images/relics/r_kaaba_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "59fb432c8e1514795d9db77a3f3d33bb9419ba6d29850d240d7163cae1139685",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

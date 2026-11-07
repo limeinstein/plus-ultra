@@ -1,0 +1,17 @@
+{
+  "id": "r_stego_legend",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-3d5ab432-6697-4231-8af5-518e7a33b2cb.png",
+  "target": "tools/disc_relics_20261107/sources/r_stego_legend.png",
+  "file": "images/relics/r_stego_legend.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "3b5dd195c224bef94a2f5ad4d8b5d979c5832cdaaa6c574da590fa7fcb758fe5",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

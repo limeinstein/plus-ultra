@@ -1,0 +1,17 @@
+{
+  "id": "r_kilwa_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-d3fb4ad3-1f4f-4b02-8873-59c5439dc9c9.png",
+  "target": "tools/disc_relics_20261107/sources/r_kilwa_holy.png",
+  "file": "images/relics/r_kilwa_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "15975f79129a61fa26339072db1e9b8cec2da9d44387770f0442548ec91fc1b0",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_machupicchu_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-99eb92be-9b22-4e3f-95ef-b8fea5c6bd5a.png",
+  "target": "tools/disc_relics_20261107/sources/r_machupicchu_holy.png",
+  "file": "images/relics/r_machupicchu_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "51d4e34c254c3b32109370fe6ceffe379fd4287b68987f7283b7bd98addd1758",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

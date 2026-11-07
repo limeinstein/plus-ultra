@@ -1,0 +1,17 @@
+{
+  "id": "r_dolphin_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-2b1c7e98-1503-4e49-92a1-c797f83b26ee.png",
+  "target": "tools/disc_relics_20261107/sources/r_dolphin_baby.png",
+  "file": "images/relics/r_dolphin_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "32e94a5f7d1d80bc16fb42ec30b78ef9871e6a04b60f847e4df39c3ca97e7f3b",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

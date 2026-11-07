@@ -464,8 +464,11 @@
       .concat(lf && lf.src ? ['discovery-ends/' + lf.src, 'discoveries/' + lf.src, 'sea-monsters/' + lf.src] : [])
       .concat(['item-kinds/' + it.kind, 'relic-kinds/' + it.kind]);
   };
-  /** 발견 유물: 전용 유물 그림, 같은 이름의 일반 물건, 발견 장면, 종류 공통 그림 순 */
-  K.relic = function (r) { return ['relics/' + r.id, 'items/' + r.id, 'discovery-ends/' + r.relic, 'discoveries/' + r.relic, 'relic-kinds/' + r.kind]; };
+  /** 발견 유물: 전용 유물, 선수상 조각, 같은 이름의 일반 물건, 발견 장면, 종류 공통 그림 순 */
+  K.relic = function (r) {
+    return ['relics/' + r.id].concat(r.kind === 'fig' ? ['figureheads/' + r.id] : [])
+      .concat(['items/' + r.id, 'discovery-ends/' + r.relic, 'discoveries/' + r.relic, 'relic-kinds/' + r.kind]);
+  };
   /** 선수상: 전용 조각 그림을 먼저 쓰고, 발견 유물은 원래 유물 그림으로 잇는다. */
   K.figurehead = function (f) {
     var r = G.RELIC && G.RELIC[f.id];

@@ -1,0 +1,17 @@
+{
+  "id": "r_zeus_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-320c7fb2-88d4-4191-bcdc-0f689b5d1559.png",
+  "target": "tools/disc_relics_20261107/sources/r_zeus_holy.png",
+  "file": "images/relics/r_zeus_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "d07b023a439fe813ecfc02a54fee7d24a1faeb2aca9df87f5a86c8da0955a5c8",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

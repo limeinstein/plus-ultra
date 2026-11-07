@@ -1,0 +1,19 @@
+{
+  "id": "r_frigatebird_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-fd4affbe-e635-4d45-be06-d0adcc8d5ddc.png",
+  "target": "tools/disc_relics_20261107/sources/r_frigatebird_baby.png",
+  "file": "images/relics/r_frigatebird_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "38538442a3883c8c8be82a0006916d1c788e2f4456c09a4fa759bb8379cbfddf",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "note": "검수: 군함조 유조의 흰 머리와 검은 날개, 성체의 붉은 목주머니 제외",
+  "prompt": "Create one isolated transparent square inventory icon for an Age of Discovery exploration game. A juvenile frigatebird chick with a fluffy creamy white head, neck and breast, dark developing long wing feathers, slim hooked long bill, small webbed feet. No red throat sac and no adult breeding display. One subject only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink, warm natural highlights, crisp silhouette at small inventory sizes, matching an old maritime adventure game. Genuinely transparent background, no floor, no scenery, no shadow plate, no text, no labels, no border, no frame, no logo, no watermark."
+}

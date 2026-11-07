@@ -1,0 +1,17 @@
+{
+  "id": "r_peacock_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-82ef90dd-4ef6-4e7e-bda1-0f69a20d58a5.png",
+  "target": "tools/disc_relics_20261107/sources/r_peacock_baby.png",
+  "file": "images/relics/r_peacock_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "3230289a0e8a7eb21a4b5af291f464dd40c604debee1ab0cbdbaa8394b9e0a9e",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

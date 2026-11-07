@@ -1,0 +1,17 @@
+{
+  "id": "r_fennec_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-a36ed2a4-7b8e-441e-97f2-c2d72099505e.png",
+  "target": "tools/disc_relics_20261107/sources/r_fennec_baby.png",
+  "file": "images/relics/r_fennec_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "04d6eec5bdf20ceb3769ab0636fb979781685e9b895a1a529e73fb137677ccc1",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

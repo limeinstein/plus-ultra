@@ -1,0 +1,17 @@
+{
+  "id": "r_florenceduomo_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-5cc50b55-339f-44bc-a099-7688ffb38d38.png",
+  "target": "tools/disc_relics_20261107/sources/r_florenceduomo_holy.png",
+  "file": "images/relics/r_florenceduomo_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "1ff81a5930380eefb4763d2fb39f0fedc70587cd701829b71d9d113d6b09b76c",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

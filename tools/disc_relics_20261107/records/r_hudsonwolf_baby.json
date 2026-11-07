@@ -1,0 +1,17 @@
+{
+  "id": "r_hudsonwolf_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-807d23f6-4c5e-42a1-bf46-bcbbbfaf15ca.png",
+  "target": "tools/disc_relics_20261107/sources/r_hudsonwolf_baby.png",
+  "file": "images/relics/r_hudsonwolf_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "34baceb4e27b4566d2fed96a19a6fa56b20c932958592b687ccbe9cb9ecb814d",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

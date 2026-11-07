@@ -1,0 +1,17 @@
+{
+  "id": "r_eightyeight_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-95aa68a6-b9e9-48d8-8901-03a9a7ba7103.png",
+  "target": "tools/disc_relics_20261107/sources/r_eightyeight_baby.png",
+  "file": "images/relics/r_eightyeight_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "1d6f91e2cfcecbd9660589342ede9e6f4463fff4d29288ed91554b553d70e1bc",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

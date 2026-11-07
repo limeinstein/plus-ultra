@@ -1,0 +1,17 @@
+{
+  "id": "r_trike_legend",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-38fb1106-71de-4ca5-a55d-312c087ef831.png",
+  "target": "tools/disc_relics_20261107/sources/r_trike_legend.png",
+  "file": "images/relics/r_trike_legend.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "580b7eaba882e361ab854e4a829663a86124adfc6b7f1271fe6d693d8e467128",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

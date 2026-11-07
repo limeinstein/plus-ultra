@@ -1,0 +1,17 @@
+{
+  "id": "r_kailash_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-53e160c0-a8e5-46c0-b4e6-0bdf178c0a43.png",
+  "target": "tools/disc_relics_20261107/sources/r_kailash_holy.png",
+  "file": "images/relics/r_kailash_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "27d282cda9848fc3a5d9b8c34b90deadef8a32cc4bf47f54eb0e48e9e3e07c48",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

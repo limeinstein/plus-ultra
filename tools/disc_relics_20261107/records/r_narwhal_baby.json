@@ -1,0 +1,17 @@
+{
+  "id": "r_narwhal_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-ec086ac7-2abc-4c4a-921d-ed5d1e5450cc.png",
+  "target": "tools/disc_relics_20261107/sources/r_narwhal_baby.png",
+  "file": "images/relics/r_narwhal_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "d31999b1b0c714b571a08d263a0e82879ad87e1b192fb038b82ddd569bb8399e",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

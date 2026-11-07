@@ -1,0 +1,17 @@
+{
+  "id": "r_coelacanth_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-6810b920-5a6f-44e4-83e0-65d8cd7ce2e6.png",
+  "target": "tools/disc_relics_20261107/sources/r_coelacanth_baby.png",
+  "file": "images/relics/r_coelacanth_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "54e2b44a2bb2bd7c744d9f54c09863c278df76bfffeaea573ee94e666ee2ff20",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

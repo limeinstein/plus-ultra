@@ -1,0 +1,17 @@
+{
+  "id": "r_yungang_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-f9e4c935-a7b6-4bb8-8603-62831dc5ce10.png",
+  "target": "tools/disc_relics_20261107/sources/r_yungang_holy.png",
+  "file": "images/relics/r_yungang_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "2dcfad250f64049cdb23b3b2ad8f93b2d896cb2907991a9fd7889b11a3759d47",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

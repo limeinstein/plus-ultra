@@ -1,0 +1,17 @@
+{
+  "id": "r_doisuthep_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-37d4f937-ee80-42a8-a86d-c587f03772f1.png",
+  "target": "tools/disc_relics_20261107/sources/r_doisuthep_holy.png",
+  "file": "images/relics/r_doisuthep_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "35889efb2cffa03650ab4eb56c2856cf2dec3ff4e08cf61c8364c694c698dc41",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

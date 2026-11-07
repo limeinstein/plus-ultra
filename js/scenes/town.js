@@ -122,7 +122,7 @@
     var out = (LANDMARKS[c.id] || []).slice(), seen = {}, used = [0, 1];
     out.forEach(function (l) { seen[l[0]] = true; used.push(l[1]); });
     (G.DISCOVERIES || []).filter(function (d) {
-      return d.cat === 'ruin' && d.how === 'city' && d.city === c.id && !seen[d.id] &&
+      return d.cat === 'ruin' && d.how === 'city' && d.city === c.id && !seen[d.id] && !d.noStreet &&
         (!G.Disc || !G.Disc.built || (G.Disc.inTown ? G.Disc.inTown(d) : G.Disc.built(d))) && !mirageGone(d) && I.pick(I.chain.landmark(d.id));   // 도시의 신기루는 이번 입항에 떴을 때만 (js/systems/discovery.js D.inTown)
     }).forEach(function (d) {
       var best = 0.5, bestGap = -1;

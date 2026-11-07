@@ -59,6 +59,9 @@
     if (G.BeauxIS) out = out.concat(G.BeauxIS.daily());       // 미남 항해사 — 루이스의 뗏목·예멘의 연대기 (js/systems/beauxis.js)
     if (G.Donglin) out = out.concat(G.Donglin.daily());       // 천계제의 궁궐과 동림당 — 홍환안·육군자·소주 민변 (js/systems/donglin.js)
     if (G.NingChong) out = out.concat(G.NingChong.daily());       // 영원성 이후 · 숭정제 즉위와 위충현 숙청 (js/systems/ningchong.js)
+    if (G.SpiceMactan) out = out.concat(G.SpiceMactan.daily());       // 향료제도와 막탄 — 반다·세랑·막탄·세부의 잔치 (js/systems/spicemactan.js)
+    if (G.MacDang) out = out.concat(G.MacDang.daily());       // 막 왕조의 성립 — 돼지 임금에서 진남관까지 (js/systems/macdang.js)
+    if (G.SundaJohor) out = out.concat(G.SundaJohor.daily());       // 순다클라파와 자야카르타 · 조호르 — 파드랑에서 노바트까지 (js/systems/sundajohor.js)
     if (G.Imjin) out = out.concat(G.Imjin.daily());       // 임진왜란 — 부산진에서 노량까지 (js/systems/imjin.js)
     if (G.Sakoku) out = out.concat(G.Sakoku.daily());      // 일본의 대외 통제·남만 교역 단절·데지마
     if (G.Globe) out = out.concat(G.Globe.daily());       // 셰익스피어와 글로브의 불 — 템페스트·장례·첫 전집 (js/systems/globe.js)

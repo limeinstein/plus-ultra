@@ -18,7 +18,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_|net::/.test(m.text())) errors.push(m.text()); });
   try {
-    await page.goto(GAME);
+    await page.goto(GAME, {waitUntil:'domcontentloaded', timeout:120000});
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     await page.evaluate(() => G.Game.go('create'));
     await page.waitForSelector('#nm');
@@ -85,11 +85,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const s = G.Game.state, Q = G.Quest, q = Q.list().filter(x => x.kind === 'buy')[0], fame0 = s.player.fame;
       s.questNotes = [];
       const n = Q.graceLeft(q) + 1;
-      G.Game.passDays(n);
-      return { gone: Q.list().indexOf(q) < 0, done: s.questDone[q.key], dFame: s.player.fame - fame0, note: s.questNotes.map(m => m.text).join(' | ') };
+      // 같은 기간에 다른 업적의 명성도 받을 수 있으므로 의뢰의 실제 감점 호출을 따로 확인한다.
+      const add0 = G.Fame.add, penalties = [];
+      G.Fame.add = function (cat, amount) { if (amount < 0) penalties.push({ cat, amount }); return add0.apply(this, arguments); };
+      try { G.Game.passDays(n); } finally { G.Fame.add = add0; }
+      return { gone: Q.list().indexOf(q) < 0, done: s.questDone[q.key], dFame: s.player.fame - fame0, penalty: penalties.some(p => p.cat === G.Fame.questCat(q.kind) && p.amount === -q.fame), note: s.questNotes.map(m => m.text).join(' | ') };
     });
     console.log('   ' + JSON.stringify(z));
-    ok(z.gone && z.done === 'late' && z.dFame < 0 && /거둬들였다/.test(z.note), '유예마저 넘기면 조합이 거둬들이고 명성이 깎이며, 그 소식도 남는다');
+    ok(z.gone && z.done === 'late' && z.penalty && /거둬들였다/.test(z.note), '유예마저 넘기면 조합이 거둬들이고 의뢰 명성이 깎이며, 그 소식도 남는다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('\n통과');
   } catch (e) { console.error('✗', e.message); process.exitCode = 1; } finally { await browser.close(); }

@@ -1,0 +1,17 @@
+{
+  "id": "r_gadir_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-51f9e15d-366f-4ce4-9e21-6275efa3534d.png",
+  "target": "tools/disc_relics_20261107/sources/r_gadir_holy.png",
+  "file": "images/relics/r_gadir_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "395273a314ae396c5cbf34902bfbcfbc81263ddf2e997e84bd85cea8ee4900aa",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_f_oarfish_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-b7a21be2-7587-4a60-bb64-01c1fbba0651.png",
+  "target": "tools/disc_relics_20261107/sources/r_f_oarfish_baby.png",
+  "file": "images/relics/r_f_oarfish_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "d11c08e3aaf75cef266da618380493a39410c8a104422d07b58daa918f143c06",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

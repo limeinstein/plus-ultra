@@ -1,0 +1,17 @@
+{
+  "id": "r_falcon_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-d3675b1a-b6ae-4e7c-801b-97bbf5f41899.png",
+  "target": "tools/disc_relics_20261107/sources/r_falcon_baby.png",
+  "file": "images/relics/r_falcon_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "a3e78ca6e9ce5f167ddb44f1dfdfa4c642d79be42717f97b54a47c6c70c19d90",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

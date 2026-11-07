@@ -1,0 +1,17 @@
+{
+  "id": "r_sukuh_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-797b118b-9aca-4de1-bc66-41a732e69992.png",
+  "target": "tools/disc_relics_20261107/sources/r_sukuh_holy.png",
+  "file": "images/relics/r_sukuh_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "1dea3f9d8211b32dc82efa84ab5a9331b650f34cb8e9ecc5876279f79d6239f9",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_sanmarco_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-d3d61b4c-f8d9-4ddb-b2b9-a3a8cc1e2329.png",
+  "target": "tools/disc_relics_20261107/sources/r_sanmarco_holy.png",
+  "file": "images/relics/r_sanmarco_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "bc2a68ebf2764834b0f20982d303dd72558847e8ac03eb6c5d1ff8471d895ae2",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

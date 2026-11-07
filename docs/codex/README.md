@@ -11,7 +11,7 @@ Claude가 설계·통합·실제 플레이 검증·배포를, Codex가 떼어 �
 | 04 | [PR 자동 시험](04_ci_tests.md) | 공통 | `.github/workflows/test.yml`(새), `tests/` | 없음 |
 | 05 | [신기루 7곳 → 가상의 놀이공원](05_mirage_amusement_parks.md) (저작권 QA 2026-11-04) | 그림·글 | `js/data/miragedisc.js`, `js/data/discfam_8.js`, `images/discoveries·discovery-ends·discovery-sheets·map-discoveries`, `tools/mirage_*` | 없음 |
 | 06 | [「갑판의 길잡이」 사이드의 팔 다시 그리기](06_said_deck_redraw.md) (사용자 QA 2026-11-06) | 그림 | `images/legend-events/bx_said_deck.webp`, `tools/missing_event_scenes_20261105_prompts.json` | 없음 |
-| 07 | [발견 유물 그림 411장 — 동물의 새끼 · 전설 생물의 물건 · 종교 성물](07_discovery_relic_icons.md) (사용자 요청 2026-11-07) | 그림 | `images/relics/r_*_baby·_legend·_holy.webp`, `images/manifest.js`, `tools/disc_relics_20261107/` | 없음 |
+| 07 | [발견 유물 그림 411장 — 동물의 새끼 · 전설 생물의 물건 · 종교 성물](07_discovery_relic_icons.md) (사용자 요청 2026-11-07) | 완료 · 411장 및 게임 화면 검증 | `images/relics/r_*_baby·_legend·_holy.webp`, `images/manifest.js`, `tools/disc_relics_20261107/` | 없음 |
 
 1단계(파도를 타는 배·돛·깃발·선수 물보라)는 2026-09-28에 Claude가 구현했습니다 — `js/world/waves.js`, `G.FX.ride`.
 연결(바다·해전 장면에 끼워 넣기)은 모듈이 들어온 뒤 Claude가 합니다. 지시서의 "연결 지점"은 참고용입니다.

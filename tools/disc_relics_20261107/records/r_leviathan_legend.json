@@ -1,0 +1,17 @@
+{
+  "id": "r_leviathan_legend",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-b8733bd3-7eb1-4096-a696-4b3e3b527fa0.png",
+  "target": "tools/disc_relics_20261107/sources/r_leviathan_legend.png",
+  "file": "images/relics/r_leviathan_legend.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "3ce7b8bfdcc2a3e7ea7e3af042b0f0ebb53fbad7bf6afb161b6090b56a8f2509",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

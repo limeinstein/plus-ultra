@@ -1,0 +1,17 @@
+{
+  "id": "r_vanmieu_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-50bb2822-325c-4b53-ae30-fba6f023b9fd.png",
+  "target": "tools/disc_relics_20261107/sources/r_vanmieu_holy.png",
+  "file": "images/relics/r_vanmieu_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "d9854bd6c46cfd5b99cb8f1fba6070f49b3c2760cf9ab30319e6f44d52a902c2",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

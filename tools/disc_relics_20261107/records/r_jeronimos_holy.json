@@ -1,0 +1,17 @@
+{
+  "id": "r_jeronimos_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-50d41e9a-1437-4e5c-be14-4f3a80b46e60.png",
+  "target": "tools/disc_relics_20261107/sources/r_jeronimos_holy.png",
+  "file": "images/relics/r_jeronimos_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "53db8487fb271bec148858e9ffa94ae3d3915a7d54432243784043da1312d1f7",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

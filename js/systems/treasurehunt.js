@@ -172,8 +172,12 @@
     pay = U.clamp(pay, r[0], r[1]);
     var q = { key: c.id + ':' + blk + ':t', kind: 'treasure', from: c.id, city: c.name, to: c.id, tlon: sp.lon, tlat: sp.lat, island: sp.island,
       seed: Math.floor(rng() * 1e9), pay: pay, reward: pay, fee: Math.max(300, Math.round(pay * b.feeK / 100) * 100), fame: 10 + Math.round(pay / 5000) };
-    q.dayNeed = Math.max(8, Math.round(sp.d / 1.05));
+    q.dayNeed = Math.max(8, Math.round(sp.d / 1.05), R.questDays ? R.questDays(c, { lon: sp.lon, lat: sp.lat }) : 0);   // 실제 뱃길 ÷ 초심자 선속 (2026-11-07)
     q.limit = Math.round(q.dayNeed * 3) + 120;          // 실마리를 모으는 날까지 넉넉히
+    if (R.supplyDay) {                                    // 물자비 = 기한 동안의 식량·물 + 지도값 — 사례는 적어도 그 3배
+      q.goodsCost = q.fee; q.supply = Math.round(R.supplyDay(c) * q.limit) + q.fee;
+      q.pay = q.reward = Math.max(q.pay, Math.ceil(q.supply * R.questK().supplyK / 100) * 100);
+    }
     q.title = (sp.island ? '섬' : '해안') + '에 묻힌 보물 (지도)';
     q.ev = []; q.clue = 0;                                // 어디인지는 조합도 모른다 — 술집에서 증거를 모아 부하들과 좁힌다
     return q;

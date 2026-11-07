@@ -537,6 +537,7 @@
       var no = G.Quest.canAccept(i);
       var K = G.Quest.KINDS[i.kind];
       var detail = K.desc + '\n\n사례금 금화 ' + U.num(i.pay) + '닢 · 명성 +' + G.Fame.mul(G.Fame.questCat(i.kind), i.fame) + ' · 기한 ' + i.limit + '일' +
+        (i.supply ? '\n물자비 약 ' + U.num(i.supply) + '닢 (기한 동안의 식량·물' + (i.goodsCost ? ' + 물건값 ' + U.num(i.goodsCost) + '닢' : '') + ')' : '') +
         (i.load ? '\n짐칸 ' + i.load + '통을 씁니다.' : '') +
         (i.hint ? '\n' + i.hint : '') +
         (i.kind === 'buy' ? '\n물건값은 제독이 냅니다. 사서 이 조합으로 가져오십시오.' : '') +

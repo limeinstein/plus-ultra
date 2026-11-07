@@ -1,0 +1,17 @@
+{
+  "id": "r_panda_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-1834fe18-cf75-4272-bea5-e818cdd89c52.png",
+  "target": "tools/disc_relics_20261107/sources/r_panda_baby.png",
+  "file": "images/relics/r_panda_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "3af8549ce2331582da9a066f64a133ba7a87bbefe688a2099f564f52eeab4e73",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

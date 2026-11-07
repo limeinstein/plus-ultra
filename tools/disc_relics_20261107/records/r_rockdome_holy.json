@@ -1,0 +1,19 @@
+{
+  "id": "r_rockdome_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-e237a059-d962-4482-9889-b51dfec1b33f.png",
+  "target": "tools/disc_relics_20261107/sources/r_rockdome_holy.png",
+  "file": "images/relics/r_rockdome_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "227859e095cb222c727a9cbeeb7001254b922c5b13ca8c337e6ad7505b164a8b",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "note": "검수: 기도구슬 뒤에 남은 반투명 배경 제거",
+  "prompt": "Edit the provided icon to remove EVERY part of the cloudy gray and white background, including the upper corners, inside the bead loop, and all gaps between beads. The output must be a true transparent alpha cutout everywhere outside the physical object, with no haze, floor, cast shadow, glow, colored plate, or scenery. Preserve the original brown wooden Islamic prayer beads, gold ornamental spacers, blue-and-gold imam bead and flowing gold tassel, their detailed hand-painted watercolor and fine-ink style and composition. Keep the entire object visible with clear margins in a square canvas. Decoration can use architecture and geometric ornament only. No people, no animals, no faces, no readable text, no border or watermark."
+}

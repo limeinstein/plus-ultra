@@ -1,0 +1,17 @@
+{
+  "id": "r_ur_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-8c269775-109d-4e19-8310-1200487c543b.png",
+  "target": "tools/disc_relics_20261107/sources/r_ur_holy.png",
+  "file": "images/relics/r_ur_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "97746a5dea891c1ff7e7bb98d69f2e717f206070c633002fa3a7cb20a8b6ccc5",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_saintsernin_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-55063820-783a-4019-bf57-10e63acdc7e8.png",
+  "target": "tools/disc_relics_20261107/sources/r_saintsernin_holy.png",
+  "file": "images/relics/r_saintsernin_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "6c45f3eb699901f9648ede97b921d8951be2e4f0331568d96838bd46e200171c",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

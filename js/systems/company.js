@@ -604,7 +604,7 @@
       o.at = t.id; o.n = n; o.got = 0;
       o.pay = Math.round((k.patrol.pay[0] + k.patrol.pay[1] * n) * payK / 100) * 100;
       o.merit = member ? k.patrol.merit[0] + k.patrol.merit[1] * n : 0;
-      o.days = days(c, t) + 60 + n * 15;
+      o.days = Math.max(days(c, t) + 60 + n * 15, R.questDeadline(R.questDays(c, t)) + 45 + n * 15);   // 가는 뱃길(초심자) + 앞바다에서 찾는 날 (2026-11-07)
       o.title = t.name + ' 앞바다의 밀수선·경쟁사 배 ' + n + '척을 쳐부순다';
       o.desc = '회사의 독점을 갉아먹는 밀수선과 경쟁사 무장 상선이 ' + t.name + ' 둘레에 드나든다. 그 앞바다(' + k.patrol.near + '° 안)에 가면 나타난다.' + (member ? '' : ' — 회사 사람이 아니라 보수는 60%, 공헌은 없다.');
     } else if (kind === 'convoy') {
@@ -614,7 +614,7 @@
       o.pay = Math.round(o.value * k.convoy.fee * (1 + k.convoy.safe));
       o.merit = k.convoy.merit[0] + k.convoy.merit[1] * ships;
       o.raids = k.convoy.raids + (ships >= 5 ? 1 : 0);
-      o.days = Math.round(days(c, hq) * 1.6) + 30;
+      o.days = Math.max(Math.round(days(c, hq) * 1.6) + 30, Math.ceil(R.questDays(c, hq) * 1.8) + 20);   // 느린 회사선과 함께 가는 뱃길 (2026-11-07)
       o.title = '귀환 대선단 ' + ships + '척을 ' + hq.name + '까지 이끈다';
       o.desc = '화물 값 금화 ' + num(o.value) + '닢을 실은 회사선 ' + ships + '척이 ' + c.name + '에서 본부로 돌아간다. 해적과 경쟁사가 노리고 덤빈다(' + o.raids + '번쯤). 한 척 잃을 때마다 수수료가 준다. 모두 지키면 ' + Math.round(k.convoy.safe * 100) + '% 더.';
     } else if (kind === 'found') {
@@ -625,7 +625,8 @@
       function rr(a) { return Math.round(a[0] + rng() * (a[1] - a[0])); }
       o.at = tt.id; o.need = { timber: rr(f.timber), cannon: rr(f.cannon), guns: rr(f.guns) };
       o.pay = Math.round((f.pay[0] + rng() * (f.pay[1] - f.pay[0])) * payK / 100) * 100;
-      o.merit = f.merit; o.days = days(c, tt) * 2 + 150;
+      o.merit = f.merit; o.days = Math.max(days(c, tt) * 2 + 150, R.questDeadline(R.questDays(c, tt)) * 2 + 120);
+      o.goodsCost = U.sum(['timber', 'cannon', 'guns'], function (g) { return G.GOOD[g] ? G.GOOD[g].p * o.need[g] : 0; });   // 실어 갈 자재값 (물자비에 든다)
       o.title = tt.name + '에 새 ' + co.short + ' 상관을 세운다';
       o.desc = '목재 ' + o.need.timber + '통 · 대포 ' + o.need.cannon + '통 · 총 ' + o.need.guns + '통을 싣고 ' + tt.name + '에 들어가면, 그 고장 사람들과 담판을 짓고 상관을 세운다. 세운 상관은 회사의 것이 되어 창고·주문서·임무가 열린다.';
     } else if (kind === 'prize') {
@@ -636,9 +637,18 @@
       o.rival = rv.id; o.at = at.id; o.name = nm; o.ship = rv.ship; o.got = 0;
       o.value = Math.round((k.prize.value[0] + rng() * (k.prize.value[1] - k.prize.value[0])) * CO.eraK() / 100) * 100;
       o.pay = Math.round(o.value * k.prize.bonus * CO.perk(CO.rank(co)).payK);
-      o.merit = k.prize.merit; o.days = days(c, at) + 100;
+      o.merit = k.prize.merit; o.days = Math.max(days(c, at) + 100, R.questDeadline(R.questDays(c, at)) + 90);
       o.title = rv.short + '의 큰 화물선 「' + nm + '」호를 나포한다';
       o.desc = rv.name + '의 「' + nm + '」호가 ' + at.name + ' 앞바다(' + k.prize.near + '° 안)를 지난다. 붙잡으면 화물 값 약 금화 ' + num(o.value) + '닢 (가라앉히면 ' + Math.round(k.prize.sunk * 100) + '%), 본부에 알리면 회사 포상금 금화 ' + num(o.pay) + '닢.';
+    }
+    // 물자비 = 기한 동안의 식량·물 값 + 실어 갈 자재값 — 보수는 적어도 그 3배 (2026-11-07, 회사 사람이 아니어도)
+    if (o.days) {
+      o.supply = Math.round(R.supplyDay(c) * o.days) + (o.goodsCost || 0);
+      var floor = Math.ceil(o.supply * R.questK().supplyK / 100) * 100;
+      if (kind === 'convoy') {
+        // 수수료는 닿을 때 화물 값에서 셈한다 (convoyHome) — 다 지키지 못해도(안전 보너스 없이) 바닥 이상이 되게 화물 값을 정한다
+        if (o.value * k.convoy.fee < floor) { o.value = Math.ceil(floor / k.convoy.fee / 100) * 100; o.pay = Math.round(o.value * k.convoy.fee * (1 + k.convoy.safe)); }
+      } else o.pay = Math.max(o.pay || 0, floor);
     }
     return o;
   }
@@ -778,7 +788,8 @@
       var t = city(m.at); if (dist(l, dockOf(t)) > k.patrol.near || !U.chance(k.patrol.spawn)) return null;
       p = placeNear(l, 2.2, 4.5); if (!p) return null; z = G.Ships.zone(p.lon, p.lat);
       var smug = U.chance(0.6), rv = rivalOf(m.co), n = Math.min(m.n - m.got, U.ri(1, 3));
-      if (smug || !rv) npc = { kind: 'merchant', label: '밀수선단', nation: '밀수', ships: G.Ships.enemyTypes('merchant', z, null, n, K2, y), hostile: false, spd: U.rf(0.9, 1.25) };
+      // 밀수선단은 짐을 가득 실은 배 — 바다에서도 해전에서도 초심자 함대보다 느리다 (quarry · G.BALANCE.quest.quarrySea·quarryBattle, 2026-11-07 베타 피드백 #156)
+      if (smug || !rv) npc = { kind: 'merchant', label: '밀수선단', nation: '밀수', ships: G.Ships.enemyTypes('merchant', z, null, n, K2, y), hostile: false, spd: U.rf(0.9, 1.25), quarry: true };
       else npc = { kind: 'navy', label: rv.short + ' 무장 상선단', nation: rv.short, ships: shipsOf(rv, n), hostile: true, spd: U.rf(0.9, 1.2) };
       m.cd = s.day + k.patrol.cd;
       UI.toast(npc.hostile ? '수평선에 ' + npc.label + U.jx(npc.label, '이/가') + ' 나타나 다가온다!' : '수평선에 밀수선단의 돛이 보인다 — ' + t.name + ' 앞바다를 몰래 드나드는 배다.', 'telescope', 5200);
@@ -795,7 +806,7 @@
       var at = city(m.at), rv3 = G.COMPANY[m.rival]; if (!rv3 || dist(l, dockOf(at)) > k.prize.near || !U.chance(k.prize.spawn)) return null;
       p = placeNear(l, 2.2, 4.2); if (!p) return null; z = G.Ships.zone(p.lon, p.lat);
       var esc = shipsOf(rv3, U.ri(1, 2)), sh = G.SHIP[m.ship] ? m.ship : esc[0];
-      npc = { kind: 'merchant', label: '「' + m.name + '」호', nation: rv3.short, ships: [sh].concat(esc), hostile: false, spd: U.rf(0.75, 0.95), prizeShip: sh };
+      npc = { kind: 'merchant', label: '「' + m.name + '」호', nation: rv3.short, ships: [sh].concat(esc), hostile: false, spd: U.rf(0.75, 0.95), prizeShip: sh, quarry: true };
       m.cd = s.day + k.prize.cd;
       UI.toast('수평선에 거대한 화물선이 보인다 — ' + rv3.short + '의 「' + m.name + '」호다!', 'telescope', 6000);
       npc.co = 'prize';

@@ -1,0 +1,17 @@
+{
+  "id": "r_flamingo_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-e2550234-1155-42df-acd4-7ed7324981ab.png",
+  "target": "tools/disc_relics_20261107/sources/r_flamingo_baby.png",
+  "file": "images/relics/r_flamingo_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "ece0a2186a0e967da517e6454c88833fd6f753a27187f7853718bdd6a20e495b",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_moonbear_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-83c54b31-50f1-4647-bdb3-030b35523808.png",
+  "target": "tools/disc_relics_20261107/sources/r_moonbear_baby.png",
+  "file": "images/relics/r_moonbear_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "5a88f81ba6ce4c18e3395bb3158f1092bcabb140bdf5cbef9b7fc64d47e4b84c",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_osireion_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-e326124f-e773-48d7-b828-7d5433c1995b.png",
+  "target": "tools/disc_relics_20261107/sources/r_osireion_holy.png",
+  "file": "images/relics/r_osireion_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "03e3b5878a9ebc557f8a17fb75d3f0900054299d7a9497cf38abc6d28f2e784b",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

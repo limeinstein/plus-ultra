@@ -1,0 +1,17 @@
+{
+  "id": "r_zebra_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-d7672e98-5c6c-44d2-af94-236417829e01.png",
+  "target": "tools/disc_relics_20261107/sources/r_zebra_baby.png",
+  "file": "images/relics/r_zebra_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "df348d056e988bdf374c15d87315b34144e8f97a151928de270005d893afb34d",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

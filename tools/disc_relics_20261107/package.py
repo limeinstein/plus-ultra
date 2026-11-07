@@ -41,12 +41,19 @@ def check(path, size=None):
         return {"size": list(image.size), "alpha": [low, high]}
 
 
-def save_source(asset_id, source):
+def save_source(asset_id, source, replace=False):
     asset = next(a for a in ASSETS if a["id"] == asset_id)
     target, output = ROOT / asset["target"], ROOT / asset["file"]
     check(source)
-    if output.exists():
+    if output.exists() and not replace:
         raise FileExistsError(f"기존 그림 덮어쓰기 차단: {output}")
+    if output.exists() and replace:
+        old_hash = hashlib.sha256(output.read_bytes()).hexdigest()[:16]
+        history = HERE / 'revisions' / asset_id
+        history.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(output, history / f'{old_hash}.webp')
+        if target.exists():
+            shutil.copy2(target, history / f'{old_hash}.png')
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, target)
     spec = importlib.util.spec_from_file_location("prepare_relic_icon", ROOT / "tools/prepare_relic_icon.py")
@@ -54,11 +61,17 @@ def save_source(asset_id, source):
     spec.loader.exec_module(prepare)
     prepare.prepare(target, output)
     info = check(output, (256, 256))
-    write_json(HERE / "records" / f"{asset_id}.json", {
+    record = {
         "id": asset_id, "source": str(source), "target": asset["target"],
         "file": asset["file"], "tool": "built-in image_gen", "date": "2026-11-07",
         "sha256": hashlib.sha256(output.read_bytes()).hexdigest(), **info,
-    })
+    }
+    fixes = HERE / 'qa_fixes.json'
+    if replace and fixes.exists():
+        fix = json.loads(fixes.read_text(encoding='utf-8')).get(asset_id)
+        if fix:
+            record.update(fix)
+    write_json(HERE / "records" / f"{asset_id}.json", record)
     print(f"저장: {asset_id}")
 
 
@@ -72,7 +85,10 @@ def make_preview(available):
     font = ImageFont.truetype(str(font_path), 12)
     heading = ImageFont.truetype(str(font_path), 25)
     draw.text((16, 13), f"발견 유물 원화 · {len(available)}/411장 저장", fill="#33291d", font=heading)
-    draw.text((16, 52), "OpenAI ImageGen · 투명 WebP 256×256 · 빈 칸은 아직 생성되지 않은 항목", fill="#574d40", font=font)
+    subtitle = "OpenAI ImageGen · 투명 WebP 256×256"
+    if len(available) < len(ASSETS):
+        subtitle += " · 빈 칸은 아직 생성되지 않은 항목"
+    draw.text((16, 52), subtitle, fill="#574d40", font=font)
     y = 90
     for group, label in groups:
         items = [a for a in ASSETS if a["group"] == group]
@@ -116,7 +132,17 @@ def package():
     ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
     mine = {a["id"] for a in ASSETS}
     base = [a for a in ledger["assets"] if a["id"] not in mine]
-    ledger["assets"] = base + [{**a, "tool": "built-in image_gen", "date": "2026-11-07"} for a in available]
+    added = []
+    for a in available:
+        row = {**a, "tool": "built-in image_gen", "date": "2026-11-07"}
+        record_path = HERE / 'records' / f'{a["id"]}.json'
+        if record_path.exists():
+            record = json.loads(record_path.read_text(encoding='utf-8'))
+            for key in ['prompt', 'note', 'sha256']:
+                if key in record:
+                    row[key] = record[key]
+        added.append(row)
+    ledger["assets"] = base + added
     ledger["total"] = len(ledger["assets"])
     ledger["generated"] = ledger["total"] - ledger.get("preserved", 0)
     ledger["discovery_relics_20261107"] = {"completed": len(available), "requested": len(ASSETS), "prompts": "tools/disc_relics_20261107/prompts.json"}
@@ -131,9 +157,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--id")
     parser.add_argument("--source", type=Path)
+    parser.add_argument("--replace", action="store_true", help="이번 작업의 검수 수정본으로 교체하고 이전 그림을 보관")
     args = parser.parse_args()
     if args.id and args.source:
-        save_source(args.id, args.source)
+        save_source(args.id, args.source, replace=args.replace)
     elif args.id or args.source:
         parser.error("--id와 --source를 함께 지정하세요")
     else:

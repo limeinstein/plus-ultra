@@ -1,0 +1,17 @@
+{
+  "id": "r_nubianibex_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-e1d4884b-18e3-4f48-883c-9493d16a55de.png",
+  "target": "tools/disc_relics_20261107/sources/r_nubianibex_baby.png",
+  "file": "images/relics/r_nubianibex_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "c2d6a57f8e912a3df04264653aa2f41d94519407f0ed0133c060d274b8d7295e",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_hwangnyong_holy",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-9cba9741-c5a1-4966-a4e5-ae1b3adde158.png",
+  "target": "tools/disc_relics_20261107/sources/r_hwangnyong_holy.png",
+  "file": "images/relics/r_hwangnyong_holy.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "f109d960e44da68401538f2bab15c324a8e4d358cfb2a8637621d3e14c7d55f1",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -39,7 +39,7 @@
     var pickN = await UI.choose(co.short + ' 회사 임무', rows, { icon: 'scroll', width: 900, text: X.isMember(co) ? U.esc(X.rankName(co, X.rank(co))) + '에게 맡길 수 있는 일 — 한 번에 하나만 맡는다.' : '회사 사람이 아니면 단속 일만 맡을 수 있다 (보수 60% · 공헌 없음).' });
     if (pickN == null || pickN < 0) return;
     var o = offs[pickN];
-    var ok = await UI.ask(o.desc + ' — 기한 ' + o.days + '일 · ' + (o.kind === 'convoy' ? '수수료 최대' : o.kind === 'prize' ? '포상금' : '보수') + ' 금화 ' + num(o.pay) + '닢', [{ label: '맡는다', value: 'yes' }, { label: '그만둔다', value: null }], who);
+    var ok = await UI.ask(o.desc + ' — 기한 ' + o.days + '일 · ' + (o.kind === 'convoy' ? '수수료 최대' : o.kind === 'prize' ? '포상금' : '보수') + ' 금화 ' + num(o.pay) + '닢' + (o.supply ? ' (물자비 약 ' + num(o.supply) + '닢)' : ''), [{ label: '맡는다', value: 'yes' }, { label: '그만둔다', value: null }], who);
     if (ok !== 'yes') return;
     X.accept(o);
     var line = { patrol: '좋소. 놈들을 쳐부수고 돌아오면 본부든 상관이든 알려 주시오.', convoy: '회사선 선장들에게 그대의 깃발을 따르라고 일러 두었소. 해적과 경쟁사 놈들이 냄새를 맡을 테니 조심하시오. 본부 부두에서 기다리겠소.', found: '물자는 그대가 마련해야 하오. 목재·대포·총을 싣고 가서 그 고장 사람들과 담판을 지으시오.', prize: '그 배 한 척이 작은 나라의 한 해 세금만큼 싣고 다니오. 붙잡든 가라앉히든, 놈들 장부에 구멍을 내시오.' }[o.kind];

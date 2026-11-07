@@ -47,8 +47,8 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       s.date = { y: 1660, m: 1, d: 1 }; out.feReal = D.built(fe) && !G.Mirage.active(fe) && !D.isMirageFind(fe);
       // 대학: 1650년부터 · 언제나 신기루로 본 발견
       const hv = G.DISC.harvard, st = G.DISC.stanford;
-      s.date = { y: 1649, m: 12, d: 1 }; out.uniBefore = unis.some(d => G.Disc.available(d) || D.built(d) || G.Mirage.active(d));
-      s.date = { y: 1650, m: 1, d: 1 }; out.uniAt = unis.every(d => G.Disc.available(d) && D.built(d) && D.isMirageFind(d));
+      s.date = { y: 1649, m: 12, d: 1 }; if (G.DiscMove) G.DiscMove.apply(); out.uniBefore = unis.some(d => G.Disc.available(d) || D.built(d) || G.Mirage.active(d));
+      s.date = { y: 1650, m: 1, d: 1 }; if (G.DiscMove) G.DiscMove.apply(); out.uniAt = unis.every(d => G.Disc.available(d) && D.built(d) && D.isMirageFind(d));
       s.date = { y: 1720, m: 1, d: 1 }; out.harvardLater = D.isMirageFind(hv) && D.isMirageFind(st);
       // 부하의 바람 — 배운 것이 가장 적은 부하가 말한다
       s.mates = [{ id: 'rocco', role: 'first', loyal: 80 }];
@@ -62,8 +62,12 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       // 장면 그림이 없는 발견물도 관찰·바람을 말한다
       const said = []; const say = G.UI.say; G.UI.say = async (t, o) => { said.push((o && o.name || '') + ': ' + t); };
       G.MATES.filter(d => d.sk && d.sk.sci && !d.eventOnly).slice(0, 1).forEach(d => s.mates.push({ id: d.id, role: 'none', loyal: 80 }));
-      out.hasReveal = G.Scenes.hasReveal(hv);
-      out.voices = await G.Scenes.discoveryVoices(hv);
+      // 지금은 대학 장면 원화도 있으므로, 파일이 없는 상황을 명시적으로 만든다.
+      const savedFiles = G.IMAGE_FILES;
+      G.IMAGE_FILES = Object.fromEntries(Object.entries(savedFiles).filter(([k]) => !k.includes('/' + hv.id)));
+      G.Img.reset();
+      try { out.hasReveal = G.Scenes.hasReveal(hv); out.voices = await G.Scenes.discoveryVoices(hv); }
+      finally { G.IMAGE_FILES = savedFiles; G.Img.reset(); }
       out.said = said;
       G.UI.say = say;
       return out;

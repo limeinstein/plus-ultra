@@ -1,0 +1,19 @@
+{
+  "id": "r_tapir_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-ce22a1fc-03f7-44de-be81-368f7f618f80.png",
+  "target": "tools/disc_relics_20261107/sources/r_tapir_baby.png",
+  "file": "images/relics/r_tapir_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "b527f0dcb9aacd686286f988b8fee76368bb7919dabc79efd99d9818afa82000",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "note": "검수: 말레이맥 새끼의 갈색 털과 흰 줄무늬·반점 적용",
+  "prompt": "Create one isolated transparent square inventory icon for an Age of Discovery exploration game. A very young Malayan tapir calf, a small rounded brown body covered with clear creamy white horizontal broken stripes and spots, rounded white-edged ears, short flexible trunk-like snout, sturdy short legs. No adult black-and-white saddle coat. One subject only, centered and completely visible, three-quarter museum catalog view, fill about 80 percent of a square canvas with generous clear margin on every side. Detailed hand-painted realistic watercolor and fine ink, warm natural highlights, crisp silhouette at small inventory sizes, matching an old maritime adventure game. Genuinely transparent background, no floor, no scenery, no shadow plate, no text, no labels, no border, no frame, no logo, no watermark."
+}

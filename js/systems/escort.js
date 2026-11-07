@@ -55,6 +55,8 @@
   }
   /** 이 도시 교역소에서 지금 나와 있는 호위 요청 (없으면 null). 열흘 단위로 같은 요청이 유지된다.
       ask = true: 제독이 직접 찾는다(E.seek) — 청하는 상인이 없는 열흘이어도, 호위를 마친 뒤 쉬는 날이어도 찾고, 거절한 상인 대신 다른 상인 */
+  /** 이익이 적어도 받는 품삯 (옛 호위는 왕복 날수 × feeDay) */
+  E.fee = function (n) { var B = K(); return n && n.fee ? n.fee : Math.round((n ? n.days : 0) * 2 * B.feeDay); };
   E.offer = function (c, ask) {
     var s = S(), e = E.st(), B = K();
     if (!s || e.now || !c || !c.port || (!ask && s.day < (e.cool || 0))) return null;
@@ -90,9 +92,15 @@
         var pool = (G.Ships.enemyTypes('merchant', zone, null, 6, big, s.date.y) || []).filter(function (id, i, a) { return a.indexOf(id) === i; }).sort(function (x, y) { return G.SHIP[x].cap - G.SHIP[y].cap; });
         var type = pool[Math.min(pool.length - 1, Math.floor(rng() * (1 + big * (pool.length - 1))))] || 'cog';
         var t = G.SHIP[type], names = G.ESCORT_NAMES[c.region >= 3 && c.region <= 5 && t.cult === 'is' && rng() < 0.5 ? 'ind' : t.cult] || G.ESCORT_NAMES.eu;
-        var days = tripDays(c, best.d);
+        // 날수: 실제 뱃길 ÷ (초심자 선속과 상인 배 선속 가운데 느린 쪽) — 함대는 상인 배보다 빨리 가지 못한다 (2026-11-07 베타 피드백 #156)
+        var rEsc = Math.min(1, t.spd / ((G.SHIP.caravel && G.SHIP.caravel.spd) || t.spd)), vEsc = R.questK().refSpeed * (rEsc + (1 - rEsc) * (B.tow || 0));   // 함대가 조금 끌어 준다 (tow)
+        var days0 = tripDays(c, best.d), days = Math.max(days0, R.questDays(c, best.d, vEsc));
+        var len = Math.max(Math.round(days0 * 2 * B.deadline[0] + B.deadline[1]), R.questDeadline(days * 2) + 4);   // 예전 기한과 (왕복 × 1.5 + 10 + 상인이 짐을 싣는 날) 가운데 긴 쪽
         offer = { key: key, from: c.id, to: best.d.id, good: best.g, type: type, name: names[Math.floor(rng() * names.length)], shipName: G.SHIP_NAMES[Math.floor(rng() * G.SHIP_NAMES.length)],
-          days: days, len: Math.round(days * 2 * B.deadline[0] + B.deadline[1]), plan: Math.max(10, Math.floor(t.cap * B.load)), share: B.share };
+          days: days, len: len, plan: Math.max(10, Math.floor(t.cap * B.load)), share: B.share };
+        // 품삯(이익이 적어도 받는 돈)은 적어도 기한 동안의 식량·물 값 × 3 (물자비는 제독이 낸다 — 상인은 제 돈으로 물건을 산다)
+        offer.supply = Math.round(R.supplyDay(c) * len);
+        offer.fee = Math.max(Math.round(days * 2 * B.feeDay), Math.ceil(offer.supply * R.questK().supplyK / 10) * 10);
       }
     }
     e.off = { key: key, offer: offer };
@@ -104,17 +112,19 @@
     sh.guns = { type: 'saker', n: Math.min(K().guns || 2, t.ports) };
     sh.crew = Math.round((t.crew[0] + t.crew[1]) / 2);
     sh.escort = true;
-    return { key: o.key, from: o.from, to: o.to, good: o.good, name: o.name, ship: sh, days: o.days, plan: o.plan, share: o.share, start: S().day, due: S().day + o.len, stage: 'out', q: null, cost: 0 };
+    return { key: o.key, from: o.from, to: o.to, good: o.good, name: o.name, ship: sh, days: o.days, plan: o.plan, share: o.share, fee: o.fee, supply: o.supply, start: S().day, due: S().day + o.len, stage: 'out', q: null, cost: 0 };
   }
   function termsHtml(n) {
     var s = S(), t = G.SHIP[n.ship.type], B = K(), to = city(n.to);
-    var gain = Math.max(0, R.sellPrice(city(n.from), n.good) - R.buyPrice(to, n.good)), guess = Math.max(Math.round(n.days * 2 * B.feeDay), Math.round(gain * n.plan * n.share * 0.75));
+    var gain = Math.max(0, R.sellPrice(city(n.from), n.good) - R.buyPrice(to, n.good)), guess = Math.max(E.fee(n), Math.round(gain * n.plan * n.share * 0.75));
     return '<div class="kv" style="font-size:18px">' +
       '<div>상인</div><div><b>' + U.esc(n.name) + '</b> · ' + t.name + ' ' + U.esc(n.ship.name) + '호 (짐칸 ' + R.shipCargoCap(n.ship) + '통)</div>' +
       '<div>갈 곳</div><div><b>' + to.name + '</b> (' + R.cityOwner(to) + ') — 편도 약 ' + n.days + '일' + ((s.known || []).indexOf(to.id) < 0 ? ' · <span class="muted">처음 가는 항구 (상인이 해도에 적어 준다)</span>' : '') + '</div>' +
       '<div>실어 올 물건</div><div>' + G.goodDot(n.good) + '<b>' + G.GOOD[n.good].name + '</b> 약 ' + n.plan + '통 <span class="muted">(상인의 돈으로 산다)</span></div>' +
       '<div>기한</div><div><b>' + U.fmtDate(dateAt(n.due)) + '</b>까지 ' + city(n.from).name + U.jx(city(n.from).name, '으로/로') + ' (' + (n.due - s.day) + '일)</div>' +
-      '<div>받는 몫</div><div>상인이 남긴 이익의 <b>' + Math.round(n.share * 100) + '%</b> <span class="muted">(지금 시세면 약 ' + U.num(guess) + '닢 · 적어도 품삯 ' + U.num(Math.round(n.days * 2 * B.feeDay)) + '닢 · 기한을 넘기면 절반)</span></div></div>' +
+      '<div>받는 몫</div><div>상인이 남긴 이익의 <b>' + Math.round(n.share * 100) + '%</b> <span class="muted">(지금 시세면 약 ' + U.num(guess) + '닢 · 적어도 품삯 ' + U.num(E.fee(n)) + '닢 · 기한을 넘기면 절반)</span></div>' +
+      (n.supply ? '<div>물자비</div><div>기한 동안의 식량·물 약 ' + U.num(n.supply) + '닢 <span class="muted">(품삯은 적어도 그 3배)</span></div>' : '') +
+      '</div>' +
       '<div class="muted" style="margin-top:10px;font-size:15px;line-height:1.5">상인의 배는 함대를 따라다닙니다. 내 짐칸·선원과는 상관없지만, <b>함대가 그 배보다 빨리 가지 못합니다.</b> 상선과 함께면 해적이 더 꾀고, 해전에서 그 배를 잃으면 호위는 실패합니다(명성 −' + B.fameLost + ').</div>';
   }
   function dateAt(day) {
@@ -248,7 +258,7 @@
     if (n.stage === 'back' && c.id === n.from) {
       var q = n.q || 0, rev = 0, l2 = q, ch2 = Math.max(1, Math.ceil(q / 10));
       while (l2 > 0) { var k2 = Math.min(ch2, l2); rev += R.sellPrice(c, n.good) * k2; R.onSell(c, n.good, k2); l2 -= k2; }
-      var profit = Math.max(0, rev - n.cost), fee = Math.round(n.days * 2 * B.feeDay), part = Math.round(profit * n.share), late = E.late(n);
+      var profit = Math.max(0, rev - n.cost), fee = E.fee(n), part = Math.round(profit * n.share), late = E.late(n);
       var pay = Math.max(fee, part); if (late) pay = Math.round(pay * B.late);
       var key = !q ? 'homeEmpty' : late ? 'homeLate' : part < fee ? 'homeThin' : 'home';
       await UI.say(line(key, n, { profit: U.num(profit), pay: U.num(pay) }), who);
@@ -331,7 +341,7 @@
       '<div>할 일</div><div>' + (n.stage === 'out' ? '<b>' + city(n.to).name + '</b>' + U.jx(city(n.to).name, '으로/로') + ' 데려간다 — 닿으면 상인이 ' + G.GOOD[n.good].name + U.jx(G.GOOD[n.good].name, '을/를') + ' 싣는다'
         : G.goodDot(n.good) + G.GOOD[n.good].name + ' ' + n.q + '통을 실었다 — <b>' + city(n.from).name + '</b>' + U.jx(city(n.from).name, '으로/로') + ' 데려온다') + '</div>' +
       '<div>기한</div><div>' + U.fmtDate(dateAt(n.due)) + (left >= 0 ? ' (남은 ' + left + '일)' : ' <span class="warn-text">(기한 ' + (-left) + '일 넘김 — 몫 절반)</span>') + '</div>' +
-      '<div>받는 몫</div><div>상인이 남긴 이익의 ' + Math.round(n.share * 100) + '% · 적어도 품삯 ' + U.num(Math.round(n.days * 2 * B.feeDay)) + '닢</div></div>';
+      '<div>받는 몫</div><div>상인이 남긴 이익의 ' + Math.round(n.share * 100) + '% · 적어도 품삯 ' + U.num(E.fee(n)) + '닢</div></div>';
     return h;
   };
   /** 함대 현황판에 붙는 줄 */

@@ -1,0 +1,17 @@
+{
+  "id": "r_otter_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-eb00211e-492e-4b7d-b4bd-2c7f6d4aa312.png",
+  "target": "tools/disc_relics_20261107/sources/r_otter_baby.png",
+  "file": "images/relics/r_otter_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "961130847a23ee838a2a91c0ef2dfb3f2ce1cc6a07182334c5f5613c2925ff56",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "r_emu_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-098e13c3-adb0-4c34-aa76-264424ca402d.png",
+  "target": "tools/disc_relics_20261107/sources/r_emu_baby.png",
+  "file": "images/relics/r_emu_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "4c8932fde1df208c017426480a8c12b62d069c6b358c6ed124e135d80dedb7f3",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ]
+}

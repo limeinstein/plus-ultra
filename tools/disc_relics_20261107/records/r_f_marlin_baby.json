@@ -1,0 +1,19 @@
+{
+  "id": "r_f_marlin_baby",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b5a1-f404-7ea3-9463-3beec4712dec\\exec-e48df68a-554c-4eee-93f6-6ecd7b47241a.png",
+  "target": "tools/disc_relics_20261107/sources/r_f_marlin_baby.png",
+  "file": "images/relics/r_f_marlin_baby.webp",
+  "tool": "built-in image_gen",
+  "date": "2026-11-07",
+  "sha256": "0029c864adc3bb85b617a4420a86abe13ab6fca33114459ee1f1aad3613eebaf",
+  "size": [
+    256,
+    256
+  ],
+  "alpha": [
+    0,
+    255
+  ],
+  "note": "검수: 피사체 뒤에 남은 반투명 배경 제거",
+  "prompt": "Edit the provided inventory icon to remove EVERY part of the white and gray cloudy background, especially at the top and in all corners and all gaps and loops. Preserve the entire cork-stoppered round glass bottle, its tied cord, water contained INSIDE the bottle and three juvenile marlin fish inside it. Preserve the hand-painted realistic watercolor and fine-ink style. Make all space outside the physical subject true transparent alpha: no white haze, gray halo, floor, scenery, cast shadow, glow, colored rectangle or backdrop. Preserve fine subject edges cleanly. Keep the entire subject fully visible and centered on a square canvas with clear margins, no text or watermark."
+}
