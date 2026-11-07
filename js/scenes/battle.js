@@ -1921,6 +1921,7 @@
       lines.push((st.flagWin ? '적 기함을 무찔러 이겼다! ' : '승리했다! ') + '전리품으로 금화 ' + U.num(gold) + '닢을 얻었다. (명성 +' + fame + ')' + (st.flagWin ? '<br><span class="muted">남은 적 배는 흩어져 달아났다.</span>' : ''));
       G.State.log((st.npc.kind === 'pirate' ? '해적' : st.npc.kind === 'navy' ? '함대' : '상선단') + '과의 해전에서 승리했다.');
       if (G.Audio) { G.Audio.sfx('cheer'); setTimeout(function () { if (G.Audio) G.Audio.sfx('coin'); }, 720); }
+      if (st.npc.great && G.Audio && G.Audio.jingle) G.Audio.jingle('victory');   // 큰 해전(레판토·무적함대·임진…)에서 이기면 팡파르 「Lumière Éclatante」 (2026-11-07)
       // 해적은 장신구·무기·도구 같은 물건을 떨어뜨리기도 한다
       var drops = st.npc.kind === 'pirate' ? pirateDrops(st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); })) : [];
       if (drops.length) lines.push('해적선에서 ' + drops.map(function (d) { var pic = G.Img.itemSrc(d.id); return (pic ? '<img class="inline-ic" src="' + pic + '" alt="">' : '') + '<b>' + d.name + '</b>' + (d.kept ? '' : ' <span class="muted">(소지품이 가득 차 버렸다)</span>'); }).join(', ') + U.jx(drops[drops.length - 1].name, '을/를') + ' 건졌다.');

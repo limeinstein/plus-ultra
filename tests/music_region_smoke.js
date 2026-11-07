@@ -30,7 +30,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       await Promise.all(files.map(t => new Promise(res => { const a = new Audio(); a.preload = 'metadata'; a.onloadedmetadata = () => res(); a.onerror = () => { bad.push(t); res(); }; a.src = G.MUSIC_FILES[t].split('/').map(encodeURIComponent).join('/'); })));
       return { files: files.length, bad, pick: G.Audio.pick('title') };
     });
-    ok(t0.files === 44 && !t0.bad.length, '곡 파일 ' + t0.files + '개를 모두 읽었다 ' + t0.bad.join(','));
+    ok(t0.files === 45 && !t0.bad.length, '팡파르를 포함한 곡 파일 ' + t0.files + '개를 모두 읽었다 ' + t0.bad.join(','));
     ok(t0.pick === '항해(태평양)', '첫 화면의 곡: ' + t0.pick);
     await page.evaluate(() => { G.Game.state = null; G.Game.go('title'); });
     await page.mouse.click(5, 5); await page.waitForTimeout(400);

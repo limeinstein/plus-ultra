@@ -5,6 +5,7 @@
      - 원래 배들은 그 자리에 남는다 — 싣고 있던 교역품·식량·물·자재도 배와 함께 (탐험대는 맨몸으로 새 배에 오른다)
      - 육상 탐험은 여기서 끝난다: 탈것은 이 도시 마구간에 맡기고, 이 항구에서 출항할 수 있다
    · 되찾기: 바다에서 남겨 둔 배의 자리 findR° 안에 들거나, 출발 항구에 남겼으면 그 항구에 들어가면 다시 함대에 든다
+     — 뭍길로 그 항구에 걸어 들어와도 남겨 둔 배에 오를 수 있다(지금 함대가 거꾸로 남겨진다 · SF.offerByLand)
      — 함대가 5척(G.MAX_SHIPS)을 넘으면 넘는 수만큼 제독이 골라 폐기한다 (기함은 고를 수 없다)
    · 버려짐: keepDays일이 지나도 찾으러 가지 않으면 배와 짐이 모두 사라진다 — warn 날 남았을 때마다 부관이 일러 준다
    · 저장: s.strands = [{ id, ships, cargo, food, water, mat, lon, lat, city(출발 항구면 그 번호), place, since, until, warned }]
@@ -59,8 +60,13 @@
       f.crew = cmax;
     }
     if (R.tidyCaptains) R.tidyCaptains();   // 남긴 배를 맡던 선장 부하는 선장 자리에서 풀린다
-    // 육상 탐험을 여기서 마친다: 탈것은 이 도시 마구간에 · 이 항구에서 출항한다
-    var lr = s.landReturn, mt = lr && lr.mount;
+    await endLandHere(c);
+    G.State.log('육상 탐험을 마치고 ' + c.name + '에서 새 배 ' + sh.name + '호로 함대를 꾸렸다.');
+    if (G.Game.refreshHud) G.Game.refreshHud();
+  };
+  /** 육상 탐험을 이 항구에서 마친다: 탈것은 이 도시 마구간에 · 이 항구에서 출항한다 */
+  async function endLandHere(c) {
+    var s = S(), lr = s.landReturn, mt = lr && lr.mount;
     if (mt && mt.id !== 'walk' && mt.n > 0 && G.Mounts && !G.Mounts.get(mt.id).hire) {
       s.stable = s.stable || {}; var old = s.stable[c.id];
       s.stable[c.id] = old && old.id === mt.id ? { id: mt.id, n: old.n + mt.n, draft: mt.draft } : { id: mt.id, n: mt.n, draft: mt.draft };
@@ -69,8 +75,63 @@
     delete s.landReturn;
     s.loc.via = 'sea';
     if (island && G.Peter && G.Peter.onLeave) { try { await G.Peter.onLeave(); } catch (e) { console.error(e); } }   // 섬에 두고 가는 아이 (js/systems/peterpan.js)
-    G.State.log('육상 탐험을 마치고 ' + c.name + '에서 새 배 ' + sh.name + '호로 함대를 꾸렸다.');
+  }
+
+  /* 뭍길로 남겨 둔 배를 찾으러 온 경우 (제보 2026-11-06 「바스라에 남긴 배를 걸어서 찾으러 갔더니 없다」)
+     — 예전에는 바다로 들어올 때만 되찾아서, 걸어서 그 항구에 닿으면 항구가 「함대가 없다」고만 했다.
+     이제 탐험대가 뭍길로 그 항구에 들어오면 남겨 둔 배에 오를 수 있다: 지금 함대(상륙 지점·출발 항구에 있는 배)는
+     거꾸로 그 자리에 남겨 둔 배가 되고(같은 keepDays 기한), 육상 탐험은 이 항구에서 끝난다. */
+  /** 뭍길로 들어온 이 항구에 남겨 둔 배 기록들 */
+  SF.hereByLand = function (c) {
+    var s = S(); if (!s || !c || !c.port || s.loc.via !== 'land') return [];
+    return SF.list().filter(function (rec) { return rec.city === c.id; });
+  };
+  /** 지금 함대가 있는 곳 {lon, lat, city, place} — 탐험대가 떠나온 상륙 지점·출발 항구 */
+  function curBase() {
+    var s = S(), b = s.landReturn && s.landReturn.base; if (!b) return null;
+    if (b.type === 'city') { var o = G.CITY_DATA[b.city], d = o.dock || [o.lat, o.lon]; return { lon: d[1], lat: d[0], city: b.city, place: o.name + ' 항구' }; }
+    return { lon: b.lon, lat: b.lat, city: null, place: coastName(b.lon, b.lat) };
+  }
+  /** 남겨 둔 배에 오를지 묻는 말 */
+  SF.boardAskText = function (c, recs) {
+    var s = S(), f = s.fleet, days = num(B().keepDays, 730), base = curBase();
+    var n = recs.reduce(function (a, r) { return a + r.ships.length; }, 0);
+    var names = [].concat.apply([], recs.map(function (r) { return r.ships.map(function (x) { return x.name + '호'; }); })).join('·');
+    var left = Math.min.apply(null, recs.map(function (r) { return r.until - s.day; }));
+    var t = '제독, 이 항구에 우리가 남겨 두었던 배 ' + n + '척(' + names + ')이 있습니다! (' + left + '일 안에 찾으면 됩니다)\n';
+    if (f.ships.length && base) t += '이 배에 오르면, 지금 함대 ' + f.ships.length + '척은 ' + base.place + '에 남게 되고 ' + Math.round(days / 365) + '년(' + days + '일) 안에 찾으러 가지 않으면 버려집니다.\n';
+    return t + '남겨 둔 배에 올라 이 항구에서 떠나시겠습니까?';
+  };
+  /** 뭍길로 온 이 항구에서 남겨 둔 배에 오른다 — 알릴 말 (Promise) */
+  SF.boardFromLand = async function (c) {
+    var s = S(), f = s.fleet, recs = SF.hereByLand(c); if (!recs.length) return null;
+    var base = curBase(), pre = '';
+    if (f.ships.length && base && base.city !== c.id) {
+      var rec = { id: 'sf' + s.day + '_' + Math.floor(Math.random() * 1e6), ships: f.ships.slice(), cargo: f.cargo, food: f.food || 0, water: f.water || 0, mat: f.mat || 0,
+        lon: base.lon, lat: base.lat, city: base.city, place: base.place, since: s.day, until: s.day + num(B().keepDays, 730), warned: {} };
+      (s.strands = s.strands || []).push(rec);
+      var nm = rec.ships.map(function (x) { return x.name + '호'; }).join('·');
+      G.State.log(base.place + '에 ' + nm + U.jx(nm, '을/를') + ' 남기고 ' + c.name + '에 남겨 두었던 배에 오르기로 했다.');
+      pre = ' ' + nm + U.jx(nm, '은/는') + ' ' + base.place + '에 남겨 두었다.';
+      f.ships = []; f.cargo = {}; f.food = 0; f.water = 0; f.mat = 0;
+    }
+    var msgs = [];
+    for (var i = 0; i < recs.length; i++) msgs.push(await rejoin(recs[i]));
+    await endLandHere(c);
+    G.State.log('육상 탐험을 마치고 ' + c.name + '에서 남겨 두었던 배에 올랐다.');
+    if (G.ShipSprite && G.ShipSprite.fleetTypes) G.ShipSprite.want(G.ShipSprite.fleetTypes());
+    if (G.CrewAuto) G.CrewAuto.refresh();
     if (G.Game.refreshHud) G.Game.refreshHud();
+    return msgs.join(' ') + pre + ' 육상 탐험을 마치고 이 항구에서 출항할 수 있습니다.';
+  };
+  /** 뭍길로 들어온 항구에 남겨 둔 배가 있으면 묻고 오른다 — 올랐으면 true (도시 입장·항구에서 부른다) */
+  SF.offerByLand = async function (c) {
+    var recs = SF.hereByLand(c); if (!recs.length) return false;
+    var v = await G.Scenes.city.mateAsk(SF.boardAskText(c, recs), [{ label: '남겨 둔 배에 오른다', value: 'go' }, { label: '나중에', value: null }]);
+    if (v !== 'go') return false;
+    var msg = await SF.boardFromLand(c);
+    if (msg) await G.Scenes.city.mate(msg);
+    return true;
   };
 
   /** 남겨 둔 배를 되찾는다 (rec): 배와 짐을 모두 다시 싣고, 함대가 MAX_SHIPS(5척)를 넘으면 넘는 수만큼 제독이 골라 폐기한다 (기함은 고를 수 없다).

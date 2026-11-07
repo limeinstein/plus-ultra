@@ -3,7 +3,7 @@
    항목: style = 얼굴 양식(portraits/npc-roles/<양식>/… — af 서아프리카 · tr 동·남아프리카 · sw 스와힐리·뿔 · is 아랍·사하라 ·
          na 북아메리카 숲 · an 안데스·남아메리카 · az 메소아메리카 · se 동남아시아·태평양 · st 초원·북방 · ne 북유럽 · jp · cn · ru),
          lang = [모국 말, 장사 말(있으면)] (G.LANGS 번호), types = 잘하는 갈래 (G.WANDER_TYPES), m·f = 이름들
-   ※ 오세아니아(아넘랜드·마오리·하와이) 전용 얼굴 그림이 아직 없어 동남아시아(se) 양식을 빌린다. 남극인은 전설이라 뺐다. */
+   ※ 오세아니아의 기본 지역 양식은 se이며, 민족·성별 전용 얼굴·무릎상이 있으면 우선한다. 남극인은 전설이라 뺐다. */
 (function (G) {
   'use strict';
   function P(style, lang, types, m, f) { return { style: style, lang: lang, types: types, m: m, f: f }; }
@@ -65,6 +65,8 @@
     folk_sami:    P('ne', [GER], ['survey', 'nav'], ['아슬락', '비에라', '마티', '우를로'], ['엘레', '카레', '사라', '마리엣']),
     vampire:      P('ru', [ROM, SLV], ['doctor', 'priest'], ['이온', '바실레', '미르체아', '도브레'], ['아나', '일레아나', '마리차', '플로리차'])
   };
+  // 중국·동남아·태평양의 새 민족 (js/data/asiafolk.js — 2026-11-07)
+  if (G.FOLK_JOIN_MORE) Object.keys(G.FOLK_JOIN_MORE).forEach(function (id) { if (!G.FOLK_JOIN[id]) G.FOLK_JOIN[id] = G.FOLK_JOIN_MORE[id]; });
   // 첨부 참고 남성 전용 원화. 민족별 한 쌍이며 이름·솜씨는 기존처럼 따로 뽑는다.
   ['khoikhoi', 'folk_zulu', 'folk_maasai', 'folk_xhosa', 'folk_san', 'folk_yoruba',
     'folk_hausa', 'folk_fulani', 'folk_akan', 'folk_mbuti', 'folk_oromo', 'punt'].forEach(function (id) {
@@ -123,6 +125,17 @@
     // 다코타·이누이트는 후속 첨부 얼굴을 반영한 수정 원화를 쓴다.
     var version = id === 'folk_dakota' || id === 'inuit' ? 'v2' : 'v1';
     p.portraits.f = ['portraits/folk-join/' + id + '_f_amer_' + version];
+  });
+  // 새 중국·동남아 민족과 폴리네시아 여성 전용 초상 (2026-11-07).
+  // 같은 민족의 여성 이름 넷이 한 쌍을 공용하며 기존 남성 초상은 보존한다.
+  ['folk_tibet', 'folk_hui', 'folk_manchu', 'folk_gaoshan', 'folk_miao', 'folk_yao',
+    'folk_shui', 'folk_buyei', 'folk_zhuang', 'folk_yi', 'folk_lachi', 'folk_lolo',
+    'folk_lue', 'folk_mnong', 'folk_samoa', 'folk_tonga', 'folk_tahiti', 'folk_rapanui',
+    'folk_maori', 'folk_hawaii'].forEach(function (id) {
+    var p = G.FOLK_JOIN[id];
+    if (!p) return;
+    p.portraits = p.portraits || {};
+    p.portraits.f = ['portraits/folk-join/' + id + '_f_20261107_v1'];
   });
   // 갈래마다 나서며 하는 말 ({who} = 그 민족)
   G.FOLK_JOIN_LINES = {

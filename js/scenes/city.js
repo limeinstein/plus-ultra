@@ -157,6 +157,7 @@
       if (arg.story && G.Story) { try { await G.Story.prologue(c); } catch (e) { console.error(e); } }   // 이야기 모드의 프롤로그 (js/systems/story.js)
       if (arg.arrive) await C.arrival(c, arg);
       if (G.Strand && s.loc.via === 'sea' && !arg.load) { var sfBack = await G.Strand.atCity(c); if (sfBack) { await C.mate(sfBack); G.Game.refreshHud(); } }   // 이 항구에 남겨 둔 배를 되찾는다
+      else if (G.Strand && s.loc.via === 'land' && !arg.load && G.Strand.offerByLand) { if (await G.Strand.offerByLand(c)) G.Game.cityHud(); }   // 뭍길로 왔어도 이 항구에 남겨 둔 배에 오를 수 있다 (제보 2026-11-06)
       if (arg.load) { UI.toast(U.fmtDate(s.date) + ' — ' + c.name, 'book'); }
       if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다
       if (G.Studio && G.Studio.pending()) await G.Studio.present();   // 화실·조각실에서 완성한 명작을 바친다

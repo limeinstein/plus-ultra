@@ -2081,3 +2081,16 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .status-strip:hover, .status-strip.open, #ui.status-open .status-strip { white-space: normal; opacity: 1; }
 .status-strip:hover br, .status-strip.open br, #ui.status-open .status-strip br { display: inline; }
 .status-strip:hover .coord, .status-strip.open .coord, #ui.status-open .status-strip .coord { display: inline; }
+
+/* 조선소 「개조할 배」 — 수첩 「함대」 표처럼 칸을 맞춘 목록 (js/city/shipyard.js shipRow · 2026-11-07) */
+.yhead, .yships .yrow { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,.75fr) minmax(0,.65fr) minmax(0,1.2fr) minmax(0,.65fr) minmax(0,.6fr) minmax(0,1.1fr) minmax(0,.55fr) minmax(0,1.45fr) minmax(0,.8fr); column-gap: 10px; align-items: center; }
+.yhead > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.yhead { padding: 0 19px 6px; font-weight: 700; font-size: 15px; color: var(--ink-soft); letter-spacing: .04em; border-bottom: 1px solid rgba(90,65,35,.45); margin-bottom: 8px; }
+.yhead .n, .yships .yrow .n { text-align: right; font-variant-numeric: tabular-nums; }
+.yships .choice.yship { display: block; padding: 9px 18px 8px; font-size: 18px; }
+.yships .yrow > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.yships .yrow .nm b { font-size: 19px; }
+.yships .yrow .nm .tag { margin-right: 6px; font-size: 13px; padding: 0 6px; }
+.yships .yrow .sl { letter-spacing: .08em; }
+.yships .ysub { margin: 5px 0 0; }
+.yships .ysub .yx { font-size: 14px; color: #6a5236; margin-left: 8px; }

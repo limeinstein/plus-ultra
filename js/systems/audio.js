@@ -20,7 +20,7 @@
     AU.setVolume();
     return true;
   }
-  AU.setVolume = function () { setFileVolume(); if (!ctx) return; musicGain.gain.value = vol('music', 0.35) * 0.5; sfxGain.gain.value = vol('sound', 0.5); };
+  AU.setVolume = function () { setFileVolume(); if (!ctx) return; musicGain.gain.value = vol('music', 0.35) * 0.5 * duckK; sfxGain.gain.value = vol('sound', 0.5); };
   AU.unlock = function () {
     if (!init()) return;
     if (ctx.state === 'suspended') ctx.resume();
@@ -509,7 +509,8 @@
      두 <audio>를 번갈아 써서 곡이 바뀔 때 겹쳐 넘어간다(fade초). 브라우저가 첫 클릭 전에는 소리를 막으므로 그때 다시 튼다. */
   var decks = [], deckOn = -1, fileTrack = null, failed = {}, pendingPlay = null, fadeTimer = null, hold = { track: null, n: 0 };
   function MT() { return G.MUSIC || { scenes: {} }; }
-  function fileVol() { return Math.min(1, vol('music', 0.35) * (MT().volume || 1)); }
+  var duckK = 1;   // 팡파르(AU.jingle)가 울리는 동안 배경 곡을 낮추는 배율
+  function fileVol() { return Math.min(1, vol('music', 0.35) * (MT().volume || 1)) * duckK; }
   function setFileVolume() { if (deckOn >= 0 && decks[deckOn] && !fadeTimer) decks[deckOn].volume = fileVol(); }
   /** 곡 이름이 쓸 수 있는가: 'gen:이름'은 코드 음악, 그 밖은 music/ 파일 */
   function usable(t) { if (!t) return false; if (t.indexOf('gen:') === 0) return !!SCALES[t.slice(4)]; return !!(G.MUSIC_FILES && G.MUSIC_FILES[t] && !failed[t]); }
@@ -627,6 +628,7 @@
     if (name !== prev) sceneMemo(name, prev);
     if (name !== 'town' && name !== 'battle' && name !== 'duel') AU.place = null;     // 도시를 떠나면 건물 곡은 끝 (일기토는 건물 안에서도 벌어진다)
     if (G.MusicMoments) G.MusicMoments.install();   // 미니 게임·육상전 같은 「잠깐」 곡을 감싸 둔다 (js/systems/musicmoments.js)
+    if (!jingleEl) prepJingle();                     // 팡파르를 미리 받아 둔다 — 처음 울릴 때 늦지 않게
     if (moments.length && !force) { var mt = momentTrack(); if (mt) return; }      // 「잠깐」 곡 동안에는 장면만 기억
     var t = AU.pick(name);
     if (t && t.indexOf('gen:') === 0) { parkFile(); genMusic(t.slice(4)); return; }
@@ -677,6 +679,46 @@
   /** 시험용: 지금 곡의 재생 상태 */
   AU.fileStatus = function () { var d = decks[deckOn]; return d ? { track: fileTrack, time: +d.currentTime.toFixed(2), paused: d.paused, volume: +d.volume.toFixed(2) } : null; };
   AU.stop = function () { AU.want = null; genStop(); stopFile(); };
+  /* 한 번 울리는 팡파르 (2026-11-07 「Lumière Éclatante」) — G.MUSIC.jingles[name]의 파일을 한 번만 튼다.
+     울리는 동안 배경 곡(파일·코드 음악)을 jingleDuck 배로 낮추고, 끝나면(또는 막혔거나 못 읽으면) 천천히 되돌린다.
+     배경 곡이 그새 바뀌어도(전설의 대륙 곡이 시작되는 등) 새 곡도 낮춘 소리로 들어온다 (fileVol이 duckK를 곱한다). */
+  var jingleEl = null, duckTimer = null, jingleEnd = null;
+  function duckTo(target, sec) {
+    if (duckTimer) clearInterval(duckTimer);
+    var from = duckK, t0 = Date.now(), ms = Math.max(50, (sec || 0.3) * 1000);
+    duckTimer = setInterval(function () {
+      var k = Math.min(1, (Date.now() - t0) / ms);
+      duckK = from + (target - from) * k;
+      AU.setVolume();
+      if (k >= 1) { clearInterval(duckTimer); duckTimer = null; }
+    }, 40);
+  }
+  function prepJingle() {
+    var J = MT().jingles || {}, t = J.discovery || J[Object.keys(J)[0]];
+    if (!t || !G.MUSIC_FILES || !G.MUSIC_FILES[t] || typeof Audio === 'undefined') return;
+    try { jingleEl = new Audio(); jingleEl.preload = 'auto'; jingleEl.src = src(t); } catch (e) { jingleEl = null; }
+  }
+  AU.jingle = function (name) {
+    var t = (MT().jingles || {})[name];
+    if (!t || failed[t] || !G.MUSIC_FILES || !G.MUSIC_FILES[t] || typeof Audio === 'undefined') return false;
+    if (!jingleEl) { jingleEl = new Audio(); jingleEl.preload = 'auto'; }
+    var el = jingleEl, done = false;
+    function end() { if (done) return; done = true; if (jingleEnd) { clearTimeout(jingleEnd); jingleEnd = null; } if (AU.jingleNow === t) AU.jingleNow = null; duckTo(1, 1.4); }
+    el.onended = end;
+    el.onerror = function () { failed[t] = 1; if (window.console) console.warn('[음악] 파일을 읽지 못했습니다: ' + G.MUSIC_FILES[t]); end(); };
+    try { el.pause(); } catch (e) { /* 무시 */ }
+    if (el.getAttribute('src') !== src(t)) el.src = src(t);   // 미리 받아 둔 같은 곡이면 그대로 (다시 받지 않는다)
+    try { el.currentTime = 0; } catch (e) { /* 아직 못 받았으면 처음부터 */ }
+    el.loop = false;
+    el.volume = Math.min(1, vol('music', 0.35) * (MT().volume || 1) * (MT().jingleVol || 1.6));   // 팡파르는 배경 곡보다 조금 크게 (최대 1)
+    AU.jingleNow = t;
+    duckTo(MT().jingleDuck == null ? 0.15 : MT().jingleDuck, 0.35);
+    jingleEnd = setTimeout(end, 30000);     // 끝 알림이 오지 않아도 배경 곡은 돌아온다
+    try { var p = el.play(); if (p && p.catch) p.catch(function () { end(); }); } catch (e) { end(); }
+    return true;
+  };
+  /** 시험용: 팡파르 재생 상태 */
+  AU.jingleStatus = function () { var e = jingleEl; return e ? { now: AU.jingleNow, time: +e.currentTime.toFixed(2), dur: e.duration, paused: e.paused, ended: e.ended, ready: e.readyState, err: e.error && e.error.code, duck: +duckK.toFixed(2) } : null; };
   /** 미니 게임·사건의 「잠깐」 곡 — 끝나면 AU.resume() */
   AU.moment = function (name) { AU.fileMoment(name); };
   AU.resume = function () { AU.fileResume(); };

@@ -191,7 +191,7 @@
 
   // ================================================================ 해적 본부 (자택처럼)
   function hq() {
-    var HQ = { icon: 'skull', paint: 'tavern', exitLabel: '본부를 나온다' };
+    var HQ = { icon: 'skull', paint: 'lairhq', exitLabel: '본부를 나온다' };
     HQ.title = function () { return '해적 본부'; };
     HQ.sub = function (c) { var n = wivesHere(c).length; return '소굴의 우두머리 자리' + (n ? ' · 부인 ' + n + '명' : ''); };
     HQ.enter = async function (c) {
@@ -214,7 +214,7 @@
     };
     return HQ;
   }
-  function boatswain(c) { return { name: '소굴의 갑판장', portrait: G.Art && G.Art.npcSpec ? G.Art.npcSpec('lairhq' + c.id, 'sailor', c.style, 'm') : null, lang: 3 }; }
+  function boatswain(c) { return G.Scenes.city.npc('boatswain', '소굴의 갑판장'); }
   function wivesHere(c) { return G.Wives ? G.Wives.list().filter(function (w) { return w.house && !w.aboard && w.city === c.id; }) : []; }
   /** 해적 본부로 데려올 수 있는 부인: 둘째 부인부터 — 이 섬에 이미 있거나, 데려다주는 길이거나, 본가에서 공주들과 함께 사는 사람은 빼고 */
   function bringable(c) {

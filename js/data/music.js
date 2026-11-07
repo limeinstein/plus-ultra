@@ -23,8 +23,10 @@
     // 상황 · 장소
     '해상 전투', '육상 전투', '일기토', '미니 게임', '주점', '왕궁', '귀환'
   ];
+  // 한 번 울리는 짧은 곡 (팡파르 — G.Audio.jingle). 2026-11-07 「Lumière Éclatante」: 지리상의 발견 · 무대륙·아틀란티스 발견 · 큰 해전 승리
+  var JINGLES = ['발견 승리 팡파르'];
   G.MUSIC_FILES = {};
-  TITLES.forEach(function (t) { G.MUSIC_FILES[t] = 'music/' + t + '.mp3'; });
+  TITLES.concat(JINGLES).forEach(function (t) { G.MUSIC_FILES[t] = 'music/' + t + '.mp3'; });
 
   function box(lon, lat, x0, x1, y0, y1) { return lon >= x0 && lon <= x1 && lat >= y0 && lat <= y1; }
 
@@ -166,6 +168,10 @@
       landwar: { def: '육상 전투', gen: 'battle' }
     },
     // 장면 사이의 「잠깐」 곡 (js/systems/musicmoments.js 가 감싸 둔 순간). minigame: 퍼즐·포커·낚시
-    moments: { legend: '무대륙 아틀란티스', landwar: '육상 전투', minigame: '미니 게임', circum: '귀환' }
+    moments: { legend: '무대륙 아틀란티스', landwar: '육상 전투', minigame: '미니 게임', circum: '귀환' },
+    // 한 번 울리는 팡파르 (G.Audio.jingle) — 울리는 동안 배경 곡을 jingleDuck 배로 낮췄다가 끝나면 되돌린다
+    //   discovery: 지리상의 발견(갈래 geo)·무대륙·아틀란티스를 찾은 순간 (js/systems/musicmoments.js) · victory: 큰 해전 승리 (js/scenes/battle.js)
+    jingles: { discovery: '발견 승리 팡파르', victory: '발견 승리 팡파르' },
+    jingleDuck: 0.15
   };
 })(window.G = window.G || {});

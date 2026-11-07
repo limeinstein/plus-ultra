@@ -10,7 +10,7 @@
 
   // 회차 규칙(diff·speed)은 저장에, 개인 취향은 이 기기에 따로 둔다. 옛 저장에는 새 필드가 필요 없다.
   var PREF_KEY = 'plusultra_preferences', prefs = null;
-  var prefBools = ['autosave', 'shake', 'banter', 'mouseFollow', 'noticeHideLine', 'statusOpen'];   // 알림·상태판 설정 (js/ui/ui.js — 2026-11-01)
+  var prefBools = ['autosave', 'shake', 'banter', 'mouseFollow', 'noticeHideLine', 'statusOpen', 'saveFile'];   // saveFile: 여관 일지를 파일로도 (2026-11-07)   // 알림·상태판 설정 (js/ui/ui.js — 2026-11-01)
   var prefEnums = { musicSrc: ['base', 'ost'], keyMode: ['dir', 'helm'], ctrlSens: ['slow', 'normal', 'fast'], portAsk: ['notify', 'stop', 'ask'], tackMode: ['off', 'open', 'on'], noticeSize: ['normal', 'small'], noticePos: ['auto', 'top', 'bottom'] };
   function readPrefs() {
     if (prefs) return prefs;
@@ -454,11 +454,32 @@
     var rec = { meta: meta, data: data, t: meta.t };
     mem[slot] = rec;
     return idbPut(slot, rec).then(function (ok2) {
-      if (!err) { ST.lastError = ''; return { ok: true, where: 'browser', msg: '' }; }
+      if (!err) { ST.lastError = ''; return { ok: true, where: 'browser', msg: '', meta: meta, slot: slot }; }
       ST.lastError = why(err);
-      if (ok2) return { ok: true, where: 'backup', msg: ST.lastError + ' — 대신 보조 저장소(IndexedDB)에 기록했습니다.' };
+      if (ok2) return { ok: true, where: 'backup', msg: ST.lastError + ' — 대신 보조 저장소(IndexedDB)에 기록했습니다.', meta: meta, slot: slot };
       delete mem[slot];
       return { ok: false, where: null, msg: ST.lastError + '. 「일지를 파일로 내려받기」로 남겨 두십시오.' };
+    });
+  };
+  /** 저장했다는 한 줄 — 「1480년 5월 1일 이강희 리스본 저장되었습니다.」 (사용자 요청 2026-11-07: 이것만 띄운다) */
+  ST.savedLine = function (meta) {
+    meta = meta || {};
+    return [meta.date, meta.name, meta.place].filter(function (x) { return x != null && x !== ''; }).join(' ') + ' 저장되었습니다.';
+  };
+  /** 이 창이 닫히면 저장이 지워지는 창(시크릿·InPrivate·사생활 보호 창)인 것 같은가 — 모르면 false (2026-11-07)
+     · 크롬·엣지 시크릿 창은 저장 한도가 기기 메모리 크기쯤으로 작게 잡힌다(보통 창은 디스크의 수십 %, 수십 GB).
+     · 파이어폭스 사생활 보호 창은 서비스 워커를 쓰지 못한다(https에서만 따진다).
+     「닫을 때 사이트 데이터 삭제」 설정이나 PC 최적화 프로그램이 지우는 것은 페이지가 알 길이 없다 — 불러오기 창 안내로 돕는다. */
+  ST.privateWindow = function () {
+    return new Promise(function (res) {
+      try {
+        var ff = typeof InstallTrigger !== 'undefined' || /firefox/i.test(navigator.userAgent || '');
+        if (ff) return res(location.protocol === 'https:' && !('serviceWorker' in navigator));
+        var heap = (window.performance && performance.memory && performance.memory.jsHeapSizeLimit) || 1073741824;
+        if (navigator.storage && navigator.storage.estimate && /Chrome\//.test(navigator.userAgent || '') && location.protocol !== 'file:') {
+          navigator.storage.estimate().then(function (e) { res(!!(e && e.quota && e.quota < heap * 2)); }, function () { res(false); });
+        } else res(false);
+      } catch (e) { res(false); }
     });
   };
   /** 예전처럼 바로 돌려받는 저장 (자동 저장) — 브라우저 저장소에 넣었으면 true. 보조 저장소 기록은 뒤에서 이어진다 */

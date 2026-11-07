@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+중국·동남아·폴리네시아 여성 후보 20종은 `portraits/folk-join/<ID>_f_20261107_v1.webp`(얼굴 448×448)와 같은 이름의 `_half.webp`(무릎 1024×1536)를 쓴다. 폴리네시아 6종은 따뜻한 갈색 피부이며, 민족별 전통 복식 바탕의 열린 옷깃·직조·자수를 구분했다. [미리보기·파일·제작 명세·검증](../docs/art/folk-asia-pacific-women-20261107.md).
+
 브리지드 버크의 최신 얼굴상·무릎상은 `portraits/rivals/탑성의 여주인 브리지드 버크_corsair20261107.webp`와 `_corsair20261107_half.webp`다. [새 첨부 얼굴·해적 복장 수정](../docs/art/brigid-corsair-20261107.md).
 
 여성 해적 라야 알리·마리 르노·아이샤 레이스·브리지드 버크는 `portraits/rivals/<이름>_ref20261107.webp`와 `_ref20261107_half.webp`를 쓴다. 첨부 참고 얼굴·표정·머리와 지역별 복식을 반영했고 기존 논리 열쇠에 연결했다. [미리보기·파일 묶음·검증](../docs/art/pirate-women-revision-20261107.md).

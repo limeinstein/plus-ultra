@@ -107,7 +107,8 @@
   add('eldorado', '황금 뗏목상', 'treasure', 0.45, '금가루를 바른 왕이 호수 한가운데로 나아가는 의식을 본뜬 황금 뗏목.');
   add('jademask', '비취 가면', 'treasure', 0.45, '비취 조각을 맞춰 붙인 왕의 가면. 눈은 조개껍데기와 흑요석이다.');
   add('grail', '아서 왕의 성배', 'treasure', 0.4, '소박한 나무 잔처럼 보이지만, 손에 들면 따뜻한 빛이 번진다.');
-  add('grail', null, 'weapon', 0, null, { use: 'excalibur', price: 250000 });
+  // 성검 엑스칼리버는 성배가 아니라 「엑스칼리버 — 호수의 검」(js/data/chaindisc.js · 아발론 사슬)을 찾으면 나온다 (2026-11-07 사용자 요청)
+  add('excalibur', null, 'weapon', 0, null, { use: 'excalibur', price: 250000 });
   add('stcrown', '성 이슈트반의 왕관', 'treasure', 0.45, '꼭대기 십자가가 비스듬히 기운 왕관. 에나멜 성인상이 둘러 있다.');
   add('reliquary', '동방박사의 유물함', 'treasure', 0.4, '금과 보석과 에나멜로 지은 작은 성당 모양의 유물함.');
   add('ifehead', '이페의 두상', 'treasure', 0.45, '가는 줄무늬가 얼굴을 덮은 사실적인 왕의 두상.');
@@ -153,6 +154,8 @@
 
   // 건물 불가사의의 유물 (js/data/wonders.js)
   if (G.WONDERS) G.WONDERS.relics.forEach(function (a) { add.apply(null, a); });
+  // 동물의 새끼 · 전설 생물의 물건 · 종교 발견물의 성물 (js/data/discrelics.js — 2026-11-07). 유물 id 를 표에 적어 둔다
+  if (G.DISC_RELICS) G.DISC_RELICS.forEach(function (a) { var ex = { rid: a[1] }; if (a[6]) for (var k in a[6]) ex[k] = a[6][k]; add(a[0], a[2], a[3], a[4], a[5], ex); });
 
   // ------------------------------------------------------------------ 등록
   G.RELICS = {};      // 발견 id → [유물]
@@ -168,11 +171,11 @@
       r.price = x.extra.price || r.price; r.rare = true; r.relic = x.disc; r.reg = r.reg || [];
       if (!base && G.ITEMS) { G.ITEMS.push(r); G.ITEM[r.id] = r; }
     } else {
-      count[x.disc] = (count[x.disc] || 0) + 1;
-      var id = 'r_' + x.disc + (count[x.disc] > 1 ? count[x.disc] : '');
+      if (!x.extra.rid) count[x.disc] = (count[x.disc] || 0) + 1;
+      var id = x.extra.rid || ('r_' + x.disc + (count[x.disc] > 1 ? count[x.disc] : ''));   // rid: 표에 적어 둔 유물 id (js/data/discrelics.js)
       r = { id: id, name: x.name, kind: x.kind, desc: x.desc, relic: x.disc, rare: true, reg: [],
         price: Math.max(300, Math.round(d.val * x.v / 50) * 50) };
-      for (var k in x.extra) r[k] = x.extra[k];
+      for (var k in x.extra) if (k !== 'rid') r[k] = x.extra[k];
       // 실존 소장품·출토품으로 바꾼 이름과 설명 (tools/heritage → js/data/heritage.js)
       var RH = G.HERITAGE && G.HERITAGE.relic[id];
       if (RH) { r.real = RH; if (RH.name) { r.name0 = r.name; r.name = RH.name; } if (RH.desc) { r.desc0 = r.desc; r.desc = RH.desc; } }

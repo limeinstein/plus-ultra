@@ -1261,16 +1261,18 @@
   }
   UI.fitWin = fitWin;
 
-  /** simple choice list. options: array of {label, value, icon, thumb, right, disabled, desc} | strings */
+  /** simple choice list. options: array of {label, value, icon, thumb, right, disabled, desc, html} | strings
+      · o.html: 줄 안을 이 HTML로 그린다(표처럼 여러 칸 — 조선소 「개조할 배」). label은 키보드·찾기용으로 그대로 둔다
+      · opts.head: 목록 위에 붙는 머리줄 HTML (칸 이름) · opts.cls: 목록(.choices)에 붙일 class */
   UI.choose = function (title, options, opts) {
     opts = opts || {};
     var list = options.map(function (o, i) { return typeof o === 'string' ? { label: o, value: i } : o; });
-    var html = (opts.text ? '<div style="font-size:19px;margin-bottom:12px;line-height:1.55">' + opts.text + '</div>' : '') + '<div class="choices"></div>';
+    var html = (opts.text ? '<div style="font-size:19px;margin-bottom:12px;line-height:1.55">' + opts.text + '</div>' : '') + (opts.head || '') + '<div class="choices' + (opts.cls ? ' ' + opts.cls : '') + '"></div>';
     var win = UI.window({ title: title, icon: opts.icon, width: opts.width || 520, html: html, closable: opts.cancel !== false, clear: opts.clear });
     var ch = win.content.querySelector('.choices');
     list.forEach(function (o, i) {
       var lead = o.thumb ? '<img class="choice-thumb" src="' + o.thumb + '" alt="">' : (o.icon ? G.icon(o.icon) : '');
-      var d = U.el('div', 'choice' + (o.disabled ? ' dis' : '') + (o.cls ? ' ' + o.cls : ''), lead + '<span>' + o.label + '</span>' + (o.right != null ? '<span class="r">' + o.right + '</span>' : ''));
+      var d = U.el('div', 'choice' + (o.disabled ? ' dis' : '') + (o.cls ? ' ' + o.cls : ''), o.html != null ? o.html : lead + '<span>' + o.label + '</span>' + (o.right != null ? '<span class="r">' + o.right + '</span>' : ''));
       if (o.desc) d.title = o.desc;
       d.onclick = function () { win.close(o.value); };
       ch.appendChild(d);

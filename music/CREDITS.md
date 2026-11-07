@@ -1,8 +1,9 @@
 # 배경 음악 출처
 
-`music/`의 곡 44개는 모두 제작자(limeinstein) 계정에서 **Suno**(https://suno.com)로 만든 기악곡입니다.
+`music/`의 곡 45개는 모두 제작자(limeinstein) 계정에서 **Suno**(https://suno.com)로 만든 기악곡입니다.
 곡마다 Suno의 곡 주소와 만든 날을 남겨 둡니다(파일 안의 「만든 이·주석」 태그에도 같은 정보가 있습니다).
 
+- 2026-11-07: 오세아니아 곡을 「정글 탐험 BGM」에서 「석양의 환영」으로 바꾸고, 짧은 팡파르 「Lumière Éclatante」(발견 승리 팡파르.mp3 — 지리상의 발견·무대륙·아틀란티스 발견·큰 해전 승리 때 한 번)를 더했습니다.
 - 2026-11-04: 곡을 만들 때 쓴 생성 지시문이 파일의 가사 칸(USLT)에 남아 있어 지웠습니다. 소리는 그대로입니다. 지시문은 공개하지 않습니다.
 - 상업적으로 쓰려면 곡을 만들 당시 Suno 유료 요금제(Pro 이상)였어야 합니다 — 제작자 확인 사항.
 
@@ -18,13 +19,14 @@
 | 동유럽.mp3 | — | 2026-08-15 | https://suno.com/song/af903716-a078-42b9-b8b3-895eecf47bb0 |
 | 러시아.mp3 | Winter Exploration | 2026-10-11 | https://suno.com/song/930f3f92-b168-4a4e-bd48-3bdbe3cf6eda |
 | 몽골 위구르.mp3 | Хэнгэрэг Гал | 2026-10-11 | https://suno.com/song/4ec41699-376f-4414-a021-cb84b995fb63 |
+| 발견 승리 팡파르.mp3 | Lumière Éclatante | 2026-11-07 | https://suno.com/song/c01e4e10-d178-4801-a10b-fa5316322a8a |
 | 무대륙 아틀란티스.mp3 | — | 2026-08-15 | https://suno.com/song/4490254c-b394-4702-9916-3a72bd01759c |
 | 미니 게임.mp3 | The Grand Lobby | 2026-08-16 | https://suno.com/song/4d7b52e5-25f2-471d-95df-c8b4513fed70 |
 | 북아메리카 동부.mp3 | Canyon Gallop | 2026-10-12 | https://suno.com/song/5b112afb-9e7d-4750-a031-a38a8ec4b03a |
 | 북아메리카 서부.mp3 | Prairie Gallop | 2026-10-12 | https://suno.com/song/cf01ebc5-43fb-48e6-8e75-f2b46d292d29 |
 | 북유럽.mp3 | 북유럽 | 2026-09-28 | https://suno.com/song/49c5b62d-796f-40ff-a4f2-b6936dc645cb |
 | 영국.mp3 | Golden Morning at the Academy | 2026-09-01 | https://suno.com/song/a12ded4e-de83-42ae-82d9-d345c9833d8e |
-| 오세아니아.mp3 | 정글 탐험 BGM | 2026-09-28 | https://suno.com/song/ac6d1dd2-5971-4d76-b07e-3a1dd07cb2ba |
+| 오세아니아.mp3 | 석양의 환영 | 2026-11-07 | https://suno.com/song/55c05d5e-550b-437b-9cfd-838e455c6b48 |
 | 오스만 제국.mp3 | 오스만 술타의 경음악 | 2026-10-12 | https://suno.com/song/37ab9c9d-35b6-471a-864e-4fc5c9dce2ef |
 | 왕궁.mp3 | Buoyant Court Dance | 2026-10-11 | https://suno.com/song/9d53b04a-9ccf-443f-8286-07a913402e10 |
 | 육상 전투.mp3 | 전장의 깊이 | 2026-10-12 | https://suno.com/song/253bbf3a-42c2-4990-94d1-bdeed4722ac7 |

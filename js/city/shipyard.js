@@ -262,9 +262,10 @@
     if (!list.length) return;
     // 여러 척 한꺼번에 개조 (2026-11-04 사용자 요청 — 종선도 같이 강화해야 함대 속력이 떨어지지 않는다)
     var own = list.filter(function (x) { return !x.loan; });
+    // 배마다 지금 개조 상태를 수첩 「함대」 표처럼 자세히 (2026-11-07 사용자 요청): 선종·선장·목재·내구·적재·대포·돛·삭구·선수상 + 특징
     var i = await UI.choose('개조할 배', (own.length >= 2 ? [{ label: '여러 척 한꺼번에 개조', right: '돛 · 대포 · 삭구', value: -1, icon: 'gear', desc: '배를 골라 같은 개조를 한 번에 합니다' }] : []).concat(list.map(function (x, k) {
-      return { label: U.esc(x.name) + '호', right: G.SHIP[x.type].name + ' · 내구 ' + Math.round(x.hp) + '/' + x.maxHp, value: k, icon: 'ship' };
-    })), { width: 620 });
+      return { label: U.esc(x.name) + '호', right: G.SHIP[x.type].name + ' · 내구 ' + Math.round(x.hp) + '/' + x.maxHp, value: k, cls: 'yship', html: shipRow(x, s, list) };
+    })), { width: 1260, head: YHEAD, cls: 'yships' });
     if (i == null) return;
     if (i === -1) return Y.batch(c);
     var sh = list[i];
@@ -294,6 +295,33 @@
       else if (v === 'name') { var nm = await UI.prompt('새 이름', sh.name, 12); if (nm) { sh.name = nm; UI.toast('선명을 ' + nm + '호로 바꾸었다.', 'scroll'); } }
     }
   };
+  /* 「개조할 배」 목록의 한 줄 — 수첩 「함대」 표(js/ui/info.js PAGES.fleet)와 같은 칸에 삭구를 더했다. 둘째 줄은 배의 특징과 맡긴 곳·창고 */
+  var YHEAD = '<div class="yhead"><span>선명</span><span>선종</span><span>선장</span><span>목재</span><span class="n">내구력</span><span class="n">적재량</span><span>대포</span><span>돛</span><span>삭구</span><span>선수상</span></div>';
+  var SAIL_MARK = { sq: '□', lat: '△', bat: '▤' };
+  function shipRow(sh, s, list) {
+    var t = G.SHIP[sh.type], w = SH().wood(sh), fig = sh.fig && G.FIGUREHEAD[sh.fig], inFleet = s.fleet.ships.indexOf(sh) >= 0;
+    var tag = sh === s.fleet.ships[0] ? '<span class="tag">기함</span>' : !inFleet ? '<span class="tag">계류</span>' : sh.loan ? '<span class="tag">빌린 배</span>' : '';
+    var gun = G.CANNON[sh.guns.type] || {}, sails = sh.sails.map(function (k) { return SAIL_MARK[k] || '?'; }).join('');
+    var sailTitle = sh.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k] || k; }).join(' · ');
+    var hurt = sh.hp < sh.maxHp;
+    var extra = [];
+    if (sh.ports < t.ports) extra.push('포문 ' + sh.ports + '/' + t.ports + '문 (늘릴 수 있음)');
+    if (G.Cabins && G.Cabins.storeCount && sh !== s.fleet.ships[0] && G.Cabins.storeCount(sh)) extra.push('선실 창고 ' + G.Cabins.storeCount(sh) + '/' + G.Cabins.slots(sh) + '칸');
+    if (w) extra.push(w.name + ' — ' + SH().woodLine(w));
+    return '<div class="yrow">' +
+      '<span class="nm">' + tag + '<b>' + U.esc(sh.name) + '</b></span>' +
+      '<span>' + t.name + '</span>' +
+      '<span>' + U.esc(inFleet ? R.captainName(sh) : '—') + '</span>' +
+      '<span' + (w ? ' title="' + U.esc(w.name + ' — ' + SH().woodLine(w)) + '"' : '') + '>' + (w ? w.name : '<span class="muted">—</span>') + '</span>' +
+      '<span class="n' + (hurt ? ' warn-text' : '') + '">' + Math.round(sh.hp) + '/' + sh.maxHp + '</span>' +
+      '<span class="n">' + U.num(R.shipCargoCap(sh)) + '</span>' +
+      '<span>' + (gun.name || '대포') + ' ' + sh.guns.n + '/' + sh.ports + '</span>' +
+      '<span class="sl" title="' + sailTitle + '">' + sails + '</span>' +
+      '<span title="' + U.esc('삭구 개량: ' + rigLabel(sh)) + '">' + rigLabel(sh) + '</span>' +
+      '<span' + (fig && G.FigFx ? ' title="' + U.esc(G.FigFx.plain(fig)) + '"' : '') + '>' + (fig ? fig.name + (fig.legend ? ' ★' : '') : '—') + '</span>' +
+      '</div><div class="traits ysub">' + SH().traitChips(sh) + '<span class="cult">' + (t.feat || '') + '</span>' +
+      (extra.length ? '<span class="yx">' + extra.join(' · ') + '</span>' : '') + '</div>';
+  }
   // ---------------------------------------------------------------- 여러 척 한꺼번에 개조 (2026-11-04 사용자 요청)
   // 개조 → 「여러 척 한꺼번에 개조」: 배를 골라(빌린 배는 빠진다) 돛 · 대포 · 삭구를 한 번에. 배마다 값을 보여 주고 한 번 묻는다.
   // 할 수 없는 배(조선 기술이 모자람 · 짐이 너무 많음 · 다 해 둠)는 까닭을 적고 건너뛴다. 값은 한 척씩 개조할 때와 같다.

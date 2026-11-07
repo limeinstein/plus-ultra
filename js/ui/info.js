@@ -607,6 +607,8 @@
       '<div>화질</div><div class="opt-row"><div class="opt' + ((st.res || 1) < 1 ? ' on' : '') + '" data-res="0.7">빠름</div><div class="opt' + ((st.res || 1) === 1 ? ' on' : '') + '" data-res="1">보통</div></div>' +
       (G.Display ? G.Display.panelHtml() : '') +   // 글자 크기(DEFAULT·제안값)·글꼴·렌더링 (js/ui/display.js, 2026-10-18)
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
+      '<div>일지를 파일로도</div><div><div class="opt-row"><div class="opt' + (st.saveFile ? ' on' : '') + '" data-sf="1">켬</div><div class="opt' + (!st.saveFile ? ' on' : '') + '" data-sf="0">끔</div></div>' +
+        '<small class="muted">여관·자택에서 일지를 기록할 때 같은 일지를 파일(.json)로도 내려받습니다. 브라우저를 닫을 때 사이트 데이터를 지우는 설정이거나 PC 정리 프로그램이 인터넷 사용 흔적을 지우면 브라우저 안의 일지가 사라지니, 그럴 때는 켜 두고 「항해 일지 불러오기 → 파일에서 불러오기」로 이어 가십시오.</small></div>' +
       '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
       '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
       '<div>알림</div><div><div class="opt-row">' + [['normal', '보통 크기'], ['small', '작게']].map(function (o) { return '<div class="opt' + ((st.noticeSize || 'normal') === o[0] ? ' on' : '') + '" data-nsz="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
@@ -639,6 +641,7 @@
     U.$$('[data-res]', el).forEach(function (o) { o.onclick = function () { st.res = +o.dataset.res; G.Game.fit(); PAGES.menu(el, win); }; });
     if (G.Display) G.Display.bind(el, function () { PAGES.menu(el, win); });
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
+    U.$$('[data-sf]', el).forEach(function (o) { o.onclick = function () { st.saveFile = o.dataset.sf === '1'; G.State.rememberSettings(st); PAGES.menu(el, win); }; });
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-nsz]', el).forEach(function (o) { o.onclick = function () { st.noticeSize = o.dataset.nsz; G.State.rememberSettings(st); if (UI.noticeSettings) UI.noticeSettings(); UI.toast('알림을 이 크기로 띄웁니다.', 'info', 2600, { tier: 'line' }); PAGES.menu(el, win); }; });
@@ -680,8 +683,12 @@
     var no = G.State.JOURNAL_SLOTS.indexOf(slot) + 1;
     if (G.State.meta(slot) && !(await UI.confirm('여관 일지 ' + no + '에 덮어쓰겠습니까?'))) return false;
     var r = await G.State.saveAsync(slot);
-    if (r.ok && r.where === 'browser') UI.toast('항해 일지에 기록했다.', 'book');
-    else if (r.ok) UI.toast('항해 일지에 기록했다. (' + r.msg + ')', 'book', 7000);
+    if (r.ok) {
+      // 저장 알림은 「1480년 5월 1일 이강희 리스본 저장되었습니다.」 한 줄만 (사용자 요청 2026-11-07)
+      UI.toast(G.State.savedLine(r.meta || G.State.meta(slot)), 'book', 4000, { tier: 'big' });   // 여느 소식(한 줄 접힘)이 아니라 끝까지 보이게
+      // 「여관 일지를 파일로도 남기기」를 켰으면 같은 일지를 파일로도 내려받는다 — 브라우저가 닫을 때 사이트 데이터를 지워도 남게
+      if (G.Game.state.settings && G.Game.state.settings.saveFile) { try { G.State.exportSlot(r.slot || slot); } catch (e) { console.warn(e); } }
+    }
     else if (await UI.confirm('기록하지 못했습니다 — ' + r.msg + '<br>지금 진행을 파일로 내려받아 둘까요?', '파일로 내려받기', '그만둔다', '항해 일지')) {
       // 브라우저에 남기지 못했어도 파일로는 남긴다
       var nm = G.State.exportNow();

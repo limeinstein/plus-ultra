@@ -20,7 +20,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.goto(pathToFileURL(path.join(__dirname, '..', 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     await page.evaluate(() => G.Game.ensureGeo());
+    await page.exposeFunction('__strandStage', stage => console.log('검사 단계: ' + stage));
     const r = await page.evaluate(async () => {
+      function stage(name) { window.__strandQaStage = name; window.__strandStage(name); }
+      stage('함대 준비');
       const s = G.State.newGame({ name: '시험 제독', nation: 'PT', job: 'explorer', age: 24, birth: { m: 1, d: 1 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk: {}, lg: [], diff: 'normal' });
       s.date = { y: 1500, m: 3, d: 1 }; s.player.gold = 200000;
       const R = G.R, C = G.Scenes.city, Y = C.B.shipyard, f = s.fleet, out = {};
@@ -42,15 +45,23 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const U0 = { choose: G.UI.choose, confirm: G.UI.confirm, prompt: G.UI.prompt };
       G.UI.choose = async () => 0; G.UI.confirm = async () => true; G.UI.prompt = async () => '희망';
       const pb = Y.buy(mal);
+      stage('구입 카드');
       for (let i = 0; i < 40 && !document.querySelector('.shipcard.click'); i++) await new Promise(r => setTimeout(r, 100));
       document.querySelector('.shipcard.click').click();
+      stage('구입 완료 대기');
       await pb;
+      stage('구입 완료');
       Object.assign(G.UI, U0);
       out.asked = asked; out.said = said;
       out.after = { ships: f.ships.map(x => x.name), cargo: Object.keys(f.cargo), food: f.food, water: f.water, mat: f.mat, crew: f.crew, cmax: R.crewMax(), landReturn: !!s.landReturn, via: s.loc.via, stable: s.stable && s.stable[9] };
       const sd = s.strands && s.strands[0];
       out.strand = sd && { crew: sd.crew || 0, ships: sd.ships.map(x => x.name), cargo: Object.keys(sd.cargo), food: sd.food, water: sd.water, lon: sd.lon, lat: sd.lat, keep: sd.until - sd.since, place: sd.place };
-      out.harbor = await C.B.harbor.enter(mal);       // 이제 이 항구에서 출항할 수 있다 (예전: 「우리 함대는 이 항구에 없습니다」)
+      stage('항구 진입');
+      // 함대 회수 판정을 검사한다. 항구에서 덧붙는 괴물 소식의 닫기 입력은 기다리지 않는다.
+      const harborSay = G.UI.say;
+      try { G.UI.say = async t => { said.push(t); }; out.harbor = await C.B.harbor.enter(mal); }
+      finally { G.UI.say = harborSay; }       // 이제 이 항구에서 출항할 수 있다 (예전: 「우리 함대는 이 항구에 없습니다」)
+      stage('항구 진입 완료');
       out.panel = G.Strand.panelHtml();
       // 남은 날 알림 · 폐기
       const day0 = s.day;
@@ -61,6 +72,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.day = sd.until - 10;
       out.notYet = (await G.Strand.atSea(-5, 36)).length;
       const back = await G.Strand.atSea(-9.6, 38.5);
+      stage('바다 회수 완료');
       out.back = { msg: back.map(m => m.text), ships: f.ships.map(x => x.name), wine: f.cargo.wine && f.cargo.wine.q, food: f.food, strands: s.strands.length, crew: f.crew };
       // 다시 남겨 두고 기한을 넘기면 폐기
       s.strands.push({ id: 'x', ships: [R.newShip('cog', '버려질')], cargo: { salt: { q: 5, cost: 10 } }, food: 10, water: 10, mat: 0, lon: 10, lat: 10, city: null, place: '어느 해안', since: s.day, until: s.day + 730, warned: {} });
@@ -76,6 +88,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const offered = [], ch0 = G.UI.choose;
       G.UI.choose = async (t, opts) => { offered.push(opts.map(o => o.label).join('|')); return opts.find(o => o.label === '을호').value; };
       const over1 = await G.Strand.atSea(20, 20);
+      stage('초과 함대 첫 회수 완료');
       out.over1 = { msg: over1.map(m => m.text), ships: f.ships.map(x => x.name), offered: offered.slice(), flag: f.ships[0].name };
       // 넘는 수가 둘이면 두 번 고른다 · 답이 없으면 값어치가 가장 낮은 배
       s.strands = [mk('o2', ['병', '정'])]; offered.length = 0;

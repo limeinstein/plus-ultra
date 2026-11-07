@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.318';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.319';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
   var bootPending = false;   // 처음 열 때의 불러오는 그림이 아직 준비 단계를 밟는 중 (타이틀을 떠나면 바로 걷는다 — T.exit)
 
@@ -73,6 +73,12 @@
       bLoad.classList.remove('disabled');      // 일지가 없어도 「파일에서 불러오기」는 할 수 있다
       if (LD && (!boot || bootPending)) LD.hide();   // 모든 준비가 끝난 뒤에 오프닝을 보인다 (그새 타이틀을 떠났으면 이미 걷었다)
       bootPending = false;
+      // 시크릿·InPrivate 창이면 창을 닫을 때 일지가 모두 지워진다 — 한 번 알린다 (베타 피드백 2026-11-06 「다음 날 일지가 사라진다」)
+      if (!T.privWarned && G.State.privateWindow) G.State.privateWindow().then(function (priv) {
+        if (!priv || T.privWarned || G.Game.sceneName !== 'title') return;
+        T.privWarned = true;
+        UI.toast('지금 창은 시크릿(InPrivate) 창으로 보입니다 — 창을 닫으면 항해 일지가 모두 지워집니다. 보통 창에서 하시거나, 여관에서 기록한 뒤 「일지를 파일로 내려받기」로 남겨 두십시오.', 'book', 12000);
+      });
     });
   };
 
@@ -89,7 +95,10 @@
     });
     opts.push({ label: '파일에서 불러오기', value: 'file', icon: 'scroll', right: '내려받아 둔 일지 파일 (.json)' });
     if (G.State.hasAnySave()) opts.push({ label: '일지를 파일로 내려받기', value: 'export', icon: 'save', right: '다른 기기·브라우저로 옮길 때' });
-    var slot = await UI.choose('항해 일지 불러오기', opts, { width: 760 });
+    // 브라우저에 일지가 하나도 없을 때 — 어제 기록한 일지가 사라졌다면 대개 브라우저가 지운 것이다 (베타 피드백 2026-11-06)
+    var none = !G.State.hasAnySave();
+    var text = none ? '<small class="muted">이 브라우저에 남은 항해 일지가 없습니다. 지난번에 기록한 일지가 보이지 않는다면 ① 브라우저를 닫을 때 쿠키·사이트 데이터를 지우는 설정, ② PC 최적화·백신 프로그램의 「인터넷 사용 흔적 삭제」, ③ 시크릿(InPrivate) 창 가운데 하나가 지운 것입니다. 내려받아 둔 일지 파일이 있으면 「파일에서 불러오기」로 이어 가고, 앞으로는 설정의 「일지를 파일로도」를 켜 두십시오.</small>' : '';
+    var slot = await UI.choose('항해 일지 불러오기', opts, { width: 760, text: text });
     if (slot == null) return;
     if (slot === 'export') { await T.exportMenu(); return; }
     var S;

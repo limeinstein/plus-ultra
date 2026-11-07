@@ -1,0 +1,2052 @@
+[
+ {
+  "id": "parthenon",
+  "name": "파르테논 신전",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "대리석 부조 조각;천마상",
+  "desc": "아테네의 언덕 위, 여신 아테나에게 바친 대리석 신전.",
+  "reg": 2
+ },
+ {
+  "id": "delphi",
+  "name": "델포이 성지",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "청동 삼발이 솥",
+  "desc": "세계의 배꼽 옴파로스가 놓인 아폴론의 성지. 무녀가 신탁을 전하던 곳.",
+  "reg": 2
+ },
+ {
+  "id": "pyramid",
+  "name": "사카라의 계단식 피라미드",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "청록 유약 타일",
+  "desc": "사카라의 계단식 피라미드. 가장 오래된 왕의 무덤이다.",
+  "reg": 4
+ },
+ {
+  "id": "giza",
+  "name": "기자의 3대 피라미드",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "스핑크스 수염 조각",
+  "desc": "스핑크스가 지키는 세 개의 거대한 피라미드. 세계 7대 불가사의의 하나.",
+  "reg": 4
+ },
+ {
+  "id": "thebes",
+  "name": "카르나크 아몬 대신전",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "신전 기둥 탁본",
+  "desc": "태양신 아몬에게 바친 거대한 기둥의 숲. 옛 이집트 신앙의 중심이었다.",
+  "reg": 4
+ },
+ {
+  "id": "abusimbel",
+  "name": "아부심벨 대신전",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "왕의 이름 명판",
+  "desc": "누비아의 바위산을 깎아 만든 거대한 신전. 네 개의 거상이 입구를 지킨다.",
+  "reg": 4
+ },
+ {
+  "id": "angkor",
+  "name": "앙코르 와트",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "압사라 부조 조각",
+  "desc": "밀림 속에 잠든 거대한 석조 사원. 다섯 개의 탑이 연꽃처럼 솟아 있다.",
+  "reg": 8
+ },
+ {
+  "id": "yungang",
+  "name": "운강 석불",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "사암 불두",
+  "desc": "사암 절벽을 파서 만든 수만 구의 불상. 서역의 불교 미술이 전해진 흔적이다.",
+  "reg": 6
+ },
+ {
+  "id": "bulguksa",
+  "name": "불국사",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "무구정광대다라니경",
+  "desc": "돌 축대 위에 나무 전각을 올려 부처의 나라를 땅 위에 옮겨 놓은 신라의 절. 청운교·백운교 돌계단을 오르면",
+  "reg": 6
+ },
+ {
+  "id": "seokguram",
+  "name": "석굴암",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "",
+  "desc": "토함산 높은 곳, 화강암을 깎아 짜 맞춘 둥근 굴 법당. 앞방과 좁은 통로를 지나면 둥근 천장 아래 석가모니",
+  "reg": 6
+ },
+ {
+  "id": "hwangnyong",
+  "name": "황룡사 터",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "",
+  "desc": "진흥왕의 명으로 세운 신라 제일의 절. 하늘 높이 솟았던 아홉 층 나무탑은 몽골군이 쳐들어왔을 때 불타고, ",
+  "reg": 6
+ },
+ {
+  "id": "jongmyo",
+  "name": "종묘",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "",
+  "desc": "조선 역대 임금과 왕비의 신주를 모신 사당. 산자락에 안긴 넓은 돌마당 끝에 정전이 길게 누워 있고, 제삿날",
+  "reg": 6
+ },
+ {
+  "id": "borobudur",
+  "name": "보로부두르",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "청동 불좌상",
+  "desc": "화산재에 묻혀 잊힌 거대한 계단식 불탑. 층마다 부처의 이야기가 새겨져 있다.",
+  "reg": 8
+ },
+ {
+  "id": "poitiers",
+  "name": "푸아티에 대성당",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "성가 필사본",
+  "desc": "성모에게 바친 로마네스크 양식의 대성당. 정면 조각이 섬세하다.",
+  "reg": 1
+ },
+ {
+  "id": "montstmichel",
+  "name": "몽생미셸",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "기사 이야기 채색 필사본",
+  "desc": "밀물 때면 바다에 떠 있는 섬이 되는 수도원. 대천사 미카엘의 계시로 세워졌다.",
+  "reg": 1
+ },
+ {
+  "id": "stave",
+  "name": "우르네스 목조교회",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "용머리 선수상",
+  "desc": "용머리 장식을 단 나무 교회. 이교의 전통과 신앙이 한데 어우러졌다.",
+  "reg": 1
+ },
+ {
+  "id": "rusch",
+  "name": "블라디미르 우스펜스키 대성당",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "금박 이콘",
+  "desc": "양파 모양 지붕을 얹은 흰 돌 교회. 추위를 견디도록 창을 작게 만들었다.",
+  "reg": 1
+ },
+ {
+  "id": "hagiasophia",
+  "name": "성 소피아 대성당",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "황금 모자이크 조각",
+  "desc": "유스티니아누스 황제가 세운 거대한 돔의 성당. 지금은 모스크로 쓰이고 있다.",
+  "reg": 2
+ },
+ {
+  "id": "prester",
+  "name": "프레스터 존의 나라",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "프레스터 존의 편지",
+  "desc": "이슬람 세계 너머에 있다는 기독교 왕국. 바위를 통째로 깎아 만든 교회들이 있다.",
+  "reg": 3
+ },
+ {
+  "id": "sepulchre",
+  "name": "성분묘 교회",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "자개 순례 십자가",
+  "desc": "그리스도의 무덤 위에 세운 교회. 수많은 순례자들이 찾아온다.",
+  "reg": 4
+ },
+ {
+  "id": "ur",
+  "name": "우르의 지구라트",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "쐐기문자 점토판",
+  "desc": "아브라함이 태어났다는 우르의 계단식 신전. 역청으로 벽돌을 붙였다.",
+  "reg": 4
+ },
+ {
+  "id": "petra",
+  "name": "페트라",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "달걀 껍질 토기",
+  "desc": "붉은 절벽을 깎아 만든 신전 도시. 파라오의 보물이 숨겨져 있다는 전설이 있다.",
+  "reg": 4
+ },
+ {
+  "id": "djenne",
+  "name": "젠네 대모스크",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "사헬의 학자 필사본",
+  "desc": "흙을 쌓아 올린 거대한 사원. 나무 기둥이 가시처럼 벽 밖으로 튀어나와 있다.",
+  "reg": 3
+ },
+ {
+  "id": "delhimosque",
+  "name": "자마 마스지드",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "금박 경전 필사본",
+  "desc": "붉은 사암과 흰 대리석으로 지은 델리의 대모스크.",
+  "reg": 5
+ },
+ {
+  "id": "qutb",
+  "name": "쿠트브 미나르",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "쇠기둥 명문 탁본",
+  "desc": "이슬람 왕조가 승리를 기념해 세운 붉은 첨탑.",
+  "reg": 5
+ },
+ {
+  "id": "madurai",
+  "name": "미낙시 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "여러 겹 청동 등잔",
+  "desc": "수천 개의 신상이 빼곡히 새겨진 거대한 문탑의 사원.",
+  "reg": 5
+ },
+ {
+  "id": "shwedagon",
+  "name": "쉐다곤 파고다",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "비둘기피 루비",
+  "desc": "부처의 머리카락을 모셨다는 황금 불탑. 머리카락이 빛날 때 기적이 일어난다고 한다.",
+  "reg": 8
+ },
+ {
+  "id": "ayubuddha",
+  "name": "아유타야의 불두",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "금박 청동 불상 손",
+  "desc": "나무뿌리에 감싸인 부처의 머리. 도시 곳곳에 불상이 있다.",
+  "reg": 8
+ },
+ {
+  "id": "potala",
+  "name": "포탈라궁",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "금니 대장경 필사본",
+  "desc": "성스러운 도시 라사를 내려다보는 붉은 언덕의 궁전. 보석이 박힌 황금 영탑이 있다.",
+  "reg": 7
+ },
+ {
+  "id": "konjiki",
+  "name": "주손지 곤지키도",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "금동 봉황 선수상",
+  "desc": "안팎을 모두 금박으로 덮은 불당. 지팡그의 황금 전설은 여기서 나왔는지도 모른다.",
+  "reg": 9
+ },
+ {
+  "id": "machupicchu",
+  "name": "마추픽추",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "태양의 금 원반",
+  "desc": "안데스 산꼭대기 구름 위의 도시. 태양을 묶어 두는 기둥이 있다.",
+  "reg": 10
+ },
+ {
+  "id": "sacsay",
+  "name": "삭사이와만",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "별 모양 청동 곤봉",
+  "desc": "칼날 하나 들어가지 않을 만큼 정교하게 쌓은 거석의 요새.",
+  "reg": 10
+ },
+ {
+  "id": "isfahanmosque",
+  "name": "마스지드 이 샤",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "일곱 빛깔 타일",
+  "desc": "푸른 타일로 뒤덮인 이스파한의 모스크. 페르시아 예술의 정수.",
+  "reg": 4
+ },
+ {
+  "id": "rockdome",
+  "name": "바위의 돔",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "",
+  "desc": "예언자가 하늘로 올라갔다는 바위 위에 세운 황금 돔.",
+  "reg": 4
+ },
+ {
+  "id": "ananda",
+  "name": "아난다 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "긁은무늬 칠기 합",
+  "desc": "수천 개의 불탑이 들판을 메운 파간의 사원 가운데 가장 아름다운 사원.",
+  "reg": 8
+ },
+ {
+  "id": "shiva",
+  "name": "시바 신상",
+  "cat": "treasure",
+  "faith": true,
+  "fut": false,
+  "rel": "춤추는 시바 청동상",
+  "desc": "불꽃 고리 속에서 춤추는 시바 신의 청동상.",
+  "reg": 5
+ },
+ {
+  "id": "stcrown",
+  "name": "성 이슈트반의 왕관",
+  "cat": "treasure",
+  "faith": true,
+  "fut": false,
+  "rel": "성 이슈트반의 왕관",
+  "desc": "헝가리 왕권의 상징인 왕관. 십자가가 비스듬히 기울어 있다.",
+  "reg": 1
+ },
+ {
+  "id": "reliquary",
+  "name": "동방박사 유물함",
+  "cat": "treasure",
+  "faith": true,
+  "fut": false,
+  "rel": "동방박사의 유물함",
+  "desc": "동방박사 세 사람의 유골을 모셨다는 황금 유물함.",
+  "reg": 1
+ },
+ {
+  "id": "holylance",
+  "name": "성창",
+  "cat": "treasure",
+  "faith": true,
+  "fut": false,
+  "rel": "성창의 금 덮개",
+  "desc": "신성 로마 황제의 보물 가운데 하나. 십자가의 그리스도를 찌른 창이라 전하며, 날 가운데에 못 하나가 금실로",
+  "reg": 1
+ },
+ {
+  "id": "paladoro",
+  "name": "팔라 도로",
+  "cat": "treasure",
+  "faith": true,
+  "fut": false,
+  "rel": "",
+  "desc": "성 마르코 대성당 제단 뒤의 황금 제단화. 칠보 그림 이백오십 장과 보석 이천 개가 박혀 있다.",
+  "reg": 2
+ },
+ {
+  "id": "ajanta",
+  "name": "아잔타 석굴 벽화",
+  "cat": "treasure",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "말굽 모양 골짜기의 석굴 벽에 그린 부처의 전생 이야기. 천 년 넘게 숲에 묻혀 빛깔이 그대로 남았다.",
+  "reg": 5
+ },
+ {
+  "id": "tripitaka",
+  "name": "팔만대장경",
+  "cat": "treasure",
+  "faith": true,
+  "fut": false,
+  "rel": "",
+  "desc": "불경을 새긴 나무판 팔만 장. 몽골이 쳐들어왔을 때 부처의 힘으로 나라를 지키려 열여섯 해 동안 새겼다.",
+  "reg": 6
+ },
+ {
+  "id": "incadisc",
+  "name": "태양의 황금 원반",
+  "cat": "treasure",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "태양 신전 벽에 걸려 아침 햇빛을 되비추던 거대한 황금 원반. 잉카 사람들은 태양신의 얼굴이라 믿었다.",
+  "reg": 10
+ },
+ {
+  "id": "creation",
+  "name": "천지창조",
+  "cat": "treasure",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "시스티나 예배당 천장에 미켈란젤로가 네 해 동안 누워 그린 창세기. 하느님과 아담의 손가락이 닿을 듯하다.",
+  "reg": 2
+ },
+ {
+  "id": "lastsupper",
+  "name": "최후의 만찬",
+  "cat": "treasure",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "수도원 식당 벽에 그린 예수와 열두 제자의 마지막 저녁. 「너희 가운데 하나가」라는 말에 놀란 얼굴들이 물결",
+  "reg": 2
+ },
+ {
+  "id": "saliera",
+  "name": "첼리니의 소금 그릇",
+  "cat": "treasure",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "바다의 신과 땅의 여신이 마주 앉은 황금 소금 그릇. 배 모양 그릇에 소금, 신전 모양 그릇에 후추를 담는다",
+  "reg": 1
+ },
+ {
+  "id": "belemmonstrance",
+  "name": "벨렝 성체 현시대",
+  "cat": "treasure",
+  "faith": true,
+  "fut": false,
+  "rel": "",
+  "desc": "바스쿠 다 가마가 인도에서 처음 가져온 금으로 만든 성체 현시대. 열두 사도와 칠보 새들이 둘러싸고 있다.",
+  "reg": 0
+ },
+ {
+  "id": "aztec",
+  "name": "아즈텍 사람들",
+  "cat": "people",
+  "faith": false,
+  "fut": false,
+  "rel": "깃털 방패;케찰 깃털 머리장식",
+  "desc": "호수 위의 도시 테노치티틀란을 중심으로 번영한 아즈텍(메시카) 제국. 신전 앞 광장에서 가로누운 나무 북 「",
+  "reg": 10
+ },
+ {
+  "id": "inca",
+  "name": "잉카 사람들",
+  "cat": "people",
+  "faith": false,
+  "fut": false,
+  "rel": "황금 옥수수",
+  "desc": "안데스 고원을 다스린 잉카 제국. 신전의 벽까지 황금으로 덮여 있다. 해의 잔치 「인티 라이미」에는 갈대 피",
+  "reg": 10
+ },
+ {
+  "id": "t_antique",
+  "name": "골동품",
+  "cat": "trade",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "옛 왕국의 유물. 순례자와 귀족들이 비싼 값에 산다.",
+  "reg": 4
+ },
+ {
+  "id": "t_sandal",
+  "name": "백단",
+  "cat": "trade",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "불상과 향에 쓰이는 향기로운 나무.",
+  "reg": 8
+ },
+ {
+  "id": "artemis",
+  "name": "에페소스의 아르테미스 신전",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "호박 구슬 봉헌물",
+  "desc": "늪이 된 들판에 부러진 대리석 기둥 하나가 외로이 서 있다. 한때 백스물일곱 개의 기둥이 받치던 세상에서 가",
+  "reg": 2
+ },
+ {
+  "id": "zeus",
+  "name": "올림피아의 제우스 상",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "\"나는 페이디아스의 것\" 술잔",
+  "desc": "알페이오스 강의 흙에 묻힌 올림피아. 신전의 거대한 기둥 북이 쓰러진 채 늘어서 있다. 페이디아스가 상아와 ",
+  "reg": 2
+ },
+ {
+  "id": "barkal",
+  "name": "게벨 바르칼의 신전",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "쿠시 왕의 황금 팔찌",
+  "desc": "누비아 사막 한가운데 홀로 솟은 붉은 바위산. 그 아래 쿠시의 흑인 파라오들이 아몬 신전과 가파른 피라미드 ",
+  "reg": 3
+ },
+ {
+  "id": "mahabodhi",
+  "name": "마하보디 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "금강좌 보리수 잎",
+  "desc": "부처가 보리수 아래에서 깨달음을 얻은 자리에 선 높은 벽돌 탑. 벽마다 부처가 새겨져 있고, 그 곁에 옛 보",
+  "reg": 5
+ },
+ {
+  "id": "nalanda",
+  "name": "날란다 대학",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "승원의 흙 인장",
+  "desc": "만 명의 학승이 모여 공부하던 거대한 승원의 붉은 벽돌 폐허. 투르크 군대가 불을 지르자 아홉 층 도서관이 ",
+  "reg": 5
+ },
+ {
+  "id": "sanchi",
+  "name": "산치 대탑",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "약시 석조 까치발",
+  "desc": "말와의 언덕 위에 엎어 놓은 사발처럼 둥근 대탑. 네 방향의 돌문에는 부처의 전생 이야기와 코끼리, 약시가 ",
+  "reg": 5
+ },
+ {
+  "id": "tikal",
+  "name": "티칼",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "비취 모자이크 그릇",
+  "desc": "페텐의 밀림 위로 하얀 신전 꼭대기가 불쑥 솟아 있다. 나무뿌리에 휘감긴 피라미드 신전 여섯 채와 수많은 비",
+  "reg": 10
+ },
+ {
+  "id": "cahokia",
+  "name": "카호키아 흙언덕",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "새 사람 돌판",
+  "desc": "미시시피 강가 들판에 흙으로 쌓은 거대한 계단 언덕. 밑변이 이집트의 피라미드만 하다. 꼭대기에 추장의 집이",
+  "reg": 10
+ },
+ {
+  "id": "chichen",
+  "name": "치첸 이트사",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "성스러운 샘의 황금 원반",
+  "desc": "유카탄 밀림의 거대한 신전 도시. 깃털 뱀 쿠쿨칸의 계단 피라미드는 봄가을 해 질 녘이면 뱀이 계단을 타고 ",
+  "reg": 10
+ },
+ {
+  "id": "notredame",
+  "name": "노트르담 대성당",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "장미창 스테인드글라스 조각",
+  "desc": "센 강 섬 위에 두 개의 네모난 탑을 올린 파리의 대성당. 둥근 장미창이 빛을 물들이고, 지붕 끝에는 괴물 ",
+  "reg": 1
+ },
+ {
+  "id": "kamakura",
+  "name": "가마쿠라 대불",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "대불의 청동 나발",
+  "desc": "가마쿠라의 절 마당에 청동 아미타불이 앉아 있다. 불상을 덮던 큰 법당은 해일과 폭풍에 휩쓸려 가고, 부처는",
+  "reg": 9
+ },
+ {
+  "id": "sankore",
+  "name": "산코레 모스크",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "통북투의 천문 필사본",
+  "desc": "통북투의 흙벽 모스크이자 학교. 사막을 건너온 학자들이 모여 법학과 천문학을 가르친다. 이 도시에서는 금보다",
+  "reg": 3
+ },
+ {
+  "id": "templomayor",
+  "name": "템플로 마요르",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "달의 여신 돌 원반",
+  "desc": "테노치티틀란 한가운데 우뚝 선 쌍둥이 신전 피라미드. 꼭대기에 전쟁의 신과 비의 신을 모신 두 채의 사당이 ",
+  "reg": 10
+ },
+ {
+  "id": "kilwa",
+  "name": "킬와 대모스크",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "킬와 술탄의 구리 동전",
+  "desc": "산호석을 다듬어 지은 킬와의 대모스크. 돔과 둥근 천장이 줄지어 있고, 벽에는 중국 청자 그릇이 박혀 있다.",
+  "reg": 3
+ },
+ {
+  "id": "samarra",
+  "name": "사마라 대모스크",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "비스듬히 새긴 회반죽 벽판",
+  "desc": "티그리스 강가의 옛 칼리프 도읍. 벽돌 모스크의 담장만 남은 곁에, 나선형 길이 바깥을 감아 올라가는 탑 말",
+  "reg": 4
+ },
+ {
+  "id": "apostolic",
+  "name": "성 베드로 대성당",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "교황의 어부 반지 봉인",
+  "desc": "사도 베드로의 무덤 위에 세운 로마의 대성당. 콘스탄티누스 황제가 지은 낡은 성당을 헐고 교황이 온 세상에서",
+  "reg": 2
+ },
+ {
+  "id": "brihadeeswarar",
+  "name": "브리하디스와라 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "촐라 장인의 춤추는 시바 청동상",
+  "desc": "탄조르의 촐라 왕 라자라자가 시바에게 바친 화강암 사원. 피라미드처럼 솟은 탑 꼭대기에 통돌 하나로 된 거대",
+  "reg": 5
+ },
+ {
+  "id": "haleokeawe",
+  "name": "할레 오 케아웨 신전",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "깃털 망토",
+  "desc": "하와이 섬 서쪽 바닷가의 성스러운 피난처. 나무 신상들이 둘러선 초가 신전 안에 역대 추장의 뼈가 모셔져 있",
+  "reg": 8
+ },
+ {
+  "id": "rila",
+  "name": "릴라 수도원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "라파엘의 나무 십자가",
+  "desc": "불가리아 깊은 산골짜기의 수도원. 은자 이반 릴스키가 동굴에서 살던 곳에 세웠다. 투르크의 지배 아래에서도 ",
+  "reg": 2
+ },
+ {
+  "id": "erdenezuu",
+  "name": "에르데니 주 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "자나바자르의 금동 타라상",
+  "desc": "옛 몽골 도읍 카라코룸의 돌을 가져다 지은 사원. 백여덟 개의 흰 불탑이 벽을 이루어 사원을 네모나게 두른다",
+  "reg": 7
+ },
+ {
+  "id": "xiengthong",
+  "name": "왓 시엥통",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "금박 나가 머리 장식",
+  "desc": "메콩 강과 칸 강이 만나는 루앙프라방의 사원. 지붕이 땅 가까이까지 겹겹이 흘러내리고, 뒷벽에는 색유리로 생",
+  "reg": 8
+ },
+ {
+  "id": "askia",
+  "name": "아스키아의 무덤",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "송가이 기병의 쇠창",
+  "desc": "가오의 흙 피라미드. 메카 순례에서 돌아온 송가이의 황제 아스키아 무함마드가 자기 무덤으로 쌓았다. 흙벽 밖",
+  "reg": 3
+ },
+ {
+  "id": "oxford",
+  "name": "옥스퍼드 대학",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "보들리 도서관의 사슬 묶인 책",
+  "desc": "템스 강 상류의 학자들의 도시. 칼리지마다 네모난 안뜰과 식당, 예배당이 있고, 학생들은 라틴어로 논쟁한다.",
+  "reg": 1
+ },
+ {
+  "id": "boudhanath",
+  "name": "보다나트 스투파",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "티베트 기도 바퀴",
+  "desc": "카트만두 분지의 거대한 흰 사발 모양 탑. 꼭대기 네 면에 그린 부처의 눈이 사방을 굽어본다. 티베트에서 넘",
+  "reg": 5
+ },
+ {
+  "id": "doisuthep",
+  "name": "왓 프라탓 도이수텝",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "사리함 모형 금탑",
+  "desc": "치앙마이 서쪽 산꼭대기의 황금 탑. 부처의 사리를 등에 실은 흰 코끼리가 산을 올라가 세 번 울고 쓰러진 자",
+  "reg": 8
+ },
+ {
+  "id": "stbasil",
+  "name": "성 바실리 대성당",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "양파 지붕의 금박 십자가",
+  "desc": "모스크바 붉은 광장 끝에 양파 모양 지붕 아홉 개를 색색으로 얹은 성당. 뇌제 이반이 카잔을 이긴 기념으로 ",
+  "reg": 1
+ },
+ {
+  "id": "kremlin",
+  "name": "크렘린",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "모노마흐의 모자",
+  "desc": "모스크바 강가의 붉은 벽돌 성채. 이탈리아 건축가들이 쌓은 성벽 안에 대공의 궁전과 금빛 지붕의 성당들이 모",
+  "reg": 1
+ },
+ {
+  "id": "sistine",
+  "name": "시스티나 성당",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "천장화 밑그림",
+  "desc": "교황 식스투스가 바티칸 궁전 안에 지은 예배당. 보티첼리와 페루지노가 벽에 모세와 그리스도 이야기를 그렸고,",
+  "reg": 2
+ },
+ {
+  "id": "pisa",
+  "name": "피사의 사탑",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "종탑의 청동 종",
+  "desc": "대성당 곁의 흰 대리석 종탑이 한쪽으로 기울어 있다. 셋째 층을 올릴 때부터 땅이 내려앉아, 백 년에 걸쳐 ",
+  "reg": 2
+ },
+ {
+  "id": "porcelain",
+  "name": "남경 대보은사 유리탑",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "유리탑의 유약 벽돌",
+  "desc": "영락제가 어머니를 기려 세운 아홉 층 팔각탑. 흰 자기 벽돌에 초록·노랑 유약을 입혀, 해가 비치면 탑 전체",
+  "reg": 6
+ },
+ {
+  "id": "escorial",
+  "name": "엘 에스코리알",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "왕실 도서관의 천구의",
+  "desc": "마드리드 북서쪽 산기슭에 펠리페 왕이 세운 거대한 수도원 겸 궁전. 격자 모양의 회색 화강암 건물 안에 역대",
+  "reg": 0
+ },
+ {
+  "id": "bluemosque",
+  "name": "술탄 아흐메트 모스크",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "이즈니크 튤립 타일",
+  "desc": "아야 소피아 맞은편에 젊은 술탄 아흐메트가 세운 모스크. 안은 이즈니크의 푸른 타일 이만 장으로 덮였고, 첨",
+  "reg": 2
+ },
+ {
+  "id": "brandenburg",
+  "name": "브란덴부르크 문",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "콰드리가의 청동 말굽",
+  "desc": "베를린의 큰길 끝에 선 사암의 개선문. 아테네의 신전 문을 본떴고, 꼭대기에는 네 필의 말이 끄는 전차를 모",
+  "reg": 1
+ },
+ {
+  "id": "bolshoi",
+  "name": "볼쇼이 극장",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "발레리나의 금박 가면",
+  "desc": "모스크바의 큰 극장. 여덟 개의 흰 기둥 위에 아폴론의 청동 전차가 달린다. 차르의 무용수들이 백조처럼 춤춘",
+  "reg": 1
+ },
+ {
+  "id": "orszaghaz",
+  "name": "헝가리 국회의사당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "성 이슈트반 왕관 모형",
+  "desc": "도나우 강가에 선 거대한 고딕 의사당. 첨탑 삼백육십오 개가 강물에 비친다. 안에는 성 이슈트반의 왕관이 모",
+  "reg": 1
+ },
+ {
+  "id": "ubudiah",
+  "name": "우부디아 모스크",
+  "cat": "ruin",
+  "faith": true,
+  "fut": true,
+  "rel": "페락 왕실의 크리스",
+  "desc": "페락의 왕도 쿠알라캉사르 언덕 위의 모스크. 금빛 양파 돔과 흰 첨탑 넷이 밀림 위로 솟는다. 공사 중에 술",
+  "reg": 8
+ },
+ {
+  "id": "sinai",
+  "name": "시나이산",
+  "cat": "nature",
+  "faith": true,
+  "fut": false,
+  "rel": "떨기나무 잎을 넣은 성물함",
+  "desc": "붉은 화강암 봉우리가 겹겹이 솟은 광야의 산. 모세가 십계명을 받았다는 곳으로, 산기슭에는 성 카타리나 수도",
+  "reg": 4
+ },
+ {
+  "id": "adamspeak",
+  "name": "스리파다 (아담의 봉우리)",
+  "cat": "nature",
+  "faith": true,
+  "fut": false,
+  "rel": "순례자의 보석 원석",
+  "desc": "실론 섬 한가운데 우뚝 솟은 원뿔 봉우리. 꼭대기 바위에 사람 발자국 모양의 움푹한 자국이 있어, 불교도는 ",
+  "reg": 5
+ },
+ {
+  "id": "kailash",
+  "name": "카일라스산",
+  "cat": "nature",
+  "faith": true,
+  "fut": false,
+  "rel": "마나사로바르 호수의 성수 병",
+  "desc": "티베트 서쪽 고원에 홀로 선, 네 면이 반듯한 눈의 피라미드. 힌두교·불교·자이나교·본교가 모두 세상의 중심",
+  "reg": 7
+ },
+ {
+  "id": "haeinsa",
+  "name": "해인사",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "경판 먹 탁본 한 장",
+  "desc": "가야산 깊은 골짜기에 신라 애장왕 때 세운 큰 절. 장경판전 두 채에 팔만 장이 넘는 경판이 빽빽이 꽂혀 있",
+  "reg": 6
+ },
+ {
+  "id": "mireuksa",
+  "name": "미륵사 터",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "연꽃무늬 수막새",
+  "desc": "백제 무왕이 왕비의 청으로 연못을 메워 세웠다는 큰 절의 터. 미륵이 세 번 설법한다는 뜻을 따라 탑 셋, ",
+  "reg": 6
+ },
+ {
+  "id": "baidinh",
+  "name": "바이딘 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "동굴 법당의 청동 향로",
+  "desc": "닌빈 땅 바이딘 산기슭의 오래된 절. 리 왕조의 선승 응우옌 민 콩이 산속 동굴에 부처와 신을 모시고 지었다",
+  "reg": 8
+ },
+ {
+  "id": "sagrada",
+  "name": "사그라다 파밀리아 성당",
+  "cat": "ruin",
+  "faith": true,
+  "fut": true,
+  "rel": "가우디의 석고 모형 조각",
+  "desc": "바르셀로나에 짓고 있는 성가족 대성당. 건축가 가우디가 평생을 바쳤지만 다 짓기까지 백 년이 넘게 걸린다고 ",
+  "reg": 0
+ },
+ {
+  "id": "nabawi",
+  "name": "알마스지드 안나바위 (예언자의 모스크)",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "순례자의 대추야자 염주",
+  "desc": "예언자 무함마드가 메디나에 와서 손수 지은 모스크. 처음에는 대추야자 줄기를 기둥 삼고 종려잎을 지붕에 얹은",
+  "reg": 4
+ },
+ {
+  "id": "kaaba",
+  "name": "카바 신전",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "키스와의 금실 자수 조각",
+  "desc": "메카의 큰 모스크 한가운데 검은 비단 휘장(키스와)을 두른 네모난 돌집. 세상의 무슬림이 하루 다섯 번 이쪽",
+  "reg": 4
+ },
+ {
+  "id": "sarnath",
+  "name": "녹야원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "법륜이 새겨진 사암 조각",
+  "desc": "바라나시 북쪽, 사슴이 뛰놀던 동산. 깨달음을 얻은 부처가 이곳에서 다섯 벗에게 처음 법을 설하여 법의 바퀴",
+  "reg": 5
+ },
+ {
+  "id": "putuo",
+  "name": "보타산 — 관음의 섬",
+  "cat": "nature",
+  "faith": false,
+  "fut": false,
+  "rel": "보타산 관음 부적",
+  "desc": "절강 앞바다 주산 군도의 작은 섬. 관음보살이 머무는 곳이라 하여 섬 전체가 절과 암자로 덮였다. 바다 건너",
+  "reg": 6
+ },
+ {
+  "id": "tiantan",
+  "name": "천단",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "푸른 유리 기와 조각",
+  "desc": "북경 성 남쪽, 명나라 영락제가 자금성과 함께 세운 하늘 제사터. 둥근 세 겹 지붕을 얹은 기년전에서 황제가",
+  "reg": 6
+ },
+ {
+  "id": "shaolin",
+  "name": "숭산 소림사",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "소림 곤봉",
+  "desc": "숭산 소실산 기슭, 북위 때 세운 절. 인도에서 온 달마가 뒷산 굴에서 아홉 해 동안 벽을 마주하고 앉아 선",
+  "reg": 6
+ },
+ {
+  "id": "dayanta",
+  "name": "대안탑",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "급제자 이름 탁본",
+  "desc": "서안 대자은사 안의 벽돌탑. 인도에서 열일곱 해 만에 돌아온 현장 법사가 가져온 경전과 불상을 지키려고 당 ",
+  "reg": 6
+ },
+ {
+  "id": "qufu",
+  "name": "곡부 공묘",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "제례에 쓰던 옥 홀",
+  "desc": "공자가 태어난 노나라 곡부에, 그가 세상을 떠난 이듬해 옛집을 사당으로 삼은 데서 시작한 사당. 왕조마다 넓",
+  "reg": 6
+ },
+ {
+  "id": "wudang",
+  "name": "무당산 금전",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "금전의 구리 풍경",
+  "desc": "호북 북서쪽 무당산은 도교의 북방 신 진무대제가 수련한 산이라 한다. 명나라 영락제가 군사와 장인 수십만을 ",
+  "reg": 6
+ },
+ {
+  "id": "manasarovar",
+  "name": "마나사로바르 호수",
+  "cat": "nature",
+  "faith": true,
+  "fut": false,
+  "rel": "호수 물을 담은 구리병",
+  "desc": "카일라스산 남쪽 기슭의 높은 호수. 힌두는 브라흐마가 마음으로 지은 호수라 하고, 불교도는 붓다의 어머니가 ",
+  "reg": 7
+ },
+ {
+  "id": "cedars",
+  "name": "레바논 삼나무 숲",
+  "cat": "nature",
+  "faith": false,
+  "fut": false,
+  "rel": "삼나무 송진 덩이",
+  "desc": "레바논 산맥 높은 골짜기에 남은 늙은 삼나무 숲. 솔로몬은 이 나무로 예루살렘 성전을 지었고, 페니키아와 이",
+  "reg": 4
+ },
+ {
+  "id": "ellora",
+  "name": "엘로라의 카일라사 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "현무암 코끼리 조각",
+  "desc": "데칸 고원의 현무암 벼랑에 서른넷 굴 사원이 늘어서 있다. 불교·힌두·자이나교 사원이 나란히 있고, 그 가운",
+  "reg": 5
+ },
+ {
+  "id": "khajuraho",
+  "name": "카주라호 사원군",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "천녀 조각 사암 조각",
+  "desc": "분델칸드 숲속, 찬델라 왕들이 세운 사원 수십 채. 산봉우리처럼 겹겹이 솟은 지붕 아래 바깥벽이 춤추는 천녀",
+  "reg": 5
+ },
+ {
+  "id": "konark",
+  "name": "코나르크 태양 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "돌 바퀴살 조각",
+  "desc": "벵골만 바닷가, 태양신 수리야가 타고 다니는 수레를 돌로 만든 사원. 돌 바퀴 스물네 개가 기단에 새겨져 있",
+  "reg": 5
+ },
+ {
+  "id": "vittala",
+  "name": "비탈라 사원 — 노래하는 기둥",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "노래하는 기둥 조각",
+  "desc": "비자야나가르 퉁가바드라 강가, 비슈누를 모신 사원. 뜰에는 가루다를 모신 돌 수레가 서 있는데, 돌 바퀴가 ",
+  "reg": 5
+ },
+ {
+  "id": "harmandir",
+  "name": "하르만디르 사히브 — 감로 연못의 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "랑가르의 놋쇠 밥그릇",
+  "desc": "라호르 동쪽 암리차르, 「불사의 감로 연못」 한가운데 세운 시크교의 사원. 다섯째 구루 아르잔이 1604년에",
+  "reg": 5
+ },
+ {
+  "id": "umayyad",
+  "name": "우마이야 모스크",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "금빛 유리 모자이크 조각",
+  "desc": "다마스쿠스 한가운데, 옛 로마 신전과 세례 요한 교회 자리에 칼리파 왈리드 1세가 지은 큰 모스크. 뜰을 두",
+  "reg": 4
+ },
+ {
+  "id": "shibam",
+  "name": "시밤 — 흙으로 쌓은 탑집 도시",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "흙벽돌 틀",
+  "desc": "하드라마우트 골짜기 한가운데, 흙벽돌로 쌓은 집 오백 채가 성벽 안에 빽빽이 솟은 도시. 집마다 대여섯 층이",
+  "reg": 4
+ },
+ {
+  "id": "folk_natchez",
+  "name": "나체즈 사람들",
+  "cat": "people",
+  "faith": false,
+  "fut": false,
+  "rel": "신전 불씨 흙 화로",
+  "desc": "「위대한 태양」이라 불리는 임금이 흙 언덕 위 집에 살고, 맞은편 언덕 신전에서는 꺼지지 않는 불을 지킨다.",
+  "reg": 10
+ },
+ {
+  "id": "gadir",
+  "name": "가디르의 헤라클레스 신전",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "멜카르트 청동상",
+  "desc": "카디스 앞 작은 섬에 페니키아 사람들이 세운 멜카르트(헤라클레스)의 신전 터. 청동 기둥 두 개에 바다 너머",
+  "reg": 0
+ },
+ {
+  "id": "guge",
+  "name": "구게 왕국의 차파랑 폐허",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "수틀레지 강 골짜기의 흙기둥 언덕에 굴과 궁전, 붉은 사원이 층층이 박혀 있다. 17세기에 무너진 왕국의 벽",
+  "reg": 7
+ },
+ {
+  "id": "kalachakra",
+  "name": "칼라차크라 경전",
+  "cat": "treasure",
+  "faith": true,
+  "fut": false,
+  "rel": "",
+  "desc": "「시간의 바퀴」라는 뜻의 밀교 경전. 북쪽 어딘가에 있는 숨은 왕국 샴발라와 그 왕들의 이름을 적고, 그곳에",
+  "reg": 7
+ },
+ {
+  "id": "pangboche",
+  "name": "팡보체 사원의 설인 머리가죽",
+  "cat": "treasure",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "에베레스트 아래 셰르파 마을의 작은 절이 모시는 원뿔 모양 머리가죽과 손뼈. 설인의 것이라고 한다. 승려들은",
+  "reg": 7
+ },
+ {
+  "id": "marib",
+  "name": "마리브 댐과 해의 신전",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "사바 왕국의 도읍 마리브. 골짜기를 가로막은 거대한 돌 댐이 사막을 밭으로 바꾸었다. 여덟 기둥이 선 해의 ",
+  "reg": 4
+ },
+ {
+  "id": "shabwa",
+  "name": "유향 길의 성채 샤브와",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "유향을 실은 낙타 대상이 반드시 지나야 했던 하드라마우트의 성채 도시. 유향의 열에 하나를 신전에 바쳐야만 ",
+  "reg": 4
+ },
+ {
+  "id": "arthurtomb",
+  "name": "아서 왕의 무덤",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "글래스턴베리 수도원 묘지 깊은 곳에서 1191년 수도사들이 파냈다는 참나무 관과 납 십자가. 「여기 아발론 ",
+  "reg": 1
+ },
+ {
+  "id": "hvalsey",
+  "name": "흐발세이 교회",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "",
+  "desc": "그린란드 피오르드 기슭에 지붕 없이 선 돌 교회. 1408년 이곳에서 치른 혼례를 마지막으로 노르드 사람들의",
+  "reg": 1
+ },
+ {
+  "id": "ramsetu",
+  "name": "아담의 다리 (라마 세투)",
+  "cat": "nature",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "인도와 실론 사이 얕은 바다에 모래톱과 산호초가 징검다리처럼 이어진다. 라마의 원숭이 군대가 바위를 던져 쌓",
+  "reg": 5
+ },
+ {
+  "id": "mahabali",
+  "name": "마하발리푸람 바닷가 사원",
+  "cat": "ruin",
+  "faith": true,
+  "fut": false,
+  "rel": "바닷가 사원의 나가 석상",
+  "desc": "벵골만 파도가 닿는 바위 위에 화강암으로 쌓은 사원. 뱃사람들은 「일곱 탑」이라 불렀다 — 나머지 여섯은 바",
+  "reg": 5
+ },
+ {
+  "id": "chicomoztoc",
+  "name": "치코모스톡 — 일곱 동굴",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "사카테카스 고원 언덕 위에 돌기둥 홀과 계단 피라미드가 남은 성채. 일곱 부족이 태어났다는 「일곱 동굴의 곳",
+  "reg": 10
+ },
+ {
+  "id": "sphinx",
+  "name": "스핑크스",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "모래 속의 꿈의 비석 탁본",
+  "desc": "기자의 피라미드 아래 석회암 언덕을 통째로 깎아 만든 거대한 석상. 사자의 몸에 왕의 얼굴을 하고 동쪽 해 ",
+  "reg": 4
+ },
+ {
+  "id": "luxor",
+  "name": "룩소르 신전",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "연꽃 기둥머리 조각",
+  "desc": "나일 강 동쪽 기슭, 테베의 남쪽 끝에 선 아몬 신의 신전. 입구의 탑문 앞에는 왕의 거상과 오벨리스크가 서",
+  "reg": 4
+ },
+ {
+  "id": "angkorthom",
+  "name": "앙코르 톰 — 바욘 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "미소 짓는 얼굴탑 조각",
+  "desc": "앙코르 와트 북쪽, 해자와 성벽으로 둘러싼 크메르의 마지막 도읍. 다섯 성문 위에는 사방을 굽어보는 거대한 ",
+  "reg": 8
+ },
+ {
+  "id": "jeronimos",
+  "name": "제로니무스 수도원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "밧줄 매듭 장식 돌조각",
+  "desc": "리스본 서쪽 벨렝의 강가에 마누엘 왕이 인도 항로를 연 것을 기려 지은 수도원. 돌기둥과 창틀에 밧줄·닻·산",
+  "reg": 0
+ },
+ {
+  "id": "giralda",
+  "name": "히랄다 탑 — 세비야 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "바람개비 여신상의 청동 깃",
+  "desc": "세비야 대성당 곁에 솟은 종탑. 아래는 알모하드 시대 대모스크의 첨탑이었고, 그리스도교도가 도시를 되찾은 뒤",
+  "reg": 0
+ },
+ {
+  "id": "santiago",
+  "name": "산티아고 데 콤포스텔라 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "순례자의 조가비",
+  "desc": "갈리시아의 언덕 위, 사도 야고보의 무덤 위에 세운 순례의 끝자리. 유럽 곳곳에서 걸어온 순례자들이 조가비를",
+  "reg": 0
+ },
+ {
+  "id": "stmartintours",
+  "name": "투르의 생마르탱 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "반쪽 망토 문양의 순례 배지",
+  "desc": "루아르 강가 투르에서 성 마르티노의 무덤 위에 세운 큰 순례 성당. 추운 날 거지에게 제 망토를 반으로 잘라",
+  "reg": 1
+ },
+ {
+  "id": "monreale",
+  "name": "몽레알레 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "금빛 모자이크 조각",
+  "desc": "팔레르모를 내려다보는 언덕에 노르만 왕 굴리엘모 2세가 세운 대성당. 안쪽 벽과 천장이 온통 금빛 모자이크로",
+  "reg": 2
+ },
+ {
+  "id": "milanduomo",
+  "name": "밀라노 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "분홍 무늬 칸돌리아 대리석",
+  "desc": "밀라노 한가운데 흰 대리석으로 짓고 있는 거대한 대성당. 백 년이 넘도록 공사가 이어지며, 지붕 위에 뾰족탑",
+  "reg": 2
+ },
+ {
+  "id": "sanmarco",
+  "name": "산 마르코 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "날개 달린 사자 청동 인장",
+  "desc": "베네치아 상인들이 알렉산드리아에서 몰래 빼 온 복음사가 마르코의 유해를 모신 대성당. 다섯 개의 둥근 지붕 ",
+  "reg": 2
+ },
+ {
+  "id": "smmaggiore",
+  "name": "산타 마리아 마조레 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "구유 나무 조각 성물함",
+  "desc": "로마의 언덕 위에 세운 성모의 대성당. 한여름에 눈이 내린 자리에 지으라는 꿈을 꾼 교황이 터를 정했다는 전",
+  "reg": 2
+ },
+ {
+  "id": "florenceduomo",
+  "name": "피렌체 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "돔 공사 도르래 설계도",
+  "desc": "피렌체를 덮는 붉은 벽돌 지붕. 너무 커서 아무도 지붕을 얹지 못하던 성당에, 브루넬레스키가 받침틀 없이 벽",
+  "reg": 2
+ },
+ {
+  "id": "chartres",
+  "name": "샤르트르 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "푸른 색유리 조각",
+  "desc": "보스 평원의 밀밭 위로 멀리서도 보이는 두 개의 서로 다른 첨탑. 불탄 옛 성당 자리에 다시 지은 고딕 대성",
+  "reg": 1
+ },
+ {
+  "id": "saintsernin",
+  "name": "생세르냉 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "순례자 성인 유골함 열쇠",
+  "desc": "툴루즈의 붉은 벽돌로 쌓은 커다란 로마네스크 순례 성당. 첫 주교 성 세르냉의 무덤 위에 세웠으며, 팔각 종",
+  "reg": 1
+ },
+ {
+  "id": "durham",
+  "name": "더럼 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "성 커스버트의 가슴 십자가",
+  "desc": "위어 강이 휘감아 도는 바위 언덕 위, 성 커스버트의 유해를 모신 노르만 대성당. 굵은 기둥마다 지그재그와 ",
+  "reg": 1
+ },
+ {
+  "id": "utrecht",
+  "name": "위트레흐트 성 마르틴 대성당 (돔)",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "외투를 가르는 성 마르틴 은 메달",
+  "desc": "저지대에서 가장 높은 종탑이 선 위트레흐트의 대성당. 투르의 성 마르틴에게 바쳤으며, 탑 위에 오르면 운하와",
+  "reg": 1
+ },
+ {
+  "id": "kyivsophia",
+  "name": "키이우 성 소피아 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "기도하는 성모 모자이크 조각;불사조상",
+  "desc": "키이우의 야로슬라프 대공이 콘스탄티노플의 지혜의 성당을 본떠 세운 대성당. 열세 개의 둥근 지붕 아래, 기도",
+  "reg": 1
+ },
+ {
+  "id": "sagres",
+  "name": "사그레스 항해 학교",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "엔히크 왕자의 해도 사본",
+  "desc": "유럽 서남쪽 끝의 바람 센 곶. 후세에는 「항해 학교」라 불렸지만 웅장한 학당이나 수도원 한 채가 있었던 것",
+  "reg": 0
+ },
+ {
+  "id": "palenque",
+  "name": "팔렝케",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "마야 글자 석회 부조 탁본",
+  "desc": "치아파스 밀림 언덕에 숨은 마야의 옛 도시. 계단식 피라미드 위의 「비문의 신전」 벽에는 마야 글자가 빼곡하",
+  "reg": 10
+ },
+ {
+  "id": "uxmal",
+  "name": "욱스말의 마법사의 피라미드",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "비의 신 착의 돌 가면 조각",
+  "desc": "유카탄의 낮은 언덕들 사이에 솟은, 모서리가 둥근 타원형 피라미드. 마법사 난쟁이가 하룻밤 새 쌓아 올렸다는",
+  "reg": 10
+ },
+ {
+  "id": "prambanan",
+  "name": "프람바난 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "라마야나 부조 조각;가루다상",
+  "desc": "자바 한가운데 들판에 시바·비슈누·브라흐마에게 바친 뾰족한 돌탑들이 빽빽이 솟은 힌두 사원. 가장 높은 시바",
+  "reg": 8
+ },
+ {
+  "id": "taprohm",
+  "name": "타 프롬 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "보석 박혔던 자리의 돌 벽",
+  "desc": "크메르 왕 자야바르만 7세가 어머니를 기려 세운 불교 사원. 버려진 뒤 거대한 무화과나무와 비단솜나무의 뿌리",
+  "reg": 8
+ },
+ {
+  "id": "banteaysrei",
+  "name": "반테아이 스레이",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "분홍 사암 데바타 조각",
+  "desc": "분홍빛 사암으로 지은 작은 힌두 사원. 「여인의 성채」라는 이름처럼 돌이 나무처럼 깎여 있어, 문틀 위 박공",
+  "reg": 8
+ },
+ {
+  "id": "preahvihear",
+  "name": "프레아 비히어 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "시바의 링가",
+  "desc": "당렉 산맥의 벼랑 끝에 시바를 모신 사원. 산 아래에서 꼭대기까지 길게 이어진 돌길과 다섯 겹의 문을 지나면",
+  "reg": 8
+ },
+ {
+  "id": "shwezigon",
+  "name": "쉐지곤 파고다",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "낫 정령의 목상",
+  "desc": "바간 왕조의 아노라타 왕이 짓기 시작해 짠싯타 왕이 끝낸 금빛 종 모양 불탑. 부처의 이와 뼈를 모셨다고 하",
+  "reg": 8
+ },
+ {
+  "id": "kyaiktiyo",
+  "name": "짜익티요 황금 바위",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "순례자의 금박 꾸러미",
+  "desc": "산꼭대기 벼랑 끝에 떨어질 듯 아슬아슬하게 걸린 커다란 바위. 순례자들이 붙인 금박으로 온통 금빛이고, 그 ",
+  "reg": 8
+ },
+ {
+  "id": "sukhothai",
+  "name": "수코타이 왓 마하탓",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "사왕칼록 청자 접시",
+  "desc": "타이 사람들의 첫 왕국 수코타이의 한가운데 절. 연꽃 봉오리 모양 탑 둘레에 크고 작은 탑 이백여 기와 걷는",
+  "reg": 8
+ },
+ {
+  "id": "phrasisanphet",
+  "name": "아유타야 왓 프라 시 산펫",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "금박 입힌 불상 손가락",
+  "desc": "아유타야 왕궁 안의 왕실 사원. 종 모양 흰 탑 셋이 나란히 서서 세 임금의 재를 모신다. 법당의 서 있는 ",
+  "reg": 8
+ },
+ {
+  "id": "myson",
+  "name": "미선 성역",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "압사라 춤꾼 사암 조각",
+  "desc": "참파 왕국의 왕들이 산으로 둘러싸인 골짜기에 대를 이어 세운 붉은 벽돌 사원들. 회반죽 없이 벽돌을 맞붙여 ",
+  "reg": 8
+ },
+ {
+  "id": "vanmieu",
+  "name": "하노이 문묘",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "진사 비석 탁본",
+  "desc": "리 왕조가 공자를 모시고 세운 사당이자 나라의 첫 대학 국자감. 연못을 낀 다섯 마당을 지나면, 돌거북 등에",
+  "reg": 8
+ },
+ {
+  "id": "watphou",
+  "name": "왓 푸",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "샘물 받던 돌 그릇",
+  "desc": "메콩 강가 산기슭에서 산꼭대기의 링가 모양 바위를 우러러 세운 크메르 사원. 긴 참배길과 저수지, 계단이 산",
+  "reg": 8
+ },
+ {
+  "id": "sanagustin",
+  "name": "산 아구스틴 교회",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "상아 성모상",
+  "desc": "에스파냐 사람들이 마닐라 성벽 안에 돌로 세운 아우구스티누스회의 교회. 대나무와 나무로 지은 앞선 교회들이 ",
+  "reg": 8
+ },
+ {
+  "id": "stpaulhill",
+  "name": "말라카 세인트 폴 언덕 교회",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "포르투갈 기사의 묘비 탁본",
+  "desc": "말라카를 차지한 포르투갈 사람들이 언덕 위에 세운 성모 교회. 뒤에 성 바울의 이름을 얻었다. 동방의 사도 ",
+  "reg": 8
+ },
+ {
+  "id": "besakih",
+  "name": "브사키 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "야자잎 제물 바구니",
+  "desc": "발리에서 가장 높은 화산 아궁산의 비탈에 계단처럼 층층이 들어선 「어머니 사원」. 스물세 개의 사원이 모였고",
+  "reg": 8
+ },
+ {
+  "id": "tanahlot",
+  "name": "타나롯 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "성스러운 샘물 단지;바다뱀 수호상",
+  "desc": "밀물이 차면 바다 위에 섬처럼 떠오르는 바위 위의 작은 사원. 자바에서 건너온 사제 니라르타가 이 바위에 머",
+  "reg": 8
+ },
+ {
+  "id": "sukuh",
+  "name": "수쿠 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "대장장이 신의 부조 조각",
+  "desc": "라우산 서쪽 비탈에 계단 피라미드처럼 쌓은 마자파힛 말기의 사원. 자바의 다른 사원과 달리 바다 건너 신대륙",
+  "reg": 8
+ },
+ {
+  "id": "jokhang",
+  "name": "조캉 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "버터 등잔",
+  "desc": "라사 한복판, 티베트 사람들이 가장 거룩하게 여기는 절. 송첸 감포 왕이 당나라에서 시집온 문성공주가 가져온",
+  "reg": 7
+ },
+ {
+  "id": "samye",
+  "name": "삼예 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "파드마삼바바의 금강저",
+  "desc": "얄룽창포 강 북쪽 모래 언덕 아래, 티베트에서 처음으로 스님을 길러 낸 절. 티송 데첸 왕이 인도에서 파드마",
+  "reg": 7
+ },
+ {
+  "id": "tashilhunpo",
+  "name": "타실훈포 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "비단 아플리케 탱화 조각",
+  "desc": "시가체의 산비탈을 금빛 지붕으로 덮은 큰 절. 쫑카파의 제자 겐둔 둡이 세웠다. 절 위쪽에 높다란 돌벽이 서",
+  "reg": 7
+ },
+ {
+  "id": "ganden",
+  "name": "간덴 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "쫑카파의 노란 모자",
+  "desc": "라사 동쪽 왕보르 산 등성이, 구름이 발아래 깔리는 높이에 쫑카파가 처음 세운 겔룩파의 절. 수백 채의 승방",
+  "reg": 7
+ },
+ {
+  "id": "sera",
+  "name": "세라 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "문답에 쓰는 염주",
+  "desc": "라사 북쪽 산기슭, 들장미가 피던 자리에 쫑카파의 제자 잠첸 최제가 세운 절. 오후가 되면 뜰의 나무 그늘에",
+  "reg": 7
+ },
+ {
+  "id": "drepung",
+  "name": "드레풍 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "큰 구리 차 솥의 국자",
+  "desc": "라사 서쪽 감보우체 산 아래, 흰 승방이 산자락을 뒤덮어 멀리서 보면 쌀을 쏟아 놓은 더미 같다고 「쌀 더미",
+  "reg": 7
+ },
+ {
+  "id": "sakya",
+  "name": "사캬 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "팍파 문자 패찰",
+  "desc": "잿빛 흙 언덕 아래 쿤 가문의 콘촉 걀포가 세운 절. 「사캬」는 흰 흙이라는 뜻으로, 이 고장의 집과 절은 ",
+  "reg": 7
+ },
+ {
+  "id": "kumbum",
+  "name": "쿰붐 사원 (타얼사)",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "야크 버터 꽃 조각",
+  "desc": "시닝 남서쪽 골짜기, 쫑카파가 태어난 자리에 세운 절. 그의 탯줄을 묻은 곳에서 자란 나무의 잎사귀마다 부처",
+  "reg": 7
+ },
+ {
+  "id": "gyantsekumbum",
+  "name": "갼체 쿰붐 탑",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "광물 물감 벽화 화첩",
+  "desc": "갼체 고을의 펠코르 최데 사원 안에 선 아홉 층 높이의 거대한 탑. 층마다 작은 법당이 수십 칸씩 둘러 있어",
+  "reg": 7
+ },
+ {
+  "id": "dazhao",
+  "name": "다자오 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "은 공양 그릇",
+  "desc": "몽골의 알탄 칸이 쿠케 호타(후허호토)에 세운 큰 절. 본당에는 은으로 부어 만든 석가모니 불상을 모셔 「은",
+  "reg": 7
+ },
+ {
+  "id": "stcatherine",
+  "name": "성 카타리나 수도원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "성 카타리나의 이콘",
+  "desc": "시나이산 기슭 메마른 골짜기에 유스티니아누스 황제가 쌓은 성채 같은 수도원. 모세가 보았다는 불붙은 떨기나무",
+  "reg": 4
+ },
+ {
+  "id": "suleymaniye",
+  "name": "쉴레이마니예 모스크",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "시난의 먹",
+  "desc": "이스탄불의 셋째 언덕 위에 술탄 쉴레이만이 건축가 시난에게 짓게 한 큰 모스크. 거대한 둥근 지붕 아래 기둥",
+  "reg": 2
+ },
+ {
+  "id": "selimiye",
+  "name": "셀리미예 모스크",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "이즈니크 타일 한 장",
+  "desc": "옛 도읍 에디르네의 언덕에 셀림 2세가 세운 모스크. 늙은 건축가 시난이 「나의 걸작」이라 부른 것으로, 둥",
+  "reg": 2
+ },
+ {
+  "id": "sumela",
+  "name": "수멜라 수도원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "절벽 교회의 성모 이콘 사본",
+  "desc": "흑해 남쪽 짙은 숲 골짜기, 깎아지른 절벽 중턱에 제비집처럼 붙어 지은 수도원. 사도 누가가 그렸다는 성모 ",
+  "reg": 2
+ },
+ {
+  "id": "ani",
+  "name": "아니 — 천 하나의 교회 도시",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "아르메니아 십자가 돌 조각",
+  "desc": "아르메니아 왕국의 옛 도읍. 협곡 위 삼각형 땅에 성벽을 두르고 교회를 하도 많이 지어 「천 하나의 교회 도",
+  "reg": 4
+ },
+ {
+  "id": "ibntulun",
+  "name": "이븐 툴룬 모스크",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "회반죽 덩굴무늬 조각",
+  "desc": "카이로에서 가장 오래된 모스크 가운데 하나. 넓은 마당을 뾰족 아치 회랑이 둘러싸고, 바깥으로 나선 계단이 ",
+  "reg": 4
+ },
+ {
+  "id": "philae",
+  "name": "필레 섬의 이시스 신전",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "이시스 매듭 부적",
+  "desc": "나일 강 첫째 폭포 위, 작은 섬 하나를 통째로 덮은 여신 이시스의 신전. 옛 이집트 신들에게 바치는 제사가",
+  "reg": 4
+ },
+ {
+  "id": "canchoroano",
+  "name": "칸초 로아노",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "타르테소스 금 목걸이",
+  "desc": "엑스트레마두라 과디아나 강 남쪽 들판, 물도랑으로 둘러싸인 흙벽돌 신전 궁전. 타르테소스 사람들이 지었는데,",
+  "reg": 0
+ },
+ {
+  "id": "meroe",
+  "name": "메로에 피라미드",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "쿠시 왕비의 방패 반지",
+  "desc": "나일 강 동쪽 사막의 모래언덕 위에 가파르고 뾰족한 작은 피라미드 수십 기가 무리 지어 서 있다. 쿠시 왕국",
+  "reg": 3
+ },
+ {
+  "id": "osireion",
+  "name": "오시레이온",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "『문의 책』 탁본",
+  "desc": "아비도스의 세티 1세 신전 뒤편, 땅을 깊이 파 내려간 자리에 붉은 화강암 통돌 기둥이 늘어선 지하 전당이 ",
+  "reg": 4
+ },
+ {
+  "id": "barabarcaves",
+  "name": "바라바르 석굴",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "아쇼카 왕 비문 탁본",
+  "desc": "가야 북쪽 바라바르 언덕, 단단한 화강암 덩어리 속을 통째로 파 들어간 석굴 몇 곳이 있다. 안쪽 벽과 둥근",
+  "reg": 5
+ },
+ {
+  "id": "elephantacaves",
+  "name": "엘레판타 석굴",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "문지기 신상의 돌 손",
+  "desc": "봄베이 앞바다의 작은 섬, 언덕 바위를 깎아 만든 커다란 석굴 사원 안에서 시바 신의 세 얼굴 거상이 어둠 ",
+  "reg": 5
+ },
+ {
+  "id": "niuheliang",
+  "name": "우하량 여신의 사당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "옥 저룡",
+  "desc": "요서의 우하량 산등성이, 땅속에 반쯤 파묻힌 사당 터에 흙으로 빚은 여인의 얼굴이 잠들어 있다. 사람 얼굴만",
+  "reg": 6
+ },
+ {
+  "id": "tillyatepe",
+  "name": "틸리야 테페 — 황금 언덕",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "나뭇잎 금관",
+  "desc": "발흐 서쪽 시베르간 들판, 옛 불의 신전이 무너진 흙 언덕 속에 금붙이로 온몸을 덮은 여섯 사람이 묻혀 있다",
+  "reg": 7
+ },
+ {
+  "id": "chavin",
+  "name": "차빈 데 우안타르",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "신전 벽의 돌머리",
+  "desc": "안데스 산맥 동쪽 기슭, 두 강이 만나는 골짜기에 돌로 쌓은 커다란 신전. 바깥벽에는 사람과 재규어가 뒤섞인",
+  "reg": 10
+ },
+ {
+  "id": "santajusta",
+  "name": "산타 후스타 엘리베이터",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "리스본 아랫동네에서 언덕 위 카르무 동네로 사람을 실어 올리는 쇠탑. 고딕 성당 창 같은 무늬의 쇠기둥 속에",
+  "reg": 0
+ },
+ {
+  "id": "galleria",
+  "name": "비토리오 에마누엘레 2세 갈레리아",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "밀라노 대성당 곁에 십자 모양으로 뻗은 지붕 덮인 거리. 쇠와 유리로 엮은 둥근 천장 아래 가게와 찻집이 늘",
+  "reg": 2
+ },
+ {
+  "id": "hassan2",
+  "name": "하산 2세 모스크",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "카사블랑카 바닷가, 바다 위로 내민 땅에 세운 거대한 모스크. 하늘을 찌를 듯한 첨탑 꼭대기에서 밤이면 메카",
+  "reg": 3
+ },
+ {
+  "id": "yamoussoukro",
+  "name": "야무수크로 평화의 성모 대성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "아프리카 상아 해안의 숲속 마을에 로마 성 베드로 대성당을 닮은 거대한 성당이 솟았다. 둥근 지붕은 그것보다",
+  "reg": 3
+ },
+ {
+  "id": "hejazrail",
+  "name": "히자즈 철도 메디나 역",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "다마스쿠스에서 사막을 건너 메디나까지 순례자를 실어 나르는 쇠길의 끝 역. 석 달 걸리던 낙타 순례길을 며칠",
+  "reg": 4
+ },
+ {
+  "id": "lotustemple",
+  "name": "연꽃 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "델리 남쪽에 활짝 핀 흰 연꽃 모양의 기도당. 대리석 꽃잎 스물일곱 장이 셋씩 모여 아홉 문을 열고, 둘레에",
+  "reg": 5
+ },
+ {
+  "id": "greathall",
+  "name": "인민대회당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "북경 천안문 광장 서쪽에 선 거대한 회의당. 열 달 만에 지었다는 기둥 늘어선 큰 집 안에 만 명이 앉는 강",
+  "reg": 6
+ },
+ {
+  "id": "sansebastian",
+  "name": "산 세바스티안 성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "마닐라의 쇠로 지은 고딕 성당. 지진과 불에 여러 번 무너진 끝에, 쇠 기둥과 쇠판을 바다 건너 벨기에에서 ",
+  "reg": 8
+ },
+ {
+  "id": "deathvalley",
+  "name": "데스 밸리",
+  "cat": "nature",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "메마른 산맥 사이로 길게 패인 골짜기 바닥이 하얀 소금으로 덮여 있다. 한낮에는 숨 쉬기도 힘들 만큼 뜨겁고",
+  "reg": 10
+ },
+ {
+  "id": "elmirador",
+  "name": "엘 미라도르",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "페텐 북쪽 끝없는 밀림 한가운데, 나무로 뒤덮인 산이 사실은 돌 신전이다. 꼭대기에 오르면 숲 바다 위로 다",
+  "reg": 10
+ },
+ {
+  "id": "choquequirao",
+  "name": "초케키라오",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "아푸리막 강 깊은 협곡 위, 깎아지른 산등성이를 평평하게 다져 돌 광장과 신전, 물길을 만들었다. 구름이 발",
+  "reg": 10
+ },
+ {
+  "id": "pachacamac",
+  "name": "파차카막",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "순례자의 채색 직물",
+  "desc": "바닷가 모래 언덕 위에 흙벽돌 신전들이 층층이 겹쳐 있다. 맨 위 태양 신전에서는 남쪽 바다가 한눈에 펼쳐지",
+  "reg": 10
+ },
+ {
+  "id": "sfsalvador",
+  "name": "상프란시스쿠 성당",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "바이앙 윗동네 광장 끝에 흰 성당 하나가 아른거린다. 문을 열면 벽과 천장, 기둥이 모두 금박 입힌 나무 조",
+  "reg": 10
+ },
+ {
+  "id": "upenn",
+  "name": "펜실베이니아 대학교",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "강 건너 거리에 붉은 벽돌과 돌로 지은 건물들이 아른거린다. 길가 벤치에 안경 쓴 노신사의 청동상이 앉아 있",
+  "reg": 10
+ },
+ {
+  "id": "brown",
+  "name": "브라운 대학교",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "언덕 꼭대기에 흰 첨탑 예배당과 벽돌 학당이 아른거린다. 잔디 마당에서는 저마다 다른 공부를 고른 학생들이 ",
+  "reg": 10
+ },
+ {
+  "id": "stanford",
+  "name": "스탠퍼드 대학교",
+  "cat": "ruin",
+  "faith": false,
+  "fut": true,
+  "rel": "",
+  "desc": "큰 만 남쪽 들판에 붉은 기와지붕과 모래빛 돌 회랑이 아른거린다. 야자수 길 끝 교회 정면에 금빛 모자이크 ",
+  "reg": 10
+ },
+ {
+  "id": "somnath",
+  "name": "솜나트 사원",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "시바의 링가 받침돌 조각",
+  "desc": "구자라트 남쪽 바닷가, 시바 신의 열두 빛기둥 가운데 첫째로 꼽히는 사원. 달의 신 소마가 시바에게 빌어 병",
+  "reg": 5
+ },
+ {
+  "id": "alnuri",
+  "name": "알 누리 대모스크",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "첨탑의 벽돌 무늬 조각",
+  "desc": "티그리스 강가 모술의 대모스크. 장기 왕조의 누르 앗딘이 세웠다. 벽돌 무늬를 일곱 띠로 쌓아 올린 첨탑이 ",
+  "reg": 4
+ },
+ {
+  "id": "aleppomosque",
+  "name": "알레포 대모스크",
+  "cat": "ruin",
+  "faith": false,
+  "fut": false,
+  "rel": "안뜰의 흑백 대리석 조각",
+  "desc": "알레포 성채 아래 시장 한가운데 선 우마이야 왕조의 대모스크. 세례자 요한의 아버지 즈가리야의 머리를 모셨다",
+  "reg": 4
+ },
+ {
+  "id": "ft_hanyang",
+  "name": "아버지의 편지",
+  "cat": "treasure",
+  "faith": false,
+  "fut": false,
+  "rel": "",
+  "desc": "한양 경복궁 담 밖, 사진 속 바로 그 자리. 근처 사찰의 노승이 두 해 전 이방인이 맡긴 기름종이 봉투를 ",
+  "reg": 6
+ }
+]

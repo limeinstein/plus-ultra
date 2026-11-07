@@ -356,7 +356,7 @@
         var key = I.pick(I.chain.exterior(drawingKind, c, drawingKind === b.kind ? b.arg : ''));
         // 그 고장 건물 그림을 쓰는 도시에서는, 유럽식 기본 그림 대신 그 고장 양식으로 그린다
         var cultureKey = A.cultureOf ? 'exteriors/' + drawingKind + '_' + A.cultureOf(c) : '';
-        if (key && es && key.indexOf('exterior-styles/') !== 0 && key.indexOf('@') < 0 && key !== cultureKey &&
+        if (key && es && key.indexOf('exterior-styles/') !== 0 && key.indexOf('pirate-islands/') !== 0 && key.indexOf('@') < 0 && key !== cultureKey &&
             A.cultureOf && A.cultureOf(c) !== 'europe') key = null;
         var flip = false;
         if (!key && SUBSTITUTE[drawingKind]) { key = I.pick(I.chain.exterior(SUBSTITUTE[drawingKind], c, '')); flip = !!key && b.kind !== 'govhall'; }

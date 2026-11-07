@@ -310,7 +310,7 @@
         desc: '「' + d.name + '」의 발견을 증명한다. 후원자에게 보고하거나 항구에서 발표할 때 건넨다.' });
     }
     // 발견 유물: 그 자리에서 보물·장신구·무기·서적·선수상 같은 것을 손에 넣는다 — 발견의 증거가 된다
-    var rel = tomb.stolen || mir ? [] : D.relicsOf(d.id), got = [];   // 신기루에서는 손에 넣을 것이 없다   // 도굴꾼이 부장품을 들고 달아났으면 손에 넣을 것이 없다
+    var rel = tomb.stolen ? [] : D.relicsOf(d.id).filter(function (r) { return !mir || r.mirageOk; }), got = [];   // mirageOk: 신기루로 본 공룡이라도 땅속의 화석은 손에 넣는다 (js/data/discrelics.js)   // 신기루에서는 손에 넣을 것이 없다   // 도굴꾼이 부장품을 들고 달아났으면 손에 넣을 것이 없다
     // 유물이 없는 보물·유적 발견은 예전처럼 값나가는 것을 조금 챙긴다 (세공 솜씨만큼 더)
     var loot = 0;
     if (!rel.length && !tomb.stolen && !mir && (d.cat === 'treasure' || d.cat === 'ruin')) {

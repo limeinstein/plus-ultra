@@ -14,7 +14,7 @@
   FK.local = function (c) {
     var s = S(); if (!c || !G.FOLK_CITY) return [];
     return (G.FOLK_CITY[c.id] || []).map(function (id) { return G.DISC[id]; }).filter(function (d) {
-      return d && !s.hints[d.id] && !G.Disc.foundByMe(d.id) && G.Disc.built(d);
+      return d && !s.hints[d.id] && !G.Disc.foundByMe(d.id) && G.Disc.built(d) && G.Disc.needMet(d);   // 먼저 찾아야 할 발견물이 있으면 그 뒤에야 (중국·향료제도·남방대륙 — 2026-11-07)
     });
   };
   /** 소문 + 그 사람들의 노래나 춤 한 줄 */

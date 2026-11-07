@@ -12,7 +12,11 @@
   H.enter = async function (c) {
     var sp = G.Scenes.mateSpeaker('first');
     var s = S();
-    if (s.loc.via === 'land') { await UI.say('우리 함대는 이 항구에 없습니다. 탐험대로 돌아가 배가 있는 곳까지 가야 합니다.', sp); return false; }
+    if (s.loc.via === 'land') {
+      // 이 항구에 남겨 둔 배가 있으면 거기에 오를 수 있다 (js/systems/strandfleet.js · 제보 2026-11-06)
+      if (G.Strand && G.Strand.hereByLand(c).length) { if (!(await G.Strand.offerByLand(c))) return false; G.Game.cityHud(); }
+      else { await UI.say('우리 함대는 이 항구에 없습니다. 탐험대로 돌아가 배가 있는 곳까지 가야 합니다.', sp); return false; }
+    }
     var line = c.id === s.player.home ? U.pick(['제독, 역시 모항이 좋군요.', '모항에 돌아오면 안심되는군요.', '출항할 때에는 말해 주십시오. 곧 준비하겠습니다.']) : U.pick(['출항할 때에는 말해 주십시오. 곧 준비하겠습니다.', '제독, 이 마을에서 잠깐 쉽시다.', '배는 잘 정박해 두었습니다.']);
     UI.toast(sp.name + ': ' + line, 'anchor', 2600);
     if (G.SeaMonsters) await G.SeaMonsters.tell(c, sp, false);

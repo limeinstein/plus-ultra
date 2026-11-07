@@ -28,13 +28,15 @@
     wrap(G.Wives, 'proposeMaid', 'love'); wrap(G.Wives, 'proposeMate', 'love');
     wrap(G.Sponsor, 'circumReturn', 'circum');
     wrap(G.Ending, 'show', 'gameover');
-    // 전설의 대륙(무 제국·아틀란티스)을 찾는 순간
+    // 전설의 대륙(무 제국·아틀란티스)을 찾는 순간 — 그 곡을 틀고, 지리상의 발견(갈래 geo)과 함께 팡파르 「Lumière Éclatante」를 한 번 울린다 (2026-11-07)
     var find = G.Disc && G.Disc.find;
     if (find && !find._moment) {
       var g = function (d) {
         var legend = d && (d.id === 'mu' || /atlantis/i.test(d.id) || /아틀란티스|무 대륙|무 제국/.test(d.name || ''));
-        if (!legend) return find.apply(this, arguments);
+        var fanfare = legend || (d && d.cat === 'geo' && !(G.Disc.foundByMe && G.Disc.foundByMe(d.id)));
+        if (!legend) { if (fanfare && G.Audio && G.Audio.jingle) G.Audio.jingle('discovery'); return find.apply(this, arguments); }
         moment('legend');
+        if (G.Audio && G.Audio.jingle) G.Audio.jingle('discovery');
         var r = find.apply(this, arguments);
         return r && r.then ? r.then(function (v) { resume(); return v; }, function (e) { resume(); throw e; }) : (resume(), r);
       };
