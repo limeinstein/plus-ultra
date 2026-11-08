@@ -1,0 +1,676 @@
+{
+  "date": "2026-11-08",
+  "mode": "built-in image_gen",
+  "portraits": [
+    {
+      "id": "dc_doughty",
+      "name": "토머스 다우티",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: English gentleman Thomas Doughty aged 32, clean handsome oval face, chestnut wavy hair, neat short moustache and beard, calculating eyes and smooth smile, elegant plum silk 1577 doublet with cream slashed sleeves, black feathered flat cap, one gloved hand holding a small wine goblet low at waist.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-c1f6f05c-6dfd-41d1-801b-1415ed209388.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_doughty.png",
+      "source_sha256": "9e4877cc002bd6b3023953cf80b0a02251e06f9c3c7d85622d47622e1cfd200e"
+    },
+    {
+      "id": "dc_walsingham",
+      "name": "프랜시스 월싱엄",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Francis Walsingham, English royal secretary aged 45, long lean face, receding dark hair, pointed graying beard, watchful restrained eyes, black velvet Elizabethan doublet and white pleated ruff, holding a tied bundle of secret papers at waist, no readable writing.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-f2b853a3-2db8-487f-b875-7299aaf32058.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_walsingham.png",
+      "source_sha256": "51ca028e354fb2e2b0d1ac0258ee228672352f040cc19352d95ba604f5a3cc73"
+    },
+    {
+      "id": "dc_guaras",
+      "name": "안토니오 데 과라스",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Antonio de Guaras, Spanish merchant and spy in London aged 57, broad smooth face, silver-black beard, slicked graying hair, warm practiced smile and shrewd eyes, black velvet cape over olive silk doublet, rings, counting two gold coins in one hand.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-abcb7a30-c85e-43b5-8e30-ad0f6863a0de.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_guaras.png",
+      "source_sha256": "bb9653af66e116865c86f84643b41493da7725afea2cc92335e6da09127ebc89"
+    },
+    {
+      "id": "dc_fletcher",
+      "name": "프랜시스 플레처",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Francis Fletcher, English fleet chaplain aged 33, narrow pale sea-worn face, short dark hair, small unkempt beard, stubborn earnest eyes, plain black 1570s Protestant clerical gown, modest white collar, worn notebook and quill held low at waist.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-1a43d13e-72d5-425f-9132-fe37fe586dee.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_fletcher.png",
+      "source_sha256": "7933a71d5c2f3cd1a53a5f05d6829f0d151e9cfd3daea766e3a7280c41320ac7"
+    },
+    {
+      "id": "dc_winter",
+      "name": "존 윈터",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: John Winter, English gentleman captain aged 28, youthful sunburned face, wavy sandy hair, short sandy beard, worried hesitant eyes, faded navy 1570s doublet, leather belt and plain cream shirt, hand lightly at a sheathed sword.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-5be40fa8-4e43-47db-bdb4-a35f105aa04a.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_winter.png",
+      "source_sha256": "ba892be63a3b0904d9195472a0068fbef1a80d673c16b3ccdadad85c400e1851"
+    },
+    {
+      "id": "dc_diego",
+      "name": "디에고",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Diego, Afro-Panamanian mariner and Cimarron man aged 28, tall lean strong build, deep warm brown skin, short tightly curled black hair, sparse beard, lively intelligent eyes, worn ochre open sleeveless jerkin over loose cream linen shirt, faded red waist sash, short sheathed dagger at belt. Dignified capable adult sailor.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-44f89949-cc01-46ce-9395-9c5609b8f1f5.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_diego.png",
+      "source_sha256": "58018d3e2ca655035705eabfb3379ff73143c2990f0a26ccd410d1c0041a3f84"
+    },
+    {
+      "id": "dc_anton",
+      "name": "산 후안 데 안톤",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: San Juan de Anton, Basque Spanish treasure ship captain aged 48, broad deeply tanned weathered face, thick dark eyebrows, short salt-and-pepper beard, incredulous expression with slightly parted lips, worn dark brown 1570s coat with silver buttons and blue sleeves, one hand open in questioning gesture at waist.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-8a4056e1-26a7-4cba-b676-432b38b4337e.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_anton.png",
+      "source_sha256": "ae916f4a8931407793a4c5bdb89e3720d88af5e4052d5ffb21de895a8987af27"
+    },
+    {
+      "id": "dc_toledo",
+      "name": "프란시스코 데 톨레도",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Francisco de Toledo, Viceroy of Peru aged 64, rigid gaunt elderly face, white short pointed beard, severe restrained anger, black silk 1570s doublet and cloak, white ruff, gold cross insignia on chest, sealed decree held in one hand at waist.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-2e9642fc-f1ac-4f6a-ae42-f0dcaf0dbce0.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_toledo.png",
+      "source_sha256": "fca8150769bc4aa8f3e7d941406f087cc36cf4e5ad3c5e92179b4f5c31b54ece"
+    },
+    {
+      "id": "dc_sarmiento",
+      "name": "페드로 사르미엔토 데 감보아",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Pedro Sarmiento de Gamboa, Spanish navigator and pursuit commander aged 47, angular scholar face and broad soldier shoulders, black hair streaked gray, close dark beard, alert stern eyes, dark brown leather jerkin over indigo doublet, brass astrolabe held at waist, sheathed sword at hip.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-aea3c1e7-f4e5-483a-8256-4ee4941f04cc.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_sarmiento.png",
+      "source_sha256": "fb558aa82f3fcfd9dd7c7b22243fb45fb4b0f587117ef118034c37f5dc1faf01"
+    },
+    {
+      "id": "dc_babullah",
+      "name": "술탄 바불라",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Sultan Babullah of Ternate aged 51, dignified Moluccan man with warm brown skin, neat dark beard, relaxed confident smile, gold-thread wrapped turban, richly embroidered emerald and gold long robe, ruby pendant and gold chains, one hand open in welcoming negotiation. Late 16th-century Indonesian court dress.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-9ad8d3ee-8e54-47af-b6e5-a99dd3464a2d.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_babullah.png",
+      "source_sha256": "797b7d65ad34d040e461a5e6a22321e8ae1779107a7636c1fc0ddca5d9bf0a81"
+    },
+    {
+      "id": "dc_miwok",
+      "name": "미웍의 늙은이",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Fictional elder of a Coast Miwok community in California aged 65, lined copper-brown face, long gray-black hair, observant calm deep-set eyes, modest local feather headband and woven feather cape over a woven plant-fiber knee-length wrap, shell bead necklace, hands relaxed. Respectful grounded coastal California design, no Plains war bonnet, no European clothing.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-78e6bae4-fbcf-4301-b77a-c90eaa5934cf.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_miwok.png",
+      "source_sha256": "44e6ac2675e9d524d75b908ad0fb0f9bf0c277d88ea5ac8d1316c913cfca8ffc"
+    },
+    {
+      "id": "dc_john",
+      "recordId": "dc_john_portrait",
+      "name": "존 다우티",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: John Doughty, English gentleman aged 29, handsome oval face resembling his elder brother Thomas, chestnut wavy hair, neat short moustache, sorrowful angry eyes, plain black Elizabethan mourning doublet and cloak, white collar, hand clenched at waist around a folded letter.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-029b9134-c6ff-46e3-9454-afc6566ebcef.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_john.png",
+      "source_sha256": "845cf5324af9a533b0877e29c7223a3348960dc9fcd1f6c635f3847f3fa01827"
+    },
+    {
+      "id": "dc_marchaumont",
+      "name": "마르쇼몽",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: French envoy Marchaumont aged 41, refined long face, curled brown hair, neat moustache and pointed beard, courteous diplomatic smile, black feathered cap, rich midnight-blue 1580s doublet with gold embroidery, white lace collar and cuffs, ceremonial sword sheathed at hip.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-3ccb9b5e-3568-4af2-a6af-78fe75ec9df4.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_marchaumont.png",
+      "source_sha256": "fe4ffb6a76d601b29c66c1d5a0e1f656d7f7d8cd8a79ded402a7452ab0269508"
+    },
+    {
+      "id": "dc_nuno",
+      "name": "누누 다 실바",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Nuno da Silva, Portuguese pilot aged 51, weathered long tan face, graying dark wavy hair and thick salt-and-pepper beard, tired thoughtful eyes, worn sea-green sailor coat over cream linen shirt, brown waist belt, hugging a wooden chart box and navigation journal at waist. Practical 1578 seafarer.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-92c15007-9895-4dda-9d74-4d962a15b16f.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/dc_nuno.png",
+      "source_sha256": "cf3c1f62630e2c3af205f87c04d1fb6b754f4775cfeaab7e6240596dd71c67bb"
+    },
+    {
+      "id": "nw_mendoza",
+      "name": "멘도사 추기경",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Pedro Gonzalez de Mendoza, Spanish cardinal aged 65, long elderly clean-shaven face, thin gray hair, clever leisurely smile, crimson late-15th-century cardinal hat and crimson mantle over white clerical garment, large ring on one hand resting over a closed book.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-cc915c2b-053b-47f6-9be6-b49e084e4b05.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/nw_mendoza.png",
+      "source_sha256": "a01188eee7587f4844af4de83bb3d743920c2dbc861f423803b7f4700554a67b"
+    },
+    {
+      "id": "nw_ovando",
+      "name": "오반도 총독",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Nicolas de Ovando, Spanish colonial governor aged 43, close gray beard, short dark-gray hair, cold exacting eyes, dark early-16th-century doublet under white cloak embroidered with a red Calatrava cross, leather belt, one hand on a closed ledger at waist.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-0db8b15c-5e06-489e-bcba-7d3cc35a25b4.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/nw_ovando.png",
+      "source_sha256": "a5277bbdb91ff423d222088e2d3e3cd24ab51e1a9d422169721a838f41b683bd"
+    },
+    {
+      "id": "nw_montesinos",
+      "name": "몬테시노스 수사",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Antonio de Montesinos, Dominican friar aged 36, tonsured head, clean-shaven angular face, intense fiery eyes, white Dominican habit under plain black mantle, right hand raised in restrained forceful sermon gesture, other hand holding a small closed book low at waist. Early 1510s.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-702df424-070e-455d-886b-aa99171beefd.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/nw_montesinos.png",
+      "source_sha256": "ef3213ce552cd225b6a894eee93a3ce78c8c198eecf19337f912873800e5ae00"
+    },
+    {
+      "id": "nw_lascasas",
+      "name": "라스 카사스",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Bartolome de las Casas, young Spanish priest aged 27, round thoughtful clean-shaven face, short chestnut tonsured hair, compassionate troubled eyes, plain black early-16th-century priest gown with a small white collar, holding a small worn prayer book with both hands at waist.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-e77cefa9-b074-49c7-b593-e7d56574d883.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/nw_lascasas.png",
+      "source_sha256": "b556a88c4f008ec8119f0027b4aaf90d012c730a79854561a2ba6ed774d169f0"
+    },
+    {
+      "id": "nw_enriquillo",
+      "name": "엔리키요",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Enriquillo, Taino leader aged 23, Caribbean Indigenous adult man with copper-brown skin, straight long black hair, firm thoughtful eyes, shell and stone bead necklace, loose cream early-16th-century Spanish linen shirt worn open at shoulder, broad woven cotton waist sash and opaque knee-length cotton wrap, modest European cloth draped over one shoulder. Proud dignified posture.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-d99962d6-9064-49c9-a416-5daf65bbb4b4.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/nw_enriquillo.png",
+      "source_sha256": "323532e2b84019063f1fc31ddd371833aee90e1276f2e560ced7a76d4889943e"
+    },
+    {
+      "id": "nw_cacique",
+      "name": "타이노 추장",
+      "prompt": "Use case: historical-scene. ONE character knee-up portrait for historical Age of Sail RPG Loop of Good Hope. Polished hand-painted semi-realistic 2D illustration, natural expressive face, finely painted period cloth and hands. Vertical 1024x1536. Single adult standing, complete headwear through BELOW BOTH KNEES, near-forward face, all hands and props within canvas, top and side margins. Genuine transparent background, no scenery, gradient, floor, cast shadow, frame, writing or watermark. Subject: Fictional Taino village cacique aged 53, Caribbean Indigenous man with warm copper-brown skin, lined tired face, straight black hair with gray strands, modest feather and cotton headband, gold guanin disk necklace, red and black painted geometric markings on shoulders and chest, opaque woven cotton knee-length wrap, relaxed tired hands, respectful human portrait.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-a250f498-ec35-4f87-b7cc-fe42f4795d0c.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/portraits/nw_cacique.png",
+      "source_sha256": "f745c0e6e250fc5cafb701b64404dac585111537876c5958d6bd0be9ba282ae4"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "dc_london",
+      "title": "알렉산드리아로 가는 배",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1577 London candlelit private study. Drake bends over a nautical chart with black-clad long-faced Walsingham and elegantly dressed plum-clad Thomas Doughty. An older Spanish merchant in black velvet quietly watches the exchange of an investment purse. Secretive amber lamplight, shuttered river window. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-90e1302b-c578-4838-8733-f36c9dd48ecd.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_london.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1577 London candlelit private study. Drake bends over a nautical chart with black-clad long-faced Walsingham and elegantly dressed plum-clad Thomas Doughty. An older Spanish merchant in black velvet quietly watches the exchange of an investment purse. Secretive amber lamplight, shuttered river window. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "d204bf75c85136d17f4898ca63aa39a21cf863fe14344d47525a9869088d164c"
+    },
+    {
+      "id": "dc_capeverde",
+      "title": "카보베르데의 포르투갈 배",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 Cape Verde harbor, dry volcanic shore beyond. Drake stands at the rail of the Pelican speaking to captured Portuguese pilot Nuno da Silva, weathered gray-bearded man in sea-green coat clutching chart box and journal, while English sailors secure a modest Portuguese merchant ship alongside. Tense negotiation, bright Atlantic morning, no violence. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-f7a251c6-a3b4-49b2-99d1-89fa535ff9e5.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_capeverde.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 Cape Verde harbor, dry volcanic shore beyond. Drake stands at the rail of the Pelican speaking to captured Portuguese pilot Nuno da Silva, weathered gray-bearded man in sea-green coat clutching chart box and journal, while English sailors secure a modest Portuguese merchant ship alongside. Tense negotiation, bright Atlantic morning, no violence. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "afd4d11f5875b9348200021bcf6fac613fc90a410395b3bcea8860cafcf8927e"
+    },
+    {
+      "id": "dc_plata",
+      "title": "남쪽 대서양의 다툼",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 cold southern Atlantic. On a rolling wooden expedition deck Drake and proud Thomas Doughty in plum silk face each other across dwindling provisions and rope coils. Dark-skinned tall sailor Diego and hesitant young captain John Winter watch uneasily. Gray wind-filled canvas overhead, tense division of gentlemen and sailors. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-47a6e269-a123-4fc7-9d47-afcc399af53b.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_plata.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 cold southern Atlantic. On a rolling wooden expedition deck Drake and proud Thomas Doughty in plum silk face each other across dwindling provisions and rope coils. Dark-skinned tall sailor Diego and hesitant young captain John Winter watch uneasily. Gray wind-filled canvas overhead, tense division of gentlemen and sailors. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "35c6d345219eb7453806c6dab5c3a000dfeb41235a04c1038cc4e75bed337c89"
+    },
+    {
+      "id": "dc_julian",
+      "title": "산훌리안의 재판",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 Port San Julian, bleak Patagonian bay. Drake sits sternly at a makeshift outdoor tribunal table opposite Thomas Doughty in plum doublet. Chaplain Fletcher in black holds a prayer book beside them, cold wind, silent adult crew in a semicircle, ships anchored behind. Solemn moral conflict before a sentence, no execution, axe, blood or corpses. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-c1001657-3316-4de2-9972-28f11ceefe5a.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_julian.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 Port San Julian, bleak Patagonian bay. Drake sits sternly at a makeshift outdoor tribunal table opposite Thomas Doughty in plum doublet. Chaplain Fletcher in black holds a prayer book beside them, cold wind, silent adult crew in a semicircle, ships anchored behind. Solemn moral conflict before a sentence, no execution, axe, blood or corpses. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "95a1b9d6ad8c28d9e8e6e676bf47dbc3fd7bc38d31b4ed7f14b0b02f0605a25b"
+    },
+    {
+      "id": "dc_hind",
+      "title": "골든 하인드호",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 entrance to Strait of Magellan. The Pelican now Golden Hind sails between icy mountain walls. Foreground Drake watches a carpenter affix a small gold-painted HIND deer emblem on stern woodwork; a pilot indicates narrow channels ahead. Two accompanying expedition ships, cold blue light with brief golden sun, no writing. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-c74c7e3d-2b23-43db-b519-ae88a17823b0.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_hind.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 entrance to Strait of Magellan. The Pelican now Golden Hind sails between icy mountain walls. Foreground Drake watches a carpenter affix a small gold-painted HIND deer emblem on stern woodwork; a pilot indicates narrow channels ahead. Two accompanying expedition ships, cold blue light with brief golden sun, no writing. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "1ed43c1a380edb7a2ef27103a1120a91655e1a4e3bace08d9143913890d38f99"
+    },
+    {
+      "id": "dc_storm",
+      "title": "땅끝의 폭풍",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 furious sea south of Tierra del Fuego. Golden Hind heels amid huge dark waves, canvas reefed, spray sweeping its timber rail. Drake grasps a mast and points toward low broken southern islands and open ocean beyond. A small distant companion vessel disappears into rain haze, no wreckage bodies. Immense storm and realization of open southern sea. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-970b72ba-93ab-40ac-b449-c98e03280ee8.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_storm.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 furious sea south of Tierra del Fuego. Golden Hind heels amid huge dark waves, canvas reefed, spray sweeping its timber rail. Drake grasps a mast and points toward low broken southern islands and open ocean beyond. A small distant companion vessel disappears into rain haze, no wreckage bodies. Immense storm and realization of open southern sea. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "769b7aab67053ba5b2d3134054febe646ba29e03bc020fbb955e3eb22538e4f8"
+    },
+    {
+      "id": "dc_chile",
+      "title": "모카 섬의 화살",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 Chilean coast after Mocha Island. Drake sits on a weathered deck with clean linen bandage beneath one eye, still smiling tiredly. Tall dark-skinned Diego in ochre vest offers a medicine chest while sailors carry herb sacks and water. Misty green coastline and a small coastal settlement beyond, no blood or open wound. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-779b2a0f-d520-4fdd-bf11-e1f815569bec.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_chile.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1578 Chilean coast after Mocha Island. Drake sits on a weathered deck with clean linen bandage beneath one eye, still smiling tiredly. Tall dark-skinned Diego in ochre vest offers a medicine chest while sailors carry herb sacks and water. Misty green coastline and a small coastal settlement beyond, no blood or open wound. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "5a41a4001a164e65d5aad9db1f989531ab133913707830ae6960ab1d457b55da"
+    },
+    {
+      "id": "dc_callao",
+      "title": "칼라오의 밤",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 Callao harbor at night. Small English rowing boat slips between anchored Spanish merchant ships; sailors quietly cut an anchor rope with a small knife. Golden Hind waits farther out, lanterns reflect in dark water, low colonial Lima shoreline in distance, Drake watching from near rail in dark cloak. Stealth and moonlit tension, no explosive battle. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-0fefe1a9-f8b0-40ba-838e-771774fb3163.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_callao.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 Callao harbor at night. Small English rowing boat slips between anchored Spanish merchant ships; sailors quietly cut an anchor rope with a small knife. Golden Hind waits farther out, lanterns reflect in dark water, low colonial Lima shoreline in distance, Drake watching from near rail in dark cloak. Stealth and moonlit tension, no explosive battle. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "93b6f9693e921dfb592d159306da95d63a66bf055464a394b2dada412c120b42"
+    },
+    {
+      "id": "dc_cacafuego",
+      "title": "카카푸에고",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 eastern Pacific treasure-ship capture. On Spanish galleon deck Drake offers a courteous open hand to astonished Basque captain San Juan de Anton, broad tanned face and silver-buttoned brown coat. An open chest reveals neatly stacked silver bars; sailors transfer chests between vessels in background. No fighting, bodies or gore, bright sea and immense sails. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-22a30651-30d2-4915-aa7e-31f7a22db7fa.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_cacafuego.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 eastern Pacific treasure-ship capture. On Spanish galleon deck Drake offers a courteous open hand to astonished Basque captain San Juan de Anton, broad tanned face and silver-buttoned brown coat. An open chest reveals neatly stacked silver bars; sailors transfer chests between vessels in background. No fighting, bodies or gore, bright sea and immense sails. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "1eef6c907d06553367cb7ae1b2726d9b710f3d98a1d609796bfc69dc09a670ca"
+    },
+    {
+      "id": "dc_guatulco",
+      "title": "과툴코의 바닷가",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 Huatulco tropical beach. Gray-bearded Portuguese pilot Nuno da Silva in sea-green coat hugs his wooden chart box, stepping into a waiting rescue rowing boat. Drake waves his cap from distant Golden Hind. Quiet relief under palm shadows, a visiting captain seen from behind gives Nuno a hand, no modern docks. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-de4e7fde-92c5-4b71-a0c9-13e8e24512e5.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_guatulco.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 Huatulco tropical beach. Gray-bearded Portuguese pilot Nuno da Silva in sea-green coat hugs his wooden chart box, stepping into a waiting rescue rowing boat. Drake waves his cap from distant Golden Hind. Quiet relief under palm shadows, a visiting captain seen from behind gives Nuno a hand, no modern docks. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "751d45cea2c88394989f2b0cec46254c4725704027b39a57a534e8a4a666b30e"
+    },
+    {
+      "id": "dc_albion",
+      "title": "노바 알비온",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 California coastal cove beneath white cliffs. Golden Hind careened ashore for repair, sailors scrape hull and apply pitch. Foreground Coast Miwok elder with shell necklace and local feather cape courteously offers a modest feather headpiece to Drake; nearby timber post has a small brass plate without readable marks. Respectful wary encounter, no Plains war bonnets. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-e92d3cac-374b-4e35-a50f-96b825e4f7a0.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_albion.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 California coastal cove beneath white cliffs. Golden Hind careened ashore for repair, sailors scrape hull and apply pitch. Foreground Coast Miwok elder with shell necklace and local feather cape courteously offers a modest feather headpiece to Drake; nearby timber post has a small brass plate without readable marks. Respectful wary encounter, no Plains war bonnets. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "7bf0118bea0eb52033441a5cc2b1c4fa0537ee013d9391ad534c506975a53648"
+    },
+    {
+      "id": "dc_ternate",
+      "title": "테르나테의 코라코라",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 Ternate harbor, volcanic green island and sultan palace beyond. Sultan Babullah in gold-thread turban and emerald robe welcomes Drake aboard a richly decorated Moluccan kora-kora with rows of paddlers in distance. Baskets of cloves beside them, warm tropical light, confident diplomatic smiles, period boats and woven cloth. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-55d35c69-7e03-4d75-a484-a48448a5bbc8.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_ternate.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 Ternate harbor, volcanic green island and sultan palace beyond. Sultan Babullah in gold-thread turban and emerald robe welcomes Drake aboard a richly decorated Moluccan kora-kora with rows of paddlers in distance. Baskets of cloves beside them, warm tropical light, confident diplomatic smiles, period boats and woven cloth. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "fd8f5d8507378ee807609db7a92384cb1214710789af7073ca563ed47b5d9b8e"
+    },
+    {
+      "id": "dc_reef",
+      "title": "셀레베스의 산호초",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1580 Sulawesi reef, Golden Hind stranded at an angle on shallow coral. Drake commands crew throwing cannon and sacks of cloves overboard as a helper ship pulls a taut towline. Chaplain Fletcher in black grips a prayer book. Turquoise reef beneath water, rising wind and urgent teamwork, no modern vessels. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-1ffafb08-93f6-4d39-8be7-f3a4a5f39d6b.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_reef.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1580 Sulawesi reef, Golden Hind stranded at an angle on shallow coral. Drake commands crew throwing cannon and sacks of cloves overboard as a helper ship pulls a taut towline. Chaplain Fletcher in black grips a prayer book. Turquoise reef beneath water, rising wind and urgent teamwork, no modern vessels. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "34d399ca8e1acf88265f9541f6c671860d9caf87db4d09b5b9e33e63060ee2cb"
+    },
+    {
+      "id": "dc_cape",
+      "title": "가장 아름다운 곶",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1580 Cape of Good Hope, majestic sunlit headlands under clearing clouds. Golden Hind glides toward open Atlantic; foreground exhausted Drake drinks fresh water from a wooden dipper offered by another captain seen from behind. Sailors refill water barrels, relief and long-voyage fatigue, vast landscape and luminous ocean. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-cbd05fe0-7a88-4c40-9151-4365f8765dde.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_cape.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1580 Cape of Good Hope, majestic sunlit headlands under clearing clouds. Golden Hind glides toward open Atlantic; foreground exhausted Drake drinks fresh water from a wooden dipper offered by another captain seen from behind. Sailors refill water barrels, relief and long-voyage fatigue, vast landscape and luminous ocean. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "5c0c9f421a5d629640c786707a67f75e069b561e2e135e31439dc048e9271ca8"
+    },
+    {
+      "id": "dc_lima",
+      "title": "리마의 부왕",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this historical RPG event illustration. Change ONLY the LEFTMOST standing recipient of the sealed commission. This person is the PLAYER captain being hired to HUNT Francis Drake, so he MUST NOT resemble Drake. Replace the left figure with an anonymous visiting sailor-captain viewed from BEHIND, only back of head and shoulder visible, plain dark NAVY wool coat and simple brown flat cap, no white pleated ruff, no red-gold brocade, no visible face. His right hand receives the sealed commission. Keep the elderly white-bearded viceroy at center and the dark-haired astrolabe navigator on right EXACTLY unchanged, same poses, faces and clothes. Keep table, map, room, lighting, panoramic composition and 2.25:1 aspect. No text, watermark or modern objects.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-8897bd0a-7f69-43e4-9e3c-26f201143863.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_lima_v2.png",
+      "recordId": "dc_lima_scene_v2",
+      "sourceId": "dc_lima_v2",
+      "revisionPrompt": "Use case: precise-object-edit. Edit this historical RPG event illustration. Change ONLY the LEFTMOST standing recipient of the sealed commission. This person is the PLAYER captain being hired to HUNT Francis Drake, so he MUST NOT resemble Drake. Replace the left figure with an anonymous visiting sailor-captain viewed from BEHIND, only back of head and shoulder visible, plain dark NAVY wool coat and simple brown flat cap, no white pleated ruff, no red-gold brocade, no visible face. His right hand receives the sealed commission. Keep the elderly white-bearded viceroy at center and the dark-haired astrolabe navigator on right EXACTLY unchanged, same poses, faces and clothes. Keep table, map, room, lighting, panoramic composition and 2.25:1 aspect. No text, watermark or modern objects.",
+      "reference": "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-01820c67-17e7-4233-abf4-cace15bcfd9d.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1579 Lima viceregal hall. Elderly white-bearded Francisco de Toledo in black silk and gold cross restrains his anger while handing a sealed pursuit commission across a carved table. Soldier-scholar Pedro Sarmiento with astrolabe and sheathed sword studies a Pacific chart nearby. Cool stone arches and restrained Spanish colonial grandeur, no readable writing. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-01820c67-17e7-4233-abf4-cace15bcfd9d.png"
+      ],
+      "source_sha256": "ca4a29706d873762ea7bdd186ec8a7ae9564980c5d38d18b7d24786bcecf90f6"
+    },
+    {
+      "id": "dc_john",
+      "title": "존 다우티",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this historical RPG event illustration. Change ONLY the LEFTMOST captain delivering the letter: he is the anonymous PLAYER and MUST NOT resemble Francis Drake. Replace his orange-and-gold brocade, elaborate white ruff and curly hair with a plain dark NAVY wool sailor coat with a simple cream linen collar and a modest brown flat cap, viewed entirely from BEHIND with no visible face. Preserve his hand delivering the folded letter. Keep the young mourning gentleman on the RIGHT exactly unchanged, same sad face, hair, black dress and clenched hand. Keep rain, doorway, Tudor riverside setting, color, mood and panoramic 2.25:1 composition. No text or watermark.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-898b3032-3f32-43e7-8709-c4004e52d123.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_john_v2.png",
+      "recordId": "dc_john_scene_v2",
+      "sourceId": "dc_john_v2",
+      "revisionPrompt": "Use case: precise-object-edit. Edit this historical RPG event illustration. Change ONLY the LEFTMOST captain delivering the letter: he is the anonymous PLAYER and MUST NOT resemble Francis Drake. Replace his orange-and-gold brocade, elaborate white ruff and curly hair with a plain dark NAVY wool sailor coat with a simple cream linen collar and a modest brown flat cap, viewed entirely from BEHIND with no visible face. Preserve his hand delivering the folded letter. Keep the young mourning gentleman on the RIGHT exactly unchanged, same sad face, hair, black dress and clenched hand. Keep rain, doorway, Tudor riverside setting, color, mood and panoramic 2.25:1 composition. No text or watermark.",
+      "reference": "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-0e09a5f5-5bc3-4cc0-bbbb-c0b16139d85d.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. 1580 London riverside doorway in gray rain. Young John Doughty in black mourning dress, chestnut hair and short moustache, receives his dead brother final folded letter from a visiting captain seen from behind. His free hand clenches, grief held inside. Tudor timber houses and Thames sailing boats in soft background, quiet intimate drama. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-0e09a5f5-5bc3-4cc0-bbbb-c0b16139d85d.png"
+      ],
+      "source_sha256": "383ef8f9f5db52a2987664a2d2d91a40b967337219149da462ccc6540bb87e27"
+    },
+    {
+      "id": "dc_deptford",
+      "title": "뎃퍼드의 기사",
+      "refs": [
+        "dc_drake"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. April 1581 Deptford, decorated Golden Hind deck. Drake kneels in new rust-red silk and gold chain. Elegant French envoy Marchaumont in midnight-blue embroidered doublet lightly touches his shoulder with ceremonial sword; Queen Elizabeth I in pearl-adorned ivory gown stands beside them after handing over sword. Courtiers and Thames beyond, celebratory spring sunlight, no writing. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-0420b52d-317d-40d9-9fc1-10a9aac9d5e0.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/dc_deptford.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Francis Drake matches reference: stocky English man late 30s, round tanned face, short curly brown hair, curled moustache and pointed brown beard, rust-red Elizabethan doublet with dark sleeves, white pleated ruff, dark cloak, sheathed sword. In working scenes clothing is weathered and simple. April 1581 Deptford, decorated Golden Hind deck. Drake kneels in new rust-red silk and gold chain. Elegant French envoy Marchaumont in midnight-blue embroidered doublet lightly touches his shoulder with ceremonial sword; Queen Elizabeth I in pearl-adorned ivory gown stands beside them after handing over sword. Courtiers and Thames beyond, celebratory spring sunlight, no writing. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\drake_half.webp"
+      ],
+      "source_sha256": "db3a01b72fb018c47ed914595f62676ff1d6de611b2da58e4bc0bc9597fedf7e"
+    },
+    {
+      "id": "nw_santafe",
+      "title": "산타페의 약속",
+      "refs": [
+        "colon"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. Winter 1492 road outside Granada gate. Columbus walks with head lowered, a mule carrying wooden chart box beside him. A mounted court messenger approaches from behind in a cloud of dust. Alhambra towers on the hill with small Castilian banners, pale winter sun, disappointment turning to possibility. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-05f94ee5-ab78-4010-8b6c-6d46a59ab6c7.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/nw_santafe.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. Winter 1492 road outside Granada gate. Columbus walks with head lowered, a mule carrying wooden chart box beside him. A mounted court messenger approaches from behind in a cloud of dust. Alhambra towers on the hill with small Castilian banners, pale winter sun, disappointment turning to possibility. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "source_sha256": "447898cc6529b405bdee7bf61e45c308bdc7e58fccb0862912c9a8c5c8861c9b"
+    },
+    {
+      "id": "nw_mutiny",
+      "title": "바다 한가운데의 사흘",
+      "refs": [
+        "colon"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. October 1492 endless Atlantic at sunset, deck of Santa Maria. Columbus stands with open arms calming a group of frightened frustrated adult sailors beside mainmast; some raise fists, others point back toward home. Green reed stems drift on sea, birds fly southwest. Early caravel rigging, tense faces, no assault or blood. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-1feaaa70-7f1d-4ee8-b9a1-93fe77a7cbcd.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/nw_mutiny.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. October 1492 endless Atlantic at sunset, deck of Santa Maria. Columbus stands with open arms calming a group of frightened frustrated adult sailors beside mainmast; some raise fists, others point back toward home. Green reed stems drift on sea, birds fly southwest. Early caravel rigging, tense faces, no assault or blood. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "source_sha256": "343f9e32587d21eaed152eeb37ee6bad72e7f77867a361bf45dcadb8bea5b29e"
+    },
+    {
+      "id": "nw_guanahani",
+      "title": "과나하니의 아침",
+      "refs": [
+        "colon"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. October 12 1492 Guanahani, luminous white beach and turquoise sea. Columbus kneels on sand holding modest Castilian banner, three small expedition ships anchored offshore. Taino adults in opaque cotton wraps cautiously approach from palm forest carrying parrots and cotton skeins. Curious wary human encounter, beautiful morning with uneasy undertone, respectful equal presence. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-c5f5b06b-478f-419f-befa-b13486c5adf0.png",
+      "mode": "built-in image_gen",
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/nw_guanahani.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. October 12 1492 Guanahani, luminous white beach and turquoise sea. Columbus kneels on sand holding modest Castilian banner, three small expedition ships anchored offshore. Taino adults in opaque cotton wraps cautiously approach from palm forest carrying parrots and cotton skeins. Curious wary human encounter, beautiful morning with uneasy undertone, respectful equal presence. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "source_sha256": "fd25ca3d2d78b3ad71f31093f153332d94f46d4cf8bad5901078b83f6c44e13b"
+    },
+    {
+      "id": "nw_egg",
+      "title": "콜론의 달걀",
+      "refs": [
+        "colon"
+      ],
+      "prompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. 1493 Barcelona candlelit banquet, low eye-level view across a long carved wooden table. A SINGLE white boiled EGG stands upright on its slightly flattened cracked base prominently at center foreground. Columbus stands beyond table with folded arms and knowing smile; elderly red-clad Cardinal Mendoza and several richly dressed nobles react in astonishment. Parrot feathers and small gold pieces on table, elegant intimate dramatic light. Egg is clear focal point. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-23262c04-4973-48ae-ab5a-601afddf9440.png",
+      "mode": "built-in image_gen",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. 1493 Barcelona candlelit banquet, low eye-level view across a long carved wooden table. A SINGLE white boiled EGG stands upright on its slightly flattened cracked base prominently at center foreground. Columbus stands beyond table with folded arms and knowing smile; elderly red-clad Cardinal Mendoza and several richly dressed nobles react in astonishment. Parrot feathers and small gold pieces on table, elegant intimate dramatic light. Egg is clear focal point. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/nw_egg.png",
+      "source_sha256": "ae7b409a196c3ea285f2e0d4f9c062da6f0ffc3b8c00d5ca0fb81e8744a9c7a8"
+    },
+    {
+      "id": "nw_encomienda",
+      "title": "엔코미엔다",
+      "refs": [
+        "colon"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit ONLY the LEFT recipient of the colonial governor offer. The recipient is an anonymous PLAYER captain, NOT Christopher Columbus. Replace his clean-shaven curly-haired face, black cap and burgundy-black mantle with a visiting captain seen entirely from BEHIND: simple brown flat cap, plain dark NAVY wool sailor coat, modest cream linen collar, no visible face and no ornate ruff. Preserve the governors white cloak with red Calatrava cross, his face and open ledger, dock, Taino workers, ships, horses, pigs, sugarcane, table, natural light and entire panoramic 2.25:1 composition. No text or watermark.",
+      "recordId": "nw_encomienda_scene_v2",
+      "sourceId": "nw_encomienda_v2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-e2fc21df-8f37-490f-aecc-75301922dcc2.png",
+      "mode": "built-in image_gen",
+      "revisionPrompt": "Use case: precise-object-edit. Edit ONLY the LEFT recipient of the colonial governor offer. The recipient is an anonymous PLAYER captain, NOT Christopher Columbus. Replace his clean-shaven curly-haired face, black cap and burgundy-black mantle with a visiting captain seen entirely from BEHIND: simple brown flat cap, plain dark NAVY wool sailor coat, modest cream linen collar, no visible face and no ornate ruff. Preserve the governors white cloak with red Calatrava cross, his face and open ledger, dock, Taino workers, ships, horses, pigs, sugarcane, table, natural light and entire panoramic 2.25:1 composition. No text or watermark.",
+      "reference": "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-dc2befb9-f024-4766-9c41-dd839bb3095f.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. Early 1500s Santo Domingo river dock, unfinished stone colonial city. Governor Ovando in white cloak with red Calatrava cross opens a ledger before a visitor. Behind him Taino adult laborers carry burdens toward a hillside while ships unload horses, pigs and sugarcane seedlings. Restrained critical sober mood, human dignity, no abuse, chains or graphic suffering. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "referenced_image_paths": [
+        "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-dc2befb9-f024-4766-9c41-dd839bb3095f.png"
+      ],
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/nw_encomienda_v2.png",
+      "source_sha256": "aeb7884b8f8b29c0b72b6031fa719fd1f37370329d484f42b32b0cf76724e1d1"
+    },
+    {
+      "id": "nw_sermon",
+      "title": "이들은 사람이 아닙니까",
+      "refs": [
+        "colon"
+      ],
+      "prompt": "Use case: precise-object-edit. Historical continuity correction to this 1511 Santo Domingo sermon scene: Christopher Columbus was not present. Change ONLY the seated clean-shaven curly-haired man in burgundy and black near the center foreground into an anonymous Spanish settler aged 50, short graying hair, close salt-and-pepper BEARD, plain dark BROWN wool doublet and cream collar, no distinctive hat or red-black mantle. Preserve seated pose and concerned listening expression. Keep the white-cloaked governor on far left, young black-clad priest behind, Dominican preacher at right and ALL other church details exactly unchanged. Same painterly style, light, panoramic 2.25:1. No text.",
+      "recordId": "nw_sermon_scene_v2",
+      "sourceId": "nw_sermon_v2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-42e85665-dcf7-4b6c-9bf7-1f92411dc13a.png",
+      "mode": "built-in image_gen",
+      "revisionPrompt": "Use case: precise-object-edit. Historical continuity correction to this 1511 Santo Domingo sermon scene: Christopher Columbus was not present. Change ONLY the seated clean-shaven curly-haired man in burgundy and black near the center foreground into an anonymous Spanish settler aged 50, short graying hair, close salt-and-pepper BEARD, plain dark BROWN wool doublet and cream collar, no distinctive hat or red-black mantle. Preserve seated pose and concerned listening expression. Keep the white-cloaked governor on far left, young black-clad priest behind, Dominican preacher at right and ALL other church details exactly unchanged. Same painterly style, light, panoramic 2.25:1. No text.",
+      "reference": "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-771febd1-02da-469b-bfac-2c5976ea09b4.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. 1511 Santo Domingo modest church with thatched roof and rough timber pulpit. Tonsured Dominican Montesinos in white habit and black mantle raises a hand in passionate sermon. Governor in white cross-embroidered cloak and wealthy settlers sit tense in front row. Young round-faced Las Casas in black priest gown clasps his hands at rear. Warm light through openings, moral confrontation. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "referenced_image_paths": [
+        "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-771febd1-02da-469b-bfac-2c5976ea09b4.png"
+      ],
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/nw_sermon_v2.png",
+      "source_sha256": "4bfe000df53be5cb48605742ed49608e437ca599dd3d40a9b4ab6d12e1fec3d2"
+    },
+    {
+      "id": "nw_pox",
+      "title": "천연두 — 의원의 손",
+      "refs": [
+        "colon"
+      ],
+      "prompt": "Use case: precise-object-edit. Historical continuity correction to this 1518-1520 Taino village medical scene: REMOVE ONLY the standing European man in burgundy and black with black cap on the FAR LEFT. Columbus must not appear. Fill his former area naturally with the existing sunlit thatched Taino village houses, woven baskets and greenery; do not add a new person. Keep physician giving water to resting child, older seated cacique, young Taino man at right, hammock, cooking pot, all faces and poses unchanged. Preserve hopeful painterly lighting and wide 2.25:1 composition. No disease lesions, blood, text or watermark.",
+      "recordId": "nw_pox_scene_v2",
+      "sourceId": "nw_pox_v2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7\\exec-b7d94d0a-f6cd-402b-839c-d97ce0afbf1b.png",
+      "mode": "built-in image_gen",
+      "revisionPrompt": "Use case: precise-object-edit. Historical continuity correction to this 1518-1520 Taino village medical scene: REMOVE ONLY the standing European man in burgundy and black with black cap on the FAR LEFT. Columbus must not appear. Fill his former area naturally with the existing sunlit thatched Taino village houses, woven baskets and greenery; do not add a new person. Keep physician giving water to resting child, older seated cacique, young Taino man at right, hammock, cooking pot, all faces and poses unchanged. Preserve hopeful painterly lighting and wide 2.25:1 composition. No disease lesions, blood, text or watermark.",
+      "reference": "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-cee590cc-7d3d-426a-aeef-9bb2575f0984.png",
+      "generationPrompt": "Use case: historical-scene. ONE continuous cinematic event illustration for historical sailing RPG Loop of Good Hope. Wide panoramic 2.25:1, target 1881x836. Polished hand-painted semi-realistic 2D artwork, natural anatomy, expressive faces, tactile wood and sailcloth, atmospheric depth. Main action within central 75% of image height. No montage, panels, frame, text, readable writing, watermark, modern objects or graphic injuries. Christopher Columbus matches reference: light-skinned middle-aged clean-shaven Genoese man, curly chestnut hair, strong angular face, soft black period cap, burgundy and black late-15th-century doublet and mantle, cream linen collar. 1518-1520 Taino village beside Caribbean forest, round thatched bohio houses. A compassionate European ship physician with linen cloth over mouth carefully gives a bowl of water to a resting child covered in clean cloth in a hammock, no lesions shown. Young Taino leader Enriquillo in open linen shirt and cotton waist wrap watches, an older tired cacique nearby, simmering medicinal pot, subdued hopeful light. No wounds, visible symptoms, bodies or horror. Character identities above apply only to people explicitly included in this scene; do not add absent people.",
+      "initial_referenced_image_paths": [
+        "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\rivals\\크리스토발 콜론_half.webp"
+      ],
+      "referenced_image_paths": [
+        "C:/Users/User/.codex/generated_images/01a1b9e9-2c92-7ca1-8b82-7b9024f05ef7/exec-cee590cc-7d3d-426a-aeef-9bb2575f0984.png"
+      ],
+      "workspace_source": "artifacts/drake-newworld-art-20261108/sources/scenes/nw_pox_v2.png",
+      "source_sha256": "258c7c92636291911e61a62a44b50f876739ce9307cc2d1fe1fd0e3722026c33"
+    }
+  ],
+  "reused": [
+    {
+      "id": "dc_drake",
+      "key": "portraits/rivals/프랜시스 드레이크",
+      "mateKey": "portraits/mates/drake"
+    },
+    {
+      "id": "colon",
+      "key": "portraits/rivals/크리스토발 콜론"
+    }
+  ]
+}

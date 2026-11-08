@@ -1648,6 +1648,11 @@
       if (G.ColonyCo && G.ColonyCo.seaPending()) await G.ColonyCo.atSea();   // 트랑케바르·퐁디셰리·토바고·다리엔 앞바다 (js/systems/colonyco.js)
       if (G.Rovers && G.Rovers.seaPending()) await G.Rovers.atSea();   // 스페르베르·하멜 · 해적(오말리·보니와 리드·검은 수염) (js/systems/rovers.js)
       if (G.SEAsia && G.SEAsia.seaPending()) await G.SEAsia.atSea();   // 세부의 레가스피 · 마닐라 만 (js/systems/seasia16.js)
+      if (G.Magellan && G.Magellan.seaPending()) await G.Magellan.atSea();   // 마가야네스의 함대를 바다에서 만나면 — 대서양·산훌리안·해협·큰 바다·세부 (js/systems/magellan.js)
+      if (G.DrakeCirc && G.DrakeCirc.seaPending()) await G.DrakeCirc.atSea();   // 드레이크의 함대를 바다에서 만나면 — 카보베르데·산훌리안·해협·칼라오·노바 알비온·산호초 (js/systems/drakecirc.js)
+      if (G.ColonVoy && G.ColonVoy.seaPending()) await G.ColonVoy.atSea();   // 콜론의 함대를 바다에서 만나면 — 과들루프·라 나비다드·쿠바·파리아·과나하·벨렌·자메이카 (js/systems/colonvoy.js)
+      if (G.ZhengHe && G.ZhengHe.seaPending()) await G.ZhengHe.atSea();   // 정화의 유령 보선 — 캘리컷 · 실론 · 말라카 · 황해 (js/systems/zhenghe.js)
+      if (G.PiriMap && G.PiriMap.seaPending()) await G.PiriMap.atSea();   // 피리 레이스의 해도 — 산 브랜던의 섬 · 아브롤류스 암초 (js/systems/pirimap.js)
       if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);

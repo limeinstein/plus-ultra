@@ -229,6 +229,9 @@
     ['SpiceMactan', 'daily', 'B'],           // 향료제도와 막탄
     ['MacDang', 'daily', 'B'],               // 막 왕조의 성립
     ['SundaJohor', 'daily', 'B'],            // 순다클라파와 자야카르타 · 조호르
+    ['Magellan', 'daily', 'B'],              // 마가야네스의 세계 일주
+    ['DrakeCirc', 'daily', 'B'],             // 드레이크의 세계 일주
+    ['ColonVoy', 'daily', 'B'],              // 콜론의 탐사
     ['Imjin', 'daily', 'B'],                 // 임진왜란
     ['Globe', 'daily', 'B'],                 // 셰익스피어와 글로브의 불
     ['Succession', 'year', function (m) { return m && m.icon === 'crown' ? 'B' : null; }],   // 군주·후원자의 대가 바뀜 (유품·기억은 일상)

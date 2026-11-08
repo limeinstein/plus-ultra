@@ -39,6 +39,21 @@ PREFERRED_FILES = {
     'portraits/mates/nc_okran_half': 'portraits/mates/nc_okran_ref20261106_half.webp',
 }
 
+# 드레이크·콜럼버스 그림 요청(2026-11-08): 신대륙의 기존 원화는 남긴다.
+PREFERRED_FILES.update({
+    'legend-events/' + scene: 'legend-events/' + scene + '_v20261108.webp'
+    for scene in ('dc_lima', 'dc_john')
+})
+PREFERRED_FILES.update({
+    'portraits/history/' + person + suffix: 'portraits/history/' + person + '_v20261108' + suffix + '.webp'
+    for person in ('nw_mendoza', 'nw_ovando', 'nw_montesinos', 'nw_lascasas', 'nw_enriquillo', 'nw_cacique')
+    for suffix in ('', '_half')
+})
+PREFERRED_FILES.update({
+    'legend-events/' + scene: 'legend-events/' + scene + '_v20261108.webp'
+    for scene in ('nw_santafe', 'nw_mutiny', 'nw_guanahani', 'nw_egg', 'nw_encomienda', 'nw_sermon', 'nw_pox')
+})
+
 # 일곱 해적섬 여급의 참고 얼굴·화려한 의상 수정본. 원본 파일과 논리 키는 보존한다.
 for pirate_maid_zone in ('med', 'atl', 'north', 'amer', 'ind', 'sea', 'east'):
     pirate_maid_key = 'portraits/npc/pirate-islands/' + pirate_maid_zone + '/servant'

@@ -193,6 +193,9 @@
       if (G.SpiceMactan && G.SpiceMactan.pending()) await G.SpiceMactan.check();   // 향료제도와 막탄 — 말라카·암보이나·테르나테·브루나이 (js/systems/spicemactan.js)
       if (G.MacDang && G.MacDang.pending()) await G.MacDang.check();   // 막 왕조의 성립 — 교도(탕롱)·유에 (js/systems/macdang.js)
       if (G.SundaJohor && G.SundaJohor.pending()) await G.SundaJohor.check();   // 순다클라파와 자야카르타 · 조호르 — 반탐·말라카 (js/systems/sundajohor.js)
+      if (G.Magellan && G.Magellan.pending()) await G.Magellan.check();   // 마가야네스의 세계 일주 — 세빌리아의 다섯 척 (js/systems/magellan.js)
+      if (G.DrakeCirc && G.DrakeCirc.pending()) await G.DrakeCirc.check();   // 드레이크의 세계 일주 — 런던·리마·파나마·뎃퍼드 (js/systems/drakecirc.js)
+      if (G.ColonVoy && G.ColonVoy.pending()) await G.ColonVoy.check();   // 콜론의 탐사 — 카디스·산토도밍고·그라나다·세비야 (js/systems/colonvoy.js)
       if (G.Imjin && G.Imjin.pending()) await G.Imjin.check();   // 임진왜란 — 동래·한양·한산도 (js/systems/imjin.js)
       if (G.Globe && G.Globe.pending()) await G.Globe.check();   // 셰익스피어와 글로브의 불 — 앤 해서웨이 (js/systems/globe.js)
       if (G.GalPisa && G.GalPisa.pending()) await G.GalPisa.check();   // 갈릴레오와 피사의 사탑 (js/systems/galpisa.js)
@@ -219,6 +222,8 @@
       if (G.Rovers && G.Rovers.pending()) await G.Rovers.check();   // 메이플라워(물자·첫 겨울·왐파노아그·추수 잔치) · 한양의 박연 (js/systems/rovers.js)
       if (G.WifeFeud && G.WifeFeud.pending()) await G.WifeFeud.check();   // 두 부인이 한 도시에 — 질투와 부부싸움 (js/systems/wifefeud.js)
       if (G.SEAsia && G.SEAsia.pending()) await G.SEAsia.check();   // 16세기 동남아 — 바인나웅 · 란쌍 · 우르다네타 · 아유타야 함락 (js/systems/seasia16.js)
+      if (G.ZhengHe && G.ZhengHe.pending()) await G.ZhengHe.check();   // 정화의 보선 — 아프리카 항구의 소문 · 이긴 뒤의 행선 패 (js/systems/zhenghe.js)
+      if (G.PiriMap && G.PiriMap.pending()) await G.PiriMap.check();   // 피리 레이스의 해도 — 이스탄불 · 산토도밍고 · 바이아 (js/systems/pirimap.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;

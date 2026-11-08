@@ -474,7 +474,7 @@
     var foe = npc.monster ? G.SEA_MONSTER_ART[npc.monster].name : npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단';
     UI.toast(arg.battle ? '저장한 해전을 이어갑니다.' : foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! ' + (st.terrain.hasLand ? '주변 섬과 해안은 통과할 수 없습니다. ' : '') + '방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5600);
   };
-  B.exit = function (next) { if (st && st.unkey) st.unkey(); if (G.Ship3D) G.Ship3D.dispose(); var root = document.getElementById('ui'); if (root) root.classList.remove('at-battle'); if (G.Rain && next !== 'sea') G.Rain.leave(); st = null; battleState = null; };
+  B.exit = function (next) { if (st && st.unkey) st.unkey(); if (G.Ship3D) G.Ship3D.dispose(); var root = document.getElementById('ui'); if (root) root.classList.remove('at-battle'); if (G.Rain && next !== 'sea') G.Rain.leave(); st = null; battleState = null; ghostCv = null; };
   B.debug = function () { return st; };
 
   // ---------------------------------------------------------------- UI
@@ -2645,6 +2645,21 @@
     ctx.drawImage(im, sr[0], sr[1], sr[2], sr[3], -64 + driftX, -44 + driftY, 1728, 972);
     ctx.restore();
   }
+  /** 유령선: 배 그림을 따로 그려 푸른 빛으로 물들이고, 반쯤 비치게 얹는다 (정화의 보선 js/systems/zhenghe.js · npc.ghost) */
+  var ghostCv = null;
+  function drawGhostShip(ctx, p, heading, length, spec, b) {
+    var tr = ctx.getTransform ? ctx.getTransform() : null;
+    if (!tr || typeof document === 'undefined') { drawShipModel(ctx, p, heading, length, spec); return; }
+    var fx = G.FX.battle.ghost, k = Math.hypot(tr.a, tr.b) || 1, half = Math.ceil(Math.max(fx.minHalf, length * k * fx.padding)), cx = tr.a * p[0] + tr.c * p[1] + tr.e, cy = tr.b * p[0] + tr.d * p[1] + tr.f;
+    var cv = ghostCv || (ghostCv = document.createElement('canvas')); if (cv.width !== half * 2 || cv.height !== half * 2) { cv.width = half * 2; cv.height = half * 2; }
+    var g = cv.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1; g.clearRect(0, 0, cv.width, cv.height);
+    g.setTransform(tr.a, tr.b, tr.c, tr.d, tr.e - (cx - half), tr.f - (cy - half));
+    drawShipModel(g, p, heading, length, spec);
+    g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-atop'; g.fillStyle = fx.tint; g.fillRect(0, 0, cv.width, cv.height);
+    var pulse = fx.alpha + fx.pulse * Math.sin(st.t * fx.pulseSpeed + ((b && b.no) || 0));
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha *= pulse; ctx.drawImage(cv, cx - half, cy - half);
+    ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = fx.glow; ctx.drawImage(cv, cx - half, cy - half); ctx.restore();
+  }
   function drawShipModel(ctx, p, heading, length, spec) {
     if (!(G.Ship3D && G.Ship3D.draw(ctx, p[0], p[1], heading, length, spec, st.t))) A.shipTop(ctx, p[0], p[1], heading, length, spec, st.t);
   }
@@ -2737,7 +2752,10 @@
       if (b.alive && b.fx) G.SeaFX.drawHull(b.fx, ctx, p[0], p[1], -b.heading, b.len, sr, slp, (b.lat || 0) <= 0 ? 1 : -1, st.t);
       spec.light = bw;
       if (b.side === 'en' && st.npc.kind === 'pirate') spec.sailTint = G.FX.ship3d.pirateSailTint;
-      drawShipModel(ctx, p, -b.heading + (b.sunk ? b.sink * 0.6 : 0), b.len * (b.sunk ? 1 - b.sink * 0.3 : 1), spec);
+      var ghost = b.side === 'en' && st.npc.ghost;   // 유령선(정화의 보선 js/systems/zhenghe.js): 푸른 빛으로 물들어 반쯤 비친다 (drawGhostShip)
+      if (ghost) { spec.sailTint = G.FX.battle.ghost.sail; spec.flag = G.FX.battle.ghost.flag; }
+      if (ghost) drawGhostShip(ctx, p, -b.heading + (b.sunk ? b.sink * 0.6 : 0), b.len * (b.sunk ? 1 - b.sink * 0.3 : 1), spec, b);
+      else drawShipModel(ctx, p, -b.heading + (b.sunk ? b.sink * 0.6 : 0), b.len * (b.sunk ? 1 - b.sink * 0.3 : 1), spec);
       // 맞은 배: 잠깐 하얗게 번쩍인다 (같은 그림을 밝게 한 번 더 겹친다)
       if (b.hitT > 0 && !b.sunk) { var hk = Math.min(1, b.hitT / Math.max(0.01, IMP().shipFlash)); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.75 * hk; drawShipModel(ctx, p, -b.heading, b.len, spec); }
       }

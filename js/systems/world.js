@@ -62,6 +62,9 @@
     if (G.SpiceMactan) out = out.concat(G.SpiceMactan.daily());       // 향료제도와 막탄 — 반다·세랑·막탄·세부의 잔치 (js/systems/spicemactan.js)
     if (G.MacDang) out = out.concat(G.MacDang.daily());       // 막 왕조의 성립 — 돼지 임금에서 진남관까지 (js/systems/macdang.js)
     if (G.SundaJohor) out = out.concat(G.SundaJohor.daily());       // 순다클라파와 자야카르타 · 조호르 — 파드랑에서 노바트까지 (js/systems/sundajohor.js)
+    if (G.Magellan) out = out.concat(G.Magellan.daily());       // 마가야네스의 세계 일주 — 바야돌리드에서 빅토리아호까지 (js/systems/magellan.js)
+    if (G.DrakeCirc) out = out.concat(G.DrakeCirc.daily());       // 드레이크의 세계 일주 — 플리머스에서 뎃퍼드까지 (js/systems/drakecirc.js)
+    if (G.ColonVoy) out = out.concat(G.ColonVoy.daily());       // 콜론의 탐사 — 쿠바의 맹세에서 산루카르까지 (js/systems/colonvoy.js)
     if (G.Imjin) out = out.concat(G.Imjin.daily());       // 임진왜란 — 부산진에서 노량까지 (js/systems/imjin.js)
     if (G.Sakoku) out = out.concat(G.Sakoku.daily());      // 일본의 대외 통제·남만 교역 단절·데지마
     if (G.Globe) out = out.concat(G.Globe.daily());       // 셰익스피어와 글로브의 불 — 템페스트·장례·첫 전집 (js/systems/globe.js)

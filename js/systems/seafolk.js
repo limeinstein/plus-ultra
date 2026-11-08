@@ -367,6 +367,7 @@
     if (!n || !n.exp || res !== 'win') return;
     var ex = n.exp, dl0 = SF.delay(ex);
     s.flags['expBeat_' + ex.id + '_' + dl0] = 1;
+    if (ex.noDelay) { if (ex.id === 'drake' && G.DrakeCirc && G.DrakeCirc.beaten) G.DrakeCirc.beaten(lines); return; }   // 역사대로 돌아가는 함대 — 한 해 늦추지 않는다 (js/data/drakecirc.js)
     ex.discs.forEach(function (id) { s.flags['delay_' + id] = (s.flags['delay_' + id] || 0) + 1; });
     var msg = ex.who + '의 함대가 크게 부서져 모항으로 되돌아갔다. 항해가 한 해 늦어진다.';
     G.State.log(msg);
@@ -392,6 +393,9 @@
   /** 선장과 이야기한다 */
   SF.talk = async function (n, who) {
     var s = S();
+    if (n && n.exp && G.ColonVoy && G.ColonVoy.talk && await G.ColonVoy.talk(n, who)) return;   // 콜론의 두 번째·세 번째·네 번째 함대 (js/systems/colonvoy.js)
+    if (n && n.exp && G.DrakeCirc && G.DrakeCirc.talk && await G.DrakeCirc.talk(n, who)) return;   // 드레이크의 함대 (js/systems/drakecirc.js)
+    if (n && n.exp && G.Magellan && G.Magellan.talk && await G.Magellan.talk(n, who)) return;   // 마가야네스의 함대 (js/systems/magellan.js)
     if (n.exp) {
       var ex = n.exp, d = G.DISC[ex.discs[0]], st = s.disc[d.id] || {};
       var fk = 'expTalk_' + ex.id + '_' + SF.delay(ex);
