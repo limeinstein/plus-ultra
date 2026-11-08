@@ -186,6 +186,21 @@ button { font: inherit; color: inherit; }
   .facts { grid-template-columns: 1fr; gap: 2px; }
   .facts dd { margin-bottom: 6px; }
 }
+.title-return { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; white-space: nowrap; }
+.extra-catalog { padding: 10px 24px; border-bottom: 1px solid #b39b70; }
+.extra-catalog summary { cursor: pointer; font-size: 14px; }
+.extra-catalog .tabs { margin: 10px -24px -10px; }
+.catalog-facets { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin-top: 14px; }
+.catalog-facets[hidden] { display: none; }
+.catalog-facets label { display: flex; flex-direction: column; gap: 5px; font-size: 13px; }
+.catalog-facets select, [data-reset] { font: inherit; padding: 8px 12px; border: 1px solid #a88b5f; border-radius: 6px; background: #f8eed8; color: #49341f; cursor: pointer; max-width: 100%; }
+.result-count { font-size: 13px; color: #715c3c; margin: 10px 0 0; }
+.player-catalog .grid.events, .player-catalog .grid.achievements, .player-catalog .grid.foods { grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); }
+.player-catalog .d-text { white-space: pre-line; }
+.player-catalog #tabs { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0; padding: 0 12px; overflow: visible; }
+.player-catalog #tabs .tab { justify-content: center; flex-wrap: wrap; padding: 12px 5px 10px; gap: 3px 6px; font-size: 16px; }
+@media (max-width: 700px) { .player-catalog #tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 0 8px; } .player-catalog #tabs .tab { font-size: 15px; } }
+@media (max-width: 560px) { .extra-catalog { padding: 10px 14px; } .extra-catalog .tabs { margin-left: -14px; margin-right: -14px; } .catalog-facets label { flex: 1 1 130px; min-width: 0; } .catalog-facets select { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
 
 /* 그림을 받는 동안 (js/core/images.js) — 코드 그림을 먼저 내보이지 않고 은은한 바탕으로 기다린다 */

@@ -168,7 +168,12 @@
       }
     } else {
       root.classList.add('rig-single');
-      fallback(root, opts, src);
+      var frames = G.FX && G.FX.portraitFace && G.FX.portraitFace.frames;
+      if (profile === 'bust' && so && frames && frames[so.key] && opts.portrait && G.Art && G.Art.portraitCanvas) {
+        // 무릎상이 없어 두 얼굴로 대화할 때도 같은 구도. 배경은 투명하게 두어 네모 판이 뜨지 않게 한다.
+        var framed = G.Art.portraitCanvas(opts.portrait, opts.size || 248, { transparent: true });
+        framed.classList.add('rig-fallback'); root.appendChild(framed);
+      } else fallback(root, opts, src);
     }
 
     var dead = false, blinkTimer = 0;

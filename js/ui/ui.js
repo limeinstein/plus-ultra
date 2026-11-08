@@ -696,6 +696,7 @@
   function standFx() {
     var d = { top: 60, sink: 6, aspect: 0.6667, minH: 360, maxH: 640, fitMax: 1.2, bustW: 260, bustH: 260, soloCity: true, npcDuo: true }, f = (G.FX && G.FX.stand) || {}, o = {}, k;
     for (k in d) o[k] = f[k] == null ? d[k] : f[k];
+    o.frameBottom = f.frameBottom || {};
     return o;
   }
   /* 무릎상의 머리끝 자리 (그림 높이에 대한 비율, 0 = 맨 위): 그림마다 머리 위 빈칸이 달라 같은 키로 세우면 제독이 작아 보였다
@@ -883,7 +884,19 @@
         try {
           var pr = G.Img.load(half.key);
           if (pr && pr.then) pr.then(function (img) {
-            if (img && img.naturalWidth && img.naturalHeight) { A0.aspect = img.naturalWidth / img.naturalHeight; A0.top0 = figureTop(img, half.key); layout(); }
+            if (img && img.naturalWidth && img.naturalHeight) {
+              var bottom = F.frameBottom && F.frameBottom[half.key];
+              bottom = bottom > 0 && bottom <= 1 ? bottom : 1;
+              // 원화는 한 장 그대로 둔다. 지정한 인물만 밑의 투명 여백을 뺀 상자로 표시한다.
+              A0.aspect = img.naturalWidth / img.naturalHeight / bottom;
+              A0.top0 = figureTop(img, half.key) / bottom;
+              if (bottom < 1) {
+                art.style.bottom = 'auto'; art.style.height = (100 / bottom) + '%';
+                actor.dataset.frameBottom = String(bottom);
+                if (A0.fbox) A0.fbox = [A0.fbox[0], A0.fbox[1] / bottom, A0.fbox[2], A0.fbox[3] / bottom];
+              }
+              layout();
+            }
             else toFaces();   // 무릎상 파일을 읽지 못하면 두 사람 다 얼굴로 (한 사람만 얼굴이 되지 않게)
           }, function () { toFaces(); });
         } catch (e) { /* 그림이 없으면 기본 비율 */ }

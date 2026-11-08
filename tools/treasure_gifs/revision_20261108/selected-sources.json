@@ -1,0 +1,142 @@
+{
+  "venusmilo": {
+    "mode": "photograph",
+    "source": "tools/treasure_gifs/sources/venusmilo.png",
+    "original": "photos/venusmilo.jpg"
+  },
+  "nike": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/nike.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-b2467b75-1aba-48d3-9e12-bb53d9b366d7.png"
+  },
+  "nefertiti": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/nefertiti.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-84588ca8-631e-4a6f-aa9f-7fe94683f104.png"
+  },
+  "benin": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/benin.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-50f6cf1d-e08d-4918-8248-332d4e6ac6ae.png"
+  },
+  "saliera": {
+    "mode": "photograph",
+    "source": "tools/treasure_gifs/sources/saliera.png",
+    "original": "photos/saliera.jpg"
+  },
+  "david": {
+    "mode": "photograph",
+    "source": "tools/treasure_gifs/sources/david.png",
+    "original": "photos/david.jpg"
+  },
+  "lastsupper": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/lastsupper.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-edcc5054-30b3-4af2-82c7-9ae222672790.png"
+  },
+  "ambassadors": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/ambassadors.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-90b3b9d4-0902-406f-9d6e-3f6fb3e38604.png"
+  },
+  "ghentaltar": {
+    "mode": "photograph",
+    "source": "tools/treasure_gifs/sources/ghentaltar.png",
+    "original": "photos/ghentaltar.jpg"
+  },
+  "orgaz": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/orgaz.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-cc84e0f2-b48d-40c6-bd8a-4b6184e2b4bf.png"
+  },
+  "nanbanscreen": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/nanbanscreen.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-9b140979-9bc1-4cc8-87d0-cc9f1ed52b58.png"
+  },
+  "earthlydelights": {
+    "mode": "photograph",
+    "source": "tools/treasure_gifs/sources/earthlydelights.png",
+    "original": "photos/earthlydelights.jpg"
+  },
+  "urbinovenus": {
+    "mode": "photograph",
+    "source": "tools/treasure_gifs/sources/urbinovenus.png",
+    "original": "photos/urbinovenus.jpg"
+  },
+  "paladoro": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/paladoro.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-12216cfc-39a4-43c9-a17d-14dc7a0181a2.png"
+  },
+  "belemmonstrance": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/belemmonstrance.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-b67a7399-2328-4824-8de1-44f9ac13a811.png"
+  },
+  "hanseal": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/hanseal.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-fe853127-7691-4707-a658-a0138765a46c.png"
+  },
+  "seismo": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/seismo.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-1b07af89-429f-4278-8636-b01ebdba17ab.png"
+  },
+  "peacockthrone": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/peacockthrone.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-8dd9c424-1c57-4d44-bd26-b73c797d83e4.png"
+  },
+  "moonjar": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/moonjar.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-8fafac42-0fac-432a-9664-1f91ccb6b161.png"
+  },
+  "goryeoceladon": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/goryeoceladon.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-a95c9428-d3aa-4765-b2bf-9712231bf782.png"
+  },
+  "tangsancai": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/tangsancai.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-4009e373-dc7c-4228-af44-ed14b53cfad9.png"
+  },
+  "incadisc": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/incadisc.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-6319433b-2146-4848-bc5c-a7633f954b5c.png"
+  },
+  "sunstone": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/sunstone.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-c824088b-342f-4664-a823-ea6c41bbb05b.png"
+  },
+  "hammurabi": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/hammurabi.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-879c9fa9-48e7-42f6-8297-8b30b1bac688.png"
+  },
+  "qingming": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/qingming.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-b19c66d8-f910-4edc-8e35-d3bd8e5e69dc.png"
+  },
+  "tripitaka": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/tripitaka.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-cac38815-124d-4848-91b4-9625876f6972.png"
+  },
+  "hunmin": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/hunmin.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-fa64bf78-523c-4b58-84bd-f81283bb2292.png"
+  },
+  "tutankh": {
+    "mode": "generated",
+    "source": "tools/treasure_gifs/sources/tutankh.png",
+    "original": "C:\\Users\\User\\.codex\\generated_images\\01a1bada-2dcb-7890-bebf-83d5b978d9d5\\exec-fbc5212a-a04b-4f26-958f-407d5d66e055.png"
+  }
+}

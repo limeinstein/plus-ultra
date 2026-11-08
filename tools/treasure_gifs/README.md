@@ -1,5 +1,13 @@
 # 보물 발견 GIF 만들기
 
+## 2026-11-08 원화·전시 보강
+
+`profiles_20261108.json`의 95종은 큰 회절광을 줄이고 원래 재질색을 보존한다. 첫 15종과 추가 13종의 원화·기존 사진·전체 제작 지시문·교체 전 파일은 `revision_20261108/`에 있다. 사진 여섯 작품에는 없는 뒷모습을 만들지 않고 조명과 완만한 확대만 적용한다. 다른 67종은 기존 원화를 유지한다.
+
+`build.py --only ID`는 보강 대상의 GIF·종료 JPG와 함께 원색 WebP 장면 판도 만든다. `ruin_gifs/sheets.py ID`로 다시 만들어도 보강 대상은 원색 장면을 사용한다. 전체 제작에서는 별도 완성된 이야기 장면 일곱 종과 `creation`·`birthvenus`·`laocoon`을 건너뛴다.
+
+검사: `python tests/treasure_revision_20261108_files.py`, `node tests/treasure_revision_20261108_smoke.cjs`. [전체 변경 전후](../../artifacts/treasure-upgrade-20261108/report.html), [사진 출처·이용 조건](../../images/TREASURE-CREDITS.md).
+
 물건형 보물 발견물 97종을 어두운 박물관 전시실에서 두 번
 360° 회전하는 `images/discoveries/ID.gif`로 만듭니다. 투탕카멘 보물
 (`tutankh`)은 사용자가 예로 든 앙크를 중심 전시물로 삼고 스카라베와 운석

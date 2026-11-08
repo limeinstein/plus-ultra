@@ -6,6 +6,13 @@
   const $ = (s, r) => (r || document).querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const num = n => Number(n).toLocaleString('ko-KR');
+  const PRIMARY = ['people', 'events', 'achievements', 'discoveries', 'foods', 'instruments', 'weapons'];
+  const params = new URLSearchParams(location.search);
+  const PLAYER = params.get('view') !== 'assets' && (params.get('view') === 'player' || !location.hash || PRIMARY.includes(location.hash.slice(1)));
+  document.body.classList.toggle('player-catalog', PLAYER);
+  const from = params.get('from');
+  if (['index.html', 'game.html', 'Loop_of_Good_Hope.html'].includes(from)) $('#titleReturn').setAttribute('href', from);
+  $('#helpBtn').hidden = PLAYER;
   const map = pairs => Object.fromEntries(pairs);
   const STYLE = map(I.STYLES), CUL = map(I.CULTURES), NPCN = map(I.NPCS), INTN = map(I.INTERIORS);
   const MAIDST = map(I.MAIDSTYLES || []), MAIDSTYLE = new Set(Object.keys(MAIDST));
@@ -178,16 +185,16 @@
   G.MATES.forEach(m => {
     const spec = A.mateSpec(m.id);
     add(tPeople, {
-      group: 'mate', portrait: true, name: m.name, sub: (m.witch ? (m.legend ? '전설의 마녀' : '마녀로 몰렸던 여인') : '동료') + ' · 명성 ' + num(m.fame) + ' 이상 · ' + m.y[0] + '~' + m.y[1] + '년',
+      group: 'mate', portrait: true, name: m.name, sub: (m.witch ? (m.legend ? '전설의 마녀' : '마녀로 몰렸던 여인') : '동료') + (m.eventOnly ? ' · 이야기로 합류' : ' · 명성 ' + num(m.fame) + ' 이상') + ' · ' + m.y[0] + '~' + m.y[1] + '년',
       meta: skillTxt(m.sk), key: 'portraits/mates/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', extra: m.desc, half: I.chain.mateHalf(m.id),
       pic: () => portrait(spec),
       detail: () => ({
         text: m.desc + (G.BIOS && G.BIOS[m.name] ? ' 〔인물 이야기〕 ' + G.BIOS[m.name] : ''),
         facts: [
           ['능력치', G.STATS.map((s, i) => s.name + ' ' + m.st[i]).join(' · ')], ['특기', skillTxt(m.sk)], ['어학', langTxt(m.lg)],
-          ['만나는 곳', (G.MATE_RANGE && G.MATE_RANGE[m.id] ? G.MATE_RANGE[m.id].zones.map(z => G.MATE_ZONES[z].name).join('·') + ' 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: ' + G.CITY_DATA[G.MATE_RANGE[m.id].home].name + ')' : m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집')],
+          ['만나는 곳', m.eventOnly ? '관련 이야기의 진행을 통해 합류' : (G.MATE_RANGE && G.MATE_RANGE[m.id] ? G.MATE_RANGE[m.id].zones.map(z => G.MATE_ZONES[z].name).join('·') + ' 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: ' + G.CITY_DATA[G.MATE_RANGE[m.id].home].name + ')' : m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집')],
           ['만날 수 있는 때', m.y[0] + '~' + m.y[1] + '년' + (m.after ? (nm => ' · ' + nm + G.U.jx(nm, '이/가') + ' 알려진 뒤')(m.after.map(id => G.DISC[id] ? G.DISC[id].name : id).join('·')) : '')],
-          ['필요한 명성', num(m.fame)], ['월급', num(m.wage) + '닢']
+          ['필요한 명성', m.eventOnly ? '이야기의 합류 조건에 따름' : num(m.fame)], ['월급', num(m.wage) + '닢']
         ],
         files: [{ key: 'portraits/mates/' + m.id, kind: 'png', note: '이 동료의 초상' }]
       })
@@ -684,12 +691,31 @@
     });
   });
 
+  // 요청한 일곱 도감을 앞에 두고, 예전 그림 자료 도감도 별도로 유지한다.
+  if (G.CatalogExtras) G.CatalogExtras.register({ tab, add, people: tPeople, portrait, num });
+  tPeople.label = '인물 도감'; tDisc.label = '발견물 도감';
+  tPeople.playerNote = '동료·후원자·궁정·역사와 이야기 속 인물을 살펴봅니다. 동료 조건과 능력, 인물 이야기는 카드를 눌러 확인하세요.';
+  tDisc.playerNote = '지리·자연·유적·보물·생물·민족·교역품으로 나누었습니다. 세부 갈래와 지역, 발견 방식으로 더 좁혀 볼 수 있습니다. 단서와 앞뒤 발견 고리는 카드를 눌러 확인하세요.';
+  TABS.sort((a, b) => (PRIMARY.includes(a.id) ? PRIMARY.indexOf(a.id) : PRIMARY.length) - (PRIMARY.includes(b.id) ? PRIMARY.indexOf(b.id) : PRIMARY.length));
+  function discPart(d) {
+    if (d.cat !== 'creature') return G.DISC_CATS[d.cat];
+    if (d.plant || d.id === 'bullocho') return '식물';
+    if (d.insect) return '곤충';
+    return d.how === 'sea' ? '해양 생물' : '동물·전설 생물';
+  }
+  tDisc.filters = { part: 'all', region: 'all', how: 'all' };
+  function filterDisc(it) {
+    if (!it.disc) return true;
+    const d = it.disc, f = tDisc.filters;
+    return (f.part === 'all' || discPart(d) === f.part) &&
+      (f.region === 'all' || (d.regions || [d.reg]).map(String).includes(f.region)) && (f.how === 'all' || d.how === f.how);
+  }
   // ---------------------------------------------------------------- state
   let cur = TABS[0], query = '';
   const hash = decodeURIComponent((location.hash || '').slice(1));
   if (TABS.some(t => t.id === hash)) cur = TABS.find(t => t.id === hash);
   const matches = it => !query || it.text.includes(query);
-  const visible = t => t.items.filter(it => matches(it) && (t.chip === 'all' || it.group === t.chip));
+  const visible = t => t.items.filter(it => matches(it) && (t.chip === 'all' || it.group === t.chip) && (t !== tDisc || filterDisc(it)));
 
   // ---------------------------------------------------------------- thumbnails (lazy, one per frame)
   const queue = [];
@@ -715,6 +741,7 @@
     const early = animatedImage(it, true);          // 장면 판은 GIF를 받지 않고 곧장
     if (early && early.tagName === 'CANVAS') { el.appendChild(early); return; }
     if (it.chain && I.pick(it.chain)) await I.preload([it.chain], 4000);
+    if (!el.isConnected) return;
     const moving = early;
     if (moving) { el.appendChild(moving); return; }
     let src;
@@ -737,10 +764,21 @@
     return k ? '<span class="state on" title="' + esc('images/' + I.path(k)) + '">교체됨</span>' : '<span class="state">코드 그림</span>';
   }
   function renderTabs() {
-    $('#tabs').innerHTML = TABS.map(t => {
+    const button = t => {
       const n = t.items.filter(matches).length;
-      return '<button class="tab" role="tab" type="button" id="tab-' + t.id + '" aria-selected="' + (t === cur) + '" data-tab="' + t.id + '">' + esc(t.label) + '<span class="n">' + num(n) + '</span></button>';
-    }).join('');
+      return '<button class="tab" role="tab" type="button" id="tab-' + t.id + '" aria-controls="grid" aria-selected="' + (t === cur) + '" data-tab="' + t.id + '">' + esc(t.label) + '<span class="n">' + num(n) + '</span></button>';
+    };
+    $('#tabs').innerHTML = TABS.filter(t => PRIMARY.includes(t.id)).map(button).join('');
+    $('#extraTabs').innerHTML = TABS.filter(t => !PRIMARY.includes(t.id)).map(button).join('');
+    if (!PRIMARY.includes(cur.id)) $('#extraCatalog').open = true;
+  }
+  function renderFacets() {
+    const box = $('#catalogFacets'); box.hidden = cur !== tDisc;
+    if (cur !== tDisc) return;
+    const parts = [...new Set(tDisc.items.filter(it => tDisc.chip === 'all' || it.group === tDisc.chip).map(it => discPart(it.disc)))];
+    if (!parts.includes(tDisc.filters.part)) tDisc.filters.part = 'all';
+    const select = (key, label, options) => '<label>' + label + '<select data-facet="' + key + '" aria-label="' + label + '">' + [['all', '전체']].concat(options).map(([v, s]) => '<option value="' + esc(v) + '"' + (tDisc.filters[key] === String(v) ? ' selected' : '') + '>' + esc(s) + '</option>').join('') + '</select></label>';
+    box.innerHTML = select('part', '세부 갈래', parts.map(s => [s, s])) + select('region', '지역', G.REGIONS.map((s, i) => [String(i), s])) + select('how', '발견 방식', Object.entries(HOW)) + '<button type="button" data-reset>검색과 필터 지우기</button>';
   }
   function renderChips() {
     const box = $('#chips');
@@ -763,17 +801,19 @@
       '<span class="body"><span class="name">' + esc(it.name) + '</span>' +
       '<span class="sub">' + esc(it.sub) + '</span>' +
       (it.meta ? '<span class="meta">' + esc(it.meta) + '</span>' : '') +
-      '<span class="file"><span class="path">' + pathHtml(pathOf(it.key, it.kind)) + '</span>' + stateHtml(it) + '</span></span></button>'
+      (PLAYER ? '' : '<span class="file"><span class="path">' + pathHtml(pathOf(it.key, it.kind)) + '</span>' + stateHtml(it) + '</span>') + '</span></button>'
     ).join('');
     $('#empty').hidden = list.length > 0;
+    $('#resultCount').textContent = cur.label + ' · ' + num(list.length) + ' / ' + num(cur.items.length) + '개';
     grid.querySelectorAll('.thumb').forEach(el => { if (io) io.observe(el); else queue.push(el); });
     if (!io) pump();
   }
   function renderAll() {
-    renderTabs(); renderChips(); renderGrid();
-    $('#note').innerHTML = cur.note;
+    renderTabs(); renderChips(); renderFacets(); renderGrid();
+    $('#note').innerHTML = PLAYER ? cur.playerNote || (PRIMARY.includes(cur.id) ? cur.note : '카드를 눌러 설명과 게임 속 정보를 살펴보세요.') : cur.note;
   }
   function summary() {
+    if (PLAYER) { $('#summary').textContent = PRIMARY.map(id => { const t = TABS.find(t => t.id === id); return t.label.replace(' 도감', '') + ' ' + num(t.items.length); }).join(' · '); return; }
     const n = id => TABS.find(t => t.id === id).items.length;
     const people = TABS.find(t => t.id === 'people').items;
     const cnt = g => people.filter(it => it.group === g).length;
@@ -805,9 +845,11 @@
     if (H.wiki) rows.push(['위키백과', a(H.wiki.url, H.wiki.title) + (H.wiki.ko ? ' · 한국어: ' + esc(H.wiki.ko) : '')]);
     if (H.photo) rows.push(['그림이 참고한 원본 사진', a(H.photo.url, [H.photo.by, H.photo.src].filter(Boolean).join(' · ') || '출처') + (H.photo.lic ? ' · ' + esc(H.photo.lic) : '') + (/BY-SA/.test(H.photo.lic || '') ? ' — 이 그림도 같은 조건으로 공개' : '')]);   // 그림은 사진을 참고해 새로 그린 것 (2026-11-04 저작권 QA)
     return '<h3>실제 자료</h3><dl class="facts">' + rows.map(r => '<dt>' + esc(r[0]) + '</dt><dd>' + r[1] + '</dd>').join('') + '</dl>' +
-      '<p class="d-text hint">설명은 UNESCO 세계유산센터(CC BY-SA 3.0 IGO)·위키백과(CC BY-SA 4.0)를 바탕으로 새로 쓴 글이며, 소장품 자료는 The Met·Smithsonian Open Access(CC0), 생물 자료는 GBIF.org·OBIS에서 가져왔습니다. 발견 그림은 사진이 아니라, 적어 둔 원본 사진을 참고해 새로 그린 것입니다(CC BY-SA 사진을 참고한 그림은 같은 조건으로 공개). 다시 모으려면 <code>python tools/heritage/fetch.py</code>.</p>';
+      '<p class="d-text hint">설명은 UNESCO 세계유산센터(CC BY-SA 3.0 IGO)·위키백과(CC BY-SA 4.0)를 바탕으로 새로 쓴 글이며, 소장품 자료는 The Met·Smithsonian Open Access(CC0), 생물 자료는 GBIF.org·OBIS에서 가져왔습니다. 발견 그림은 사진이 아니라, 적어 둔 원본 사진을 참고해 새로 그린 것입니다(CC BY-SA 사진을 참고한 그림은 같은 조건으로 공개).' + (PLAYER ? '' : ' 다시 모으려면 <code>python tools/heritage/fetch.py</code>.') + '</p>';
   }
+  let detailSerial = 0;
   async function openDetail(it) {
+    const serial = ++detailSerial;
     const d = it.detail ? it.detail() : {};
     if (it.halfKey) {
       d.strip = [{ label: '대화창에 서는 모습 (무릎상)', key: it.halfKey, kind: 'webp', pic: () => I.make([it.halfKey], 1024, 1536, it.bustPic) },
@@ -824,23 +866,25 @@
       (facts.length ? '<dl class="facts">' + facts.map(f => '<dt>' + esc(f[0]) + '</dt><dd>' + esc(f[1]) + '</dd>').join('') + '</dl>' : '') +
       realHtml(d.real) +
       (d.strip ? '<h3>그림 종류</h3><div class="strip" id="dStrip"></div>' : '') +
-      '<h3>이 그림을 바꾸려면</h3><p class="d-text hint">위에서부터 먼저 찾습니다. 파일을 넣은 뒤 <code>python tools/images.py</code>를 실행하세요.</p>' + filesTable(d.files || []) +
+      (PLAYER ? '' : '<h3>이 그림을 바꾸려면</h3><p class="d-text hint">위에서부터 먼저 찾습니다. 파일을 넣은 뒤 <code>python tools/images.py</code>를 실행하세요.</p>' + filesTable(d.files || [])) +
       '</div>';
     const dlg = $('#detail');
     if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', ''); }
     dlg.scrollTop = 0;
     if (it.chain && I.pick(it.chain)) await I.preload([it.chain], 4000);
     if (it.halfKey) await I.preload([[it.halfKey]], 4000);
+    if (serial !== detailSerial || !dlg.open) return;
     const moving = animatedImage(it), src = moving ? null : it.pic();
     $('#dHero').appendChild(moving || copyCanvas(src));
     if (d.strip) {
       const box = $('#dStrip');
       for (const s of d.strip) {
         const fig = document.createElement('figure');
-        fig.innerHTML = '<figcaption>' + esc(s.label) + '<span class="path">' + pathHtml(pathOf(s.key, s.kind)) + '</span></figcaption>';
+        fig.innerHTML = '<figcaption>' + esc(s.label) + (PLAYER ? '' : '<span class="path">' + pathHtml(pathOf(s.key, s.kind)) + '</span>') + '</figcaption>';
         box.appendChild(fig);
         await new Promise(r => requestAnimationFrame(() => r()));
         if (s.key && I.has(s.key)) await I.preload([[s.key]], 4000);
+        if (serial !== detailSerial || !dlg.open) return;
         const pic = s.pic();
         const cv = s.wide ? copyCanvas(pic, 480, 270) : copyCanvas(pic);
         fig.insertBefore(cv, fig.firstChild);
@@ -911,12 +955,23 @@
       renderAll(); window.scrollTo(0, 0); return;
     }
     const ch = e.target.closest('[data-chip]');
-    if (ch) { cur.chip = ch.dataset.chip; renderChips(); renderGrid(); return; }
+    if (ch) { cur.chip = ch.dataset.chip; if (cur === tDisc) tDisc.filters.part = 'all'; renderChips(); renderFacets(); renderGrid(); return; }
+    if (e.target.closest('[data-reset]')) { clearTimeout(qt); query = ''; $('#q').value = ''; cur.chip = 'all'; Object.keys(tDisc.filters).forEach(k => tDisc.filters[k] = 'all'); renderAll(); return; }
     const cp = e.target.closest('[data-copy]');
     if (cp) { copy(cp.dataset.copy); return; }
     const card = e.target.closest('.card');
     if (card) { openDetail(ITEM[card.dataset.uid]); return; }
     if (e.target.id === 'helpBtn') { manifestCheck(); const h = $('#help'); if (h.showModal) h.showModal(); else h.setAttribute('open', ''); }
+  });
+  $('#catalogFacets').addEventListener('change', e => { if (e.target.dataset.facet) { tDisc.filters[e.target.dataset.facet] = e.target.value; renderGrid(); } });
+  document.addEventListener('keydown', e => {
+    const button = e.target.closest('[data-tab]');
+    if (!button || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+    const list = Array.from(button.parentElement.querySelectorAll('[data-tab]'));
+    let n = list.indexOf(button);
+    n = e.key === 'Home' ? 0 : e.key === 'End' ? list.length - 1 : (n + (e.key === 'ArrowRight' ? 1 : -1) + list.length) % list.length;
+    const id = list[n].dataset.tab; e.preventDefault(); list[n].click();
+    const next = $('[data-tab="' + id + '"]'); next.focus({ preventScroll: true }); next.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   });
   ['detail', 'help'].forEach(id => {
     const dlg = $('#' + id);

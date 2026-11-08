@@ -77,7 +77,7 @@ fs.mkdirSync(OUT,{recursive:true});
   });
   await p.locator('.dlg canvas[data-img="portraits/legendary/halina"]').waitFor();await p.screenshot({path:path.join(OUT,'halina-dialog.png'),animations:'disabled'});
   await p.locator('.modal-back.catch').last().evaluate(e=>e.click());await p.evaluate(async()=>{await window.__centerSay;if(window.__centerPic)await window.__centerPic.stop();});
-  await p.evaluate(()=>{G.Info.open('mates');});await p.locator('.shipcard').filter({hasText:'할리나'}).scrollIntoViewIfNeeded();await p.screenshot({path:path.join(OUT,'halina-notebook.png'),animations:'disabled'});
+  await p.evaluate(()=>{G.Info.open('mates');});await p.locator('.shipcard, .mb-table tbody tr').filter({hasText:'할리나'}).scrollIntoViewIfNeeded();await p.screenshot({path:path.join(OUT,'halina-notebook.png'),animations:'disabled'});
   assert.deepStrictEqual(errors,[],'콘솔 오류');fs.writeFileSync(path.join(OUT,'verification.json'),JSON.stringify({report,errors},null,2));
   console.log(JSON.stringify({portraits:report.filter(r=>r.key).length,synthetic:report.filter(r=>r.synthetic!=null).length,errors},null,2));
  }finally{await browser.close();}

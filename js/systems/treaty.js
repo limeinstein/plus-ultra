@@ -126,18 +126,24 @@
   /** 세계 지도: 뭍·바다 + 두 왕실의 반구 + 경계선 (조약 창·도감) */
   var LAND = null, MAP_N = 72, MAP_S = -56;   // 조약 지도의 위도 범위
   function landMap(w, h) {
-    if (LAND && LAND.width === w) return LAND;
+    if (LAND && LAND.width === w && LAND.height === h) return LAND;
     var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
     var ctx = cv.getContext('2d'), img = ctx.createImageData(w, h), d = img.data;
     for (var y = 0; y < h; y++) {
       var lat = MAP_N - (y + 0.5) / h * (MAP_N - MAP_S);
       for (var x = 0; x < w; x++) {
         var lon = -180 + (x + 0.5) / w * 360, o = (y * w + x) * 4, land = G.Geo.isLand(lon, lat), n = ((x * 73856093) ^ (y * 19349663)) & 7;
-        if (land) { d[o] = 200 - n; d[o + 1] = 176 - n; d[o + 2] = 124 - n; } else { d[o] = 156 - n; d[o + 1] = 182 - n; d[o + 2] = 182 - n; }
+        if (land) { d[o] = 194 - n; d[o + 1] = 164 - n; d[o + 2] = 108 - n; } else { d[o] = 225 - n; d[o + 1] = 214 - n; d[o + 2] = 181 - n; }
         d[o + 3] = 255;
       }
     }
     ctx.putImageData(img, 0, 0);
+    // 먹으로 새긴 해안선: 세계 지형은 실제 게임 지형을 그대로 쓴다.
+    ctx.fillStyle = 'rgba(83,61,34,.4)';
+    for (var cy = 1; cy < h - 1; cy++) for (var cx = 1; cx < w - 1; cx++) {
+      var at = (cy * w + cx) * 4;
+      if (d[at] < 205 && (d[at - 4] > 205 || d[at + 4] > 205 || d[at - w * 4] > 205 || d[at + w * 4] > 205)) ctx.fillRect(cx, cy, 1, 1);
+    }
     LAND = cv; return cv;
   }
   T.mapCanvas = function (w, h, opt) {
@@ -146,11 +152,28 @@
     var ctx = cv.getContext('2d');
     function px(lon, lat) { return [(lon + 180) / 360 * w, (MAP_N - lat) / (MAP_N - MAP_S) * h]; }
     ctx.drawImage(landMap(w, h), 0, 0);
+    // 오래된 항해도에 새긴 방위선과 양피지 가장자리.
+    ctx.save(); ctx.strokeStyle = 'rgba(100,75,40,.12)'; ctx.lineWidth = 0.7;
+    var roseX = w * 0.16, roseY = h * 0.75;
+    for (var ray = 0; ray < 16; ray++) {
+      var angle = ray * Math.PI / 8;
+      ctx.beginPath(); ctx.moveTo(roseX, roseY); ctx.lineTo(roseX + Math.cos(angle) * w, roseY + Math.sin(angle) * w); ctx.stroke();
+    }
+    for (var gridLon = -150; gridLon < 180; gridLon += 30) { var gx = px(gridLon, 0)[0]; ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke(); }
+    for (var gridLat = -30; gridLat <= 60; gridLat += 30) { var gy = px(0, gridLat)[1]; ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke(); }
+    var age = ctx.createRadialGradient(w / 2, h / 2, h / 4, w / 2, h / 2, w / 1.8);
+    age.addColorStop(0, 'rgba(90,55,20,0)'); age.addColorStop(1, 'rgba(90,55,20,.3)'); ctx.fillStyle = age; ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = '#765932'; ctx.lineWidth = 2; ctx.strokeRect(5, 5, w - 10, h - 10); ctx.lineWidth = 0.6; ctx.strokeRect(9, 9, w - 18, h - 18);
+    ctx.translate(roseX, roseY);
+    for (var point = 0; point < 8; point++) {
+      ctx.rotate(Math.PI / 4); ctx.beginPath(); ctx.moveTo(0, -24); ctx.lineTo(5, 0); ctx.lineTo(0, 9); ctx.lineTo(-5, 0); ctx.closePath(); ctx.fillStyle = point % 2 ? '#bc9a5d' : '#695334'; ctx.fill();
+    }
+    ctx.restore();
     var L = D().tordesillas.lon, A = opt.zaragoza ? D().zaragoza.lon : L + 180;
     // 반구 물들이기: 에스파냐(붉은 금빛) · 포르투갈(초록)
     function band(a, b, col) { var p0 = px(a, 0)[0], p1 = px(b, 0)[0]; ctx.fillStyle = col; ctx.fillRect(p0, 0, p1 - p0, h); }
-    band(L, A, 'rgba(40,120,70,.20)');
-    band(-180, L, 'rgba(176,40,30,.18)'); band(A, 180, 'rgba(176,40,30,.18)');
+    band(L, A, 'rgba(40,100,70,.10)');
+    band(-180, L, 'rgba(150,45,30,.09)'); band(A, 180, 'rgba(150,45,30,.09)');
     // 조약이 미치지 않는 곳: 유럽·동북아시아 (빗금)
     ctx.save(); ctx.strokeStyle = 'rgba(60,50,40,.35)'; ctx.lineWidth = 1;
     [[-12, 42, 35, 72], [100, 145, 20, 55]].forEach(function (r) {
@@ -167,7 +190,7 @@
     var cvp = px(D().tordesillas.capeVerde[0], D().tordesillas.capeVerde[1]);
     ctx.fillStyle = '#1e3552'; ctx.beginPath(); ctx.arc(cvp[0], cvp[1], 4, 0, 7); ctx.fill();
     ctx.strokeStyle = '#1e3552'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(cvp[0], cvp[1]); ctx.lineTo(fx, cvp[1]); ctx.stroke(); ctx.setLineDash([]);
-    var font = getComputedStyle(document.body).fontFamily;
+    var font = 'Georgia, "Noto Serif KR", serif';
     function label(t, x, y, col, size, align) { ctx.font = '700 ' + (size || 15) + 'px ' + font; ctx.textAlign = align || 'center'; ctx.textBaseline = 'middle'; ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(245,236,214,.9)'; ctx.strokeText(t, x, y); ctx.fillStyle = col; ctx.fillText(t, x, y); }
     label('카보베르데 → 370레구아', (cvp[0] + fx) / 2, cvp[1] - 13, '#1e3552', 12);
     label('서경 46.5°', fx, 14, '#8a1c10', 13);
@@ -190,8 +213,37 @@
       : me === 'ES' ? '에스파냐의 제독으로서는 대서양 서쪽의 새 땅이 모두 우리의 몫이 되었다. 아프리카·인도의 포르투갈 항구에는 이제 들어갈 수 없다.' : '';
   }
   function win(title, html, mapOpt) {
-    var w = UI.window({ title: title, icon: 'scroll', width: 1060, html: '<div class="treaty"><div class="tr-map"></div><div class="tr-text">' + html + '</div></div>', buttons: [{ label: '조약문을 접는다', value: 1, cls: 'navy' }] });
-    try { var cv = T.mapCanvas(900, 300, mapOpt); cv.className = 'tr-cv'; w.content.querySelector('.tr-map').appendChild(cv); } catch (e) { console.error(e); }
+    var fx = G.FX.treaty, scene = !mapOpt.zaragoza && G.Img && G.Img.has(fx.sceneKey);
+    var opening = scene ? '<div class="tr-tabs" role="tablist" aria-label="조약 보기"><button type="button" class="tr-tab active" role="tab" id="tr-scene-tab" aria-controls="tr-scene-panel" aria-selected="true" data-tr-view="scene">군주들의 시선</button><button type="button" class="tr-tab" role="tab" id="tr-chart-tab" aria-controls="tr-chart-panel" aria-selected="false" data-tr-view="chart">경계와 조약문</button></div>' +
+      '<section class="tr-scene" id="tr-scene-panel" role="tabpanel" aria-labelledby="tr-scene-tab"><figure class="tr-painting"><img class="tr-art" alt="양피지 세계 지도에 붉은 선을 긋는 로마 교황. 포르투갈과 에스파냐 군주는 수긍하고, 조선·말리·명·잉카·인도·오스만 군주는 의아해한다."><figcaption>두 왕실이 그은 선, 세계가 던진 물음</figcaption></figure>' +
+      '<div class="tr-crowns"><p class="es"><b>에스파냐 · 서쪽</b><span>대서양 너머의 새 땅을.</span></p><span class="tr-seal" aria-hidden="true">✥</span><p class="pt"><b>포르투갈 · 동쪽</b><span>아프리카를 돌아 동방으로.</span></p></div>' +
+      '<p class="tr-dissent"><b>“우리의 땅을, 어찌 그대들이 나누는가?”</b><span>조선 · 말리 · 명(중국) · 잉카(남미) · 인도 · 오스만</span></p>' +
+      '<p class="tr-allegory">각국 군주를 한자리에 그린 상징화 · 실제 조약은 이베리아 두 왕실이 맺었다.</p></section>' : '';
+    var w = UI.window({ title: title, icon: 'scroll', width: fx.windowW, clickAny: false,
+      html: '<div class="treaty">' + opening + '<section class="tr-chart" id="tr-chart-panel"' + (scene ? ' role="tabpanel" aria-labelledby="tr-chart-tab" hidden' : '') + '><div class="tr-map" role="img" aria-label="두 왕실의 경계선이 그려진 세계 해도"></div><div class="tr-text">' + html + '</div></section></div>',
+      buttons: [{ label: '조약문을 접는다', value: 1, cls: 'navy' }] });
+    if (scene) {
+      var art = w.content.querySelector('.tr-art');
+      function showView(view) {
+        w.content.querySelector('.tr-scene').hidden = view !== 'scene';
+        w.content.querySelector('.tr-chart').hidden = view !== 'chart';
+        Array.prototype.forEach.call(w.content.querySelectorAll('.tr-tab'), function (tab) { var active = tab.dataset.trView === view; tab.classList.toggle('active', active); tab.setAttribute('aria-selected', String(active)); });
+        w.content.scrollTop = 0;
+        if (UI.fitWin) UI.fitWin(w.el, w.back);
+      }
+      art.onerror = function () { showView('chart'); w.content.querySelector('.tr-tabs').hidden = true; };
+      art.src = G.Img.src(fx.sceneKey);
+      Array.prototype.forEach.call(w.content.querySelectorAll('.tr-tab'), function (tab) {
+        tab.onclick = function () { showView(tab.dataset.trView); };
+        tab.onkeydown = function (e) {
+          if (e.key === 'Enter' || e.code === 'Space') { e.preventDefault(); e.stopPropagation(); tab.click(); return; }
+          if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+          e.preventDefault(); e.stopPropagation();
+          var next = w.content.querySelector('[data-tr-view="' + (tab.dataset.trView === 'scene' ? 'chart' : 'scene') + '"]'); next.click(); next.focus();
+        };
+      });
+    }
+    try { var cv = T.mapCanvas(fx.mapW, fx.mapH, mapOpt); cv.className = 'tr-cv'; w.content.querySelector('.tr-map').appendChild(cv); } catch (e) { console.error(e); }
     if (G.Audio) G.Audio.sfx('discover');
     return w.result;
   }

@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import math
 from pathlib import Path
 
@@ -19,6 +20,8 @@ SOURCES = ROOT / "tools" / "treasure_gifs" / "sources"
 OUT = ROOT / "images" / "discoveries"
 ENDS = ROOT / "images" / "discovery-ends"
 W, H = 576, 256
+# 새 원화의 얼굴·회화·세공은 큰 회절광 대신 원래 재질과 색을 보여 준다.
+PROFILES = json.loads((Path(__file__).with_name('profiles_20261108.json')).read_text(encoding='utf-8'))
 TREASURE_IDS = [
     "ankh",
     "beowulf", "kingjohn", "agamemnon", "tutankh", "rosetta", "sargon",
@@ -94,13 +97,13 @@ def common_crop(panels: list[Image.Image]) -> tuple[int, int, int, int]:
             min(panels[0].width, x1 + pad_x), min(panels[0].height, y1 + pad_y))
 
 
-def prepared_views(src: Image.Image) -> list[Image.Image]:
+def prepared_views(src: Image.Image, refined: bool = False) -> list[Image.Image]:
     panels = split_turntable(src)
     box = common_crop(panels)
     views = []
     for panel in panels:
         crop = panel.crop(box)
-        scale = min(390 / crop.width, 238 / crop.height)
+        scale = min((504 if refined else 390) / crop.width, 238 / crop.height)
         size = (max(1, round(crop.width * scale)), max(1, round(crop.height * scale)))
         views.append(crop.resize(size, Image.Resampling.LANCZOS))
     return views
@@ -175,6 +178,14 @@ def flare_layer(did: str, phase: float, light: float, art_box: tuple[int, int, i
     d = ImageDraw.Draw(layer)
     x0, y0, x1, y1 = art_box
     aw, ah = x1 - x0, y1 - y0
+    if did in PROFILES:
+        # 돌·회화에는 별빛을 붙이지 않는다. 금속의 가장자리만 작게 반짝인다.
+        if PROFILES[did].get('glints'):
+            for i, (fx, fy) in enumerate(((.12, .3), (.87, .7))):
+                pulse = max(0, math.sin(phase * math.tau * 2 + i * 2.4)) ** 8
+                star(d, x0 + aw * fx, y0 + ah * fy, 1.5 + pulse * 2.5,
+                     (255, 235, 190, round(95 * pulse)))
+        return Image.alpha_composite(layer.filter(ImageFilter.GaussianBlur(2)), layer)
     x = x0 + aw * (.52 + .29 * math.sin(phase * math.tau + .3))
     y = y0 + ah * (.27 + .18 * math.cos(phase * math.tau * 1.7))
     power = .38 + .62 * light
@@ -224,10 +235,14 @@ def render(did: str, view: Image.Image, frame_index: int) -> Image.Image:
     else:
         light = .72 + .18 * (math.sin(phase * math.tau * 2 - .8) + 1) / 2
 
+    refined = did in PROFILES
     frame = gallery(phase, light)
-    art = ImageEnhance.Color(view).enhance(1.04)
-    art = ImageEnhance.Contrast(art).enhance(1.08)
-    art = ImageEnhance.Brightness(art).enhance(.83 + .24 * light)
+    if refined:
+        # 약한 전시실 빛만 스크린 합성해 검은 받침대 경계를 잘라내지 않는다.
+        frame = ImageEnhance.Brightness(frame).enhance(.22)
+    art = ImageEnhance.Color(view).enhance(1.0 if refined else 1.04)
+    art = ImageEnhance.Contrast(art).enhance(1.025 if refined else 1.08)
+    art = ImageEnhance.Brightness(art).enhance((.9 + .16 * light) if refined else (.83 + .24 * light))
     x = round((W - art.width) / 2)
     y = round(H * .50 - art.height * .49)
     frame = screen_paste(frame, art, x, y)
@@ -239,16 +254,25 @@ def render(did: str, view: Image.Image, frame_index: int) -> Image.Image:
 
 
 def animation(did: str, src: Image.Image) -> list[Image.Image]:
-    views = prepared_views(src)
+    views = prepared_views(src, did in PROFILES)
+    if PROFILES.get(did, {}).get('mode') == 'photo':
+        # 사진에서 없는 뒷모습을 만들지 않고 완만한 접근과 이동 조명으로 전시한다.
+        frames = []
+        for i in range(len(VIEW_SEQUENCE)):
+            p = i / (len(VIEW_SEQUENCE) - 1)
+            zoom = .96 + .04 * math.sin(math.pi * p) ** 2
+            view = views[0].resize((round(views[0].width * zoom), round(views[0].height * zoom)), Image.Resampling.LANCZOS)
+            frames.append(render(did, view, i))
+        return frames
     return [render(did, views[view_no], i) for i, view_no in enumerate(VIEW_SEQUENCE)]
 
 
-def shared_palette(frames: list[Image.Image]) -> Image.Image:
+def shared_palette(frames: list[Image.Image], colors: int = 96) -> Image.Image:
     sample = Image.new("RGB", (W * 4, H * 2))
     picks = [round(i * (len(frames) - 1) / 7) for i in range(8)]
     for i, fi in enumerate(picks):
         sample.paste(frames[fi], ((i % 4) * W, (i // 4) * H))
-    return sample.convert("P", palette=Image.Palette.ADAPTIVE, colors=96)
+    return sample.convert("P", palette=Image.Palette.ADAPTIVE, colors=colors)
 
 
 def build_one(did: str) -> Path:
@@ -256,7 +280,7 @@ def build_one(did: str) -> Path:
     with Image.open(source) as raw:
         src = raw.convert("RGB")
     frames = animation(did, src)
-    palette = shared_palette(frames)
+    palette = shared_palette(frames, 256 if did in PROFILES else 96)
     pal = [f.quantize(palette=palette, dither=Image.Dither.FLOYDSTEINBERG) for f in frames]
 
     OUT.mkdir(parents=True, exist_ok=True)
@@ -266,6 +290,14 @@ def build_one(did: str) -> Path:
 
     ENDS.mkdir(parents=True, exist_ok=True)
     frames[-1].save(ENDS / f"{did}.jpg", "JPEG", quality=93, optimize=True)
+    if did in PROFILES:
+        # GIF의 양자화·디더를 다시 확대하지 않고 원색 장면에서 게임용 판을 만든다.
+        sheets = ROOT / 'images' / 'discovery-sheets'
+        sheets.mkdir(parents=True, exist_ok=True)
+        atlas = Image.new('RGB', (W * 6, H * 4))
+        for i, frame in enumerate(frames):
+            atlas.paste(frame, ((i % 6) * W, (i // 6) * H))
+        atlas.save(sheets / f'{did}.webp', 'WEBP', quality=88, method=6)
     return dst
 
 
@@ -275,6 +307,9 @@ def main() -> None:
     args = ap.parse_args()
     wanted = set(args.only.split(",")) if args.only else None
     ids = [did for did in TREASURE_IDS if wanted is None or did in wanted]
+    if wanted is None:
+        # 별도 도구로 완성한 이야기·고전 작품 연출을 예전 회전 원화로 되돌리지 않는다.
+        ids = [did for did in ids if not did.startswith('ft_') and did not in {'creation', 'birthvenus', 'laocoon'}]
     unknown = sorted((wanted or set()) - set(TREASURE_IDS))
     if unknown:
         raise SystemExit("unknown treasure discovery ids: " + ", ".join(unknown))

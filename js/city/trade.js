@@ -536,11 +536,15 @@
      · 사는 값: 품목 값(값 깎기·면세·관계가 이미 들어간 값)에서 일괄 할인만큼 더 싸게
      · 파는 값: 이 도시가 팔지 않는 물건(들여온 물건)의, 다른 곳에서 산 몫에만 웃돈 — 깎아 사서 그 자리에서 되팔아 남기지 못하게(낱개 흥정과 같은 규칙)
      조정값 G.BALANCE.batchDeal */
-  function BD() { var d = { base: 0.03, perAcct: 0.015, purser: 0.015, bulkPer: 2000, bulkMax: 0.03, cap: 0.22, sellK: 0.7, fade: 0.8 }, b = (G.BALANCE && G.BALANCE.batchDeal) || {}, o = {}, k; for (k in d) o[k] = b[k] == null ? d[k] : b[k]; return o; }
+  function BD() {
+    var d = { base: 0.03, perAcct: 0.015, purser: 0.015, bulkPer: 2000, bulkMax: 0.03, cap: 0.22, sellK: 0.7, fade: 0.8 }, b = (G.BALANCE && G.BALANCE.batchDeal) || {}, o = {}, k; for (k in d) o[k] = b[k] == null ? d[k] : b[k];
+    o.cap += T.haggleStat().batchD;   // 지력·매력이 높으면 일괄 흥정의 상한도 올라간다
+    return o;
+  }
   /** 한 번 흥정에서 깎이는 몫: 회계·경리·물량(통 수)에 따라 */
   T.batchStep = function (c, qtyTotal) {
     var K = BD(), acct = R.skill('acct'), pu = R.purser();
-    return K.base + acct * K.perAcct + (pu ? K.purser + (pu.acct || 0) * 0.005 : 0) + Math.min(K.bulkMax, (qtyTotal || 0) / K.bulkPer * K.bulkMax);
+    return K.base + acct * K.perAcct + (pu ? K.purser + (pu.acct || 0) * 0.005 : 0) + Math.min(K.bulkMax, (qtyTotal || 0) / K.bulkPer * K.bulkMax) + T.haggleStat().batchD;
   };
   /** 이번 입항 동안의 일괄 흥정 상태 {buy·sell: 얻은 할인/웃돈 몫, used, fails} — 입항이 바뀌면 새로 */
   function batState(c) {
@@ -704,14 +708,30 @@
     }
   };
 
+  /** 흥정의 지력·매력 (G.BALANCE.haggleStat): 지력·매력이 from(50) 이하이면 덤 0 — 예전 값이 바닥이고, 넘는 만큼 성공률(p)·깎는 폭(d)이 커진다.
+      경리가 있으면 지력·매력 저마다 제독과 경리 가운데 높은 쪽으로 (장부를 따지는 사람과 말을 붙이는 사람이 나눠 맡는다).
+      batchD: 일괄 거래 흥정 한 번의 덤·상한 덤, dealP·dealD: 시장 결제 추가 협상의 성공률·깎는 폭 덤 */
+  T.haggleStat = function () {
+    var K = (G.BALANCE && G.BALANCE.haggleStat) || {}, from = K.from == null ? 50 : K.from, top = K.top || 100;
+    function v(k, i) {
+      var me = R.stat(k) || 0, pu = R.purser(), mv = 0;
+      if (pu && pu.m && R.mateStats) { var ms = R.mateStats(pu.m).st; mv = (ms && ms[i]) || 0; }
+      return Math.max(me, mv);
+    }
+    var iv = v('int', 1), cha = v('cha', 3), oi = Math.max(0, Math.min(top, iv) - from), oc = Math.max(0, Math.min(top, cha) - from);
+    var p = oi * (K.intP == null ? 0.003 : K.intP) + oc * (K.chaP == null ? 0.004 : K.chaP);
+    var d = oi * (K.intD == null ? 0.0012 : K.intD) + oc * (K.chaD == null ? 0.0008 : K.chaD);
+    return { int: iv, cha: cha, p: p, d: d, batchD: d * (K.batchK == null ? 0.5 : K.batchK), dealP: p * (K.dealP == null ? 0.5 : K.dealP), dealD: d * (K.dealD == null ? 0.3 : K.dealD) };
+  };
   T.haggleOdds = function (c) {
-    var acct = R.skill('acct'), lv = C.langLv(c), cha = R.stat('cha'), pu = R.purser();
-    var p = 0.25 + acct * 0.17 + (lv - 1) * 0.08 + (cha - 50) * 0.004 + (pu ? 0.12 + pu.acct * 0.05 : 0) + (G.Cabins ? G.Cabins.fx('account', 'haggle') : 0) + (G.SkillCombos ? G.SkillCombos.bonus('haggle') : 0);
-    var disc = 0.04 + acct * 0.03 + (pu ? 0.02 + pu.acct * 0.015 : 0);
+    var acct = R.skill('acct'), lv = C.langLv(c), pu = R.purser(), hs = T.haggleStat();
+    // 매력이 50보다 낮아도 깎이지 않는다 — 지력·매력은 덤만 더한다 (T.haggleStat)
+    var p = 0.25 + acct * 0.17 + (lv - 1) * 0.08 + hs.p + (pu ? 0.12 + pu.acct * 0.05 : 0) + (G.Cabins ? G.Cabins.fx('account', 'haggle') : 0) + (G.SkillCombos ? G.SkillCombos.bonus('haggle') : 0);
+    var disc = 0.04 + acct * 0.03 + (pu ? 0.02 + pu.acct * 0.015 : 0) + hs.d;
     // 귀족의 권한: 작위가 있으면 유럽·이슬람 도시에서 더 잘, 더 많이 깎인다 (js/systems/court.js)
     var nb = G.Court ? G.Court.haggle(c) : null;
     if (nb) { p += nb.p; disc += nb.disc; }
-    return { p: U.clamp(p, 0.08, pu || nb ? 0.95 : 0.92), disc: disc, pu: pu, noble: nb };
+    return { p: U.clamp(p, 0.08, pu || nb ? 0.95 : 0.92), disc: disc, pu: pu, noble: nb, stat: hs };
   };
   T.haggle = async function (c) {
     var cur = C.current(), k = keeper();
@@ -734,17 +754,20 @@
     }
     if (ok && used) o.disc += 0.01 * used;   // 끈질기게 흥정해 얻으면 조금 더 깎인다
     if (ok) {
-      var disc = Math.min(0.25 + (o.noble ? o.noble.disc : 0), o.disc + U.rf(0, 0.04));
+      var disc = Math.min(0.25 + (o.noble ? o.noble.disc : 0) + o.stat.d, o.disc + U.rf(0, 0.04));   // 지력·매력의 덤만큼 상한도 올라간다
       cur.haggle = keepHag(c, { ok: true, buy: 1 - disc, sell: 1 + disc * (pu ? 0.7 : 0.6) });
       if (G.Growth) G.Growth.haggle();
       await C.say(k, o.noble && !pu ? U.pick([o.noble.adr + '의 청을 어찌 물리치겠습니까. 특별히 그 값에 드리지요.', o.noble.adr + '께서 찾아 주신 것만도 영광입니다. 값은 넉넉히 빼 드리겠습니다.']) : U.pick(pu ? ['자네 경리는 무서운 사람이군… 알았네, 그 값에 주지.', '장부까지 들이밀다니! 좋아, 이번만일세.'] : ['허허, 자네한테는 못 당하겠군. 좋아, 특별히 싸게 해 주지.', '자네, 보는 눈이 있군. 득 보는 걸세.', '알았네, 알았어. 이번만일세.']));
-      UI.toast('값 깎기 성공' + (pu ? '(경리 ' + pu.name + ')' : '') + (o.noble ? '(귀족의 권한 — ' + o.noble.title.ko + ')' : '') + '! 사는 값 -' + Math.round(disc * 100) + '%, 들여온 물건 파는 값 +' + Math.round(disc * (pu ? 70 : 60)) + '%', 'scales');
+      UI.toast('값 깎기 성공' + (pu ? '(경리 ' + pu.name + ')' : '') + (o.noble ? '(귀족의 권한 — ' + o.noble.title.ko + ')' : '') + '! 사는 값 -' + Math.round(disc * 100) + '%, 들여온 물건 파는 값 +' + Math.round(disc * (pu ? 70 : 60)) + '%' + statNote(o.stat), 'scales');
     } else if (!cur.haggle) {
       cur.haggle = keepHag(c, { ok: false });
       await C.say(k, U.pick(['어림없는 소리! 이 값도 밑지고 파는 걸세.', '싫으면 다른 데 가 보게.', '값을 깎으려거든 장사를 좀 더 배우고 오게.']));
       await osaHelp(c, cur);
     }
   };
+  /** 알림 꼬리: 지력·매력이 보탠 몫 */
+  function statNote(hs) { return hs && (hs.p > 0.0005 || hs.d > 0.0005) ? ' (지력 ' + hs.int + '·매력 ' + hs.cha + ' — 성공률 +' + Math.round(hs.p * 100) + '%p, 깎는 폭 +' + (Math.round(hs.d * 1000) / 10) + '%p)' : ''; }
+  T.statNote = statNote;
   /** 모항에서 흥정이 막혔을 때 소꿉친구가 나타나 거든다 — 거들었으면 이번 방문의 값 깎기를 이룬 것으로 (js/systems/osa.js) */
   async function osaHelp(c, cur) {
     if (!G.Osa || !G.Osa.haggleHelp) return false;

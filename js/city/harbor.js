@@ -667,7 +667,8 @@
     return '<tr><td><span class="tag">' + tag + '</span></td><td><b>' + U.esc(sh.name) + '</b>' + (sh.loan ? ' <small class="muted">(빌린 배)</small>' : '') + '</td><td>' + t.name + (sh.wood && G.TIMBER[sh.wood] ? ' <small class="muted">' + G.TIMBER[sh.wood].name + '</small>' : '') + '</td><td>' + (tag === '도크' ? '<span class="' + (/일 남음/.test(note || '') ? 'warn-text' : 'muted') + '">' + (note || '—') + '</span>' : U.esc(R.captainName(sh))) + '</td><td class="num">' + Math.round(sh.hp) + '/' + sh.maxHp + '</td><td class="num">' + sh.crewMin + '~' + sh.crewMax + '</td><td class="num">' + R.shipCargoCap(sh) + '</td><td class="num">' + (G.CANNON[sh.guns.type] ? G.CANNON[sh.guns.type].name + ' ' : '') + sh.guns.n + '/' + sh.ports + '</td></tr>';
   }
   function pickShip(title, list) {
-    return UI.choose(title, list.map(function (sh, i) { return { label: U.esc(sh.name) + '호', right: G.SHIP[sh.type].name + ' · 내구 ' + Math.round(sh.hp) + '/' + sh.maxHp, value: i, icon: 'ship' }; }), { width: 620 });
+    // 적재량도 함께 (2026-11-08 사용자 요청 — 배를 바꿀 때 짐칸을 보고 고르게)
+    return UI.choose(title, list.map(function (sh, i) { return { label: U.esc(sh.name) + '호', right: G.SHIP[sh.type].name + ' · 적재 ' + U.num(R.shipCargoCap(sh)) + '통 · 내구 ' + Math.round(sh.hp) + '/' + sh.maxHp, value: i, icon: 'ship' }; }), { width: 680 });
   }
   H.pickShip = pickShip;
 

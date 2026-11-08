@@ -1,0 +1,449 @@
+{
+  "venusmilo": {
+    "mode": "photo",
+    "glints": false
+  },
+  "nike": {
+    "mode": "views",
+    "glints": false
+  },
+  "nefertiti": {
+    "mode": "views",
+    "glints": false
+  },
+  "benin": {
+    "mode": "views",
+    "glints": true
+  },
+  "saliera": {
+    "mode": "photo",
+    "glints": false
+  },
+  "david": {
+    "mode": "photo",
+    "glints": false
+  },
+  "lastsupper": {
+    "mode": "views",
+    "glints": false
+  },
+  "ambassadors": {
+    "mode": "views",
+    "glints": false
+  },
+  "ghentaltar": {
+    "mode": "photo",
+    "glints": false
+  },
+  "orgaz": {
+    "mode": "views",
+    "glints": false
+  },
+  "nanbanscreen": {
+    "mode": "views",
+    "glints": false
+  },
+  "earthlydelights": {
+    "mode": "photo",
+    "glints": false
+  },
+  "urbinovenus": {
+    "mode": "photo",
+    "glints": false
+  },
+  "paladoro": {
+    "mode": "views",
+    "glints": true
+  },
+  "belemmonstrance": {
+    "mode": "views",
+    "glints": true
+  },
+  "hanseal": {
+    "mode": "views",
+    "glints": true
+  },
+  "seismo": {
+    "mode": "views",
+    "glints": true
+  },
+  "peacockthrone": {
+    "mode": "views",
+    "glints": true
+  },
+  "moonjar": {
+    "mode": "views",
+    "glints": false
+  },
+  "goryeoceladon": {
+    "mode": "views",
+    "glints": false
+  },
+  "tangsancai": {
+    "mode": "views",
+    "glints": false
+  },
+  "incadisc": {
+    "mode": "views",
+    "glints": true
+  },
+  "sunstone": {
+    "mode": "views",
+    "glints": false
+  },
+  "hammurabi": {
+    "mode": "views",
+    "glints": false
+  },
+  "qingming": {
+    "mode": "views",
+    "glints": false
+  },
+  "tripitaka": {
+    "mode": "views",
+    "glints": false
+  },
+  "hunmin": {
+    "mode": "views",
+    "glints": false
+  },
+  "ankh": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "beowulf": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "kingjohn": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "agamemnon": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "tutankh": {
+    "mode": "views",
+    "glints": true
+  },
+  "rosetta": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "sargon": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "urcrown": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "goldplate": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "ewer": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "shiva": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "goldelephant": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "jadesuit": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "bronze": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "cloisonne": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "glassbowl": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "goldseal": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "crystalskull": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "eldorado": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "jademask": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "grail": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "stcrown": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "reliquary": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "ifehead": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "sillacrown": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "cheonmado": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "baekjecenser": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "guanyublade": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "libai": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "kohinoor": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "genghis": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "holylance": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "qinghua": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "ruware": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "iznikware": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "lustreware": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "aritaware": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "rakubowl": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "tsukumonasu": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "blackprince": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "ironcrown": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "wenceslas": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "timurruby": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "mogokruby": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "lankasapphire": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "muzoemerald": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "peregrina": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "ajanta": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "lanting": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "moctezuma": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "mayacodex": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "monalisa": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "durer": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "babeltower": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "baburnama": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "shahnameh": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "pirireis": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "flordelamar": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "rongorongo": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "lapita": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "timaeus": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "huascarchain": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "kalachakra": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "pangboche": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "excalibur": {
+    "mode": "views",
+    "glints": true,
+    "retained_source": true
+  },
+  "kingittor": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "boturini": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  },
+  "oldworldmap": {
+    "mode": "views",
+    "glints": false,
+    "retained_source": true
+  }
+}

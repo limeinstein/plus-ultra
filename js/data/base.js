@@ -557,6 +557,10 @@
     //   배가 버티는 무게 +wt[단계], blackMarket 단계부터 크기 bmSize 이상 항구의 비밀 암시장 — 물건 bmItems가지(값 ×bmMarkup)·밀수품 bmGoods가지(산지 값 ×bmGoodMarkup),
     //   토르데시야스 조약 뒤에는 상대 왕실의 국기를 기간마다 bmFlags장 (js/systems/blackmarket.js BM.flag),
     //   bmPeriod일마다 바뀜, 거래마다 악명 +bmNoto
+    // 흥정의 지력·매력 (js/city/trade.js T.haggleStat — 2026-11-08 사용자 요청): 지력·매력이 from 이하이면 예전 값 그대로(깎이지 않는다 — 지금 값이 바닥),
+    //   from을 넘는 1점마다 성공률 +intP·chaP, 깎는 폭 +intD·chaD, 깎는 폭의 상한도 그만큼 올라간다. 경리가 있으면 제독과 경리 가운데 높은 쪽.
+    //   일괄 거래 흥정은 한 번에 깎는 몫·상한에 깎는 폭 덤 × batchK, 시장 결제 추가 협상은 성공률 덤 × dealP · 깎는 폭 덤 × dealD
+    haggleStat: { from: 50, top: 100, intP: 0.003, chaP: 0.004, intD: 0.0012, chaD: 0.0008, batchK: 0.5, dealP: 0.5, dealD: 0.3 },
     acct: { tries: [1, 2, 2, 3], puTry: 1, retryK: 0.7, wt: [0, 0.04, 0.08, 0.12], marketDeals: [0, 1, 2, 3], marketDealChance: [0, 0.55, 0.7, 0.85], marketDealDisc: [0, 0.03, 0.05, 0.07], blackMarket: 3, bmSize: 2, bmItems: 3, bmFlags: 3, bmGoods: 2, bmMarkup: 1.5, bmGoodMarkup: 1.4, bmPeriod: 30, bmNoto: 1 },
     // 제독의 수명·생일 선물 (js/systems/lifespan.js): maxAge세 생일에 세상을 떠난다(아들이 있으면 뒤를 잇는다). warnFrom세부터 생일마다 귀띔.
     //   생일에 충성 giftLoyal 이상인 부하 가운데 가장 충성스러운 한 사람이 특기에 맞는 선물 하나(고맙다는 말에 충성 +giftLoyalUp),
@@ -599,12 +603,12 @@
     famEv: { seaChance: 0.06, seaGap: 20, dateAff: 40, dateGap: 7, dockDays: 120, dockChance: 0.7, returnDays: 45, homeChance: 0.5, homeGap: 25, cradleDays: 60, portChance: 0.2, portGap: 30 },
     tombDuel: { guardFame: 1.25, robFame: 1.1, robLoot: 0.08, robbedFame: 0.7, retryDays: 30, loseFatigue: 10, battleFame: 4, statPerPw: 0.04 },
     // 전설 속 인물 (js/systems/legends.js): 세 형제를 만나는 횟수 · 중국 술집에서 한 번 들른 사이 술을 사는 횟수 · 탁군 좌표·반지름(도)
-    //   제갈량: 유비가 부관일 때 여관 들르는 횟수 · 달타냥: 프랑스 시장에서 사는 물건 수·빌려줄 돈 · 셰헤라자드: 이슬람 도서관에서 읽는 책 수
-    //   알라딘·알리바바: 오스만 교역소 출자 등급 · 부하가 된 뒤 처음 충성심
+    //   제갈량: 유비가 부관일 때 여관 들르는 횟수 · 달타냥: 프랑스 시장에서 사는 물건 수·빌려줄 돈 · 셰헤라자드: 이슬람 도서관에서 한 번 들른 사이 읽는 책 수 · 그 가운데 꼭 있어야 하는 책(scheBook, 『천일야화』)
+    //   알라딘·알리바바: 오스만 교역소 출자 등급 · 알리바바는 부하가 aliBabaMates명을 넘어야(마흔 도적보다 많은 무리) · 부하가 된 뒤 처음 충성심
     fairy: { chance: 0.3, coolDays: 45, nearR: 2.5 },   // 숲에서 만나는 옛이야기의 아가씨: 날마다 확률·거절 뒤 쉬는 날·도시 근처 거리
     // 거리를 거니는 동료 (js/systems/matestroll.js · 2026-11-07): 공주·셰에라자드·엘리자베타·마녀가 일행에 있으면 입항마다 이 확률로 한 명이 거리에 나온다 (출항 전까지 그 한 명만)
     mateStroll: { chance: 0.1 },
-    legends: { meets: 3, drinks: 3, zhuoLon: 115.97, zhuoLat: 39.49, zhuoR: 0.45, innVisits: 3, dartBuys: 3, dartLoan: 2000, books: 5, investLv: 5, loyal: 80 },
+    legends: { meets: 3, drinks: 3, zhuoLon: 115.97, zhuoLat: 39.49, zhuoR: 0.45, innVisits: 3, dartBuys: 3, dartLoan: 2000, books: 10, scheBook: 'b_nights', investLv: 5, aliBabaMates: 40, loyal: 80 },
     castaway: { radius: 0.6, gapDays: 30, wilsonDays: 30, wilsonCamps: 10, journalDays: 90, journalCamps: 15, wilsonRest: 8, journalCost: 0.15, journalFind: 1.25 },
     // 잠입 (js/systems/sneak.js): 성공 가망 = 바탕(base) + 변장 + 말(못 하면 lang0, 단계마다 langLv) + 화술 × speech + 모국어 동료(native)
     //   − 악명 × noto(최대 notoMax) − 얼마 전(alertDays일 안) 들킨 일(alert). min~max로 자른다.
@@ -738,7 +742,12 @@
       // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)
       // · 집을 비운 달마다 −bondAway(3살부터) · 견습으로 배에 타면 달마다 +bondAboard, 특기를 익힐 확률 apprenticeSkill
       // · 해산 한 달 앞(nearDays)이면 소식과 자택 「해산을 기다린다」 · 견습은 apprenticeAge살부터
-      bondBorn: 60, bondMissed: 40, bondVisit: 3, bondAway: 1, bondAboard: 2, apprenticeSkill: 0.22, nearDays: 30, apprenticeAge: 12 },
+      bondBorn: 60, bondMissed: 40, bondVisit: 3, bondAway: 1, bondAboard: 2, apprenticeSkill: 0.22, nearDays: 30, apprenticeAge: 12,
+      // 물려받는 능력 (js/systems/family.js F.inherit · 2026-11-08 사용자 요청): 임신 때 부모의 능력을 능력마다 아버지 쪽 faW 비중으로 섞고 ±noise 흔들림·mean으로 pull만큼 당김
+      // gift 확률로 한 능력 +giftAmt, 같은 확률로 한 능력 −giftAmt · 출산 나이: 어머니 momOld살부터 해마다 momPer(+momVery살부터 momVeryPer) · 아버지 dadOld살부터 dadPer
+      // · 어머니가 momYoung살보다 어리면 해마다 youngPer → penMax까지, 능력마다 penChance 확률로 0.5~1.5배를 뺀다 · 타고난 능력은 lo~hi
+      inherit: { faW: [0.3, 0.7], noise: 6, mean: 55, pull: 0.15, gift: 0.1, giftAmt: [5, 12], lo: 25, hi: 90,
+        momYoung: 17, youngPer: 1.5, momOld: 35, momPer: 1.2, momVery: 40, momVeryPer: 1.5, dadOld: 45, dadPer: 0.6, penMax: 18, penChance: 0.75, momMax: 45 } },   // momMax: 어머니가 이 나이를 넘으면 아이가 생기지 않는다
     // 철새(떠돌이 항해사, wanderers.js): 새 게임에 startN명, 해마다 perYear명이 새로 나타난다.
     // cycle년마다(epoch부터 센다: 1510·1540·1570…) 세대가 바뀐다 — 고용하지 않은 철새는 떠나고, 그 가운데 rebornMax명의 「다음 세대」가 나타난다.
     // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).

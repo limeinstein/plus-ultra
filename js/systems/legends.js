@@ -7,8 +7,10 @@
    ■ 달타냥 — 프랑스 도시 시장에서 한 번 들른 사이에 물건을 dartBuys번 사면, 말 값이 모자란다며 금화 dartLoan닢을 빌려 달라고 한다. 빌려주면 부하가 된다
      ■ 삼총사 — 달타냥을 데리고 처음 가는 도시 술집에 들어설 때마다 아토스 → 포르토스 → 아라미스 차례로 한 사람이 결투를 걸어 온다(피할 수 없다).
        제독이나 달타냥이 이기면 그 사람이 부하가 된다. 지면 다음 새 도시에서 다시 온다.
-   ■ 셰헤라자드 — 이슬람 도시 도서관에서 한 번 들른 사이에 서로 다른 책을 books권 읽으면(다시 읽은 책도 — 빨간 책은 못 읽으니 빼고) 다가와 부하가 되겠다고 한다
+   ■ 셰헤라자드 — 이슬람 도시 도서관에서 한 번 들른 사이에 서로 다른 책을 books(10)권 읽고(다시 읽은 책도 — 빨간 책은 못 읽으니 빼고),
+     그 가운데 『천일야화』(scheBook)가 있으면 다가와 부하가 되겠다고 한다 (읽는 차례는 상관없다)
    ■ 알라딘·알리바바 — 셰헤라자드가 통역(interp)일 때 오스만 제국 도시 교역소 출자가 investLv등급이면 그 교역소에서 한 사람씩 만난다 (두 사람은 서로 다른 도시)
+     · 알리바바는 부하가 aliBabaMates(40)명을 넘어야 함께한다 — 모자라면 그 교역소에서 한 번 귀띔만 하고 물러난다 (도시 기록은 남기지 않아 다시 들르면 또 판정)
    · 저장: s.legend = {tao: {met: [자리]}, zhuge: {inn}, dart: {}, musk: {seen: [도시], lost: {id: 번}}, sche: {}, ott: {cities: []}}
    · 건물의 일(술·여관·서가·시장·교역소)은 그 건물 함수를 감싸서 본다 (install). 뭍은 js/scenes/land.js 가 G.Legend.onLand 를 부른다 */
 (function (G) {
@@ -232,15 +234,34 @@
   }
 
   // ================================================================ 셰헤라자드
-  async function bookRead(c) {
-    var cu = cur(), H = st().sche; if (!cu) return;
+  /* 이슬람 도시 도서관에서 한 번 들른 사이(나가지 않고)에 서로 다른 책을 books(10)권 읽고, 그 가운데 『천일야화』(scheBook)가 있으면 다가온다.
+     다시 읽은 책도 센다 — 빨간 책은 못 읽으니 빼고. 『천일야화』는 먼저 읽든 나중에 읽든 된다 (2026-11-08 사용자 요청 — 전에는 아무 책 5권).
+     10권이 되는 도서관: 이스탄불(서가 20권)·카이로(19권) — 중근동 개척이 조금 나아간 1492년 무렵부터 (그리스어·아랍어·역사학) */
+  function scheNeed() { var n = K().books; return n == null ? 10 : n; }
+  function scheBook() { return K().scheBook || 'b_nights'; }
+  LG.scheNeed = scheNeed;
+  async function bookRead(c, b) {
+    var cu = cur(), H = st().sche; if (!cu || !b) return;
     cu.lgBooks = (cu.lgBooks || 0) + 1;
-    if (!LG.isIslam(c) || row('scheherazade') || gone('scheherazade') || H.done || cu.lgSche || cu.lgBooks < (K().books || 5)) return;
+    if (b.id === scheBook()) cu.lgNights = 1;
+    if (!LG.isIslam(c) || row('scheherazade') || gone('scheherazade') || H.done) return;
+    var n = cu.lgBooks, need = scheNeed();
+    if (n < need) return;
+    if (!cu.lgNights) {
+      // 열 권을 채웠는데 『천일야화』를 아직 펼치지 않았다: 이 서가에 있으면 사서가 일러 준다 (한 번 들른 사이 한 번)
+      if (!cu.lgScheTold) {
+        cu.lgScheTold = 1;
+        var nb = G.BOOK_BY_ID ? G.BOOK_BY_ID[scheBook()] : (G.BOOKS || []).filter(function (x) { return x.id === scheBook(); })[0];
+        if (nb && nb.libs.indexOf(c.id) >= 0) await UI.say('하루도 쉬지 않고 ' + n + '권째로군요. 그 이야기꾼은 『천일야화』를 펼친 손님에게만 다가온다던데…… 저기 저 서가에 꽂혀 있답니다.', C().npc('librarian', '사서'));
+      }
+      return;
+    }
+    if (cu.lgSche) return;
     cu.lgSche = 1;
     var pc = G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/scheherazade_library', title: '끝나지 않는 이야기' }) : null;
     try {
-      await UI.say('다섯 번째 책을 덮자, 맞은편 서가 그늘에서 비단 너울을 쓴 여인이 웃음을 머금고 다가온다.', {});
-      await say('scheherazade', '하루에 한 권씩, 다섯 권을 쉬지 않고 읽는 분은 오랜만에 보는군요. 저는 셰헤라자드. 천 하루 밤 동안 이야기를 하며 살아남은 사람이랍니다.');
+      await UI.say('책을 덮고 고개를 들자, 맞은편 서가 그늘에서 비단 너울을 쓴 여인이 웃음을 머금고 다가온다.', {});
+      await say('scheherazade', '한자리에서 ' + n + '권을 쉬지 않고, 그것도 제 이야기책까지 펼치셨군요. 저는 셰헤라자드. 천 하루 밤 동안 이야기를 하며 살아남은 사람이랍니다.');
       await say('scheherazade', '책 속의 이야기는 다 읽으셨지요? 그럼 아직 아무 책에도 쓰이지 않은 이야기는 어떠세요.\f저는 프랑크 사람들의 말도, 아랍과 페르시아의 말도, 바다 건너 아프리카의 말도, 인도와 중국의 말도 압니다. 당신의 배가 가는 곳마다 제가 말을 옮겨 드리지요.');
       await UI.say('……그 대신, 당신의 항해를 끝까지 이야기로 엮게 해 주세요. 끝나지 않는 이야기가 제일 좋거든요.', who('scheherazade'));
       if (await offer(['scheherazade'], c, '셰헤라자드가 부하가 되겠다고 한다.')) { H.done = 1; await say('scheherazade', '그럼 첫날 밤의 이야기를 시작할까요. 옛날 옛적, 바다를 건너온 한 제독이 있었는데……'); }
@@ -249,6 +270,9 @@
   }
 
   // ================================================================ 알라딘·알리바바
+  /** 지금 거느린 부하 수 · 알리바바가 바라는 수(이 수를 넘어야 한다) */
+  LG.mateCount = function () { var s = S(); return (s && s.mates ? s.mates.length : 0); };
+  LG.aliBabaNeed = function () { var n = K().aliBabaMates; return n == null ? 40 : n; };
   var OTT = [
     { id: 'aladdin', intro: '교역소 뒷방에 낡은 놋쇠 램프를 든 젊은이가 앉아 있다. 출자 장부에 적힌 제독의 이름을 보더니 벌떡 일어선다.',
       lines: ['당신이 이 교역소의 큰 출자자로군요! 저는 알라딘. 바그다드 뒷골목에서 왔습니다.', '셰헤라자드 누님! 누님이 이분 배에 계셨군요. 그럼 이야기가 빠르겠네요.', '이 램프요? 하하, 문지르지 마세요. 소원은 셋뿐이고 저는 벌써 둘을 썼거든요. 남은 하나는…… 넓은 바다를 보는 데 쓰고 싶습니다.'] },
@@ -262,6 +286,16 @@
     if ((R.investLv ? R.investLv(c.id) : 0) < (K().investLv || 5)) return;
     var it = OTT.filter(function (o) { return !row(o.id) && !gone(o.id); })[0];
     if (!it) return;
+    // 알리바바: 부하가 aliBabaMates명을 넘어야 — 마흔 도적이 아직 그를 쫓으니, 그보다 많은 무리와 함께여야 바다로 나선다 (2026-11-08)
+    if (it.id === 'ali_baba' && LG.mateCount() <= LG.aliBabaNeed()) {
+      if (O.abHint !== c.id) {
+        O.abHint = c.id;
+        await UI.say('교역소 창고에서 낙타 짐을 풀던 사내가 출자 장부를 넘겨보다가, 제독 뒤의 일행을 헤아려 보고는 고개를 젓는다.', {});
+        await say('ali_baba', '마흔 도적이 아직도 저를 쫓습니다. 그놈들보다 적은 무리와 함께 다니다가는 바다 위에서 붙잡히고 말지요. 부하가 ' + LG.aliBabaNeed() + '명이 넘는 큰 일행이 되시면 그때 다시 찾아 주십시오.');
+        UI.toast('알리바바: 부하가 ' + LG.aliBabaNeed() + '명을 넘어야 함께한다 (지금 ' + LG.mateCount() + '명)', 'info', 5200);
+      }
+      return;
+    }
     O.cities.push(c.id);
     await UI.say(it.intro, {});
     for (var i = 0; i < it.lines.length; i++) {
@@ -327,13 +361,13 @@
           var r = await pick0.apply(this, arguments);
           // 읽은 책: 새로 읽은 것·다시 읽은 것 모두 (못 읽는 빨간 책은 빼고) — 한 번 들른 사이에 서로 다른 책으로 센다
           var cu = cur();
-          if (k !== 'lock' && cu && b && !(cu.lgBookIds = cu.lgBookIds || {})[b.id]) { cu.lgBookIds[b.id] = 1; try { await bookRead(c); } catch (e) { console.error(e); } }
+          if (k !== 'lock' && cu && b && !(cu.lgBookIds = cu.lgBookIds || {})[b.id]) { cu.lgBookIds[b.id] = 1; try { await bookRead(c, b); } catch (e) { console.error(e); } }
           return r;
         };
         B.library.pick._lg = true;
       }
       wrapAfter(B.library, 'enter', function (x, c) {
-        if (LG.isIslam(c) && !row('scheherazade') && !st().sche.done) return hint('sche', CC.npc('librarian', '사서'), '요즘 밤마다 이야기를 들려주는 여인이 서가에 들르지요. 책을 쉬지 않고 여러 권 읽는 손님이 있으면 슬그머니 다가온다더군요.');
+        if (LG.isIslam(c) && !row('scheherazade') && !st().sche.done) return hint('sche', CC.npc('librarian', '사서'), '요즘 밤마다 이야기를 들려주는 여인이 서가에 들르지요. 한자리에서 책을 ' + scheNeed() + '권이나 쉬지 않고 읽고 『천일야화』까지 펼친 손님에게 슬그머니 다가온다더군요.');
       });
     }
     // 교역소: 들어서거나 출자한 뒤 (알라딘·알리바바)

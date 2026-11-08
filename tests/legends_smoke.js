@@ -2,7 +2,7 @@
    · 11명이 항해사 명부(G.MATE)에 있고 얼굴·무릎상(portraits/legendary)이 이어지며, 술집 손님·떠도는 명부에는 나오지 않는다
    · 세 형제: 중국 술집 술 3번(같은 도시는 한 번) + 탁군 땅 + 다른 중국 술집 → 셋이 함께 부하
    · 제갈량: 유비 부관 + 여관 3번 · 달타냥: 프랑스 시장 물건 3개 + 금화 2000 빌려줌 · 삼총사: 새 도시 술집마다 결투(지면 다음 도시에서 다시)
-   · 셰헤라자드: 이슬람 도서관 책 5권 · 알라딘·알리바바: 셰헤라자드 통역 + 오스만 교역소 출자 5등급 (서로 다른 도시)
+   · 셰헤라자드: 이슬람 도서관에서 한 번 들른 사이 10권 + 『천일야화』 · 알라딘·알리바바: 셰헤라자드 통역 + 오스만 교역소 출자 5등급 (서로 다른 도시), 알리바바는 부하 40명 넘게
    · 대화는 그대로 두고(무릎상 둘이 마주 서는지 한 장면 찍는다) 고르는 창만 저절로 고른다. 콘솔 오류 0
    node tests/legends_smoke.js */
 'use strict';
@@ -125,30 +125,40 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     r = await visit(22, 'tavern');
     ok((await page.evaluate(() => _asks.filter(a => a[0] === 'duel' && /아토스|포르토스|아라미스/.test(a[1])).length)) === 4, '삼총사를 다 맞은 뒤에는 결투가 없다');
 
-    // ---------------------------------------------------------------- 셰헤라자드
+    // ---------------------------------------------------------------- 셰헤라자드 (한 번 들른 사이 10권 + 『천일야화』)
     console.log('셰헤라자드');
     const lib = await page.evaluate(() => {
       const s = G.Game.state; s.player.lang = G.LANGS.map(() => 3); s.player.skills = Object.assign(s.player.skills || {}, { hist: 3, sci: 3, theo: 3, survey: 3, nav: 3, med: 3, acct: 3 });
+      s.player.lg = {}; G.LANGS.forEach((x, i) => { s.player.lg[i] = 3; }); s.player.sk = Object.assign(s.player.sk || {}, { hist: 3, sci: 3, theo: 3, survey: 3, nav: 3, art: 3 });
+      s.date.y = Math.max(s.date.y, 1493); s.day += 4800; G.Frontier.invalidate();   // 중근동 개척이 나아간 때 (1492년 무렵부터 10권이 읽힌다 — 1494년 토르데시야스 조약 장면 전)
       const LB = G.Scenes.city.B.library;
-      return G.CITY_DATA.filter(c => G.Legend.isIslam(c) && G.R.cityExists(c) && G.R.facilities(c).library).map(c => ({ id: c.id, name: c.name, open: LB.shelfBooks(c).filter(b => LB.shelfState(b).kind !== 'lock').length }));
+      return G.CITY_DATA.filter(c => G.Legend.isIslam(c) && G.R.cityExists(c) && G.R.facilities(c).library).map(c => { const op = LB.shelfBooks(c).filter(b => LB.shelfState(b).kind !== 'lock'); return { id: c.id, name: c.name, open: op.length, nights: op.some(b => b.id === 'b_nights') }; });
     });
-    const lc = lib.filter(x => x.open >= 5)[0];
-    console.log('    이슬람 도시 도서관: ' + lib.map(x => x.name + ' ' + x.open).join(', '));
-    if (lc) {
-      r = await page.evaluate(async (cid) => {
-        const C = G.Scenes.city, s = G.Game.state; await window._enter(cid, 'library');
-        const c = G.CITY_DATA[cid], LB = C.B.library, books = LB.shelfBooks(c).filter(b => LB.shelfState(b).kind !== 'lock').slice(0, 5);
-        G.UI.talk = async () => {};
-        const win0 = G.UI.window;
-        G.UI.window = () => ({ result: Promise.resolve(1), content: document.createElement('div'), close: () => {} });
-        try { for (const b of books) await LB.pick(c, b); } finally { G.UI.window = win0; }
-        await C.leave();
-        return { mates: s.mates.map(m => m.id + ':' + m.role) };
-      }, lc.id);
-    } else {
-      r = await page.evaluate(async (cid) => { const C = G.Scenes.city, s = G.Game.state; await window._enter(cid, 'library'); for (let i = 0; i < 5; i++) await G.Legend._t.bookRead(G.CITY_DATA[cid]); await C.leave(); return { mates: s.mates.map(m => m.id + ':' + m.role) }; }, lib[0].id);
-    }
-    ok(r.mates.some(m => m.indexOf('scheherazade') === 0), '이슬람 도서관에서 책 다섯 권을 읽으니 셰헤라자드가 부하가 되었다' + (lc ? ' (' + lc.name + ' — 서가에서 실제로 읽음)' : ' (읽을 책이 모자라 셈만)'));
+    console.log('    이슬람 도시 도서관(읽을 수 있는 책): ' + lib.map(x => x.name + ' ' + x.open + (x.nights ? '*' : '')).join(', '));
+    const ten = lib.filter(x => x.open >= 11 && x.nights);
+    ok(ten.length >= 1 && ten.some(x => /이스탄불/.test(x.name)), '『천일야화』를 포함해 10권을 읽을 수 있는 이슬람 도서관이 있다: ' + ten.map(x => x.name + ' ' + x.open).join(', '));
+    const lc = ten[0];
+    const readAt = (cid, withNights, n) => page.evaluate(async ([cid, withNights, n]) => {
+      const C = G.Scenes.city, s = G.Game.state;
+      for (let k = 0; k < 30 && (C.isBusy() || G.UI.busy() || G.Game.sceneName !== 'city'); k++) await new Promise(r => setTimeout(r, 200));
+      try { await window._enter(cid, 'library'); } catch (e) { throw new Error(e.message + ' modal=' + Array.from(G.UI.modalRoot().children).map(x => (x.className || '') + ':' + (x.textContent || '').slice(0, 80)).join(' | ') + ' scene=' + G.Game.sceneName + ' busy=' + C.isBusy() + ' ui=' + G.UI.busy() + ' cur=' + JSON.stringify(C.current() && C.current().kind) + ' loc=' + s.loc.city + ' fac=' + JSON.stringify(G.R.facilities(G.CITY_DATA[cid]))); }
+      const c = G.CITY_DATA[cid], LB = C.B.library, op = LB.shelfBooks(c).filter(b => LB.shelfState(b).kind !== 'lock');
+      const others = op.filter(b => b.id !== 'b_nights'), nb = op.filter(b => b.id === 'b_nights');
+      const books = (withNights ? nb.concat(others.slice(0, n - 1)) : others.slice(0, n));
+      G.UI.talk = async () => {};
+      const win0 = G.UI.window; window._say.length = 0;
+      G.UI.window = () => ({ result: Promise.resolve(1), content: document.createElement('div'), close: () => {} });
+      try { for (const b of books) await LB.pick(c, b); } finally { G.UI.window = win0; }
+      const said = window._say.map(x => x.join(':')).join(' / ');
+      await C.leave();
+      return { mates: s.mates.map(m => m.id + ':' + m.role), read: books.length, hint: /천일야화/.test(said) };
+    }, [cid, withNights, n]);
+    r = await readAt(lc.id, true, 9);
+    ok(!r.mates.some(m => m.indexOf('scheherazade') === 0), '『천일야화』를 넣어 9권 — 아직 오지 않는다');
+    r = await readAt(lc.id, false, 10);
+    ok(!r.mates.some(m => m.indexOf('scheherazade') === 0) && r.hint, '『천일야화』 없이 10권 — 오지 않고 사서가 『천일야화』를 일러 준다');
+    r = await readAt(lc.id, true, 10);
+    ok(r.mates.some(m => m.indexOf('scheherazade') === 0), '한 번 들른 사이 『천일야화』를 넣어 10권을 읽으니 셰헤라자드가 부하가 되었다 (' + lc.name + ' — 서가에서 실제로 읽음)');
     const lgs = await page.evaluate(() => G.MATE.scheherazade.lg);
     ok([0, 1, 2, 3, 4, 7, 8, 9, 12, 13, 14].every(k => lgs[k] >= 2 && lgs[k] <= 3) && [5, 6, 10].every(k => lgs[k] === 3), '셰헤라자드는 유럽·아시아의 말을 모두 2~3단계, 아랍어·페르시아어·아프리카 말은 능숙');
 
@@ -163,8 +173,19 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.mates.some(m => m.indexOf('aladdin') === 0) && !r.mates.some(m => m.indexOf('ali_baba') === 0), '오스만 교역소 출자 5등급 + 셰헤라자드 통역 → 알라딘');
     r = await visit(ott[0], 'trade');
     ok(!r.mates.some(m => m.indexOf('ali_baba') === 0), '같은 도시에서는 알리바바를 만나지 않는다');
+    const nMates = await page.evaluate(() => G.Game.state.mates.length);
+    await page.evaluate(() => { window._say.length = 0; });
     r = await visit(ott[1], 'trade');
-    ok(r.mates.some(m => m.indexOf('ali_baba') === 0), '다른 오스만 도시 교역소에서 알리바바');
+    const abSaid = await page.evaluate(() => window._say.map(x => x.join(':')).join(' / '));
+    ok(!r.mates.some(m => m.indexOf('ali_baba') === 0) && /40명/.test(abSaid), '부하 ' + nMates + '명 — 알리바바는 40명을 넘어야 한다며 물러난다');
+    await page.evaluate(() => {   // 부하를 41명으로 채운다
+      const s = G.Game.state, have = new Set(s.mates.map(m => m.id));
+      const pool = Object.keys(G.MATE).filter(id => !have.has(id) && !G.MATE[id].tale && !G.MATE[id].rival && G.LEGENDS.indexOf(id) < 0);
+      while (s.mates.length < 41 && pool.length) s.mates.push({ id: pool.shift(), role: 'none', loyal: 60, ev: 1, joined: G.U.dateNum(s.date), from: s.loc.city });
+    });
+    ok((await page.evaluate(() => G.Game.state.mates.length)) === 41, '부하 41명');
+    r = await visit(ott[1], 'trade');
+    ok(r.mates.some(m => m.indexOf('ali_baba') === 0), '부하가 40명을 넘으니 다른 오스만 도시 교역소에서 알리바바');
 
     // ---------------------------------------------------------------- 장면 한 장: 무릎상 둘이 마주 선다
     await page.evaluate(() => { window._shot = 1; });

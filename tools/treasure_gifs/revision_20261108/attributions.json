@@ -1,0 +1,60 @@
+{
+  "venusmilo": {
+    "page": "https://commons.wikimedia.org/wiki/File:MG-Paris-Aphrodite_of_Milos_edited.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/2/28/MG-Paris-Aphrodite_of_Milos_edited.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/2/28/MG-Paris-Aphrodite_of_Milos_edited.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Mattgirling\" class=\"mw-redirect\" title=\"User:Mattgirling\">Mattgirling</a>",
+    "changes": "Background extraction, scaling, museum spotlight composition and animated presentation."
+  },
+  "saliera": {
+    "page": "https://commons.wikimedia.org/wiki/File:Sali%C3%A8re_de_Cellini_(8).jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Sali%C3%A8re_de_Cellini_%288%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Sali%C3%A8re_de_Cellini_%288%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Guerinf\" title=\"User:Guerinf\">Guerinf</a>",
+    "changes": "Background extraction, scaling, museum spotlight composition and animated presentation."
+  },
+  "ghentaltar": {
+    "page": "https://commons.wikimedia.org/wiki/File:Ghent_Altarpiece_Google_Art_Project.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/50/Ghent_Altarpiece_Google_Art_Project.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Ghent_Altarpiece_Google_Art_Project.jpg/1920px-Ghent_Altarpiece_Google_Art_Project.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "license": "Public domain",
+    "license_url": null,
+    "artist": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:Jan_van_Eyck\" class=\"extiw\" title=\"w:en:Jan van Eyck\"><span title=\"Flemish painter (c.1390–1441)\">Jan van Eyck</span></a></bdi> / <bdi>Presumably <a href=\"https://en.wikipedia.org/wiki/en:Hubert_van_Eyck\" class=\"extiw\" title=\"w:en:Hubert van Eyck\"><span title=\"Early Netherlandish painter (1366-1426)\">Hubert van Eyck</span></a></bdi>",
+    "changes": "Background extraction, scaling, museum spotlight composition and animated presentation."
+  },
+  "earthlydelights": {
+    "page": "https://commons.wikimedia.org/wiki/File:The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg/1920px-The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "license": "Public domain",
+    "license_url": null,
+    "artist": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:Hieronymus_Bosch\" class=\"extiw\" title=\"w:en:Hieronymus Bosch\"><span title=\"painters in art (1450–1516)\">Hieronymus Bosch</span></a></bdi>",
+    "changes": "Background extraction, scaling, museum spotlight composition and animated presentation."
+  },
+  "urbinovenus": {
+    "page": "https://commons.wikimedia.org/wiki/File:Tiziano_-_Venere_di_Urbino_-_Google_Art_Project.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Tiziano_-_Venere_di_Urbino_-_Google_Art_Project.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "download_url": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Tiziano_-_Venere_di_Urbino_-_Google_Art_Project.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "license": "Public domain",
+    "license_url": null,
+    "artist": "<bdi><a href=\"https://en.wikipedia.org/wiki/en:Titian\" class=\"extiw\" title=\"w:en:Titian\"><span title=\"Italian painter (c.1490–1576)\">Titian</span></a></bdi>",
+    "changes": "Background extraction, scaling, museum spotlight composition and animated presentation."
+  },
+  "david": {
+    "id": "david",
+    "title": "File:David - (Michelangelo).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:David_-_(Michelangelo).jpg",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/f/fa/David_-_%28Michelangelo%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/David_-_%28Michelangelo%29.jpg/1280px-David_-_%28Michelangelo%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "artist": "<a href=\"//commons.wikimedia.org/wiki/User:%CE%A3%CF%80%CE%AC%CF%81%CF%84%CE%B1%CE%BA%CE%BF%CF%82\" title=\"User:Σπάρτακος\">Σπάρτακος</a>",
+    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+    "changes": "축소·색상 양자화·여백 추가·확대 이동 GIF 및 재생 시트로 변환",
+    "source": "tools\\asset_qa_20261031\\classical-originals\\david.jpg"
+  }
+}

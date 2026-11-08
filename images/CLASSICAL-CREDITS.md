@@ -1,5 +1,7 @@
 # 고전 작품 발견 연출 출처
 
+2026-11-08 다비드상은 같은 원본 사진에서 배경을 제거하고 검은 보물 전시실의 조명·완만한 확대 연출로 갱신했습니다. 추가한 고전 작품 사진의 출처·이용 조건은 [보물 전시 사진 출처](TREASURE-CREDITS.md)에 있습니다.
+
 이 기록은 `discoveries/`, `discovery-ends/`, `discovery-sheets/`의 아래 세 작품에 적용됩니다. 원본은 축소·색상 양자화·여백 추가·확대 이동 연출로 변환했습니다.
 
 - `creation`: 미켈란젤로, 천지창조 중 아담의 창조. [자료](https://commons.wikimedia.org/wiki/File:Michelangelo,_Creation_of_Adam_01.jpg), Web Gallery of Art, 퍼블릭 도메인.

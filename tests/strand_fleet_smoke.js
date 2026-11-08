@@ -48,6 +48,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       stage('구입 카드');
       for (let i = 0; i < 40 && !document.querySelector('.shipcard.click'); i++) await new Promise(r => setTimeout(r, 100));
       document.querySelector('.shipcard.click').click();
+      // 배를 누르면 도움말(역사·게임 설정)이 먼저 뜬다 → 「이 배를 산다」 (2026-11-08)
+      stage('배 도움말');
+      let buyBtn = null; for (let i = 0; i < 40 && !buyBtn; i++) { buyBtn = [...document.querySelectorAll('.modal-back button')].find(x => x.textContent.trim() === '이 배를 산다'); if (!buyBtn) await new Promise(r => setTimeout(r, 100)); }
+      if (buyBtn) buyBtn.click();
       stage('구입 완료 대기');
       await pb;
       stage('구입 완료');

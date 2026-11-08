@@ -14,6 +14,8 @@
     // 집 외관 높이: 평민·유력자·남작·백작·공작 (거리의 다른 건물과 견줄 때)
     homeBuilding: { heights: [340, 390, 415, 465, 520] },
     famScene: { w: 1008, top: 74 },            // 가족 사건 그림의 너비(높이는 576:256 비율)·위쪽 자리
+    // 조약 창: 군주들의 상징화와 실제 경계 해도는 같은 창에서 넘겨 본다.
+    treaty: { windowW: 1120, mapW: 900, mapH: 300, sceneKey: 'legend-events/tordesillas_council_20261108_v2' },
     // 불러오는 그림 (js/ui/loader.js): 적어도 minShow ms 보여 주고 fadeMs 에 걸쳐 걷는다 · 장면 사이 검은 막이 fadeAfter ms 넘게 걸리면 작게 띄운다 ·
     //   게임을 시작할 때 그림 받기를 기다리는 가장 긴 시간 prepareMs · 도시에 들어서 앞바다를 미리 그리기 시작하는 때 cityWarmMs
     loader: { minShow: 450, fadeMs: 450, fadeAfter: 350, prepareMs: 5000, cityWarmMs: 1500 },
@@ -222,7 +224,27 @@
       deadZone: 0.055,    // 이 정도의 작은 가로 차이는 원래 구도를 유지
       maxShift: 0.25,     // 한 번에 옮길 수 있는 그림 너비 비율
       minFaceWidth: 0.18, // 무릎상·전신상이 임시로 쓰인 경우는 보정하지 않는다
-      bg: '#1a120c'
+      bg: '#1a120c',
+      // 초상 위치 검토 22~37번. rect는 원화 안의 [왼쪽, 위, 너비, 높이] 비율.
+      // 긴 관모·터번은 같은 인물의 무릎상에서 머리와 가슴을 함께 잡아 얼굴을 가운데에 둔다.
+      frames: {
+        'portraits/history/br_gwanghae_king': { source: 'portraits/history/br_gwanghae_king_half', rect: [0.085525, 0, 0.7, 0.466666667] },
+        'portraits/history/ot_suleyman': { source: 'portraits/history/ot_suleyman_half', rect: [0.26115, 0, 0.56, 0.373333333] },
+        'maid-styles/africa/8': { rect: [0.143555, 0.033203, 0.856445, 0.856445] },
+        'maid-styles/africa/10': { rect: [0.141602, 0.033203, 0.858398, 0.858398] },
+        'maid-styles/africa/12': { rect: [0.032091, 0.027344, 0.870117, 0.870117] },
+        'maid-styles/japan/1': { rect: [0.18491, 0.068359, 0.78418, 0.78418] },
+        'maid-styles/japan/2': { rect: [0.074834, 0.052734, 0.817383, 0.817383] },
+        'maid-styles/japan/3': { rect: [0.131137, 0.054688, 0.813477, 0.813477] },
+        'maid-styles/japan/4': { rect: [0.122022, 0.054688, 0.816406, 0.816406] },
+        'maid-styles/japan/5': { rect: [0.147848, 0.054688, 0.814453, 0.814453] },
+        'maid-styles/japan/6': { rect: [0.18457, 0.053711, 0.81543, 0.81543] },
+        'maid-styles/japan/7': { rect: [0.04822, 0.035156, 0.849609, 0.849609] },
+        'maid-styles/japan/8': { rect: [0.083916, 0.032227, 0.855469, 0.855469] },
+        'maid-styles/japan/9': { rect: [0.07062, 0.035156, 0.849609, 0.849609] },
+        'maid-styles/native/1': { rect: [0.129883, 0.025391, 0.870117, 0.870117] },
+        'maid-styles/native/6': { rect: [0.069147, 0.036133, 0.847656, 0.847656] }
+      }
     },
     dialogue: {           // 대화 인물 2.5D 리그 (js/art/portrait_rig.js)
       breath: 1.0,        // 호흡에 따른 상체 움직임
@@ -237,6 +259,29 @@
       aspect: 0.6667,     // 무릎상 가로÷세로 (1024×1536)
       minH: 360, maxH: 640, // 무릎상 높이 범위
       fitMax: 1.2,        // 두 사람이 마주 설 때 머리끝을 맞추려고 키울 수 있는 배수 (그림마다 머리 위 빈칸이 다르다 — 기본 제독 그림은 13%)
+      // 초상 위치 검토 1~20번만: 실제 원화 아랫단. 투명한 밑 여백을 키·발밑 계산에서 뺀다.
+      frameBottom: {
+        'portraits/history/alvarado_half': 1202 / 1536,
+        'portraits/history/azambuja_half': 1202 / 1536,
+        'portraits/history/bernal_half': 1202 / 1536,
+        'portraits/history/caramansa_half': 1202 / 1536,
+        'portraits/history/fsousa_half': 1202 / 1536,
+        'portraits/history/gaeta_half': 1202 / 1536,
+        'portraits/history/jcsousa_half': 1202 / 1536,
+        'portraits/history/kongo_afonso_half': 1202 / 1536,
+        'portraits/history/kongo_nkuwu_half': 1202 / 1536,
+        'portraits/history/kongo_nsaku_half': 1202 / 1536,
+        'portraits/history/kongo_nsaku_envoy_half': 1202 / 1536,
+        'portraits/history/kongo_priest_half': 1202 / 1536,
+        'portraits/history/kongo_soyo_half': 1202 / 1536,
+        'portraits/history/mina_elder_half': 1202 / 1536,
+        'portraits/history/mina_factor_half': 1202 / 1536,
+        'portraits/history/mowgli_ape_half': 1218 / 1536,
+        'portraits/history/narvaez_half': 1202 / 1536,
+        'portraits/history/nzinga_imb_half': 1202 / 1536,
+        'portraits/history/nzinga_wic_half': 1202 / 1536,
+        'portraits/history/salvador_sa_half': 1202 / 1536
+      },
       bustW: 260, bustH: 260, // 무릎상이 없는 사람의 흉상 크기
       soloCity: true      // 혼자 말하는 사람(집사·상인·여관 주인…)은 도시 안에서만 대화창 가운데에 세운다 (바다에서는 예전 흉상 창)
     },

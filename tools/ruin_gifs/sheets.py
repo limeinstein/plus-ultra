@@ -16,6 +16,8 @@
 """
 import os
 import sys
+import importlib.util
+import json
 from PIL import Image, ImageSequence
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -24,6 +26,25 @@ SRC = os.path.join(ROOT, 'images', 'discoveries')
 DST = os.path.join(ROOT, 'images', 'discovery-sheets')
 COLS = 6
 QUALITY = 76
+_TREASURE = None
+
+
+def treasure_frames(gid):
+    """보강한 보물은 GIF의 제한된 색 대신 원색 원화에서 장면 판을 만든다."""
+    global _TREASURE
+    folder = os.path.join(ROOT, 'tools', 'treasure_gifs')
+    profiles = os.path.join(folder, 'profiles_20261108.json')
+    if not os.path.exists(profiles):
+        return None
+    with open(profiles, encoding='utf-8') as f:
+        if gid not in json.load(f):
+            return None
+    if _TREASURE is None:
+        spec = importlib.util.spec_from_file_location('treasure_atlas_source', os.path.join(folder, 'build.py'))
+        _TREASURE = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(_TREASURE)
+    with Image.open(os.path.join(folder, 'sources', gid + '.png')) as src:
+        return _TREASURE.animation(gid, src.convert('RGB'))
 
 
 def frames_of(path):
@@ -38,7 +59,8 @@ def build(gid, force=False):
     dst = os.path.join(DST, gid + '.webp')
     if not force and os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
         return None
-    fr = frames_of(src)
+    original_color = treasure_frames(gid)
+    fr = original_color if original_color is not None else frames_of(src)
     if not fr:
         return None
     n = len(fr)
@@ -52,7 +74,7 @@ def build(gid, force=False):
         sheet.paste(f, ((i % COLS) * w, (i // COLS) * h))
     os.makedirs(DST, exist_ok=True)
     tmp = dst + '.tmp'
-    sheet.save(tmp, 'WEBP', quality=QUALITY, method=6)
+    sheet.save(tmp, 'WEBP', quality=88 if original_color is not None else QUALITY, method=6)
     os.replace(tmp, dst)
     return n, cells, os.path.getsize(src), os.path.getsize(dst)
 

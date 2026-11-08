@@ -651,7 +651,18 @@
     portraitAlpha.set(im, transparent);
     return transparent;
   }
-  function centerPortrait(ctx, w, h, key) {
+  function centerPortrait(ctx, w, h, key, frame, transparent) {
+    // 개별 구도는 원화에서 정한 영역을 바로 그린다. 도감·대화창·작은 동료 얼굴에 함께 적용한다.
+    if (frame && frame.rect) {
+      var source = G.Img.get(key), r = frame.rect;
+      if (source) {
+        var sw = source.naturalWidth || source.width, sh = source.naturalHeight || source.height;
+        ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, w, h);
+        if (!transparent) { ctx.fillStyle = G.FX.portraitFace.bg; ctx.fillRect(0, 0, w, h); }
+        ctx.drawImage(source, r[0] * sw, r[1] * sh, r[2] * sw, r[3] * sh, 0, 0, w, h);
+        return;
+      }
+    }
     var k = G.FX && G.FX.portraitFace, f = G.PORTRAIT_FACES && G.PORTRAIT_FACES[key];
     if (!k || !f || !f.box || !f.eyes || !f.mouth || /_half$/.test(key)) return;
     var im = G.Img.get(key); if (!im) return;
@@ -675,8 +686,9 @@
       ctx.drawImage(im, sx * iw, sy * ih, side * iw, side * ih, 0, 0, w, h);
     }
   }
-  A.portraitCanvas = function (spec, size) {
+  A.portraitCanvas = function (spec, size, opts) {
     size = size || 134;
+    opts = opts || {};
     // 무대 전체가 CSS로 확대되므로 논리 크기 2배만 그리면 큰 화면에서 다시 흐려진다.
     // 현재 무대 배율과 화면 DPR을 반영하되 지나친 메모리 사용을 막아 4배에서 멈춘다.
     var stageScale = G.Game && G.Game.scale ? G.Game.scale : 1;
@@ -685,7 +697,17 @@
     var px = Math.max(1, Math.round(size * ratio));
     var chain = A.portraitKeys(spec);
     if (chain && G.Img.pick(chain)) {
-      var oc = G.Img.make(chain, px, px, function () { var pc = A.canvas(px, px); A.drawPortrait(pc.getContext('2d'), px, spec); return pc; }, { fy: 0.25, bg: '#1a120c', post: centerPortrait });
+      var faceKey = G.Img.pick(chain), frames = G.FX && G.FX.portraitFace && G.FX.portraitFace.frames;
+      var frame = frames && frames[faceKey];
+      if (frame && frame.source) {
+        if (G.Img.has(frame.source)) chain = [frame.source];
+        else frame = null;
+      }
+      var oc = G.Img.make(chain, px, px, function () { var pc = A.canvas(px, px); A.drawPortrait(pc.getContext('2d'), px, spec); return pc; }, {
+        fy: 0.25, bg: opts.transparent ? null : '#1a120c',
+        post: function (ctx, w, h, key) { centerPortrait(ctx, w, h, key, frame, opts.transparent); }
+      });
+      if (frame) oc.setAttribute('data-portrait-frame', faceKey);
       oc.style.width = size + 'px'; oc.style.height = size + 'px';
       return oc;
     }

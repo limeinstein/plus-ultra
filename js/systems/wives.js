@@ -85,7 +85,12 @@
   };
   W.canConceive = function (key) { return W.sexesOpen(key).length > 0; };
   /** 아이가 생긴다: 아들·딸을 이때 정한다 */
-  W.newPreg = function (key, day, gestation) { var o = W.sexesOpen(key); return { since: day, due: day + gestation, told: false, sex: o.length ? U.pick(o) : U.pick(['m', 'f']) }; };
+  W.newPreg = function (key, day, gestation) {
+    var o = W.sexesOpen(key);
+    // 아이가 생긴 그때의 아버지·어머니 능력과 나이 — 태어날 때 물려받는다 (js/systems/family.js F.inherit · 2026-11-08)
+    var gen = G.Family && G.Family.genSnap ? G.Family.genSnap(key === 'main' ? P().wife : key) : null;
+    return { since: day, due: day + gestation, told: false, sex: o.length ? U.pick(o) : U.pick(['m', 'f']), gen: gen };
+  };
   /** 태어날 아이들의 성별: 임신 때 정한 성별, 쌍둥이는 남은 자리가 있을 때만 (twin = 쌍둥이를 굴린 결과) */
   W.birthSexes = function (key, pr, twin) {
     var o0 = W.sexesOpen(key, pr), first = pr && pr.sex ? pr.sex : o0.length ? U.pick(o0) : U.pick(['m', 'f']), out = [first];
@@ -240,11 +245,8 @@
   W.onArrive = onArrive;
 
   // ---------------------------------------------------------------- 둘째 부인의 아기
-  function inborn(w) {
-    var st = P().st || {}, md = G.MATE[w.id], ms = md && md.st;
-    function one(v, i) { var mo = ms ? ms[i] : 55; return Math.max(30, Math.min(85, Math.round(((v || 55) + (mo || 55)) / 2 + U.ri(-8, 8)))); }
-    return { str: one(st.str, 0), int: one(st.int, 1), mar: one(st.mar, 2), cha: one(st.cha, 3) };
-  }
+  /** 둘째 부인의 아이도 임신 때의 아버지·어머니 능력과 나이를 물려받는다 (family.js F.bornStats) */
+  function inborn(w, k, pr) { return G.Family.bornStats(k, pr && pr.gen, w.id); }
   function there(w) { var s = S(); return s.loc && s.loc.mode === 'city' && s.loc.city === w.city; }
   /** 매일 (family.js F.daily에 붙음): 둘째 부인의 임신 편지·출산 */
   W.daily = function () {
@@ -259,14 +261,16 @@
       if (s.day < pr.due) return;
       var sexes = W.birthSexes(W.momKey(w), pr, U.chance(fc.twins == null ? 0.03 : fc.twins)), twins = sexes.length > 1, born = [];
       for (var t = 0; t < sexes.length; t++) {
-        var k = { name: '', unnamed: true, sex: sexes[t], born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: inborn(w), edu: {}, mother: w.id, house: w.city };
+        var k = { name: '', unnamed: true, sex: sexes[t], born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: null, edu: {}, mother: w.id, house: w.city };
+        inborn(w, k, pr);
         k.witness = here; k.bond = here ? (fc.bondBorn || 60) : (fc.bondMissed || 40);
         P().kids.push(k); born.push(k);
       }
       w.preg = null; w.lastBirth = s.day;
       var bk = twins ? '쌍둥이가' : born[0].sex === 'f' ? '딸이' : '아들이';
-      out.push({ icon: 'heart', text: ship ? '배 위에서 ' + nm + '에게서 ' + bk + ' 태어났다! 아기는 ' + W.cityName(w) + '의 집에서 자란다 — 그 집에 들러 이름을 지어 주자.'
-        : W.cityName(w) + '의 ' + nm + '에게서 ' + bk + ' 태어났다! 그 집에 들러 이름을 지어 주자.' });
+      var gn = born.map(function (k) { var n = G.Family.inheritNote(k); return n ? ' (' + (twins ? (k.sex === 'f' ? '딸' : '아들') + ': ' : '') + n + ')' : ''; }).join('');
+      out.push({ icon: 'heart', text: (ship ? '배 위에서 ' + nm + '에게서 ' + bk + ' 태어났다! 아기는 ' + W.cityName(w) + '의 집에서 자란다 — 그 집에 들러 이름을 지어 주자.'
+        : W.cityName(w) + '의 ' + nm + '에게서 ' + bk + ' 태어났다! 그 집에 들러 이름을 지어 주자.') + gn });
       G.State.log(nm + '에게서 ' + (twins ? '쌍둥이' : born[0].sex === 'f' ? '딸' : '아들') + '이 태어났다.');
     });
     return out;
@@ -296,7 +300,7 @@
       if (!shown) await UI.say('당신… 우리에게 아기가 생겼어요.', sp);
       await UI.alert(W.name(w) + U.jx(W.name(w), '이/가') + ' 아이를 가졌다. ' + Math.max(1, Math.round((w.preg.due - s.day) / 30)) + '달쯤 뒤에 태어난다.', '기쁜 소식');
     }
-    var md = G.MATE[w.id], tooOld = md && (md.old || (md.bornY && s.date.y - md.bornY > 45));
+    var md = G.MATE[w.id], tooOld = (md && (md.old || (md.bornY && s.date.y - md.bornY > 45))) || (G.Family.momAge && G.Family.momAge(w.id) > ((fc.inherit || {}).momMax || 45));   // 어머니 나이 (family.js F.momAge)
     if (!w.preg && !tooOld && W.canConceive(W.momKey(w)) && (w.lastBirth == null || s.day - w.lastBirth >= (fc.gapDays || 300)) && (w.tryDay == null || s.day - w.tryDay >= (rest ? 3 : 20))) {
       w.tryDay = s.day;
       if (U.chance((cfg().conceive || 0.3) * (rest ? 1.2 : 1))) w.preg = W.newPreg(W.momKey(w), s.day, fc.gestation || 266);

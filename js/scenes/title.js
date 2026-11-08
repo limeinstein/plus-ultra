@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.322';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.323';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
   var bootPending = false;   // 처음 열 때의 불러오는 그림이 아직 준비 단계를 밟는 중 (타이틀을 떠나면 바로 걷는다 — T.exit)
 
@@ -40,6 +40,12 @@
     var bStory = G.Story && G.Story.begin ? btn('이야기 — 아버지의 사진', 'scroll', function () { if (!bStory.classList.contains('disabled')) G.Story.begin(); }) : null;
     if (bStory) bStory.classList.add('disabled');
     var bLoad = btn('항해 일지 불러오기', 'book', function () { T.loadMenu(); });
+    var bCatalog = btn('도감', 'book', function () {
+      // 같은 폴더의 도감으로 간다. 파일 실행·정식판·베타판 모두 상대 주소를 쓴다.
+      var from = location.pathname.split('/').pop() || 'index.html';
+      location.href = 'catalog.html?view=player&from=' + encodeURIComponent(from) + '#people';
+    });
+    var books = U.el('div', 'title-row title-books'); menu.insertBefore(books, bLoad); books.appendChild(bLoad); books.appendChild(bCatalog);
     var bHelp = btn('조작 안내', 'info', function () { T.help(); });
     if (G.Display) {   // 글자 크기·글꼴 (js/ui/display.js) — 조작 안내와 한 줄에 나란히 (단추가 늘어 화면 밑으로 밀리지 않게)
       var row = U.el('div', 'title-row'); menu.insertBefore(row, bHelp); row.appendChild(bHelp);

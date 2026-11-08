@@ -18,17 +18,21 @@
   </div>
   <p class="summary" id="summary">게임에 나오는 도시·인물·발견물을 그림과 함께 보여 줍니다.</p>
   <div class="tools">
-    <label class="search" for="q"><span class="sr">찾기</span><input id="q" type="search" placeholder="이름, 번호, 파일 이름으로 찾기" autocomplete="off"></label>
+    <a class="help-btn title-return" id="titleReturn" href="index.html">타이틀로</a>
+    <label class="search" for="q"><span class="sr">찾기</span><input id="q" type="search" placeholder="이름이나 설명으로 찾기" autocomplete="off"></label>
     <button class="help-btn" id="helpBtn" type="button">그림 교체 방법</button>
   </div>
 </header>
 <nav class="tabs" id="tabs" role="tablist" aria-label="분류"></nav>
+<details class="extra-catalog" id="extraCatalog"><summary>그 밖의 도감 · 도시·배·교역품 등</summary><nav class="tabs" id="extraTabs" role="tablist" aria-label="그 밖의 분류"></nav></details>
 <section class="bar">
   <div class="chips" id="chips" role="group" aria-label="걸러 보기"></div>
+  <div class="catalog-facets" id="catalogFacets" hidden></div>
+  <p class="result-count" id="resultCount" role="status"></p>
   <p class="note" id="note"></p>
 </section>
 <main id="grid" class="grid" aria-live="polite"></main>
-<p class="empty" id="empty" hidden>찾는 항목이 없습니다. 다른 낱말로 찾아보세요.</p>
+<p class="empty" id="empty" hidden>찾는 항목이 없습니다. <button type="button" data-reset>검색과 필터 지우기</button></p>
 
 <dialog id="detail" class="sheet" aria-labelledby="dTitle">
   <form method="dialog" class="close-row"><button class="x" value="close" aria-label="닫기">닫기</button></form>
@@ -72,7 +76,7 @@
       <li>그림은 칸을 꽉 채우도록 가운데를 기준으로 잘라 씁니다. 인물은 위쪽 4분의 1 지점을 기준으로 자르므로 얼굴을 위쪽에 두세요.</li>
       <li>해질녘·저녁 전용 그림이 없으면 기본 그림에 옅은 노을빛을 입혀 씁니다.</li>
       <li>바다 지도, 육상 탐험 지도, 해전 화면은 실시간으로 그리는 화면이라 파일로 바꾸지 않습니다.</li>
-      <li>claude.ai에 올리는 한 파일짜리 판은 16MB까지입니다. 그림을 많이 넣을 때는 JPG(품질 80 안팎)로 저장하세요.</li>
+      <li>한 파일짜리 판은 파일을 올리는 서비스의 용량 제한을 확인하세요. 그림을 많이 넣을 때는 JPG(품질 80 안팎)로 저장하세요.</li>
     </ul>
     <div id="manifestCheck"></div>
   </div>
@@ -153,6 +157,9 @@
 <script src="js/data/matewalks.js"></script>
 <script src="js/data/regionfolk.js"></script>
 <script src="js/data/seamaidens.js"></script>
+<script src="js/data/histfigures.js"></script>
+<script src="js/data/familyevents.js"></script>
+<script src="js/data/relevents.js"></script>
 <script src="js/data/mughal.js"></script>
 <script src="js/data/newworld.js"></script>
 <script src="js/data/reformation.js"></script>
@@ -173,8 +180,10 @@
 <script src="js/data/clues.js"></script>
 <script src="js/data/frontiers.js"></script>
 <script src="js/data/achievements.js"></script>
+<script src="js/data/achvevents.js"></script>
 <script src="js/data/cities.js"></script>
 <script src="js/data/cuisine.js"></script>
+<script src="js/data/cuisine_place.js"></script>
 <script src="js/data/tribes.js"></script>
 <script src="js/data/tradegoods.js"></script>
 <script src="js/data/slavetrade.js"></script>
@@ -199,6 +208,8 @@
 <script src="js/art/ships.js"></script>
 <script src="js/art/shipsprite.js"></script>
 <script src="js/art/seamonstersprite.js"></script>
+<script src="js/data/catalogscenes.js"></script>
+<script src="js/catalog-extra.js"></script>
 <script src="js/catalog.js"></script>
 <script src="js/data/pirate_island_faces.js"></script>
 <script src="js/systems/pirate_island_art.js"></script>

@@ -32,6 +32,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const pre = await page.evaluate(() => {
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 0; });
       const s = G.Game.state = G.State.newGame({ name: '시험', nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, st: { str: 50, int: 50, mar: 50, cha: 50 }, sk, lg: G.LANGS.map((_, i) => i === 1 ? 3 : 0), diff: 'normal' });
+      s.settings.res = 0.35;
       if (G.BALANCE.disaster) G.BALANCE.disaster.random = 0; if (G.BALANCE.econ) G.BALANCE.econ.perDay = 0;
       s.date = { y: 1494, m: 6, d: 5 };
       s.history = G.HISTORY.findIndex(h => h.y > 1493);   // 1494년 소식부터
@@ -47,7 +48,32 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(!pre.d6 && !pre.t1a && pre.newsBefore === 0, '1494년 6월 6일까지는 조약이 없다');
     ok(pre.d7 && pre.t1b === 'due' && pre.newsQuiet === 0 && pre.log.some(t => /토르데시야스/.test(t)), '6월 7일: 조약이 걸림 (일지에 적고 창을 기다림, 「세상의 소식」 한 줄로 따로 띄우지 않음)');
     await page.waitForFunction(() => G.Game.sceneName === 'city', null, { timeout: 30000 });
-    await page.waitForSelector('.treaty canvas', { timeout: 20000 });
+    await page.waitForSelector('.treaty canvas', { state: 'attached', timeout: 20000 });
+    await page.waitForFunction(() => { const im = document.querySelector('.tr-art'); return im && im.complete && im.naturalWidth > 0; });
+    ok(await page.locator('.tr-scene').isVisible() && !(await page.locator('.tr-chart').isVisible()), '교황·두 왕실·여섯 지역 군주의 원화가 기본 화면, 조약문은 별도 탭');
+    await page.screenshot({ path: path.join(OUT, 'council.png') });
+    await page.locator('[data-tr-view="chart"]').focus();
+    await page.keyboard.press('ArrowLeft');
+    ok(await page.locator('[data-tr-view="scene"]').getAttribute('aria-selected') === 'true' && await page.evaluate(() => document.activeElement.dataset.trView === 'scene'), '방향키로 장면 탭을 고르고 초점을 옮긴다');
+    await page.locator('[data-tr-view="chart"]').focus();
+    await page.keyboard.press('Enter');
+    ok(await page.locator('.tr-chart').isVisible(), 'Enter로 초점이 있는 조약문 탭을 연다');
+    await page.locator('[data-tr-view="scene"]').click();
+    for (const size of [{ width: 960, height: 540 }, { width: 800, height: 450 }]) {
+      await page.setViewportSize(size);
+      await page.waitForTimeout(300);
+      const layout = await page.evaluate(() => {
+        const w = document.querySelector('.treaty').closest('.win').getBoundingClientRect();
+        const b = document.querySelector('.treaty').closest('.win').querySelector('.foot button').getBoundingClientRect();
+        const c = document.querySelector('.treaty').closest('.content');
+        return w.left >= -1 && w.right <= innerWidth + 1 && b.top >= 0 && b.bottom <= innerHeight + 1 && c.scrollWidth <= c.clientWidth + 1;
+      });
+      ok(layout, size.width + '×' + size.height + ': 가로 넘침 없음 · 닫기 단추가 화면 안에 있음');
+      await page.screenshot({ path: path.join(OUT, 'council-' + size.width + '.png') });
+    }
+    await page.setViewportSize({ width: 1600, height: 900 });
+    await page.locator('[data-tr-view="chart"]').click();
+    ok(await page.locator('.tr-chart').isVisible() && !(await page.locator('.tr-scene').isVisible()), '경계와 조약문 탭을 눌러도 창이 닫히지 않는다');
     await page.waitForTimeout(900);
     await page.screenshot({ path: path.join(OUT, 'tordesillas.png') });
     const tw = await page.evaluate(() => ({ text: document.querySelector('.treaty').innerText, cv: document.querySelector('.treaty canvas').width }));
@@ -149,6 +175,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     // ⑦ 옛 저장: 1600년, s.treaty 없음 → 창 없이 지난 것으로
     const old = await page.evaluate(async () => { const s = G.Game.state; delete s.treaty; s.date = { y: 1600, m: 1, d: 1 }; G.Treaty.daily(); await new Promise(r => setTimeout(r, 1500)); return { t: JSON.stringify(s.treaty), win: !!document.querySelector('.treaty') }; });
     ok(/"t1":"skip"/.test(old.t) && /"t2":"skip"/.test(old.t) && !old.win, '옛 저장(1600년): 조약 창 없이 지난 것으로 ' + old.t);
+    // 그림 오류가 생겨도 조약문과 지도는 읽을 수 있다.
+    await page.evaluate(() => { G.Treaty.showTordesillas(); });
+    await page.waitForSelector('.tr-art');
+    await page.locator('.tr-art').dispatchEvent('error');
+    ok(await page.locator('.tr-chart').isVisible() && !(await page.locator('.tr-tabs').isVisible()), '원화를 읽지 못하면 경계와 조약문으로 전환');
+    await closeWin();
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('스크린샷: ' + OUT);
   } catch (e) { console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1; } finally { await browser.close(); }

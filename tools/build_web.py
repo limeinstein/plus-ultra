@@ -189,7 +189,7 @@ def main():
         keep.add(os.path.normpath(os.path.join(OUT, 'favicon.svg')))
         copy_if_changed(os.path.join(pages.ROOT, 'favicon.svg'), os.path.join(OUT, 'favicon.svg'))
         # 출처·라이선스 (2026-11-04 저작권 QA): THIRD_PARTY_NOTICES.md · licenses/ · music/CREDITS.md
-        for rel in ['THIRD_PARTY_NOTICES.md', 'music/CREDITS.md'] + (['licenses/' + fn for fn in sorted(os.listdir(os.path.join(pages.ROOT, 'licenses')))] if os.path.isdir(os.path.join(pages.ROOT, 'licenses')) else []):
+        for rel in ['THIRD_PARTY_NOTICES.md', 'music/CREDITS.md', 'images/CLASSICAL-CREDITS.md', 'images/TREASURE-CREDITS.md'] + (['licenses/' + fn for fn in sorted(os.listdir(os.path.join(pages.ROOT, 'licenses')))] if os.path.isdir(os.path.join(pages.ROOT, 'licenses')) else []):
             if os.path.isfile(os.path.join(pages.ROOT, rel)):
                 keep.add(os.path.normpath(os.path.join(OUT, rel)))
                 copy_if_changed(os.path.join(pages.ROOT, rel), os.path.join(OUT, rel))
@@ -219,7 +219,7 @@ def main():
                     copy_if_changed(os.path.join(dirpath, fn), dst)
         tick()
         game = build_page('index.html', 'game', 'index.html', 'Loop of Good Hope — 더 먼 바다로', DESC, esbuild, manifest_rel)
-        cat = build_page('catalog.html', 'catalog', 'catalog.html', 'Loop of Good Hope 도감', '게임에 나오는 도시·인물·발견물을 그림과 함께 보여 주고, 그림을 바꿀 때 쓸 파일 이름을 알려 주는 도감.', esbuild, manifest_rel)
+        cat = build_page('catalog.html', 'catalog', 'catalog.html', 'Loop of Good Hope 도감', '인물·이벤트·업적·발견물·음식·악기·무기를 그림과 설명으로 찾아보는 도감.', esbuild, manifest_rel)
         center = build_beta_center() if CHANNEL == 'beta' else []
         emit('.nojekyll', '')
         for rel in list(game) + list(cat) + center + ['index.html', 'catalog.html', '.nojekyll']:

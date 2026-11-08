@@ -9,8 +9,8 @@
   CR.list = [
     { h: '게임', rows: [
       ['Loop of Good Hope', '기획·제작', '© limeinstein', ''],
-      ['코드·글', '제작자가 AI 도구(Anthropic Claude · OpenAI Codex)와 함께 썼다', '', ''],
-      ['그림', '제작자가 이미지 생성 도구(OpenAI ImageGen)와 three.js 절차적 3D로 만든 원화. 다른 작품의 그림을 옮기지 않는다', '', ''],
+      ['코드·글', '제작자가 보조 도구와 함께 개발·작성했다', '', ''],
+      ['그림', '이미지 생성 도구(OpenAI ImageGen)와 three.js 절차적 3D로 제작한 원화 및 아래에 출처를 표시한 고전 작품 사진', '', ''],
       ['배경 음악', '제작자가 Suno로 만든 기악곡 44곡 (곡마다 출처는 music/CREDITS.md)', '', 'https://suno.com'] ] },
     { h: '효과음', rows: [
       ['Kenney 「RPG Audio」', '발걸음·동전·칼·책·문·천', 'CC0 1.0 (공개 저작물)', 'https://kenney.nl'],
@@ -32,7 +32,12 @@
       ['GBIF.org · OBIS', '동식물의 학명·관찰 기록', 'CC BY 4.0', 'https://www.gbif.org'] ] },
     { h: '명화', rows: [
       ['미켈란젤로 「아담의 창조」 · 보티첼리 「비너스의 탄생」', '발견 연출', '공개 저작물 (Web Gallery of Art · Google Art Project)', 'https://commons.wikimedia.org'],
-      ['미켈란젤로 「다비드」 사진', '발견 연출 — 이 사진으로 만든 그림도 같은 조건으로 공개', '사진: Σπάρτακος (2018), CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:David_-_(Michelangelo).jpg'] ] }
+      ['미켈란젤로 「다비드」 사진', '발견 연출 — 이 사진으로 만든 그림도 같은 조건으로 공개', '사진: Σπάρτακος (2018), CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:David_-_(Michelangelo).jpg'],
+      ['밀로의 아프로디테 사진', '보물 전시 — 배경 제거·조명·확대·색상 변환', '사진: Mattgirling, CC BY 3.0', 'https://commons.wikimedia.org/wiki/File:MG-Paris-Aphrodite_of_Milos_edited.jpg'],
+      ['첼리니의 소금 그릇 사진', '보물 전시 — 변환 결과도 같은 조건으로 공개', '사진: Guerinf, CC BY-SA 4.0', 'https://commons.wikimedia.org/wiki/File:Sali%C3%A8re_de_Cellini_(8).jpg'],
+      ['반 에이크 「어린 양에 대한 경배」', '보물 전시', '공개 저작물 (Google Art Project)', 'https://commons.wikimedia.org/wiki/File:Ghent_Altarpiece_Google_Art_Project.jpg'],
+      ['보스 「쾌락의 정원」', '보물 전시', '공개 저작물', 'https://commons.wikimedia.org/wiki/File:The_Garden_of_Earthly_Delights_by_Bosch_High_Resolution.jpg'],
+      ['티치아노 「우르비노의 비너스」', '보물 전시', '공개 저작물 (Google Art Project)', 'https://commons.wikimedia.org/wiki/File:Tiziano_-_Venere_di_Urbino_-_Google_Art_Project.jpg'] ] }
   ];
   CR.note = '역사 속 인물·사건과 옛이야기(피노키오·피터 팬·안데르센 동화·돈키호테·천일야화 등)는 공개 저작물인 원작을 바탕으로 이 게임에 맞게 새로 썼다. ' +
     '실제 회사·건물 이름은 그 장소를 가리키는 데만 쓴다. 출처 전체와 라이선스 원문: THIRD_PARTY_NOTICES.md · licenses/';

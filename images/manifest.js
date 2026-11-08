@@ -6646,6 +6646,8 @@ G.IMAGE_FILES = {
   "legend-events/teppo_firing": "legend-events/teppo_firing.webp",
   "legend-events/teppo_hideyoshi": "legend-events/teppo_hideyoshi.webp",
   "legend-events/teppo_offer": "legend-events/teppo_offer.webp",
+  "legend-events/tordesillas_council_20261108": "legend-events/tordesillas_council_20261108.webp",
+  "legend-events/tordesillas_council_20261108_v2": "legend-events/tordesillas_council_20261108_v2.webp",
   "legend-events/tudor_marriage_petition": "legend-events/tudor_marriage_petition.webp",
   "legend-events/tudor_rome_petition": "legend-events/tudor_rome_petition.webp",
   "legend-events/tw_banner": "legend-events/tw_banner.webp",

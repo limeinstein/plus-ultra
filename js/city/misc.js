@@ -141,6 +141,7 @@
   };
   /** 경리가 흥정해 둔 값 (이번 방문): {ok, buy, sell} */
   function mkDeal() { var cur = C.current(); return cur && cur.mk && cur.mk.buy ? cur.mk : null; }
+  function hagStat() { return C.B.trade && C.B.trade.haggleStat ? C.B.trade.haggleStat() : { p: 0, d: 0, dealP: 0, dealD: 0 }; }
   function acctLv() { return G.Acct ? G.Acct.lv() : Math.max(0, Math.min(3, R.skill('acct') || 0)); }
   /** 시장 값: 기본값 × 이 도시 시세(무기는 무기 갈래, 선물은 사치품·기호품·공예품 …) × 경리가 흥정한 값 */
   function mkBase(it) { return Math.max(1, Math.round(it.price * R.itemMult(C.city(), it))); }
@@ -197,8 +198,9 @@
     if (v === 'cancel' || v == null) return { cancel: true, total: total };
     if (v !== 'deal') return { total: total, dealt: false };
     if (cur) cur.mkBuyDeals = used + 1;
-    var chance = G.Acct ? G.Acct.marketDealChance() : 0.45 + lv * 0.1;
-    var disc = G.Acct ? G.Acct.marketDealDisc() : lv * 0.02;
+    var hs = hagStat();   // 지력·매력이 높으면 결제 협상도 더 잘 통하고 더 깎인다 (js/city/trade.js T.haggleStat)
+    var chance = Math.min(0.95, (G.Acct ? G.Acct.marketDealChance() : 0.45 + lv * 0.1) + hs.dealP);
+    var disc = (G.Acct ? G.Acct.marketDealDisc() : lv * 0.02) + hs.dealD;
     if (U.chance(chance)) {
       total = Math.max(qty, Math.round(total * (1 - disc)));
       await C.say(vendor(), '장부까지 다시 맞춰 보니 빈틈이 없군. 좋아, 금화 ' + U.num(total) + '닢에 넘기겠네.');
@@ -343,15 +345,16 @@
     var sp = pu ? G.Scenes.mateSpeaker('purser') : null;
     if (pu) await UI.say(U.pick(['이 칼 한 자루에 그 값이라니, 날에 금이라도 발랐소? 절반만 받으시오.', '물건은 좋소. 다만 값이 틀렸구려 — 이 도시 시세는 내가 다 적어 두었소.', '여기서 여럿 사 갈 테니 한꺼번에 셈합시다. 덤도 좀 얹고.']), sp);
     else await C.me(U.pick(['장부를 맞춰 보니 이 값은 너무 비싸군. 조금 깎아 주게.', '여럿 사 갈 테니 셈을 다시 해 주게.']));
-    var acct = R.skill('acct'), p = U.clamp(0.35 + acct * 0.12 + (pu ? pu.acct * 0.06 : 0) + (C.langLv(c) - 1) * 0.06 + (R.stat('cha') - 50) * 0.003, 0.1, 0.92);
+    // 매력이 50보다 낮아도 깎이지 않는다 — 지력·매력은 덤만 더한다 (js/city/trade.js T.haggleStat)
+    var acct = R.skill('acct'), hs = hagStat(), p = U.clamp(0.35 + acct * 0.12 + (pu ? pu.acct * 0.06 : 0) + (C.langLv(c) - 1) * 0.06 + hs.p, 0.1, 0.92);
     var nb = G.Court ? G.Court.haggle(c) : null;   // 귀족의 권한: 작위만큼 더 잘, 더 많이 깎인다
     if (nb) p = Math.min(0.95, p + nb.p);
     if (U.chance(p)) {
-      var disc = Math.min(0.22, 0.08 + (pu ? pu.acct * 0.03 : 0) + acct * 0.01 + U.rf(0, 0.03)) + (nb ? nb.disc : 0);
+      var disc = Math.min(0.22 + hs.d, 0.08 + (pu ? pu.acct * 0.03 : 0) + acct * 0.01 + hs.d + U.rf(0, 0.03)) + (nb ? nb.disc : 0);
       cur.mk = { ok: true, buy: 1 - disc, sell: 1 + disc * 0.7 };
       if (G.Growth) G.Growth.haggle();
       await C.say(vendor(), U.pick(pu ? ['허허, 자네 경리 앞에서는 장사할 맛이 안 나는군. 좋아, 그렇게 하지.', '알았네, 알았어! 대신 다른 데 가서 이 값 말하지 말게.'] : ['셈이 밝은 사람이군. 좋아, 그렇게 하지.', '장부까지 맞춰 왔다니 어쩔 수 없군. 그 값에 주겠네.']));
-      UI.toast('흥정 성공' + (pu ? '(경리 ' + pu.name + ')' : '(회계 ' + acctLv() + ')') + '! 시장 사는 값 −' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * 70) + '% · 결제 때 추가 협상 ' + (G.Acct ? G.Acct.marketDeals() : acctLv()) + '번', 'scales');
+      UI.toast('흥정 성공' + (pu ? '(경리 ' + pu.name + ')' : '(회계 ' + acctLv() + ')') + '! 시장 사는 값 −' + Math.round(disc * 100) + '%, 파는 값 +' + Math.round(disc * 70) + '% · 결제 때 추가 협상 ' + (G.Acct ? G.Acct.marketDeals() : acctLv()) + '번' + (C.B.trade.statNote ? C.B.trade.statNote(hs) : ''), 'scales');
     } else {
       cur.mk = { ok: false };      // 실패하면 값은 그대로 (올라가지 않는다)
       await C.say(vendor(), U.pick(['흥! 그 값에 팔 바에야 바다에 던지겠네.', '장사를 모르는구먼. 싫으면 관두게!']));

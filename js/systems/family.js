@@ -131,15 +131,97 @@
   /** 지금 견습으로 배에 타고 있는 아이들 */
   F.aboard = function () { return (S().player.kids || []).filter(function (k) { return k.aboard && !k.lost; }); };   // k.lost: 섬에서 사라진 아이 (js/systems/peterpan.js)
 
-  /** 아이의 타고난 능력: 제독을 닮고 조금씩 다르다 */
-  function inborn() {
-    var p = S().player, st = p.st || {}, mw = F.wifeMate(), ms = mw && mw.st;   // 부하였던 아내라면 엄마도 닮는다
-    function one(v, i) { var mo = ms ? ms[i] : 55; return Math.max(30, Math.min(85, Math.round(((v || 55) + (mo || 55)) / 2 + U.ri(-8, 8)))); }
-    return { str: one(st.str, 0), int: one(st.int, 1), mar: one(st.mar, 2), cha: one(st.cha, 3) };
+  /* ---------------------------------------------------------------- 물려받는 능력 (2026-11-08 사용자 요청)
+     아이가 생길 때(임신) 아버지와 어머니의 능력·나이를 적어 두고(pr.gen — F.genSnap), 태어날 때 그것으로 타고난 능력을 정한다(F.inherit).
+     · 능력마다 아버지 쪽 비중을 faW 사이에서 굴린다 — 어느 능력은 아버지를, 어느 능력은 어머니를 더 닮는다
+     · 흔들림(noise — 가운데가 잦은 종 모양) · 모두의 평균(mean)으로 조금 당김(pull) — 뛰어난 부모의 아이도 부모만 못할 수 있다
+     · gift 확률로 한 능력이 타고나게 뛰어나고(+giftAmt), 같은 확률로 한 능력이 처진다
+     · 출산 나이: 어머니 momOld살부터 해마다 momPer, momVery살부터 momVeryPer를 더 · 아버지 dadOld살부터 해마다 dadPer · 어머니가 momYoung살보다 어리면 해마다 youngPer
+       → 합(penMax까지)을 능력마다 penChance 확률로 0.5~1.5배 뺀다. 아버지 능력은 나이 들수록 오르지만 늦둥이가 무조건 낫지는 않다
+     · 어머니 능력: 부하였던 항해사면 그 사람의 능력, 여급·아가씨는 성품(like)에 맞춘 타고난 능력 (이름으로 정해져 늘 같다)
+     · 어머니 나이: 항해사의 bornY가 있으면 그것, 없으면 처음 아이를 가질 때 아버지 나이에 맞춰 정해 두고(s.momAge) 해마다 한 살씩 든다
+     옛 저장의 임신(gen 없음)은 태어날 때의 부모로 셈한다 */
+  var STK = ['str', 'int', 'mar', 'cha'];
+  var LIKE_ST = { brave: 'mar', bold: 'mar', strong: 'str', willful: 'str', delicate: 'int', steady: 'int', kind: 'cha', generous: 'cha' };
+  function IK() {
+    var d = { faW: [0.3, 0.7], noise: 6, mean: 55, pull: 0.15, gift: 0.1, giftAmt: [5, 12], lo: 25, hi: 90,
+      momYoung: 17, youngPer: 1.5, momOld: 35, momPer: 1.2, momVery: 40, momVeryPer: 1.5, dadOld: 45, dadPer: 0.6, penMax: 18, penChance: 0.75, momMax: 45 };
+    var c = cfg().inherit || {}; Object.keys(c).forEach(function (k) { d[k] = c[k]; });
+    return d;
   }
-  function newKid(sex) {
+  /** 어머니의 능력 {str,int,mar,cha} */
+  F.momStats = function (id) {
+    var md = id && G.MATE[id];
+    if (md && md.st) return { str: md.st[0], int: md.st[1], mar: md.st[2], cha: md.st[3] };
+    var o = {}, m = id && G.MAID && G.MAID[id], lk = m && LIKE_ST[m.like];
+    STK.forEach(function (k) { o[k] = 44 + (U.strHash(String(id || 'wife') + ':' + k) % 19); });   // 44~62
+    if (lk) o[lk] += 10;
+    return o;
+  };
+  /** 어머니의 지금 나이 */
+  F.momAge = function (id) {
+    var s = S(), md = id && G.MATE[id];
+    if (md && md.bornY) return s.date.y - md.bornY;
+    var L = s.momAge || (s.momAge = {}), key = String(id || 'wife'), e = L[key];
+    if (!e) { var fa = R.age ? R.age() : 30; e = L[key] = { a: U.clamp(Math.min(fa - 3, 24) + (U.strHash(key) % 7) - 2, 16, 34), y: s.date.y }; }
+    return e.a + (s.date.y - e.y);
+  };
+  /** 아이가 생긴 그때의 부모 (임신에 적어 둔다 — js/systems/wives.js W.newPreg) */
+  F.genSnap = function (momId) {
+    var p = S().player, st = p.st || {}, fa = {};
+    STK.forEach(function (k) { fa[k] = st[k] || 55; });
+    return { fa: fa, faAge: R.age ? R.age() : 30, mo: F.momStats(momId), moAge: F.momAge(momId), mom: momId || null, y: S().date.y };
+  };
+  /** 출산 나이로 깎일 값 (능력마다 이 값의 0.5~1.5배를 penChance 확률로) */
+  F.agePenalty = function (g) {
+    var K = IK(), mo = g.moAge || 25, fa = g.faAge || 30;
+    return Math.min(K.penMax, Math.max(0, mo - K.momOld) * K.momPer + Math.max(0, mo - K.momVery) * K.momVeryPer + Math.max(0, fa - K.dadOld) * K.dadPer + Math.max(0, K.momYoung - mo) * K.youngPer);
+  };
+  /** 타고난 능력: {st, info: {fa: 아버지를 닮은 정도 %, pen, gift, flaw, faAge, moAge}} */
+  F.inherit = function (g) {
+    var K = IK(), st = {}, pen = F.agePenalty(g), faSum = 0;
+    var gift = U.chance(K.gift) ? U.pick(STK) : null, flaw = U.chance(K.gift) ? U.pick(STK.filter(function (x) { return x !== gift; })) : null;
+    STK.forEach(function (k) {
+      var w = U.rf(K.faW[0], K.faW[1]); faSum += w;
+      var v = w * g.fa[k] + (1 - w) * g.mo[k];
+      v += (U.rand() + U.rand() + U.rand() - 1.5) * K.noise * 2;
+      v += (K.mean - v) * K.pull;
+      if (k === gift) v += U.rf(K.giftAmt[0], K.giftAmt[1]);
+      if (k === flaw) v -= U.rf(K.giftAmt[0], K.giftAmt[1]);
+      if (pen > 0 && U.chance(K.penChance)) v -= pen * U.rf(0.5, 1.5);
+      st[k] = Math.round(U.clamp(v, K.lo, K.hi));
+    });
+    return { st: st, info: { fa: Math.round(faSum / 4 * 100), pen: Math.round(pen), gift: gift, flaw: flaw, faAge: g.faAge, moAge: g.moAge } };
+  };
+  /** 태어난 아이 하나 — 임신 때 적어 둔 부모(gen)로 (없으면 지금의 부모로) */
+  F.bornStats = function (k, gen, momId) {
+    var r = F.inherit(gen || F.genSnap(momId != null ? momId : S().player.wife));
+    k.st = r.st; k.gen = r.info;
+    return k;
+  };
+  /** 출생 소식에 붙는 한 줄: 누구를 닮았나 · 타고난 재주 · 늦둥이 */
+  F.inheritNote = function (k) {
+    var g = k && k.gen; if (!g) return '';
+    var nm = function (id) { return (G.STATS.filter(function (x) { return x.id === id; })[0] || {}).name || id; };
+    var t = g.fa >= 56 ? '아버지를 많이 닮았다' : g.fa <= 44 ? '어머니를 많이 닮았다' : '부모를 고루 닮았다';
+    if (g.gift) t += ' · 타고난 ' + nm(g.gift) + U.jx(nm(g.gift), '이/가') + ' 남다르다';
+    if (g.flaw) t += ' · ' + nm(g.flaw) + U.jx(nm(g.flaw), '은/는') + ' 조금 처진다';
+    if (g.pen >= 4) t += ' · ' + (g.moAge >= 35 ? '늦게 얻은 아이라' : g.moAge < 17 ? '어머니가 너무 어려' : '아버지가 늦게 얻은 아이라') + ' 몸이 조금 약하다';
+    return t;
+  };
+  /** 아이의 능력 한 줄 (정보 창 툴팁) */
+  F.kidStatLine = function (k) {
+    if (!k || !k.st) return '';
+    var t = G.STATS.map(function (x) { return x.name + ' ' + k.st[x.id]; }).join(' · ');
+    var g = k.gen; if (g) t += ' — ' + F.inheritNote(k) + ' (아이가 생길 때 아버지 ' + g.faAge + '세 · 어머니 ' + g.moAge + '세)';
+    return t;
+  };
+  /** 아이의 타고난 능력 (옛 저장의 능력 없는 아이) */
+  function inborn() { return F.inherit(F.genSnap(S().player.wife)).st; }
+  function newKid(sex, gen) {
     var s = S();
-    var k = { name: '', unnamed: true, sex: sex, born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: inborn(), edu: {} };
+    var k = { name: '', unnamed: true, sex: sex, born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: null, edu: {} };
+    F.bornStats(k, gen, s.player.wife);
     if (G.KidVoy) k.temper = G.KidVoy.rollTemper(k, U.rand());   // 타고난 성격 (js/systems/kidvoyage.js)
     return k;
   }
@@ -164,14 +246,15 @@
       // 아들·딸은 임신 때 정해 두었다 (부인마다 5명 · 아들 모두 5명 · 딸 부인마다 2명 — wives.js W.birthSexes)
       var sexes = G.Wives && G.Wives.birthSexes ? G.Wives.birthSexes('main', pr, U.chance(c.twins == null ? 0.03 : c.twins)) : [U.pick(['m', 'f'])], twins = sexes.length > 1, born = [];
       for (var t = 0; t < sexes.length; t++) {
-        var sex = sexes[t]; var k = newKid(sex);
+        var sex = sexes[t]; var k = newKid(sex, pr.gen);   // 아이가 생길 때 적어 둔 부모의 능력·나이로 (F.inherit)
         k.witness = !!atHome;                                         // 제독이 해산을 지켜보았나 — 출산 장면·첫 사이
         k.bond = atHome ? (c.bondBorn || 60) : (c.bondMissed || 40);
         p.kids.push(k); born.push(k);
       }
       p.preg = null; p.lastBirth = s.day;
       var what = twins ? '쌍둥이가' : (born[0].sex === 'f' ? '딸이' : '아들이');
-      out.push({ icon: 'heart', text: (atHome ? '집에서 ' : '고향 ' + G.CITY_DATA[p.home].name + '에서 ') + what + ' 태어났다! ' + (atHome ? '자택에서 이름을 지어 주자.' : '집에 돌아가 이름을 지어 주자.') });
+      out.push({ icon: 'heart', text: (atHome ? '집에서 ' : '고향 ' + G.CITY_DATA[p.home].name + '에서 ') + what + ' 태어났다! ' + (atHome ? '자택에서 이름을 지어 주자.' : '집에 돌아가 이름을 지어 주자.') +
+        born.map(function (k) { var n = F.inheritNote(k); return n ? ' (' + (twins ? (k.sex === 'f' ? '딸' : '아들') + ': ' : '') + n + ')' : ''; }).join('') });
       G.State.log((twins ? '쌍둥이' : born[0].sex === 'f' ? '딸' : '아들') + '이 태어났다.');
     }
     return out;
@@ -277,7 +360,7 @@
     // 아이가 생긴다
     // 본처의 아이 5명까지 · 아들은 둘째 부인의 아이까지 모두 합쳐 5명 · 딸은 2명 (wives.js W.sexesOpen)
     var today = s.day, room = G.Wives && G.Wives.canConceive ? G.Wives.canConceive('main') : p.kids.length + (p.preg ? 1 : 0) < (c.perMother || 5), wm = F.wifeMate();
-    var tooOld = wm && (wm.old || (wm.bornY && s.date.y - wm.bornY > 45));   // 늙은 마녀·나이 든 아내
+    var tooOld = (wm && (wm.old || (wm.bornY && s.date.y - wm.bornY > 45))) || F.momAge(p.wife) > (IK().momMax || 45);   // 늙은 마녀·나이 든 아내 — 여급·아가씨도 어머니 나이(F.momAge)로 (2026-11-08)
     var cold = G.Wives && G.Wives.isWifeCold && G.Wives.isWifeCold();   // 숨은 거처를 들킨 뒤 한동안 (wives.js W.lodgeCaught)
     if (!p.preg && !tooOld && !cold && room && (p.lastBirth == null || today - p.lastBirth >= (c.gapDays || 300)) &&
         (p.tryDay == null || today - p.tryDay >= (rest ? 3 : 20))) {

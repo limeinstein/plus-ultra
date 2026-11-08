@@ -109,9 +109,9 @@
       '<div class="flex"><b style="font-size:22px">' + t.name + '</b><span class="muted" style="margin-left:10px;font-size:15px">' + t.feat + '</span><span class="right big-num">' + U.num(Y.priceOf(c, id)) + '<small style="font-size:15px">닢</small></span></div>' +
       '<div class="traits"><span class="trait lvchip">' + t.lv + '등급</span>' + SH().traitChips(t) + '<span class="cult">' + G.SHIP_CULT[t.cult] + '의 배' + (foreign ? ' · 이 고장 배가 아님(값 +20%)' : '') + '</span></div>' +
       '<div class="muted" style="margin:4px 0 8px;font-size:16px">' + t.desc + '</div>' +
-      '<div class="kv" style="font-size:16px;grid-template-columns:auto 1fr auto 1fr auto 1fr"><div>적재량</div><div>' + t.cap + '통</div><div>내구력</div><div>' + hpWith(t, lw) + (hpWith(t, lw) !== t.hp ? ' <small class="muted">(기본 ' + t.hp + ')</small>' : '') + '</div><div>선원</div><div>' + t.crew[0] + '~' + t.crew[1] + '명</div>' +
+      '<div class="kv" style="font-size:16px;grid-template-columns:auto 1fr auto 1fr auto 1fr"><div>적재량</div><div>' + t.cap + '통 <small class="muted" title="처음 다는 사커 대포의 무게를 뺀 실제 짐칸">(짐칸 ' + newShipCap(t) + ')</small></div><div>내구력</div><div>' + hpWith(t, lw) + (hpWith(t, lw) !== t.hp ? ' <small class="muted">(기본 ' + t.hp + ')</small>' : '') + '</div><div>선원</div><div>' + t.crew[0] + '~' + t.crew[1] + '명</div>' +
       '<div>포문</div><div>' + t.ports + '문</div><div>돛</div><div>' + t.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k]; }).join('·') + '</div><div>속도</div><div>' + stars(t.spd) + '</div>' + upwindCell(t) + (t.oar ? '<div>노</div><div>' + stars(t.oar + 0.35) + '</div>' : '') + cabinCell(id) + '</div>' +
-      '<div class="muted small">권장 여유자금 약 ' + U.num(Math.round(Y.priceOf(c, id) * G.BALANCE.commerce.operatingReserve)) + '닢 (화물·보급·급료 준비, 실제 비용은 항로·선원에 따라 다릅니다)</div>' +
+      '<div class="muted small">' + G.icon('scroll') + ' 누르면 이 배의 역사와 게임 설정을 봅니다 · 권장 여유자금 약 ' + U.num(Math.round(Y.priceOf(c, id) * G.BALANCE.commerce.operatingReserve)) + '닢 (화물·보급·급료 준비, 실제 비용은 항로·선원에 따라 다릅니다)</div>' +
       (lock ? '<div class="warn-text" style="margin-top:6px">' + G.icon('seal') + lock + '</div>' : '') +
       '</div></div>';
   }
@@ -127,12 +127,16 @@
     if (!types.length) { await C.say(keeper(), '미안하네, 이 고장에서는 큰 배를 짓지 않네. 수리라면 해 주지.'); return; }
     var picked = null, lw = SH().localWood(c).id;
     var html = woodNote(c) + '<div class="scroll" style="max-height:560px">' + types.map(function (id) { return shipCardHtml(c, id, lw); }).join('') + '</div>';
-    var win = UI.window({ title: '배 구입 — 소지금 ' + U.num(s.player.gold) + '닢', icon: 'ship', width: 900, html: html, buttons: [{ label: '돌아간다', value: null }],
-      onBuild: function (el, w) {
-        U.$$('.pic', el).forEach(function (p) { p.appendChild(A.shipCard(p.dataset.t, 220, 120)); });
-        U.$$('.shipcard.click', el).forEach(function (d) { d.onclick = function () { picked = d.dataset.id; w.close('pick'); }; });
-      } });
-    if ((await win.result) !== 'pick') return;
+    // 배를 누르면 도움말(역사·게임 설정) → 「이 배를 산다」를 눌러야 산다. 「다른 배를 본다」면 목록으로 (2026-11-08 사용자 요청)
+    for (;;) {
+      var win = UI.window({ title: '배 구입 — 소지금 ' + U.num(s.player.gold) + '닢', icon: 'ship', width: 900, html: html, buttons: [{ label: '돌아간다', value: null }],
+        onBuild: function (el, w) {
+          U.$$('.pic', el).forEach(function (p) { p.appendChild(A.shipCard(p.dataset.t, 220, 120)); });
+          U.$$('.shipcard', el).forEach(function (d) { d.style.cursor = 'pointer'; d.onclick = function () { picked = d.dataset.id; w.close('pick'); }; });
+        } });
+      if ((await win.result) !== 'pick') return;
+      if ((await Y.shipHelp(c, picked, { buy: true })) === 'buy') break;
+    }
     var t = G.SHIP[picked];
     // 목재 고르기
     var opts = SH().woodOptions(c, picked), opt = opts[0];
@@ -183,6 +187,61 @@
     return '<div>맞바람</div><div title="' + tip + '" style="color:' + col + '">' + w + (u.row ? ' (노)' : '') + '</div>';
   }
   function stars(v) { var n = Math.round((v - 0.9) / 0.14); n = U.clamp(n, 1, 5); return '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n); }
+
+  /* 교체·개조 화면마다 적재량과 내구력을 보인다 (2026-11-08 사용자 요청)
+     적재량 = 실제로 짐을 싣는 칸 (R.shipCargoCap: 선체 적재량 − 대포 무게 + 창고). 바뀌는 개조는 「지금 → 바꾼 뒤」로 */
+  function storeOf(sh) { return G.Cabins && G.Cabins.storeBonus ? Math.round(G.Cabins.storeBonus(sh)) : 0; }
+  function capHp(sh) {
+    var st = storeOf(sh);
+    return '적재량 <b>' + U.num(R.shipCargoCap(sh)) + '</b>통 <small class="muted">(선체 ' + U.num(sh.cap) + ' − 대포 ' + U.num(Math.round(R.gunLoad(sh))) + (st ? ' + 창고 ' + U.num(st) : '') + ')</small> · 내구력 <b' + (sh.hp < sh.maxHp ? ' class="warn-text"' : '') + '>' + Math.round(sh.hp) + '/' + sh.maxHp + '</b>';
+  }
+  Y.capHp = capHp;
+  /** 고쳐 본 뒤의 적재량: 바뀔 값(patch)을 잠깐 씌워 재고 되돌린다 */
+  function capIf(sh, patch) {
+    var keep = {}; Object.keys(patch).forEach(function (k) { keep[k] = sh[k]; sh[k] = patch[k]; });
+    try { return R.shipCargoCap(sh); } finally { Object.keys(keep).forEach(function (k) { sh[k] = keep[k]; }); }
+  }
+  function capArrow(a, b) { return a === b ? '적재량 ' + U.num(a) + '통 그대로' : '적재량 ' + U.num(a) + ' → <b class="' + (b < a ? 'warn-text' : 'good-text') + '">' + U.num(b) + '</b>통'; }
+  function hpArrow(sh, to) { return to == null || to === sh.maxHp ? '내구력 ' + Math.round(sh.hp) + '/' + sh.maxHp + ' 그대로' : '내구력 ' + sh.maxHp + ' → <b class="' + (to < sh.maxHp ? 'warn-text' : 'good-text') + '">' + to + '</b>'; }
+  /** 새 배가 처음 다는 대포(사커 4문)를 뺀 실제 짐칸 — R.newShip과 같은 셈 */
+  function newShipCap(t) { var g = G.CANNON.saker; return Math.max(0, Math.floor(t.cap - Math.min(4, t.ports) * (g ? g.load : 1))); }
+
+  /* ---------------------------------------------------------------- 배 도움말 (2026-11-08 사용자 요청)
+     조선소 「배 구입」에서 배를 누르면 — 그 배의 역사 이야기(js/data/shiphist.js)와 게임 설정(js/data/ships.js의 수치)을 함께 보인다.
+     「개조」의 배 메뉴에도 「이 배 도움말」. opt: {buy: 구입 단추를 보일지, sh: 가진 배(지금 상태도 함께)} → 'buy' | null */
+  Y.shipHelp = function (c, id, opt) {
+    opt = opt || {};
+    var t = G.SHIP[id], h = (G.SHIP_HIST || {})[id] || {}, lw = c ? SH().localWood(c).id : null, sh = opt.sh;
+    var sailNm = function (k) { return { sq: '사각돛', lat: '삼각돛', bat: '대나무 살 돛' }[k] || k; };
+    var startPorts = Math.min(t.ports, Math.max(4, Math.round(t.ports * 0.5)));
+    var when = t.from || t.to ? (t.from ? t.from + '년부터' : '') + (t.to ? (t.from ? ' ' : '') + t.to + '년까지' : '') : '처음부터';
+    var row = function (k, v) { return '<div>' + k + '</div><div>' + v + '</div>'; };
+    var kv = '<div class="kv shiphelp-kv" style="font-size:16px;grid-template-columns:auto 1fr auto 1fr">' +
+      row('등급', t.lv + '등급 <small class="muted">(조선 기술 ' + t.lv + '등급 이상)</small>') + row('문화권', G.SHIP_CULT[t.cult] + '의 배 <small class="muted">(다른 문화권 조선소는 수리비가 비싸다)</small>') +
+      row('나오는 때', when) + row('파는 곳', U.esc(t.where || '—')) +
+      row('적재량', t.cap + '통 <small class="muted">(처음 다는 사커 ' + Math.min(4, t.ports) + '문을 빼면 짐칸 ' + newShipCap(t) + '통)</small>') +
+      row('내구력', t.hp + (lw && hpWith(t, lw) !== t.hp ? ' <small class="muted">(이 조선소 목재로는 ' + hpWith(t, lw) + ')</small>' : '') + ' <small class="muted">— 목재에 따라 달라진다</small>') +
+      row('선원', t.crew[0] + '~' + t.crew[1] + '명') + row('포문', '최대 ' + t.ports + '문 <small class="muted">(새 배는 ' + startPorts + '문)</small>') +
+      row('돛', t.sails.map(sailNm).join(' · ') + ' <small class="muted">(돛대 최대 ' + t.maxMast + ')</small>') + row('속도', stars(t.spd) + ' <small class="muted">(' + t.spd.toFixed(2) + '°/일)</small>') +
+      (t.oar ? row('노', stars(t.oar + 0.35) + ' <small class="muted">(' + t.oar.toFixed(2) + '°/일 — 바람이 없어도)</small>') : '') + row('선회', '×' + t.turn) +
+      upwindCell(t) + cabinCell(id) +
+      (c ? row('값', '금화 ' + U.num(Y.priceOf(c, id)) + '닢 <small class="muted">(이 조선소)</small>') : row('기본 값', '금화 ' + U.num(t.price) + '닢')) +
+      '</div>';
+    var traits = t.traits.length ? '<div class="shiphelp-traits" style="font-size:15px;line-height:1.6;margin-top:8px">' + t.traits.map(function (k) { var d = G.SHIP_TRAITS[k]; return d ? '<div><span class="trait">' + d.name + '</span> ' + d.desc + '</div>' : ''; }).join('') + '</div>' : '';
+    var now = sh ? '<div class="woodnote" style="margin-top:10px">' + G.icon('ship') + ' <b>' + U.esc(sh.name) + '호</b> 지금 — ' + capHp(sh) + ' · ' + ((G.CANNON[sh.guns.type] || {}).name || '대포') + ' ' + sh.guns.n + '/' + sh.ports + '문</div>' : '';
+    var html = '<div class="shiphelp" style="display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start">' +
+      '<div><div class="pic" data-t="' + id + '"></div><div class="traits" style="margin-top:6px"><span class="trait lvchip">' + t.lv + '등급</span>' + SH().traitChips(t) + '</div>' +
+      '<div class="muted" style="font-size:15px;margin-top:6px">' + U.esc(t.feat || '') + '</div></div>' +
+      '<div><h3 style="margin:0 0 4px">역사' + (h.era ? ' <small class="muted" style="font-weight:400">' + h.era + '</small>' : '') + '</h3>' +
+      '<div style="font-size:17px;line-height:1.65">' + (h.hist || t.desc) + '</div>' +
+      (h.known ? '<div style="font-size:16px;line-height:1.6;margin-top:6px">' + G.icon('scroll') + ' ' + h.known + '</div>' : '') + '</div></div>' +
+      '<h3 style="margin:14px 0 4px">게임에서</h3><div class="muted" style="font-size:16px;margin-bottom:6px">' + t.desc + '</div>' + kv + traits + now;
+    var lock = opt.buy && c ? Y.locked(c, id) : null;
+    var btns = (opt.buy && !lock ? [{ label: '이 배를 산다', value: 'buy', cls: 'primary' }] : []).concat([{ label: opt.buy ? '다른 배를 본다' : '닫기', value: null }]);
+    var win = UI.window({ title: '배 도움말 — ' + t.name, icon: 'ship', width: 940, html: '<div class="scroll" style="max-height:620px">' + html + (lock ? '<div class="warn-text" style="margin-top:8px">' + G.icon('seal') + lock + '</div>' : '') + '</div>', buttons: btns,
+      onBuild: function (el) { U.$$('.pic', el).forEach(function (pc) { pc.appendChild(A.shipCard(pc.dataset.t, 300, 165)); }); } });
+    return win.result;
+  };
 
   // ---------------------------------------------------------------- 기술 투자 (공업 투자)
   Y.invest = async function (c) {
@@ -279,11 +338,13 @@
         { label: '포문 증설', right: sh.ports + '/' + t.ports + '문', value: 'port', icon: 'plus', disabled: sh.ports >= t.ports },
         { label: '선수상', right: sh.fig ? G.FIGUREHEAD[sh.fig].name : '없음', value: 'fig', icon: 'feather', thumb: G.Img.figureheadSrc(sh.fig), desc: sh.fig && G.FigFx ? G.FigFx.short(G.FIGUREHEAD[sh.fig]) : '' },
         { label: '선체 다시 짓기 (목재)', right: (SH().wood(sh) || { name: '보통 목재' }).name, value: 'wood', icon: 'hammer' },
-        { label: '선명 변경', right: sh.name, value: 'name', icon: 'scroll' }
+        { label: '선명 변경', right: sh.name, value: 'name', icon: 'scroll' },
+        { label: '이 배 도움말', right: t.name + '의 역사와 설정', value: 'help', icon: 'book' }
       ].concat(sh === s.fleet.ships[0] && G.CabinView ? [{ label: '선실 개조', right: '선실 ' + (G.Cabins.rooms().length - 1) + '칸', value: 'cabin', icon: 'bed' }]
         : G.Cabins && G.Cabins.setStore ? [{ label: '선실 → 창고 개조', right: '창고 ' + G.Cabins.storeCount(sh) + '/' + G.Cabins.slots(sh) + '칸 · 짐칸 +' + U.num(G.Cabins.otherStoreBonus(sh, G.Cabins.storeCount(sh))) + '통', value: 'store', icon: 'chest',
-            desc: '기함이 아닌 배의 선실을 창고로 고쳐 짐칸을 늘린다 (한 칸마다 적재량의 ' + Math.round(storeK().per * 100) + '%). 창고로 고친 칸에는 부하가 머물지 않는다.' }] : []), { width: 600, text: '소지금 ' + U.num(s.player.gold) + '닢' });
+            desc: '기함이 아닌 배의 선실을 창고로 고쳐 짐칸을 늘린다 (한 칸마다 적재량의 ' + Math.round(storeK().per * 100) + '%). 창고로 고친 칸에는 부하가 머물지 않는다.' }] : []), { width: 640, text: capHp(sh) + '<br>소지금 ' + U.num(s.player.gold) + '닢' });
       if (v == null) return;
+      if (v === 'help') { await Y.shipHelp(c, sh.type, { sh: sh }); continue; }
       if (v === 'cabin') await G.CabinView.open({ yard: c });
       else if (v === 'store') await refitStore(c, sh);
       else if (v === 'gun') await refitGuns(c, sh);
@@ -405,7 +466,7 @@
     var lines = ships.map(function (sh) {
       var n = mode === 'full' ? sh.ports : mode === 'same' ? Math.min(sh.ports, sh.guns.n) : Math.min(sh.ports, fix);
       var same = ty === sh.guns.type && n === sh.guns.n;
-      return { sh: sh, n: n, cost: same ? 0 : gunCost(sh, ty, n), skip: same, text: same ? '이미 ' + g.name + ' ' + n + '문' : gunTxt(sh) + ' → ' + g.name + ' ' + n + '/' + sh.ports + '문' };
+      return { sh: sh, n: n, cost: same ? 0 : gunCost(sh, ty, n), skip: same, text: same ? '이미 ' + g.name + ' ' + n + '문' : gunTxt(sh) + ' → ' + g.name + ' ' + n + '/' + sh.ports + '문 · ' + capArrow(R.shipCargoCap(sh), capIf(sh, { guns: { type: ty, n: n } })) };
     });
     if (lines.every(function (l) { return l.skip; })) { UI.toast('바꿀 배가 없습니다.', 'info'); return; }
     var pc = planConfirm('대포 일괄 변경', lines);
@@ -437,7 +498,8 @@
         if (mode === 'one') break;
       }
       if (from >= T.length) why = '다 해 둠';
-      return { sh: sh, from: from, to: to, cost: cost, skip: to === from, text: to === from ? why : rigLabel(sh) + ' → ' + to + '단 · ' + T[to - 1].name + (why && mode === 'max' ? ' (' + why + ')' : '') };
+      var capTo = sh.cap; for (var ri = from; ri < to; ri++) if (T[ri].cap) capTo = Math.round(capTo * (1 + T[ri].cap));
+      return { sh: sh, from: from, to: to, cost: cost, skip: to === from, text: to === from ? why : rigLabel(sh) + ' → ' + to + '단 · ' + T[to - 1].name + (why && mode === 'max' ? ' (' + why + ')' : '') + (capTo !== sh.cap ? ' · ' + capArrow(R.shipCargoCap(sh), capIf(sh, { cap: capTo })) : '') };
     });
     if (lines.every(function (l) { return l.skip; })) { await C.say(keeper(), '고른 배들은 이 조선소에서 더 손볼 삭구가 없네. ' + (lines[0] ? lines[0].text : '')); return; }
     var pc = planConfirm('삭구 일괄 개량', lines);
@@ -474,12 +536,13 @@
   async function refitGuns(c, sh) {
     var s = S(), tech = SH().tech(c);
     var more = G.CANNONS.filter(function (g) { return !Y.gunOk(c, g); });
+    var cap0 = R.shipCargoCap(sh), n0 = Math.min(sh.ports, sh.guns.n || 4);
     var ty = await UI.choose('대포 종류', G.CANNONS.map(function (g) {
       var ok = Y.gunOk(c, g), mine = g.id === sh.guns.type;
       return { label: g.name + ((g.lv || 1) > 1 ? ' <span class="tag">기술 ' + g.lv + '</span>' : '') + (mine ? ' <span class="tag">지금</span>' : ''),
-        right: ok || mine ? '1문 ' + g.price + '닢 · 사정 ' + g.range + ' · 위력 ' + g.dmg + ' · 무게 ' + g.load : '조선 기술 ' + g.lv + '등급 필요',
-        value: g.id, desc: g.desc + (!ok && mine ? ' — 이 조선소에서는 줄이거나 떼어낼 수만 있다' : ''), icon: 'cannon', disabled: !ok && !mine };
-    }), { width: 760, text: '같은 종류로 수를 바꾸거나 다른 종류로 바꿔 달 수 있습니다. 떼어낸 대포는 반값에 사들입니다.' +
+        right: (ok || mine ? '1문 ' + g.price + '닢 · 사정 ' + g.range + ' · 위력 ' + g.dmg + ' · 무게 ' + g.load : '조선 기술 ' + g.lv + '등급 필요') + ' · <span title="' + n0 + '문을 달 때의 적재량">적재 ' + U.num(capIf(sh, { guns: { type: g.id, n: n0 } })) + '통</span>',
+        value: g.id, desc: g.desc + (!ok && mine ? ' — 이 조선소에서는 줄이거나 떼어낼 수만 있다' : '') + ' · ' + n0 + '문이면 ' + capArrow(cap0, capIf(sh, { guns: { type: g.id, n: n0 } })).replace(/<[^>]+>/g, ''), icon: 'cannon', disabled: !ok && !mine };
+    }), { width: 760, text: sh.name + '호 — ' + capHp(sh) + '<br>같은 종류로 수를 바꾸거나 다른 종류로 바꿔 달 수 있습니다. 떼어낸 대포는 반값에 사들입니다. 대포가 무거울수록 짐칸이 줄어듭니다 (오른쪽 「적재」는 ' + n0 + '문을 달 때).' +
       (more.length ? ' 이 조선소의 조선 기술은 <b>' + tech + '등급</b> — 「기술 투자」로 올리면 ' + more.map(function (g) { return g.name; }).join('·') + U.jx(more[more.length - 1].name, '을/를') + ' 부어 달 수 있습니다.' : '') });
     if (!ty) return;
     var g = G.CANNON[ty], old = G.CANNON[sh.guns.type];
@@ -487,8 +550,7 @@
     var n = await UI.number({ title: g.name + ' 탑재 수', min: 0, max: Y.gunOk(c, g) ? sh.ports : sh.guns.n, value: ty === sh.guns.type ? sh.guns.n : Math.min(sh.ports, sh.guns.n || 4), unit: '문',
       info: function (k) {
         var cost = ty === sh.guns.type ? Math.max(0, k - sh.guns.n) * g.price - (k < sh.guns.n ? refund(sh.guns.n - k) : 0) : k * g.price - refund(sh.guns.n);
-        var cap = Math.max(0, Math.floor(sh.cap - k * g.load));
-        return (cost >= 0 ? '비용 ' + U.num(cost) : '환급 ' + U.num(-cost)) + '닢 · 적재량 ' + cap + '통';
+        return (cost >= 0 ? '비용 ' + U.num(cost) : '환급 ' + U.num(-cost)) + '닢 · ' + capArrow(R.shipCargoCap(sh), capIf(sh, { guns: { type: ty, n: k } })) + ' · ' + hpArrow(sh);
       } });
     if (n == null) return;
     var cost = ty === sh.guns.type ? Math.max(0, n - sh.guns.n) * g.price - (n < sh.guns.n ? refund(sh.guns.n - n) : 0) : n * g.price - refund(sh.guns.n);
@@ -505,7 +567,7 @@
     var s = S(), price = 300, kinds = sailKinds(c);
     for (;;) {
       var opts = sh.sails.map(function (k, i) { var nx = kinds[(kinds.indexOf(k) + 1) % kinds.length] || 'sq'; return { label: (i + 1) + '번 돛대', right: G.SAIL_NAME[k] + ' → ' + G.SAIL_NAME[nx], value: i, icon: 'sail' }; });
-      var i = await UI.choose('돛 바꾸기 (1개 ' + price + '닢)', opts, { width: 620, text: '사각돛은 순풍에서 빠르고, 삼각돛은 옆바람과 맞바람에 강합니다.' + (kinds.length > 2 ? ' 대나무 살 돛은 그 사이 — 어느 바람에나 무난하고 폭풍에 빨리 줄일 수 있습니다.' : '') });
+      var i = await UI.choose('돛 바꾸기 (1개 ' + price + '닢)', opts, { width: 620, text: sh.name + '호 — ' + capHp(sh) + ' <small class="muted">(돛을 바꿔도 그대로)</small><br>사각돛은 순풍에서 빠르고, 삼각돛은 옆바람과 맞바람에 강합니다.' + (kinds.length > 2 ? ' 대나무 살 돛은 그 사이 — 어느 바람에나 무난하고 폭풍에 빨리 줄일 수 있습니다.' : '') });
       if (i == null) return;
       if (s.player.gold < price) { await C.say(keeper(), '돈이 모자라는군.'); return; }
       var cur = kinds.indexOf(sh.sails[i]);
@@ -529,12 +591,13 @@
       var n = sh.rig || 0;
       var opts = T.map(function (r, i) {
         var price = Math.round(t.price * r.cost / 10) * 10, done = i < n, next = i === n, lock = next && tech < r.lv;
-        return { label: (i + 1) + '단 · ' + r.name, right: done ? '해 둠' : next ? (lock ? '조선 기술 ' + r.lv + '등급 필요' : '금화 ' + U.num(price) + '닢') : '앞 단계를 먼저',
+        var capTxt = r.cap ? ' · 적재 ' + (next ? U.num(R.shipCargoCap(sh)) + '→' + U.num(capIf(sh, { cap: Math.round(sh.cap * (1 + r.cap)) })) + '통' : (r.cap > 0 ? '+' : '') + Math.round(r.cap * 100) + '%') : '';
+        return { label: (i + 1) + '단 · ' + r.name, right: (done ? '해 둠' : next ? (lock ? '조선 기술 ' + r.lv + '등급 필요' : '금화 ' + U.num(price) + '닢') : '앞 단계를 먼저') + capTxt,
           value: i, icon: done ? 'check' : 'gear', disabled: !next || lock,
-          desc: r.desc + (r.cap ? ' (적재량 ' + Math.round(r.cap * 100) + '%)' : '') + (next ? ' — 맞바람 속력 ' + upTxt(sh, n) + ' → ' + upTxt(sh, n + 1) + '°/일 (무역풍 세기)' : '') };
+          desc: r.desc + (r.cap ? ' (적재량 ' + Math.round(r.cap * 100) + '%' + (next ? ' — ' + capArrow(R.shipCargoCap(sh), capIf(sh, { cap: Math.round(sh.cap * (1 + r.cap)) })) : '') + ')' : '') + (next ? ' — 맞바람 속력 ' + upTxt(sh, n) + ' → ' + upTxt(sh, n + 1) + '°/일 (무역풍 세기)' : '') };
       });
       var i = await UI.choose(sh.name + '호 삭구 개량', opts, { width: 720,
-        text: '바람을 거슬러 오르는 힘을 키웁니다. 사각돛이 많은 배일수록 효과가 크고(삼각돛·살돛뿐인 배는 절반), 순풍 속력은 그대로입니다. 이 조선소의 조선 기술은 ' + tech + '등급입니다. 소지금 ' + U.num(s.player.gold) + '닢.' });
+        text: sh.name + '호 — ' + capHp(sh) + '<br>바람을 거슬러 오르는 힘을 키웁니다. 사각돛이 많은 배일수록 효과가 크고(삼각돛·살돛뿐인 배는 절반), 순풍 속력은 그대로입니다. 이 조선소의 조선 기술은 ' + tech + '등급입니다. 소지금 ' + U.num(s.player.gold) + '닢.' });
       if (i == null) return;
       var r = T[i], price = Math.round(t.price * r.cost / 10) * 10;
       if (i !== (sh.rig || 0)) return;
@@ -558,8 +621,8 @@
     var cost = function (o) { return Math.round(t.price * 0.4 * o.k / 10) * 10; };
     var v = await UI.choose(sh.name + '호 선체 다시 짓기', opts.map(function (o, i) {
       var w = G.TIMBER[o.id], hp = Math.round(t.hp * w.hp);
-      return { label: w.name, right: '금화 ' + U.num(cost(o)) + '닢 · 내구 ' + sh.maxHp + '→' + hp, value: i, icon: o.how === 'cargo' ? 'sack' : 'hammer', desc: SH().woodLine(w) + (o.how === 'cargo' ? ' · 싣고 온 목재 ' + o.need + '통' : '') + ' — ' + w.desc };
-    }), { width: 720, text: '판자를 모두 갈아 다시 짓습니다. 배값의 40% 정도가 듭니다. 지금 손상은 비율대로 남습니다.' });
+      return { label: w.name, right: '금화 ' + U.num(cost(o)) + '닢 · ' + hpArrow(sh, hp), value: i, icon: o.how === 'cargo' ? 'sack' : 'hammer', desc: SH().woodLine(w) + (o.how === 'cargo' ? ' · 싣고 온 목재 ' + o.need + '통' : '') + ' — ' + w.desc };
+    }), { width: 720, text: sh.name + '호 — ' + capHp(sh) + ' <small class="muted">(적재량은 목재와 상관없이 그대로)</small><br>판자를 모두 갈아 다시 짓습니다. 배값의 40% 정도가 듭니다. 지금 손상은 비율대로 남습니다.' });
     if (v == null) return;
     var o = opts[v], w = G.TIMBER[o.id], price = cost(o);
     if (s.player.gold < price) { await C.say(keeper(), '금화 ' + U.num(price) + '닢 필요하네. 돈이 모자라는군.'); return; }
@@ -595,7 +658,7 @@
     if (sh === s.fleet.ships[0]) return;
     var n = await UI.number({ title: sh.name + '호 — 선실을 창고로 (한 칸 ' + U.num(k.cost) + '닢)', min: 0, max: N, value: N, unit: '칸',
       text: G.SHIP[sh.type].name + '의 선실 ' + N + '칸 가운데 몇 칸을 창고로 쓸지 정하십시오. 지금 창고 ' + cur + '칸.<br><small class="muted">창고 한 칸마다 짐칸이 적재량(' + U.num(G.SHIP[sh.type].cap) + '통)의 ' + Math.round(k.per * 100) + '%씩 늡니다. 무게 한도는 그대로입니다. 창고로 고친 칸에는 부하가 머물지 않고, 창고를 빈 선실로 되돌리는 데는 돈이 들지 않습니다.</small>',
-      info: function (v) { var p = storePlan(sh, v); return '짐칸 ' + (p.dCap >= 0 ? '+' : '') + U.num(p.dCap) + '통 · ' + (p.cost ? '금화 ' + U.num(p.cost) + '닢 · 공사 ' + p.days + '일' : '비용 없음') + (p.out ? ' · <span class="warn-text">이 배 선실의 부하 ' + p.out + '명은 대기로</span>' : ''); } });
+      info: function (v) { var p = storePlan(sh, v); return capArrow(R.shipCargoCap(sh), R.shipCargoCap(sh) + p.dCap) + ' · ' + (p.cost ? '금화 ' + U.num(p.cost) + '닢 · 공사 ' + p.days + '일' : '비용 없음') + (p.out ? ' · <span class="warn-text">이 배 선실의 부하 ' + p.out + '명은 대기로</span>' : ''); } });
     if (n == null || n === cur) return;
     var p = storePlan(sh, n);
     if (s.player.gold < p.cost) { await C.say(keeper(), '돈이 모자라는군.'); return; }
@@ -624,7 +687,7 @@
   }
   async function refitPorts(c, sh) {
     var s = S(), t = G.SHIP[sh.type], price = 250;
-    var n = await UI.number({ title: '포문 증설 (1문 ' + price + '닢)', min: 1, max: t.ports - sh.ports, value: Math.min(2, t.ports - sh.ports), unit: '문', info: function (k) { return '비용 ' + U.num(k * price) + '닢'; } });
+    var n = await UI.number({ title: '포문 증설 (1문 ' + price + '닢)', text: sh.name + '호 — ' + capHp(sh) + '<br><small class="muted">포문만 뚫으면 적재량은 그대로 — 대포를 달면 그 무게만큼 줄어든다</small>', min: 1, max: t.ports - sh.ports, value: Math.min(2, t.ports - sh.ports), unit: '문', info: function (k) { return '비용 ' + U.num(k * price) + '닢 · 포문 ' + sh.ports + ' → ' + (sh.ports + k) + '문'; } });
     if (!n) return;
     if (s.player.gold < n * price) { await C.say(keeper(), '돈이 모자라는군.'); return; }
     s.player.gold -= n * price; sh.ports += n; UI.toast('포문을 ' + n + '문 늘렸다.', 'plus');
