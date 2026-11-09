@@ -17,7 +17,7 @@
     }
     function scene(t, e) {
       const chain = e.chain || (e.key ? [e.key] : []);
-      return add(t, { group: e.group, name: e.name, sub: e.sub || '', meta: e.meta || '', extra: e.text || '',
+      return add(t, { group: e.group, name: e.name, sub: e.sub || '', meta: e.meta || '', extra: e.text || '', when: e.when, achId: e.achId, foodId: e.foodId,   // 본 것만 보이게 (js/systems/codexmemo.js)
         key: chain[0] || '', chain: chain, ar: '16 / 10',
         pic: () => I.make(chain, 960, 600, () => pageArt(e.name)),
         detail: () => ({ text: e.text, hint: e.hint, facts: (e.facts || []).filter(Boolean) }) });
@@ -35,7 +35,7 @@
     });
 
     const events = tab('events', '이벤트 도감', { chips: [['all', '전체'], ['story', '모험 이야기'], ['family', '가족'], ['relations', '왕실·정세'], ['world', '세계 소식']],
-      note: '이야기와 장면의 내용을 미리 볼 수 있습니다. 실제 만남과 사건 진행은 항해 시기와 선택에 따라 달라집니다. 줄거리 내용이 포함되어 있습니다.' });
+      note: '항해에서 겪은 이야기와 장면, 그 해까지 지나간 세계 소식을 다시 볼 수 있습니다.' });
     (G.CATALOG_SCENES || []).forEach(e => scene(events, { group: 'story', name: e.name, key: e.key, sub: e.story, text: e.text,
       facts: [['이야기', e.story]], hint: '모험 중 펼쳐지는 장면입니다. 사건의 진행에 따라 이 장면을 만나게 됩니다.' }));
     const at = { sea: '바다 위', tavern: '술집', return: '집에 돌아온 날', dock: '고향 부두', port: '항구', preg: '임신 소식', birth: '출산', home: '집', wed: '혼례' };
@@ -46,18 +46,19 @@
       hint: '가족 구성과 동행 여부에 따라 대화가 달라집니다.', facts: [['장소·계기', at[e.at] || '가족 이야기'],
         e.need && e.need.length ? ['기본 조건', needText(e.need)] : null, e.kid ? ['아이 나이', e.kid[0] + '세~' + e.kid[1] + '세'] : null,
         e.pick ? ['선택', e.pick.opts.map(o => prose(o.label)).join(' / ')] : null] }));
-    (G.REL_EVENTS || []).forEach(e => scene(events, { group: 'relations', name: e.title, sub: date(e), text: e.text || '이 사건을 계기로 나라 사이의 관계가 바뀝니다.',
+    const when = e => e.y * 10000 + (e.m || 1) * 100 + (e.d || 1);   // 그날이 지난 항해를 했으면 본 소식
+    (G.REL_EVENTS || []).forEach(e => scene(events, { group: 'relations', name: e.title, key: e.img, sub: date(e), when: when(e), text: e.text || '이 사건을 계기로 나라 사이의 관계가 바뀝니다.',
       facts: [['시기', date(e)], e.need && e.need.met ? ['직접 소식을 전하는 조건', e.need.met.map(id => (G.SPONSOR[id] || {}).title || '후원자').join(' · ') + ' 가운데 한 사람을 만난 적이 있음'] : null,
         e.ask ? ['참여', prose(e.ask.text)] : null, e.battle ? ['참여', '해당 시기의 전장 해역에서 큰 해전에 참여할 수 있습니다.'] : null] }));
-    (G.HISTORY || []).filter(e => e.text).forEach(e => scene(events, { group: 'world', name: e.text.split('.')[0], sub: date(e), text: e.text,
+    (G.HISTORY || []).filter(e => e.text).forEach(e => scene(events, { group: 'world', name: e.text.split('.')[0], key: e.img, sub: date(e), text: e.text, when: when(e),
       facts: [['시기', date(e)], e.city ? ['관련 도시', cityName(e.city[0])] : null] }));
 
     const ach = tab('achievements', '업적 도감', { chips: [['all', '전체']].concat((G.ACHV_GROUPS || []).map(g => [g, g])),
-      note: '모든 업적의 달성 조건과 보상을 살펴봅니다. 달성 여부는 항해 중 수첩의 업적에서 확인할 수 있습니다.' });
+      note: '이룬 업적의 달성 조건과 보상을 살펴봅니다. 아직 이루지 못한 업적은 항해 중 수첩의 업적에서 확인할 수 있습니다.' });
     (G.ACHIEVEMENTS || []).forEach(a => {
       const e = (G.ACHV_EVENTS || {})[a.id] || {}, chain = [e.pic || 'achievement-events/' + a.id];
       (a.ids || []).forEach(id => chain.push('discoveries/' + id));
-      scene(ach, { group: a.group, name: a.name, sub: a.group, text: a.desc, chain: chain,
+      scene(ach, { group: a.group, name: a.name, sub: a.group, text: a.desc, chain: chain, achId: a.id,
         meta: '탐험 명성 +' + num(a.fame || 0) + ' · 금화 ' + num(a.gold || 0) + '닢',
         facts: [['달성 조건', a.desc], ['탐험 명성', '+' + num(a.fame || 0)], ['금화 보상', num(a.gold || 0) + '닢'],
           a.title ? ['칭호', a.title] : null, a.ids ? ['관련 발견물', a.ids.map(id => (G.DISC[id] || {}).name || id).join(' · ')] : null,
@@ -71,7 +72,7 @@
     G.CITY_DATA.filter(c => G.CUISINE.hasRestaurant ? G.CUISINE.hasRestaurant(c) : c.size >= k.minSize || (G.CUISINE.special[c.id] || []).length).forEach(c => G.CUISINE.dishes(c).forEach(d => (served[d.id] = served[d.id] || []).push(c)));
     G.CUISINES.forEach(d => {
       const cities = served[d.id] || [], prices = cities.map(c => Math.round(k.base + c.size * k.size + d.tier * k.tier));
-      scene(food, { group: d.zone, name: d.name, sub: zones[d.zone], key: 'foods/' + d.id, text: d.desc,
+      scene(food, { group: d.zone, name: d.name, sub: zones[d.zone], key: 'foods/' + d.id, text: d.desc, foodId: d.id,
         meta: '등급 ' + d.tier + ' · 피로 −' + k.rest[d.tier] + ' · 체력 +' + k.hp[d.tier],
         facts: [['지역', zones[d.zone]], ['음식 등급', d.tier], ['피로 감소', k.rest[d.tier]], ['체력 회복', k.hp[d.tier]], ['규율 증가', (k.disc || [])[d.tier] || 0],
           ['기본 사교 명성', (k.so || [])[d.tier] || 0], ['식사', '도시에 들를 때마다 한 끼'],
@@ -88,7 +89,7 @@
         if (seen.has(it.id)) return; seen.add(it.id);
         const relic = (G.RELIC || {})[it.id], origin = relic ? 'relic' : it.reg && it.reg.length ? 'market' : 'special';
         const chain = I.chain.item(it), source = relic && G.DISC[relic.relic];
-        add(t, { group: origin, name: it.name, sub: (it.subRegion || (it.reg || []).map(r => G.REGIONS[r]).join(' · ') || '특수 입수'),
+        add(t, { group: origin, itemId: it.id, name: it.name, sub: (it.subRegion || (it.reg || []).map(r => G.REGIONS[r]).join(' · ') || '특수 입수'),
           meta: kind === 'weapon' ? '공격력 ' + (it.atk || 0) : it.tradition || (it.military ? '군악기' : '연주 악기'),
           extra: it.desc + ' ' + (it.aliases || []).join(' '), key: chain[0], chain: chain, ar: '1 / 1', fit: 'contain',
           pic: () => I.make(chain, 480, 480, () => A.relicArt(it, 480, 480), { fit: 'contain' }),

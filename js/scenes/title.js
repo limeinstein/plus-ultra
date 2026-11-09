@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.324';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.325';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
   var bootPending = false;   // 처음 열 때의 불러오는 그림이 아직 준비 단계를 밟는 중 (타이틀을 떠나면 바로 걷는다 — T.exit)
 
@@ -43,6 +43,7 @@
     var bCatalog = btn('도감', 'book', function () {
       // 같은 폴더의 도감으로 간다. 파일 실행·정식판·베타판 모두 상대 주소를 쓴다.
       var from = location.pathname.split('/').pop() || 'index.html';
+      if (G.CodexMemo) { try { G.CodexMemo.sync(); G.CodexMemo.flush(); } catch (e) { /* */ } }   // 본 것 기록을 마저 적고 간다 (js/systems/codexmemo.js)
       location.href = 'catalog.html?view=player&from=' + encodeURIComponent(from) + '#people';
     });
     var books = U.el('div', 'title-row title-books'); menu.insertBefore(books, bLoad); books.appendChild(bLoad); books.appendChild(bCatalog);

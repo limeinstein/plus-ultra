@@ -1,7 +1,7 @@
 /* 개척 도시의 건물: 감찰관 저택 · 총독부 (규칙·대사: js/systems/colony.js · js/data/colony.js)
    - 감찰관 저택(inspector): 본국에서 온 감찰관이 도시를 살핀다 — 이야기 · 개척 현황
    - 총독부(govhall): 총독 취임 · 개척 현황 · 가족을 총독 관저로(또는 고향으로) · 총독 관저로 간다
-   그림: 바깥은 저택·왕궁 그림을 빌려 쓰고(js/scenes/town.js SUBSTITUTE), 안은 저택·왕궁 실내 (paint) */
+   거리에는 개척 도시 양식의 전용 외관을 세우고, 실내는 저택·왕궁 그림을 쓴다. */
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R, C = G.Scenes.city, CO = G.Colony;

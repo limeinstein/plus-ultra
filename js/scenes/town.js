@@ -139,6 +139,17 @@
   // ---------------------------------------------------------------- 만들기
   T.available = function (c) { return !!(I.count() && (I.pick(I.chain.bg(c)) || (I.extStyle && I.extStyle(c)))); };
 
+  // 거리 준비와 그리기에서 같은 후보를 쓴다. 빌려 쓰는 그림도 첫 방문에 읽혀야 한다.
+  function streetExterior(kind, c, arg) {
+    var direct = I.chain.exterior(kind, c, arg);
+    if (I.extStyle(c) && A.cultureOf && A.cultureOf(c) !== 'europe') {
+      // 고장 양식이 있는 도시에서는 유럽 공통 외관을 건너뛴다.
+      direct = direct.filter(function (key) { return key !== 'exteriors/' + kind; });
+    }
+    var substitute = SUBSTITUTE[kind];
+    return { direct: direct, chain: substitute ? direct.concat(I.chain.exterior(substitute, c, '')) : direct };
+  }
+
   /** 도시의 거리를 준비한다. buildings: G.Scenes.city.buildings(c) */
   T.open = function (c, buildings) {
     var landmarks = landmarksFor(c), chains = [I.chain.bg(c), I.chain.hero()];
@@ -148,7 +159,7 @@
     buildings.forEach(function (b) {
       var homeTier = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.tier() : 0;
       var homeKind = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.baseKind(homeTier, c) : b.kind;
-      chains.push(I.chain.exterior(homeKind, c, homeKind === b.kind ? b.arg : ''));
+      chains.push(streetExterior(homeKind, c, homeKind === b.kind ? b.arg : '').chain);
       if (b.kind === 'home' && homeTier > 0 && (homeTier === 1 || homeTier === 3 || homeKind === 'home')) chains.push(I.chain.exterior('home', c, ''));
     });
     landmarks.forEach(function (l) { chains.push(I.chain.landmark(l[0])); });
@@ -185,7 +196,7 @@
       if (back && G.HomeBuilding && st.homeTier !== G.HomeBuilding.tier()) {
         var old = st, c = st.city, buildings = G.Scenes.city.buildings(c);
         var nextKind = G.HomeBuilding.baseKind(G.HomeBuilding.tier(), c);
-        var pre = [I.chain.exterior(nextKind, c, '')];
+        var pre = [streetExterior(nextKind, c, '').chain];
         if (G.HomeBuilding.tier() === 1 || G.HomeBuilding.tier() === 3 || nextKind === 'home') pre.push(I.chain.exterior('home', c, ''));
         I.preload(pre, 5000).then(function () {
           if (st !== old) return;
@@ -343,7 +354,6 @@
     finishHeroGesture();
     var rng = rngOf(c);
     var bgKey = I.pick(I.chain.bg(c));
-    var es = I.extStyle && I.extStyle(c);
     var items = [];
     var order = {};
     ORDER.forEach(function (k, i) { order[k] = i; });
@@ -353,13 +363,9 @@
         var homeTier = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.tier() : 0;
         var drawingKind = b.kind === 'home' && G.HomeBuilding ? G.HomeBuilding.baseKind(homeTier, c) : b.kind;
         if (b.kind === 'home' && G.FX && G.FX.homeBuilding && G.FX.homeBuilding.heights) h = G.FX.homeBuilding.heights[homeTier] || h;
-        var key = I.pick(I.chain.exterior(drawingKind, c, drawingKind === b.kind ? b.arg : ''));
-        // 그 고장 건물 그림을 쓰는 도시에서는, 유럽식 기본 그림 대신 그 고장 양식으로 그린다
-        var cultureKey = A.cultureOf ? 'exteriors/' + drawingKind + '_' + A.cultureOf(c) : '';
-        if (key && es && key.indexOf('exterior-styles/') !== 0 && key.indexOf('pirate-islands/') !== 0 && key.indexOf('@') < 0 && key !== cultureKey &&
-            A.cultureOf && A.cultureOf(c) !== 'europe') key = null;
-        var flip = false;
-        if (!key && SUBSTITUTE[drawingKind]) { key = I.pick(I.chain.exterior(SUBSTITUTE[drawingKind], c, '')); flip = !!key && b.kind !== 'govhall'; }
+        var exterior = streetExterior(drawingKind, c, drawingKind === b.kind ? b.arg : '');
+        var key = I.pick(exterior.chain);
+        var flip = key && exterior.direct.indexOf(key) < 0 && b.kind !== 'govhall';
         var img = key && I.get(key);
         var cv = img ? prescale(img, h, flip) : fallback(drawingKind, c, h, rng);
         if (!cv) return;

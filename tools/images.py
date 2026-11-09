@@ -61,6 +61,19 @@ for pirate_maid_zone in ('med', 'atl', 'north', 'amer', 'ind', 'sea', 'east'):
         PREFERRED_FILES[pirate_maid_key + pirate_maid_suffix] = pirate_maid_key + '_ref20261107_v1' + pirate_maid_suffix + '.webp'
 
 
+# 얼굴·무릎상 짝 교정(2026-11-10). 검증한 두 파일을 목록 재생성에서도 함께 쓴다.
+portrait_pair_overrides = os.path.join(TOOLS, 'portrait_pair_overrides_20261110.json')
+if os.path.isfile(portrait_pair_overrides):
+    with open(portrait_pair_overrides, encoding='utf-8') as portrait_pair_file:
+        PREFERRED_FILES.update(json.load(portrait_pair_file))
+
+# 누락 사건 원화(2026-11-10)의 버전 연결. 목록 재생성·웹 빌드에서도 유지한다.
+event_art_overrides = os.path.join(TOOLS, 'missing_event_art_20261110', 'asset-overrides.json')
+if os.path.isfile(event_art_overrides):
+    with open(event_art_overrides, encoding='utf-8') as event_art_file:
+        PREFERRED_FILES.update(json.load(event_art_file))
+
+
 def read(rel):
     with open(os.path.join(ROOT, rel), encoding='utf-8') as f:
         return f.read()
@@ -291,6 +304,8 @@ def valid_keys(d):
         for kind in ('palace', 'mansion'):
             k['exteriors/%s@%s' % (kind, sp['id'])] = '건물 겉모습 · %s' % sp['title']
     # 지역별 건물 겉모습 묶음
+    for kind, label in [('inspector', '감찰관 저택'), ('govhall', '총독부')]:
+        k['exterior-styles/espana/' + kind] = '개척 도시 건물 겉모습 · ' + label
     for es, elab in d.get('extstyles', []):
         for kind, label in d['interiors']:
             k['exterior-styles/%s/%s' % (es, kind)] = '건물 겉모습 · %s (%s)' % (label, elab)

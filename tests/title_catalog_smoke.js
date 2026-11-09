@@ -17,7 +17,7 @@ const out = path.join(ROOT, 'artifacts/title-catalog-20261108'); fs.mkdirSync(ou
     await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({ contentType: 'text/css', body: '' }));
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.goto(base + 'catalog.html?view=player&from=index.html#people', { waitUntil: 'load', timeout: 120000 });
+    await page.goto(base + 'catalog.html?view=player&all=1&from=index.html#people', { waitUntil: 'load', timeout: 120000 });
     await page.waitForSelector('#tabs [data-tab="people"]');
     // 대표 카드뿐 아니라 새 분류의 모든 상세 설명과 대체 그림도 만들 수 있어야 한다.
     const dataErrors = await page.evaluate(() => {

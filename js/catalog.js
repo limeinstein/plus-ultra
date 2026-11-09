@@ -714,7 +714,25 @@
   let cur = TABS[0], query = '';
   const hash = decodeURIComponent((location.hash || '').slice(1));
   if (TABS.some(t => t.id === hash)) cur = TABS.find(t => t.id === hash);
-  const matches = it => !query || it.text.includes(query);
+  if (PLAYER && !PRIMARY.includes(cur.id)) cur = TABS.find(t => t.id === PRIMARY[0]);   // 플레이어 도감은 일곱 갈래만
+  /* 플레이어 도감: 항해에서 직접 본 것만 (2026-11-10 사용자 요청 — js/systems/codexmemo.js 가 게임에서 쌓은 기록).
+     발견물·업적·음식·소지품은 그 id 로, 장면·사람은 그 그림 키·이름으로, 세계 소식·왕실 사건은 그날을 지나 항해했는지로 본다.
+     개발용 전체 도감(?view=assets)은 모두 보인다. */
+  const MEMO = PLAYER && G.CodexMemo && params.get('all') !== '1' ? G.CodexMemo.load() : null;   // &all=1: 점검용 — 플레이어 도감 모양 그대로 모두 (tests/title_catalog_smoke.js)
+  function seenIt(it) {
+    if (!MEMO) return true;
+    const M = MEMO;
+    if (it.disc) return !!M.d[it.disc.id];
+    if (it.achId) return !!M.a[it.achId];
+    if (it.foodId) return !!M.f[it.foodId];
+    if (it.itemId) return !!M.it[it.itemId];
+    if (it.when) return M.y >= it.when;
+    const ks = [it.key, it.halfKey, it.chain && it.chain[0], it.bustChain && it.bustChain[0]];
+    if (ks.some(k => k && M.k[k])) return true;
+    return !!(it.portrait && M.n[it.name]);
+  }
+  const seenCount = t => t.items.filter(seenIt).length;
+  const matches = it => seenIt(it) && (!query || it.text.includes(query));
   const visible = t => t.items.filter(it => matches(it) && (t.chip === 'all' || it.group === t.chip) && (t !== tDisc || filterDisc(it)));
 
   // ---------------------------------------------------------------- thumbnails (lazy, one per frame)
@@ -769,8 +787,9 @@
       return '<button class="tab" role="tab" type="button" id="tab-' + t.id + '" aria-controls="grid" aria-selected="' + (t === cur) + '" data-tab="' + t.id + '">' + esc(t.label) + '<span class="n">' + num(n) + '</span></button>';
     };
     $('#tabs').innerHTML = TABS.filter(t => PRIMARY.includes(t.id)).map(button).join('');
-    $('#extraTabs').innerHTML = TABS.filter(t => !PRIMARY.includes(t.id)).map(button).join('');
-    if (!PRIMARY.includes(cur.id)) $('#extraCatalog').open = true;
+    $('#extraCatalog').hidden = PLAYER;   // 도시·배·교역품·그림 파일 같은 제작용 도감은 플레이어 도감에서 감춘다 (?view=assets 에서 모두)
+    $('#extraTabs').innerHTML = PLAYER ? '' : TABS.filter(t => !PRIMARY.includes(t.id)).map(button).join('');
+    if (!PLAYER && !PRIMARY.includes(cur.id)) $('#extraCatalog').open = true;
   }
   function renderFacets() {
     const box = $('#catalogFacets'); box.hidden = cur !== tDisc;
@@ -804,16 +823,25 @@
       (PLAYER ? '' : '<span class="file"><span class="path">' + pathHtml(pathOf(it.key, it.kind)) + '</span>' + stateHtml(it) + '</span>') + '</span></button>'
     ).join('');
     $('#empty').hidden = list.length > 0;
-    $('#resultCount').textContent = cur.label + ' · ' + num(list.length) + ' / ' + num(cur.items.length) + '개';
+    $('#resultCount').textContent = MEMO ? cur.label + ' · 본 것 ' + num(seenCount(cur)) + ' / 전체 ' + num(cur.items.length) + '개' + (query || cur.chip !== 'all' ? ' (보이는 것 ' + num(list.length) + ')' : '') : cur.label + ' · ' + num(list.length) + ' / ' + num(cur.items.length) + '개';
+    if (MEMO) {   // 아직 본 것이 없으면 안내 — 검색어가 있으면 원래 글
+      const none = !seenCount(cur);
+      $('#empty').innerHTML = none && !query ? '아직 항해에서 본 ' + U_none(cur.id) : '찾는 항목이 없습니다. <button type="button" data-reset>검색과 필터 지우기</button>';
+    }
     grid.querySelectorAll('.thumb').forEach(el => { if (io) io.observe(el); else queue.push(el); });
     if (!io) pump();
   }
+  function U_none(id) {
+    return { people: '인물이 없습니다. 항해하며 대화를 나눈 사람이 여기에 실립니다.', events: '이벤트가 없습니다. 항해하며 겪은 장면과 지나간 세계 소식이 여기에 실립니다.',
+      achievements: '업적이 없습니다. 이룬 업적이 여기에 실립니다.', discoveries: '발견물이 없습니다. 직접 찾은 발견물이 여기에 실립니다.',
+      foods: '음식이 없습니다. 식당에서 맛본 음식이 여기에 실립니다.', instruments: '악기가 없습니다. 사거나 손에 넣은 악기가 여기에 실립니다.', weapons: '무기가 없습니다. 사거나 손에 넣은 무기가 여기에 실립니다.' }[id] || '것이 없습니다.';
+  }
   function renderAll() {
     renderTabs(); renderChips(); renderFacets(); renderGrid();
-    $('#note').innerHTML = PLAYER ? cur.playerNote || (PRIMARY.includes(cur.id) ? cur.note : '카드를 눌러 설명과 게임 속 정보를 살펴보세요.') : cur.note;
+    $('#note').innerHTML = PLAYER ? (MEMO ? '<b>항해에서 직접 본 것만 실립니다</b> — 본 것 ' + num(seenCount(cur)) + ' / 전체 ' + num(cur.items.length) + '. ' : '') + (cur.playerNote || (PRIMARY.includes(cur.id) ? cur.note : '카드를 눌러 설명과 게임 속 정보를 살펴보세요.')) : cur.note;
   }
   function summary() {
-    if (PLAYER) { $('#summary').textContent = PRIMARY.map(id => { const t = TABS.find(t => t.id === id); return t.label.replace(' 도감', '') + ' ' + num(t.items.length); }).join(' · '); return; }
+    if (PLAYER) { $('#summary').textContent = PRIMARY.map(id => { const t = TABS.find(t => t.id === id); return t.label.replace(' 도감', '') + ' ' + (MEMO ? num(seenCount(t)) + '/' : '') + num(t.items.length); }).join(' · '); return; }
     const n = id => TABS.find(t => t.id === id).items.length;
     const people = TABS.find(t => t.id === 'people').items;
     const cnt = g => people.filter(it => it.group === g).length;

@@ -19,7 +19,7 @@
       if (s.date.y > h.y || (s.date.y === h.y && (s.date.m > h.m || (s.date.m === h.m && s.date.d >= (h.d || 1))))) {   // h.d: 그달 며칠부터 (없으면 1일)
         s.history++;
         if (h.city) s.owners[h.city[0]] = h.city[1];
-        if (!h.quiet) out.push({ icon: 'scroll', text: h.text, history: true });   // quiet: 따로 창을 띄우는 사건(토르데시야스 조약 — js/systems/treaty.js)
+        if (!h.quiet) out.push({ icon: h.img && G.Img && G.Img.has(h.img) ? { src: G.Img.src(h.img), icon: 'scroll' } : 'scroll', img: h.img, text: h.text, history: true });   // quiet: 따로 창을 띄우는 사건(토르데시야스 조약 — js/systems/treaty.js)
         G.State.log(h.text, G.Journal ? G.Journal.historyGrade(h) : null);   // 일지 중요도 (js/systems/journal.js)
       } else break;
     }

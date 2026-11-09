@@ -149,7 +149,7 @@
       if (!fresh) { r.told = r.told || {}; r.told[e.id] = 1; }   // 지난 일은 사절이 찾아오지 않는다
       if (!fresh || e.silent) return;
       var direct = (e.who || e.ask) && metNeed(e);
-      if (!direct) out.push({ icon: e.icon || 'scroll', text: '【' + e.title + '】 ' + e.text, history: true });   // 직접 전하러 오는 사건은 그때 들려준다
+      if (!direct) out.push({ icon: e.img && G.Img && G.Img.has(e.img) ? { src: G.Img.src(e.img), icon: e.icon || 'scroll' } : e.icon || 'scroll', img: e.img, text: '【' + e.title + '】 ' + e.text, history: true });   // 직접 전하러 오는 사건은 그때 들려준다
       else if (r.pend.indexOf(e.id) < 0) r.pend.push(e.id);
     });
     // 갈래가 바뀌면 알린다 (처음 볼 때는 적어만 둔다)
@@ -242,7 +242,13 @@
     var tt = String(e.title).replace(/\s*\(\d{3,4}\)\s*$/, '');   // 「신성 동맹 (1571)」 → 「신성 동맹」 (대화창은 괄호 속 숫자를 알림으로 떼어 낸다)
     // 왕녀가 직접 전하는 혼인 소식: 이벤트 샷 (js/art/eventshot.js) — 혼례일 때만. 「귀부인들의 평화」 같은 다른 소식에 혼례 그림이 뜨던 것 (2026-10-26)
     var pr = e.who && e.who.princess && G.EventShot ? ((G.COURT && G.COURT.princesses) || []).filter(function (x) { return x.id === e.who.princess; })[0] : null;
-    var pc = pr && (/혼례/.test(e.title) || e.icon === 'heart') ? await G.EventShot.princess('royal_wedding', { realm: pr.realm, name: pr.name, title: tt, city: (function () { var r = G.COURT.realms[pr.realm], sp = r && r.sponsors && G.SPONSOR[r.sponsors[0]]; return sp ? G.CITY_DATA[sp.city] : null; })() }) : null;
+    var pc = null;
+    if (e.img && G.Img && G.Img.has(e.img) && G.FamEv && G.FamEv.showPic) {
+      await G.Img.load(e.img);
+      pc = G.FamEv.showPic({ img: e.img, title: tt });
+    } else if (pr && (/혼례/.test(e.title) || e.icon === 'heart')) {
+      pc = await G.EventShot.princess('royal_wedding', { realm: pr.realm, name: pr.name, title: tt, city: (function () { var r = G.COURT.realms[pr.realm], sp = r && r.sponsors && G.SPONSOR[r.sponsors[0]]; return sp ? G.CITY_DATA[sp.city] : null; })() });
+    }
     try { await courtIn(e, s, p, who, a, tt); } finally { if (pc) await pc.stop(); }
   }
   async function courtIn(e, s, p, who, a, tt) {
