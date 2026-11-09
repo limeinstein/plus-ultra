@@ -30,7 +30,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       }
       return out;
     });
-    ok(played.length === 25 && played.every(x => x[1].length === 3 && x[1].every(Boolean)), '효과음 25종 × 세 변형을 Web Audio로 모두 생성');
+    const duelSounds = ['swingSlash', 'swingThrust', 'swingBash', 'thud', 'thudKo', 'duelRing', 'duelParry'];
+    const failed = played.filter(x => x[1].length !== 3 || !x[1].every(Boolean));
+    ok(played.length === 32 && new Set(played.map(x => x[0])).size === 32 && duelSounds.every(k => played.some(x => x[0] === k)) && !failed.length,
+      '기존 25종과 일기토 7종 × 세 변형을 Web Audio로 모두 생성' + (failed.length ? ' — 실패: ' + JSON.stringify(failed) : ''));
     ok(await page.evaluate(() => G.Audio.travel('sea', 0.8) === true && G.Audio.travel('sea', 0.8) === false), '이동음은 실제 시간 간격으로 제한되어 배속에서도 겹치지 않음');
 
     const src = files => files.map(f => fs.readFileSync(path.join(ROOT, f), 'utf8')).join('\n');

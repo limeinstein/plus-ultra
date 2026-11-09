@@ -56,7 +56,7 @@
     tone(high ? 620 : 105, t, high ? 0.1 : 0.16, 'triangle', (gain || 0.16) * 0.55);
   }
   /** 파일 없이 합성하는 효과음 목록 — 작은 음원을 여럿 겹쳐 물·나무·금속·목소리의 질감을 만든다. */
-  AU.SFX = ['wake', 'sail', 'depart', 'dock', 'breath', 'wagon', 'horse', 'run', 'townstep', 'door', 'gull', 'cat', 'dog', 'cannon', 'gun', 'sword', 'growl', 'discover', 'children', 'page', 'glasses', 'coin', 'coinland', 'unload', 'cheer'];
+  AU.SFX = ['wake', 'sail', 'depart', 'dock', 'breath', 'wagon', 'horse', 'run', 'townstep', 'door', 'gull', 'cat', 'dog', 'cannon', 'gun', 'sword', 'growl', 'discover', 'children', 'page', 'glasses', 'coin', 'coinland', 'unload', 'cheer', 'swingSlash', 'swingThrust', 'swingBash', 'thud', 'thudKo', 'duelRing', 'duelParry'];
   AU.SFX_VARIANTS = 3;
   var lastVariant = {};
   function pickVariant(name, want) {
@@ -132,27 +132,28 @@
     var F = G.SFX_FILES, e = F && F.sets && F.sets[name];
     return !!(e && canOgg() && e.f.some(function (f) { return !smpBad[f] && sReady(f); }));
   };
-  function playOne(e, name) {
+  function playOne(e, name, level) {
     var fs = e.f.filter(function (f) { return !smpBad[f] && sReady(f); }); if (!fs.length) return false;
     var pick = fs.length > 1 ? fs.filter(function (x) { return x !== smpLast[name]; }) : fs, f = pick[Math.floor(Math.random() * pick.length)];
     smpLast[name] = f;
     var a = smpEl(f), r = e.rate ? e.rate[0] + Math.random() * (e.rate[1] - e.rate[0]) : 1;
     try { a.currentTime = 0; } catch (x) { /* 아직 못 읽음 */ }
     a.playbackRate = r;
-    a.volume = Math.max(0, Math.min(1, vol('sound', 0.5) * 0.8 * (e.v == null ? 1 : e.v) * (G.SFX_FILES.vol == null ? 1 : G.SFX_FILES.vol)));   // 0.8 = 합성음의 master
+    a.volume = Math.max(0, Math.min(1, vol('sound', 0.5) * 0.8 * (level == null ? 1 : level) * (e.v == null ? 1 : e.v) * (G.SFX_FILES.vol == null ? 1 : G.SFX_FILES.vol)));   // 0.8 = 합성음의 master
     var p = a.play(); if (p && p.catch) p.catch(function () { /* 못 읽은 파일 · 자동 재생 막힘 */ });
     return true;
   }
   /** 녹음 효과음 하나 (seq가 있으면 그 시각들에 한 번씩). 냈으면 true */
-  AU.sample = function (name) {
+  AU.sample = function (name, level) {
     if (!ctx || ctx.state !== 'running' || !AU.hasSample(name)) return false;
     var e = G.SFX_FILES.sets[name], seq = e.seq || [0];
     if (!(vol('sound', 0.5) > 0)) return true;
-    seq.forEach(function (d) { if (d > 0) setTimeout(function () { playOne(e, name); }, d * 1000); else playOne(e, name); });
+    seq.forEach(function (d) { if (d > 0) setTimeout(function () { playOne(e, name, level); }, d * 1000); else playOne(e, name, level); });
+    if (e.also) playOne({ f: e.also, rate: e.rate, v: e.v * 0.65 }, name + 'Tail', level);
     return true;
   };
   // 녹음만 있는 이름을 녹음 없이 부르면 비슷한 합성음으로
-  var SAMPLE_FALLBACK = { draw: 'sword', cut: 'sword', parry: 'sword', card: 'page', shuffle: 'page', reveal: 'page', book: 'page', landstep: 'breath', purse: 'coinland',
+  var SAMPLE_FALLBACK = { hitCloth: 'sword', hitLeather: 'sword', hitArmor: 'sword', hitShield: 'sword', block: 'sword', duelLand: 'breath', duelDrop: 'sword', draw: 'sword', cut: 'sword', parry: 'sword', card: 'page', shuffle: 'page', reveal: 'page', book: 'page', landstep: 'breath', purse: 'coinland',
     prize: 'coin', bet: 'coinland', drums: 'cannon', boom: 'cannon', seamonster: 'growl', roarBeast: 'growl', roarBig: 'growl', roarLion: 'growl', wolfAttack: 'growl' };
 
   // ---------------------------------------------------------------- 배경 소리 (파도·항구·비·새 — js/data/sfxfiles.js amb)
@@ -235,14 +236,23 @@
   };
 
   /** 두 번째 인수 0·1·2로 세 변형을 직접 고를 수 있고, 생략하면 바로 전과 다른 변형을 고른다. */
-  AU.sfx = function (name, wantVariant) {
+  AU.sfx = function (name, wantVariant, level) {
     if (!ctx || ctx.state !== 'running') return false;
     var E = G.SFX_FILES && G.SFX_FILES.sets && G.SFX_FILES.sets[name];
-    if (E && AU.sample(name)) { if (E.mode !== 'layer') return true; }
+    if (E && AU.sample(name, level)) { if (E.mode !== 'layer') return true; }
     else if (SAMPLE_FALLBACK[name]) name = SAMPLE_FALLBACK[name];
     var t = ctx.currentTime, oldTune = sfxTune, variant = pickVariant(name, wantVariant);
     sfxTune = [0.91, 1, 1.09][variant];
+    if (/^(swing|thud|duel)/.test(name)) sfxTune = 0.94 + Math.random() * 0.12;
     switch (name) {
+      case 'swingSlash': noise(t, 0.12, 0.18, 1800, 1.2, null, 'bandpass'); break;
+      case 'swingThrust': noise(t, 0.06, 0.14, 4000, 1.6, null, 'bandpass'); break;
+      case 'swingBash': noise(t, 0.18, 0.24, 800, 1, null, 'bandpass'); break;
+      case 'thud': case 'thudKo':
+        sweep(110, 45, t, 0.14, 'sine', level == null ? 0.25 : level);
+        if (name === 'thudKo') noise(t, 0.25, 0.20, 300); break;
+      case 'duelParry': case 'duelRing':
+        tone(2780, t, 0.5, 'sine', 0.07); tone(3720, t, 0.43, 'sine', 0.035); break;
       case 'click': tone(880, t, 0.06, 'square', 0.05); break;
       case 'wake':
         noise(t, 0.95, 0.11, 1150, 0.7, null, 'bandpass'); noise(t + 0.06, 0.75, 0.08, 320, 0.5);

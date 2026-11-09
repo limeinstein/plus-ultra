@@ -21,11 +21,12 @@ const OUT = process.env.OUT;
       window.__duelFrames = [];
       const draw = CanvasRenderingContext2D.prototype.drawImage;
       CanvasRenderingContext2D.prototype.drawImage = function (im, ...args) {
-        if (im && /duel\/fighters\//.test(im.src || '') && args.length === 8) {
+        if (im && /duel\/fighters(?:_ext)?\//.test(im.src || '') && args.length === 8) {
           const tf = this.getTransform();
-          const id = im.src.split('/').pop().split('.')[0], duel = window.G && G.Games && G.Games._duelDebug;
+          const file = im.src.split('/').pop().split('.')[0];
+          const id = file.replace(/_(atk|react)$/, ''), duel = window.G && G.Games && G.Games._duelDebug;
           const fighter = duel && (duel.me.spriteId === id ? duel.me : duel.en);
-          window.__duelFrames.push({ id, pose: fighter && fighter.pose,
+          window.__duelFrames.push({ id, file, pose: fighter && fighter.pose, reaction: fighter && fighter.reaction, hard: fighter && fighter.hardHit,
             c: args[0] / 432, r: args[1] / 304, time: performance.now(),
             flip: Math.sign(tf.a), b: tf.b, ctf: tf.c, a: tf.a, d: tf.d, x: tf.e, y: tf.f,
             alpha: this.globalAlpha, dx: args[4], dy: args[5], scale: args[6] / 432 });
@@ -44,7 +45,7 @@ const OUT = process.env.OUT;
       window.__duelResult = G.Games.duel({ name: '아토스', sprite: 'athos', style: 'thrust', str: 70, mar: 70, skill: 2 },
         { sprite: 'aramis', place: 'deck', fastEnd: true });
     });
-    await page.waitForFunction(() => G.Games._duelDebug && G.Games._duelDebug.en.spriteImg && G.Games._duelDebug.me.spriteImg);
+    await page.waitForFunction(() => { const d = G.Games._duelDebug; return d && [d.me, d.en].every(f => f.spriteImg && f.atkSheet && f.reactSheet); });
     await page.evaluate(() => {
       G.Games._duelDebug.choose('allout');
       document.querySelector('.rd-sys .btn').click(); // 방침 화면을 닫고 자동 합만 멈춘다.
@@ -88,7 +89,8 @@ const OUT = process.env.OUT;
       await page.evaluate(() => window.__exchange);
       const hits = await page.evaluate(() => window.__duelFrames.filter(f => f.pose === 'hit'));
       assert(hits.some(f => f.id === 'athos') && hits.some(f => f.id === 'aramis'), '실제 한 합에서 양쪽이 피격됨');
-      assert(hits.every(f => f.r === 3 && f.c === 0), '일반 공격마다 쓰러지지 않고 반격');
+      assert(hits.every(f => f.reaction === 'bash' && !f.hard ? f.file === f.id && f.r === 3 && f.c === 0 :
+        f.file === f.id + '_react' && f.r <= 1), '실제 수에 맞는 피격 자세 후 반격');
       console.log('실제 공격·반격: 서서 피격:', fast ? '빠르게' : '보통');
     }
     for (const fast of [false, true]) for (const target of ['en', 'me']) {

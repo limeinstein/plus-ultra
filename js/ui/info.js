@@ -609,7 +609,8 @@
       '<div>자동 저장</div><div class="opt-row"><div class="opt' + (st.autosave !== false ? ' on' : '') + '" data-as="1">켬</div><div class="opt' + (st.autosave === false ? ' on' : '') + '" data-as="0">끔</div></div>' +
       '<div>일지를 파일로도</div><div><div class="opt-row"><div class="opt' + (st.saveFile ? ' on' : '') + '" data-sf="1">켬</div><div class="opt' + (!st.saveFile ? ' on' : '') + '" data-sf="0">끔</div></div>' +
         '<small class="muted">여관·자택에서 일지를 기록할 때 같은 일지를 파일(.json)로도 내려받습니다. 브라우저를 닫을 때 사이트 데이터를 지우는 설정이거나 PC 정리 프로그램이 인터넷 사용 흔적을 지우면 브라우저 안의 일지가 사라지니, 그럴 때는 켜 두고 「항해 일지 불러오기 → 파일에서 불러오기」로 이어 가십시오.</small></div>' +
-      '<div>해전 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
+      '<div>일기토 먹방울</div><div class="opt-row"><div class="opt' + (st.duelInk !== false ? ' on' : '') + '" data-ink="1">켬</div><div class="opt' + (st.duelInk === false ? ' on' : '') + '" data-ink="0">끔</div></div>' +
+      '<div>전투 화면 흔들림·번쩍임</div><div class="opt-row"><div class="opt' + (st.shake !== false ? ' on' : '') + '" data-sh="1">켬</div><div class="opt' + (st.shake === false ? ' on' : '') + '" data-sh="0">끔</div></div>' +
       '<div>발견 때 부하들의 수다</div><div class="opt-row"><div class="opt' + (st.banter !== false ? ' on' : '') + '" data-bt="1">켬</div><div class="opt' + (st.banter === false ? ' on' : '') + '" data-bt="0">끔</div></div>' +
       '<div>알림</div><div><div class="opt-row">' + [['normal', '보통 크기'], ['small', '작게']].map(function (o) { return '<div class="opt' + ((st.noticeSize || 'normal') === o[0] ? ' on' : '') + '" data-nsz="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
         '<div class="opt-row" style="margin-top:4px">' + [['auto', '장면에 맞춰'], ['top', '늘 위'], ['bottom', '늘 아래']].map(function (o) { return '<div class="opt' + ((st.noticePos || 'auto') === o[0] ? ' on' : '') + '" data-npos="' + o[0] + '">' + o[1] + '</div>'; }).join('') + '</div>' +
@@ -642,6 +643,7 @@
     if (G.Display) G.Display.bind(el, function () { PAGES.menu(el, win); });
     U.$$('[data-as]', el).forEach(function (o) { o.onclick = function () { st.autosave = o.dataset.as === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-sf]', el).forEach(function (o) { o.onclick = function () { st.saveFile = o.dataset.sf === '1'; G.State.rememberSettings(st); PAGES.menu(el, win); }; });
+    U.$$('[data-ink]', el).forEach(function (o) { o.onclick = function () { st.duelInk = o.dataset.ink === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-sh]', el).forEach(function (o) { o.onclick = function () { st.shake = o.dataset.sh === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-bt]', el).forEach(function (o) { o.onclick = function () { st.banter = o.dataset.bt === '1'; PAGES.menu(el, win); }; });
     U.$$('[data-nsz]', el).forEach(function (o) { o.onclick = function () { st.noticeSize = o.dataset.nsz; G.State.rememberSettings(st); if (UI.noticeSettings) UI.noticeSettings(); UI.toast('알림을 이 크기로 띄웁니다.', 'info', 2600, { tier: 'line' }); PAGES.menu(el, win); }; });

@@ -86,7 +86,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     console.log('   ' + JSON.stringify(r.after));
     ok(r.before.morgan && !r.after.morgan && r.after.gone && !r.after.hire, '모르간 르 페이: 세대 교체 뒤 함대에 없고, 술집에서 다시 고용할 수 없다');
     ok(/블랑카 왕녀·모르간 르 페이·이네스/.test(r.after.alert), '세대 교체 창: 「' + r.after.alert.trim() + '」');
-    ok(r.after.maidId !== 'm_lis' && r.after.maid !== '이네스' && r.after.newPic && r.after.newPic !== r.after.oldPic, '리스본 술집: 이네스 대신 새 여급 「' + r.after.maid + '」 — 얼굴 ' + r.after.oldPic + ' → ' + r.after.newPic);
+    // 2026-11-09 (베타 피드백 #162): 여급은 혼인하는 순간 술집을 떠난다 — 은퇴 전부터 이미 새 여급이 서 있고(js/systems/maidswap.js MS.wed), 대가 바뀌어도 그대로
+    ok(r.before.maid !== '이네스' && r.after.maidId !== 'm_lis' && r.after.maid !== '이네스' && r.after.newPic && r.after.newPic === r.after.oldPic, '리스본 술집: 혼인한 이네스 대신 새 여급 「' + r.after.maid + '」이 혼인 때부터 그대로 (얼굴 ' + r.after.newPic + ')');
     ok(/처음 뵙는 분/.test(r.greet || ''), '새 여급은 처음 보는 사람처럼 맞는다: 「' + r.greet + '」');
     ok(r.reload, '저장·불러오기 뒤에도 그 여급 그대로');
     ok(r.third.id !== r.after.maidId && r.third.name !== r.after.maid && r.third.pic !== r.after.newPic, '다음 대에도 또 다른 여급: ' + r.third.name + ' (' + r.third.pic + ')');

@@ -939,7 +939,7 @@
     // 출발한 성문으로 바로 들어와도 산 탈것은 사라지지 않고 마구간 장비로 돌아간다.
     if (isBaseCity) {
       var mt = MT(), mm = G.Mounts.get(mt.id);
-      if (mt.id !== 'walk' && mt.n > 0 && !mm.hire) { s.stable = s.stable || {}; s.stable[c.id] = { id: mt.id, n: mt.n, draft: mt.draft }; }
+      if (mt.id !== 'walk' && mt.n > 0 && !mm.hire) { s.stable = s.stable || {}; var old0 = s.stable[c.id]; s.stable[c.id] = old0 && old0.id === mt.id ? { id: mt.id, n: old0.n + mt.n, draft: mt.draft } : { id: mt.id, n: mt.n, draft: mt.draft }; }   // 떠날 때 마구간에 남겨 둔 짐승과 합친다 (2026-11-09)
       delete s.landReturn;
     }
     st.busy++;                                    // 성 안으로 넘어가는 사이에 「도시로 들어가시겠습니까?」가 다시 뜨지 않게 (QA 2026-10-16)

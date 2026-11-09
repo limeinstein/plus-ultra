@@ -380,6 +380,34 @@
       }
     },
     duel: {               // 일기토 스프라이트와 타격감 (js/games/duel.js)
+      impact: {
+        hitstop:  { light: 45, adv: 60, heavy: 90, comboHit: 35, comboEnd: 110, ko: 140, koMe: 100, block: 30, parry: 70 }, // ms
+        fastHitstop: 0.6,                       // 빠르게 모드에서 히트스톱 배율 (다른 시간은 기존처럼 0.5)
+        slowmo:   { scale: 0.35, ms: 280, zoom: 0.02 },   // 강적 처치 때만
+        timing: {                               // ms — 준비(읽히게) · 휘두름(빠르게) · 이어짐 · 회수
+          slash:  { wind: 200, swing: 70, follow: 90,  recover: 140 },
+          thrust: { wind: 260, swing: 45, follow: 80,  recover: 160 },
+          bash:   { wind: 300, swing: 80, follow: 110, recover: 180, peakHold: 60 },
+          windPull: 12                          // 준비 때 뒤로 당기는 거리(px)
+        },
+        shake:    { light: 3, adv: 4, heavy: 7, ko: 11, koMe: 4, block: 1.5, parry: 5, taken: 4, comboHit: 2, max: 12, freq: 28, damp: 18 }, // px · Hz · 1/초
+        knock: {                                // [보통, 강, 처치] px — 방향은 공격자 face
+          slash:  { dx: [10, 26, 40], dy: [0, 0, -4],  rot: 0.07 },
+          thrust: { dx: [14, 34, 50], dy: [0, 0, 0],   rot: -0.04, fold: 0.03 },
+          bash:   { dx: [6, 14, 24],  dy: [5, 8, 0],   rot: 0.03, squash: 0.08 },
+          rise:   { dx: [18, 30, 46], dy: [-10, -14, -18], rot: 0.09 },   // 올려베기 (3연격 3타)
+          fastPart: 0.7, fastMs: 60, slideMs: 220, returnMs: 260   // 밀림의 70%를 60ms에, 나머지는 미끄러지며 220ms
+        },
+        recoil:   { armor: 6, block: 8, parried: 26, parriedMs: 320, defBlock: 4 },  // 공격자·방어자 반동 px
+        flash:    { whiteMs: 40, fadeMs: 120, me: '255,214,204', foe: '255,255,255', outline: 2, screenMinGap: 330,
+                    screenCrit: 0.18, screenParry: 0.18, screenComboEnd: 0.22, screenKo: 0.3, vignetteTaken: 0.22, vignetteKoMe: 0.45 },
+        contact:  { slash: 0.60, thrust: 0.50, bash: 0.80, rise: 0.66, jitter: 6 },   // 맞는 높이 (대기 키에 대한 비율, 발에서 위로)
+        gapAfter: { block: 220, parry: 160 },  // 받아치기 전 대기(ms)
+        streak:   { on: false, n: 3 },         // 선택: 같은 쪽이 n합 연속 명중하면 n번째를 heavy로
+        fastMotion: 0.58, minStopGap: 120,
+        finish: { braceMs: 160, flyMs: 260, lift: 9, landingShake: 4, rivalPower: 1.1 },
+        soundGap: 80, fxCap: 300
+      },
       spriteSize: 230,    // 256px 셀을 화면에 그리는 크기
       idleFrame: 0,       // 대기할 때 행동 줄의 안정된 전투 자세 한 장을 쓴다(프레임 순환은 고개가 까닥여 보임)
       breathRate: 1.35,   // 대기 호흡 속도(rad/초, 한 번 약 4.7초)

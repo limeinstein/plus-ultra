@@ -129,7 +129,9 @@
     var st = S().maids[m.id]; if (st) st.aff = 100;
     wedLog(m.name);
     if (G.FamEv) { try { await G.FamEv.wedding({ id: m.id, second: true, city: c.id }); } catch (e) { console.error(e); } }   // 술집의 혼례 잔치
-    await UI.alert(m.name + U.jx(m.name, '과/와') + ' 혼인했다! ' + c.name + '에 「' + m.name + '의 집」이 생겼다. 도시 메뉴에서 찾아갈 수 있다.', ord);
+    // 부인은 더 이상 술집에서 일하지 않는다 — 새 여급(없으면 기본 여급)이 선다 (js/systems/maidswap.js)
+    var wn0 = ''; if (G.MaidSwap && G.MaidSwap.wed) { try { G.MaidSwap.wed(m.id, c.id); wn0 = G.MaidSwap.wedNote(c.id); } catch (e) { console.error(e); } }
+    await UI.alert(m.name + U.jx(m.name, '과/와') + ' 혼인했다! ' + c.name + '에 「' + m.name + '의 집」이 생겼다. 도시 메뉴에서 찾아갈 수 있다.' + (wn0 ? '<br><small>' + wn0 + '</small>' : ''), ord);
     if (G.Game.cityHud) G.Game.cityHud();
     return true;
   };

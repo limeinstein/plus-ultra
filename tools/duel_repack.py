@@ -26,14 +26,17 @@ ROWS = {0: 6, 1: 4, 2: 3, 3: 6}            # 공격 6 · 방어 4 · 피격 3 ·
 USED = [(r, c) for r, n in ROWS.items() for c in range(n)]
 
 
-def split_frames(a):
+FULL = [(r, c) for r in range(4) for c in range(6)]
+
+
+def split_frames(a, used=USED):
     """RGBA 배열 → 장면별 (픽셀 좌표 ys, xs) — 원본 시트 좌표."""
     alpha = a[:, :, 3]
     mask = alpha > DUST                       # 알파 1~4의 보이지 않는 먼지는 버린다
     core = ndimage.binary_erosion(alpha > 100, structure=np.ones((3, 3)), iterations=4)
     lab_c, _ = ndimage.label(core, structure=np.ones((3, 3)))
     markers = np.zeros(alpha.shape, np.int32)
-    for k, (r, c) in enumerate(USED, 1):
+    for k, (r, c) in enumerate(used, 1):
         y0, x0 = r * SRC_CELL, c * SRC_CELL
         sub = lab_c[y0:y0 + SRC_CELL, x0:x0 + SRC_CELL]
         ids, cnt = np.unique(sub[sub > 0], return_counts=True)
@@ -59,10 +62,10 @@ def split_frames(a):
     return labels
 
 
-def extents(labels):
+def extents(labels, used=USED):
     """장면마다 원본 피벗 기준 (왼, 오른, 위, 아래) 거리."""
     out = {}
-    for k, (r, c) in enumerate(USED, 1):
+    for k, (r, c) in enumerate(used, 1):
         ys, xs = np.nonzero(labels == k)
         if not len(ys):
             continue
@@ -71,23 +74,23 @@ def extents(labels):
     return out
 
 
-def soften(out, cell, n):
+def soften(out, cell, n, used=USED):
     """칸마다 가장자리 n px 안의 알파를 거리에 비례해 줄인다(가장자리 줄은 0)."""
     cw, ch = cell
     y = np.arange(ch)[:, None]; x = np.arange(cw)[None, :]
     d = np.minimum(np.minimum(y, ch - 1 - y), np.minimum(x, cw - 1 - x)).astype(np.float32)
     ramp = np.clip(d / n, 0, 1)
-    for r, c in USED:
+    for r, c in used:
         cellv = out[r * ch:(r + 1) * ch, c * cw:(c + 1) * cw, 3]
         cellv[:] = np.round(cellv * ramp).astype(np.uint8)
     return out
 
 
-def repack(a, labels, cell, pivot):
+def repack(a, labels, cell, pivot, used=USED):
     cw, ch = cell
     out = np.zeros((ch * 4, cw * 6, 4), np.uint8)
     clipped = 0
-    for k, (r, c) in enumerate(USED, 1):
+    for k, (r, c) in enumerate(used, 1):
         ys, xs = np.nonzero(labels == k)
         if not len(ys):
             continue
@@ -99,6 +102,43 @@ def repack(a, labels, cell, pivot):
     return out, clipped
 
 
+def align_extension(out, name, cell, pivot):
+    """제작 시트와 기존 대기의 키를 한 배율로 맞추고, 매 칸 장화 밑창을 같은 바닥에 둔다."""
+    from pathlib import Path
+    base = Path(__file__).resolve().parents[1] / 'images/duel/fighters' / (name.rsplit('_', 1)[0] + '.png')
+    old = Image.open(base).convert('RGBA')
+    cw, ch = cell
+    idle = np.asarray(old.crop((0, 3 * ch, cw, 4 * ch)))[:, :, 3]
+    ys, xs = np.where(idle > 90)
+    floor = int(ys.max())
+    sole = xs[ys >= floor - 15]
+    anchor = (int(sole.min()) + int(sole.max())) / 2
+    neutral_col = 5
+    neutral = out[:ch, neutral_col * cw:(neutral_col + 1) * cw, 3]
+    yy = np.where(neutral > 90)[0]
+    scale = (floor - ys.min()) / (yy.max() - yy.min())
+    # 머리 위로 든 칼도 최상단 여백에 들어가도록 전 시트에 같은 배율을 쓴다.
+    tallest = max(np.ptp(np.where(out[r*ch:(r+1)*ch, c*cw:(c+1)*cw, 3] > DUST)[0]) + 1 for r, c in FULL)
+    scale = min(scale, (floor - 8) / tallest)
+    atlas = Image.new('RGBA', (cw * 6, ch * 4))
+    for r, c in FULL:
+        tile = Image.fromarray(out[r*ch:(r+1)*ch, c*cw:(c+1)*cw])
+        a = np.asarray(tile)[:, :, 3]
+        ys, xs = np.where(a > 90)
+        foot = int(ys.max())
+        sole = xs[ys >= foot - 15]
+        center = (int(sole.min()) + int(sole.max())) / 2
+        box = tile.getchannel('A').getbbox()
+        crop = tile.crop(box)
+        crop = crop.resize(tuple(round(v * scale) for v in crop.size), Image.Resampling.LANCZOS)
+        x = max(8, min(cw - crop.width - 8, round(anchor + (box[0] - center) * scale)))
+        y = round(floor + (box[1] - foot) * scale)
+        if x < 1 or y < 1 or x + crop.width >= cw or y + crop.height >= ch:
+            raise ValueError(f'{name} {r},{c}: 발밑 정렬 뒤 칸을 벗어남')
+        atlas.paste(crop, (c*cw+x, r*ch+y))
+    return atlas
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('src', nargs='?')
@@ -107,9 +147,11 @@ def main():
     ap.add_argument('--pivot', default='')
     ap.add_argument('--margin', type=int, default=8)
     ap.add_argument('--soft-edge', type=int, default=0)
+    ap.add_argument('--extension', action='store_true', help='추가 동작은 4행 모두 6칸을 쓴다')
     ap.add_argument('--check', default='')
     ap.add_argument('--report', default='')
     args = ap.parse_args()
+    used = FULL if args.extension else USED
     if args.check:
         return check(args.check)
     files = sorted(glob.glob(os.path.join(args.src, '*.png')))
@@ -118,9 +160,9 @@ def main():
         a = np.array(Image.open(f).convert('RGBA'))
         if a.shape[:2] != (1024, 1536):
             sys.exit(f + ': 원본은 1536×1024여야 함')
-        lab = split_frames(a)
+        lab = split_frames(a, used)
         data[f] = (a, lab)
-        for key, e in extents(lab).items():
+        for key, e in extents(lab, used).items():
             ext.setdefault(key, []).append((os.path.basename(f), e))
     m = args.margin
     L = max(e[0] for v in ext.values() for _, e in v); R = max(e[1] for v in ext.values() for _, e in v)
@@ -134,11 +176,12 @@ def main():
     os.makedirs(args.out, exist_ok=True)
     rep = {}
     for f, (a, lab) in data.items():
-        out, clipped = repack(a, lab, cell, pivot)
+        out, clipped = repack(a, lab, cell, pivot, used)
         if args.soft_edge:
-            out = soften(out, cell, args.soft_edge)
+            out = soften(out, cell, args.soft_edge, used)
         name = os.path.basename(f)
-        Image.fromarray(out, 'RGBA').save(os.path.join(args.out, name), optimize=True)
+        image = align_extension(out, name, cell, pivot) if args.extension else Image.fromarray(out)
+        image.save(os.path.join(args.out, name), optimize=True)
         rep[name] = {'clipped': clipped}
         print(name.ljust(28), '잘림', clipped, 'px')
     if args.report:
@@ -151,7 +194,9 @@ def check(d):
         a = np.array(Image.open(f).convert('RGBA'))[:, :, 3]
         H, W = a.shape; cw, ch = W // 6, H // 4
         lab, n = ndimage.label(a > DUST, structure=np.ones((3, 3)))
-        cells = set()
+        used = FULL if os.path.basename(f).endswith(('_atk.png', '_react.png')) else USED
+        if used is FULL and (W, H) != (2592, 1216):
+            bad += 1; print(f, '추가 동작 시트 규격 오류')
         for i, sl in enumerate(ndimage.find_objects(lab), 1):
             ys, xs = np.nonzero(lab[sl] == i)
             ys = ys + sl[0].start; xs = xs + sl[1].start
@@ -161,9 +206,11 @@ def check(d):
         for r in range(4):
             for c in range(6):
                 sub = a[r * ch:(r + 1) * ch, c * cw:(c + 1) * cw]
-                if (r, c) not in USED and sub.max() > DUST:
+                if (r, c) in used and not sub.any():
+                    bad += 1; print(os.path.basename(f), '빈 동작 칸', r, c)
+                if (r, c) not in used and sub.max() > DUST:
                     bad += 1; print(os.path.basename(f), '안 쓰는 칸에 그림', r, c)
-                if (r, c) in USED and max(sub[0].max(), sub[-1].max(), sub[:, 0].max(), sub[:, -1].max()) > DUST:
+                if (r, c) in used and max(sub[0].max(), sub[-1].max(), sub[:, 0].max(), sub[:, -1].max()) > DUST:
                     bad += 1; print(os.path.basename(f), '가장자리에 닿음', r, c)
     print('점검 끝, 문제', bad)
     return 1 if bad else 0

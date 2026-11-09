@@ -28,7 +28,7 @@ REGION = {
     'guan_yu': 'cn', 'zhang_fei': 'cn',
     'joseon_swordsman': 'kr', 'ganghui': 'kr',
     'samurai': 'jp',
-    'barbary_corsair': 'islam',
+    'barbary_corsair': 'islam', 'scheherazade': 'islam',
     'indian_warrior': 'india', 'vietnamese_woman': 'seasia',
     'east_asian_attendant': 'cn',
     'african_warrior': 'africa',

@@ -71,7 +71,7 @@ sandbox.G = sandbox.window.G;
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'js/data/seafx.js'), 'utf8'), sandbox);
 vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'js/data/duelart.js'), 'utf8'), sandbox);
 const art = sandbox.G.DUEL_ART;
-ok(art && art.fighters.length === 24, '기본·전설 전투원 메타데이터는 24종이어야 함');
+ok(art && art.fighters.length === 30, '기본·전설·공주 전투원 30명');
 const S = art.sheet, CW = S.cell[0], CH = S.cell[1], DUST = 4;
 ok(S.columns === 6 && S.rows === 4 && S.width === CW * 6 && S.height === CH * 4, '시트 크기 = 칸 × 6열·4행');
 ok(S.pivot[0] > S.safeMargin && S.pivot[0] < CW && S.pivot[1] > S.safeMargin && S.pivot[1] < CH, '발밑 피벗은 칸 안');
@@ -93,6 +93,14 @@ for (const f of allFighters) {
   const fall = im.bounds(2 * CW, 2 * CH, CW, CH);
   ok(Math.abs(fall.b - S.pivot[1]) <= 1 && fall.w > fall.h * 2.5 && fall.h < 120,
     f.id + ': 피격 마지막 장면은 바닥에 누운 자세 ' + JSON.stringify(fall));
+  for (const type of ['atk', 'react']) {
+    const ext = png(path.join(ROOT, 'images/duel/fighters_ext', f.id + '_' + type + '.png'), true);
+    ok(ext.width === 6 * CW && ext.height === 4 * CH, f.id + ': 추가 동작 규격 ' + type);
+    for (let r = 0; r < 4; r++) for (let c = 0; c < 6; c++) {
+      const frame = ext.bounds(c * CW, r * CH, CW, CH);
+      ok(frame.h > 60 && frame.w > 25 && frame.b < CH, f.id + ': 추가 동작 실루엣 ' + [type, r, c]);
+    }
+  }
   const geo = art.fallGeometry[f.id], knee = im.bounds(CW, 2 * CH, CW, CH), idleGround = im.bounds(0, 3 * CH, CW, CH).b;
   ok(geo && geo.ground === idleGround && geo.knee === knee.b && geo.rest === fall.h && geo.edge.length >= 4,
     f.id + ': 느린 착지의 바닥·무릎 외곽·누운 높이가 실제 시트와 같음');
@@ -121,6 +129,10 @@ for (const id of Object.values(art.backgrounds).filter((v, i, a) => a.indexOf(v)
 
 const manifest = fs.readFileSync(path.join(ROOT, 'images/manifest.js'), 'utf8');
 for (const f of allFighters) {
+  for (const type of ['atk', 'react']) {
+    const id = 'duel/fighters_ext/' + f.id + '_' + type;
+    ok(manifest.includes('"' + id + '": "' + id + '.png"'), f.id + ': 추가 동작 등록 ' + type);
+  }
   ok(manifest.includes('"duel/fighters/' + f.id + '"'), f.id + ': 매니페스트 등록 (python tools/images.py)');
   ok(manifest.includes('"duel/cutins/' + f.id + '"'), f.id + ': 전면 필살기 컷인 매니페스트 등록');
 }
@@ -162,4 +174,4 @@ ok(!unused.length, '쓰이지 않는 전투원: ' + unused.join(', '));
 const L1 = art.layout({ naturalWidth: 1536, naturalHeight: 1024 }), L2 = art.layout({ naturalWidth: S.width, naturalHeight: S.height }), L3 = art.layout({ naturalWidth: S.width / 2, naturalHeight: S.height / 2 });
 ok(L1.cw === 256 && L1.py === 246 && L2.cw === CW && L2.py === S.pivot[1] && L3.cw === CW / 2 && L3.f === 0.5, '그림 크기로 칸·배율 고르기');
 
-console.log('일기토 전투원 ' + allFighters.length + '종(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·인물별 전면 필살기 컷인 37종·비밀무기·장비 호통·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');
+console.log('일기토 전투원 ' + allFighters.length + '종(' + S.width + '×' + S.height + ', 칸 ' + CW + '×' + CH + ')·인물별 전면 필살기 컷인 ' + allFighters.length + '종·비밀무기·장비 호통·배경 5종·메타데이터·투명 셀·칸 넘침·그림 고르기 검사 통과');

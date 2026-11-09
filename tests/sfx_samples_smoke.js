@@ -21,7 +21,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.evaluate(() => G.Audio.loadPacks && G.Audio.loadPacks());   // 게임 전용 효과음 묶음 (sounds/nature.pack.js — 2026-11-04)
     const F = await page.evaluate(() => G.SFX_FILES);
     const bank = await page.evaluate(() => Object.keys(G.SFX_BANK || {}).filter(k => k.indexOf('/') > 0));
-    const files = [...new Set(Object.values(F.sets).flatMap(e => e.f).concat(Object.values(F.amb).map(e => e.f)))];
+    const files = [...new Set(Object.values(F.sets).flatMap(e => e.f.concat(e.also || [])).concat(Object.values(F.amb).map(e => e.f)))];
     const all = fs.readdirSync(path.join(ROOT, F.dir, 'rpg')).filter(f => /\.ogg$/.test(f)).map(f => 'rpg/' + f.replace(/\.ogg$/, '')).concat(bank);
     const unused = all.filter(f => files.indexOf(f) < 0);
     ok(!unused.length, '녹음 ' + all.length + '개(rpg ' + all.filter(f => /^rpg/.test(f)).length + ' · nature ' + all.filter(f => /^nature/.test(f)).length + ')를 모두 어딘가에 쓴다' + (unused.length ? ' — 안 씀: ' + unused.join(', ') : ''));
@@ -52,7 +52,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     for (const k of Object.keys(played)) console.log('    ' + k.padEnd(9) + ' ' + played[k].n + '번 ' + played[k].files.join(','));
     const sets = F.sets;
-    ok(Object.keys(sets).every(k => played[k].n === (sets[k].seq || [0]).length && played[k].r === true), '이름 ' + Object.keys(sets).length + '개마다 녹음이 난다 (발걸음은 한 번에 여러 걸음)');
+    ok(Object.keys(sets).every(k => played[k].n === (sets[k].seq || [0]).length + (sets[k].also ? 1 : 0) && played[k].r === true), '이름 ' + Object.keys(sets).length + '개마다 녹음이 난다 (발걸음 순서·타격음 겹침 포함)');
+    ok(['hitCloth', 'hitLeather', 'hitArmor', 'hitShield', 'duelParry'].every(k => played[k].n === 2 &&
+      played[k].files.some(f => sets[k].f.includes(f)) && played[k].files.some(f => sets[k].also.includes(f))), '재질별 타격음·받아넘김은 기본 녹음과 보조 녹음을 함께 재생');
+    ok(played.duelDrop.n === 1 && sets.duelDrop.f.includes(played.duelDrop.files[0]), '무기 떨어짐은 전용 녹음을 한 번 재생');
     ok(played.townstep.rate.every(r => r >= sets.townstep.rate[0] - 0.01 && r <= sets.townstep.rate[1] + 0.01) && new Set(played.run.files).size > 1, '발걸음은 빠르기·파일을 바꿔 가며 낸다');
     ok(played.coinRain.n === 3 && /handleCoins/.test(played.coinRain.files[0]) && /coin_prize/.test(played.coinRain.files[2]), '아주 큰 매출이면 돈주머니 소리 두 번에 금화 소리까지');
     // 배경 소리: 알려 주면 깔리고, 소식이 끊기면 사라진다
@@ -93,7 +96,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(fb.every(Boolean), '녹음이 없으면 비슷한 합성음으로 (칼 뽑기 → 쇳소리, 카드 → 종이)');
     // 장면에 이어져 있다
     const src = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
-    const hooks = [['js/games/duel.js', "sfx('draw')", '일기토 시작 칼 뽑기'], ['js/games/duel.js', "sfx('cut')", '일기토 베기'], ['js/games/duel.js', "sfx('parry')", '일기토 막기'],
+    const hooks = [['js/games/duel.js', "sfx('draw')", '일기토 시작 칼 뽑기'], ['js/games/duel.js', "sound('contact', 'hit'", '일기토 재질별 명중'], ['js/games/duel.js', "sound('contact', parry ? 'duelParry' : 'block')", '일기토 막기·받아넘김'],
       ['js/games/landwar.js', "sfx('draw')", '육상전 개시'], ['js/scenes/battle.js', "sfx('creak')", '백병전 뱃전 부딪침'], ['js/games/poker.js', "sfx('shuffle')", '포카 섞기'], ['js/games/poker.js', "sfx('card')", '포카 나누기'],
       ['js/games/poker.js', "sfx('reveal')", '포카 펼치기'], ['js/ui/info.js', "sfx('book')", '수첩 펴기'], ['js/ui/info.js', "'equip'", '장비'], ['js/systems/audio.js', "AU.sample('purse')", '매출'], ['js/systems/audio.js', "'landstep'", '뭍 걷기'],
       ['js/systems/audio.js', "AU.sample('creak')", '항해 삐걱임'], ['js/city/restaurant.js', "sfx('pot')", '식당'], ['js/systems/treasurehunt.js', "sfx('latch')", '보물 상자'], ['js/scenes/city.js', "sfx('doorClose')", '건물 나서기'], ['js/ui/info.js', "sfx('bookClose')", '수첩 덮기'],

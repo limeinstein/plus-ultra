@@ -1733,6 +1733,7 @@
         var nb = st.npc.boss;   // 큰 해전: 이름난 적장이 나선다 (js/data/histfigures.js)
         if (nb && nb.hist && G.Hist) { var hs = G.Hist.speaker(nb.hist); boss.name = hs.name; boss.portrait = hs.portrait || boss.portrait; ['str', 'atk', 'def', 'skill', 'mar', 'int', 'cha', 'look'].forEach(function (k) { if (nb[k] != null) boss[k] = nb[k]; }); }
         else if (nb && nb.name) { var cs = st.npc.cap && G.Captains && G.Captains.speaker ? G.Captains.speaker(st.npc) : null; boss.name = nb.name; if (cs && cs.portrait) boss.portrait = cs.portrait; ['str', 'atk', 'def', 'skill', 'mar', 'int', 'cha', 'look'].forEach(function (k) { if (nb[k] != null) boss[k] = nb[k]; }); }
+        boss.duelBoss = !!st.npc.boss;
         var res = await G.Games.duel(boss, v === 2 ? { mate: px, place: 'deck' } : { place: 'deck' });
         var ld = G.Games.lastDuel || {}, fm = ld.mate, fd = fm && G.MATE[fm.id];
         if (res === 'win') {

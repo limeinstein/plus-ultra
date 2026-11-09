@@ -608,6 +608,9 @@
     fairy: { chance: 0.3, coolDays: 45, nearR: 2.5 },   // 숲에서 만나는 옛이야기의 아가씨: 날마다 확률·거절 뒤 쉬는 날·도시 근처 거리
     // 거리를 거니는 동료 (js/systems/matestroll.js · 2026-11-07): 공주·셰에라자드·엘리자베타·마녀가 일행에 있으면 입항마다 이 확률로 한 명이 거리에 나온다 (출항 전까지 그 한 명만)
     mateStroll: { chance: 0.1 },
+    // 여급과 혼인한 뒤 그 술집 (js/systems/maidswap.js · 2026-11-09 베타 피드백 #162): 부인이 그 술집에 들르는 확률(술집에 들어설 때)·다시 들르기까지 날수 ·
+    //   새 여급에게 부인의 안부를 전하면 오르는 호감 (한 번 들른 사이 한 번)
+    maidWife: { dropChance: 0.35, dropGap: 20, sisAff: 3 },
     legends: { meets: 3, drinks: 3, zhuoLon: 115.97, zhuoLat: 39.49, zhuoR: 0.45, innVisits: 3, dartBuys: 3, dartLoan: 2000, books: 10, scheBook: 'b_nights', investLv: 5, aliBabaMates: 40, loyal: 80 },
     castaway: { radius: 0.6, gapDays: 30, wilsonDays: 30, wilsonCamps: 10, journalDays: 90, journalCamps: 15, wilsonRest: 8, journalCost: 0.15, journalFind: 1.25 },
     // 잠입 (js/systems/sneak.js): 성공 가망 = 바탕(base) + 변장 + 말(못 하면 lang0, 단계마다 langLv) + 화술 × speech + 모국어 동료(native)

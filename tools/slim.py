@@ -44,6 +44,8 @@ RULES = [
     ('ships-nav/', 3584, 'keep', 88),
     ('sprites/expedition_', 4096, 'webp', 88),   # 탐험대 동작 시트(PNG 38장·54MB): 크기는 그대로 두고 WebP로만 바꾼다 — PNG 그대로면 아티팩트 한도를 넘는다
     ('sprites/', 4096, 'keep', 88),   # 육상전·탐험대·사건 스프라이트 시트: 칸 좌표(js/data/sprites.js)가 원본 크기 기준이라 줄이지 않는다
+    ('duel/fighters_ext/', 2592, 'webp', 84),
+    ('duel/fx/', 3200, 'webp', 88),
     ('duel/fighters/', 2592, 'webp', 84),   # 일기토 전투원 시트: 칸이 화면에 390px 안팎으로 커져 원본 크기를 지킨다(게임이 배율을 알아서 맞춤)
     ('duel/backgrounds/', 1400, 'auto', 72),
     ('landwar/backgrounds/', 1400, 'auto', 72),   # 육상전 지형 배경: 1000×430 싸움터에 깔린다
@@ -100,6 +102,8 @@ def hq_for(key):
 FLOOR = {
     'ships-nav/': 3584,       # 8방향 동작 배 시트: 조각 좌표와 피벗을 지키도록 원본 그대로
     'sprites/': 4096,         # 육상전·탐험대·사건 스프라이트 시트도 원본 크기 그대로
+    'duel/fighters_ext/': 1944,
+    'duel/fx/': 1024,
     'duel/fighters/': 1944,   # 일기토 전투원: 칸 324px 이상 — 화면 390px로 늘려도 뭉개지지 않게
     'duel/backgrounds/': 1100,  # 일기토 배경: 1060×380 화면에 깔린다
     'landwar/backgrounds/': 1000,  # 육상전 배경: 1000×430 싸움터

@@ -224,6 +224,7 @@
       if (G.SEAsia && G.SEAsia.pending()) await G.SEAsia.check();   // 16세기 동남아 — 바인나웅 · 란쌍 · 우르다네타 · 아유타야 함락 (js/systems/seasia16.js)
       if (G.ZhengHe && G.ZhengHe.pending()) await G.ZhengHe.check();   // 정화의 보선 — 아프리카 항구의 소문 · 이긴 뒤의 행선 패 (js/systems/zhenghe.js)
       if (G.PiriMap && G.PiriMap.pending()) await G.PiriMap.check();   // 피리 레이스의 해도 — 이스탄불 · 산토도밍고 · 바이아 (js/systems/pirimap.js)
+      if (G.Nights && G.Nights.pending()) await G.Nights.check();   // 천일야화 — 신드바드(바스라·콜롬보) · 하룬 알 라시드(바그다드) · 흑단 말(시라즈·이스파한) (js/systems/nights.js)
     } catch (e) { console.error(e); }
     busy = false;
     if (G.Game.scene !== C) return;

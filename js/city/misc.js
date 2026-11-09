@@ -722,17 +722,56 @@
     offers.forEach(function (id) { if (ids.indexOf(id) < 0) ids.push(id); });
     var draftHere = M.draft(c);
     function sellValue(h) { var m = M.get(h.id); return m.hire ? 0 : Math.round(m.price * h.n * m.sell); }
-    function plan(id) {
+    /* 데려갈(마구간에 둘) 수를 고른다 (2026-11-09 피드백 「탐험 떠날 때 말이 전부 합쳐져 버린다」):
+       전에는 마구간의 짐승을 모두 데려가 — 제노바 500필 + 베네치아 500필이 탐험대 1,000필이 되었다.
+       이제는 대원에게 필요한 만큼(need)이 기본이고, 창 아래 「데려갈 수」로 늘리거나 줄인다. 남는 짐승은 이 도시 마구간에 남는다.
+       마구간 둘러보기(stable)에서는 「마구간에 둘 수」 — 늘리면 사고, 줄이면 그만큼 되판다. */
+    var want = {};
+    function sellOne(id) { var m = M.get(id); return m.hire ? 0 : m.price * m.sell; }
+    function range(id) {
       var m = M.get(id), need = M.need(id, party), canBuy = offers.indexOf(id) >= 0;
       var carry = have && have.id === id ? have.n : 0, stab = id !== 'walk' && kept && kept.id === id ? kept.n : 0, own = carry + stab;
-      var buyN = id === 'walk' ? 0 : canBuy ? Math.max(0, need - own) : 0;
-      var n = id === 'walk' ? 0 : own + buyN;
+      if (id === 'walk') return { lo: 0, hi: 0, def: 0, need: 0, own: 0 };
+      var hi = canBuy ? Math.max(own, need || own) : own, lo = mode === 'stable' ? 0 : Math.min(1, hi);
+      if (mode === 'stable' && canBuy && !m.hire) hi = Math.max(hi, own + Math.max(need, 1) * 2);   // 마구간에는 다음 탐험을 위해 넉넉히 사 둘 수도 있다
+      var def = mode === 'stable' ? Math.max(own, Math.min(hi, need)) : Math.min(hi, need || own);   // 둘러보기는 예전처럼 대원 수까지 채워 사는 것이 기본 (이미 넉넉하면 그대로)
+      return { lo: lo, hi: hi, def: Math.max(lo, def), need: need, own: own, carry: carry, stab: stab, canBuy: canBuy };
+    }
+    function chosen(id) { var r = range(id); return want[id] == null ? r.def : U.clamp(Math.round(want[id]), r.lo, r.hi); }
+    function plan(id) {
+      var m = M.get(id), rg = range(id), need = rg.need;
+      var carry = rg.carry || 0, stab = rg.stab || 0, own = carry + stab;
+      var n = id === 'walk' ? 0 : chosen(id);
+      var buyN = id === 'walk' ? 0 : Math.max(0, n - own);
+      // 데려온 짐승(carry)부터 쓰고, 모자라면 마구간에 사 둔 것(stab), 그래도 모자라면 산다. 남는 것은 마구간에 남긴다
+      var useCarry = Math.min(carry, n), useStab = Math.min(stab, n - useCarry);
+      var left = id === 'walk' ? 0 : own - useCarry - useStab;
+      var sellN = 0;
+      if (mode === 'stable') { sellN = left; left = 0; }                             // 둘러보기: 줄인 만큼 되판다
+      else if (left > 0 && mode === 'resume' && kept && kept.id !== id) { sellN = left; left = 0; }   // 마구간에 다른 짐승이 있어 남길 칸이 없다 → 남는 것은 되판다
       var refund = id !== 'walk' && have && have.id !== id ? sellValue(have) : 0;      // 데려온 다른 짐승은 되판다 (걸어가면 마구간에 맡긴다)
       // 걸어가는데 마구간에 다른 짐승이 이미 있으면 한 칸에 두 무리를 둘 수 없어 데려온 짐승을 되판다
       if (id === 'walk' && mode === 'resume' && have && kept && kept.id !== have.id) refund = sellValue(have);
+      refund += Math.round(sellN * sellOne(id));
       var buy = buyN * m.price;
-      return { id: id, need: need, own: own, carry: carry, stab: stab, buyN: buyN, n: n, buy: buy, refund: refund, net: buy - refund,
-        draft: have && have.id === id && have.draft ? have.draft : stab && kept.draft ? kept.draft : draftHere };
+      return { id: id, need: need, own: own, carry: carry, stab: stab, buyN: buyN, n: n, left: left, sellN: sellN, useCarry: useCarry, useStab: useStab, buy: buy, refund: refund, net: buy - refund,
+        lo: rg.lo, hi: rg.hi, draft: have && have.id === id && have.draft ? have.draft : stab && kept.draft ? kept.draft : draftHere };
+    }
+    /** 카드 아래 값 줄 — 데려갈 수를 바꾸면 다시 쓴다 */
+    function priceText(id, p) {
+      var m = M.get(id);
+      if (id === 'walk') return have && mode !== 'resume' ? '마구간의 ' + M.get(have.id).name + U.jx(M.get(have.id).name, '은/는') + ' 그대로 둔다'
+        : have && mode === 'resume' && !M.get(have.id).hire ? (p.refund ? '데려온 ' + M.get(have.id).name + U.jx(M.get(have.id).name, '은/는') + ' 되판다 · 되판 값 +' + U.num(p.refund) + '닢' : '데려온 ' + M.get(have.id).name + U.jx(M.get(have.id).name, '은/는') + ' 이 도시 마구간에 맡긴다')
+        : kept ? '마구간의 ' + M.get(kept.id).name + U.jx(M.get(kept.id).name, '은/는') + ' 그대로 둔다' : '돈이 들지 않는다';
+      var u = unitOf(id), parts = [];
+      parts.push((m.per ? (mode === 'stable' ? '마구간에 ' : '') + p.n + u + ' (대원 ' + party + '명에 ' + p.need + u + (m.per === 1 ? '' : ' · ' + m.per + '명에 하나') + ')' : ''));
+      if (p.own) parts.push(mode === 'resume' && p.stab ? (p.carry ? '데려온 ' + p.carry + u + ' · ' : '') + '마구간에 사 둔 ' + p.stab + u : '가진 것 ' + p.own + u);
+      if (p.left) parts.push('마구간에 남길 ' + p.left + u);
+      if (p.sellN) parts.push(p.sellN + u + ' 되판다');
+      if (p.buyN) parts.push((m.hire ? '품삯 ' : '금화 ') + U.num(p.buy) + '닢');
+      if (p.refund) parts.push('되판 값 +' + U.num(p.refund) + '닢');
+      if (!p.buyN && !p.own) parts.push('여기서는 구할 수 없다');
+      return parts.filter(Boolean).join(' · ');
     }
     var TN = G.MOUNT_TERR_NAME, sel = have ? have.id : kept ? kept.id : (offers[0] && M.get(offers[0]).per ? offers[0] : 'walk');
     if (mode === 'stable' && sel === 'walk' && offers.length) sel = offers[0];
@@ -747,19 +786,7 @@
       if (m.cold) extra.push('추위 피로 ×' + m.cold);
       if (m.combat) extra.push('싸움 +' + Math.round(m.combat * 100) + '%');
       if (m.scout) extra.push('정찰 +' + m.scout + '°');
-      var price;
-      if (id === 'walk') price = have && mode !== 'resume' ? '마구간의 ' + M.get(have.id).name + U.jx(M.get(have.id).name, '은/는') + ' 그대로 둔다'
-        : have && mode === 'resume' && !M.get(have.id).hire ? (p.refund ? '데려온 ' + M.get(have.id).name + U.jx(M.get(have.id).name, '은/는') + ' 되판다 · 되판 값 +' + U.num(p.refund) + '닢' : '데려온 ' + M.get(have.id).name + U.jx(M.get(have.id).name, '은/는') + ' 이 도시 마구간에 맡긴다')
-        : kept ? '마구간의 ' + M.get(kept.id).name + U.jx(M.get(kept.id).name, '은/는') + ' 그대로 둔다' : '돈이 들지 않는다';
-      else {
-        var u = unitOf(id), parts = [];
-        parts.push((m.per ? p.n + u + ' (대원 ' + party + '명 · ' + (m.per === 1 ? '한 사람에 하나' : m.per + '명에 하나') + ')' : ''));
-        if (p.own) parts.push(mode === 'resume' && p.stab ? (p.carry ? '데려온 ' + p.carry + u + ' · ' : '') + '마구간에 사 둔 ' + p.stab + u : '가진 것 ' + p.own + u);
-        if (p.buyN) parts.push((m.hire ? '품삯 ' : '금화 ') + U.num(p.buy) + '닢');
-        if (p.refund) parts.push('되판 값 +' + U.num(p.refund) + '닢');
-        if (!p.buyN && !p.own) parts.push('여기서는 구할 수 없다');
-        price = parts.filter(Boolean).join(' · ');
-      }
+      var price = priceText(id, p);
       var short = p.net > s.player.gold && id !== 'walk';
       return '<div class="of-card' + (id === sel ? ' sel' : '') + (short ? ' short' : '') + '" data-id="' + id + '" tabindex="-1">' +
         '<canvas width="264" height="122"></canvas>' +
@@ -773,11 +800,15 @@
     var intro = mode === 'resume' ? '탐험대로 돌아가기 전에 탈것을 바꿀 수 있습니다.' : mode === 'stable' ? '짐승을 사서 마구간에 맡겨 두거나, 맡긴 짐승을 되팔 수 있습니다.' : '이 고장에서 구할 수 있는 탈것입니다. 탈것은 걸음을 빠르게 하고 피로를 덜어 주지만, 맞지 않는 땅에서는 힘을 못 쓰고 쓰러지기도 합니다.';
     var html = '<div class="outfit"><div class="of-head"><div>' + intro + '</div><div class="of-meta">탐험대 <b>' + party + '명</b> · 소지금 <b class="of-gold">' + U.num(s.player.gold) + '</b>닢</div></div>' +
       '<div class="of-grid">' + ids.map(card).join('') + '</div>' +
+      '<div class="of-count"><span class="of-count-lbl">' + (mode === 'stable' ? '마구간에 둘 수' : '데려갈 수') + '</span>' +
+        '<input class="of-count-r" type="range" min="0" max="1" step="1">' +
+        '<input class="nfield of-count-n" type="number" inputmode="numeric" min="0">' +
+        '<button type="button" class="btn small" data-d="need">' + (mode === 'stable' ? '대원 수만큼' : '필요한 만큼') + '</button><span class="of-count-note"></span></div>' +
       '<div class="of-legend">지형 적합도 <span class="tc best">◎</span> 아주 좋음(×2.2 넘게) <span class="tc good">○</span> 좋음 <span class="tc mid">△</span> 조금 나음 <span class="tc bad">×</span> 나쁨(느리거나 짐승을 잃는다) · 짐승이 모자라면 효과가 그만큼 줄어든다</div></div>';
     var btns = [];
     if (mode === 'stable') {
       btns.push({ label: '사서 마구간에 둔다', value: 'buy', cls: 'navy', id: 'go' });
-      if (have) btns.push({ label: '마구간의 ' + M.get(have.id).name + U.jx(M.get(have.id).name, '을/를') + ' 되판다 (+' + U.num(sellValue(have)) + '닢)', value: 'sell', id: 'sell' });
+      if (have) btns.push({ label: '마구간의 ' + M.get(have.id).name + ' 모두 되판다 (+' + U.num(sellValue(have)) + '닢)', value: 'sell', id: 'sell' });
       btns.push({ label: '닫는다', value: null });
     } else {
       btns.push({ label: '떠난다', value: 'go', cls: 'navy', id: 'go' });
@@ -793,15 +824,52 @@
       var p = plan(id), m = M.get(id), gold = s.player.gold;
       if (win.go) {
         if (mode === 'stable') {
-          win.go.innerHTML = id === 'walk' || !p.buyN ? '살 것이 없다' : m.name + ' ' + p.buyN + unitOf(id) + U.jx(unitOf(id), '을/를') + ' 사서 맡긴다 (' + U.num(p.net) + '닢)';
-          win.go.disabled = id === 'walk' || !p.buyN || p.net > gold || m.hire;
+          win.go.innerHTML = id === 'walk' || (!p.buyN && !p.sellN) ? '바꿀 것이 없다' : p.sellN ? m.name + ' ' + p.sellN + unitOf(id) + U.jx(unitOf(id), '을/를') + ' 되판다 (+' + U.num(-p.net) + '닢)' : m.name + ' ' + p.buyN + unitOf(id) + U.jx(unitOf(id), '을/를') + ' 사서 맡긴다 (' + U.num(p.net) + '닢)';
+          win.go.disabled = id === 'walk' || (!p.buyN && !p.sellN) || p.net > gold || m.hire;
           if (m.hire) win.go.innerHTML = '짐꾼은 떠날 때 데려간다';
         } else {
-          win.go.innerHTML = (id === 'walk' ? '걸어서 떠난다' : m.name + U.jx(m.name, '과/와') + ' 떠난다') + (p.net > 0 ? ' (' + U.num(p.net) + '닢)' : p.net < 0 ? ' (+' + U.num(-p.net) + '닢)' : '');
+          win.go.innerHTML = (id === 'walk' ? '걸어서 떠난다' : m.name + ' ' + p.n + unitOf(id) + U.jx(unitOf(id), '과/와') + ' 떠난다') + (p.net > 0 ? ' (' + U.num(p.net) + '닢)' : p.net < 0 ? ' (+' + U.num(-p.net) + '닢)' : '');
           win.go.disabled = p.net > gold || (id !== 'walk' && !p.n);
         }
         win.go.classList.toggle('disabled', !!win.go.disabled);
       }
+      syncCount(id, p, m);
+    }
+    // 데려갈 수 — 고른 탈것의 수를 늘리고 줄인다. 카드의 값 줄과 단추 글이 함께 바뀐다
+    var cntRow = win.content.querySelector('.of-count'), cntIn = cntRow && cntRow.querySelector('.of-count-n'), cntBar = cntRow && cntRow.querySelector('.of-count-r'), cntNote = cntRow && cntRow.querySelector('.of-count-note');
+    function syncCount(id, p, m) {
+      if (!cntRow) return;
+      var off = id === 'walk' || p.hi <= 0 || (mode === 'stable' && m.hire);
+      cntRow.classList.toggle('off', off);
+      cntRow.querySelectorAll('button, input').forEach(function (b) { b.disabled = off; });
+      var card0 = cards.filter(function (e) { return e.getAttribute('data-id') === id; })[0];
+      if (card0) { var pr = card0.querySelector('.of-price'); if (pr) pr.innerHTML = priceText(id, p); var sh = p.net > s.player.gold && id !== 'walk'; card0.classList.toggle('short', sh); if (pr) pr.classList.toggle('short', sh); }
+      if (off) { cntIn.value = ''; cntBar.min = 0; cntBar.max = 1; cntBar.value = 0; cntNote.innerHTML = id === 'walk' ? '걸어서 가면 짐승을 데려가지 않는다' : ''; return; }
+      if (document.activeElement !== cntIn) cntIn.value = p.n;
+      cntIn.min = p.lo; cntIn.max = p.hi;
+      cntBar.min = p.lo; cntBar.max = Math.max(p.lo + 1, p.hi); cntBar.disabled = p.hi <= p.lo; cntBar.value = p.n;   // 끌어서 고르는 막대 (2026-11-09 사용자 요청: ±단추 대신)
+      var u = unitOf(id), bits = ['대원 ' + party + '명에 필요한 수 <b>' + p.need + u + '</b>'];
+      if (p.left) bits.push('마구간에 남는 것 <b>' + p.left + u + '</b>');
+      if (p.sellN) bits.push('되파는 것 <b>' + p.sellN + u + '</b>');
+      if (p.buyN) bits.push((m.hire ? '새로 부르는 것 ' : '새로 사는 것 ') + '<b>' + p.buyN + u + '</b>');
+      if (p.n < p.need && mode !== 'stable') bits.push('<span class="warn-text">모자라면 탈것의 효과가 그만큼 준다</span>');
+      bits.push('(' + p.lo + '~' + p.hi + u + ')');
+      cntNote.innerHTML = bits.join(' · ');
+    }
+    function setCount(v) { if (sel === 'walk') return; want[sel] = v; pick(sel); }
+    if (cntRow) {
+      cntRow.querySelectorAll('button[data-d]').forEach(function (b) {
+        b.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var d = b.getAttribute('data-d'), p = plan(sel);
+          setCount(d === 'need' ? Math.max(p.lo, Math.min(p.hi, p.need)) : p.n + (+d));
+        });
+      });
+      cntBar.addEventListener('input', function () { setCount(+cntBar.value); });
+      cntBar.addEventListener('keydown', function (e) { e.stopPropagation(); });   // 막대 위의 ←→는 탈것을 바꾸지 않고 수를 바꾼다
+      cntIn.addEventListener('input', function () { var v = parseInt(cntIn.value, 10); if (isFinite(v)) setCount(v); });
+      cntIn.addEventListener('change', function () { cntIn.value = plan(sel).n; });
+      cntIn.addEventListener('keydown', function (e) { e.stopPropagation(); if (e.key === 'Enter') { cntIn.blur(); cntIn.value = plan(sel).n; } });
     }
     cards.forEach(function (e) { var id = e.getAttribute('data-id'); e.addEventListener('click', function () { pick(id); }); e.addEventListener('dblclick', function () { pick(id); if (win.go && !win.go.disabled) win.go.click(); }); });
     pick(sel);
@@ -819,7 +887,14 @@
       if (v === 'sell' && have) { s.player.gold += sellValue(have); delete s.stable[c.id]; UI.toast(m.name ? M.get(have.id).name + ' ' + have.n + unitOf(have.id) + U.jx(unitOf(have.id), '을/를') + ' 되팔았다.' : '', 'coin'); return null; }
       if (p.net > s.player.gold) { UI.toast('소지금이 모자랍니다.', 'coin'); return null; }
       s.player.gold -= p.net;
-      if (mode === 'stable') { if (p.buyN) { s.stable[c.id] = { id: sel, n: p.n, draft: p.draft }; UI.toast(m.name + ' ' + p.buyN + unitOf(sel) + U.jx(unitOf(sel), '을/를') + ' 사서 마구간에 맡겼다.', 'horse'); } return null; }
+      if (mode === 'stable') {
+        if (sel === 'walk' || m.hire) return null;
+        if (p.n > 0) s.stable[c.id] = { id: sel, n: p.n, draft: p.draft }; else delete s.stable[c.id];
+        if (p.buyN) UI.toast(m.name + ' ' + p.buyN + unitOf(sel) + U.jx(unitOf(sel), '을/를') + ' 사서 마구간에 맡겼다. (마구간 ' + p.n + unitOf(sel) + ')', 'horse');
+        if (p.sellN) UI.toast(m.name + ' ' + p.sellN + unitOf(sel) + U.jx(unitOf(sel), '을/를') + ' 되팔았다 (+' + U.num(Math.round(p.sellN * sellOne(sel))) + '닢). 마구간 ' + p.n + unitOf(sel), 'coin');
+        if (have && have.id !== sel) UI.toast('마구간의 ' + M.get(have.id).name + U.jx(M.get(have.id).name, '은/는') + ' 되팔았다 (+' + U.num(sellValue(have)) + '닢).', 'coin');
+        return null;
+      }
       if (sel === 'walk') {
         if (mode === 'resume' && have && !M.get(have.id).hire) {
           var o0 = s.stable[c.id];
@@ -828,10 +903,17 @@
         }
         return { id: 'walk', n: 0 };
       }
-      if (mode !== 'resume') delete s.stable[c.id];                 // 마구간의 짐승을 데리고 나간다 (다른 종류였으면 되팔았다)
-      else if (p.stab) { delete s.stable[c.id]; UI.toast('마구간에 사 둔 ' + m.name + ' ' + p.stab + unitOf(sel) + U.jx(unitOf(sel), '을/를') + ' 데리고 간다.', 'horse'); }   // 사 둔 짐승을 탐험대에 더한다 (값은 이미 치렀다)
+      // 마구간의 짐승 가운데 고른 수만 데리고 나간다 — 남는 것은 이 도시 마구간에 그대로 (2026-11-09). 다른 종류를 고르면 마구간의 짐승은 되팔았다
+      if (mode !== 'resume') { if (p.left > 0 && !m.hire) s.stable[c.id] = { id: sel, n: p.left, draft: have && have.id === sel && have.draft ? have.draft : p.draft }; else delete s.stable[c.id]; }
+      else {
+        if (p.useStab) UI.toast('마구간에 사 둔 ' + m.name + ' ' + p.useStab + unitOf(sel) + U.jx(unitOf(sel), '을/를') + ' 데리고 간다.', 'horse');   // 사 둔 짐승을 탐험대에 더한다 (값은 이미 치렀다)
+        if (p.left > 0 && !m.hire) s.stable[c.id] = { id: sel, n: p.left, draft: p.draft };
+        else if (p.stab) delete s.stable[c.id];
+      }
+      if (p.left > 0 && !m.hire) UI.toast('남는 ' + m.name + ' ' + p.left + unitOf(sel) + U.jx(unitOf(sel), '은/는') + ' ' + c.name + ' 마구간에 맡겼다.', 'horse');
       if (p.buyN) UI.toast(m.name + ' ' + p.buyN + unitOf(sel) + U.jx(unitOf(sel), '을/를') + (m.hire ? ' 고용했다.' : ' 샀다.'), 'horse');
-      if (p.refund) UI.toast(M.get(have.id).name + U.jx(M.get(have.id).name, '을/를') + ' 되팔았다 (+' + U.num(p.refund) + '닢).', 'coin');
+      if (p.sellN) UI.toast('마구간에 다른 짐승이 있어 남는 ' + m.name + ' ' + p.sellN + unitOf(sel) + U.jx(unitOf(sel), '을/를') + ' 되팔았다 (+' + U.num(Math.round(p.sellN * sellOne(sel))) + '닢).', 'coin');
+      if (have && have.id !== sel && p.refund) UI.toast(M.get(have.id).name + U.jx(M.get(have.id).name, '을/를') + ' 되팔았다 (+' + U.num(sellValue(have)) + '닢).', 'coin');
       return { id: sel, n: p.n, draft: p.draft, style: c.style, bought: p.net, prev: mode === 'resume' ? null : have };
     });
   };

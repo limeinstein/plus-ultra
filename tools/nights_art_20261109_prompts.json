@@ -1,0 +1,146 @@
+{
+  "date": "2026-11-09",
+  "mode": "built-in image_gen",
+  "portraits": [
+    {
+      "id": "nadira",
+      "name": "나디라 알 사나니",
+      "base": "portraits/legendary/nadira",
+      "prompt": "Use case: stylized-concept. Asset type: one adult character knee-up portrait for Loop of Good Hope historical fantasy sailing RPG. Use the TWO supplied photos as FACE AND EXPRESSION references only: preserve their distinctive large gray-hazel almond eyes, dark arched brows, delicate straight nose, full softly smiling lips, oval jaw, black flowing hair and playful sideways upward gaze; photo 2 is primary for the coy closed-lip smile and slight head tilt, photo 1 supports facial proportions. Subject: Nadira al Sanani, clearly adult Yemeni princess aged 25, intelligent, confident and mischievous. Curvy adult figure with a noticeably large full bust and natural proportions. Luxurious deep crimson silk princess gown with a fitted opaque bodice, a bold open sweetheart neckline with tasteful cleavage, exposed shoulders and upper arms, long flowing skirt to below the knees, ornate silver Yemeni filigree belt, ruby and pearl silver necklace, bracelets and earrings, delicate sheer pearl-strung veil draped behind her flowing dark hair without hiding face. Fine gold and silver embroidery. One hand gently lifting a loose lock of hair beside her cheek, other resting naturally at waist; all fingers clear. Polished hand-painted semi-realistic 2D RPG key art, subtle brush texture, detailed expressive face, warm natural light, restrained rim light. Vertical 1024x1536, ONE standing person framed from complete head and veil through just BELOW BOTH KNEES; relaxed three-quarter pose, room around hands, head and skirt. Genuinely transparent background, no scenery, floor, shadow, frame, text or watermark. Clothing and styling are fictional historical fantasy; no modern clothing, no forehead mark. Preserve elegant character-centered composition.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-32e5e85e-33a7-4cf2-a2a3-b774fcbf815a.png"
+    },
+    {
+      "id": "qamar",
+      "name": "카마르 알 아크마르",
+      "base": "portraits/legendary/qamar",
+      "look": "Qamar al Aqmar, Persian prince aged 25, exceptionally handsome graceful adult man with a refined oval face, intelligent dark eyes and youthful confident smile, long wavy black hair, clean-shaven. White silk turban with a small feather and sapphire clasp, richly embroidered cobalt blue Persian silk long coat with open front revealing ivory under-robe, silver and gold brocade belt, loose elegant trousers visible below knee, jeweled dagger safely sheathed at belt. One hand holds a small silver mechanical winding key near waist, other relaxed beside the coat. Historic Persian fantasy princely attire.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE knee-up transparent character illustration for Loop of Good Hope Arabian Nights historical fantasy RPG. Polished hand-painted semi-realistic 2D key art, expressive realistic face, natural anatomy, finely detailed tactile period cloth and metal, soft warm portrait lighting. Vertical 1024x1536. Single adult standing relaxed three-quarter pose, face nearly forward; complete headwear through just BELOW BOTH KNEES, safe top and side margins, all hands and props entirely inside canvas. Genuinely transparent background and clean cutout edges. No scenery, floor, cast shadow, lettering, frame or watermark. Subject: Qamar al Aqmar, Persian prince aged 25, exceptionally handsome graceful adult man with a refined oval face, intelligent dark eyes and youthful confident smile, long wavy black hair, clean-shaven. White silk turban with a small feather and sapphire clasp, richly embroidered cobalt blue Persian silk long coat with open front revealing ivory under-robe, silver and gold brocade belt, loose elegant trousers visible below knee, jeweled dagger safely sheathed at belt. One hand holds a small silver mechanical winding key near waist, other relaxed beside the coat. Historic Persian fantasy princely attire.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-0d4cf242-ceb8-4d72-a797-95657faa6ac8.png"
+    },
+    {
+      "id": "an_harun",
+      "name": "하룬 알 라시드",
+      "base": "portraits/history/an_harun",
+      "look": "Harun al Rashid disguised as a Mosul merchant, Middle Eastern man aged 45, dark full beard with slight gray, sharp dark eyes with an amused subtle smile, charismatic dignified face. Modest worn brown merchant robe and beige wrapped headcloth over dark hair, a little costly gold embroidery peeking from sleeve lining, a conspicuously large ruby ring on one hand. One hand lightly clasping other at waist. Understated but quietly powerful Abbasid inspired attire, no crown.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE knee-up transparent character illustration for Loop of Good Hope Arabian Nights historical fantasy RPG. Polished hand-painted semi-realistic 2D key art, expressive realistic face, natural anatomy, finely detailed tactile period cloth and metal, soft warm portrait lighting. Vertical 1024x1536. Single adult standing relaxed three-quarter pose, face nearly forward; complete headwear through just BELOW BOTH KNEES, safe top and side margins, all hands and props entirely inside canvas. Genuinely transparent background and clean cutout edges. No scenery, floor, cast shadow, lettering, frame or watermark. Subject: Harun al Rashid disguised as a Mosul merchant, Middle Eastern man aged 45, dark full beard with slight gray, sharp dark eyes with an amused subtle smile, charismatic dignified face. Modest worn brown merchant robe and beige wrapped headcloth over dark hair, a little costly gold embroidery peeking from sleeve lining, a conspicuously large ruby ring on one hand. One hand lightly clasping other at waist. Understated but quietly powerful Abbasid inspired attire, no crown.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-3de73260-0ae0-4d42-93aa-2a265a0d9ad7.png"
+    },
+    {
+      "id": "an_jafar",
+      "name": "자파르",
+      "base": "portraits/history/an_jafar",
+      "look": "Jafar al Barmaki disguised as merchant, Middle Eastern man aged 38, neatly trimmed short black beard and mustache, keen intelligent observant eyes and slender long face. Deep forest-green cloak over understated olive and beige merchant robe, muted green wrapped turban. Holding one small leather-bound closed account ledger against his waist with one hand, other hand touching ledger, calm thoughtful expression, discreet refined Abbasid-inspired clothing.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE knee-up transparent character illustration for Loop of Good Hope Arabian Nights historical fantasy RPG. Polished hand-painted semi-realistic 2D key art, expressive realistic face, natural anatomy, finely detailed tactile period cloth and metal, soft warm portrait lighting. Vertical 1024x1536. Single adult standing relaxed three-quarter pose, face nearly forward; complete headwear through just BELOW BOTH KNEES, safe top and side margins, all hands and props entirely inside canvas. Genuinely transparent background and clean cutout edges. No scenery, floor, cast shadow, lettering, frame or watermark. Subject: Jafar al Barmaki disguised as merchant, Middle Eastern man aged 38, neatly trimmed short black beard and mustache, keen intelligent observant eyes and slender long face. Deep forest-green cloak over understated olive and beige merchant robe, muted green wrapped turban. Holding one small leather-bound closed account ledger against his waist with one hand, other hand touching ledger, calm thoughtful expression, discreet refined Abbasid-inspired clothing.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-ca7595aa-ebb6-4da1-9a47-676157cbb7c5.png"
+    },
+    {
+      "id": "an_masrur",
+      "name": "마스루르",
+      "base": "portraits/history/an_masrur",
+      "look": "Masrur the caliph's swordsman, Middle Eastern adult man aged 43, very tall muscular broad-shouldered body, stern silent square face with closely trimmed dark beard, thick brows and watchful dark eyes. Black wrapped turban and flowing black cloak over charcoal tunic, dark leather belt. A large curved scimitar SAFELY SHEATHED hangs at waist, one broad hand resting over closed scabbard, other relaxed. Serious disciplined Abbasid-inspired bodyguard, no armor spikes.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE knee-up transparent character illustration for Loop of Good Hope Arabian Nights historical fantasy RPG. Polished hand-painted semi-realistic 2D key art, expressive realistic face, natural anatomy, finely detailed tactile period cloth and metal, soft warm portrait lighting. Vertical 1024x1536. Single adult standing relaxed three-quarter pose, face nearly forward; complete headwear through just BELOW BOTH KNEES, safe top and side margins, all hands and props entirely inside canvas. Genuinely transparent background and clean cutout edges. No scenery, floor, cast shadow, lettering, frame or watermark. Subject: Masrur the caliph's swordsman, Middle Eastern adult man aged 43, very tall muscular broad-shouldered body, stern silent square face with closely trimmed dark beard, thick brows and watchful dark eyes. Black wrapped turban and flowing black cloak over charcoal tunic, dark leather belt. A large curved scimitar SAFELY SHEATHED hangs at waist, one broad hand resting over closed scabbard, other relaxed. Serious disciplined Abbasid-inspired bodyguard, no armor spikes.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-2556c754-9bbc-4d12-84ab-920933233cf1.png"
+    },
+    {
+      "id": "an_sage",
+      "name": "늙은 현자",
+      "base": "portraits/history/an_sage",
+      "look": "Elderly Persian craftsman and scheming inventor aged 75, thin hunched adult man, long hooked nose, wiry white beard and weathered wrinkled face, cunning greedy eyes looking sideways, tousled white hair beneath a small dark cap. Grease-stained charcoal black long work robe, worn leather belt with tiny brass tools, holding a small clockwork winding key between fingers at chest, other hand loosely holding a little brass mechanism near waist. Clever ominous expression without caricature.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE knee-up transparent character illustration for Loop of Good Hope Arabian Nights historical fantasy RPG. Polished hand-painted semi-realistic 2D key art, expressive realistic face, natural anatomy, finely detailed tactile period cloth and metal, soft warm portrait lighting. Vertical 1024x1536. Single adult standing relaxed three-quarter pose, face nearly forward; complete headwear through just BELOW BOTH KNEES, safe top and side margins, all hands and props entirely inside canvas. Genuinely transparent background and clean cutout edges. No scenery, floor, cast shadow, lettering, frame or watermark. Subject: Elderly Persian craftsman and scheming inventor aged 75, thin hunched adult man, long hooked nose, wiry white beard and weathered wrinkled face, cunning greedy eyes looking sideways, tousled white hair beneath a small dark cap. Grease-stained charcoal black long work robe, worn leather belt with tiny brass tools, holding a small clockwork winding key between fingers at chest, other hand loosely holding a little brass mechanism near waist. Clever ominous expression without caricature.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-1803cb22-a160-40ea-a184-d7b2507d9c0d.png"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "an_sinbad_house",
+      "name": "바스라의 신드바드 저택",
+      "refs": [
+        "sinbad"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic Arabian Nights event illustration for Loop of Good Hope historical fantasy sailing RPG. Wide panoramic 2.25:1 landscape, 1881x836 target. Polished hand-painted semi-realistic 2D key art, delicate brushwork and realistic expressive adult people, rich tactile textiles and carved wood, atmospheric lighting. Main narrative action safely within middle 75 percent of height for wide game crop. No montage, split panels, border, text, readable writing, watermark or modern objects. Inside a wealthy Basra riverside mansion courtyard, carved arches, palm garden, a low sumptuous feast with fruit and bowls, an oud musician at left and tired porter resting in shade by the gate. In foreground Sindbad matching the reference (weathered smiling man, cream turban with red patterned ends, dark teal gold-embroidered coat over ivory tunic and red sash) animatedly gestures while telling travelers his seven voyages. Warm late afternoon, distant river and dhows through arch, welcoming Arabian storybook atmosphere.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-fc353e69-998a-4241-b0dd-d5d07d278648.png"
+    },
+    {
+      "id": "an_whale",
+      "name": "섬인 줄 알았던 고래",
+      "refs": [],
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic Arabian Nights event illustration for Loop of Good Hope historical fantasy sailing RPG. Wide panoramic 2.25:1 landscape, 1881x836 target. Polished hand-painted semi-realistic 2D key art, delicate brushwork and realistic expressive adult people, rich tactile textiles and carved wood, atmospheric lighting. Main narrative action safely within middle 75 percent of height for wide game crop. No montage, split panels, border, text, readable writing, watermark or modern objects. Open sea off Oman, a colossal whale mistaken for a small low island now slowly tilts and rises. Its huge wet back is covered with seaweed, shells and a little grasslike marine growth; a tiny campfire with cooking pot burns on its back. Adult sailors in historical Arabian robes scramble toward a small rescue rowing boat and some leap safely into blue water; enormous tail lifts in middle distance. A late medieval Arab dhow with cream triangular lateen sail waits nearby. Dynamic spray, tiny humans against vast whale, suspense and wonder, no wounds or blood.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-18dd3d1a-d4f3-4687-abe2-6abf656da38f.png"
+    },
+    {
+      "id": "an_roc",
+      "name": "로크의 거대한 알",
+      "refs": [],
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic Arabian Nights event illustration for Loop of Good Hope historical fantasy sailing RPG. Wide panoramic 2.25:1 landscape, 1881x836 target. Polished hand-painted semi-realistic 2D key art, delicate brushwork and realistic expressive adult people, rich tactile textiles and carved wood, atmospheric lighting. Main narrative action safely within middle 75 percent of height for wide game crop. No montage, split panels, border, text, readable writing, watermark or modern objects. Tropical Laccadive island beach, one enormous perfectly round ivory-white roc egg rises like a white dome among tall palm trees. A single gigantic roc eagle circles overhead, its immense wings casting a dramatic shadow over palms and egg. At foreground beach lies one feather as long as a ship mast, several small adult Arabian sailors stand beside it to show scale, a small wooden dhow anchored in turquoise lagoon. Awe and sunlight crossed by giant shadow, lush foliage, no broken egg or gore.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-e2f6a702-c5a7-480c-9974-a0a3428e2bbe.png"
+    },
+    {
+      "id": "an_valley",
+      "name": "다이아몬드 골짜기",
+      "refs": [],
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic Arabian Nights event illustration for Loop of Good Hope historical fantasy sailing RPG. Wide panoramic 2.25:1 landscape, 1881x836 target. Polished hand-painted semi-realistic 2D key art, delicate brushwork and realistic expressive adult people, rich tactile textiles and carved wood, atmospheric lighting. Main narrative action safely within middle 75 percent of height for wide game crop. No montage, split panels, border, text, readable writing, watermark or modern objects. Deep sheer-sided rocky mountain valley beneath Adam's Peak in Serendib, Sri Lanka. Rough raw diamonds sparkle like scattered stars on valley floor, several huge dark snakes coil among jagged rocks below. A large eagle rises through valley air carrying a small piece of meat with rough crystals stuck to it, no gore. At the high cliff rim two tiny historical Arabian adult sailors watch safely and toss another wrapped bait bundle. Vast vertical cliffs and distant green tropical mountain, golden shafts of light, clever fairytale adventure and believable natural textures.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-a5b36e6f-1e55-481f-8449-a6f1aea3d653.png"
+    },
+    {
+      "id": "an_tavern",
+      "name": "바그다드 밤 술집",
+      "refs": [
+        "harun",
+        "jafar",
+        "masrur"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic Arabian Nights event illustration for Loop of Good Hope historical fantasy sailing RPG. Wide panoramic 2.25:1 landscape, 1881x836 target. Polished hand-painted semi-realistic 2D key art, delicate brushwork and realistic expressive adult people, rich tactile textiles and carved wood, atmospheric lighting. Main narrative action safely within middle 75 percent of height for wide game crop. No montage, split panels, border, text, readable writing, watermark or modern objects. Supplied character cutouts are identity and costume references, not objects to paste into scene; naturally pose characters in setting. Night tavern in a narrow Tigris riverside Baghdad alley, warm brass lanterns and low arched brick interior, three disguised merchants at a wooden table: Harun matching reference 1 with dark beard, brown robe, beige turban and prominent ruby ring; Jafar matching reference 2 in deep green cloak clutching his ledger; very broad tall Masrur matching reference 3 in black cloak and black turban, sheathed scimitar. Two rough adult men in plain robes kick a low stool and angrily gesture about unpaid drinks, innkeeper extends open palm to calm them. Tense moment before a clever intervention, lively human faces and clear spatial staging, no drawn blades or injury.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-d63dcfff-efe0-423a-b148-eee259da0ccf.png"
+    },
+    {
+      "id": "an_palace",
+      "name": "황금 문의 궁",
+      "refs": [
+        "harun",
+        "jafar",
+        "masrur"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic Arabian Nights event illustration for Loop of Good Hope historical fantasy sailing RPG. Wide panoramic 2.25:1 landscape, 1881x836 target. Polished hand-painted semi-realistic 2D key art, delicate brushwork and realistic expressive adult people, rich tactile textiles and carved wood, atmospheric lighting. Main narrative action safely within middle 75 percent of height for wide game crop. No montage, split panels, border, text, readable writing, watermark or modern objects. Supplied character cutouts are identity and costume references, not objects to paste into scene; naturally pose characters in setting. Grand Abbasid palace audience hall at center of circular Baghdad, golden arched entrance and green dome visible through high arcade, geometric carved plaster and patterned tiles. Caliph Harun al Rashid on a raised ornate throne, same face dark beard and ruby ring as reference 1 but wearing regal cream-and-gold silk robe and elegant white gold-banded turban. Jafar same face as reference 2 in formal emerald robe holds a slender vizier staff at his side. Tall broad Masrur same face as reference 3 in black cloak stands guard with SHEATHED scimitar. In foreground a visiting adult sea captain shown from behind receives a folded gold-thread robe. Warm sunrise and majestic reveal, respectful human dignified atmosphere.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-6b1cc877-8e26-483c-90f5-239f89129ef0.png"
+    },
+    {
+      "id": "an_ebony",
+      "name": "시라즈의 흑단 말",
+      "refs": [
+        "qamar"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic Arabian Nights event illustration for Loop of Good Hope historical fantasy sailing RPG. Wide panoramic 2.25:1 landscape, 1881x836 target. Polished hand-painted semi-realistic 2D key art, delicate brushwork and realistic expressive adult people, rich tactile textiles and carved wood, atmospheric lighting. Main narrative action safely within middle 75 percent of height for wide game crop. No montage, split panels, border, text, readable writing, watermark or modern objects. Supplied character cutouts are identity and costume references, not objects to paste into scene; naturally pose characters in setting. Rose garden in Shiraz, early Persian palace arches and tiled garden fountain, one life-sized polished black EBONY WOOD mechanical horse, clearly a carved artificial horse with brass joints and ornate gold harness, NOT a living horse. A hinged belly panel is open showing intricate brass gears, springs and clockwork. Handsome adult Persian prince Qamar matching reference, clean-shaven refined face, white feathered turban with sapphire, cobalt embroidered silk coat and ivory robe, holds horse's ear lever while leaning curiously toward mechanism. An adult visiting sailor shown mostly from back examines the belly with small tool. Sunlit roses, sense of invention and fairytale wonder.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-8736c8e2-8290-4ef7-a7b9-43790edb7439.png"
+    },
+    {
+      "id": "an_isfahan",
+      "name": "이스파한 궁의 계략",
+      "refs": [
+        "qamar",
+        "sage"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic Arabian Nights event illustration for Loop of Good Hope historical fantasy sailing RPG. Wide panoramic 2.25:1 landscape, 1881x836 target. Polished hand-painted semi-realistic 2D key art, delicate brushwork and realistic expressive adult people, rich tactile textiles and carved wood, atmospheric lighting. Main narrative action safely within middle 75 percent of height for wide game crop. No montage, split panels, border, text, readable writing, watermark or modern objects. Supplied character cutouts are identity and costume references, not objects to paste into scene; naturally pose characters in setting. Courtyard entrance of a Persian governor's palace at edge of an Isfahan square, deep turquoise tiles, pointed arches and incense haze. At left an elderly craftsman with hooked nose, white beard, small dark cap and grease-stained black robe exactly like reference 2 shouts in frustration while wrists are loosely restrained by an iron chain held by a watchful guard. At right handsome clean-shaven adult prince Qamar, face and dark hair exactly reference 1, disguised as a physician in a simple white robe and cream turban over blue sleeves, carries a modest leather medicine satchel and quietly gestures to gain entry. Several adult onlookers, afternoon dramatic light, intrigue and tension, no wounds, abuse or gore.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-ad8a456c-f982-4d96-8f8b-aee673ea3508.png"
+    },
+    {
+      "id": "an_flight",
+      "name": "흑단 말을 타고 탈출",
+      "refs": [
+        "qamar",
+        "nadira"
+      ],
+      "prompt": "Use case: historical-scene. Asset type: ONE continuous cinematic Arabian Nights event illustration for Loop of Good Hope historical fantasy sailing RPG. Wide panoramic 2.25:1 landscape, 1881x836 target. Polished hand-painted semi-realistic 2D key art, delicate brushwork and realistic expressive adult people, rich tactile textiles and carved wood, atmospheric lighting. Main narrative action safely within middle 75 percent of height for wide game crop. No montage, split panels, border, text, readable writing, watermark or modern objects. Supplied character cutouts are identity and costume references, not objects to paste into scene; naturally pose characters in setting. Heroic escape through fragrant incense smoke above blue-tiled domes and minarets of Isfahan at golden sunset. One magnificent polished ebony WOOD mechanical flying horse with brass joints, carved mane and golden harness is clearly airborne and naturally rearing forward, no wings. Handsome adult prince Qamar matching reference 1 (white feathered turban with sapphire, embroidered cobalt Persian silk coat) sits in FRONT steering by horse ear lever. Adult princess Nadira aged 25 matching reference 2 sits securely BEHIND him; preserve her distinctive gray-hazel eyes, dark arched brows, delicate nose, full smiling lips, long flowing black hair, curvy figure and very full bust, crimson silk off-shoulder sweetheart-neckline embroidered gown and ornate silver and pearl jewelry with pearl-strung sheer veil. She lifts windswept hair off her face with one hand, smiling in triumphant playful relief; other hand safely holds prince. Both fully clothed with opaque fabric, faces legible and joyful. Wide cityscape beneath, tiny people in square look up in astonishment, graceful coherent anatomy for two riders and one horse, no floating extra limbs.",
+      "source": "C:/Users/User/.codex/generated_images/01a1bbb8-3596-75a1-8e7b-8e0ea0e0512d/exec-1209975e-3262-4749-b9ff-789557975ac7.png"
+    }
+  ],
+  "reused": [
+    {
+      "id": "an_sinbad",
+      "base": "portraits/legendary/sinbad"
+    }
+  ],
+  "referenceImages": [
+    "artifacts/nights-art-20261109/references/nadira-face-1.png",
+    "artifacts/nights-art-20261109/references/nadira-face-2.png"
+  ]
+}

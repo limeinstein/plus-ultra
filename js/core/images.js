@@ -886,6 +886,7 @@
   /** holder: 1-based index into sp.holders (the person holding the title at that time) */
   K.sponsor = function (sp, holder) {
     var out = [];
+    if (sp.face) out.push(sp.face);   // 사건 화자와 후원자가 같은 인물일 때 전용 초상을 이어 쓴다.
     if (typeof holder === 'string' && holder) out.push('portraits/sponsors/' + holder);   // 다른 후원자의 그림을 빌림 (포르투갈 펠리페 1세 = 에스파냐 펠리페 2세)
     else if (holder) out.push('portraits/sponsors/' + sp.id + '_' + holder);
     out.push('portraits/sponsors/' + sp.id); return out;

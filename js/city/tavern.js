@@ -29,6 +29,9 @@
   };
   T.servant = async function (c) {
     var who = T.servantSpeaker(c);
+    // 이 술집을 혼인으로 떠난 부인이 있으면 그 안부부터 (js/systems/maidswap.js)
+    var sis = G.MaidSwap && G.MaidSwap.sisLine ? G.MaidSwap.sisLine(c) : '', cu0 = C.current();
+    if (sis && cu0 && !cu0.sisAsked) { cu0.sisAsked = 1; await UI.say(sis, who); return; }
     var d = U.chance(0.45) ? T.rumour(c, { stack: true }) : null;
     if (d) {
       var known = G.Disc.hasHint(d.id);
@@ -71,6 +74,8 @@
     // 이 도시에 머무는 경쟁 탐험가를 처음 보면 주인이 귀띔한다 (콜론 — 리스본)
     var rv = T.rivalsStaying(c).filter(function (r) { return !r.atSea && !S().flags['seenRival_' + r.name]; })[0];
     if (rv) { S().flags['seenRival_' + rv.name] = 1; if (G.RIVAL_STAYS[rv.name].keeper) await C.say(master(), G.RIVAL_STAYS[rv.name].keeper); return; }
+    // 이 술집에서 일하던 부인이 들른다 — 남편을 찾으러, 또는 배에 함께 와서 옛 일터를 둘러본다 (js/systems/maidswap.js MS.wifeDrop)
+    if (G.MaidSwap && G.MaidSwap.wifeDrop) { try { if (await G.MaidSwap.wifeDrop(c)) return; } catch (e) { console.error(e); } }
     if (U.chance(0.45)) await T.encounter(c);
   };
   T.sub = function (c) { var m = maidOf(c); return m ? '여급 ' + U.j(m.name, '이/가') + ' 일하고 있다' : '뱃사람들로 북적인다'; };
@@ -872,9 +877,12 @@
     function ask(text, choices) { return UI.ask(text, choices, scene('warm', true)); }
     st.met++;
     if (s.player.wife === m.id) { await say('어머, 당신! 여기서 뭐 해요? 집에서 기다릴게요.', 'happy'); return; }
-    if (G.Wives && G.Wives.of(m.id)) { await say('어머, 당신! 여기서는 일하는 중이에요. 집으로 와요, 기다릴게요.', 'happy'); return; }
+    if (G.Wives && G.Wives.of(m.id)) { await say('어머, 당신! 옛 일터에 잠깐 들렀어요. 집으로 와요, 기다릴게요.', 'happy'); return; }
     var greet = st.aff < 20 ? '어서 오세요. 처음 뵙는 분이네요.' : st.aff < 50 ? '어머, 또 오셨네요!' : st.aff < 80 ? '와 주셨군요! 기다리고 있었어요.' : '당신 얼굴을 보니 정말 기뻐요.';
     await say(greet, st.aff >= 50 ? 'happy' : 'warm');
+    // 이 술집을 혼인으로 떠난 부인의 안부 — 한 번 들른 사이 한 번 (js/systems/maidswap.js)
+    var sisW = G.MaidSwap && G.MaidSwap.prevWife ? G.MaidSwap.prevWife(c.id) : null, cuS = C.current();
+    if (sisW && cuS && !cuS.sisAsked) { cuS.sisAsked = 1; await say(G.MaidSwap.sisLine(c), 'warm'); }
     if (G.MateKnow) { try { await G.MateKnow.deliver(c, m, say); } catch (e) { console.error(e); } }   // 부탁한 항해사의 행방 — 날이 찼으면 (js/systems/mateknow.js)
     for (;;) {
       var v = await ask(m.name + ' — 호감 ' + heart(st.aff), [
@@ -882,9 +890,11 @@
         (function () { var cd = G.FamEv ? G.FamEv.canDate(m.id) : null; return cd ? { label: '함께 시간을 보낸다' + (cd.ok ? '' : ' (' + cd.why + ')'), value: 'date', dis: !cd.ok } : null; })(),
         G.MaidTip ? { label: '사례하고 소식을 묻는다' + (G.MaidTip.canAsk(st) ? '' : ' (호감이 더 있어야)'), value: 'tip', dis: !G.MaidTip.canAsk(st) } : null,
         G.MateKnow ? { label: '항해사의 행방을 부탁한다' + (G.MateKnow.seekSub(m) ? ' (' + G.MateKnow.seekSub(m) + ')' : ''), value: 'seek' } : null,   // 만났거나 인연이 있던 항해사 — 20일쯤 (js/systems/mateknow.js)   // 상선대·군함대·해적·철새의 행방 (js/systems/maidtip.js)
+        sisW ? { label: sisW.name + '의 안부를 전한다', value: 'sis' } : null,
         { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }].filter(Boolean));
       if (!v) return;
       if (v === 'tip') { await G.MaidTip.ask(c, m, st, say); continue; }
+      if (v === 'sis') { await G.MaidSwap.sisTalk(c, m, st, say); continue; }
       if (v === 'seek') { await G.MateKnow.seek(c, m, st, say); continue; }
       if (v === 'date') { await G.FamEv.date(c, m); continue; }      // 데이트 — 건배·춤·쪽지·난롯가·저녁 (familyevent.js)
       if (v === 'drink') {
@@ -923,7 +933,9 @@
         if (G.Growth) G.Growth.once('wed', 'cha', 1, '혼인 — 한 집안의 가장이 되었다');   // 첫 혼인: 매력 +1 (js/systems/growth.js)
         G.State.log(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다.');
         if (G.FamEv) { try { await G.FamEv.wedding({ id: m.id, city: c.id }); } catch (e) { console.error(e); } }   // 술집의 혼례 잔치
-        await UI.alert(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다! 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리고 있을 것이다.', '결혼');
+        // 부인은 더 이상 술집에서 일하지 않는다 — 새 여급(코덱스가 그린 새 얼굴부터, 없으면 기본 여급)이 선다 (js/systems/maidswap.js)
+        var wn0 = ''; if (G.MaidSwap && G.MaidSwap.wed) { try { G.MaidSwap.wed(m.id, c.id); wn0 = G.MaidSwap.wedNote(c.id); } catch (e) { console.error(e); } }
+        await UI.alert(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다! 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리고 있을 것이다.' + (wn0 ? '<br><small>' + wn0 + '</small>' : ''), '결혼');
         return;
       }
     }

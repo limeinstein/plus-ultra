@@ -77,5 +77,5 @@ if __name__ == '__main__':
     target.write_text('/* 사건 도감 자료 — tools/generate_catalog_events.py로 게임 장면에서 모음. */\n'
                       + '(function (G) {\n  \'use strict\';\n  G.CATALOG_SCENES = '
                       + json.dumps(scenes, ensure_ascii=False, indent=2)
-                      + ';\n})(window.G = window.G || {});\n', encoding='utf-8')
+                      + ';\n})(window.G = window.G || {});\n', encoding='utf-8', newline='\n')
     print(f'사건 장면 {len(scenes)}개 → {target.relative_to(ROOT)}')

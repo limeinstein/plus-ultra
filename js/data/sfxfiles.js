@@ -47,6 +47,15 @@
       draw:     { f: rpg(['drawKnife1', 'drawKnife2', 'drawKnife3']), v: 0.75, rate: [0.92, 1.05] },   // 칼을 뽑는다: 일기토·육상전·백병전 시작
       cut:      { f: rpg(['chop', 'knifeSlice2']), v: 0.55, rate: [0.85, 1.05] },        // 일기토에서 칼이 들어갔을 때
       parry:    { f: rpg(['metalPot1', 'metalPot2', 'metalPot3']), v: 0.22, rate: [1.3, 1.5] },   // 일기토에서 막았을 때 — 칼날이 부딪는 쇳소리
+      swingSlash: { f: rpg(['knifeSlice']), v: 0.43, rate: [0.94,1.06], mode: 'layer' },
+      hitCloth:   { f: rpg(['chop']), also: rpg(['knifeSlice2']), v: 0.40, rate: [0.82,0.92] },
+      hitLeather: { f: rpg(['chop']), also: rpg(['dropLeather']), v: 0.45, rate: [0.94,1.06] },
+      hitArmor:   { f: rpg(['metalPot1','metalPot2']), also: rpg(['metalClick']), v: 0.25, rate: [1.12,1.26] },
+      hitShield:  { f: rpg(['creak1','dropLeather']), also: rpg(['chop']), v: 0.31, rate: [0.94,1.06] },
+      block:      { f: rpg(['metalPot1','metalPot2','metalPot3']), v: 0.23, rate: [1.32,1.48] },
+      duelParry:  { f: rpg(['metalPot1','metalPot2']), also: rpg(['metalLatch']), v: 0.26, rate: [1.51,1.69], mode: 'layer' },
+      duelLand:   { f: STEPS, v: 0.45, rate: [0.91,1.03] },
+      duelDrop:   { f: rpg(['metalClick']), v: 0.38, rate: [0.94,1.06] },
       drums:    { f: nat(['war_drums']), v: 0.6, rate: [0.97, 1.03] },                     // 해전·육상전이 시작된다
       boom:     { f: nat(['boom_far']), v: 0.55, rate: [0.85, 1] },                        // 배가 터져 가라앉는다 (멀리서 울리는 폭발)
       // ---- 카드 (술집 포카)
