@@ -60,7 +60,7 @@
   };
   /** 집에 있는 아이들 (이름이 있고, 세 살부터, 견습으로 나가 있지 않은) */
   HL.kidsHome = function () {
-    return (S().player.kids || []).filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && !k.married && F().kidAge(k) >= 3; });   // 시집간 딸은 집에 없다 (kidwed.js)
+    return (S().player.kids || []).filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && !k.married && !k.away && F().kidAge(k) >= 3; });   // 시집간 딸은 집에 없다 (kidwed.js)
   };
 
   // ---------------------------------------------------------------- 집 안에 서 있는 가족
@@ -170,12 +170,12 @@
     if (fx.bond) { kids.forEach(function (x) { F().addBond(x, fx.bond); }); out.push('사이 ' + (fx.bond > 0 ? '+' : '') + fx.bond); }
     if (k && !all) {
       if (!k.st) k.st = { str: 50, 'int': 50, mar: 50, cha: 50 };
-      Object.keys(STAT).forEach(function (x) { if (fx[x]) { k.st[x] = U.clamp(k.st[x] + fx[x], 1, b.statMax || 90); out.push(STAT[x] + ' +' + fx[x]); } });
+      Object.keys(STAT).forEach(function (x) { if (fx[x]) { var gx = G.KidGrow ? G.KidGrow.statAdd(k, x, fx[x]) : (function () { var b0 = k.st[x]; k.st[x] = U.clamp(k.st[x] + fx[x], 1, b.statMax || 90); return k.st[x] - b0; })(); if (gx) out.push(STAT[x] + ' ' + (gx > 0 ? '+' : '') + gx); } });   // 타고난 그릇과 운 (js/systems/kidgrow.js)
       // 특기: 첫 단계는 누구나 가르칠 수 있고, 그 위는 제독(함대)이 아는 만큼만 — 할 일마다 상한이 있다
       if (fx.sk) Object.keys(fx.sk).forEach(function (id) {
         var cap = Math.min(fx.sk[id], Math.max(G.R.skill(id), 1));
         k.sk = k.sk || {};
-        if ((k.sk[id] || 0) < cap && U.chance(b.skillChance == null ? 0.6 : b.skillChance)) { k.sk[id] = (k.sk[id] || 0) + 1; out.push(G.SKILL_BY_ID[id].name + ' ' + k.sk[id]); }
+        if (G.KidGrow ? G.KidGrow.skill(k, id, b.skillChance == null ? 0.6 : b.skillChance, cap) : ((k.sk[id] || 0) < cap && U.chance(b.skillChance == null ? 0.6 : b.skillChance) && (k.sk[id] = (k.sk[id] || 0) + 1))) { out.push(G.SKILL_BY_ID[id].name + ' ' + k.sk[id]); }
       });
       if (fx.lang) {
         var li = HL.teachLang(k);
@@ -463,7 +463,7 @@
   /** 해마다 (W.newYear): 꿈을 정한 아이는 그 능력이 하나 더 자란다 */
   HL.newYear = function () {
     (S().player.kids || []).forEach(function (k) {
-      if (k.aim && k.st && k.st[k.aim] != null) k.st[k.aim] = Math.min(B().statMax || 90, k.st[k.aim] + 1);
+      if (k.aim && k.st && k.st[k.aim] != null && !k.away && !k.crew) { if (G.KidGrow) G.KidGrow.stat(k, k.aim, 1); else k.st[k.aim] = Math.min(B().statMax || 90, k.st[k.aim] + 1); }
     });
     return [];
   };

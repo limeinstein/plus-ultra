@@ -102,6 +102,9 @@
 
   function pips(v, mx) { var h = '<span class="pips">'; for (var i = 1; i <= (mx || 3); i++) h += '<i class="' + (i <= v ? 'on' : '') + '"></i>'; return h + '</span>'; }
   I.pips = pips;
+  /** 제독 본인 단계(own)는 빨강, 동료·통역으로 올라간 단계(eff까지)는 파랑 (2026-11-10 사용자 요청) */
+  function pipsOwn(own, eff, mx) { var h = '<span class="pips">'; for (var i = 1; i <= (mx || 3); i++) h += '<i class="' + (i <= own ? 'on own' : i <= eff ? 'on' : '') + '"></i>'; return h + '</span>'; }
+  I.pipsOwn = pipsOwn;
 
   PAGES.admiral = function (el) {
     var s = S(), p = s.player, job = G.JOBS.filter(function (j) { return j.id === p.job; })[0];
@@ -123,11 +126,11 @@
       (G.Career ? G.Career.html() : '') + '<div class="sep"></div><div class="grid2">' +
       '<div><h4 style="margin:0 0 8px">능력치</h4>' + G.STATS.map(function (st) { var bo = R.statBonus ? R.statBonus(st.id) : 0, src = bo ? R.statSource(st.id) : '';   // 지닌 물건이 올린 만큼은 「67(+7)」, 마우스를 올리면 그 물건
         return '<div class="statrow"' + (src ? ' title="' + U.esc(src + ' — ' + st.name + ' +' + bo + ' (같은 능력치는 가장 높은 물건 하나만)') + '"' : '') + '><span>' + st.name + '</span>' + UI.bar(p.st[st.id] + bo, 100, 'gold') + '<b>' + (R.statText ? R.statText(p.st[st.id], bo) : p.st[st.id]) + '</b></div>'; }).join('') + '</div>' +
-      '<div><h4 style="margin:0 0 8px">특기 <small class="muted">(동료 포함 실효 수준)</small></h4><div class="skillgrid" style="grid-template-columns:1fr 1fr">' +
-      G.SKILLS.map(function (sk) { var own = p.sk[sk.id] || 0, eff = R.skill(sk.id); return '<div class="flex" style="font-size:16px;gap:6px" title="' + sk.desc + '"><span style="width:70px">' + sk.name + '</span>' + pips(eff) + (eff > own ? '<small class="muted">동료</small>' : '') + '</div>'; }).join('') + '</div></div></div>' +
+      '<div><h4 style="margin:0 0 8px">특기 <small class="muted">(동료 포함 실효 수준 · <span class="pips pips-key"><i class="on own"></i></span> 제독 본인 · <span class="pips pips-key"><i class="on"></i></span> 동료로 올린 것)</small></h4><div class="skillgrid" style="grid-template-columns:1fr 1fr">' +
+      G.SKILLS.map(function (sk) { var own = p.sk[sk.id] || 0, eff = R.skill(sk.id); return '<div class="flex" style="font-size:16px;gap:6px" title="' + sk.desc + '"><span style="width:70px">' + sk.name + '</span>' + pipsOwn(own, eff) + '</div>'; }).join('') + '</div></div></div>' +
       '<div class="sep"></div><h4 style="margin:0 0 8px">숨은 능력 <small class="muted">(제독 본인의 LV3 특기 조합)</small></h4>' + (G.SkillCombos ? G.SkillCombos.html() : '') +
       '<div class="sep"></div><h4 style="margin:0 0 8px">언어</h4><div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:16px">' +
-      G.LANGS.map(function (l, i) { var own = p.lg[i] || 0, eff = R.lang(i); if (!eff) return ''; return '<span>' + l + ' ' + pips(eff) + (eff > own ? '<small class="muted"> 통역</small>' : '') + '</span>'; }).join('') + '</div>' +
+      G.LANGS.map(function (l, i) { var own = p.lg[i] || 0, eff = R.lang(i); if (!eff) return ''; return '<span>' + l + ' ' + pipsOwn(own, eff) + (eff > own ? '<small class="muted"> 통역</small>' : '') + '</span>'; }).join('') + '</div>' +
       interpBook() + '</div></div>';
     if (G.Growth) html += G.Growth.html();   // 경험과 성장 (js/systems/growth.js)
     el.innerHTML = html;

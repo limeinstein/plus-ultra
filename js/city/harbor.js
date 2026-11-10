@@ -47,17 +47,49 @@
   /** 함대의 배 하나를 이 항구 도크에 맡긴다 */
   async function dockIn(c) {
     var s = S(), D = G.Dock;
-    if (s.fleet.ships.length < 2) { UI.toast('기함은 도크에 맡길 수 없습니다. 맡길 배가 없습니다.', 'info'); return false; }
-    if (D.full(c)) { UI.toast('이 항구 도크가 가득 찼습니다. (' + D.note(c) + ')', 'info'); return false; }
-    var k = await pickShip('도크에 맡길 배 (' + D.note(c) + (D.isHome(c) ? ' · 모항' : ' · ' + Math.round(D.keepDays() / 365) + '년 뒤 폐기') + ')', s.fleet.ships.slice(1)); if (k == null) return false;
-    var rs = s.fleet.ships[k + 1];
-    if (R.used() > R.fleetCap() - R.shipCargoCap(rs)) { UI.toast('짐이 너무 많아 이 배를 뺄 수 없습니다.', 'info'); return false; }
+    // 맡길 수 없으면 까닭을 창으로 (2026-11-10 사용자 제보 「모항 도크에 3척밖에 안 들어간다」 — 짐·한도·기함 가운데 무엇이 막는지)
+    if (s.fleet.ships.length < 2) { await UI.alert('맡길 배가 없습니다.<br><small class="muted">기함은 제독이 타는 배라 도크에 맡길 수 없습니다. 함대에 기함 말고 다른 배가 있어야 합니다.</small>', '도크에 맡길 수 없음'); return false; }
+    if (D.full(c)) { await UI.alert(D.fullWhy(c), '도크에 맡길 수 없음'); return false; }
+    var ships = s.fleet.ships.slice(1), overs = ships.map(dockOver);
+    if (overs.every(function (o) { return o > 0; })) { await UI.alert(cargoWhy(ships, overs), '도크에 맡길 수 없음'); return false; }
+    var k = await UI.choose('도크에 맡길 배 (' + D.note(c) + (D.isHome(c) ? ' · 모항' : ' · ' + Math.round(D.keepDays() / 365) + '년 뒤 폐기') + ')', ships.map(function (sh, i) {
+      var o = overs[i];
+      return { label: U.esc(sh.name) + '호', right: G.SHIP[sh.type].name + ' · 적재 ' + U.num(R.shipCargoCap(sh)) + '통 · 내구 ' + Math.round(sh.hp) + '/' + sh.maxHp + (o > 0 ? ' · <span class="warn-text">짐 ' + U.num(o) + '통 넘침</span>' : ''), value: i, icon: 'ship',
+        desc: o > 0 ? '이 배를 빼면 남은 배들의 짐칸이 ' + U.num(o) + '통 모자랍니다.' : '' };
+    }), { width: 760, text: '<span style="font-size:16px">' + D.capWhy(c) + ' (' + D.note(c) + ', 빈자리 ' + D.free(c) + '척)<br>실은 짐 ' + U.num(R.used()) + '/' + U.num(R.fleetCap()) + '통 — ' + loadText() + '</span>' });
+    if (k == null) return false;
+    var rs = ships[k];
+    if (dockOver(rs) > 0) { await UI.alert(cargoWhy([rs], [dockOver(rs)]), '도크에 맡길 수 없음'); return false; }
     s.fleet.ships.splice(k + 1, 1);
     D.put(c, rs);
     trimCrew();
     UI.toast(rs.name + '호를 ' + c.name + ' 도크에 맡겼다.' + (D.isHome(c) ? '' : ' ' + Math.round(D.keepDays() / 365) + '년 안에 찾으러 오지 않으면 폐기된다.'), 'anchor', 4200);
     return true;
   }
+  /** 이 배를 함대에서 빼면 남은 배들의 짐칸에 들어가지 않는 짐 (0이면 뺄 수 있다) — 짐 = 교역품·식량·물·자재·의뢰 짐 (R.used) */
+  function dockOver(rs) { return Math.max(0, R.used() - (R.fleetCap() - R.shipCargoCap(rs))); }
+  function loadText() {
+    var f = S().fleet, q = G.Quest ? G.Quest.load() : 0, out = [];
+    [['교역품', R.cargoQty()], ['식량', Math.ceil(f.food || 0)], ['물', Math.ceil(f.water || 0)], ['자재', Math.ceil(f.mat || 0)], ['의뢰 짐', q]].forEach(function (x) { if (x[1] > 0) out.push(x[0] + ' ' + U.num(x[1]) + '통'); });
+    return out.length ? out.join(' · ') : '짐 없음';
+  }
+  /** 짐 때문에 뺄 수 없을 때의 설명 (HTML) */
+  function cargoWhy(ships, overs) {
+    var best = 0; overs.forEach(function (o, i) { if (o < overs[best]) best = i; });
+    var sh = ships[best], left = R.fleetCap() - R.shipCargoCap(sh);
+    return '<b>짐이 많아 ' + (ships.length > 1 ? '어느 배도' : U.esc(sh.name) + '호를') + ' 함대에서 뺄 수 없습니다.</b><br>' +
+      '실은 짐 <b>' + U.num(R.used()) + '통</b> (' + loadText() + ') · 함대 적재량 ' + U.num(R.fleetCap()) + '통<br>' +
+      U.esc(sh.name) + '호(적재 ' + U.num(R.shipCargoCap(sh)) + '통)를 빼면 적재량이 ' + U.num(left) + '통이 되어 <b class="warn-text">' + U.num(overs[best]) + '통</b>이 넘칩니다.' +
+      '<br><small class="muted">교역소에서 짐을 팔거나, 식량·물을 덜 실으면 맡길 수 있습니다. 식량·물·자재도 짐칸을 차지합니다.</small>';
+  }
+  H.dockWhy = function (c) {   // 도크 창에 보여 줄 한 줄: 지금 맡길 수 있는지
+    var s = S(), D = G.Dock, ships = s.fleet.ships.slice(1);
+    if (!ships.length) return '기함 말고는 맡길 배가 없습니다.';
+    if (D.full(c)) return '도크가 가득 찼습니다 — ' + D.capWhy(c) + '.';
+    var ok = ships.filter(function (sh) { return dockOver(sh) <= 0; }).length;
+    if (!ok) return '짐이 많아 지금은 어느 배도 뺄 수 없습니다 (실은 짐 ' + U.num(R.used()) + '/' + U.num(R.fleetCap()) + '통).';
+    return '지금 맡길 수 있는 배 ' + ok + '/' + ships.length + '척 · 빈자리 ' + D.free(c) + '척' + (ok < ships.length ? ' (나머지는 빼면 짐이 넘침)' : '');
+  };
   /** 이 항구 도크의 배 하나를 함대에 넣는다 */
   async function dockOut(c) {
     var s = S(), D = G.Dock, dock = D.list(c);
@@ -79,6 +111,7 @@
     for (;;) {
       var dock = D.list(c), yrs = Math.round(D.keepDays() / 365);
       var html = '<div style="font-size:16px;margin-bottom:8px" class="muted">함대에서 뺀 배를 도크에 맡겨 둡니다. 모항(' + U.esc((G.CITY_DATA[s.player.home] || {}).name || '') + ') 도크에는 ' + D.cap(s.player.home) + '척까지 기한 없이, 다른 항구 도크에는 ' + (D.isHome(c) ? D.cap(-1) : D.cap(c)) + '척까지 맡길 수 있고 ' + yrs + '년이 지나면 폐기됩니다.</div>' +
+        '<div style="font-size:16px;margin-bottom:8px">' + U.esc(H.dockWhy(c)) + '</div>' +
         '<h4 style="margin:4px 0 6px">' + U.esc(c.name) + ' 도크 — ' + dock.length + '/' + D.cap(c) + '척' + (D.isHome(c) ? ' <span class="tag">모항</span>' : '') + '</h4>' +
         (dock.length ? '<table class="tbl"><tr><th></th><th>선명</th><th>선종</th><th>기한</th><th class="num">내구력</th><th class="num">선원</th><th class="num">적재</th><th class="num">대포</th></tr>' +
           dock.map(function (sh) { return shipRow(sh, '도크', D.leftText(c, sh)); }).join('') + '</table>' : '<div class="muted">맡긴 배가 없습니다.</div>');

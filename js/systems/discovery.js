@@ -156,7 +156,8 @@
   };
   D.valueK = function (d) { return D.valueParts(d).k; };
   D.value = function (d) { return Math.round(d.val * D.valueK(d) * D.mirageK(d)); };
-  D.fameFor = function (d) { var combo = G.SkillCombos ? G.SkillCombos.bonus('discoveryReward') : 0; return Math.round(D.value(d) / 26 + d.pw * 30 * D.mirageK(d) * (1 + combo)); };   // 숨은 능력의 「발견 명성 +N%」가 pw 몫에도 같이 붙게
+  D.rewardK = function (kind) { var r = G.BALANCE && G.BALANCE.discoveryReward; return (r && r[kind]) || 1; };   // 발견 보상 배수 (G.BALANCE.discoveryReward — 2026-11-10 1.8배)
+  D.fameFor = function (d) { var combo = G.SkillCombos ? G.SkillCombos.bonus('discoveryReward') : 0; return Math.round((D.value(d) / 26 + d.pw * 30 * D.mirageK(d) * (1 + combo)) * D.rewardK('fame')); };   // 숨은 능력의 「발견 명성 +N%」가 pw 몫에도 같이 붙게
   /** 현장 기록 보너스 — 유적은 그림(정밀한 도판)·세공(짜임·재료 기록)에 밝은 사람이 있으면 명성이 더 오른다.
       값어치(D.value)와 따로, 명성에만 곱한다. 발견 순간·후원자 보고·늦은 보고에 모두 쓴다. d 없이 부르면 1(옛 호출과 호환). */
   D.RECORD_K = { art: 0.05, craft: 0.04 };
@@ -314,7 +315,7 @@
     // 유물이 없는 보물·유적 발견은 예전처럼 값나가는 것을 조금 챙긴다 (세공 솜씨만큼 더)
     var loot = 0;
     if (!rel.length && !tomb.stolen && !mir && (d.cat === 'treasure' || d.cat === 'ruin')) {
-      loot = Math.round(D.value(d) * (0.05 + (R.skillRead ? R.skillRead('craft') : R.skill('craft')) * 0.02) * (st.rival ? 0.5 : 1));
+      loot = Math.round(D.value(d) * (0.05 + (R.skillRead ? R.skillRead('craft') : R.skill('craft')) * 0.02) * (st.rival ? 0.5 : 1) * D.rewardK('gold'));
       if (loot > 0) s.player.gold += loot;
     }
     G.State.log(d.name + U.j(d.name, '을/를').slice(d.name.length) + (mir ? ' 신기루로 보았다. 아직 세상에 없는 것이 잠시 떠올랐다가 흩어졌다. (발견으로 기록)' : ' 발견했다.'));

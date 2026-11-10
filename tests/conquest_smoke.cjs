@@ -81,7 +81,7 @@ fs.mkdirSync(OUT, { recursive: true });
       s = fresh(); const originalOwner = G.R.cityOwner(by('예루살렘'));
       check(await Q.assault(by('예루살렘')), '수비대와 두 차례 증원 격퇴 후 점령');
       check(calls.length === 3 && calls.map(x => x.n).join() === '8000,4000,4000' && calls.map(x => x.party).join() === '2000,1990,1980' && calls.every(x => x.o.conquest && x.owner === originalOwner), '실제 인원 증원·아군 손실 누적·마지막 승리 전 소유권 유지');
-      check(G.R.cityOwner(by('예루살렘')) === '포르투갈' && s.conquests[120].from === originalOwner && s.fleet.crew === 1970 && s.loc.party == null && s.player.notoriety === 15, '점령국·이전 소유국 기록 / 선원 손실·임시 대원 정리');
+      check(G.R.cityOwner(by('예루살렘')) === '포르투갈' && s.conquests[120].from === originalOwner && s.fleet.crew === 1970 && s.loc.party == null && s.player.notoriety === 15 + Q.reward(by('예루살렘')).notoriety && Q.reward(by('예루살렘')).fame === 1500 && (G.Fame ? G.Fame.get('bt') : s.player.fame) >= 1500, '점령국·이전 소유국 기록 / 선원 손실·임시 대원 정리 / 점령 명성 1500·악명 (2026-11-10)');
       check(!C.entryCheck(by('예루살렘')), '점령 후 예전 이교도 출입 금지 해제');
       const serialized = G.State.serialize(); G.Game.state = G.State.deserialize(serialized); s = G.Game.state;
       s.date = { y: 1517, m: 1, d: 1 };

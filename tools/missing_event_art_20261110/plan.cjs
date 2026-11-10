@@ -50,6 +50,11 @@ const histReuse={
 };
 const history=audit.history.map(e=>({id:'world_'+String(e.index).padStart(2,'0'),key:histReuse[e.index]||'legend-events/world_'+String(e.index).padStart(2,'0')+'_20261110',name:e.text.split('.')[0],category:'scenes',kind:'world',index:e.index,reuse:!!histReuse[e.index],transparent:false,
  prompt:cinematic+'Specific historical news event: '+e.text+'. Date: '+e.y+'-'+(e.m||1)+'-'+(e.d||1)+'. Depict the actual location, ships or formal historical principals and action in this event, as a clear narrative scene. Use clothing, vessels and buildings appropriate to that year and region.'}));
+const refinementsFile=path.join(__dirname,'scene-refinements.json');
+if(fs.existsSync(refinementsFile)){
+  const refinements=JSON.parse(fs.readFileSync(refinementsFile,'utf8'));
+  [...stories,...relations,...history].forEach(row=>{if(refinements[row.id])row.prompt=refinements[row.id].prompt;});
+}
 const plan={date:'2026-11-10',mode:'built-in image_gen',portraits,scenes:[...stories,...relations.filter(x=>!x.reuse),...history.filter(x=>!x.reuse)],relations,history,reusedRelations:relations.filter(x=>x.reuse),reusedHistory:history.filter(x=>x.reuse)};
 fs.mkdirSync(OUT,{recursive:true});fs.writeFileSync(path.join(OUT,'plan.json'),JSON.stringify(plan,null,2));
 fs.writeFileSync(path.join(ROOT,'tools/missing_event_art_20261110/prompts.json'),JSON.stringify(plan,null,2));

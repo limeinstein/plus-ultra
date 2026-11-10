@@ -396,6 +396,8 @@ table.tbl .up { color: #8a2a1e; } table.tbl .down { color: #2e6a36; }
 .pips i { width: 14px; height: 14px; border: 1px solid rgba(90,65,35,.55); transform: rotate(45deg) scale(.8); background: rgba(255,255,255,.3); }
 .pips i.on { background: linear-gradient(135deg, #3d679a, #1e3552); border-color: #1e3552; }
 .pips i.base { background: linear-gradient(135deg, #b8925a, #7a5c33); border-color: #7a5c33; }
+.pips i.on.own { background: linear-gradient(135deg, #c8473a, #7a1e1e); border-color: #6a1616; }   /* 제독 본인 단계 — 동료로 올린 단계(파랑)와 나눈다 (수첩 「제독」) */
+.pips.pips-key { display: inline-flex; vertical-align: -2px; } .pips.pips-key i { width: 11px; height: 11px; }
 .mini { width: 30px; height: 28px; font-size: 16px; padding: 0; min-height: 0; }
 
 /* ---------------------------------------------------------------- city screen */
@@ -2120,3 +2122,22 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .yships .yrow .sl { letter-spacing: .08em; }
 .yships .ysub { margin: 5px 0 0; }
 .yships .ysub .yx { font-size: 14px; color: #6a5236; margin-left: 8px; }
+
+/* 식당 현상수배 벽보. 낡은 종이와 초상은 한 장의 무채색 그림이며 글은 현재 현상금을 따른다. */
+.wp-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.wp-card { appearance:none; display:flex; flex-direction:column; padding:0; margin:0; min-width:0; border:0; border-radius:0; background:#252624; color:#eee; cursor:pointer; font:inherit; box-shadow:1px 3px 5px #0005; }
+.wp-card:hover, .wp-card:focus-visible { outline:2px solid #e4d4a9; outline-offset:2px; }
+.wp-sheet { container-type:inline-size; isolation:isolate; position:relative; display:block; width:100%; aspect-ratio:2/3; overflow:hidden; color:#242424; background:#dbdbd8; text-align:center; font-family:Batang,"바탕",serif; text-shadow:none; }
+.wp-face { position:absolute; inset:0; z-index:-1; }
+.wp-face canvas { width:100%; height:100%; display:block; }
+.wp-head { position:absolute; top:4%; left:10%; right:10%; font-size:12cqw; font-weight:900; line-height:1.18; letter-spacing:.13em; text-indent:.13em; border-bottom:1px solid #333a; padding-bottom:2%; }
+.wp-caption { position:absolute; left:0; right:0; bottom:0; padding:4% 6%; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:1cqw; line-height:1.18; background:linear-gradient(to bottom,transparent,#dcdcdcbd 22%,#dcdcdc70 90%,transparent); }
+.wp-name { font-size:min(8.1cqw,calc(86cqw / var(--wp-name-length))); white-space:nowrap; }
+.wp-band { font-size:6.4cqw; }
+.wp-pay { width:88%; margin-top:1%; padding-top:2%; border-top:1px solid #333a; font-size:8.4cqw; white-space:nowrap; }
+.wp-stamp { position:absolute; left:50%; top:58%; transform:translateX(-50%) rotate(-12deg); font-weight:bold; font-size:11cqw; letter-spacing:.08em; border:3px double #343434; color:#333; background:#eee9; padding:0 .2em; }
+.wp-meta { flex:1; display:flex; width:100%; box-sizing:border-box; gap:5px; align-items:center; justify-content:center; padding:3px 5px; font-size:13px; line-height:1.2; }
+.wp-meta canvas { display:block; width:26px; height:26px; }
+.wp-big { display:flex; align-items:flex-start; gap:20px; padding:16px; background:#deded9; color:#302f2d; }
+.wp-detail-sheet { flex:0 0 250px; box-shadow:1px 3px 5px #0004; }
+@media(max-width:650px) { .wp-grid{grid-template-columns:repeat(2,minmax(0,1fr))} .wp-detail-sheet {flex-basis:38%} }

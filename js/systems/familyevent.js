@@ -65,7 +65,7 @@
   function byAge(a, b) { return Fm().kidAge(b) - Fm().kidAge(a); }
   /** 집에 있는 아이들 [이름 있는 3살 넘은 아이, 갓난아기] — w 가 있으면 그 둘째 부인의 집 */
   FE.homeKids = function (w) {
-    var p = P(), list = (w ? (G.Wives ? G.Wives.kidsOf(w) : []) : (p.kids || []).filter(function (k) { return !k.aboard && k.house == null; }))
+    var p = P(), list = (w ? (G.Wives ? G.Wives.kidsOf(w) : []) : (p.kids || []).filter(function (k) { return !k.aboard && k.house == null && !k.away; }))
       .filter(function (k) { return !k.married && !k.lost; });   // 시집간 딸·섬에서 사라진 아이는 집 장면에 나오지 않는다 (2026-10-26)
     return { kids: list.filter(named).sort(byAge), babies: list.filter(function (k) { return !named(k); }) };
   };

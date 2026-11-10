@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+교역 업적샷 6종(2026-11-10)은 `achievement-events/bigdeal_{eu,af,as,am,oc}.webp`·`tradeking.webp`의 1881×836 장면을 쓴다. 지역별 항구와 거래 물품을 구분하며 업적 달성 대화·도감에 함께 연결했다. [미리보기](../artifacts/trade-achievement-shots-20261110/preview.jpg) · [제작 지시문](../tools/trade_achievement_shots_20261110_prompts.json).
+
 2026-11-09 네덜란드 2명·벨기에 2명·독일 3명은 `maid-styles/lowlands/2~5`·`germany/9~11`에 추가했다. 각 키의 `.webp`는 448×448 얼굴상, `_half.webp`는 같은 원화의 1024×1536 투명 무릎상이다. [미리보기·참고 비교·생성 지시문·14장 묶음](../docs/art/lowlands-german-maids-20261109.md).
 
 이집트·튀니지·알제리 여급 7쌍(2026-11-09)은 `maid-styles/arabia/20~26`에 추가했다. 각 `.webp`는 448×448 얼굴상, `_half.webp`는 1024×1536 투명 무릎상이며 같은 원화의 얼굴·표정·의상을 쓴다. [전체 미리보기·생성 프롬프트·14장 묶음·검증](../docs/art/northafrica-maids-20261109.md).

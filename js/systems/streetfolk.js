@@ -185,7 +185,8 @@
         // 한 칸(380×444)은 어른 키에 맞춰 그렸고, 아이·짐승은 칸 안에서 이미 작다 (tools/npc_walks.py displayScale) — 칸 높이는 모두 같게
         var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height, cw = fr.c != null ? iw / 4 : iw, ch = fr.c != null ? ih / 2 : ih;
         var h = (k0().imgH || 158) * f.sc, w = cw * h / ch;
-        ctx.save(); ctx.fillStyle = 'rgba(40,26,12,.28)'; ctx.beginPath(); ctx.ellipse(x, f.y - 2, w * 0.3, 7, 0, 0, 7); ctx.fill();
+        ctx.save();
+        A.drawGroundShadow(ctx, x, f.y - 2, w * 0.38, Math.max(9, h * 0.07), G.FX.streetShadow.folk);
         ctx.translate(x, f.y); if (f.dir < 0) ctx.scale(-1, 1);
         if (fr.c != null) ctx.drawImage(img, (fr.c % 4) * cw, Math.floor(fr.c / 4) * ch, cw, ch, -w / 2, -h, w, h);   // 시트의 한 칸
         else ctx.drawImage(img, -w / 2, -h, w, h);

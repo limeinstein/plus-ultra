@@ -106,13 +106,13 @@
     var SN = { str: '체력', int: '지력', mar: '무력', cha: '매력' };
     ['str', 'int', 'mar', 'cha'].forEach(function (x) {
       if (!fx[x]) return; if (!k.st) k.st = { str: 55, int: 55, mar: 55, cha: 55 };
-      var b = k.st[x] || 55; k.st[x] = Math.max(1, Math.min(90, b + fx[x])); if (k.st[x] !== b) out.push(SN[x] + ' ' + (fx[x] > 0 ? '+' : '') + fx[x]);
+      var b = k.st[x] || 55, gx = G.KidGrow ? G.KidGrow.statAdd(k, x, fx[x]) : (k.st[x] = Math.max(1, Math.min(90, b + fx[x])), k.st[x] - b); if (gx) out.push(SN[x] + ' ' + (gx > 0 ? '+' : '') + gx);   // 타고난 그릇과 운 (js/systems/kidgrow.js)
     });
     if (fx.sk) {
       if (!k.sk) k.sk = {};
       Object.keys(fx.sk).forEach(function (id) {
         var cap = fx.sk[id], cur = k.sk[id] || 0; if (cur >= cap) return;
-        k.sk[id] = cur + 1;
+        if (G.KidGrow) { if (!G.KidGrow.skill(k, id, 0.8, cap)) return; } else k.sk[id] = cur + 1;
         var nm = (G.SKILLS.filter(function (x) { return x.id === id; })[0] || {}).name || id;
         out.push(nm + ' ' + k.sk[id]);
       });

@@ -7,6 +7,34 @@
   var A = G.Art, U = G.U;
   var INK = '#2a1d12';
 
+  // 발을 기준으로 바닥에 남는 부드러운 그림자. lift는 인물이 바닥에서 뜬 거리(px).
+  A.drawGroundShadow = function (ctx, x, y, rx, ry, opacity, lift) {
+    lift = Math.max(0, lift || 0);
+    var cast = G.FX.groundShadow;
+    var spread = 1 + Math.min(lift, cast.maxLift) * cast.liftSpread;
+    ctx.save();
+    ctx.globalAlpha *= (opacity == null ? 1 : opacity) / (1 + lift * cast.liftFade);
+    ctx.translate(x, y);
+    ctx.save();
+    ctx.translate(rx * cast.castX, ry * cast.castY);
+    ctx.scale(rx * cast.castWidth * spread, ry * cast.castDepth * spread);
+    var longShade = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    longShade.addColorStop(0, 'rgba(31,20,14,' + cast.castOpacity + ')');
+    longShade.addColorStop(0.55, 'rgba(31,20,14,' + cast.castOpacity * 0.65 + ')');
+    longShade.addColorStop(1, 'rgba(31,20,14,0)');
+    ctx.fillStyle = longShade;
+    ctx.beginPath(); ctx.arc(0, 0, 1, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    ctx.scale(rx * spread, ry * spread);
+    var shade = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+    shade.addColorStop(0, 'rgba(31,20,14,' + cast.coreOpacity + ')');
+    shade.addColorStop(0.45, 'rgba(31,20,14,' + cast.midOpacity + ')');
+    shade.addColorStop(1, 'rgba(31,20,14,0)');
+    ctx.fillStyle = shade;
+    ctx.beginPath(); ctx.arc(0, 0, 1, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  };
+
   // ---------------------------------------------------------------- 생김새
   var SKIN = {
     europe: ['#f1cfae', '#e8c09b', '#ddb08a', '#f3d6bb'], islam: ['#d8a878', '#c99766', '#b98757', '#e0b48a'],
@@ -157,8 +185,6 @@
       circle(ctx, p[2][0], p[2][1], H * 0.024, back ? shade(s.skin, -0.15) : s.skin);
       return p;
     }
-    // 그림자
-    ctx.fillStyle = 'rgba(40,26,12,.28)'; ctx.beginPath(); ctx.ellipse(0, 0, H * 0.17, H * 0.03, 0, 0, 7); ctx.fill();
     // 망토 (뒤)
     if (s.cape || s.cloak) fillPath(ctx, [[shX - H * 0.05, shY], [shX - H * 0.16 - Math.sin(t) * 3 * sw, hipY + H * 0.12], [shX - H * 0.02, hipY + H * 0.1]], s.cape || s.cloak);
     if (s.pack) fillPath(ctx, [[shX - H * 0.13, shY + H * 0.02], [shX - H * 0.2, shY + H * 0.06], [shX - H * 0.19, shY + H * 0.2], [shX - H * 0.08, shY + H * 0.2]], '#6a4a2a');
@@ -288,7 +314,6 @@
   function animal(ctx, s, ph, moving) {
     var H = s.h, t = ph * Math.PI * 2, sw = moving ? 1 : 0, cat = s.type === 'cat';
     var L = H * (cat ? 1.6 : 1.5), bodyY = -H * 0.62, legL = H * 0.5;
-    ctx.fillStyle = 'rgba(40,26,12,.25)'; ctx.beginPath(); ctx.ellipse(0, 0, L * 0.55, H * 0.07, 0, 0, 7); ctx.fill();
     function legAt(x, phase, back) { var a = Math.sin(phase) * 0.5 * sw; seg(ctx, [[x, bodyY + H * 0.1], [x + Math.sin(a) * legL * 0.5, bodyY + H * 0.1 + legL * 0.5], [x + Math.sin(a * 0.6) * legL * 0.7, -H * 0.02]], H * (cat ? 0.09 : 0.12), back ? shade(s.fur, -0.25) : s.fur); }
     legAt(L * 0.32, t + Math.PI, true); legAt(-L * 0.3, t, true);
     // 꼬리
@@ -313,10 +338,15 @@
 
   /** 마을 사람 한 명을 그린다: (x, y) = 발 가운데, dir: 1 오른쪽 · −1 왼쪽, ph 걸음 0~1, sc 크기 */
   A.drawFolk = function (ctx, s, x, y, dir, ph, moving, sc, glow) {
-    ctx.save();
-    ctx.translate(x, y); if (dir < 0) ctx.scale(-1, 1); if (sc && sc !== 1) ctx.scale(sc, sc);
-    try { if (s.type === 'dog' || s.type === 'cat') animal(ctx, s, ph, moving); else person(ctx, s, ph, moving); } catch (e) { /* 그리다 틀려도 거리는 돈다 */ }
-    ctx.restore();
+    if (s.type !== 'none') {
+      var h = s.h * (sc || 1), beast = s.type === 'dog' || s.type === 'cat';
+      A.drawGroundShadow(ctx, x, y, beast ? h * (s.type === 'cat' ? 1.6 : 1.5) * 0.67 : h * 0.26,
+        beast ? h * 0.16 : h * 0.072, G.FX.streetShadow.folk);
+      ctx.save();
+      ctx.translate(x, y); if (dir < 0) ctx.scale(-1, 1); if (sc && sc !== 1) ctx.scale(sc, sc);
+      try { if (beast) animal(ctx, s, ph, moving); else person(ctx, s, ph, moving); } catch (e) { /* 그리다 틀려도 거리는 돈다 */ }
+      ctx.restore();
+    }
     if (glow) { ctx.save(); ctx.strokeStyle = 'rgba(255,236,170,.9)'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.ellipse(x, y, s.h * (sc || 1) * 0.26, s.h * (sc || 1) * 0.06, 0, 0, 7); ctx.stroke(); ctx.restore(); }
   };
 })(window.G = window.G || {});

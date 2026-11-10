@@ -1,5 +1,5 @@
 /* 그림 연결 점검 (2026-10-10)
-   · 유물 1,109종은 전용 유물·선수상·발견 그림으로, 민족 유물 18종은 기본 코드 그림으로
+   · 유물 1,109종은 전용 유물·선수상·발견 그림으로
    · 새 항해사 얼굴 6명(보쿠덴·첸·김·키스크·말린체·투팍) 흉상·무릎상
    · 얼굴과 다른 몸을 포갠 옛 합성 묶음은 부하 표시에 쓰지 않는다
    · 역사·종교 발견물 216곳(GIF·끝 장면·시트) · 대화창에 완성된 얼굴상·무릎상 한 쌍이 실제로 선다 · 콘솔 오류 0
@@ -54,8 +54,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         borrowN: borrowers.length, badBorrowedPair, pairedId: borrowedPairs.length ? borrowedPairs[0].id : null, ruinN: ruins.length, discMiss,
         slaves: I.pick(K.good(G.GOOD.slaves)) };
     }, CINEMATIC_IDS);
-    const folkRelics = ['tibet','hui','manchu','gaoshan','miao','yao','shui','buyei','zhuang','yi','lachi','lolo','lue','mnong','samoa','tonga','tahiti','rapanui'].map(id => 'r_folk_' + id);
-    ok(r.relicN === 1109 && JSON.stringify([...r.relicMiss].sort()) === JSON.stringify(folkRelics.sort()) && !r.relicNoFallback.length, '유물 ' + r.relicN + '종: 전용 그림 1,091종·민족 유물 18종의 기본 코드 그림');
+    ok(r.relicN === 1109 && !r.relicMiss.length, '유물 ' + r.relicN + '종 모두 전용 유물·선수상·발견 그림 연결');
     ok(r.goodN === 158 && !r.goodMiss.length && r.slaves === 'goods/slaves', '교역품 ' + r.goodN + '종 모두 전용 그림 (노예 → ' + r.slaves + ') ' + r.goodMiss.join(','));
     ok(!r.mateMiss.length, '새 항해사 얼굴 6명 흉상·무릎상 ' + r.mateMiss.join(','));
     ok(!r.badBorrowedPair.length, '전용 그림 없는 항해사 ' + r.borrowN + '명도 합성 묶음 없이 완성된 얼굴상·무릎상 한 쌍으로 선다');

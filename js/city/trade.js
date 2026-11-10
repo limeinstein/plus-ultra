@@ -276,6 +276,7 @@
         var tot = 0, profit = 0; ids.forEach(function (id) { var sold = sellQty(c, id, s.fleet.cargo[id].q); tot += sold.total; profit += sold.profit; });
         UI.toast('짐을 모두 팔아 금화 ' + U.num(tot) + '닢을 받았다.', 'coin');
         tradePaid(profit); soldAny = true;
+        await bigDeal(c, profit);
         continue;
       }
       if (v !== 'pick' || !picked) return;
@@ -286,8 +287,11 @@
       var sold = sellQty(c, picked, q);
       UI.toast(g.name + ' ' + q + '통을 팔아 금화 ' + U.num(sold.total) + '닢을 받았다.', 'coin');
       tradePaid(sold.profit); soldAny = true;
+      await bigDeal(c, sold.profit);
     }
   };
+  /** 한 번의 매각 이익 → 대륙의 「대단한 거래」·「교역왕」 (js/systems/tradeking.js) */
+  async function bigDeal(c, profit) { if (G.TradeKing) { try { await G.TradeKing.sold(c, profit); } catch (e) { console.error(e); } } }
   function tradePaid(profit) {
     if (G.Audio) G.Audio.sfx('unload');
     if (profit > 0 && G.TradeFX) setTimeout(function () { if (G.TradeFX) G.TradeFX.profit(profit); }, 260);
@@ -704,6 +708,7 @@
       G.Game.refreshHud();
       UI.toast('짐 ' + rs.filter(function (r) { return r.q; }).length + '가지를 한꺼번에 팔아 금화 ' + U.num(tot2) + '닢을 받았다.' + (bonusAll ? ' (일괄 웃돈 +' + U.num(bonusAll) + ')' : ''), 'coin', 5200);
       tradePaid(profit);
+      await bigDeal(c, profit);
       return true;
     }
   };

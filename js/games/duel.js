@@ -532,8 +532,6 @@
         if (pose === 'down') { var fallQ = smooth((k * downDuration() * 1000 - D.downMs[0]) / (D.downMs[1] + D.downMs[2])); ctx.translate(0, -10 * fallQ); ctx.rotate(-face * Math.PI / 2 * fallQ); }
         if (pose === 'kneel') ctx.translate(0, 22);
         ctx.scale(face, 1);
-        // 그림자
-        ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(0, 2, 34, 7, 0, 0, 7); ctx.fill();
         // 다리
         var stepA = pose === 'run' ? Math.sin(t * 16) * 0.6 : pose === 'lunge' ? 0.7 : pose === 'hit' ? -0.3 : 0.28, legL = 46;
         ctx.strokeStyle = L.pants; ctx.lineWidth = 11; ctx.lineCap = 'round';
@@ -711,6 +709,12 @@
         if (slow || now < tintUntil) ctx.filter = 'saturate(' + (slow ? 0.7 : saturation) + ')';
         drawScene(t); ctx.restore();
         var gy = H * 0.86;
+        [me, en].forEach(function (f) {
+          if (motionFighter === f || (f.spriteKey && !f.spriteImg && I && I.pending(f.spriteKey))) return;
+          var radius = f.spriteImg ? D.shadow.spriteRadius : D.shadow.fallbackRadius;
+          if (f.pose === 'down') radius *= D.shadow.downSpread;
+          A.drawGroundShadow(ctx, fighterX(f), gy + D.shadow.y, radius, D.shadow.depth, D.shadow.opacity, -(f.ky || 0));
+        });
         if (motionFighter !== me) drawFighter(me, W / 2 - 160, gy, 1, t);
         if (motionFighter !== en) drawFighter(en, W / 2 + 160, gy, -1, t);
         if (en.pose === 'wind' && en.pt >= 0.45 && motionFighter !== en) {

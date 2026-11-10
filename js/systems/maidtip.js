@@ -1,6 +1,7 @@
 /* 여급의 귀띔 — 사례를 하고 바다의 배·떠돌이 항해사의 행방을 묻는다 (G.MaidTip) 2026-10-22 사용자 요청
    · 술집 여급 메뉴 「사례하고 소식을 묻는다」(js/city/tavern.js T.maid). 호감(친밀도)이 minAff 아래면 아무것도 묻지 못한다.
-   · 물을 수 있는 것: 상선대 · 군함대 · 해적 · 철새(떠돌이 항해사).
+   · 물을 수 있는 것: 상선대 · 군함대 · 해적 · 이름난 해적의 소문(2026-11-10, 현상수배된 두목 — js/systems/pirate_wanted.js) · 철새(떠돌이 항해사).
+     식당 손님에게 들은 해적 소문(G.Wanted.gossip)도 같은 장부에 적는다 (tip.who = '식당 손님', 기한이 짧다).
      - 배: 그 도시에서 멀지 않은 항구 앞바다를 짚어 「○○ 앞바다, 이곳에서 ○쪽으로 ○일쯤 · ○일 안에」라고 일러 준다.
        그 앞바다(near° 안)에 기한 안에 들어가면 그 배들이 정말 나타난다 (js/scenes/sea.js spawnNpcs → MT.spawn). 한 번 나타나면 끝.
        상선대는 짐이 무거워 느리고 전리품이 많다 · 해적은 이름난 두목이 붙기 쉽다(현상금) · 군함대는 어느 나라 배인지 미리 안다.
@@ -42,6 +43,7 @@
     merchant: { label: '상선대의 행방', icon: 'sack', desc: '짐을 가득 실은 상선대가 지나는 앞바다' },
     navy: { label: '군함대의 행방', icon: 'flag', desc: '어느 나라 군함이 어디를 지키는지' },
     pirate: { label: '해적의 행방', icon: 'skull', desc: '해적 떼가 숨어 기다리는 앞바다' },
+    named: { label: '이름난 해적의 소문', icon: 'skull', desc: '현상수배된 해적 두목이 어느 앞바다에 나타났는지 (js/systems/pirate_wanted.js)' },
     wander: { label: '철새(떠돌이 항해사)의 행방', icon: 'people', desc: '어느 도시 술집에 머무는지' }
   };
   MT.KIND = KIND;
@@ -51,7 +53,8 @@
     var k = K(), aff = Math.max(k.minAff, st.aff || 0), a = (aff - k.minAff) / Math.max(1, 100 - k.minAff);
     var affK = k.affK[0] + (k.affK[1] - k.affK[0]) * a;
     var metK = Math.max(k.metMin, 1 - (st.met || 0) * k.metK);
-    return Math.max(20, Math.round(k.base[kind] * (1 + (c.size || 1) * k.sizeK) * affK * metK / 10) * 10);
+    var base = k.base[kind] != null ? k.base[kind] : kind === 'named' ? ((G.BALANCE.wanted && G.BALANCE.wanted.maid) || 650) : 300;
+    return Math.max(20, Math.round(base * (1 + (c.size || 1) * k.sizeK) * affK * metK / 10) * 10);
   };
   MT.canAsk = function (st) { return (st.aff || 0) >= K().minAff; };
 
@@ -101,15 +104,23 @@
   }
 
   /** 배의 소식을 하나 만든다 → tip (못 만들면 null) */
-  MT.make = function (kind, c, m, st) {
-    var s = S(), k = K(), sp = pickSpot(kind, c); if (!sp) return null;
+  MT.make = function (kind, c, m, st, opt) {
+    var s = S(), k = K(), sp = pickSpot(kind === 'named' ? 'pirate' : kind, c); if (!sp) return null;
+    var cap = null;
+    if (kind === 'named') {   // 그 앞바다의 바다에서 지금 활약하는 이름난 해적 하나 (소굴을 찾는 데 아직 세지 않은 사람을 먼저)
+      cap = G.Wanted && G.Wanted.rumorPick ? G.Wanted.rumorPick(G.Ships.zone(sp.lon, sp.lat)) : null;
+      if (!cap) return null;
+    }
     var aff = st.aff || 0, go = daysTo(c, sp);
     var tip = {
       id: 't' + s.day + '_' + Math.floor(Math.random() * 1e6).toString(36), kind: kind, nation: nationFor(kind, sp.p, sp),
       lon: sp.lon, lat: sp.lat, port: sp.p.id, from: s.day, to: s.day + go + k.days + Math.round(aff * k.daysAff),
-      n: kind === 'merchant' ? U.ri(2, 4) : kind === 'navy' ? U.ri(3, 5) : U.ri(2, 4), rich: kind === 'merchant' ? 1 + aff / 100 : 1,
+      n: kind === 'merchant' ? U.ri(2, 4) : kind === 'navy' ? U.ri(3, 5) : kind === 'named' ? U.ri(3, 5) : U.ri(2, 4), rich: kind === 'merchant' ? 1 + aff / 100 : 1,
       by: m.id, city: c.id
     };
+    if (cap) { tip.cap = cap.id; tip.capName = cap.name; }
+    if (opt && opt.days != null) tip.to = s.day + go + opt.days;   // 식당 손님의 소문은 기한이 짧다
+    if (opt && opt.who) tip.who = opt.who;
     list().push(tip);
     return tip;
   };
@@ -117,6 +128,7 @@
   MT.text = function (tip) {
     var c = city(tip.city), p = city(tip.port), s = S(), left = Math.max(0, tip.to - s.day);
     var where = p.name + ' 앞바다 (' + (c ? c.name + '에서 ' + dirName(c, tip) + ' 약 ' + daysTo(c, tip) + '일' : '') + ')';
+    if (tip.kind === 'named') { var pc = G.Wanted && G.Wanted.pirate ? G.Wanted.pirate(tip.cap) : null; return (pc && G.Captains.crew ? G.Captains.crew(pc) : tip.capName) + ' ' + tip.n + '척 — ' + where + ' · ' + left + '일 안'; }
     var who = tip.kind === 'merchant' ? (tip.nation ? tip.nation + ' ' : '') + '상선대 ' + tip.n + '척' : tip.kind === 'navy' ? (tip.nation || '어느 나라') + ' 군함 ' + tip.n + '척' : (G.Ships ? G.Ships.pirateLabel(G.Ships.zone(tip.lon, tip.lat)) : '해적') + ' ' + tip.n + '척';
     return who + ' — ' + where + ' · ' + left + '일 안';
   };
@@ -135,22 +147,25 @@
     if (!tip) return null;
     tip.spawned = s.day;
     var zone = G.Ships.zone(tip.lon, tip.lat), y = s.date.y;
-    var K0 = tip.kind === 'pirate' ? (G.Scenes.sea.pirateK ? G.Scenes.sea.pirateK() : 1) : Math.min(1, s.player.fame / ((G.BALANCE && G.BALANCE.pirateFame) || 4000));
+    var K0 = tip.kind === 'pirate' || tip.kind === 'named' ? (G.Scenes.sea.pirateK ? G.Scenes.sea.pirateK() : 1) : Math.min(1, s.player.fame / ((G.BALANCE && G.BALANCE.pirateFame) || 4000));
     var Kx = tip.kind === 'merchant' ? Math.min(1.6, K0 * 0.6 + 0.3 * tip.rich) : tip.kind === 'navy' ? Math.max(0.5, K0) : K0;
     var lon = tip.lon, lat = tip.lat;
     if (G.Geo.dist(l.lon, l.lat, lon, lat) < 1.5) {   // 너무 가까우면 수평선 끝에 띄운다
       var a = Math.atan2(lat - l.lat, G.Geo.wrapLon(lon - l.lon)) || U.rf(0, 6.28);
       for (var r = 2.5; r <= 4; r += 0.5) { var x = l.lon + Math.cos(a) * r, yy = l.lat + Math.sin(a) * r; if (G.Geo.isSea(x, yy, 1)) { lon = x; lat = yy; break; } }
     }
-    var npc = { id: 'tip_' + tip.id, kind: tip.kind, lon: lon, lat: lat, heading: U.rf(0, 6.28), n: tip.n, K: Kx, spd: tip.kind === 'merchant' ? U.rf(0.6, 0.85) : U.rf(0.9, 1.2), life: 30,
-      hostile: tip.kind === 'pirate' || (tip.kind === 'navy' && (s.player.notoriety > 40 || (G.Hostile && G.Hostile.hunting(tip.nation)))), nation: tip.nation, zone: zone, tip: tip.id,
+    var kind0 = tip.kind === 'named' ? 'pirate' : tip.kind;
+    var npc = { id: 'tip_' + tip.id, kind: kind0, lon: lon, lat: lat, heading: U.rf(0, 6.28), n: tip.n, K: Kx, spd: tip.kind === 'merchant' ? U.rf(0.6, 0.85) : U.rf(0.9, 1.2), life: 30,
+      hostile: kind0 === 'pirate' || (tip.kind === 'navy' && (s.player.notoriety > 40 || (G.Hostile && G.Hostile.hunting(tip.nation)))), nation: tip.nation, zone: zone, tip: tip.id,
       rich: tip.rich };
-    npc.ships = G.Ships.enemyTypes(tip.kind, zone, tip.nation, tip.n, Kx, y);
+    npc.ships = G.Ships.enemyTypes(kind0, zone, tip.nation, tip.n, Kx, y);
     if (G.SeaFolk) G.SeaFolk.decorate(npc, npcs || []);
+    if (tip.cap && G.Captains && G.Captains.forceNamed && !G.Captains.forceNamed(npc, tip.cap)) { tip.met = s.day; return null; }   // 그새 사로잡혔거나 은퇴한 해적 — 소문은 헛걸음
+    if (tip.cap && G.Corsair && G.Corsair.named) { try { G.Corsair.named(npc); if (G.SeaFolk.label) npc.label = G.SeaFolk.label(npc); if (G.Wanted && G.Wanted.empower) G.Wanted.empower(npc); } catch (e) { console.error(e); } }   // 이름난 해적다운 함대·전술 (corsairs.js)
     fitCount(npc, tip.n, Kx, y);   // 알려 준 척수 그대로
     if (tip.nation && tip.kind !== 'pirate') { npc.nation = tip.nation; if (G.SeaFolk.label) npc.label = G.SeaFolk.label(npc); }
-    var mn = G.MAID && G.MAID[tip.by] ? G.MAID[tip.by].name : '여급';
-    UI.toast(mn + U.jx(mn, '이/가') + ' 말한 ' + (npc.label || KIND[tip.kind].label) + U.jx(npc.label || '배', '이/가') + ' 수평선에 보인다!', tip.kind === 'pirate' ? 'skull' : 'ship', 5200);
+    var mn = tip.who || (G.MAID && G.MAID[tip.by] ? G.MAID[tip.by].name : '여급');
+    UI.toast(mn + U.jx(mn, '이/가') + ' 말한 ' + (npc.label || KIND[tip.kind].label) + U.jx(npc.label || '배', '이/가') + ' 수평선에 보인다!', kind0 === 'pirate' ? 'skull' : 'ship', 5200);
     G.State.log(mn + '의 귀띔대로 ' + city(tip.port).name + ' 앞바다에서 ' + (npc.label || '배') + U.jx(npc.label || '배', '을/를') + ' 만났다.');
     return npc;
   };
@@ -209,20 +224,21 @@
     var lines = {
       merchant: ['짐을 가득 실은 배들이 지나간대요. 선원들이 술값을 미리 당겨 쓸 만큼요. ', '큰 장사 마치고 돌아가는 상선대가 있대요. '],
       navy: ['군함들이 그쪽 바다를 지킨대요. 괜히 마주치지 마세요. ', '군함이 순찰을 돈대요. 그 나라와 사이가 나쁘면 피하세요. '],
-      pirate: ['그쪽에 해적들이 숨어서 기다린대요. 정말 조심하세요… 아니면, 잡으러 가시는 거예요? ', '해적 떼가 그 앞바다에서 배를 노린대요. ']
+      pirate: ['그쪽에 해적들이 숨어서 기다린대요. 정말 조심하세요… 아니면, 잡으러 가시는 거예요? ', '해적 떼가 그 앞바다에서 배를 노린대요. '],
+      named: ['벽보에 붙은 그 해적 말이에요… 어젯밤 그 패거리 선원이 여기서 술을 마셨어요. 다음엔 이쪽으로 간대요. ', '쉿, 현상금 붙은 두목이 그 앞바다에 나타났대요. 잡으시면 저한테도 한 잔 사 주세요. ']
     };
-    await say(U.pick(lines[v]) + '\n' + MT.text(tip), v === 'pirate' ? 'sad' : 'warm');
+    await say(U.pick(lines[v]) + '\n' + MT.text(tip), v === 'pirate' || v === 'named' ? 'sad' : 'warm');
     G.State.log(m.name + '의 귀띔: ' + MT.text(tip));
     UI.toast('수첩 「할 일」에 적었다 — ' + city(tip.port).name + ' 앞바다', 'scroll', 4200);
     if (G.Game.refreshHud) G.Game.refreshHud();
   };
 
-  /** 수첩 「할 일」 — 여급의 귀띔 (아직 유효한 것) */
+  /** 수첩 「할 일」 — 여급의 귀띔 · 식당 손님의 해적 소문 (아직 유효한 것) */
   MT.html = function () {
     var s = S(); if (!s || !s.maidTips) return '';
     var L = MT.active(); if (!L.length) return '';
-    return '<div class="sep"></div><h4 style="margin:0 0 8px">여급의 귀띔</h4><ul>' + L.map(function (t) {
-      var mn = G.MAID && G.MAID[t.by] ? G.MAID[t.by].name : '여급';
+    return '<div class="sep"></div><h4 style="margin:0 0 8px">여급의 귀띔 · 해적 소문</h4><ul>' + L.map(function (t) {
+      var mn = t.who || (G.MAID && G.MAID[t.by] ? G.MAID[t.by].name : '여급');
       return '<li>' + U.esc(MT.text(t)) + ' <small class="muted">(' + U.esc(mn) + ')</small></li>';
     }).join('') + '</ul>';
   };

@@ -159,7 +159,7 @@
       if (fv !== 'go') return;
     }
     // 함대가 가득 차면 새 배는 이 항구 도크로 — 도크도 가득이면 살 수 없다 (js/systems/dock.js)
-    if (!far && s.fleet.ships.length >= G.MAX_SHIPS && G.Dock && G.Dock.full(c)) { await C.say(keeper(), '함대도 가득 찼고 이 항구 도크도 ' + G.Dock.note(c) + '로 꽉 찼네. 배를 하나 팔거나 도크에서 빼고 오게나.'); return; }
+    if (!far && s.fleet.ships.length >= G.MAX_SHIPS && G.Dock && G.Dock.full(c)) { await C.say(keeper(), '함대도 가득 찼고 이 항구 도크도 ' + G.Dock.note(c) + '로 꽉 찼네. ' + (G.Dock.isHome(c) ? '모항 도크라도 ' + G.Dock.cap(c) + '척까지라네.' : '모항이 아닌 항구의 도크는 ' + G.Dock.cap(c) + '척까지만 맡아 주지 — 모항 도크는 ' + (G.BALANCE.dock && G.BALANCE.dock.home || 10) + '척까지라네.') + ' 배를 하나 팔거나 도크에서 빼고 오게나.'); return; }
     if (!(await UI.confirm(wood.name + U.jx(wood.name, '으로/로') + ' 지은 ' + t.name + U.jx(t.name, '을/를') + ' 금화 ' + U.num(price) + '닢에 사겠습니까? (내구력 ' + hpWith(t, opt.id) + ')', '산다', '그만둔다'))) return;
     var name = await UI.prompt('새 배의 이름', U.pick(G.SHIP_NAMES), 12);
     if (!name) name = U.pick(G.SHIP_NAMES);
@@ -738,4 +738,3 @@
     sh.fig = null; return true;
   }
 })(window.G = window.G || {});
-

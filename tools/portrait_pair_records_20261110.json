@@ -1,0 +1,58 @@
+[
+  {
+    "id": "newton",
+    "key": "portraits/history/newton",
+    "face_file": "images/portraits/history/newton_pair20261110.webp",
+    "half_file": "images/portraits/history/newton_pair20261110_half.webp",
+    "face_sha256": "1b9da2c873e8bbae8b9ca63d9ee0b966780f3313d1b0c596f281c699057dc6f8",
+    "half_sha256": "c71f4074e0e9370e268b02b79e5596ab5719acc3baba54f2632a3a600815f5b0"
+  },
+  {
+    "id": "burbage",
+    "key": "portraits/history/burbage",
+    "face_file": "images/portraits/history/burbage_pair20261110.webp",
+    "half_file": "images/portraits/history/burbage_pair20261110_half.webp",
+    "face_sha256": "cad1d07be4ac4fff6af1cc44f9c48b79775b48dc4418cb9f1889a85697fd4f26",
+    "half_sha256": "ca8d79fa671413818d3f88d512c7e4d0f8ceaf4d785d85da2337189c240325ac"
+  },
+  {
+    "id": "nt_halley",
+    "key": "portraits/history/nt_halley",
+    "face_file": "images/portraits/history/nt_halley_pair20261110.webp",
+    "half_file": "images/portraits/history/nt_halley_pair20261110_half.webp",
+    "face_sha256": "3cc31be066ef2cb99c7c6e661e1ba602a4d6e8b37ca22765f3ed59ab4cbbacb2",
+    "half_sha256": "6fc51277e8ed080e677734dd7d28270858cfb2eff520ff9b656b3f78b525bc6b"
+  },
+  {
+    "id": "nt_hooke",
+    "key": "portraits/history/nt_hooke",
+    "face_file": "images/portraits/history/nt_hooke_pair20261110.webp",
+    "half_file": "images/portraits/history/nt_hooke_pair20261110_half.webp",
+    "face_sha256": "6cf31496e0efcdddc2356928d086a5900aac1048d4957fa3360299547eca92b2",
+    "half_sha256": "bfb5db30024dd38dabd4383e5f7642bd1a7ce4ad807ce4967886b5a4dab2f32f"
+  },
+  {
+    "id": "nt_broker",
+    "key": "portraits/history/nt_broker",
+    "face_file": "images/portraits/history/nt_broker_pair20261110.webp",
+    "half_file": "images/portraits/history/nt_broker_pair20261110_half.webp",
+    "face_sha256": "3a9f3085810c353435a6a3b56d03e1a3679d8e3120ec64fb2ae29f57af8f0aa8",
+    "half_sha256": "d7454bd59fee55c66b2289d05fbbd9e0b6de2de3d0b444f0a1ea2ab8a607ad6b"
+  },
+  {
+    "id": "tam",
+    "key": "portraits/legendary/tam",
+    "face_file": "images/portraits/legendary/cam.webp",
+    "half_file": "images/portraits/legendary/cam_half.webp",
+    "face_sha256": "b344e369be5223088e296b5af9bd19a8ae5dc4ef00d67925317d0b092ff99c45",
+    "half_sha256": "1e439c62031ec6b6d7374b64c3652a314be8d9b1b6c7e75e2ed465a6f561bec7"
+  },
+  {
+    "id": "maria",
+    "key": "portraits/legendary/maria",
+    "face_file": "images/portraits/legendary/maria_pair20261110.webp",
+    "half_file": "images/portraits/legendary/maria_pair20261110_half.webp",
+    "face_sha256": "1d413c5c5b135e34aa34c928a4e3b7f038933f321a068a96a08710fdb4e584e9",
+    "half_sha256": "7efc24b62880d8328e40fae6717f6af90c95845dff6c479d75572c995b786284"
+  }
+]

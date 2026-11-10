@@ -216,6 +216,9 @@
     var g = k.gen; if (g) t += ' — ' + F.inheritNote(k) + ' (아이가 생길 때 아버지 ' + g.faAge + '세 · 어머니 ' + g.moAge + '세)';
     return t;
   };
+  /** 아이의 능력을 키운다 — 타고난 그릇과 운을 거친다 (js/systems/kidgrow.js) */
+  function grow(k, x, n) { if (G.KidGrow) return G.KidGrow.stat(k, x, n); var b = k.st[x]; k.st[x] = Math.min(90, b + n); return k.st[x] - b; }
+  F.grow = grow;
   /** 아이의 타고난 능력 (옛 저장의 능력 없는 아이) */
   function inborn() { return F.inherit(F.genSnap(S().player.wife)).st; }
   function newKid(sex, gen) {
@@ -266,7 +269,9 @@
       if (!k.st) k.st = inborn();
       var age = F.kidAge(k);
       F.prepareHeir(k);
-      if (age >= 3) ['str', 'int', 'mar', 'cha'].forEach(function (x) { if (U.chance(0.5)) k.st[x] = Math.min(90, k.st[x] + 1); });
+      var yr = G.KidGrow && !k.unnamed && !k.away && !k.crew ? G.KidGrow.year(k, out) : null;   // 해마다의 운 — 좋은 해 · 힘든 해 (js/systems/kidgrow.js)
+      if (age >= 3 && yr !== 'bad' && !k.crew) ['str', 'int', 'mar', 'cha'].forEach(function (x) { if (U.chance(0.5)) grow(k, x, 1); });
+      if (G.KidGrow && !k.crew) G.KidGrow.fromMother(k, out);   // 함께 사는 어머니의 말·특기
       if (!k.unnamed && (age === 6 || age === 12)) out.push({ icon: 'heart', text: k.name + U.jx(k.name, '이/가') + ' ' + age + '살이 되었다. ' + (age === 6 ? '글을 배우기 시작할 나이다.' : '바다를 동경하는 눈빛이 제법 날카롭다.') });
       if (!k.unnamed && age === (c.adult || 16)) out.push({ icon: 'star', text: k.name + U.jx(k.name, '이/가') + ' 어른이 되었다. 이제 제독의 뒤를 이을 수 있다.' });
     });
@@ -278,16 +283,20 @@
     var s = S(), p = s.player, out = [], c = cfg(), home = F.atHome();
     (p.kids || []).forEach(function (k) {
       if (k.unnamed || k.lost) return;                             // 섬에서 사라진 아이 (js/systems/peterpan.js)
+      if (k.away) return;                                          // 서른 넘어 독립한 아들 — 제 삶을 산다 (js/systems/kidcrew.js)
       if (k.married) return;                                       // 시집간 딸: 제 집에 사니 아버지가 집을 비워도 사이가 식지 않는다 (2026-10-28 피드백) — 편지로 가까워진다 (marriedLetter)
       var age = F.kidAge(k);
       if (k.aboard) {
         k.sea = (k.sea || 0) + 1;                                    // 함께 바다에 나간 달 수
         F.addBond(k, c.bondAboard || 2);
-        if (U.chance(0.5)) { var x = U.pick(['str', 'int', 'mar', 'cha']); k.st[x] = Math.min(90, k.st[x] + 1); }
-        if (U.chance(c.apprenticeSkill || 0.22)) {
+        if (k.crew) return;                                        // 정식 항해사가 된 자식은 선실에서 배운다 (js/systems/kidcrew.js)
+        if (U.chance(0.5)) { var x = U.pick(['str', 'int', 'mar', 'cha']); grow(k, x, 1); }
+        {
           var sk = U.pick(['nav', 'survey', 'sword', 'ops', 'gunnery'].filter(function (id) { return G.SKILL && G.SKILL[id] ? true : G.SKILLS.some(function (x) { return x.id === id; }); }));
-          if (sk && (k.sk[sk] || 0) < 3) {
-            k.sk[sk] = (k.sk[sk] || 0) + 1;
+          // 견습의 특기 — 단계가 높을수록 · 지력이 낮을수록 어렵고, 어른 전에는 2단계까지 (js/systems/kidgrow.js)
+          var learnt = sk && (G.KidGrow ? G.KidGrow.skill(k, sk, G.KidGrow.K().apprSkill)
+            : ((k.sk[sk] || 0) < 3 && U.chance(c.apprenticeSkill || 0.22) && (k.sk[sk] = (k.sk[sk] || 0) + 1)));
+          if (learnt) {
             var nm = (G.SKILLS.filter(function (x) { return x.id === sk; })[0] || {}).name || sk;
             out.push({ icon: 'star', text: '견습 ' + k.name + U.jx(k.name, '이/가') + ' 선원들 틈에서 ' + nm + U.jx(nm, '을/를') + ' 익혔다. (' + nm + ' ' + k.sk[sk] + ')' });
           }
@@ -337,7 +346,7 @@
     // 집에 들르면 아이들과 가까워진다 (보름에 한 번)
     if (p.lastHomeBond == null || s.day - p.lastHomeBond >= 15) {
       p.lastHomeBond = s.day;
-      p.kids.forEach(function (k) { if (!k.unnamed && !k.aboard && k.house == null && !k.married) F.addBond(k, c.bondVisit || 3); });
+      p.kids.forEach(function (k) { if (!k.unnamed && !k.aboard && k.house == null && !k.married && !k.away) F.addBond(k, c.bondVisit || 3); });
     }
     // 이름 없는 아기
     for (var i = 0; i < p.kids.length; i++) {
@@ -378,20 +387,21 @@
     await UI.say(away ? wl('away', null, '얼마 만이에요… 정말 오래 걸렸네요. 얼굴 좀 보여 줘요.') : wl('greet', null, U.pick(['당신, 이번 항해는 어땠어요? 이야기 들려주세요.', '아이들이 당신을 많이 보고 싶어 했어요.', '몸 건강히 돌아와 줘서 고마워요.'])), w);
     if (p.preg) { var pn = Math.max(1, Math.round((p.preg.due - s.day) / 30)); await UI.say(p.preg.told ? wl('preg', { n: pn }, '배 속의 아기가 오늘 발로 찼어요. ' + pn + '달만 기다리면 만나요.') : wl('pregHint', null, U.pick(['요즘 이상하게 신 것이 당겨요.', '요즘 몸이 조금 나른해요.'])), w); }
     if (!p.kids.length && !p.preg) await UI.say(wl('nokids', null, U.pick(['우리에게도 아이가 생기면 좋겠어요. 집에 자주 들러 줘요.', '당신이 집에 오래 있으면 좋겠어요.'])), w);
-    var low = p.kids.filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && !k.married && F.kidAge(k) >= 4 && F.bond(k) < 30; })[0];
+    var low = p.kids.filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && !k.married && !k.away && F.kidAge(k) >= 4 && F.bond(k) < 30; })[0];
     if (low) await UI.say(wl('lowKid', { kid: F.given(low) }, F.given(low) + U.jx(F.given(low), '이/가') + ' 요즘 당신 이야기를 잘 안 해요. 아버지 얼굴이 가물가물한가 봐요. 집에 좀 더 자주 와 줘요.'), w);
     var kv = function (k, age, b, fb) { return (VO && VO.kid(k, age, b)) || fb; }, kr = function (k, kind, fb) { return (VO && VO.kidReact(k, kind)) || fb; };
     for (var i = 0; i < p.kids.length; i++) {
       var k = p.kids[i], age = F.kidAge(k), b; if (!k.st) k.st = inborn(); if (!k.edu) k.edu = {};
       if (k.unnamed || k.house != null) continue;          // 둘째 부인의 집에 사는 아이는 그 집에서 만난다
+      if (k.away) { if (G.KidCrew) await G.KidCrew.awayTalk(k, G.CITY_DATA[s.loc.city] || null); continue; }   // 서른 넘어 독립한 아들 — 편지 · 배로 부른다 (js/systems/kidcrew.js)
       if (k.married) { await marriedLetter(k, w); continue; }   // 시집간 딸은 집에 없다 — 아내가 그 딸의 편지를 전하고, 답장으로 가까워진다 (2026-10-28 피드백)
       if (k.lost) { if (G.Peter) await UI.say(G.Peter.homeLine(k), w); continue; }   // 섬에서 사라진 아이 (js/systems/peterpan.js)
       b = F.bond(k);
       var sp = G.HomeLife ? G.HomeLife.speaker(k, true) : { name: k.name + ' (' + age + '세 · ' + F.bondWord(k) + ')', portrait: F.kidSpec(k), lang: 3 };
       if (k.aboard) {
         await UI.say((VO && VO.kidAboard(k)) || U.pick(['아버지, 다음 항해는 어디로 가요? 저 밧줄 매는 법 다 익혔어요!', '아버지, 바다는 정말 넓어요. 고래도 봤어요!', '선원 아저씨들이 저더러 제법이래요.']), sp);
-        var ab = await UI.ask(k.name + U.jx(k.name, '은/는') + ' 견습으로 함대에 타고 있다 (' + (k.sea || 0) + '달째).', [{ label: '계속 데리고 다닌다', value: 1 }, { label: '집에 남게 한다', value: 0 }], sp);
-        if (ab === 0) { k.aboard = false; await UI.say(b >= 60 ? '…알겠어요. 다음에 또 데려가 주세요, 아버지.' : '네.', sp); UI.toast(k.name + U.jx(k.name, '이/가') + ' 집에 남았다.', 'house'); }
+        var ab = await UI.ask(k.name + U.jx(k.name, '은/는') + (k.crew ? ' 항해사로' : ' 견습으로') + ' 함대에 타고 있다 (' + (k.sea || 0) + '달째).', [{ label: '계속 데리고 다닌다', value: 1 }, { label: '집에 남게 한다', value: 0 }], sp);
+        if (ab === 0) { if (k.crew && G.KidCrew) G.KidCrew.home(k); k.aboard = false; await UI.say(b >= 60 ? '…알겠어요. 다음에 또 데려가 주세요, 아버지.' : '네.', sp); UI.toast(k.name + U.jx(k.name, '이/가') + ' 집에 남았다.', 'house'); }
         continue;
       }
       if (age < 3) { await UI.say(wl('baby', { kid: F.given(k) }, U.pick(['아기가 당신을 보고 방긋 웃어요. 안아 줘요.', '밤마다 조금 울지만, 당신 목소리를 들으면 금방 그쳐요.'])), w); continue; }
@@ -400,8 +410,8 @@
         var play = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', [{ label: '함께 놀아 준다', value: 'play' }, { label: '옛날이야기를 들려준다', value: 'tale' }, { label: '그냥 둔다', value: null }], sp);
         if (play && k.edu[s.date.y + ':' + play] == null) {
           k.edu[s.date.y + ':' + play] = 1; F.addBond(k, 6);
-          if (play === 'play') { k.st.str = Math.min(90, k.st.str + 2); k.st.cha = Math.min(90, k.st.cha + 1); if (G.Audio) G.Audio.sfx('children'); await UI.say(kr(k, 'play', '아빠 최고! 또 놀아 줘!'), sp); }
-          else { k.st.int = Math.min(90, k.st.int + 2); await UI.say(kr(k, 'tale', '그래서 그 배는 어떻게 됐어? 또 들려줘!'), sp); }
+          if (play === 'play') { grow(k, 'str', 2); grow(k, 'cha', 1); if (G.Audio) G.Audio.sfx('children'); await UI.say(kr(k, 'play', '아빠 최고! 또 놀아 줘!'), sp); }
+          else { grow(k, 'int', 2); await UI.say(kr(k, 'tale', '그래서 그 배는 어떻게 됐어? 또 들려줘!'), sp); }
         } else if (play) await UI.say('올해는 벌써 많이 놀았어요. 이제 자야 해요.', w);
         continue;
       }
@@ -416,7 +426,7 @@
         opts.push({ label: '그냥 둔다', value: null });
         var act = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', opts, sp);
         if (act === 'story') {
-          k.edu[s.date.y + ':story'] = 1; F.addBond(k, 5); k.st.int = Math.min(90, k.st.int + 1);
+          k.edu[s.date.y + ':story'] = 1; F.addBond(k, 5); grow(k, 'int', 1);
           await UI.say(b >= 30 ? kr(k, 'story', '정말요? 그 바다 끝에 그런 게 있었어요? 저도 언젠가 꼭 가 볼래요!') : kr(k, 'storyCold', '……그런 일이 있었군요. (조금 귀를 기울인다)'), sp);
         } else if (act === 'aboard') {
           if (b < 30) { await UI.say('…아버지 배에요? 저는… 아직 잘 모르겠어요.', sp); F.addBond(k, 2); continue; }
@@ -431,12 +441,14 @@
             var cost = c.eduCost || 800;
             if (p.gold < cost) { UI.toast('교육비(금화 ' + U.num(cost) + '닢)가 모자랍니다.', 'coin'); continue; }
             p.gold -= cost; k.edu[s.date.y] = v; F.addBond(k, 2);
-            if (v === 'lang') { var li = U.pick([0, 1, 2, 3, 5]); k.lg[li] = Math.min(3, (k.lg[li] || 0) + 1); k.st.int = Math.min(90, k.st.int + 2); }
+            if (v === 'lang') { var li = U.pick([0, 1, 2, 3, 5]), oldLv = k.lg[li] || 0; if (!G.KidGrow || U.chance(G.KidGrow.K().tutorSkill)) k.lg[li] = Math.max(oldLv, Math.min(G.KidGrow ? 2 : 3, oldLv + 1)); grow(k, 'int', 2); }
             else {
-              k.sk[v] = Math.min(3, (k.sk[v] || 0) + 1);
-              if (v === 'sword') k.st.str = Math.min(90, k.st.str + 2);
-              if (v === 'nav') k.st.int = Math.min(90, k.st.int + 1);
-              if (v === 'speech') k.st.cha = Math.min(90, k.st.cha + 2);
+              // 가정교사도 해마다 반드시 붙지는 않는다 — 단계가 높을수록 어렵고, 지력이 높을수록 잘 배운다 · 어른이 되기 전에는 2단계까지 (js/systems/kidgrow.js)
+              var learned = G.KidGrow ? G.KidGrow.skill(k, v, G.KidGrow.K().tutorSkill) : (k.sk[v] = Math.min(3, (k.sk[v] || 0) + 1), true);
+              if (!learned) UI.toast(k.name + '의 ' + ((G.SKILL_BY_ID[v] || {}).name || v) + ' 공부는 올해 신통치 않았다' + ((k.sk[v] || 0) >= (G.KidGrow ? G.KidGrow.skillCap(k) : 3) ? ' (어른이 되기 전에는 ' + (G.KidGrow ? G.KidGrow.skillCap(k) : 3) + '단계까지)' : '') + '.', 'book', 4200);
+              if (v === 'sword') grow(k, 'str', 2);
+              if (v === 'nav') grow(k, 'int', 1);
+              if (v === 'speech') grow(k, 'cha', 2);
             }
             UI.toast(k.name + '에게 가정교사를 붙였다. (금화 ' + U.num(cost) + '닢)', 'book');
           }
@@ -454,7 +466,7 @@
         adultOpts.push({ label: '배에 태워 함께 다닌다', value: 'aboard' }, { label: '그냥 둔다', value: null });
         var ad = await UI.ask(k.name + U.jx(k.name, '과/와') + ' 무엇을 할까?', adultOpts, sp);
         if (ad === 'story') { k.edu[s.date.y + ':story'] = 1; F.addBond(k, 5); }
-        else if (ad === 'aboard') { k.aboard = true; F.addBond(k, 3); UI.toast(k.name + U.jx(k.name, '이/가') + ' 함대에 올랐다.', 'ship'); }
+        else if (ad === 'aboard') { if (G.KidCrew && G.KidCrew.board(k, G.CITY_DATA[s.loc.city] || null)) F.addBond(k, 3); else { k.aboard = true; F.addBond(k, 3); UI.toast(k.name + U.jx(k.name, '이/가') + ' 함대에 올랐다.', 'ship'); } }   // 부하처럼 함께 항해 (js/systems/kidcrew.js)
       }
     }
   };
@@ -547,7 +559,7 @@
     }
     var heirs = F.heirs();
     if (heirs.length) {
-      var i = heirs.length > 1 ? await UI.choose('뒤를 이을 아들', heirs.map(function (k, j) { return { label: k.name, right: F.kidAge(k) + '세 · ' + F.bondWord(k), value: j }; }), { width: 420, cancel: false }) : 0;
+      var i = heirs.length > 1 ? await UI.choose('뒤를 이을 아들', heirs.map(function (k, j) { return { label: k.name, right: F.kidAge(k) + '세 · ' + F.bondWord(k) + (G.KidCrew ? G.KidCrew.heirNote(k) : ''), value: j }; }), { width: 520, cancel: false }) : 0;
       if (i == null) i = 0;
       return F.succeed(heirs[i], forced);
     }
@@ -690,6 +702,7 @@
 
   F.succeed = async function (k, forced) {
     var s = S(), p = s.player;
+    if (G.KidCrew) G.KidCrew.beforeSucceed(k);   // 배에 탄 아들은 함대에서 내려 제독이 되고, 독립한 아들은 돌아온다 (js/systems/kidcrew.js)
     F.prepareHeir(k);
     var sur = await F.askSurname();   // 뒤를 잇는 아이는 아버지의 성을 그대로 (옛 일지면 이때 한 번 묻는다 — 지금 제독·아이들 이름에도 붙는다)
     var old = p.name;

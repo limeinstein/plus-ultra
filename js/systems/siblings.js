@@ -112,7 +112,7 @@
     // 같은 성별 형제와 얼굴(그림 변형 1~5)이 겹치지 않게 — 뒤를 이은 제독의 얼굴이 먼저
     var usedV = { m: {}, f: {} }; if (H && H.variant) usedV[heir.sex === 'f' ? 'f' : 'm'][H.variant(heir)] = 1;
     kids.forEach(function (k) {
-      if (k === heir || k.lost || k.married) return;
+      if (k === heir || k.lost || k.married || k.away) return;   // 서른 넘어 독립한 아들은 제 삶을 산다 (js/systems/kidcrew.js)
       if (k.unnamed || !k.name) {   // 이름이 없는 갓난아기 — 남은 이름 가운데 하나
         var pool = Fm.names(k.sex).filter(function (n) { return !used[n]; });
         var nm = pool.length ? pool[0] : Fm.names(k.sex)[0];
@@ -134,6 +134,7 @@
       // 어머니는 그 아이를 낳은 부인 (둘째 부인의 아이에게도 늘 본처 이름이 적히던 것 — QA 2026-10-23)
       var mom = k.mother && k.mother !== p.wife && G.Wives && G.Wives.name ? G.Wives.name(k.mother) : mother;
       k.sib = { father: p.name, mother: mom || mother, gen: (p.generation || 1) + 1, y: s.date.y };
+      if (k.crew) { k.wasAboard = true; k.crew = false; }   // 함께 항해하던 자식 → 동생 항해사로 그대로 배에 (js/systems/kidcrew.js)
       k.aboard = false; k.house = null; delete k.wedNext;
       if (k.sibBond == null) k.sibBond = U.clamp(45 + Math.round((Fm.bond(k) - 50) / 3), 20, 80);
       out.push(k);
@@ -324,7 +325,7 @@
     var out = [], c0 = K();
     SB.home().forEach(function (k) {
       var a = age(k);
-      if (a >= 3 && k.st) ['str', 'int', 'mar', 'cha'].forEach(function (x) { if (U.chance(0.5)) k.st[x] = Math.min(90, (k.st[x] || 50) + 1); });
+      if (a >= 3 && k.st) ['str', 'int', 'mar', 'cha'].forEach(function (x) { if (U.chance(0.5)) { if (G.KidGrow) G.KidGrow.stat(k, x, 1); else k.st[x] = Math.min(90, (k.st[x] || 50) + 1); } });
       if (a === c0.hireAge) out.push({ icon: 'star', text: SB.relShort(k) + ' ' + k.name + U.jx(k.name, '이/가') + ' 스무 살이 되었다. 집에 들르면 항해사로 데려갈 수 있다. (함께 항해 ' + c0.maxHire + '명까지)' });
       if (a === c0.leaveAge) out.push({ icon: 'house', text: SB.relShort(k) + ' ' + k.name + U.jx(k.name, '이/가') + ' 스물두 살이 되었다. ' + (k.sex === 'f' ? '혼담이 오간다 — 집에 들르면 시집을 간다.' : '제 길을 찾아 떠날 채비를 한다 — 집에 들르면 작별한다.') });
     });

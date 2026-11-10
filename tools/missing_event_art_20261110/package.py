@@ -75,7 +75,7 @@ def main():
                     rows.append(info);overrides[k]=actual_file(k)
             done.append({**row,**rec,'source_sha256':source_hash})
     if missing and not args.partial:raise ValueError('남은 원화 '+str(len(missing))+': '+', '.join(missing))
-    (TOOLS/'asset-overrides.json').write_text(json.dumps(overrides,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    (TOOLS/'asset-overrides.json').write_text(json.dumps(overrides,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
     manifest=ROOT/'images/manifest.js';text=manifest.read_text(encoding='utf-8')
     match=re.search(r'G\.IMAGE_FILES = (\{[\s\S]*?\});',text)
     files=json.loads(match[1]);files.update(overrides)

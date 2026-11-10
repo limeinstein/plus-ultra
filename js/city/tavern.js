@@ -11,7 +11,13 @@
   function master() { return C.npc('tavernkeeper', '술집 주인'); }
   function maidOf(c) { if (G.MaidSwap) return G.MaidSwap.at(c.id); return G.baseMaidAt ? G.baseMaidAt(c.id) : G.MAIDS.filter(function (m) { return m.city === c.id && (!m.from || !S() || S().date.y >= m.from); })[0] || null; }   // 지난 대 제독의 아내였던 여급 자리에는 새 여급 (js/systems/maidswap.js)
   T.maidOf = maidOf;
-  T.maidSpeaker = function (m) { var c = G.CITY_DATA[m.city]; return { name: m.name, rigId: 'maid:' + m.id, portrait: A.maidSpec(m), half: G.Img.chain.maidHalf(m.id, c), lang: R.cityLang(c).lv, li: R.cityLang(c).li }; };
+  T.maidSpeaker = function (m) {
+    var c = G.CITY_DATA[m.city], o = { name: m.name, rigId: 'maid:' + m.id, portrait: A.maidSpec(m), half: G.Img.chain.maidHalf(m.id, c) };
+    // 청혼을 받아들인 여급은 혼인하기까지 제독의 말을 익혔다 — 그 뒤로는 어디서나 제독의 말로 (통역 없이). 처음 알게 된 날을 적어 둔다 (헤어진 뒤에도)
+    var st = S().maids && S().maids[m.id];
+    if ((st && st.lgMe) || (R.isSpouse && R.isSpouse(m.id))) { if (st && !st.lgMe) st.lgMe = U.dateNum(S().date); o.lang = 3; return o; }
+    o.lang = R.cityLang(c).lv; o.li = R.cityLang(c).li; return o;
+  };
   T.playerSpeaker = function () { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; };
   /** 마주 보는 대화: 왼쪽 제독 · 오른쪽 상대. 두 사람 다 무릎상(half)이 있으면 서 있는 모습으로 크게 */
   T.duo = function (who, emotion, asking) {

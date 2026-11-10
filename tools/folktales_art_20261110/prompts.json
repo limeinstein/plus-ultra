@@ -1,0 +1,169 @@
+{
+  "date": "2026-11-10",
+  "mode": "built-in image_gen",
+  "portraits": [
+    {
+      "id": "ft_robin",
+      "name": "로빈 후드",
+      "key": "portraits/legendary/robin_hood",
+      "subject": "A 28-year-old English male outlaw archer, warm green-brown eyes, wavy chestnut hair, short brown beard, playful confident half smile. Forest-green hood lowered around shoulders, dark green wool tunic, brown leather sleeveless jerkin, brown hose, leather belt. Longbow held vertically by his side and quiver over shoulder. Slender athletic build.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 28-year-old English male outlaw archer, warm green-brown eyes, wavy chestnut hair, short brown beard, playful confident half smile. Forest-green hood lowered around shoulders, dark green wool tunic, brown leather sleeveless jerkin, brown hose, leather belt. Longbow held vertically by his side and quiver over shoulder. Slender athletic build.",
+      "transparent": true
+    },
+    {
+      "id": "ft_marian",
+      "name": "마리안",
+      "key": "portraits/legendary/marian",
+      "subject": "A 26-year-old adult English noblewoman and resourceful outlaw, intelligent steady grey-green eyes, long chestnut braid, thin silver circlet. Deep crimson medieval dress with fitted long sleeves and a green traveling cloak, practical leather belt with slender sheathed sword and a small bow at her side. Composed determined smile, capable athletic build.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 26-year-old adult English noblewoman and resourceful outlaw, intelligent steady grey-green eyes, long chestnut braid, thin silver circlet. Deep crimson medieval dress with fitted long sleeves and a green traveling cloak, practical leather belt with slender sheathed sword and a small bow at her side. Composed determined smile, capable athletic build.",
+      "transparent": true
+    },
+    {
+      "id": "ft_rapunzel",
+      "name": "라푼젤",
+      "key": "portraits/legendary/rapunzel",
+      "subject": "A 22-year-old adult Central European woman, clear curious blue eyes, softly smiling oval face, extremely long thick golden braid visibly looping down beside her body past her knees. Simple pale blue linen long-sleeved medieval dress, modest neckline, plain woven belt. Holding a few wildflowers at her waist. Natural adult proportions. No purple princess dress, frying pan or recognizable animated film design.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 22-year-old adult Central European woman, clear curious blue eyes, softly smiling oval face, extremely long thick golden braid visibly looping down beside her body past her knees. Simple pale blue linen long-sleeved medieval dress, modest neckline, plain woven belt. Holding a few wildflowers at her waist. Natural adult proportions. No purple princess dress, frying pan or recognizable animated film design.",
+      "transparent": true
+    },
+    {
+      "id": "ft_tell",
+      "name": "빌헬름 텔",
+      "key": "portraits/legendary/tell",
+      "subject": "A 40-year-old Swiss male mountain hunter, broad strong shoulders, weathered angular face, intent brown eyes, short dark brown hair and beard streaked with a little grey. Natural undyed wool tunic under brown leather jerkin, dark forest green short cloak and simple soft felt cap. Wooden medieval crossbow held diagonally down safely across his waist, bolt pouch on belt.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 40-year-old Swiss male mountain hunter, broad strong shoulders, weathered angular face, intent brown eyes, short dark brown hair and beard streaked with a little grey. Natural undyed wool tunic under brown leather jerkin, dark forest green short cloak and simple soft felt cap. Wooden medieval crossbow held diagonally down safely across his waist, bolt pouch on belt.",
+      "transparent": true
+    },
+    {
+      "id": "ft_sheriff",
+      "name": "노팅엄 장관",
+      "key": "portraits/history/ft_sheriff",
+      "subject": "A 55-year-old English male sheriff with a narrow face, pointed dark greying beard and thin suspicious eyes. Dark crimson velvet doublet and knee-length surcoat with gold chain of office, black soft cap with a restrained feather. Holding one golden prize arrow horizontally at his waist. Haughty smug expression.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 55-year-old English male sheriff with a narrow face, pointed dark greying beard and thin suspicious eyes. Dark crimson velvet doublet and knee-length surcoat with gold chain of office, black soft cap with a restrained feather. Holding one golden prize arrow horizontally at his waist. Haughty smug expression.",
+      "transparent": true
+    },
+    {
+      "id": "ft_littlejohn",
+      "name": "리틀 존",
+      "key": "portraits/history/ft_littlejohn",
+      "subject": "A 35-year-old English male forest outlaw of exceptionally tall, broad giant-like but realistic build, bushy brown beard, ruddy wide face and friendly laughing eyes. Green wool hood, moss-green tunic and rough leather vest, brown hose, broad belt. Holding a thick oak quarterstaff upright by his side.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 35-year-old English male forest outlaw of exceptionally tall, broad giant-like but realistic build, bushy brown beard, ruddy wide face and friendly laughing eyes. Green wool hood, moss-green tunic and rough leather vest, brown hose, broad belt. Holding a thick oak quarterstaff upright by his side.",
+      "transparent": true
+    },
+    {
+      "id": "ft_gothel",
+      "name": "마녀 고텔",
+      "key": "portraits/history/ft_gothel",
+      "subject": "A 65-year-old Central European woman with sharply observant eyes, lined angular face, black hair streaked with silver pulled back under a dark hood, severe controlled expression. Rich dark plum-purple wool cloak over charcoal medieval dress, modest high neckline. One hand holding a bunch of fresh rampion leaves, the other holding closed large iron shears safely at waist. Grounded human character, no monster features.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 65-year-old Central European woman with sharply observant eyes, lined angular face, black hair streaked with silver pulled back under a dark hood, severe controlled expression. Rich dark plum-purple wool cloak over charcoal medieval dress, modest high neckline. One hand holding a bunch of fresh rampion leaves, the other holding closed large iron shears safely at waist. Grounded human character, no monster features.",
+      "transparent": true
+    },
+    {
+      "id": "ft_gessler",
+      "name": "게슬러",
+      "key": "portraits/history/ft_gessler",
+      "subject": "A 52-year-old male Habsburg bailiff, square jaw, cold pale grey eyes, short dark greying hair and close cropped beard. Blackened plate breastplate over a dark wool doublet, crimson cloak, red felt feathered cap. Holding a pair of dark leather gloves at waist. Proud rigid military bearing.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 52-year-old male Habsburg bailiff, square jaw, cold pale grey eyes, short dark greying hair and close cropped beard. Blackened plate breastplate over a dark wool doublet, crimson cloak, red felt feathered cap. Holding a pair of dark leather gloves at waist. Proud rigid military bearing.",
+      "transparent": true
+    },
+    {
+      "id": "ft_walter",
+      "name": "발터",
+      "key": "portraits/history/ft_walter",
+      "subject": "A ten-year-old Swiss boy with clearly childlike proportions, tousled golden blond hair, clear trusting blue eyes and a brave closed-mouth expression. Simple fully covering undyed wool long-sleeved tunic, dark brown hose and plain belt. He holds a whole red apple in both hands at waist. No weapon, no injury, no arrow, no threat in this portrait.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A ten-year-old Swiss boy with clearly childlike proportions, tousled golden blond hair, clear trusting blue eyes and a brave closed-mouth expression. Simple fully covering undyed wool long-sleeved tunic, dark brown hose and plain belt. He holds a whole red apple in both hands at waist. No weapon, no injury, no arrow, no threat in this portrait.",
+      "transparent": true
+    },
+    {
+      "id": "ft_woodcutter",
+      "name": "숲의 나무꾼",
+      "key": "portraits/history/ft_woodcutter",
+      "subject": "A 48-year-old Central European male woodcutter, weathered broad face, kind brown eyes, shaggy brown greying hair, short coarse beard. Ochre wool cap, rough russet wool tunic, patched dark green short cloak, leather belt and brown hose. Holding a small bundle of kindling in one arm, other hand pointing gently as if giving directions.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 48-year-old Central European male woodcutter, weathered broad face, kind brown eyes, shaggy brown greying hair, short coarse beard. Ochre wool cap, rough russet wool tunic, patched dark green short cloak, leather belt and brown hose. Holding a small bundle of kindling in one arm, other hand pointing gently as if giving directions.",
+      "transparent": true
+    },
+    {
+      "id": "ft_herald",
+      "name": "장관의 전령",
+      "key": "portraits/history/ft_herald",
+      "subject": "A 30-year-old clean-shaven English male herald, alert blue eyes, short sandy hair under a dark red soft cap. Muted red and cream heraldic tabard without letters or invented writing over a plain blue wool doublet, brown hose. Small wooden drum hanging at waist, holding two drumsticks. Open mouth as if making an announcement.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 30-year-old clean-shaven English male herald, alert blue eyes, short sandy hair under a dark red soft cap. Muted red and cream heraldic tabard without letters or invented writing over a plain blue wool doublet, brown hose. Small wooden drum hanging at waist, holding two drumsticks. Open mouth as if making an announcement.",
+      "transparent": true
+    },
+    {
+      "id": "ft_tuck",
+      "name": "터크 수사",
+      "key": "portraits/history/ft_tuck",
+      "subject": "A 50-year-old cheerful English male friar, round ruddy face, warm humorous brown eyes, balding tonsured head with short greying beard, heavyset sturdy build. Plain brown Franciscan-style wool habit with cowl, knotted rope belt and simple wooden cross. Holding a small wooden bowl and a closed accounts book at waist, knowing amused smile.",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE individual knee-up portrait, vertical 1024x1536. Show complete headwear and body down through BOTH KNEES, lower legs cut by bottom edge, 2 percent top and side margin. Near frontal face clearly visible, all hands and props within canvas. The figure fills the canvas vertically. Genuine transparent background, clean alpha, no scenery, floor, cast shadow, text, border, watermark or second character. Fully clothed, practical late medieval costume. Subject: A 50-year-old cheerful English male friar, round ruddy face, warm humorous brown eyes, balding tonsured head with short greying beard, heavyset sturdy build. Plain brown Franciscan-style wool habit with cowl, knotted rope belt and simple wooden cross. Holding a small wooden bowl and a closed accounts book at waist, knowing amused smile.",
+      "transparent": true
+    }
+  ],
+  "scenes": [
+    {
+      "id": "ft_contest",
+      "name": "노팅엄의 활쏘기 대회",
+      "refs": [
+        "ft_robin",
+        "ft_sheriff",
+        "ft_herald"
+      ],
+      "scene": "An archery tournament on the grassy field below Nottingham medieval castle walls in spring daylight. At left a smiling chestnut-haired archer in a green hood has just lowered his longbow. Near center a straw target shows one arrow embedded precisely in the split wooden shaft of the first arrow, a clear close foreground detail. At right the sharp-bearded crimson-velvet sheriff watches from a raised timber dais holding a golden prize arrow, with his red-and-cream herald and curious townspeople. One coherent field and natural perspective, a joyful skill contest. No violence against people.",
+      "key": "legend-events/ft_contest",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE continuous panoramic narrative scene, 1881x836 wide 2.25:1 landscape. Expressive faces, period architecture, atmospheric depth and clear action. All key faces and hands inside the middle 70 percent of height for wide cropping. No montage, panels, writing, readable text, border or watermark. No modern objects. Characters must match the supplied individual portrait references in face, hair and costume. References are identity/style guides only: build one cohesive new scene. Scene: An archery tournament on the grassy field below Nottingham medieval castle walls in spring daylight. At left a smiling chestnut-haired archer in a green hood has just lowered his longbow. Near center a straw target shows one arrow embedded precisely in the split wooden shaft of the first arrow, a clear close foreground detail. At right the sharp-bearded crimson-velvet sheriff watches from a raised timber dais holding a golden prize arrow, with his red-and-cream herald and curious townspeople. One coherent field and natural perspective, a joyful skill contest. No violence against people.",
+      "transparent": false
+    },
+    {
+      "id": "ft_sherwood",
+      "name": "셔우드 숲의 잔치",
+      "refs": [
+        "ft_robin",
+        "ft_marian",
+        "ft_littlejohn",
+        "ft_tuck"
+      ],
+      "scene": "A welcoming nocturnal feast under a huge hollow oak in Sherwood Forest. Robin Hood in forest green sits beside adult Marian in crimson dress and green cloak near the warm central campfire. Broad giant-like Little John rests his oak staff beside the table, while round jovial Friar Tuck in a plain brown habit raises a wooden bowl over a roast venison meal. Outlaws and villagers share bread and ale at rustic timber tables. Deep blue woodland, warm fire-lit faces, abundant green foliage, camaraderie and generosity.",
+      "key": "legend-events/ft_sherwood",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE continuous panoramic narrative scene, 1881x836 wide 2.25:1 landscape. Expressive faces, period architecture, atmospheric depth and clear action. All key faces and hands inside the middle 70 percent of height for wide cropping. No montage, panels, writing, readable text, border or watermark. No modern objects. Characters must match the supplied individual portrait references in face, hair and costume. References are identity/style guides only: build one cohesive new scene. Scene: A welcoming nocturnal feast under a huge hollow oak in Sherwood Forest. Robin Hood in forest green sits beside adult Marian in crimson dress and green cloak near the warm central campfire. Broad giant-like Little John rests his oak staff beside the table, while round jovial Friar Tuck in a plain brown habit raises a wooden bowl over a roast venison meal. Outlaws and villagers share bread and ale at rustic timber tables. Deep blue woodland, warm fire-lit faces, abundant green foliage, camaraderie and generosity.",
+      "transparent": false
+    },
+    {
+      "id": "ft_forest",
+      "name": "문 없는 탑",
+      "refs": [
+        "ft_rapunzel",
+        "ft_gothel",
+        "ft_woodcutter"
+      ],
+      "scene": "A secluded cylindrical medieval stone tower with no door and no exterior stairs rising among immense dark Central European forest trees at sunset. The tower is far enough back that its top and long smooth walls are visible within the wide composition. Adult Rapunzel in a simple pale blue linen dress leans from a high window, her thick golden braid hanging uninterrupted down toward the ground. At the base a severe older woman in a plum-purple cloak carries rampion leaves and closed shears. A small woodcutter on the foreground path quietly points out the hidden tower. Natural red sunset light threads between trees; mysterious but humane folktale mood. No animated film design.",
+      "key": "legend-events/ft_forest",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE continuous panoramic narrative scene, 1881x836 wide 2.25:1 landscape. Expressive faces, period architecture, atmospheric depth and clear action. All key faces and hands inside the middle 70 percent of height for wide cropping. No montage, panels, writing, readable text, border or watermark. No modern objects. Characters must match the supplied individual portrait references in face, hair and costume. References are identity/style guides only: build one cohesive new scene. Scene: A secluded cylindrical medieval stone tower with no door and no exterior stairs rising among immense dark Central European forest trees at sunset. The tower is far enough back that its top and long smooth walls are visible within the wide composition. Adult Rapunzel in a simple pale blue linen dress leans from a high window, her thick golden braid hanging uninterrupted down toward the ground. At the base a severe older woman in a plum-purple cloak carries rampion leaves and closed shears. A small woodcutter on the foreground path quietly points out the hidden tower. Natural red sunset light threads between trees; mysterious but humane folktale mood. No animated film design.",
+      "transparent": false
+    },
+    {
+      "id": "ft_altdorf",
+      "name": "알트도르프 광장의 모자",
+      "refs": [
+        "ft_tell",
+        "ft_walter",
+        "ft_gessler"
+      ],
+      "scene": "The legendary William Tell apple trial in the medieval Swiss village square of Altdorf. Compose a coherent long-distance scene: foreground left the rugged brown-clad hunter Tell stands in profile holding a crossbow steady while the small distant boy Walter stands bravely beneath a linden tree on the far right, a whole red apple on his head. A clearly long empty stretch of square separates them. The boy is unharmed and calm, no bolt in flight, no impact, no blood, no injury. The black-armored bailiff Gessler on horseback watches from the middle background with a few guards. A tall pole bearing Gessler’s red feathered hat is visible, alpine timber and plaster houses and distant mountains. Tense moral folktale scene, restrained and non-graphic.",
+      "key": "legend-events/ft_altdorf",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE continuous panoramic narrative scene, 1881x836 wide 2.25:1 landscape. Expressive faces, period architecture, atmospheric depth and clear action. All key faces and hands inside the middle 70 percent of height for wide cropping. No montage, panels, writing, readable text, border or watermark. No modern objects. Characters must match the supplied individual portrait references in face, hair and costume. References are identity/style guides only: build one cohesive new scene. Scene: The legendary William Tell apple trial in the medieval Swiss village square of Altdorf. Compose a coherent long-distance scene: foreground left the rugged brown-clad hunter Tell stands in profile holding a crossbow steady while the small distant boy Walter stands bravely beneath a linden tree on the far right, a whole red apple on his head. A clearly long empty stretch of square separates them. The boy is unharmed and calm, no bolt in flight, no impact, no blood, no injury. The black-armored bailiff Gessler on horseback watches from the middle background with a few guards. A tall pole bearing Gessler’s red feathered hat is visible, alpine timber and plaster houses and distant mountains. Tense moral folktale scene, restrained and non-graphic.",
+      "transparent": false
+    },
+    {
+      "id": "ft_storm",
+      "name": "루체른 호수의 폭풍",
+      "refs": [
+        "ft_tell",
+        "ft_gessler"
+      ],
+      "scene": "A dramatic Foehn storm over Lake Lucerne, Swiss mountain cliffs rising behind a wind-lashed dark lake. Tell, the rugged brown-clad hunter with a short beard and crossbow slung across his back, has just leaped from the bailiff’s wooden oared lake boat onto a broad flat rock beneath the cliff. His boots firmly land on the rock, one leg pushing the wooden boat safely away. The black-armored crimson-cloaked bailiff Gessler grips the gunwale as oarsmen fight choppy foaming waves. A smaller rowboat with anonymous sailors follows toward the flat rock. Clear readable escape action, physically plausible small medieval lake boats, dramatic light through storm clouds. No ocean galleons, no injuries or people drowning.",
+      "key": "legend-events/ft_storm",
+      "prompt": "Use case: historical-scene. Original hand-painted semi-realistic 2D character illustration for the historical sailing RPG Loop of Good Hope. Rich natural color, tactile woven cloth, leather and wood, refined expressive face and realistic hands. Not a movie or animation adaptation. ONE continuous panoramic narrative scene, 1881x836 wide 2.25:1 landscape. Expressive faces, period architecture, atmospheric depth and clear action. All key faces and hands inside the middle 70 percent of height for wide cropping. No montage, panels, writing, readable text, border or watermark. No modern objects. Characters must match the supplied individual portrait references in face, hair and costume. References are identity/style guides only: build one cohesive new scene. Scene: A dramatic Foehn storm over Lake Lucerne, Swiss mountain cliffs rising behind a wind-lashed dark lake. Tell, the rugged brown-clad hunter with a short beard and crossbow slung across his back, has just leaped from the bailiff’s wooden oared lake boat onto a broad flat rock beneath the cliff. His boots firmly land on the rock, one leg pushing the wooden boat safely away. The black-armored crimson-cloaked bailiff Gessler grips the gunwale as oarsmen fight choppy foaming waves. A smaller rowboat with anonymous sailors follows toward the flat rock. Clear readable escape action, physically plausible small medieval lake boats, dramatic light through storm clouds. No ocean galleons, no injuries or people drowning.",
+      "transparent": false
+    }
+  ]
+}

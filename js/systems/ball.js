@@ -55,7 +55,7 @@
   /** 꼬실 수 있는 아들: 다 자랐고, 신부가 없다 */
   BL.sons = function () {
     var ad = (G.BALANCE.family && G.BALANCE.family.adult) || 16;
-    return (S().player.kids || []).filter(function (k) { return k.sex !== 'f' && !k.unnamed && !k.lost && !k.bride && age(k) >= ad; })
+    return (S().player.kids || []).filter(function (k) { return k.sex !== 'f' && !k.unnamed && !k.lost && !k.bride && !k.away && age(k) >= ad; })
       .sort(function (a, b) { return age(b) - age(a); });
   };
   /** 데뷔탕트를 치를 딸: 열다섯~열일곱, 자택에 산다, 아직 데뷔하지 않았다 */

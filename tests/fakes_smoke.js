@@ -36,7 +36,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // 리스본에서 12° 안의, 아직 못 찾은 모조품감 하나
       const d = G.DISCOVERIES.filter(x => F.fakeable(x) && x.how !== 'city' && !G.Disc.foundByMe(x.id) && G.Geo.dist(city.lon, city.lat, x.lon, x.lat) < 12 && G.Disc.built(x))[0];
       out.d = d.id;
-      s.hints[d.id] = 'test';
+      s.hints[d.id] = { src: 'legacy:test', d: U.dateNum(s.date) };
       out.forSale = F.forSale(city).some(x => x.id === d.id);
       out.price = F.price(d);
       G.Scenes.city.visit && 0;
@@ -48,7 +48,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.date = { y: 1500, m: 3, d: 7 };
       const small = G.CITY_DATA.filter(c => G.CityIcon.tier(c) === 1)[0], mid = G.CITY_DATA.filter(c => G.CityIcon.tier(c) === 2)[0];
       out.small = F.open(small); out.mid = F.open(mid); out.smallName = small.name; out.midName = mid.name;
-      G.DISCOVERIES.filter(x => F.fakeable(x) && !G.Disc.foundByMe(x.id) && G.Disc.built(x) && G.Geo.dist(city.lon, city.lat, x.lon, x.lat) < 12).slice(0, 6).forEach(x => { s.hints[x.id] = s.hints[x.id] || 'test'; });
+      G.DISCOVERIES.filter(x => F.fakeable(x) && !G.Disc.foundByMe(x.id) && G.Disc.built(x) && G.Geo.dist(city.lon, city.lat, x.lon, x.lat) < 12).slice(0, 6).forEach(x => { s.hints[x.id] = s.hints[x.id] || { src: 'legacy:test', d: U.dateNum(s.date) }; });
       out.cands = F.forSale(city).length; out.stock = F.stock(city).length;
       const uch = UI.choose, gold0 = s.player.gold; s.player.gold = 1e7;
       UI.choose = async () => 0;
@@ -85,8 +85,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const day0 = U.dayIndex(s.date), fame0 = s.player.fame + 1000; s.player.fame = fame0;
       s.contract = { sponsor: king.id, disc: d2.id, reward: 8000, due: U.dateNum(U.addDays(s.date, 200)) };
       answers = ['fake'];
-      await SP.report(king);
-      out.jailDays = U.dayIndex(s.date) - day0; out.banned = !!SP.rel(king.id).banned; out.fameCut = fame0 - s.player.fame; out.contract3 = s.contract;
+      // 옥살이 동안 다른 사건·업적의 명성도 오를 수 있으므로 직접 감점을 따로 확인한다.
+      const fameAdd = G.Fame.add, penalties = [];
+      G.Fame.add = function (cat, n) { const v = fameAdd.apply(this, arguments); if (cat == null && n < 0) penalties.push(-v); return v; };
+      try { await SP.report(king); } finally { G.Fame.add = fameAdd; }
+      out.jailDays = U.dayIndex(s.date) - day0; out.banned = !!SP.rel(king.id).banned; out.fameCut = penalties[0]; out.expectedFameCut = Math.round(fame0 * 0.1); out.contract3 = s.contract;
       // 4) 들킴 → 벌금 (체포 없음)
       SP.rel(merch.id).banned = 0; G.BALANCE.fakes.arrestBase = -5;
       F.give(d2.id, 1); const g3 = s.player.gold; answers = ['fake'];
@@ -121,7 +124,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.paid1 > 0 && !r.found1 && r.fakeTo && r.fakeTo.indexOf('pt_king') >= 0 && !r.contract1, '못 찾은 채 모조품만으로 계약 보고: 사례금 ' + r.paid1 + ', 발견물은 그대로 못 찾은 상태');
     ok(r.paid2 > 0 && r.chaser === 'pt_king', '다른 후원자에게 또 팔면(이중 계약) 사례금 ' + r.paid2 + ' — 포르투갈 국왕이 추격자를 보낸다');
     ok(r.chaserNpc === 'pt_king' && !r.chaserAfter, '바다에 「' + r.chaserLabel + '」 한 번 나타나고, 맞닥뜨리면 끝');
-    ok(r.jailDays >= 20 && r.banned && r.fameCut > 0 && !r.contract3, '들켜서 옥살이 ' + r.jailDays + '일 · 명성 −' + r.fameCut + ' · 한 해 출입 금지 · 계약 끝');
+    ok(r.jailDays >= 20 && r.banned && r.fameCut > 0 && r.fameCut === r.expectedFameCut && !r.contract3, '들켜서 옥살이 ' + r.jailDays + '일 · 직접 명성 −' + r.fameCut + '(10%) · 한 해 출입 금지 · 계약 끝');
     ok(r.fine >= 800, '들켜서 벌금 금화 ' + r.fine);
     ok(r.paidReal > 0 && Math.abs(r.paidBoth / r.paidReal - 1.3) < 0.03 && r.trustBoth >= 16 && r.fakeLeft === 0, '진짜와 모조품을 함께: 사례금 ' + r.paidBoth + ' (진짜만 ' + r.paidReal + '의 ×1.3) · 신뢰 +' + r.trustBoth + '(10 더)');
     ok(!errors.length, '페이지 오류 0' + (errors.length ? ' — ' + errors.join(' | ') : ''));

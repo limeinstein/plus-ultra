@@ -467,7 +467,7 @@
     return best;
   };
   /** 부하의 말 단계: 타고난 것과 배에서 배운 것 가운데 높은 쪽 */
-  CB.mateLang = function (m, li) { var d = G.MATE[m.id]; return Math.max((d && d.lg && d.lg[li]) || 0, (m.lgx && m.lgx[li]) || 0); };
+  CB.mateLang = function (m, li) { var d = G.MATE[m.id]; return Math.max((d && d.lg && d.lg[li]) || 0, (m.lgx && m.lgx[li]) || 0, R().spouseLang ? R().spouseLang(m.id, li) : 0); };   // 아내는 제독의 모국어를 익혔다 (rules.js R.spouseLang)
   function levelFor(days) { var t = B().langDays || [90, 270, 730], lv = 0; for (var i = 0; i < t.length; i++) if (days >= t[i]) lv = i + 1; return lv; }
   /** 방의 자리 (가까운 방을 가릴 때): 선실 번호 → [칸, 줄] */
   CB.cols = function () { return B().cols || 6; };

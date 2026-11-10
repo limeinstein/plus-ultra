@@ -291,6 +291,9 @@
     // 도시 점령은 성문 돌파와 별개. 첫 수비대와 두 차례 증원군을 모두 격퇴해야 한다.
     conquest: {
       from: 15101125, joseonFrom: 15920523, notoriety: 15,
+      // 점령에 성공하면 (2026-11-10 사용자 요청 — 「점령해도 명성 변화가 없어 아쉽다」 피드백): 전투 명성 small/medium/large 이상, 악명 +notorietyWin (시도할 때의 +notoriety와 따로)
+      //   대도시는 도시에 따라 더: 왕궁(P) +palace · 제국의 중심(E) +empire · 항구 도시 +port · 특산물이 goodsFrom개를 넘으면 하나마다 +goods
+      reward: { small: 1000, medium: 1500, large: 2000, palace: 500, empire: 500, port: 300, goods: 300, goodsFrom: 2, notorietyWin: { small: 10, medium: 15, large: 20 } },
       // 지역 항로가 먼저 알려져야 점령을 시도한다. 지중해·중근동·서아프리카는 처음부터 알려진 땅.
       regionRoutes: { 5: 'indiaroute', 6: 'china', 7: 'indiaroute', 8: 'malacca', 9: 'zipang', 10: 'westroute' },
       // 같은 문화권 번호 안의 바다를 구별한다. 위에서부터 먼저 맞는 구역을 쓴다.
@@ -320,6 +323,7 @@
     // 명성 업적은 일회성 금화·칭호만 준다. 명성/능력 배수는 없어 연쇄 보상과 힘의 격차를 막는다.
     // 재산 업적 (사용자 요청 2026-11-01): 소지금 + 금고 예금이 문턱에 이르면. 보상은 교역 명성과 칭호 — 금화를 주면 다음 문턱을 밀어 주므로 주지 않는다
     wealthAchievements: { steps: [1000000, 10000000, 100000000, 10000000000], fame: [300, 800, 2000, 5000] },
+    tradeDeals: { min: 1000000, fame: 600, kingFame: 3000, kingGold: 200000 },   // 대단한 거래(대륙마다 한 번의 매각 이익 min 이상)·교역왕 — js/systems/tradeking.js
     fameAchievements: {
       totalGold: [300, 600, 1200, 2000, 3000, 4000, 6000, 8000, 10000],
       branchSteps: [20000, 150000, 650000], branchGold: [300, 1000, 2500],
@@ -327,6 +331,9 @@
     },
     // 발견물 완성: 전체 1개·종류별 12개. 보상은 각 업적을 처음 이룰 때만 준다.
     discoveryAchievements: { allGold: 200000, allFame: 5000, kindGold: 25000, kindFame: 1000 },
+    // 지리상의 발견 보상 배수 (2026-11-10 사용자 요청 — 예전보다 명성·돈 1.8배): fame → 발견 명성(G.Disc.fameFor: 찾을 때·보고·발표·확인 의뢰),
+    //   gold → 후원자 성공 보수·계약 없는 보고 사례금(sponsor.js offerFor)과 찾을 때 건지는 값어치(discovery.js). 선금·명명권 값은 그대로
+    discoveryReward: { fame: 1.8, gold: 1.8 },
     // 맞바람 (js/core/rules.js sailEff·shipSpeed·fleetMotion)
     // sq: 사각돛 효율 꺾은선 [바람과 이루는 각(0 = 뒤바람, 180 = 정면 맞바람), 효율] — 예전에는 110°에서 0.29, 135° 넘으면 0.07이라
     //     비싼 사각돛 대형선(프리깃·대형 갤리온)이 맞바람에서 카라벨의 40%밖에 못 갔다. 순풍 쪽(0~60°)은 그대로.
@@ -575,6 +582,12 @@
     //   always: 처음부터 활동하는 바다(왜구 · 바르바리 해적 · 모로코의 해적) · gate: 그 바다의 지리상 발견(이 발견물이 알려져야) · calmYears: 이름난 해적이 먼저 덤비지 않는 해(게임 시작부터)
     pirateAct: { reports: 5, start: 0.2, rampYears: 10, always: ['east', 'med', 'atl'], gate: { amer: 'westroute', ind: 'indiaroute', sea: 'malacca' }, calmYears: 5 },
     lair: { kills: 3, chiefs: 2, near: 2.5, spawn: [0.9, 1.6], cool: 20, nextChief: 2, ships: [4, 5], K: [0.75, 0.9], fame: 300, gold: 20000 },
+    // 현상수배 벽보 · 해적 소문 · 해적 깃발 (js/systems/pirate_wanted.js — 2026-11-10 사용자 요청)
+    //   현상금 = base × (역사 인물이면 hist) × (바다 하나 더할 때마다 +multi) — round 닢 단위. 벽보는 그 바다에서 지금 활약하는 이름난 해적 posters명까지.
+    //   식당 소문: 들르는 동안 한 번, chance로 이름난 해적의 행방을 듣는다 (기한 days일, 앞바다 near°). 여급의 「이름난 해적의 소문」 사례금 기본값 maid.
+    //   absorb: 무찌른 이름난 해적의 남은 무리를 같은 바다의 다른 해적이 흡수 — 한 해적이 max명까지. 한 명마다 배 +ships척 · 선원 +crew · 포술 +gun · 일기토 힘 +boss, 현상금 +흡수한 해적 현상금×bounty
+    wanted: { base: 2000, hist: 2, multi: 0.2, round: 100, posters: 8, chance: 0.75, days: 12, maid: 650,
+      absorb: { max: 2, ships: 1, crew: 0.08, gun: 0.1, boss: 4, bounty: 0.5 } },
     voyagePlans: { noticeDays: 730, subscriptionDays: 730, deferDays: 30, investigationDays: 730,
       investigationGold: 600, investigationFame: 15, maxTasks: 3, firstGold: 1000, firstFame: 30,
       tradeQty: 8, tradeValue: 300, contactDays: 14, contactLevels: [1, 3, 6], archiveFame: 5,
@@ -741,6 +754,14 @@
       // monthLair: 해적 본부에 데려온 부인을 본부인이 알아챌 달마다 확률 (외딴 해적 섬이라 0 — 본부인을 태우고 들어가면 visitWithWife)
       lodge: { monthHome: 0.06, monthGov: 0.03, monthLair: 0, visitWithWife: 0.5, lossRate: 0.25, lossMin: 30000, love: 40, coldDays: 180, sideCold: 120 } },
     kidVoy: { chance: 0.02, gap: 60 },   // 배에 탄 아이의 하루 (js/systems/kidvoyage.js): 바다 위 하루마다 일어날 확률 · 같은 아이는 며칠에 한 번까지
+    // 아이가 자라는 길 (js/systems/kidgrow.js — 2026-11-10 「너무 강한 2세가 쉽게 탄생한다」):
+    //   타고난 그릇 = 처음 능력 + potLo~potHi (타고난 재주 ±giftPot). 그릇 아래에서는 (그릇−지금)/room 확률(적어도 minP)로 +1, 그릇에 닿으면 breakP
+    //   특기: 기본 확률 × lvK[지금 단계] × 지력(intK) · 어른(16) 전에는 skillMax까지 · 가정교사 tutorSkill · 견습 달마다 apprSkill
+    //   해마다(6~15세) goodYear 「좋은 해」(능력 +1) · badYear 「힘든 해」(그해 저절로 자라지 않음) · 어머니에게서 말 momLang · 특기 momSkill (해마다 하나씩)
+    kidEdu: { potLo: 6, potHi: 26, giftPot: 6, room: 12, minP: 0.25, breakP: 0.05, statMax: 90, skillMax: 2, lvK: [1, 0.55, 0.3], intK: [0.7, 1.3],
+      tutorSkill: 0.7, apprSkill: 0.1, goodYear: 0.12, badYear: 0.1, momLang: 0.35, momSkill: 0.15 },
+    // 어른이 된 자식과 함께 항해 · 독립 (js/systems/kidcrew.js): 배에 타지 않은 아들은 leaveAge에 집에 들르면 떠나고, 끝내 안 들르면 letterAge에 편지로 · 노자 purse
+    kidCrew: { leaveAge: 31, letterAge: 33, purse: 3000 },
     family: { conceive: 0.35, gapDays: 300, perMother: 5, sons: 5, daughtersPer: 2, gestation: 266, twins: 0.03, adult: 16, heirYoung: 20, eduCost: 800,
       // 아이와 제독의 사이(0~100): 해산을 지켜보면 bondBorn, 놓치면 bondMissed에서 시작 · 집에 들르면 +bondVisit(보름에 한 번)
       // · 집을 비운 달마다 −bondAway(3살부터) · 견습으로 배에 타면 달마다 +bondAboard, 특기를 익힐 확률 apprenticeSkill

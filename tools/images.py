@@ -19,6 +19,10 @@ DISC_CATS = ['geo', 'nature', 'ruin', 'treasure', 'creature', 'people', 'trade']
 # 기존 원본을 보존하면서 검증된 교체본을 게임의 기존 키로 사용한다.
 # scan() 뒤에 적용해야 manifest 재생성·웹 빌드에서도 연결이 되돌아가지 않는다.
 PREFERRED_FILES = {
+    'portraits/rivals/진주 눈물 소교': 'portraits/rivals/ref39049-39045/진주 눈물 소교.webp',
+    'portraits/rivals/진주 눈물 소교_half': 'portraits/rivals/ref39049-39045/진주 눈물 소교_half.webp',
+    'portraits/rivals/안개섬 모이라': 'portraits/rivals/ref39049-39045/안개섬 모이라.webp',
+    'portraits/rivals/안개섬 모이라_half': 'portraits/rivals/ref39049-39045/안개섬 모이라_half.webp',
     'portraits/rivals/파랑새 깃발의 라야 알리': 'portraits/rivals/파랑새 깃발의 라야 알리_ref20261107.webp',
     'portraits/rivals/파랑새 깃발의 라야 알리_half': 'portraits/rivals/파랑새 깃발의 라야 알리_ref20261107_half.webp',
     'portraits/rivals/해골 깃발의 마리 르노': 'portraits/rivals/해골 깃발의 마리 르노_ref20261107.webp',
@@ -38,6 +42,17 @@ PREFERRED_FILES = {
     'portraits/mates/nc_okran': 'portraits/mates/nc_okran_ref20261106.webp',
     'portraits/mates/nc_okran_half': 'portraits/mates/nc_okran_ref20261106_half.webp',
 }
+
+# 데위와 참고 사진 다섯 장으로 그린 여해적의 게임 표시본.
+PREFERRED_FILES.update({
+    f'portraits/rivals/금빛 날개 데위{suffix}': f'portraits/rivals/four-20261110/금빛 날개 데위{suffix}.webp'
+    for suffix in ('', '_half')
+})
+PREFERRED_FILES.update({
+    f'portraits/rivals/{name}{suffix}': f'portraits/rivals/ref38073-37560/{name}{suffix}.webp'
+    for name in ('붉은 손톱 카테리나', '아홉 꼬리 홍련', '인어 귀걸이 마리솔', '흑십자의 파올라', '뱀 비늘 쁘라파이')
+    for suffix in ('', '_half')
+})
 
 # 드레이크·콜럼버스 그림 요청(2026-11-08): 신대륙의 기존 원화는 남긴다.
 PREFERRED_FILES.update({
@@ -72,6 +87,17 @@ event_art_overrides = os.path.join(TOOLS, 'missing_event_art_20261110', 'asset-o
 if os.path.isfile(event_art_overrides):
     with open(event_art_overrides, encoding='utf-8') as event_art_file:
         PREFERRED_FILES.update(json.load(event_art_file))
+
+
+# 혼인 업적의 도감도 실제 달성 사건과 같은 그림을 쓴다 (2026-11-10).
+PREFERRED_FILES['achievement-events/happily'] = 'legend-events/happily_after_all.webp'
+
+# 옛이야기의 기본 원화 위에 셔우드·텔 이야기의 새 초상과 장면을 연결한다.
+for folk_art_name in ('asset-overrides.json', 'sherwood-tell-overrides.json'):
+    folk_art_overrides = os.path.join(TOOLS, 'folktales_art_20261110', folk_art_name)
+    if os.path.isfile(folk_art_overrides):
+        with open(folk_art_overrides, encoding='utf-8') as folk_art_file:
+            PREFERRED_FILES.update(json.load(folk_art_file))
 
 
 def read(rel):
@@ -393,6 +419,11 @@ def valid_keys(d):
     for r in d['rivals']:
         k['portraits/rivals/' + r] = '경쟁자 · ' + r
         k['portraits/rivals/' + r + '_half'] = '경쟁자 무릎상 · ' + r
+    roster = os.path.join(TOOLS, 'pirate_roster_20261110', 'prompts.json')
+    if os.path.isfile(roster):
+        with open(roster, encoding='utf-8') as f:
+            for pirate in json.load(f)['portraits']:
+                k['wanted/' + pirate['id']] = '해적 수배서 · ' + pirate['name']
     for b, label in (('son', '아들'), ('daughter', '딸')):
         k['portraits/family/' + b] = '자녀 · ' + label
         for n in range(1, 7):
@@ -498,6 +529,7 @@ def report(found, dups, keys):
               ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'), ('기함 선실', 'cabins/'),
               ('항해 효과', 'effects/'), ('결과 연출', 'outcomes/'), ('이야기 사진', 'story/'), ('명작', 'masterworks/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('거리 보행 NPC', 'street-folk/'), ('보행 원본', 'npc-walk/'), ('미니게임', 'minigames/'), ('가이드북 그림', 'guide/')]
+    groups.append(('해적 수배서', 'wanted/'))
     print('그림 %d개 → images/manifest.js' % len(found))
     for label, pre in groups:
         n = sum(1 for k in found if k == pre or k.startswith(pre))

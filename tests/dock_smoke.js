@@ -29,10 +29,13 @@ const ROOT = path.resolve(__dirname, '..');
     const p = H.dock(other); await sleep(200);
     const dlgTxt = ([...document.querySelectorAll('.modal-back')].pop() || {}).textContent || '';
     ok(/모항/.test(dlgTxt) && /2년/.test(dlgTxt), '도크 창 안내: 모항 10척 · 다른 항구 2년 뒤 폐기');
+    let why = '';
     for (let n = 0; n < 4; n++) {
       btn('도크에 맡긴다').click(); await sleep(150);
       const el = choices()[0]; if (el) { el.click(); await sleep(200); }
+      else { const al = [...document.querySelectorAll('.modal-back')].pop(); if (al && /도크에 맡길 수 없음/.test(al.textContent)) { why = al.textContent; [...al.querySelectorAll('button')].pop().click(); await sleep(200); } }   // 맡길 수 없으면 까닭 창 (2026-11-10)
     }
+    ok(/가득 찼습니다 — 3\/3척/.test(why) && /모항이 아닌 항구의 도크에는 3척까지만/.test(why), '네 번째는 까닭 창: ' + why.replace(/\s+/g, ' ').slice(0, 80));
     ok(D.list(other).length === 3 && s.fleet.ships.length === 2, '다른 항구 도크는 3척에서 멈춤 (도크 ' + D.list(other).length + ' · 함대 ' + s.fleet.ships.length + ')');
     btn('도크에서 꺼낸다').click(); await sleep(150); choices()[0].click(); await sleep(200);
     ok(D.list(other).length === 2 && s.fleet.ships.length === 3 && s.fleet.ships[2].dockDay == null, '도크에서 꺼내면 함대로 · 날짜 지움');

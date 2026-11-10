@@ -1336,12 +1336,10 @@
       var x = st.hero.x - cam, y = GROUND + 34 - (kind === 'back' ? rise * enterEase : 0);
       ctx.save();
       ctx.globalAlpha = st.hero.fade;
-      ctx.fillStyle = 'rgba(40,26,12,.28)';
       var gait = kind === 'back' || kind === 'gesture' || (loop && loop.fixedScale) ? { squash: 1, lift: 0 } : heroGaitPose(kind);
       var shadowLift = loop && loop.fixedScale && loop.lift ? loop.lift[ai] * HERO_H / (loop.baseHeight || 300) : gait.lift;
-      var shadow = 1 / (1 + shadowLift * G.FX.heroGait.shadowLift);
       var shadowW = (kind === 'gesture' || loop) && motion.walk ? motion.walk.naturalWidth / MOTION_COLS * HERO_H / G.FX.townHeroGestures.baseHeight : w;
-      ctx.beginPath(); ctx.ellipse(x, y - 2, shadowW * 0.3 * shadow, 8 * shadow, 0, 0, 7); ctx.fill();
+      A.drawGroundShadow(ctx, x, GROUND + 32, shadowW * 0.4, G.FX.streetShadow.heroDepth, G.FX.streetShadow.hero, shadowLift + GROUND + 34 - y);
       ctx.translate(x, y - gait.lift);
       ctx.scale(st.hero.dir < 0 ? -1 : 1, heroIdleBreath() * gait.squash);
       ctx.drawImage(atlas, (ai % cols) * aw, Math.floor(ai / cols) * ah, aw, ah, -w / 2, -h, w, h);
@@ -1355,8 +1353,7 @@
     var x = st.hero.x - cam, y = GROUND + 34;
     ctx.save();
     ctx.globalAlpha = st.hero.fade;
-    ctx.fillStyle = 'rgba(40,26,12,.28)';
-    ctx.beginPath(); ctx.ellipse(x, y - 2, w * 0.3, 8, 0, 0, 7); ctx.fill();
+    A.drawGroundShadow(ctx, x, y - 2, w * 0.4, G.FX.streetShadow.heroDepth, G.FX.streetShadow.hero);
     ctx.translate(x, y);
     ctx.scale(st.hero.dir < 0 ? -1 : 1, heroIdleBreath());
     ctx.drawImage(img, -w / 2, -h, w, h);

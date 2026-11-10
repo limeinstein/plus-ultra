@@ -39,6 +39,19 @@
     if (sh) { delete sh.dockDay; delete sh.dockWarn; }
     return sh;
   };
+  /** 이 항구 도크의 한도가 왜 그만큼인지 — 「모항 도크는 10척까지」 / 「모항이 아닌 항구는 3척까지 (모항 리스본은 10척)」 */
+  D.capWhy = function (c) {
+    var s = S(), home = s && s.player ? G.CITY_DATA[s.player.home] : null;
+    if (D.isHome(c)) return '모항 도크에는 ' + D.cap(c) + '척까지 기한 없이 맡길 수 있습니다';
+    return '모항이 아닌 항구의 도크에는 ' + D.cap(c) + '척까지만 맡길 수 있습니다' + (home ? ' (모항 ' + home.name + '의 도크는 ' + num(B().home, 10) + '척까지)' : '');
+  };
+  /** 가득 찼을 때 알려 줄 글 (HTML) */
+  D.fullWhy = function (c) {
+    var n = D.list(c).length, cap = D.cap(c), name = (G.CITY_DATA[cid(c)] || {}).name || '이 항구';
+    return '<b>' + G.U.esc(name) + ' 도크가 가득 찼습니다 — ' + n + '/' + cap + '척</b><br>' + D.capWhy(c) + '.' +
+      (n > cap ? '<br><small class="muted">예전 저장에서 한도보다 많이 맡겨 둔 배는 그대로 두지만, 한도 아래로 줄기 전에는 더 맡길 수 없습니다.</small>' : '') +
+      '<br><small class="muted">도크에서 배를 꺼내거나 조선소에서 팔면 자리가 납니다.</small>';
+  };
   /** 「도크 3/10척」 같은 짧은 글 */
   D.note = function (c) { return '도크 ' + D.list(c).length + '/' + D.cap(c) + '척'; };
   D.leftText = function (c, sh) {

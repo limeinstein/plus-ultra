@@ -1,4 +1,4 @@
-/* 도시 점령 (G.Conquest): 성문 공격은 통행, 점령은 수비대·증원군 격퇴와 영토 획득.
+/* 도시 점령 (G.Conquest): 성문 공격은 통행, 점령은 수비대·증원군 격퇴와 영토 획득. 점령에 성공하면 전투 명성(소 1000 · 중 1500 · 대 2000+)과 악명 (Q.reward).
    저장 s.conquests[도시] = {owner, from, date, day}. 없던 저장은 처음 점령할 때 만든다. */
 (function (G) {
   'use strict';
@@ -33,6 +33,18 @@
     var waves = K().waves[tier].slice();
     return { tier: tier, waves: waves, total: U.sum(waves, function (n) { return n; }), protected: holy || capital, militia: capital && c.name === '한양',
       label: { holy: '이슬람 성지', capital: '주요 수도', large: '대도시', medium: '중규모 도시', small: '소규모 도시' }[tier] };
+  };
+  /** 점령에 성공하면 받는 것 (G.BALANCE.conquest.reward — 2026-11-10): 전투 명성(실제로 오르는 값) · 악명 */
+  Q.reward = function (c, p) {
+    var r = K().reward || {}, tier = (p || Q.profile(c)).tier, fame = r[tier] || r.large || 0;
+    if (tier !== 'small' && tier !== 'medium') {
+      if (c.flags.indexOf('P') >= 0) fame += r.palace || 0;
+      if (c.flags.indexOf('E') >= 0) fame += r.empire || 0;
+      if (c.port) fame += r.port || 0;
+      fame += (r.goods || 0) * Math.max(0, (c.goods || []).length - (r.goodsFrom || 0));
+    }
+    var nw = r.notorietyWin || {};
+    return { fame: fame, notoriety: nw[tier] != null ? nw[tier] : nw.large || 0 };
   };
   /** 금지 사유는 메뉴와 실행 직전에 함께 검사한다. 성문 공격에는 적용하지 않는다. */
   Q.block = function (c) {
@@ -71,7 +83,8 @@
     var p = Q.profile(c), party = force(s), loc = s.loc;
     if (party < 1) { await UI.say('공략에 나설 대원이 없습니다.', G.Scenes.mateSpeaker('first')); return false; }
     var text = c.name + ' 도시 점령\n' + Q.note(c) + '\n우리 공략대 ' + U.num(party) + '명. 성문 공격과 별개의 전투입니다. 두 차례 증원군까지 모두 격퇴해야 합니다.\n' +
-      (p.militia ? '관군과 전국 각지의 의병이 한양 방어에 참전합니다. 의병이 계속 집결하므로 한양은 점령할 수 없습니다. ' : p.protected ? '국가 방위군이 계속 집결하므로 이 도시는 점령할 수 없습니다. ' : '') + '공격하면 악명 +' + K().notoriety + '.';
+      (p.militia ? '관군과 전국 각지의 의병이 한양 방어에 참전합니다. 의병이 계속 집결하므로 한양은 점령할 수 없습니다. ' : p.protected ? '국가 방위군이 계속 집결하므로 이 도시는 점령할 수 없습니다. ' : '') + '공격하면 악명 +' + K().notoriety + '.' +
+      (p.protected ? '' : ' 점령에 성공하면 전투 명성 +' + U.num(Q.reward(c, p).fame) + ' · 악명 +' + Q.reward(c, p).notoriety + '.');
     fighting = true;
     var oldParty = loc.party, oldLon = loc.lon, oldLat = loc.lat, started = false;
     try {
@@ -101,8 +114,14 @@
       var owner = s.player.nation === 'PT' ? '포르투갈' : s.date.y < 1516 ? '카스티야' : '에스파냐';
       var holdings = s.conquests || (s.conquests = {});
       holdings[c.id] = { owner: owner, from: R.cityOwner(c), date: { y: s.date.y, m: s.date.m, d: s.date.d }, day: s.day };
-      G.State.log(c.name + '의 수비대와 증원군을 모두 격퇴하여 ' + owner + ' 영토로 점령했다.');
-      await UI.say(c.name + U.jx(c.name, '을/를') + ' 점령했습니다. 이제 ' + owner + '의 영토입니다.', G.Scenes.mateSpeaker('first'));
+      // 본국에 알려져 명성이 오르고, 이웃 나라들 사이에는 악명이 퍼진다 (2026-11-10)
+      var gain = Q.reward(c, p), mul = (G.Fame && G.Fame.MUL && G.Fame.MUL.bt) || 1;
+      var famed = G.Fame ? G.Fame.add('bt', Math.ceil(gain.fame / mul)) : 0;
+      if (!G.Fame) { s.player.fame += gain.fame; famed = gain.fame; }
+      s.player.notoriety += gain.notoriety;
+      if (G.Game.refreshHud) G.Game.refreshHud();
+      G.State.log(c.name + '의 수비대와 증원군을 모두 격퇴하여 ' + owner + ' 영토로 점령했다. (전투 명성 +' + U.num(famed) + ' · 악명 +' + gain.notoriety + ')');
+      await UI.say(c.name + U.jx(c.name, '을/를') + ' 점령했습니다. 이제 ' + owner + '의 영토입니다.\n본국에 소식이 전해져 명성이 높아졌습니다 — 전투 명성 +' + U.num(famed) + '. 이웃 나라들 사이에는 악명이 퍼졌습니다 — 악명 +' + gain.notoriety + '.', G.Scenes.mateSpeaker('first'));
       return true;
     } finally {
       if (started) {

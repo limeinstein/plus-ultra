@@ -60,8 +60,15 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       });
       G.EXPEDITIONS.forEach(ex => {
         out.voy++;
-        if (!G.RIVAL_STAYS[ex.who]) out.whoBad.push(ex.id + ':' + ex.who);
-        const d = G.DISC[ex.discs[0]]; if (!d || !d.rival || d.rival[2] !== ex.who) out.whoBad.push(ex.id + '→' + ex.discs[0]);
+        // 고정 역사 사건의 함대는 경쟁자의 최초 발견을 바꾸지 않는다.
+        const story = { colon2: 'ColonVoy', colon3: 'ColonVoy', colon4b: 'ColonVoy', drake: 'DrakeCirc' }[ex.id];
+        const d = G.DISC[ex.discs[0]];
+        if (story) {
+          if (!ex.noDelay || !G[story] || !d || !ex.who) out.whoBad.push(ex.id + ':사건 연결');
+        } else {
+          if (!G.RIVAL_STAYS[ex.who]) out.whoBad.push(ex.id + ':' + ex.who);
+          if (!d || !d.rival || d.rival[2] !== ex.who) out.whoBad.push(ex.id + '→' + ex.discs[0]);
+        }
         // 배가 다닐 수 있는 칸인가 (뱃길 찾기의 가장 가까운 바다가 제자리)
         ex.pts.forEach((p, i) => { const ns = G.Nav.nearestSea(p[1], p[0], 3); if (!ns || Math.hypot(ns[0] - p[1], ns[1] - p[0]) > 0.15) out.landPts.push(ex.id + '#' + i + ' (' + p[0] + ',' + p[1] + ')'); });
       });
@@ -71,7 +78,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(d1.people.length >= 40 && !d1.missStay.length, '경쟁자 ' + d1.people.length + '명 모두 머무는 도시·대사 자료 (' + d1.missStay.join(',') + ')');
     ok(!d1.missLine.length, '사람마다 주인 귀띔·소개·거절·꿈·졌을 때, 발견물마다 계획·발표 대사와 카드 (' + d1.missLine.join(', ') + ')');
     ok(!d1.badStay.length, '머무는 해에 그 도시가 있다 (' + d1.badStay.join(', ') + ')');
-    ok(!d1.whoBad.length, '탐험 함대 ' + d1.voy + '개 — 이끄는 사람과 대표 발견물의 경쟁자가 같다 (' + d1.whoBad.join(', ') + ')');
+    ok(!d1.whoBad.length, '탐험 함대 ' + d1.voy + '개 — 경쟁 발견자 또는 고정 역사 사건 연결 (' + d1.whoBad.join(', ') + ')');
     console.log('    뭍에 걸린 항로 점: ' + (d1.landPts.length ? d1.landPts.join(' · ') : '없음'));
     ok(!d1.landPts.length, '항로 점은 모두 배가 다닐 수 있는 바다');
 

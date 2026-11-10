@@ -111,6 +111,7 @@
     if (G.Treaty) out = out.concat(G.Treaty.daily());   // 토르데시야스·사라고사 조약의 날, 바다에서 경계선 넘기 (js/systems/treaty.js)   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)   // 유럽 시장의 소식·세상의 유행 (js/systems/era.js)
     if (G.Fad) out = out.concat(G.Fad.daily());             // 끝난 유행을 거둔다
     if (G.Family && G.Family.daily) out = out.concat(G.Family.daily());
+    if (G.KidCrew) out = out.concat(G.KidCrew.daily());     // 어른이 된 자식 항해사 — 배운 것 옮겨 적기 · 견습이 어른이 되면 정식 항해사 (js/systems/kidcrew.js)
     if (G.HomeLife) out = out.concat(G.HomeLife.daily());   // 먼 바다에서 추억의 물건을 꺼내 본다
     if (G.Escort) out = out.concat(G.Escort.daily());       // 상선 호위의 기한
     if (G.Court) out = out.concat(G.Court.daily());         // 국왕의 부름(명성 10,000마다)·왕명의 기한
@@ -178,7 +179,8 @@
     // 아이들이 자란다
     if (G.Family && G.Family.newYear) out = out.concat(G.Family.newYear());
     if (G.HomeLife) out = out.concat(G.HomeLife.newYear());
-    if (G.Siblings) out = out.concat(G.Siblings.newYear());   // 동생들이 자란다 · 스무 살 · 스물두 살 (js/systems/siblings.js)
+    if (G.Siblings) out = out.concat(G.Siblings.newYear());
+    if (G.KidCrew) out = out.concat(G.KidCrew.newYear());   // 서른이 넘도록 집에 들르지 않으면 아들이 편지를 남기고 떠난다   // 동생들이 자란다 · 스무 살 · 스물두 살 (js/systems/siblings.js)
     if (G.Wander) out = out.concat(G.Wander.newYear());
     // 새로 간행된 책: 도서관을 다시 찾을 이유가 생긴다
     G.BOOKS.forEach(function (b) {

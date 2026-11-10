@@ -69,7 +69,7 @@
     if (x.kind === 'main') P().wifeLove = v; else x.w.love = v;
     return v;
   }
-  function kidsOf(x) { var p = P(); return x.kind === 'main' ? (p.kids || []).filter(function (k) { return k.house == null && !k.married && !k.lost; }) : W().kidsOf(x.w); }
+  function kidsOf(x) { var p = P(); return x.kind === 'main' ? (p.kids || []).filter(function (k) { return k.house == null && !k.married && !k.lost && !k.away; }) : W().kidsOf(x.w); }
 
   // ================================================================ 도시에 들어설 때
   WF.pending = function () {

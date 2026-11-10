@@ -76,7 +76,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     console.log(JSON.stringify(r, null, 1));
     ok(!r.can10 && /친해지면/.test(r.refuse), '호감 10: 아무것도 묻지 못한다 (' + r.refuse + ')');
     ok(r.p20 > r.p60 && r.p60 > r.p60m && r.p60m > r.p95m, '사례금: 호감 20 ' + r.p20 + ' > 호감 60 ' + r.p60 + ' > 60·만남 30번 ' + r.p60m + ' > 95·만남 60번 ' + r.p95m);
-    ok(r.menu && r.menu.length === 4, '물을 것 넷: ' + r.menu.join(' / '));
+    ok(r.menu && r.menu.length === 5, '물을 것 다섯(이름난 해적의 소문 2026-11-10): ' + r.menu.join(' / '));
     ok(r.paid > 0 && /앞바다/.test(r.mText) && /일 안/.test(r.mText), '상선대: ' + r.mText.split('\n').pop() + ' (금화 ' + r.paid + ')');
     ok(/오늘은/.test(r.sameDay), '같은 여급에게는 하루 한 번');
     ok(/오늘은/.test(r.sameStay || ''), '다음 날이라도 같은 입항이면 다시 묻지 못한다');

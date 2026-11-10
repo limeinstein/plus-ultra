@@ -167,7 +167,7 @@
       wives: (p.wives2 || []).map(function (w) { return G.Wives ? G.Wives.name(w) : '부인'; })
     };
     var kids = (p.kids || []).map(function (k) {
-      var f = k.married ? fateNow(k, null, 0) : k.lost ? { t: '섬에서 사라짐', cls: 'lost' } : k.aboard ? { t: '견습으로 배에', cls: 'mate' } : k.house != null ? { t: '어머니의 집에서', cls: 'home' } : { t: '집에서 자람', cls: 'home' };
+      var f = k.married ? fateNow(k, null, 0) : k.lost ? { t: '섬에서 사라짐', cls: 'lost' } : k.away ? { t: '독립 — ' + k.away.title, cls: 'home' } : k.crew ? { t: '항해사로 배에', cls: 'mate' } : k.aboard ? { t: '견습으로 배에', cls: 'mate' } : k.house != null ? { t: '어머니의 집에서', cls: 'home' } : { t: '집에서 자람', cls: 'home' };
       return { key: key(k), name: Fm.kidName(k), sex: k.sex === 'f' ? 'f' : 'm', by: k.born ? k.born.y : null, age: Fm.kidAge(k), chain: kidChain(k), fate: f };
     });
     gens.push({ e: cur, kids: kids });

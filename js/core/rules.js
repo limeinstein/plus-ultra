@@ -523,7 +523,14 @@
     return R.mateHurt(m) ? Math.floor(lv / 2) : lv;
   };
   /** 부하의 말 단계: 타고난 것과 한배에서 지내며 배운 것(m.lgx) 가운데 높은 쪽 */
-  R.mateLang = function (m, li) { if (R.mateHidden && R.mateHidden(m)) return 0; var d = G.MATE[m.id]; return Math.max((d && d.lg && d.lg[li]) || 0, (m.lgx && m.lgx[li]) || 0); };
+  R.mateLang = function (m, li) { if (R.mateHidden && R.mateHidden(m)) return 0; var d = G.MATE[m.id]; return Math.max((d && d.lg && d.lg[li]) || 0, (m.lgx && m.lgx[li]) || 0, R.spouseLang(m.id, li)); };
+  /** 청혼을 받아들인 사람(본처·둘째 부인 — 헤어지거나 사별해도)인가 (2026-11-10 사용자 요청 「아내는 청혼을 받아들이면 그 사이 플레이어의 언어를 습득」) */
+  R.isSpouse = function (id) {
+    var S = R.S(), p = S && S.player; if (!p || !id) return false;
+    return p.wife === id || (p.wives2 || []).some(function (w) { return w && w.id === id; }) || !!(S.wedEver && S.wedEver[id]);
+  };
+  /** 아내는 제독의 모국어(R.nativeLang)를 3단계로 익혔다 — 그 밖의 말은 0 */
+  R.spouseLang = function (id, li) { var S = R.S(); return S && S.player && li === R.nativeLang(S.player.nation) && R.isSpouse(id) ? 3 : 0; };
   /** 대리 결투에서 진 동료는 한동안 다쳐 있다 (남은 날, 0이면 멀쩡) */
   R.mateHurt = function (m) { var S = R.S(); return m && m.hurt && S && S.day < m.hurt ? m.hurt - S.day : 0; };
   /** 배 한 척을 맡은 사람의 특기: 기함은 제독과 기함 참모(부관·항해사·측량사), 다른 배는 그 배 선장 한 사람 */

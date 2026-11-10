@@ -943,7 +943,8 @@
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
     if (G.HomeLife) await G.HomeLife.happen();                                    // 가끔 아이와 얽힌 일이 생긴다 (homelife.js)
     if (G.HeirPlan) { try { await G.HeirPlan.homeEvents(c); } catch (e) { console.error(e); } }
-    if (G.Ball) { try { await G.Ball.homeHint(c); } catch (e) { console.error(e); } }   // 작위를 받으면 집사가 무도회를, 딸이 열다섯이 되면 아내가 데뷔탕트를 귀띔한다 (js/systems/ball.js)   // 아들의 소꿉친구가 찾아온다 · 후계를 위한 안배를 권한다 (js/systems/heirplan.js)
+    if (G.Ball) { try { await G.Ball.homeHint(c); } catch (e) { console.error(e); } }
+    if (G.KidCrew) { try { await G.KidCrew.homeCheck(c); } catch (e) { console.error(e); } }   // 서른이 넘은 아들은 제 살 길을 찾아 떠난다 (js/systems/kidcrew.js)   // 작위를 받으면 집사가 무도회를, 딸이 열다섯이 되면 아내가 데뷔탕트를 귀띔한다 (js/systems/ball.js)   // 아들의 소꿉친구가 찾아온다 · 후계를 위한 안배를 권한다 (js/systems/heirplan.js)
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeDay(); } catch (e) { console.error(e); } }      // 임신 중의 한때 · 가족의 일상 (familyevent.js)
     if (story) { try { await G.Story.family(c, 'home'); } catch (e) { console.error(e); } }                  // 아내와 어머니 (이야기 모드)
   };

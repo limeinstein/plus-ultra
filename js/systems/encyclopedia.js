@@ -95,8 +95,8 @@
       : U.pick(['「' + d.name + '」… 아버지 일지에 적힌 날짜랑 똑같네요. 그날 어떠셨어요?', '이 관찰은 누가 적은 거예요? 저도 언젠가 이런 걸 적고 싶어요.', '다음 항해에 저도 데려가 주세요. 이 책에 한 줄 보태고 싶어요.']), sp);
     var out = [];
     var bd = F.addBond(k, 3); out.push('사이 +3');
-    if (U.chance(0.5)) { k.st.int = Math.min(90, (k.st.int || 55) + 1); out.push('지력 +1'); }
-    if ((k.sk[sk] || 0) < 2 && U.chance(0.35)) { k.sk[sk] = (k.sk[sk] || 0) + 1; out.push(skName(sk) + ' ' + k.sk[sk]); }
+    if (U.chance(0.5) && (G.KidGrow ? G.KidGrow.stat(k, 'int', 1) : (k.st.int = Math.min(90, (k.st.int || 55) + 1), 1))) out.push('지력 +1');
+    if (G.KidGrow ? G.KidGrow.skill(k, sk, 0.35, 2) : ((k.sk[sk] || 0) < 2 && U.chance(0.35) && (k.sk[sk] = (k.sk[sk] || 0) + 1))) out.push(skName(sk) + ' ' + k.sk[sk]);
     if (G.HomeLife.touch) { try { k.touch = (k.touch || 0) + 1; } catch (e) { /* */ } }
     G.State.log(k.name + U.jx(k.name, '과/와') + ' 백과사전의 「' + d.name + '」 항목을 함께 읽었다.');
     var note = k.name + ' — ' + out.join(' · ');

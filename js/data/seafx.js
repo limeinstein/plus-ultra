@@ -7,6 +7,8 @@
   G.FX = {
     // 합성 효과음 크기 (js/systems/audio.js). 거리의 짐승 소리는 다른 효과음보다 작게 들린다.
     audio: { pet: { cat: 0.042, dog: 0.05 } },
+    groundShadow: { castX: 0.65, castY: 0.35, castWidth: 1.45, castDepth: 1.35, castOpacity: 0.34,
+      coreOpacity: 0.62, midOpacity: 0.42, liftSpread: 0.006, liftFade: 0.025, maxLift: 80 }, // 발 오른쪽으로 드리우는 바닥 그림자
     // 알림은 왼쪽에서 상태판·해도·조작줄을 피한다. 넘치는 알림은 이 공간 안에서만 펼친다.
     noticeLayout: { left: 16, gap: 12, width: 360 },
     // 자택 장면 그림 (js/art/homeart.js): 그림 크기와 화면 위에서의 자리 (무대 1600×900)
@@ -380,6 +382,7 @@
       }
     },
     duel: {               // 일기토 스프라이트와 타격감 (js/games/duel.js)
+      shadow: { spriteRadius: 74, fallbackRadius: 53, depth: 13, opacity: 0.9, y: 3, downSpread: 1.45 }, // 발의 지면 접촉 그림자
       impact: {
         hitstop:  { light: 45, adv: 60, heavy: 90, comboHit: 35, comboEnd: 110, ko: 140, koMe: 100, block: 30, parry: 70 }, // ms
         fastHitstop: 0.6,                       // 빠르게 모드에서 히트스톱 배율 (다른 시간은 기존처럼 0.5)
@@ -626,6 +629,7 @@
   //   걷는 빠르기 speed(짐승 animalSpeed) px/초, 멈춰 쉬는 시간 idle초, 바닥선 아래 깊이 depth px(멀수록 작게 scale), 말을 걸 때 제독이 서는 거리 talkGap px
   //   fps: 거리 사람만 움직일 때 거리를 다시 그리는 횟수(초당) — 낮출수록 가볍다 · imgH: 걷는 그림(380×444 한 장)을 그리는 높이 px (제독 178)
   G.FX.streetFolk = { min: 3, max: 4, speed: [38, 72], animalSpeed: [70, 130], idle: [1.2, 4.5], depth: [12, 52], scale: [1.02, 1.16], talkGap: 100, fps: 60, imgH: 158 };
+  G.FX.streetShadow = { hero: 0.95, folk: 0.82, heroDepth: 13 }; // 거리 인물의 바닥 그림자 농도·세로 폭
   // 주민에게 직접 들을 소식의 거리·기간. 실제 정세·값은 바꾸지 않는다.
   G.FX.streetFolk.culture = { historyDays: 1095, historyCount: 2, neighborRange: 16, neighborCount: 2 };
   // 제독이 거리의 건물 문으로 들어가는 연출 (js/scenes/town.js): sec 전체 시간,
@@ -646,8 +650,7 @@
   G.FX.heroGait = {
     supportEnd: 0.42,
     walk: { stride: 300, maxCycles: 1.35, down: 2.2, rise: 1.5 },
-    run: { stride: 440, maxCycles: 2.2, down: 3.2, rise: 5.5 },
-    shadowLift: 0.035
+    run: { stride: 440, maxCycles: 2.2, down: 3.2, rise: 5.5 }
   };
   // 해전 물보라: 4×2칸, 각 256px. 크기는 해전 화면의 기준 px, 수명은 전투 초.
   G.FX.waterSplash = {

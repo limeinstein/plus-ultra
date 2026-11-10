@@ -104,7 +104,7 @@
     });
     return out;
   }
-  const fameFor = d => Math.round(d.val / 26 + d.pw * 30);   // 게임과 같은 식 (G.Disc.fameFor)
+  const fameFor = d => Math.round((d.val / 26 + d.pw * 30) * ((G.BALANCE && G.BALANCE.discoveryReward && G.BALANCE.discoveryReward.fame) || 1));   // 게임과 같은 식 (G.Disc.fameFor · 발견 보상 배수)
   /** escaped path with break opportunities after each slash */
   const pathHtml = p => esc(p).replace(/\//g, '/<wbr>');
 

@@ -72,14 +72,14 @@
   function hired(id) { var s = S(); return s.mates.some(function (m) { return m.id === id; }) || s.player.wife === id || !!(G.Wives && G.Wives.of && G.Wives.of(id)); }
   /** 항해사와 같은 사람(바르바로사 등)이 지금 바다에 나올 수 있나: 고용되지 않았고, 다른 함대를 맡지 않았고 */
   function mateFree(id) { var r = st(); return !!G.MATE[id] && !hired(id) && !(r && r.prom[id]); }
-  function active(c, y) { var r = st(); return y >= c.y[0] && y <= c.y[1] && !(r && r.out[c.id]) && (!c.mate || mateFree(c.mate)); }
+  function active(c, y) { var r = st(); return y >= c.y[0] && y <= c.y[1] && !(r && r.out[c.id]) && (!c.mate || mateFree(c.mate)) && !(G.Wanted && G.Wanted.gone && G.Wanted.gone(c.id)); }   // 다른 해적에게 흡수된 해적은 나오지 않는다 (js/systems/pirate_wanted.js)
   function kindOK(k, want) { return want === 'n' ? (k === 'n' || k === 'b') : want === 'm' ? (k === 'm' || k === 'b') : k === want; }
 
   /** 이 나라 갈래의 지금 명부: [{id, name, k, src:'hist'|'prom'|'gen', desc, g, mate}] */
   CP.roster = function (key, y) {
     var s = S(), r = st(); if (!s || !key) return [];
     y = y == null ? s.date.y : y;
-    var out = CP.list().filter(function (c) { return c.nat === key && active(c, y); }).map(function (c) { return { id: c.id, name: c.name, k: c.k, src: 'hist', desc: c.desc, g: FEMALE[c.id] ? 'f' : 'm', mate: c.mate }; });
+    var out = CP.list().filter(function (c) { return c.nat === key && active(c, y); }).map(function (c) { return { id: c.id, name: c.name, k: c.k, src: 'hist', desc: c.desc, g: c.g || (FEMALE[c.id] ? 'f' : 'm'), mate: c.mate }; });
     Object.keys(r.prom).forEach(function (id) {
       var p = r.prom[id], d = G.MATE[id];
       if (p.nat === key && p.k !== 'p' && d) out.push({ id: id, name: d.name, k: p.k, src: 'prom', desc: d.desc, g: d.g || 'm', mate: id });
@@ -218,20 +218,38 @@
     if (n.tip) return;   // 여급이 알려 준 배는 알려 준 척수 그대로 (js/systems/maidtip.js)
     if (G.Ships && n.ships && n.n < 5) { var more = G.Ships.enemyTypes(n.kind, n.zone, n.nation, 1, n.K, S().date.y); if (more[0]) { n.ships.push(more[0]); n.n = n.ships.length; } }
   }
+  // 이름난 해적 → 바다의 배에 붙이는 선장 (성별·해적단은 js/data/pirate_roster.js)
+  function capOf(c) { return { id: c.id, name: c.name, src: 'hist', desc: c.desc, g: c.g || (FEMALE[c.id] ? 'f' : 'm'), mate: c.mate, k: 'p', band: c.band || null }; }
+  /** 지금 바다에 나올 수 있는 이름난 해적 (zone 바다, busy: 이미 바다에 나온 선장 id) */
+  CP.namedFree = function (zone, busy) {
+    var s = S(); if (!s) return []; CP.ensure();
+    var y = s.date.y; busy = busy || {};
+    return CP.pirates().filter(function (c) { return !busy[c.id] && active(c, y) && (!zone || c.zones.indexOf(zone) >= 0); });
+  };
+  /** 해적 떼 n에 이 이름난 해적을 붙인다 (여급·식당의 소문 — js/systems/maidtip.js). 나올 수 없는 사람이면 false */
+  CP.forceNamed = function (n, id) {
+    var s = S(); if (!s || !n || n.kind !== 'pirate') return false; CP.ensure();
+    var c = CP.pirates().filter(function (x) { return x.id === id; })[0];
+    if (!c || !active(c, s.date.y)) return false;
+    n.cap = capOf(c); n.K = Math.min(1, (n.K || 0.3) + 0.2);
+    n.label = CP.label(n);
+    if (G.PirateAct && G.PirateAct.calm() && !n.lairChief) { n.hostile = false; n.calm = true; }
+    return true;
+  };
   CP.assign = function (n, npcs) {
     var s = S(); if (!s || !n || n.exp || n.court || n.cap) return n;
     CP.ensure();
     var busy = busySet(npcs), y = s.date.y;
     if (n.kind === 'pirate') {
       var r = st(), zone = n.zone;
-      var cand = CP.pirates().filter(function (c) { return !busy[c.id] && active(c, y) && c.zones.indexOf(zone) >= 0; }).map(function (c) { return { id: c.id, name: c.name, src: 'hist', desc: c.desc, g: FEMALE[c.id] ? 'f' : 'm', mate: c.mate, k: 'p' }; });
+      var cand = CP.pirates().filter(function (c) { return !busy[c.id] && active(c, y) && c.zones.indexOf(zone) >= 0; }).map(capOf);
       Object.keys(r.prom).forEach(function (id) { var p = r.prom[id], d = G.MATE[id]; if (p.k === 'p' && p.zone === zone && d && !busy[id]) cand.push({ id: id, name: d.name, src: 'prom', desc: d.desc, g: d.g || 'm', mate: id, k: 'p' }); });
       if (n.tip || !cand.length || !U.chance(B().namedPirate)) return n;   // 여급이 알려 준 해적 떼는 이름 없는 해적 (알려 준 대로)
       n.cap = U.pick(cand); boost(n, 0.2);
       n.label = CP.label(n);
       if (G.PirateAct && G.PirateAct.calm() && !n.lairChief) {
         n.hostile = false; n.calm = true;
-        if (G.UI && G.UI.toast) G.UI.toast(n.cap.name + '의 해적단이 수평선에 보인다 — 아직은 우리를 건드리지 않는다.', 'skull', 4200);
+        if (G.UI && G.UI.toast) G.UI.toast(CP.crew(n.cap) + U.jx(CP.crew(n.cap), '이/가') + ' 수평선에 보인다 — 아직은 우리를 건드리지 않는다.', 'skull', 4200);
       }   // 게임을 시작하고 몇 해: 보여도 먼저 덤비지 않는다 (pirate_activity.js)
       return n;
     }
@@ -246,10 +264,13 @@
     n.label = CP.label(n);
     return n;
   };
+  /** 「바르바로사 함대의 하이레딘 바르바로사」 · 해적단이 없으면 「○○의 해적단」 */
+  CP.crew = function (c) { var bd = c && c.band && G.PIRATE_BANDS && G.PIRATE_BANDS[c.band]; return bd ? bd.name + '의 ' + c.name : (c ? c.name : '') + '의 해적단'; };
   CP.title = function (n) { var c = n.cap; return n.kind === 'pirate' ? '두목' : n.kind === 'navy' || c.k === 'n' ? '제독' : '선장'; };
   CP.label = function (n) {
     var c = n.cap; if (!c) return n.label;
-    if (n.kind === 'pirate') return c.name + '의 ' + (G.Ships ? G.Ships.pirateLabel(n.zone) : '해적') + '단';
+    var bd = c.band && G.PIRATE_BANDS && G.PIRATE_BANDS[c.band];
+    if (n.kind === 'pirate') return bd ? bd.name + ' — 두목 ' + c.name : c.name + '의 ' + (G.Ships ? G.Ships.pirateLabel(n.zone) : '해적') + '단';
     var base = (n.nation ? n.nation + ' ' : '') + (n.hunt ? (n.privateer ? '사략함대' : '군함') : n.kind === 'merchant' ? '상선대' : '함대');
     return base + ' — ' + CP.title(n) + ' ' + c.name;
   };
@@ -282,7 +303,7 @@
   };
   CP.encounterText = function (n, text, byMe) {
     var c = n.cap; if (!c) return null;
-    if (n.kind === 'pirate') return byMe ? c.name + '의 해적단 ' + n.n + '척이 있다.' + (n.calm ? ' 아직은 우리를 건드리지 않고 지켜보기만 한다.' : '') + ' 어떻게 할까요?' : '제독! ' + c.name + '의 해적단입니다! ' + n.n + '척이 다가옵니다! — ' + c.desc;
+    if (n.kind === 'pirate') return byMe ? CP.crew(c) + ' ' + n.n + '척이 있다.' + (n.calm ? ' 아직은 우리를 건드리지 않고 지켜보기만 한다.' : '') + ' 어떻게 할까요?' : '제독! ' + CP.crew(c) + '입니다! ' + n.n + '척이 다가옵니다! — ' + c.desc;
     return null;
   };
 

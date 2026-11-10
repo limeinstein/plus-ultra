@@ -272,7 +272,7 @@
     // 관심사에 맞는 이야기는 후하게 (G.BALANCE.sponsorTaste) — 세계일주는 관심사와 상관없다
     var T = (G.BALANCE && G.BALANCE.sponsorTaste) || {}, liked = d.id !== 'circum' && G.tasteHit(sp.taste, d);
     var adv = Math.round(d.val * (0.2 + 0.055 * w) * (liked ? T.advance || 1 : 1) / 100) * 100;
-    var rew = Math.round(G.Disc.value(d) * (0.62 + 0.12 * w) * art * (liked ? T.reward || 1 : 1) / 100) * 100;   // 그림·세공은 G.Disc.value에 들어 있다
+    var rew = Math.round(G.Disc.value(d) * (0.62 + 0.12 * w) * art * (liked ? T.reward || 1 : 1) * (G.Disc.rewardK ? G.Disc.rewardK('gold') : 1) / 100) * 100;   // 발견 보상 배수 (G.BALANCE.discoveryReward)   // 그림·세공은 G.Disc.value에 들어 있다
     // 성품: 조급하면 기한이 짧고 선금이 후하다 · 신중하면 선금은 적고 사례가 크다 · 욕심이 많으면 사례가 적다 · 너그러우면 선금을 조금 더
     var tp = SP.temper(sp);
     if (tp === 'hasty') { if (d.id !== 'circum') years = Math.max(1, years - 1); adv *= 1.15; }
@@ -280,7 +280,7 @@
     else if (tp === 'greedy') rew *= 0.9;
     else if (tp === 'generous') adv *= 1.05;
     adv = Math.round(adv / 100) * 100; rew = Math.round(rew / 100) * 100;
-    return { advance: Math.max(400, adv), reward: Math.max(1200, rew), years: years, liked: liked };
+    return { advance: Math.max(400, adv), reward: Math.max(Math.round(1200 * (G.Disc.rewardK ? G.Disc.rewardK('gold') : 1) / 100) * 100, rew), years: years, liked: liked };
   }
 
   /** 튜토리얼의 메디나셀리 공작인가 — 튜토리얼에서는 제안을 늘 받아 주고, 교섭은 늘 성공하며, 교섭 뒤에는 「승낙한다」만 남는다 (QA 2026-10-16:

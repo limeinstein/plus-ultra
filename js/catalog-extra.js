@@ -18,8 +18,8 @@
     function scene(t, e) {
       const chain = e.chain || (e.key ? [e.key] : []);
       return add(t, { group: e.group, name: e.name, sub: e.sub || '', meta: e.meta || '', extra: e.text || '', when: e.when, achId: e.achId, foodId: e.foodId,   // 본 것만 보이게 (js/systems/codexmemo.js)
-        key: chain[0] || '', chain: chain, ar: '16 / 10',
-        pic: () => I.make(chain, 960, 600, () => pageArt(e.name)),
+        key: chain[0] || '', chain: chain, ar: e.ar || '16 / 10',
+        pic: () => I.make(chain, 960, e.ar === '9 / 4' ? 427 : 600, () => pageArt(e.name)),
         detail: () => ({ text: e.text, hint: e.hint, facts: (e.facts || []).filter(Boolean) }) });
     }
 
@@ -59,6 +59,7 @@
       const e = (G.ACHV_EVENTS || {})[a.id] || {}, chain = [e.pic || 'achievement-events/' + a.id];
       (a.ids || []).forEach(id => chain.push('discoveries/' + id));
       scene(ach, { group: a.group, name: a.name, sub: a.group, text: a.desc, chain: chain, achId: a.id,
+        ar: a.id === 'happily' ? '9 / 4' : undefined,   // 네 공주의 얼굴을 가로 원화 그대로 보여 준다.
         meta: '탐험 명성 +' + num(a.fame || 0) + ' · 금화 ' + num(a.gold || 0) + '닢',
         facts: [['달성 조건', a.desc], ['탐험 명성', '+' + num(a.fame || 0)], ['금화 보상', num(a.gold || 0) + '닢'],
           a.title ? ['칭호', a.title] : null, a.ids ? ['관련 발견물', a.ids.map(id => (G.DISC[id] || {}).name || id).join(' · ')] : null,

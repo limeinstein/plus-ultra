@@ -1,0 +1,116 @@
+[
+  {
+    "id": "folk_tibet",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_tibet.png",
+    "game": "images/discovery-ends/folk_tibet.jpg",
+    "sha256": "f94925ba5dbc2efe14fa0ad90511f3383145419aac66b667c1ffb8f188180fa6"
+  },
+  {
+    "id": "folk_hui",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_hui.png",
+    "game": "images/discovery-ends/folk_hui.jpg",
+    "sha256": "675a216977aaa8f089034fac0c80b0bd7166734e408e72092930002bc951aef5"
+  },
+  {
+    "id": "folk_manchu",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_manchu.png",
+    "game": "images/discovery-ends/folk_manchu.jpg",
+    "sha256": "861b0edfa631e24e7dce1b82b1a23cad4d2020385b555fe22ce89c67cadffbc0"
+  },
+  {
+    "id": "folk_gaoshan",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_gaoshan.png",
+    "game": "images/discovery-ends/folk_gaoshan.jpg",
+    "sha256": "582650d2d815b1b360a0c7767b3212e7774874fb30f2a1db0756699224fe74bc"
+  },
+  {
+    "id": "folk_miao",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_miao.png",
+    "game": "images/discovery-ends/folk_miao.jpg",
+    "sha256": "bcf16ff684a1d5ff983be8b4422eaa8b51a0f55fc16553a7c989ee5bddcae1f2"
+  },
+  {
+    "id": "folk_yao",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_yao.png",
+    "game": "images/discovery-ends/folk_yao.jpg",
+    "sha256": "7eb469f0fa08f59bca6ffcf6fc6aa4bea1db5e895a34165d84ee4597f45ba370"
+  },
+  {
+    "id": "folk_shui",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_shui.png",
+    "game": "images/discovery-ends/folk_shui.jpg",
+    "sha256": "6804dcf97487e38eaba8ec19092dd3eea5f26877d9d8a80dd771171bccd67630"
+  },
+  {
+    "id": "folk_buyei",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_buyei.png",
+    "game": "images/discovery-ends/folk_buyei.jpg",
+    "sha256": "8c8f7895dff873e4d5d74c9933af6e831e8ceb727226e6824c1f3fea7d38944e"
+  },
+  {
+    "id": "folk_zhuang",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_zhuang.png",
+    "game": "images/discovery-ends/folk_zhuang.jpg",
+    "sha256": "ac52ef7d6f1ffd02df4628350deee0b7b0c6f4fc5132d796cd0c3f6ead0129bf"
+  },
+  {
+    "id": "folk_yi",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_yi.png",
+    "game": "images/discovery-ends/folk_yi.jpg",
+    "sha256": "89125a8cd1286c23337e7bc7555e10616b15ed67a44ef08c68fb37039ffec17f"
+  },
+  {
+    "id": "folk_lachi",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_lachi.png",
+    "game": "images/discovery-ends/folk_lachi.jpg",
+    "sha256": "a9595df3ff8849736f6aad3b110a9e56a9fe7eeebacaa27d410fa0f135a058dd"
+  },
+  {
+    "id": "folk_lolo",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_lolo.png",
+    "game": "images/discovery-ends/folk_lolo.jpg",
+    "sha256": "05cc127b932f4a3b09d6e50623b52c5130f2755fbb7beea7dc2579174db4c6f7"
+  },
+  {
+    "id": "folk_lue",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_lue.png",
+    "game": "images/discovery-ends/folk_lue.jpg",
+    "sha256": "0e862da8ae4107411ddc042721d71f613321a58d82eaf939c59d95ba27895314"
+  },
+  {
+    "id": "folk_mnong",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_mnong.png",
+    "game": "images/discovery-ends/folk_mnong.jpg",
+    "sha256": "0444e6ac15a64bd22652d24efdf6de69a46e30b3b652f24111be0240f35fb640"
+  },
+  {
+    "id": "folk_samoa",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_samoa.png",
+    "game": "images/discovery-ends/folk_samoa.jpg",
+    "sha256": "1b796f858faf15ba08a8c68a26eac3261ec79bda624062e01800677c06919874"
+  },
+  {
+    "id": "folk_tonga",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_tonga.png",
+    "game": "images/discovery-ends/folk_tonga.jpg",
+    "sha256": "d481d9d5f74b73fd8f25c37493aa16f992972f73beec7b6880c86ed285e64c73"
+  },
+  {
+    "id": "folk_tahiti",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_tahiti.png",
+    "game": "images/discovery-ends/folk_tahiti.jpg",
+    "sha256": "d846a2381e6c282aa90aafc9c3e380cd375f1236e442cb32da456da16d1f65ae"
+  },
+  {
+    "id": "folk_rapanui",
+    "source": "tools/missing_catalog_art_20261110/sources/folk_rapanui.png",
+    "game": "images/discovery-ends/folk_rapanui.jpg",
+    "sha256": "4ab7a0a3b6e6585868938694d72da22cbf3d6bb51e18307255ee0e82987ab2bc"
+  },
+  {
+    "id": "moye",
+    "source": "tools/missing_catalog_art_20261110/sources/moye.png",
+    "game": "images/items/moye.webp",
+    "sha256": "5eea5c5b35b155fe1d76919d676615b2a2dac0347f81d102f6b29c6147e2f4b2"
+  }
+]
