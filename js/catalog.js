@@ -31,7 +31,7 @@
   // ---------------------------------------------------------------- helpers
   function pathOf(key, kind) {
     const f = I.path(key);
-    return 'images/' + (f || key + (kind === 'png' ? '.png' : '.jpg'));
+    return I.base() + (f || key + (kind === 'png' ? '.png' : '.jpg'));
   }
   function copyCanvas(src, w, h) {
     const c = document.createElement('canvas');

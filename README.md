@@ -2242,3 +2242,7 @@ dist/               만들어진 배포판
   놓은 자리는 이 기기(브라우저)에 기억한다 — `localStorage pu.hudPos.minimap / pu.hudPos.windbox`(화면 비율로, 저장 파일과 상관없다).
 - 오른쪽 클릭, 또는 옮긴 판에 마우스를 올리면 나오는 ⟲ 단추로 기본 자리로 돌아간다.
 - 코드 `js/ui/hudpin.js` (G.HudPin) · `js/scenes/sea.js` · `css/style.css` · 시험 `tests/hud_pin_smoke.js` (1600×900 · 1432×807 · 1280×720 · 1920×1080 · 1366×768)
+
+### Pages 그림 전송 (2026-11-10)
+
+GitHub Pages 자동 배포는 각 가지의 커밋에 고정된 공개 저장소 그림 주소를 사용합니다. 	ools/build_web.py --image-base URL로 지정하며 원본 그림을 다시 압축하거나 줄이지 않습니다. 시작 화면의 불러오기 그림과 출처 문서는 웹에 함께 둡니다. 일반 빌드와 로컬 파일 실행은 기존 그림 폴더를 사용합니다. 정식·베타 묶음을 합친 뒤 	ools/check_pages_size.py로 게시 한도 1GB를 검사합니다.

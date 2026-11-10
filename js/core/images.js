@@ -5,7 +5,7 @@
   'use strict';
   var I = {};
   G.Img = I;
-  var BASE = 'images/';
+  var BASE = G.IMAGE_BASE || 'images/';   // 웹 배포는 버전이 고정된 그림 주소를 쓸 수 있다. 파일 실행은 기존 폴더를 쓴다.
   var files = null, fileKeys = null, lists = new Map();
   var imgs = {}, state = {}, waiters = {};
   var failAt = {}, askedAt = {};        // 못 읽은 때 · 읽기 시작한 때 (ms)
@@ -283,7 +283,9 @@
     };
     im.onerror = function () { end(false); };
     timer = setTimeout(function () { try { im.src = ''; } catch (e) { /* 무시 */ } end(false); }, CF('stallMs'));
-    im.src = I.src(k);
+    var src = I.src(k);
+    if (/^https?:\/\//.test(src || '')) im.crossOrigin = 'anonymous';   // 다른 주소의 그림도 캔버스·WebGL에서 안전하게 읽는다.
+    im.src = src;
   }
   /** 곧 그릴 그림: 기다리지 않고 읽기만 시작한다 (이미 읽는 중·읽었으면 아무 일도 하지 않는다 — 매 장면 불러도 가볍다) */
   I.want = function (k) { if (k && !state[k] && man()[k]) I.load(k); };

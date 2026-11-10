@@ -8,7 +8,8 @@
 
 esbuild가 설치되어 있으면(npm i -g esbuild) 자바스크립트와 CSS를 줄여서 더 작게 만듭니다.
 """
-import os, re, time, shutil, subprocess, sys, zipfile
+import os, re, time, shutil, subprocess, sys, zipfile, json
+from urllib.parse import urlsplit
 
 sys.dont_write_bytecode = True  # tools 폴더에 __pycache__ 를 만들지 않음
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -28,6 +29,12 @@ OUT = output_path(option('--out', os.path.join('dist', 'web')))
 ZIP = output_path(option('--zip', os.path.join('dist', 'Loop_of_Good_Hope_web.zip')))
 CHANNEL = option('--channel', 'stable')
 NO_ZIP = '--no-zip' in sys.argv
+IMAGE_BASE = option('--image-base', '').strip()
+if IMAGE_BASE:
+    image_url = urlsplit(IMAGE_BASE)
+    if image_url.scheme not in ('http', 'https') or not image_url.netloc or image_url.query or image_url.fragment or image_url.username or image_url.password:
+        raise SystemExit('--image-base에는 인증 정보·질의문이 없는 http(s) 폴더 주소를 넣으십시오.')
+    IMAGE_BASE = IMAGE_BASE.rstrip('/') + '/'
 DESC = '탐험과 발견의 시대(1480~1860)를 무대로 한 모험·교역·해전 브라우저 게임. 후원자의 의뢰를 받아 세계의 발견물을 찾아 떠나세요.'
 TELEMETRY_ENDPOINT = 'https://plus-ultra-telemetry.luminary121284.chatgpt.site/api/event'
 
@@ -176,6 +183,10 @@ def main():
         # images: 바뀐 것만 복사 (예전에는 dist/web을 지우고 1GB를 통째로 다시 복사했다)
         n_copied = 0
         for k, rel in sorted(found.items()):
+            # Pages의 1GB 한도: 원화는 저장소의 커밋 고정 주소를 사용한다.
+            # 시작 화면은 스크립트보다 먼저 뜨므로 불러오기 그림 한 장은 함께 둔다.
+            if IMAGE_BASE and rel != 'effects/loading-world.anim.webp':
+                continue
             dst = os.path.join(OUT, 'images', rel)
             keep.add(os.path.normpath(dst))
             if copy_if_changed(os.path.join(pages.ROOT, 'images', rel), dst):
@@ -183,6 +194,8 @@ def main():
                 if n_copied % 25 == 0:
                     tick()
         mjs, _ = pages.manifest_js(found, embed=False)
+        if IMAGE_BASE:
+            mjs += 'G.IMAGE_BASE = ' + json.dumps(IMAGE_BASE) + ';\n'
         keep.add(os.path.normpath(os.path.join(OUT, 'images/manifest.js')))
         emit('images/manifest.js', mjs)
         manifest_rel = 'images/manifest.js?v=' + pages.short_hash(mjs)
