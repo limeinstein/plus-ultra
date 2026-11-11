@@ -1,0 +1,396 @@
+{
+  "date": "2026-11-11",
+  "tool": "built-in image_gen",
+  "size": 256,
+  "margin": 14,
+  "total": 43,
+  "assets": [
+    {
+      "id": "wayland",
+      "name": "웨일랜드의 사슬 갑옷",
+      "kind": "armor",
+      "description": "대장장이 웨일랜드가 짰다고 영웅 베오울프가 자랑하던 사슬 갑옷. 고리 하나하나에 작은 룬이 새겨져 있고, 바닷물에 담가 두어도 녹이 슬지 않는다. 한자 상인의 창고에 저당 잡혀 있던 것이 베르겐 시장에 흘러나왔다.",
+      "source": "artifacts/new-item-art-20261111/raw/wayland.png",
+      "output": "images/items/wayland.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Wayland's legendary northern European chainmail hauberk, one empty unworn knee-length mail shirt with short sleeves and integral draped mail coif lying behind the collar, exceptionally fine interlinked silver-gray iron rings, subtle tiny illegible rune-like tooling on a few larger collar rings, worn leather edging and one simple bronze clasp. No body, mannequin, head, helmet or weapon."
+    },
+    {
+      "id": "cidarmor",
+      "name": "엘 시드의 갑옷",
+      "kind": "armor",
+      "description": "발렌시아를 차지한 기사 로드리고 디아스, 「엘 시드」가 입었다는 사슬 갑옷과 흉갑. 죽은 뒤에도 이 갑옷을 입고 말 위에 묶여 성문을 나서자 적이 달아났다는 전설이 얽혀 있다. 대성당 보물고에서 나왔다는 소문과 함께 발렌시아 시장에 걸렸다.",
+      "source": "artifacts/new-item-art-20261111/raw/cidarmor.png",
+      "output": "images/items/cidarmor.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: El Cid's legendary Spanish armor: one empty medieval mail hauberk with an attached compact polished steel breastplate over the torso, broad shoulder mail, restrained warm brass edging and a burgundy leather fastening. Distinct chain rings and curved chest plate, no wearer, helmet, person, horse or weapons."
+    },
+    {
+      "id": "saladin",
+      "name": "살라딘의 사슬 갑옷",
+      "kind": "armor",
+      "description": "예루살렘을 되찾은 술탄 살라흐 앗딘이 입었다는 다마스쿠스 강철 사슬 갑옷. 고리를 두 겹으로 꿰어 화살촉이 빠져나가지 못한다. 술탄이 잠든 우마이야 모스크 곁의 갑옷장이 집안이 대대로 지켜 오다 다마스쿠스 시장에 내놓았다.",
+      "source": "artifacts/new-item-art-20261111/raw/saladin.png",
+      "output": "images/items/saladin.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Saladin's legendary Damascene double-layer chainmail coat: an empty long-sleeved dark silvery steel mail shirt, dense overlapping fine interlinked rings, refined narrow brass geometric trim at neck and hem and a few dark brown leather closures. Elegant medieval Syrian craftsmanship. No figures, animals, faces, person, mannequin, helmet, writing or extra weapons."
+    },
+    {
+      "id": "babrebayan",
+      "name": "루스탐의 호피 갑옷",
+      "kind": "armor",
+      "description": "『왕의 책(샤나메)』의 영웅 루스탐이 싸움마다 입었다는 「바브레 바얀」. 물에 젖지도 불에 타지도 않는다는 짐승 가죽 겉옷 아래 쇠미늘을 촘촘히 댔다. 이스파한 바자르의 늙은 상인은 루스탐의 무덤 바위 아래에서 나온 것이라고 맹세한다.",
+      "source": "artifacts/new-item-art-20261111/raw/babrebayan.png",
+      "output": "images/items/babrebayan.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Rostam's Babr-e Bayan legendary Persian armor: one unworn sleeveless tiger-striped fur hide overcoat with orange-gold and black stripes, dense dark iron lamellar plates visibly lining the inside of its open front, simple bronze Persian geometric clasps, thick leather seams. Object only, no animal head, paws, tail, live tiger, wearer, helmet or mannequin."
+    },
+    {
+      "id": "kavacha",
+      "name": "카르나의 황금 갑옷",
+      "kind": "armor",
+      "description": "태양신의 아들 카르나가 태어날 때부터 몸에 붙어 있었다는 황금 갑옷 「카바차」. 인드라 신에게 떼어 바쳤다는 노래와 달리, 남인도의 사원이 몰래 모셔 왔다고 한다. 캘리컷 사모린의 궁정 상인이 처음으로 시장에 내놓았다.",
+      "source": "artifacts/new-item-art-20261111/raw/kavacha.png",
+      "output": "images/items/kavacha.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Karna's legendary Kavacha golden armor: one unworn luminous warm gold Indian breastplate with curved shoulder guards and overlapping lower plates, finely embossed central sun disk and delicate radial floral scrollwork, rich softly worn gold texture. A physical empty armor, no wearer, skin, deity, mannequin, face, earrings or weapons."
+    },
+    {
+      "id": "white_elephant_seal",
+      "name": "흰 코끼리 인장",
+      "kind": "keepsake",
+      "description": "따웅우 왕 바인나웅이 총포를 바친 포르투갈 사람에게 내린 인장. 흰 코끼리는 버마 왕권의 상징이다.",
+      "source": "artifacts/new-item-art-20261111/raw/white_elephant_seal.png",
+      "output": "images/items/white_elephant_seal.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A small sixteenth-century Burmese royal seal with a stylized white elephant carved as the handle, ivory-white stone elephant with trunk gently raised standing on a round gilded bronze stamping base, delicate Burmese floral metalwork. Show actual solid seal object, no separate ink stamp impression, letters, person or live animal."
+    },
+    {
+      "id": "thatluang_leaf",
+      "name": "탓루앙의 금박 한 장",
+      "kind": "keepsake",
+      "description": "비엔티안의 큰 탑 탓루앙을 덮을 금박 가운데 한 장. 란쌍의 스님이 「공덕을 나눈 사람」에게 돌려준 것이다.",
+      "source": "artifacts/new-item-art-20261111/raw/thatluang_leaf.png",
+      "output": "images/items/thatluang_leaf.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: ONE delicate square sheet of extremely thin gold leaf for gilding That Luang stupa, softly rippling irregular gold edges, subtle creases and light transmitting at the thinnest edges, one partially folded ivory tissue backing visible behind the gold leaf. Precious small devotional material, no stupa, frame, lettering or scenery."
+    },
+    {
+      "id": "santo_nino_copy",
+      "name": "산토 니뇨의 작은 모상",
+      "kind": "keepsake",
+      "description": "1565년 세부의 불탄 집에서 찾아낸 아기 예수상 — 마젤란이 마흔네 해 전에 남긴 것 — 을 본떠 깎은 작은 나무 상.",
+      "source": "artifacts/new-item-art-20261111/raw/santo_nino_copy.png",
+      "output": "images/items/santo_nino_copy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A small carved wooden Santo Nino devotional statuette: a fully clothed infant Jesus figure wearing an elaborate deep red and gold embroidered robe, a small gilded crown, holding a miniature golden orb in one hand and raising the other in blessing. Warm painted wood texture and a low simple wooden plinth, a physical sculpture, not a living child. No halo glow, scenery or writing."
+    },
+    {
+      "id": "tornaviaje_chart",
+      "name": "우르다네타의 돌아오는 길 해도",
+      "kind": "book",
+      "description": "필리핀에서 북쪽으로 올라가 북위 40도 언저리의 서풍과 해류를 타고 아메리카로 돌아오는 길을 그린 해도. 이 길이 열리자 마닐라와 아카풀코 사이에 갤리온이 오가게 되었다.",
+      "source": "artifacts/new-item-art-20261111/raw/tornaviaje_chart.png",
+      "output": "images/items/tornaviaje_chart.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A sixteenth-century Urdaneta return-route nautical chart on one partly unfurled ivory parchment sheet, hand-drawn Pacific Ocean between a small Philippine island group on the left and the west coast of the Americas on the right, clear red route curving far north then east, faint compass rose and thin rhumb lines, soft illegible ink notations. Rolled corners, no modern printed map, no text legible."
+    },
+    {
+      "id": "ayutthaya_craft",
+      "name": "아유타야 장인의 금 상감 함",
+      "kind": "keepsake",
+      "description": "1569년 무너지는 아유타야에서 함께 빠져나온 장인이 고마움의 뜻으로 건넨 작은 함. 검은 옻칠 위에 금으로 연꽃이 새겨져 있다.",
+      "source": "artifacts/new-item-art-20261111/raw/ayutthaya_craft.png",
+      "output": "images/items/ayutthaya_craft.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A small sixteenth-century Ayutthaya artisan's rectangular lacquer keepsake casket, glossy aged black lacquer with exquisite gold-inlaid lotus blossoms and scrolling leaves, Thai pointed floral edging and tiny brass hinges, lid slightly open showing a plain dark interior. One box, no jewelry contents, people, letters or scene."
+    },
+    {
+      "id": "sulayman_kris",
+      "name": "술라이만의 크리스",
+      "kind": "keepsake",
+      "description": "마닐라의 젊은 왕 라자 술라이만이 지녔다는 물결 모양 칼날의 단검. 반쿠사이의 바다에서 건져 올렸다.",
+      "source": "artifacts/new-item-art-20261111/raw/sulayman_kris.png",
+      "output": "images/items/sulayman_kris.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Raja Sulayman's recovered kris dagger, ONE clearly wavy forged steel blade with visible subtle pamor patterns, a compact carved dark brown wooden grip, warm aged brass collar and small crossguard, elegant Philippine maritime craftsmanship, salt-worn but intact. Diagonal whole dagger fully visible, no sheath, hands, blood or other weapons."
+    },
+    {
+      "id": "zh_qilin_scroll",
+      "name": "기린도 두루마리",
+      "kind": "keepsake",
+      "description": "1414년 벵골의 사신이 말린디의 기린을 명나라 황제께 바친 날을 그린 그림의 옛 사본. 말린디의 늙은 뱃사람이 할아버지의 할아버지에게서 물려받았다며 내주었다.",
+      "source": "artifacts/new-item-art-20261111/raw/zh_qilin_scroll.png",
+      "output": "images/items/zh_qilin_scroll.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A Ming Chinese hanging painting scroll partly unrolled, showing a slender giraffe with ochre spotted fur being gently led by a tiny robed attendant in a very small refined ink-and-color painting on aged silk. The giraffe painting is the clear center, dark wooden top and bottom rollers, no readable inscriptions, seal text, frame or surrounding scene. Depict a giraffe, NOT a mythical Chinese qilin."
+    },
+    {
+      "id": "pr_family_map",
+      "name": "피리 레이스 집안의 해도 사본",
+      "kind": "book",
+      "description": "1513년 겔리볼루에서 그린 가젤 가죽 세계 지도를 피리 레이스가 손수 베낀 사본. 술탄께 바친 지도에는 없는 붉은 잉크의 글 몇 줄과, 「진짜 십자가의 땅」 남쪽 바다에 찍힌 붉은 점 하나가 있다.",
+      "source": "artifacts/new-item-art-20261111/raw/pr_family_map.png",
+      "output": "images/items/pr_family_map.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Piri Reis family's 1513 world-chart copy on one irregular gazelle-hide parchment, antique Atlantic coast outlines with western Africa at right and eastern South America at left, a finely drawn compass rose and rhumb lines, a few restrained red illegible ink notes and ONE small red dot in the southern Atlantic near Brazil. Entire tactile parchment visible, no modern continent outlines or readable labels."
+    },
+    {
+      "id": "pr_astrolabe",
+      "name": "카브랄 선단의 청동 아스트롤라베",
+      "kind": "keepsake",
+      "description": "1500년 카브랄 선단 보급선의 수로안내인이 금화 상자와 함께 아브롤류스 암초에 묻은 청동 아스트롤라베. 테두리에 포르투갈 왕가의 혼천의 문장이 새겨져 있다.",
+      "source": "artifacts/new-item-art-20261111/raw/pr_astrolabe.png",
+      "output": "images/items/pr_astrolabe.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A compact heavy bronze Portuguese MARINER'S ASTROLABE recovered from Cabral's fleet, open spoked circular ring with large cutout apertures to let wind pass, a pivoting sighting alidade across center, stout suspension ring above, worn nautical degree ticks and a small engraved armillary-sphere emblem on the lower rim. Green marine patina, no readable numerals or words, not a clock."
+    },
+    {
+      "id": "pr_red_note",
+      "name": "붉은 잉크의 마지막 쪽지",
+      "kind": "keepsake",
+      "description": "금화 상자 밑바닥에 깔려 있던 쪽지. 젊은 피리의 글씨로 「이것을 찾은 이는 내 지도를 믿어 준 사람이다」라고 적혀 있다.",
+      "source": "artifacts/new-item-art-20261111/raw/pr_red_note.png",
+      "output": "images/items/pr_red_note.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One small weathered cream paper note from the bottom of a treasure chest, partly unfolded with two sharply creased flaps, a few fine lines of faded RED handwritten ink rendered entirely illegible, a small dark red ink blot near the edge, warm aged paper fibers. No pen, chest, coins, readable words or seal."
+    },
+    {
+      "id": "an_valley_diamond",
+      "name": "다이아몬드 골짜기의 큰 다이아몬드",
+      "kind": "keepsake",
+      "description": "세렌디브 산속, 뱀이 우글거리는 골짜기 바닥에서 고깃덩이에 붙어 올라온 주먹만 한 다이아몬드. 신드바드가 「내 둘째 항해 때 것보다 크군」 하고 웃었다.",
+      "source": "artifacts/new-item-art-20261111/raw/an_valley_diamond.png",
+      "output": "images/items/an_valley_diamond.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One fist-sized natural rough diamond from Sinbad's diamond valley, huge translucent pale clear crystal with irregular octahedral faces and a few naturally fractured edges, restrained prismatic internal glints and sharply painted mineral facets. Unmounted uncut gemstone only, no gold setting, meat, snakes, hands, floor, scenery, rainbow rays or floating sparkles."
+    },
+    {
+      "id": "an_roc_feather",
+      "name": "로크의 깃털",
+      "kind": "keepsake",
+      "description": "돛대만큼 긴 거대한 새 로크의 깃털 한 가닥. 깃대가 사람 팔뚝보다 굵다. 마르코 폴로도 칸에게 로크의 깃털이 바쳐졌다고 적었다.",
+      "source": "artifacts/new-item-art-20261111/raw/an_roc_feather.png",
+      "output": "images/items/an_roc_feather.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One enormous roc feather presented as a collectible object, broad ivory cream barbs with subtle silver-gray shading, extremely thick bone-white quill, elegant slightly curved shape filling a diagonal square, tiny natural flaws along the vane. Entire single feather visible, no bird, person, measuring ruler, background, sparkle or frame."
+    },
+    {
+      "id": "an_khilat",
+      "name": "칼리프의 영예의 옷",
+      "kind": "keepsake",
+      "description": "하룬 알 라시드가 밤 산책에서 자기를 도와준 이방인에게 내린 금실 비단 옷(힐아트). 이 옷을 입고 바그다드에 들어서면 궁의 문지기가 먼저 고개를 숙인다.",
+      "source": "artifacts/new-item-art-20261111/raw/an_khilat.png",
+      "output": "images/items/an_khilat.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A caliph's luxurious khilat robe of honor, one empty unworn long open-front Abbasid-inspired silk robe folded into a compact draped display, deep emerald silk, intricate gold-thread geometric and floral embroidery along broad cuffs, collar and hem, a rich burgundy silk lining slightly visible. No wearer, head, mannequin, animal or human motifs, readable Arabic, jewelry or scenery."
+    },
+    {
+      "id": "an_ebony_key",
+      "name": "흑단 말의 태엽 열쇠",
+      "kind": "keepsake",
+      "description": "하늘을 나는 흑단 말의 귀 뒤에 꽂는 은 열쇠의 짝. 왕자 카마르가 「말을 고쳐 준 사람에게」라며 내주었다. 돌리면 아주 작게 날갯짓 소리가 난다.",
+      "source": "artifacts/new-item-art-20261111/raw/an_ebony_key.png",
+      "output": "images/items/an_ebony_key.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One exquisite small silver winding key for a magical mechanical ebony horse, antique polished silver, double-loop butterfly-shaped handle with delicate geometric engraving, a short square-ended winding shaft and one tiny recessed brass gear visible in the handle. Mechanical object only, no horse, literal wings, fantasy glow, stand or writing."
+    },
+    {
+      "id": "an_sanaa_pearls",
+      "name": "사나 공주의 진주 목걸이",
+      "kind": "keepsake",
+      "description": "이스파한에서 구해 낸 예멘 사나의 공주 나디라 알 사나니가 고마움의 뜻으로 건넨 어머니의 진주 목걸이.",
+      "source": "artifacts/new-item-art-20261111/raw/an_sanaa_pearls.png",
+      "output": "images/items/an_sanaa_pearls.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: An heirloom pearl necklace from a Yemeni princess, a single graceful loop of luminous uneven natural white pearls, antique gold clasp and a small understated filigree gold centerpiece with one teardrop pearl pendant, warm delicate jewelry craftsmanship. Entire necklace clearly visible with all spaces true transparent, no neck, bust, box, people, readable text or figures."
+    },
+    {
+      "id": "ft_golden_arrow",
+      "name": "노팅엄의 금 화살",
+      "kind": "keepsake",
+      "description": "노팅엄 장관이 활쏘기 대회의 상으로 건 금 화살. 장관은 이 화살로 로빈 후드의 무리를 꾀어내려 했지만, 검은 망토의 배트 후드가 단상에서 낚아채 갔다.",
+      "source": "artifacts/new-item-art-20261111/raw/ft_golden_arrow.png",
+      "output": "images/items/ft_golden_arrow.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One ceremonial golden archery prize arrow from Nottingham, long slender straight gilded shaft, sharply formed leaf-shaped gold arrowhead, sculpted feather fletchings with fine grooves and a small nock, restrained medieval English engraving. Diagonal entire arrow visible, no bow, quiver, hands, ribbons, living bird or scenery."
+    },
+    {
+      "id": "ft_rapunzel_braid",
+      "name": "라푼젤의 금빛 머리채",
+      "kind": "keepsake",
+      "description": "마녀 고텔이 잘라 낸 라푼젤의 머리채. 탑 꼭대기에서 땅까지 닿던 길이다. 라푼젤이 「다시는 이걸로 누구를 올려 주지 않을 거예요」라며 웃으며 건넸다.",
+      "source": "artifacts/new-item-art-20261111/raw/ft_rapunzel_braid.png",
+      "output": "images/items/ft_rapunzel_braid.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Rapunzel's severed golden braid as a fairy-tale keepsake, ONE extraordinarily long thick braid of warm golden-blonde hair coiled into two generous loops, a soft loose natural cut end and a small faded wine-red ribbon tying the far end. Hair only, no head, scalp, body, person, blood, magical glow or writing."
+    },
+    {
+      "id": "ft_gessler_hat",
+      "name": "게슬러의 모자",
+      "kind": "keepsake",
+      "description": "알트도르프 광장의 장대 끝에 걸려, 지나가는 사람마다 절하게 했던 합스부르크 대관의 모자. 이제는 아무도 그 앞에서 고개를 숙이지 않는다.",
+      "source": "artifacts/new-item-art-20261111/raw/ft_gessler_hat.png",
+      "output": "images/items/ft_gessler_hat.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Gessler's imposing medieval Habsburg bailiff's hat, one dark crimson felt cap with a wide slightly upturned brim, a dark brown leather band, a small aged brass buckle and one restrained black feather, visibly weather-worn from being hung on a pole. Entire hat isolated, no pole, head, mannequin, crown or readable heraldic text."
+    },
+    {
+      "id": "cv_paria",
+      "name": "파리아 만의 해도",
+      "kind": "special",
+      "description": "1498년 8월, 바닷물이 민물로 바뀌는 파리아 만에서 콜론과 함께 수심을 재며 그린 해도. 귀퉁이에 콜론의 글씨로 「이것은 다른 세상이다(otro mundo)」라고 적혀 있다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/cv_paria.png",
+      "output": "images/items/cv_paria.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A single old parchment nautical chart of the Gulf of Paria, wide indented coast with river mouths and soundings in faded sepia ink, pale blue wash over the gulf, compact compass rose and short illegible marginal notes. One curled corner and warm salt-stained paper, no modern map labeling, readable writing, title, pen or ship."
+    },
+    {
+      "id": "cv_letter",
+      "name": "사슬의 편지",
+      "kind": "special",
+      "description": "1500년 가을, 쇠사슬에 묶인 콜론이 「라 고르다」호에서 왕자 후안의 유모였던 도냐 후아나 데 라 토레에게 쓴 긴 편지. 「나는 마치 한 도시의 시장이 아니라 낯선 왕국을 다스리는 사람처럼 심판받아야 합니다.」 여왕이 읽기를 바라는 편지다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/cv_letter.png",
+      "output": "images/items/cv_letter.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Columbus's 'letter from chains': two old ivory parchment leaves joined as one folded letter, dense faint illegible sepia cursive, a dark rusty iron shackle with a short two-link chain laid across the lower corner as part of this single letter keepsake, heavy travel creases and a small broken wax seal. No person, hands, readable quotation or surrounding props."
+    },
+    {
+      "id": "cv_msg",
+      "name": "멘데스의 편지",
+      "kind": "special",
+      "description": "1503년 여름 자메이카의 산타 글로리아 바닷가에서 콜론이 에스파뇰라 총독 오반도에게 쓴 구원의 편지. 디에고 멘데스가 맡았다. 「배 두 척이 벌레 먹어 모래에 박혔소. 백열여섯 명이 살아 있소.」 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/cv_msg.png",
+      "output": "images/items/cv_msg.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Mendes's plea-for-rescue letter carried from Jamaica, one compact folded cream parchment dispatch tied with a thin faded blue cord, its top flap half-open revealing a few illegible brown cursive lines, salt stains and slightly frayed edges. One restrained dark red wax seal. No canoe, palm tree, person, readable text or scene."
+    },
+    {
+      "id": "cv_chain",
+      "name": "콜론의 사슬 한 고리",
+      "kind": "special",
+      "description": "1500년 산토도밍고에서 콜론의 손발을 묶었던 쇠사슬의 한 고리. 그는 그 사슬을 방에 걸어 두고, 죽으면 함께 묻어 달라고 했다. 1505년 세비야의 겨울, 그가 그 한 고리를 떼어 건넸다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/cv_chain.png",
+      "output": "images/items/cv_chain.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: ONE heavy broken oval iron chain link from Columbus's shackles, dark forged steel with rust in recesses, hand-hammered facets, one clear broken opening and worn smooth inner edges. Single isolated metal link only, no additional chain, shackle, person, padlock, paper, blood or scenery."
+    },
+    {
+      "id": "dc_letter",
+      "name": "다우티의 마지막 편지",
+      "kind": "special",
+      "description": "1578년 7월 2일 산훌리안의 바닷가, 목이 베이기 전날 밤 토머스 다우티가 아우 존에게 쓴 편지. 밀랍 위에 그의 반지 자국이 찍혀 있다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/dc_letter.png",
+      "output": "images/items/dc_letter.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Thomas Doughty's final letter, one folded aged cream paper letter with an open upper flap, faint illegible ink lines, a distinctive deep red wax seal bearing an indistinct signet-ring impression, softened travel creases and slightly darkened edges. No actual signet ring, quill, hands, blood, execution scene or readable words."
+    },
+    {
+      "id": "dc_plate",
+      "name": "노바 알비온의 놋쇠 판 탁본",
+      "kind": "special",
+      "description": "1579년 여름, 드레이크가 북쪽 바닷가의 기둥에 못 박은 놋쇠 판을 종이에 문질러 뜬 것. 「여왕 엘리자베스의 이름으로 이 땅을 노바 알비온이라 부른다」 — 가운데 구멍에는 여왕의 얼굴을 새긴 은화가 박혀 있었다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/dc_plate.png",
+      "output": "images/items/dc_plate.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A paper rubbing of Drake's brass plate of Nova Albion: one rectangular cream paper sheet with rough rubbed charcoal and bronze-gray impression of a rectangular metal plaque, bands of intentionally illegible incised-letter texture and a central circular coin-shaped rubbed impression of a tiny abstract royal profile. Worn folded corners, no actual plate, detached coin, readable lettering or scenery."
+    },
+    {
+      "id": "dc_plank",
+      "name": "골든 하인드호의 판자",
+      "kind": "special",
+      "description": "1580년 1월 셀레베스 앞바다의 산호초에 걸렸던 골든 하인드호의 바닥에서 갈아 낸 참나무 판자. 드레이크가 「이 배가 나를 놓지 않았듯 그대도 나를 놓지 않았소」라며 건넸다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/dc_plank.png",
+      "output": "images/items/dc_plank.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One stout fragment of aged oak hull planking from the Golden Hind, irregular rectangular board with a broken diagonal end, two old iron nail heads, a dark tar seam along one edge, salt-weathered warm wood grain and a few tiny pale coral encrustations at the bottom. A single plank, no entire ship, text, sea or extra objects."
+    },
+    {
+      "id": "dc_chest",
+      "name": "카카푸에고의 은 상자",
+      "kind": "special",
+      "description": "1579년 3월 1일 적도 바다에서 사로잡은 보물선 「누에스트라 세뇨라 데 라 콘셉시온」의 은 상자 하나. 드레이크가 몫으로 떼어 주며 봉인했다. 팔 수 없다 — 잉글랜드에 닿아 원정의 셈이 끝나면 금화가 된다.",
+      "source": "artifacts/new-item-art-20261111/raw/dc_chest.png",
+      "output": "images/items/dc_chest.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One compact sixteenth-century Spanish treasure chest filled with silver, dark oak box with heavy tarnished silver-colored iron straps, lid slightly open to reveal a modest stack of old silver ingots and a few silver coins, a small red wax shipping seal on the front latch. One chest only, no gold treasure, readable text, people or scene."
+    },
+    {
+      "id": "dc_share",
+      "name": "드레이크 원정의 출자 증서",
+      "kind": "special",
+      "description": "1577년 런던에서 끊은 「알렉산드리아 무역」 원정의 출자 증서. 실은 남쪽 바다로 가는 길이라는 것을 아는 사람은 몇 없다. 여왕도 몰래 한 몫을 냈다고 한다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/dc_share.png",
+      "output": "images/items/dc_share.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A Drake expedition investment certificate disguised as an Alexandrian trade venture, ONE formal sixteenth-century cream parchment document with neat rows of tiny illegible brown cursive, a modest geometric ink border and one dark green hanging wax seal on a short cream ribbon. Slightly rolled lower edge, no readable heading, modern typography, people, coins or maps."
+    },
+    {
+      "id": "dc_commission",
+      "name": "페루 부왕의 허가장",
+      "kind": "special",
+      "description": "1579년 리마에서 부왕 톨레도가 내준 허가장. 「잉글랜드 해적 프란시스코 드라케를 쫓아 붙잡거나 그 배를 부수는 자에게 왕의 이름으로 상을 내린다.」 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/dc_commission.png",
+      "output": "images/items/dc_commission.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A Spanish viceroy of Peru's official pursuit commission, one rolled-open warm parchment decree, a modest red-and-gold heraldic crest at the top as tiny abstract geometric marks, illegible sepia handwritten lines and a hanging dark red wax seal on a short burgundy cord. No readable words, portrait, weapons, people or separate scroll case."
+    },
+    {
+      "id": "mg_astrolabe",
+      "name": "마가야네스의 아스트롤라베",
+      "kind": "special",
+      "description": "1521년 4월 27일 막탄의 여울에서 건져 낸 사령관이 끝내 놓지 않은 놋쇠 아스트롤라베. 고리에 「모든 성인의 해협」을 지난 날짜가 칼끝으로 새겨져 있다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/mg_astrolabe.png",
+      "output": "images/items/mg_astrolabe.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Magellan's battered brass MARINER'S ASTROLABE recovered from shallow water at Mactan, a thick openwork circular bronze ring with cross-shaped spokes, rotating sighting bar and stout suspension loop, dark marine patina and scratches on lower rim with only tiny indistinct engraved marks. Entire object, no clock face, stars, readable dates, person or scenery."
+    },
+    {
+      "id": "mg_share",
+      "name": "빅토리아호의 출자 증서",
+      "kind": "special",
+      "description": "1519년 세빌리아 무역관(카사 데 콘트라타시온)에서 끊어 준 향료제도 원정의 출자 증서. 배가 정향을 싣고 돌아오면 몫을 받는다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/mg_share.png",
+      "output": "images/items/mg_share.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A 1519 Spanish Casa de Contratacion investment certificate for the Victoria spice expedition, ONE warm cream folded parchment with a neat tabular list of illegible ink entries, a small abstract heraldic mark, a dark crimson wax seal on a short double ochre cord. Slightly rough paper edges, no loose cloves, ship, readable words or additional objects."
+    },
+    {
+      "id": "sj_padrao",
+      "name": "파드랑의 탁본",
+      "kind": "special",
+      "description": "1522년 8월 순다클라파 강어귀에 포르투갈 사람들이 세운 돌기둥(파드랑)의 글을 라트나가 야자 종이에 떠 놓은 탁본. 십자가 아래 포르투갈 왕의 문장과 혼천의가 찍혀 있다. 돌기둥은 남았으나, 그 약속을 지키러 온 배는 없었다.",
+      "source": "artifacts/new-item-art-20261111/raw/sj_padrao.png",
+      "output": "images/items/sj_padrao.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: A palm-paper rubbing of a Portuguese padrao stone pillar, ONE long tan fiber paper sheet, rubbed gray impression of a Christian cross above an abstract Portuguese shield and armillary-sphere emblem, lower inscription blurred into short unreadable strokes, natural vertical fold creases and rolled lower corners. No stone column, readable text, person or scenery."
+    },
+    {
+      "id": "sj_nobat",
+      "name": "노바트의 북채",
+      "kind": "special",
+      "description": "말라카 왕실의 즉위 북(노바트)을 치던 북채 한 쌍. 1528년 조호르 강가에서 열다섯 살의 알라우딘 리아야트 샤 2세가 즉위하던 날, 툰 파티마가 「북을 지켜 준 배에게」라며 내렸다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/sj_nobat.png",
+      "output": "images/items/sj_nobat.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: ONE matched pair of Malay royal nobat drumsticks, dark polished hardwood shafts with rounded padded dark-red heads, restrained gold metal collars and narrow burgundy silk wrapping at the grip, crossed in a clean compact arrangement. Two sticks only, no drum, hands, people, readable text, backdrop or music symbols."
+    },
+    {
+      "id": "md_sinker",
+      "name": "막당중의 그물추",
+      "kind": "special",
+      "description": "막당중이 젊은 날 꼬짜이 앞바다에서 쓰던 납 그물추. 손때에 반질반질하다. 「나도 고기를 잡던 손이오. 그물은 한 번 던지면 거두어야 하오.」",
+      "source": "artifacts/new-item-art-20261111/raw/md_sinker.png",
+      "output": "images/items/md_sinker.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One small well-handled old Vietnamese fishing-net sinker made from dull silver-gray lead, squat teardrop weight with a clearly drilled attachment hole through its top, smooth polished wear along the sides and a short thin hemp cord loop threaded through the hole. Simple unadorned fishing object, no net, fish, person or writing."
+    },
+    {
+      "id": "md_comb",
+      "name": "후옌의 대모 빗",
+      "kind": "special",
+      "description": "대모(바다거북 등딱지)로 깎은 반달 빗. 태후가 아끼던 여관에게 내린 것으로, 등에 작은 글씨로 「黎(레)」 한 자가 새겨져 있다. 마 강 어귀의 새벽, 후옌이 제독의 손에 쥐여 주었다.",
+      "source": "artifacts/new-item-art-20261111/raw/md_comb.png",
+      "output": "images/items/md_comb.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One crescent-shaped Vietnamese tortoiseshell comb, translucent amber and dark brown mottled shell, a gently arched broad back with fine even tapering teeth, a tiny single engraved Chinese character '黎' on the back, restrained aged polish. Entire delicate comb fully visible, no turtle, hair, person, other lettering, jewelry or scene."
+    },
+    {
+      "id": "md_rope",
+      "name": "진남관의 밧줄 한 토막",
+      "kind": "special",
+      "description": "1540년 겨울, 막당중이 목에 밧줄을 걸고 맨발로 진남관에 나가 명의 장수 앞에 엎드렸다. 그 밧줄의 끝을 끊어 온 것. 「씨름꾼은 목에 밧줄을 걸지 않습니다.」 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/md_rope.png",
+      "output": "images/items/md_rope.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: ONE short cut length of old thick hemp rope from Zhen'nan Pass, roughly coiled into a loose open S, worn tawny fibers with two clearly frayed cut ends, slight dark stains from age. Plain rope keepsake only, no closed noose, knot around anything, person, neck, scene, label or other props."
+    },
+    {
+      "id": "sm_letter",
+      "name": "세랑의 편지",
+      "kind": "special",
+      "description": "1512년 테르나테에서 프란시스쿠 세랑이 벗 마가야네스에게 쓴 편지. 「나는 여기서 바스쿠 다 가마가 찾은 것보다 더 크고 더 부유한 새 세상을 찾았네.」 정향 냄새가 밴 종이에 밀랍으로 봉했다. 팔 수 없다.",
+      "source": "artifacts/new-item-art-20261111/raw/sm_letter.png",
+      "output": "images/items/sm_letter.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: Francisco Serrao's 1512 letter to Magellan from Ternate, one partly unfolded ivory paper letter with faint illegible brown cursive and a dark reddish-brown wax seal, warm humidity stains and rough fibrous edges, a subtle clove-brown tint on a corner. No loose spices, pen, ship, map, hands or readable words."
+    },
+    {
+      "id": "sm_clove",
+      "name": "테르나테의 정향 가지",
+      "kind": "special",
+      "description": "가말라마 화산 중턱, 보키 나이라가 「할머니의 할머니가 심은 나무」라 부르는 정향나무에서 꺾은 꽃봉오리 가지. 붉은 봉오리가 마르면서 못 모양이 된다. 그래서 정향(丁香)이다.",
+      "source": "artifacts/new-item-art-20261111/raw/sm_clove.png",
+      "output": "images/items/sm_clove.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: One fresh clove-tree twig from Ternate, slim woody brown branch with three glossy elliptical deep-green leaves and several clusters of small rosy red unopened clove flower buds, a few darkening buds beginning to form the distinctive nail shape. Natural botanical collectible, not dried spice pile, no pot, label, hand, insect or scene."
+    },
+    {
+      "id": "sm_spear",
+      "name": "막탄의 대나무 창",
+      "kind": "special",
+      "description": "1521년 4월 27일, 막탄의 얕은 여울에서 쓰인 대나무 창. 끝을 불에 그슬려 단단하게 했다. 불란이 「우리 바다를 지킨 것」이라며 건넸다.",
+      "source": "artifacts/new-item-art-20261111/raw/sm_spear.png",
+      "output": "images/items/sm_spear.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent individual inventory item icon for a historical Age of Discovery maritime RPG, readable at 256x256. Detailed semi-realistic hand-painted museum object illustration matching existing item art: rich natural materials, fine crafted details, restrained warm upper-left light, clear silhouette and tactile texture. One centered square composition, slightly elevated three-quarter view, entire object fully inside the frame with generous 12 percent transparent padding on EVERY side. TRUE transparent alpha outside the object and inside all holes. No floor, cast-shadow plate, white/gray haze, scenery, hands, person, mannequin, label, border, logo or watermark. All writing must be tiny illegible ink strokes except an explicitly requested single engraved character. No readable captions. Do not add props unless explicitly specified. Subject: ONE Mactan bamboo spear, a long slender bamboo shaft with clear segmented nodes and a sharply whittled fire-hardened dark brown tip, a simple narrow rattan binding immediately below the tip and a clean plain lower end. Entire spear diagonal, no steel spearhead, feathers, flag, hand, warrior, blood, flame or scenery."
+    }
+  ]
+}

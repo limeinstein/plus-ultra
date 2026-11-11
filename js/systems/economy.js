@@ -6,7 +6,8 @@
    · 제독이 가까이 있으면 소식으로 듣고, 멀리 있으면 술집 소문·교역소 주인 이야기·그 도시에 들러서 안다(s.econ.ev[].known).
      모르는 사건도 값에는 그대로 들어간다 — 소식을 놓치면 싸게 팔거나 비싸게 사게 된다.
    · 값에 곱하기: rules.js R.buyPrice·R.sellPrice(E.mult 'buy'·'sell'), R.supply('stock'), R.onSell(E.onSell — 모자란 양 채우기)
-   · 저장: s.econ = {ev: [사건], seq, seeded} — 사건 {n, type, at(가운데 도시), cities, nat, war, k(세기), ann(조짐 날), start, end, why, pre, fill{도시:{물건:통}}, known, told}
+   · 제독이 실어다 팔아 모자람이 풀리면(E.sold) 적어 두고, 거리 사람·술집 소문이 그 이야기를 한다(E.reliefLine·E.reliefMurmur).
+   · 저장: s.econ = {ev: [사건], seq, seeded, relief: [풀린 일], reliefSeq} — 사건 {n, type, at(가운데 도시), cities, nat, war, k(세기), ann(조짐 날), start, end, why, pre, fill{도시:{물건:통}}, known, told}
      옛 저장에는 없고 쓸 때 만든다.
    조정값: G.BALANCE.econ */
 (function (G) {
@@ -194,6 +195,119 @@
     return make('war', at.id, list.map(function (c) { return c.id; }), { nat: nat, war: w[2] });
   };
 
+  // ---------------------------------------------------------------- 제독이 실어다 풀었다 (모자람이 풀림 → 마을 사람들의 입으로)
+  /* 매각이 끝난 뒤(js/city/trade.js sellQty) 한 번: 이번 매각으로 모자람 사건이 풀렸거나(full) 크게 꺾였으면(part) 적어 둔다.
+     s.econ.relief = [{id, ev(사건 n), type, city, g, q(제독이 이 도시에 판 양), day, kind, mb·ma(사건 배수 전·뒤), pb·pa(사는 값 전·뒤), why, others[아직 모자란 이웃 도시], told{도시: 몇 번}}]
+     거리 사람(js/systems/streetfolk.js)이 그 도시에서는 고마움·값 이야기로, 이웃 도시에서는 「…라더라」로 전한다. 술집 소문(E.say)도 제독의 이름을 댄다. */
+  function RK() { return K().relief || {}; }
+  /** 사건 까닭을 들은 말로 (「… 밀밭이 타들어 간다」 → 「… 밀밭이 타들어 간다고들 했지. 」) */
+  function whySay(w) { var t = String(w || '').replace(/[.。]\s*$/, ''); return /다$/.test(t) ? t + '고들 했지. ' : ''; }
+  function reliefs() { var T = st(); return T ? (T.relief || (T.relief = [])) : []; }
+  E.reliefs = reliefs;
+  E.sold = function (c, g, q) {
+    if (!S() || !S().econ || !c || !q) return [];
+    var out = [], rk = RK(), d = day(), T = st();
+    E.activeAt(c.id).forEach(function (e) {
+      var v = dOf(e, g, c); if (v <= 1) return;
+      var r = ramp(e); if (!r) return;
+      var nq = needQty(e, c, g); if (!nq) return;
+      var left = E.needLeft(e, c, g), leftB = Math.min(nq, left + q);
+      var frA = 1 - left / nq, frB = 1 - leftB / nq;
+      var mb = 1 + (v - 1) * r * (1 - frB), ma = 1 + (v - 1) * r * (1 - frA);
+      if (mb < 1.12) return;                                         // 이미 거의 제자리였다 — 이야깃거리가 아니다
+      var mine = (e.fill && e.fill[c.id] && e.fill[c.id][g]) || q;
+      var full = left <= nq * (rk.fullLeft == null ? 0.06 : rk.fullLeft);
+      var prev = reliefs().filter(function (x) { return x.ev === e.n && x.city === c.id && x.g === g; });
+      if (prev.some(function (x) { return x.kind === 'full'; })) return;
+      if (!full && (prev.length || mine < nq * (rk.partShare == null ? 0.4 : rk.partShare) || mb - ma < 0.15)) return;
+      var bs = K().buyShare == null ? 0.75 : K().buyShare, pa = Math.round(R.buyPrice(c, g)), pb = Math.round(pa * (1 + (mb - 1) * bs) / (1 + (ma - 1) * bs));
+      var others = e.cities.filter(function (id) {
+        var t = city(id); if (!t || id === c.id || !t.port) return false;
+        var n2 = needQty(e, t, g); return n2 > 0 && E.needLeft(e, t, g) > n2 * 0.4;
+      }).map(function (id) { var t = city(id); return { id: id, d: G.Geo.dist(c.lon, c.lat, t.lon, t.lat), left: E.needLeft(e, t, g) }; })
+        .sort(function (a, b) { return a.d - b.d; }).slice(0, 3);
+      if (prev.length) { var T0 = T.relief; T.relief = T0.filter(function (x) { return prev.indexOf(x) < 0; }); }
+      var rec = { id: (T.reliefSeq = (T.reliefSeq || 0) + 1), ev: e.n, type: e.type, city: c.id, g: g, q: Math.round(mine), day: d, kind: full ? 'full' : 'part',
+        mb: Math.round(mb * 100) / 100, ma: Math.round(ma * 100) / 100, pb: pb, pa: pa, why: e.why, left: left, others: others, told: {} };
+      reliefs().push(rec); out.push(rec);
+      E.learn(e);
+      G.State.log('시장: ' + c.name + '의 ' + G.GOOD[g].name + ' 모자람' + (full ? '이 풀렸다' : '이 한풀 꺾였다') + ' — 실어다 판 ' + U.num(rec.q) + '통. 값 ' + U.num(pb) + ' → ' + U.num(pa) + '닢');
+    });
+    // 오래된 이야기는 잊힌다
+    var keep = rk.keepDays || 240;
+    if (T.relief && T.relief.length) T.relief = T.relief.filter(function (x) { return d - x.day <= keep; }).slice(-(rk.max || 30));
+    return out;
+  };
+  /** 매각 뒤 알림 한 줄 */
+  E.reliefToast = function (rec) {
+    var c = city(rec.city), gn = G.GOOD[rec.g].name;
+    return rec.kind === 'full'
+      ? c.name + '에 ' + U.num(rec.q) + '통의 ' + gn + U.jx(gn, '이/가') + ' 풀리자 모자람이 가셨다. ' + gn + ' 값이 ' + U.num(rec.pb) + '닢에서 ' + U.num(rec.pa) + '닢으로 제자리를 찾았다 — 거리에 소문이 돌기 시작한다.'
+      : c.name + '의 ' + gn + ' 값이 한풀 꺾였다(' + U.num(rec.pb) + ' → ' + U.num(rec.pa) + '닢). 아직 ' + U.num(Math.round(rec.left / 10) * 10) + '통쯤 모자라다.';
+  };
+  /** 이 도시 c의 거리에서 들릴 만한 이야기: {rec, local} — 그 도시면 local, 이웃이면 들은 이야기 */
+  E.reliefNear = function (c) {
+    if (!S() || !S().econ || !c) return null;
+    var rk = RK(), d = day(), best = null;
+    reliefs().forEach(function (x) {
+      var age = d - x.day, t = city(x.city); if (!t || age < 0) return;
+      var local = x.city === c.id;
+      if (local ? age > (x.kind === 'full' ? (rk.localDays || 45) : (rk.partDays || 25)) : (x.kind !== 'full' || age > (rk.hearDays || 90))) return;
+      if (!local) {
+        var dd = G.Geo.dist(c.lon, c.lat, t.lon, t.lat);
+        if (dd > (rk.hearDist || 22) && !(G.REGION_DIST[c.region] && G.REGION_DIST[c.region][t.region] === 0)) return;
+        if (age < Math.min(20, dd * 0.8)) return;                    // 소문이 닿는 데도 날이 걸린다
+        if (((x.told || {})[c.id] || 0) >= (rk.hearTell || 2)) return;
+      } else if (((x.told || {})[c.id] || 0) >= (rk.localTell || 6)) return;
+      var w = (local ? 10 : 1) - age / 100;
+      if (!best || w > best.w) best = { rec: x, local: local, w: w };
+    });
+    return best;
+  };
+  /** 지나가며 들리는 짧은 말 (말풍선) */
+  E.reliefMurmur = function (n, c) {
+    var R0 = n.rec, gn = G.GOOD[R0.g].name, t = city(R0.city), food = G.GOOD[R0.g].cat === 'food';
+    if (!n.local) return U.pick([t.name + '에 ' + gn + U.jx(gn, '이/가') + ' 풀렸대', t.name + ' ' + gn + ' 값이 내렸다던데', t.name + ' 쪽은 한시름 놨다네']);
+    if (R0.kind === 'part') return U.pick([gn + ' 값이 좀 내렸네', '그래도 아직 모자라대', '배가 또 오면 좋겠는데']);
+    return U.pick([gn + ' 값이 내렸대!', '부두에 ' + gn + U.jx(gn, '이/가') + ' 들어왔어', food ? '이제 끼니 걱정은 덜었네' : '이제 한시름 놨네', '어느 배 덕분이래', gn + ' 값이 제자리래']);
+  };
+  /** 거리 사람이 말을 걸었을 때 하는 이야기 (f: 거리 사람) — 없으면 null */
+  E.reliefLine = function (f, c) {
+    if (!f || f.animal || f.reliefSaid) return null;
+    var n = E.reliefNear(c); if (!n) return null;
+    var rk = RK(), told = (n.rec.told || {})[c.id] || 0;
+    if (!f.murmur && !U.chance(n.local ? (told < (rk.localSure == null ? 3 : rk.localSure) ? 1 : (rk.localLater == null ? 0.5 : rk.localLater)) : (rk.hearChance == null ? 0.45 : rk.hearChance))) return null;
+    var x = n.rec, t = city(x.city), gn = G.GOOD[x.g].name, food = G.GOOD[x.g].cat === 'food', s = S();
+    var she = s.player.g === 'f', pn = s.player.name || '제독';
+    var price = gn + ' 값이 한 통 ' + U.num(x.pb) + '닢에서 ' + U.num(x.pa) + '닢으로';
+    var oth = (x.others || []).filter(function (o) { var t2 = city(o.id); if (!t2) return false; var e = st().ev.filter(function (e0) { return e0.n === x.ev; })[0]; return e && day() < e.end && E.needLeft(e, t2, x.g) > 30; });
+    var nextTip = oth.length ? ' 그래도 ' + city(oth[0].id).name + U.jx(city(oth[0].id).name, '은/는') + ' 아직 ' + gn + U.jx(gn, '이/가') + ' 모자라다더군.' : '';
+    var type = f.type, text;
+    if (n.local && x.kind === 'part') {
+      text = type === 'merchant' ? '당신 배가 ' + gn + ' ' + U.num(x.q) + '통을 풀어서 ' + price + ' 꺾였소. 그래도 아직 ' + U.num(Math.round(x.left / 10) * 10) + '통쯤 모자라오. 한 번 더 실어 오면 그만큼 또 남을 거요.'
+        : type === 'boy' || type === 'girl' ? (she ? (type === 'boy' ? '누나' : '언니') : '아저씨') + '가 ' + gn + ' 실어 왔죠? 엄마가 조금 나아졌대요. 근데 아직 모자라대요.'
+        : '선장님 배가 ' + U.eul(gn) + ' 실어 온 덕에 ' + price + ' 내렸어요. 그래도 아직 다 채워지진 않았대요. 다른 배도 오면 좋겠는데.';
+    } else if (n.local) {
+      if (type === 'merchant') text = '당신이 ' + gn + ' ' + U.num(x.q) + '통을 푼 그 선장이로군. 덕분에 ' + price + ' 돌아갔소. 이제 여기에 ' + U.eul(gn) + ' 가져와도 큰 재미는 없을 거요.' + (oth.length ? ' 남기려면 ' + city(oth[0].id).name + U.jx(city(oth[0].id).name, '으로/로') + ' 가 보시오. 거긴 아직 ' + U.num(Math.round(oth[0].left / 10) * 10) + '통쯤 모자라다니.' : ' 모자란 곳은 늘 바뀌는 법이지.');
+      else if (type === 'grandma') text = '자네가 ' + U.eul(gn) + ' 실어 왔다면서? 장에서 ' + price + ' 내렸다네. ' + (food ? '이제 손주들 끼니 걱정은 덜었어.' : '이제야 숨통이 트이는구먼.') + ' 고맙네, 고마워.';
+      else if (type === 'woman') text = '선장님이 ' + U.eul(gn) + ' 실어 왔다면서요? 장에서 ' + price + ' 내렸어요. ' + (food ? '이제 애들 끼니 걱정은 덜었네요.' : '숨통이 좀 트였어요.') + ' 고마워요.';
+      else if (type === 'boy' || type === 'girl') text = (she ? (type === 'boy' ? '누나' : '언니') : '아저씨') + '가 ' + gn + ' 실어 온 사람이에요? ' + (food ? '엄마가 이제 배불리 먹을 수 있대요!' : '어른들이 다 그 배 이야기만 해요!');
+      else if (type === 'man' || type === 'navigator' || type === 'soldier') text = '부두에 ' + gn + ' ' + U.num(x.q) + '통이 내려지는 걸 봤소. 그게 당신 배였구려. ' + (x.why ? whySay(x.why) : '') + '치솟던 ' + gn + ' 값이 그 뒤로 제자리로 돌아왔소.';
+      else text = '이 고장 사람들이 한시름 놓았네. ' + gn + U.jx(gn, '이/가') + ' 모자라 다들 애를 태웠는데, ' + pn + ' 선장 배가 실어 온 뒤로 ' + price + ' 돌아갔지.';
+    } else {
+      var who = pn + ' 선장';
+      text = type === 'merchant'
+        ? t.name + ' 쪽은 이제 늦었소. 누가 ' + gn + ' ' + U.num(Math.round(x.q / 10) * 10) + '통을 먼저 풀어서 값이 제자리로 돌아갔다더군.' + (oth.length ? ' 그 일대에서 아직 모자란 데는 ' + oth.map(function (o) { return city(o.id).name; }).join('·') + '쯤이라오.' : ' 이제 그쪽으로 ' + U.eul(gn) + ' 싣고 가 봐야 헛걸음이오.')
+        : '들었소? ' + t.name + '에 ' + gn + U.jx(gn, '이/가') + ' 모자라 난리였는데, 어느 배가 ' + U.num(Math.round(x.q / 10) * 10) + '통을 실어다 풀어서 값이 제자리로 돌아갔다지 뭐요. ' + who + '이라던데… 혹시 당신이오?' + nextTip;
+    }
+    f.reliefSaid = x.id;
+    x.told = x.told || {}; x.told[c.id] = (x.told[c.id] || 0) + 1;
+    return { text: text, rec: x };
+  };
+  /** 술집·교역소 소문(E.say)에 쓰는: 이 사건을 제독이 풀어 준 일이 있나 */
+  function reliefOf(e) { var L = reliefs().filter(function (x) { return x.ev === e.n && x.kind === 'full'; }); return L[L.length - 1] || null; }
+  E.reliefOf = reliefOf;
+
   // ---------------------------------------------------------------- 날마다 (js/systems/world.js)
   function here() {
     var s = S(), l = s.loc || {};
@@ -286,7 +400,11 @@
     var up = gl.filter(function (x) { return x.d > 1; }); if (!up.length) return e.why + '.';
     var top = up[0], v2 = eff(e, C0, top.g), nl = E.needLeft(e, C0, top.g), nq = needQty(e, C0, top.g);
     var what = names(up, 3) + U.jx(G.GOOD[up[Math.min(2, up.length - 1)].g].name, '을/를') + ' 찾는다더군';
-    if (v2 < 1.15 || nl < nq * 0.15) return e.why + '. ' + what + '. 하지만 벌써 여러 배가 실어다 채워서 값은 거의 제자리로 돌아왔다네.';
+    if (v2 < 1.15 || nl < nq * 0.15) {
+      var rl = reliefOf(e);
+      if (rl && city(rl.city)) return e.why + '. ' + what + '. 그런데 ' + (S().player.name || '어느') + ' 선장의 배가 ' + city(rl.city).name + '에 ' + G.GOOD[rl.g].name + ' ' + U.num(Math.round(rl.q / 10) * 10) + '통을 먼저 풀어서 값은 거의 제자리로 돌아왔다네.';
+      return e.why + '. ' + what + '. 하지만 벌써 여러 배가 실어다 채워서 값은 거의 제자리로 돌아왔다네.';
+    }
     var tail = nl < nq * 0.4 ? ' 다른 배들이 실어다 꽤 채웠지만 아직 ' + U.num(Math.round(nl / 10) * 10) + '통쯤 모자라다네.' : ' 그곳에선 ' + G.GOOD[top.g].name + U.jx(G.GOOD[top.g].name, '이/가') + ' 아직 ' + U.num(Math.round(nl / 10) * 10) + '통쯤 모자라다네.';
     var hm = U.howMuch(v2);
     return e.why + '. ' + what + '. 값이 ' + (/곱절$/.test(hm) ? hm + '로 뛰었고,' : hm + ' 올랐고,') + tail + ' ' + U.howLong(left) + '은 갈 걸세.';

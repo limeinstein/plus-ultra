@@ -784,7 +784,20 @@
   /** 들여온 물건의 그 도시 값 (기준가의 몇 배): 진짜 산지에서 먼 만큼 비싸다. 사는 값은 산지 값 × floor 아래로 내려가지 않는다 */
   R.relayMult = function (c, goodId, side) {
     var K = RELAY(), m = R.regionalMult(goodId, c.region);
-    return side === 'sell' ? Math.max(0.55 * K.floor * 0.9, m * K.sell) : Math.max(0.62 * K.floor, m * K.buy);
+    if (side === 'sell') return Math.max(0.55 * K.floor * 0.9, m * K.sell);
+    var b = Math.max(0.62 * K.floor, m * K.buy), near = K.nearCity && K.nearCity[c.name] != null ? K.nearCity[c.name] : K.nearEU && K.nearEU[R.relayEuDist(c)];
+    if (near) b = Math.max(b, R.regionalMult(goodId, 0) * near);   // 유럽 가까운 중계항은 바로 앞 유럽 시장 값에 가깝게 판다 (2026-11-11 베타 피드백)
+    return b;
+  };
+  /** 중계항에서 이베리아(유럽 시장)까지의 지역 거리 (G.REGION_DIST) */
+  R.relayEuDist = function (c) { var d = c && G.REGION_DIST && G.REGION_DIST[c.region]; return d ? d[0] : 9; };
+  /** 중계항 재고 배수: stock × stockNear[이베리아까지 거리] × stockCity[도시 이름] × stockGood[물건] (G.BALANCE.relay) */
+  R.relayStockK = function (c, goodId) {
+    var K = RELAY(), k = K.stock == null ? 1 : K.stock, d = R.relayEuDist(c);
+    if (K.stockNear && K.stockNear[d] != null) k *= K.stockNear[d];
+    if (K.stockCity && c && K.stockCity[c.name] != null) k *= K.stockCity[c.name];
+    if (K.stockGood && K.stockGood[goodId] != null) k *= K.stockGood[goodId];
+    return k;
   };
   /** price the city asks when you buy */
   R.buyPrice = function (c, goodId) {
@@ -949,7 +962,7 @@
   R.stockCapacity = function (c, id, baseOnly) {
     if (G.Sakoku && G.Sakoku.tradeBlock(c, id, 'buy')) return 0;
     var k = MK(), sk = G.BALANCE.commerce.supply;
-    var cap = (k.stock[0] + c.size * k.stock[1]) * R.stockProfile(id).cap * (R.isRelay(c, id) ? RELAY().stock : 1) *
+    var cap = (k.stock[0] + c.size * k.stock[1]) * R.stockProfile(id).cap * (R.isRelay(c, id) ? R.relayStockK(c, id) : 1) *
       (G.Econ ? G.Econ.mult(c, id, 'stock') : 1) * (G.TradeFleet ? G.TradeFleet.mult(c, id, 'stock') : 1) /
       (G.Era && G.Era.source ? G.Era.source(c, id) : 1) * (G.Sakoku ? G.Sakoku.stock(c) : 1) * R.farStockK(c, id) * (G.Influence ? G.Influence.mult(c, id, 'stock') : 1);   // 항구 영향도: 재고가 는다
     return Math.round(Math.max(sk.goods[id] ? sk.rareMin : sk.min, cap) * (baseOnly ? 1 : 1 + R.projectEffect(c, 'stock')));

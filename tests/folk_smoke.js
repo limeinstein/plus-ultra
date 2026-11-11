@@ -1,5 +1,5 @@
 /* 새 발견물 점검 (2026-10-08) — 중국·인도·중동 명승지·건축물(js/data/eastdisc.js)과 민족 발견물(js/data/folkdisc.js · js/systems/folk.js)
-   - 새 발견물 101곳: 자연 30 · 유적 17 · 민족 54 (중국·동남아·태평양 18 — js/data/asiafolk.js). 모두 G.DISC에 있고, 개척 단계·유물이 있고, 뭍 발견물은 뭍에·바다 발견물은 바다에 있다.
+   - 새 발견물 104곳: 자연 30 · 유적 17 · 민족 57 (중국·동남아·태평양 18 — js/data/asiafolk.js · 카자흐·몽골·위구르 3 — js/data/steppenorse.js). 모두 G.DISC에 있고, 개척 단계·유물이 있고, 뭍 발견물은 뭍에·바다 발견물은 바다에 있다.
    - 민족 발견물은 모두 풍속(folk: 노래·춤·악기·음식·무예)을 갖는다. 발견 카드에 「풍속」 칸이 나온다.
    - 부족 이름 도시(230~245, 298~308) 둘레에 그 부족 발견물이 있고, 처음 들르면 마을 사람이, 술집에서는 주인이 단서를 준다(개척 단계와 상관없이).
    - 도감(catalog.html)이 오류 없이 열리고 민족 발견물 상세에 풍속 줄이 있다.
@@ -44,11 +44,11 @@ const NOISE = /fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed 
       return r;
     });
     console.log('   ' + JSON.stringify(d));
-    ok(d.n === 101 && d.cats.nature === 30 && d.cats.ruin === 17 && d.cats.people === 54, '새 발견물 101곳: 자연 30 · 유적 17 · 민족 54');
+    ok(d.n === 104 && d.cats.nature === 30 && d.cats.ruin === 17 && d.cats.people === 57, '새 발견물 104곳: 자연 30 · 유적 17 · 민족 57');
     ok(!d.place.length, '뭍 발견물은 뭍에, 바다 발견물은 바다에 ' + d.place.join(', '));
     ok(!d.front.length && !d.relic.length, '모두 개척 단계와 유물이 있다 ' + d.front.concat(d.relic).join(','));
     // 52 → 51: 오로라(aurora, 옛 「천상의 커튼」)가 민족이 아니라 자연으로 옮겨 갔다 (js/data/realnames.js cat:'nature') — 의도된 것 (QA 2026-10-23)
-    ok(d.people === 69 && !d.noFolk.length, '민족 발견물 69곳 모두 풍속(노래·춤…)을 갖는다 ' + d.noFolk.join(','));
+    ok(d.people === 72 && !d.noFolk.length, '민족 발견물 72곳 모두 풍속(노래·춤…)을 갖는다 ' + d.noFolk.join(','));
     ok(d.rewritten === 5, '이미 있던 민족 발견물은 풍속 위주 글로 바뀌고 옛 글은 desc0에 남는다');
     ok(d.renamed === 10, '외부인이 붙인 옛 이름 10곳은 실제 공동체를 드러내는 이름으로 바뀌고 옛 이름은 name0에 남는다');
     ok(!d.tribeCities.length, '부족 이름 도시 27곳 둘레마다 민족 발견물 ' + d.tribeCities.join(','));
@@ -84,12 +84,15 @@ const NOISE = /fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed 
     });
     ok(card.join() === '노래,춤,악기,음식,무예', '발견 카드에 풍속 칸: ' + card.join('·'));
     const found = await page.evaluate(async () => {
+      // 발견 처리와 기록을 검사하며, 별도 업적 연출 때문에 응답을 기다리지는 않는다.
+      const achieveScene = G.Achieve.scene; G.Achieve.scene = async () => {};
       const UI = G.UI, o = { say: UI.say, ask:UI.ask, alert: UI.alert, toast: UI.toast, rev: G.Scenes.discoveryReveal, voices:G.Scenes.discoveryVoices, card: G.Scenes.discoveryCard, offer: G.Names && G.Names.offer };
       UI.say = async () => {}; UI.alert = async () => {}; UI.toast = () => {}; G.Scenes.discoveryReveal = async () => {}; G.Scenes.discoveryCard = async () => {}; if (G.Names) G.Names.offer = async () => {};
       G.Scenes.discoveryVoices=async()=>{};UI.ask=async(t,opts)=>opts[opts.length-1].value;
       const ids = ['guilin', 'shaolin', 'tiantan', 'manasarovar', 'socotra', 'umayyad', 'vittala', 'folk_maori', 'folk_tuva', 'folk_mandan'];
       for (const id of ids) { try { await G.Disc.find(G.DISC[id], G.DISC[id].how); } catch (e) { console.error(id + ': ' + e.message); } }
       UI.say = o.say; UI.ask=o.ask; UI.alert = o.alert; UI.toast = o.toast; G.Scenes.discoveryReveal = o.rev;G.Scenes.discoveryVoices=o.voices; G.Scenes.discoveryCard = o.card; if (G.Names) G.Names.offer = o.offer;
+      G.Achieve.scene = achieveScene;
       return ids.filter(id => G.Disc.foundByMe(id)).length;
     });
     ok(found === 10, '새 발견물 10곳을 실제로 찾아 수첩에 적는다');
@@ -98,7 +101,7 @@ const NOISE = /fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed 
     const cat = await browser.newPage({ viewport: { width: 1280, height: 800 } });
     cat.on('pageerror', e => errors.push('catalog: ' + e.message));
     cat.on('console', m => { if (m.type() === 'error' && !NOISE.test(m.text())) errors.push('catalog: ' + m.text()); });
-    await cat.goto(pathToFileURL(path.join(ROOT, 'catalog.html')).href);
+    await cat.goto(pathToFileURL(path.join(ROOT, 'catalog.html')).href+'?view=assets#discoveries');
     await cat.waitForFunction(() => document.querySelector('#tab-discoveries'), null, { timeout: 90000 });
     await cat.click('#tab-discoveries');
     await cat.fill('#q', '줄루 사람들');

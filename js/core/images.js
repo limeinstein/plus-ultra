@@ -580,6 +580,8 @@
     if (age == null) { var s = G.Game && G.Game.state; if (!p) p = s && s.player; age = s && p === s.player && G.R && G.R.age ? G.R.age() : null; }
     var b = hk.sex === 'f' ? 'daughter' : 'son', sf = half ? '_half' : '', P = 'portraits/family/', out = [], v = +(hk.variant || 0);
     var stage = age != null && age >= 40 ? 40 : age != null && age >= 20 ? 20 : 15;
+    var familyKey = I.familyPortrait(hk.artFamily, hk.sex, stage, half);
+    if (familyKey) out.push(familyKey);
     if (v >= 1 && v <= 5) out.push(P + b + '_age' + stage + '_v' + v + sf);
     if (hk.folder) out.push(P + hk.folder + '/' + b + '_age' + stage + sf);
     out.push(P + b + '_age' + stage + sf);
@@ -596,6 +598,12 @@
     return out;
   }
   I.heirChain = heirChain;
+  /** 어머니의 실제 초상을 참고해 그린 자녀 그림이 그 나이에 있을 때만 쓴다. */
+  I.familyPortrait = function (folder, sex, stage, half) {
+    if (!folder) return null;
+    var key = 'portraits/family/' + folder + '/' + (sex === 'f' ? 'daughter' : 'son') + '_age' + stage + (half ? '_half' : '');
+    return I.has(key) ? key : null;
+  };
   /** 대화창 얼굴: 뒤를 이은 자녀는 15세·20세·40세 가족 그림을 나이에 맞게 쓴다. */
   K.heroPortrait = function (p, age) {
     var id = I.heroLook(p), young = FACE + id, old = 'portraits/player-aged/' + id;

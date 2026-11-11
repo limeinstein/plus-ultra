@@ -66,7 +66,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.kid === [5, 10, 15, 20].map(a => P + 'son_age' + a + '_v3|' + P + 'son_age' + a + '_v3_half').join(' '), '아들: 같은 외형 변형으로 5·10·15·20살 얼굴·무릎상이 이어진다');
     ok(r.daughter === [5, 10, 15, 20].map(a => P + 'daughter_age' + a + '_v2|' + P + 'daughter_age' + a + '_v2_half').join(' '), '딸: 같은 외형 변형으로 5·10·15·20살 얼굴·무릎상이 이어진다');
     ok(r.has === '1'.repeat(100) && r.looks.length === 0, '자녀 2종 × 외형 5종 × 5·10·15·20·40살 × 얼굴·무릎상 100장이 모두 있다 ' + r.looks.join(','));
-    ok(/^아들:2:sea_dog:\{"sex":"m","folder":"sea_dog","variant":4\}$/.test(r.succ), '아들이 이으면 아버지의 생김새와 자기 외형 변형을 잇는다 (' + r.succ + ')');
+    ok(/^아들:2:sea_dog:\{"sex":"m","folder":"sea_dog","variant":4(?:,"artFamily":"")?\}$/.test(r.succ), '아들이 이으면 아버지의 생김새와 자기 외형 변형을 잇는다 (' + r.succ + ')');
     ok(r.face17 === P + 'son_age15_v4|' + P + 'son_age15_v4_half|' + P + 'son_age15_v4', '17살 새 제독: 저장된 변형의 소년 얼굴·무릎상');
     ok(r.face25 === P + 'son_age20_v4|' + P + 'son_age20_v4_half', '스무 살부터: 저장된 변형의 성인 얼굴·무릎상 (' + r.face25 + ')');
     ok(r.face45 === P + 'son_age40_v4|' + P + 'son_age40_v4_half', '마흔부터: 저장된 변형의 40대 아들 얼굴·무릎상');

@@ -102,6 +102,17 @@
     var same = (S().player.kids || []).filter(function (x) { return (x.sex === 'f') === (k.sex === 'f'); });
     return Math.max(1, same.indexOf(k) + 1);
   }
+  /** 같은 어머니에게서 태어난 아들·딸별 초상 폴더. 둘째부터는 자기 순번의 그림을 찾는다. */
+  HL.portraitFamily = function (k) {
+    if (k.artFamily != null) return k.artFamily;
+    var p = S().player, mother = k.mother || p.wife;
+    if (!mother) return '';
+    var children = (p.kids || []).filter(function (kid) {
+      return kid.sex === k.sex && (kid.mother || p.wife) === mother;
+    });
+    var n = k.sib ? k.sibOrder : children.indexOf(k) + 1;
+    return 'from_' + mother + (n > 1 ? '_' + n : '');
+  };
   /** 자녀마다 이름·생일에서 안정적으로 정한 외형 변형(1~5, 0 = 지역 그림 k.lookFolder). 성장해도 그대로.
       딸은 어머니의 생김새에 맞는 그림 가운데서 고른다(HL.lookOptions). 옛 저장의 아이도 처음 보일 때 —
       이미 고른 그림이 어머니와 맞으면 그대로 두고, 맞지 않으면(백설공주의 딸이 흑인 등) 맞는 그림으로 바꾼다 */
@@ -132,6 +143,8 @@
       more.push(P + k.lookFolder + '/' + b + '_age15' + sf);
       out = more.concat(out);
     }
+    var familyKey = G.Img.familyPortrait(HL.portraitFamily(k), k.sex, st, half);
+    if (familyKey) out.unshift(familyKey);
     return out;
   };
   /** 대화에서 말하는 아이 */

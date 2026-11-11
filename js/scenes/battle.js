@@ -1591,12 +1591,15 @@
         if (k.hit && targetable(k.target)) {
           var t = k.target;
           var dmg = k.dmg * (1 - (k.target.side === 'me' ? R.fleetBonus('hp') : 0)) * 1.1 * armorK(t) * (k.radial && t.side === 'me' ? Math.max(0.5, 1 - R.fleetBonus('monster')) : 1);
+          // 수호 유물(성 게오르기우스의 방패 — js/data/relics.js ward 'fire'): 용머리 배의 불길·불 뿜는 괴물의 불덩이가 우리 배에 닿지 않는다
+          var wardF = t.side === 'me' && (k.dragonFire || k.element === 'fire') && G.Ward ? G.Ward.item('fire') : null;
+          if (wardF) { dmg = 0; if (!st.wardFireSaid) { st.wardFireSaid = 1; log('불길이 ' + wardF.name + ' 앞에서 갈라진다 — 우리 배에 불이 붙지 않는다!'); } }
           t.hp -= dmg;
           var kill = !t.monster && Math.random() < 0.5 ? Math.ceil(dmg * 0.35 * (k.kill || 1) * (has(t, 'armor') ? 0.4 : has(t, 'raft') ? 1.5 : 1)) : 0; t.crew = Math.max(0, t.crew - kill);
           var water = k.element === 'water';
           if (water) waterBurst(k.tx, k.ty, k.tx - k.x, k.ty - k.y, dmg, true);
           else hitBurst(k.tx, k.ty, k.tx - k.x, k.ty - k.y, dmg, k.gun);
-          if (k.dragonFire && t.hp > 0) {
+          if (k.dragonFire && t.hp > 0 && !wardF) {
             var FK = G.BALANCE.dragonFire, old = t.fireBurn;
             t.fireBurn = { left: FK.duration, clock: old ? old.clock || 0 : 0, dps: Math.max(old ? old.dps : 0, dmg / FK.directK * FK.dotK), fx: 0 };
           }
@@ -1743,7 +1746,8 @@
           else if (how === 'persuade') { var fmP = G.Fame.add('bt', 6); await UI.say(lead + '두목을 설득하자 두목이 칼을 거두었다. 적 함대가 피를 더 흘리지 않고 항복했다! (명성 +' + fmP + ')', {}); }
           else if (how === 'rout') await UI.say(lead + '호통에 두목이 달아나자 적이 우왕좌왕하다 항복했다!', {});
           else await UI.say(lead + '두목을 쓰러뜨리자 적의 전의가 꺾였다! 적 함대가 항복했다!', {});
-          if (ld.secret) { S().player.notoriety += 2; UI.toast('비밀무기를 쓴 일로 뒷말이 돈다. (악명 +2)', 'skull', 3500); }
+          if (ld.secret && !st.npc.great) { S().player.notoriety += 2;   // 큰 해전(레판토 …)에서는 뒷말이 나지 않는다
+            UI.toast('비밀무기를 쓴 일로 뒷말이 돈다. (악명 +2)', 'skull', 3500); }
           st.ships.forEach(function (o) { if (o.side === 'en' && o.alive) { o.alive = false; o.captured = true; } });
           st.busy--; checkEnd(); return;
         }
@@ -1913,7 +1917,9 @@
       });
       s.player.gold += gold;
       var fame = st.npc.kind === 'pirate' ? ((G.BALANCE && G.BALANCE.pirateFameGain) || 25) * Math.max(1, st.ships.filter(function (b) { return b.side === 'en' && (b.sunk || b.captured); }).length) : 10;   // 달아난 배는 치지 않는다
-      fame = G.Fame.add('bt', fame); if (st.npc.kind !== 'pirate' && !st.npc.great && !(G.Court && G.Court.lawful(st.npc)) && !(G.Company && G.Company.lawful(st.npc))) s.player.notoriety += 5;   // 큰 해전(무적함대·레판토·제노바·아즈텍 호수)은 나라 편에 선 싸움 — 악명을 붙이지 않는다 (QA 2026-10-23)
+      fame = G.Fame.add('bt', fame); if (st.npc.kind !== 'pirate' && !st.npc.great && !(G.Court && G.Court.lawful(st.npc)) && !(G.Company && G.Company.lawful(st.npc))) s.player.notoriety += G.Rel && G.Rel.fightNotoriety ? G.Rel.fightNotoriety(st.npc, 'win', 5) : 5;
+      var faithFame = G.Rel && G.Rel.faithFame ? G.Rel.faithFame(st.npc) : 0;   // 이슬람 세력의 함대를 꺾으면 해적질이 아니라 무훈 — 악명 대신 명성 (G.BALANCE.faithFoe, 2026-11-11)
+      if (faithFame) { fame += G.Fame.add('bt', faithFame); lines.push('<span class="muted">' + U.esc(st.npc.nation) + '의 함대를 꺾은 일은 해적질이 아니라 무훈으로 전해진다.</span>'); }   // 큰 해전(무적함대·레판토·제노바·아즈텍 호수)은 나라 편에 선 싸움 — 악명을 붙이지 않는다 (QA 2026-10-23)
       s.stats.sunk += st.ships.filter(function (b) { return b.side === 'en' && b.sunk; }).length;
       // 조합의 해적 퇴치 의뢰
       if (st.npc.kind === 'pirate' && G.Quest) {

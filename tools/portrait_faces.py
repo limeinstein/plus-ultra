@@ -57,7 +57,8 @@ def main():
     R = lambda v: round(float(v), 4)
     out, miss = {}, []
     files = []
-    for d in DIRS + ['portraits/folk-african-men', 'portraits/folk-join', 'portraits/folk-indian-women']:
+    family_dirs = [os.path.relpath(p, IMG) for p in glob.glob(os.path.join(IMG, 'portraits', 'family', 'from_*')) if os.path.isdir(p)]
+    for d in DIRS + ['portraits/folk-african-men', 'portraits/folk-join', 'portraits/folk-indian-women'] + family_dirs:
         for ext in ('webp', 'png', 'jpg'):
             files += glob.glob(os.path.join(IMG, d, '**', '*.' + ext), recursive=True)
     if prefix:

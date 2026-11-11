@@ -628,7 +628,9 @@
   // 거리를 걷는 마을 사람 (js/systems/streetfolk.js · 그림 js/art/streetfolk.js): 거리에 나올 때마다 min~max명,
   //   걷는 빠르기 speed(짐승 animalSpeed) px/초, 멈춰 쉬는 시간 idle초, 바닥선 아래 깊이 depth px(멀수록 작게 scale), 말을 걸 때 제독이 서는 거리 talkGap px
   //   fps: 거리 사람만 움직일 때 거리를 다시 그리는 횟수(초당) — 낮출수록 가볍다 · imgH: 걷는 그림(380×444 한 장)을 그리는 높이 px (제독 178)
-  G.FX.streetFolk = { min: 3, max: 4, speed: [38, 72], animalSpeed: [70, 130], idle: [1.2, 4.5], depth: [12, 52], scale: [1.02, 1.16], talkGap: 100, fps: 60, imgH: 158 };
+  G.FX.streetFolk = { min: 3, max: 4, speed: [38, 72], animalSpeed: [70, 130], idle: [1.2, 4.5], depth: [12, 52], scale: [1.02, 1.16], talkGap: 100, fps: 60, imgH: 158,
+    // 지나가며 들리는 말풍선 (js/systems/streetfolk.js SF.murmurs — 제독이 실어다 풀어 준 모자람 이야기): 그 도시면 local명, 이웃 도시면 hearChance로 한 명 · first초 뒤 처음, every초마다 show초씩 times번
+    murmur: { local: 2, hearChance: 0.5, first: 1.2, gap: 3.4, every: 9, show: 3.4, times: 3 } };
   G.FX.streetShadow = { hero: 0.95, folk: 0.82, heroDepth: 13 }; // 거리 인물의 바닥 그림자 농도·세로 폭
   // 주민에게 직접 들을 소식의 거리·기간. 실제 정세·값은 바꾸지 않는다.
   G.FX.streetFolk.culture = { historyDays: 1095, historyCount: 2, neighborRange: 16, neighborCount: 2 };

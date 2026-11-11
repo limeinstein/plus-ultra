@@ -213,6 +213,9 @@
       var index = st.ships.indexOf(o);
       if (b.chargeHits.indexOf(index) >= 0 || distanceSegment(o.x, o.y, ox, oy, b.x, b.y) >= cfg.ramRadius + o.len * cfg.hitRadiusK) return;
       b.chargeHits.push(index); var dmg = b.maxHp / cfg.hpK * cfg.ramHpK * api.armor(o);
+      // 수호 유물(성 브렌던의 종 — js/data/relics.js ward 'ram'): 종소리를 들은 괴물이 우리 배를 비켜 간다
+      var wardM = o.side === 'me' && G.Ward ? G.Ward.item('ram') : null;
+      if (wardM) { if (!b.wardSaid) { b.wardSaid = 1; api.log(b.name + U.jx(b.name, '이/가') + ' ' + wardM.name + ' 소리에 몸을 틀어 ' + o.name + '호를 비켜 갔다!'); } return; }
       o.hp -= dmg; api.hit(o, dmg, b); api.log(b.name + U.jx(b.name, '이/가') + ' ' + o.name + '호를 들이받았다!');
       if (o.hp <= 0) api.hullBreak(o);
     });

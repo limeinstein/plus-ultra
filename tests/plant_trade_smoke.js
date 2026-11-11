@@ -20,7 +20,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.PlantTrade && G.PlantTrade.hooked, null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
-      const out = {}, P = G.PLANTS.map(id => G.DISC[id]);
+      const MORE = (G.STEPPE_NORSE || []).filter(id => G.PLANTS.indexOf(id) >= 0);   // 2026-11-11 시베리아 식물 4·양귀비 (js/data/steppenorse.js) — 지역별 열매 수 같은 79종 규칙 밖이라 따로 센다
+      const out = { more: MORE.length, moreOk: MORE.every(id => G.PlantTrade.crop(G.DISC[id])) }, P = G.PLANTS.filter(id => MORE.indexOf(id) < 0).map(id => G.DISC[id]);
       // ---- 자료
       out.n = P.length;
       out.fruitByReg = {}; P.filter(d => !d.flower && !d.tree && !d.cactus).forEach(d => { out.fruitByReg[d.reg] = (out.fruitByReg[d.reg] || 0) + 1; });
@@ -89,6 +90,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     });
     console.log(JSON.stringify(r, null, 1).slice(0, 3000));
     ok(r.n === 79, '식물 발견물 79종');
+    ok(r.more === 5 && r.moreOk, '시베리아 식물 4·양귀비 1 — 교역품도 낸다');
     ok(Object.keys(r.fruitByReg).length === 11 && Object.values(r.fruitByReg).every(n => n === 5), '열매 — 지역 11곳마다 5종 (55)');
     ok(new Set(r.trees).size === 11 && r.trees.length === 11 && r.cacti === 3, '지역 대표 나무 11(지역마다 하나) · 선인장 3');
     ok(r.asked.every(Boolean), '매화·난초·국화·대나무·적송·진달래·튤립·장미·흰 장미·파란 장미');

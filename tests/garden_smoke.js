@@ -27,6 +27,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
       const out = {}, UI = G.UI, CT = G.Court, F = G.Fame;
+      // 정원·서임 규칙을 검사하는 동안 업적 보상은 유지하고 별도 업적 연출만 넘긴다.
+      G.Achieve.scene = async () => {};
       const ui0 = { say: UI.say, alert: UI.alert, toast: UI.toast, confirm: UI.confirm, choose: UI.choose, ask: UI.ask };
       function fresh() {
         const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 2; });
@@ -37,7 +39,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const relicOf = disc => Object.keys(G.RELIC).filter(id => G.RELIC[id].relic === disc)[0];
       // ---- 식물 가리기
       out.plants = G.DISCOVERIES.filter(CT.isPlant).map(d => d.id).filter(id => (G.PLANTS || []).indexOf(id) < 0 && (G.AMER1630 || []).indexOf(id) < 0); out.amerPlants = (G.AMER1630 || []).filter(id => CT.isPlant(G.DISC[id])).length;   // 2026-10-28 아메리카 1630 식물 10
-      out.newPlants = (G.PLANTS || []).filter(id => CT.isPlant(G.DISC[id])).length;   // 2026-10-22 식물 발견물 79종(js/data/plantdisc.js)은 따로 센다
+      out.newPlants = (G.PLANTS || []).filter(id => CT.isPlant(G.DISC[id])).length;   // 2026-10-22 식물 발견물 79종(js/data/plantdisc.js) + 2026-11-11 시베리아·양귀비 5종(js/data/steppenorse.js)은 따로 센다
       out.animalNot = ['tiger', 'giraffe', 'tarantula'].every(id => !CT.isPlant(G.DISC[id]));
       out.seedOk = ['sequoia', 'breadfruit', 'lotus', 'flowers', 'huangshan'].map(d => relicOf(d)).every(id => id && CT.plantItem({ id }));
       out.seedNot = ['tarantula', 'sargasso', 'rubber', 'papyrus'].map(d => relicOf(d)).filter(Boolean).every(id => !CT.plantItem({ id }));
@@ -75,9 +77,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       G.State.save = () => {};
 
       // ---- 왕명 「왕실 정원 가꾸기」
-      s = fresh(); F.add('ex', 10500 + 10000 * 3); s.court = { titles: { PT: 3 } };
+      s = fresh(); F.add('ex', 4 * G.BALANCE.court.step + 500);
+      // 세 번째 작위를 오래전 받은 제독: 이전 저장 보정이 새 승진으로 간주해 대기 기간을 붙이지 않게 한다.
+      s.court = { titles: { PT: 3 }, promotions: { PT: { rank: 3, day: -1000 } } };
       const king = G.SPONSOR.pt_king, realm = CT.realmOf(king);
-      ['rubber', 'lotus'].forEach(id => { s.disc[id] = { me: true, found: 15400101 }; });
+      ['rubber', 'lotus', 'mangrove'].forEach(id => { s.disc[id] = { me: true, found: 15400101 }; });
       s.player.items.push({ id: relicOf('breadfruit') });
       out.menu = CT.palaceItems(king).map(x => x.label).join(',');
       let o = null;
@@ -85,13 +89,14 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.offer = o ? o.title + ' · ' + o.cat + ' · n=' + o.n : null;
       want = 'garden'; await CT.audience(king); want = null;
       const t = CT.task();
+      out.audienceState = { fame: s.player.fame, level: CT.level(), rank: CT.rank(realm), present: G.Sponsor.present(king), wait: CT.waitDays(realm), said: said.slice(-4) };
       out.accepted = !!t && t.kind === 'garden';
       out.prog0 = t && CT.progress(t).text;
       said.length = 0; await CT.report(king);
       out.reportHint = said.some(x => /왕실 정원」에서 정원사에게/.test(x));
       out.menuSub = G.Garden.menuItem(king, realm).sub;
       const fame0 = s.player.fame, ex0 = s.player.fameBy.ex, items0 = s.player.items.length;
-      said.length = 0; pickPlant = 3;
+      said.length = 0; pickPlant = 4;
       await G.Garden.visit(king);
       const c = CT.state(), g = c.garden.PT;
       out.done = { title: c.titles.PT, task: !!CT.task(), gdone: !!c.gardenDone.PT, n: g ? g.ids.length + '+' + g.items.length : '-', seedGone: s.player.items.length === items0 - 1, used: Object.keys(c.gardenUsed).sort().join(','),
@@ -107,18 +112,18 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return out;
     });
     console.log('   식물 ' + r.plants.length + '종: ' + r.plants.join(', '));
-    ok(r.plants.length === 11 && r.plants.indexOf('bullocho') >= 0 && r.animalNot && r.newPlants === 79 && r.amerPlants === 10, '나무·꽃·풀 11종(불로초 포함)·새 식물 79종·아메리카 1630 식물 10종은 식물, 호랑이·기린·거미는 아니다');
+    ok(r.plants.length === 11 && r.plants.indexOf('bullocho') >= 0 && r.animalNot && r.newPlants === 84 && r.amerPlants === 10, '나무·꽃·풀 11종(불로초 포함)·새 식물 84종·아메리카 1630 식물 10종은 식물, 호랑이·기린·거미는 아니다');
     ok(r.seedOk && r.seedNot, '씨앗·묘목·분재(세쿼이아·빵나무·연꽃·푸른 양귀비·황산 소나무)는 식물 유물 — 거미 표본·모자반·고무공·파피루스는 아니다');
     ok(r.zoo === 'giraffe,tiger' && r.museum.indexOf('lotus') < 0 && r.museum !== '' && /rubber/.test(r.gardenHave) && /lotus/.test(r.gardenHave), '동물원에는 짐승만, 박물관에는 씨앗이 빠지고, 정원에 바칠 것: ' + r.gardenHave);
     console.log('   옛 저장: ' + JSON.stringify(r.mig) + ' · 동물원 전시 ' + r.zooShow);
     ok(r.mig.zoo === 'tiger' && r.mig.zooUsed === 'tiger' && r.mig.museum === '옛 전시품' && r.mig.garden === 'rubber|큰 연꽃 씨앗' && r.zooShow === 'tiger', '옛 저장: 동물원의 흰 수액나무·박물관의 연꽃 씨앗이 포르투갈 왕실 정원으로 옮겨졌다');
     ok(/왕실 정원/.test(r.menu), '왕궁 메뉴: ' + r.menu);
-    ok(r.offer && /· ex · n=3/.test(r.offer) && r.accepted, '왕명 「' + r.offer + '」을 받았다');
+    ok(r.offer && /· ex · n=4/.test(r.offer) && r.accepted, '왕명 「' + r.offer + '」을 받았다 · ' + JSON.stringify(r.audienceState));
     ok(r.reportHint, '왕좌에서 아뢰면 「식물은 왕궁 안 「왕실 정원」에서 정원사에게 넘기시오」 — ' + r.prog0 + ' · 메뉴 「' + r.menuSub + '」');
     console.log('   ' + JSON.stringify(r.done));
-    ok(r.done.title === 4 && !r.done.task && r.done.gdone && r.done.n === '2+1' && r.done.seedGone && r.done.king && r.done.knight && r.done.alert && r.done.ex > 0, '정원에서 3종(찾아낸 식물 2 + 빵나무 묘목)을 넘기자 군주가 정원으로 나와 백작 서임, 탐험 명성 +' + r.done.ex);
+    ok(r.done.title === 4 && !r.done.task && r.done.gdone && r.done.n === '3+1' && r.done.seedGone && r.done.king && r.done.knight && r.done.alert && r.done.ex > 0, '정원에서 4종(찾아낸 식물 3 + 빵나무 묘목)을 넘기자 군주가 정원으로 나와 자작 서임, 탐험 명성 +' + r.done.ex);
     ok(!r.again, '정원 왕명은 한 나라에 한 번');
-    ok(r.free.so > 0 && r.free.trust > 0 && r.free.n === 4 && r.free.line, '왕명 없이 바친 세쿼이아: 사교 명성 +' + r.free.so + ' · 신뢰 +' + r.free.trust);
+    ok(r.free.so > 0 && r.free.trust > 0 && r.free.n === 5 && r.free.line, '왕명 없이 바친 세쿼이아: 사교 명성 +' + r.free.so + ' · 신뢰 +' + r.free.trust);
 
     // ---------------- 정원을 거닌다 (실제 창)
     await page.evaluate(() => {
@@ -133,7 +138,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     await page.waitForTimeout(1200);
     const cards = await page.evaluate(() => Array.from(document.querySelectorAll('.mu-card')).map(x => x.querySelector('.mu-name').textContent + (x.querySelector('img') ? '🖼' : '')));
     await page.screenshot({ path: path.join(OUT, 'garden.png') });
-    ok(cards.length === 4, '정원을 거닌다 — 카드 ' + cards.join(' · ') + ' (그림: ' + path.join(OUT, 'garden.png') + ')');
+    ok(cards.length === 5, '정원을 거닌다 — 카드 ' + cards.join(' · ') + ' (그림: ' + path.join(OUT, 'garden.png') + ')');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
     console.log('\n통과');
   } catch (e) { console.error('✗', e.message); process.exitCode = 1; } finally { await browser.close(); }

@@ -92,9 +92,37 @@
       f.target = f.x;
       if (G.StreetCulture && !f.mate) G.StreetCulture.attach(f, c, i);   // 거니는 동료는 그 고장 사람이 아니다
     });
+    SF.murmurs(out, c);
     SF.warm(out);
     return out;
   };
+  /** 제독이 실어다 풀어 준 일(js/systems/economy.js E.reliefNear)이 있으면 지나가는 사람 한둘이 그 이야기를 중얼거린다 — 말풍선 */
+  SF.murmurs = function (list, c) {
+    if (!G.Econ || !G.Econ.reliefNear) return;
+    var n; try { n = G.Econ.reliefNear(c); } catch (e) { return; }
+    if (!n) return;
+    var k = K().murmur || {}, who = (list || []).filter(function (f) { return !f.animal && !f.mate; });
+    var cnt = n.local ? Math.min(who.length, k.local || 2) : (U.chance(k.hearChance == null ? 0.5 : k.hearChance) ? 1 : 0);
+    U.shuffle ? U.shuffle(who) : who.sort(function () { return U.rng() - 0.5; });
+    who.slice(0, cnt).forEach(function (f, i) {
+      f.murmur = { text: garbleCanvas(G.Econ.reliefMurmur(n, c), R.cityLang(c).lv), t: -(k.first || 1.2) - i * (k.gap || 3.4) - U.rf(0, 1.2), n: 0, on: false };
+    });
+  };
+  /** 말이 통하지 않으면 알아듣는 만큼만 (UI.garble의 그림판용 — 모르는 낱말은 ×) */
+  function garbleCanvas(text, lv) {
+    if (lv == null || lv >= 3) return text;
+    var rng = U.makeRng(U.strHash(text)), keep = [0, 0.35, 0.7][Math.max(0, lv)];
+    return text.replace(/[가-힣A-Za-z0-9]+/g, function (w) { return rng() < keep ? w : w.replace(/./g, '×'); });
+  }
+  /** 말풍선이 보이는 동안인가 (show초 보이고 every초마다, times번까지) */
+  function murmurOn(f, dt) {
+    var m = f.murmur; if (!m) return false;
+    var k = K().murmur || {}, every = k.every || 9, show = k.show || 3.4, times = k.times || 3;
+    m.t += dt;
+    if (m.t < 0 || f.state === 'talk') return false;
+    var cyc = Math.floor(m.t / every); if (cyc >= times) { f.murmur = null; return false; }
+    return (m.t - cyc * every) < show;
+  }
   /** 말을 걸었을 때 대화창에 설 무릎상(그 사람·제독)을 미리 받아 둔다 — 누르자마자 대화가 열리게 (기다리지 않음) */
   SF.warm = function (list) {
     var I = G.Img; if (!I || !I.count || !I.count() || !I.prefetchKeys) return;
@@ -155,6 +183,7 @@
   SF.update = function (list, dt, heroX) {
     var k = K(), moved = false;
     (list || []).forEach(function (f) {
+      if (f.murmur) { var was = f.murmur.on, on = murmurOn(f, dt); if (f.murmur) f.murmur.on = on; if (on !== was || on) moved = true; }
       if (f.state === 'talk') { var d0 = heroX - f.x; if (d0 && Math.sign(d0) !== f.dir) { f.dir = Math.sign(d0); moved = true; } return; }
       if (f.state === 'idle') {
         f.timer -= dt;
@@ -181,6 +210,34 @@
   // ---------------------------------------------------------------- 그리기·누르기
   function k0() { return K(); }
   SF.draw = function (ctx, f, cam, glow) {
+    drawBody(ctx, f, cam, glow);
+    if (f.murmur && f.murmur.on) drawMurmur(ctx, f, cam);
+  };
+  /** 머리 위 말풍선 (지나가며 들리는 말) */
+  function drawMurmur(ctx, f, cam) {
+    var x = f.x - cam; if (x < -200 || x > 1800) return;
+    var k = K().murmur || {}, every = k.every || 9, show = k.show || 3.4, m = f.murmur, ph = m.t - Math.floor(m.t / every) * every;
+    var a = Math.min(1, ph / 0.35, (show - ph) / 0.5); if (a <= 0) return;
+    var h = (f.frames ? (k0().imgH || 158) * (f.spec.child ? 0.78 : 1) : f.spec.h) * f.sc;
+    var y = f.y - h - 14 - Math.min(1, ph / 0.35) * 6;
+    ctx.save();
+    ctx.globalAlpha = a;
+    ctx.font = k.font || '600 17px "Nanum Myeongjo", serif';
+    var tw = ctx.measureText(m.text).width, pw = tw + 26, phh = 34, bx = Math.round(x - pw / 2), by = Math.round(y - phh);
+    ctx.fillStyle = 'rgba(30,22,14,0.28)'; roundRect(ctx, bx + 2, by + 3, pw, phh, 12); ctx.fill();
+    ctx.fillStyle = k.bg || 'rgba(252,246,230,0.96)'; ctx.strokeStyle = k.line || 'rgba(110,82,44,0.85)'; ctx.lineWidth = 1.5;
+    roundRect(ctx, bx, by, pw, phh, 12); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x - 7, by + phh - 1); ctx.lineTo(x + (f.dir < 0 ? -2 : 2), by + phh + 10); ctx.lineTo(x + 7, by + phh - 1); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x - 7, by + phh); ctx.lineTo(x + (f.dir < 0 ? -2 : 2), by + phh + 10); ctx.lineTo(x + 7, by + phh); ctx.stroke();
+    ctx.fillStyle = k.ink || '#4a3218'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(m.text, x, by + phh / 2 + 1);
+    ctx.restore();
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r); ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r); ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+  }
+  function drawBody(ctx, f, cam, glow) {
     var x = f.x - cam; if (x < -120 || x > 1720) return;
     var moving = f.state === 'walk';
     if (f.frames) {
@@ -335,22 +392,25 @@
     var cl = R.cityLang(c); if (!f.animal) { sp.lang = cl.lv; sp.li = cl.li; } else { sp.lang = 3; sp.li = null; }   // 말은 지금 일행의 실력으로
     f.talked++;
     var deaf = !f.animal && sp.lang === 0;            // 말이 통하지 않으면 쓸모 있는 이야기는 아껴 둔다 (통역을 데려와 다시 말을 걸면 된다)
-    var info = !f.used && !deaf && INFO[f.type] ? INFO[f.type](c) : null;
+    // 제독이 실어다 풀어 준 일 — 그 도시에서는 고마움·값 이야기, 이웃 도시에서는 들은 이야기 (js/systems/economy.js E.reliefLine): 다른 이야기보다 먼저
+    var rel = null; if (!deaf && !f.animal && G.Econ && G.Econ.reliefLine) { try { rel = G.Econ.reliefLine(f, c); } catch (e) { rel = null; } }
+    var info = !rel && !f.used && !deaf && INFO[f.type] ? INFO[f.type](c) : null;
     var text, useInfo = info && (f.animal || f.talked === 1 || U.chance(0.7));
     // 귀환 잔치 중인 도시: 잔치 이야기가 먼저 (js/systems/festival.js)
-    var fest = G.Fest && !deaf ? G.Fest.line(f.type, c) : null;
+    var fest = G.Fest && !deaf && !rel ? G.Fest.line(f.type, c) : null;
     // 사건·전설 부하의 소문 (js/systems/eventrumor.js — 5%): 이 고장 둘레에서 누군가 조건을 맞추면 일어날 일을 두루뭉술하게
-    var rum = !deaf && G.EventRumor ? G.EventRumor.pick(f, c) : null;
+    var rum = !deaf && !rel && G.EventRumor ? G.EventRumor.pick(f, c) : null;
     // 고장의 인사를 한 번 들은 뒤에는 기존 실용 정보도 전한다. 소문이 끼어들어도 다음 대화에서 기회를 잃지 않는다.
     var usefulTurn = info && !f.animal && (f.cultureTalks || 0) > 0;
     if (usefulTurn) useInfo = true;
-    var regional = !f.animal && !deaf && G.StreetCulture && !usefulTurn && !rum && !fest ? G.StreetCulture.next(f, c) : null;
-    if (rum) { useInfo = false; f.rumored = true; text = rum.text; }
+    var regional = !f.animal && !deaf && !rel && G.StreetCulture && !usefulTurn && !rum && !fest ? G.StreetCulture.next(f, c) : null;
+    if (rel) { useInfo = false; f.murmur = null; text = rel.text; }
+    else if (rum) { useInfo = false; f.rumored = true; text = rum.text; }
     else if (fest && (f.animal || U.chance(0.75))) { useInfo = false; text = fest; }
     else if (regional) { useInfo = false; text = regional.text; }
     else if (useInfo) { f.used = true; text = info.text; }
     else text = fill(U.pick(lines), c);
-    if (f.talked > 1 && !f.animal && !useInfo) text = U.pick(['또 만났군요. ', '아까 그 분이시군요. ', '']) + text;
+    if (f.talked > 1 && !f.animal && !useInfo && !rel) text = U.pick(['또 만났군요. ', '아까 그 분이시군요. ', '']) + text;
     await UI.say(text, sp);
     if (deaf) { await C().mate('말이 통하지 않아 무슨 이야기인지 알아듣지 못했습니다.'); return; }
     if (useInfo && info.after) info.after();

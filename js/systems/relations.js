@@ -67,6 +67,34 @@
   // ================================================================ 교역
   /** 이 도시의 교역소가 제독의 나라에 문을 닫았나 */
   RL.embargo = function (c) { var k = RL.cityPower(c), me = RL.mine(); return !!(k && me && k !== me && RL.atWar(me, k)); };
+
+  // ================================================================ 이슬람 세력과의 싸움 (2026-11-11 사용자 요청 — 베타 피드백 「그라나다·이슬람 함대만 쳤는데 악명 71로 고향에서 입항 거부」)
+  //   기독교 나라의 제독이 이슬람 세력의 배와 싸우면 해적질이 아니라 무훈으로 본다 — 악명이 적게 붙고, 군함을 꺾으면 전투 명성이 조금 더 붙는다.
+  //   조정값: G.BALANCE.faithFoe (js/data/base.js). 큰 해전(레판토 …)은 원래대로 악명 없이 그 해전의 명성(G.Rel.afterBattle)만 받는다.
+  var faithMap = { y: null, m: null };
+  /** 이슬람 세력의 나라인가: faithFoe.nations에 있거나, 그해 다스리는 도시가 절반 넘게 이슬람(c.rel 'I')인 나라 */
+  RL.faithFoe = function (nation) {
+    var K = G.BALANCE && G.BALANCE.faithFoe, s = S(); if (!K || !nation || !s || !s.date) return false;
+    var me = RL.mine(); if (!me || D().christian.indexOf(me) < 0) return false;
+    if ((K.nations || []).indexOf(nation) >= 0) return true;
+    if (faithMap.y !== s.date.y) {
+      var m = {};
+      (G.CITY_DATA || []).forEach(function (c) { if (!c) return; var o = R.cityOwner(c); if (!o) return; var k = m[o] || (m[o] = [0, 0]); k[1]++; if (c.rel === 'I') k[0]++; });
+      faithMap = { y: s.date.y, m: m };
+    }
+    var v = faithMap.m[nation]; return !!(v && v[0] * 2 > v[1]);
+  };
+  /** 싸움으로 붙는 악명 — when: 'attack'(먼저 공격했다) · 'win'(이겼다), base: 보통 값. 이슬람 세력의 배면 faithFoe[when][배 갈래]로 줄인다 */
+  RL.fightNotoriety = function (npc, when, base) {
+    var K = G.BALANCE && G.BALANCE.faithFoe, t = K && K[when];
+    if (!t || !npc || npc.kind === 'pirate' || !RL.faithFoe(npc.nation)) return base;
+    var v = t[npc.kind]; return v == null ? base : Math.min(base, v);
+  };
+  /** 이슬람 세력의 함대를 꺾었을 때 더 받는 전투 명성 (큰 해전은 제 몫의 명성이 따로 있어 0) */
+  RL.faithFame = function (npc) {
+    var K = G.BALANCE && G.BALANCE.faithFoe; if (!K || !K.winFame || !npc || npc.great || !RL.faithFoe(npc.nation)) return 0;
+    return K.winFame[npc.kind] || 0;
+  };
   /** 교역소 값의 배수: kind 'buy' | 'sell' */
   RL.priceK = function (c, kind) {
     var k = RL.cityPower(c), me = RL.mine(); if (!k || !me || k === me) return 1;

@@ -199,6 +199,11 @@
     k.st = r.st; k.gen = r.info;
     return k;
   };
+  /** 태어난 순서대로 같은 어머니의 아들·딸 그림을 정해 저장한다. 쌍둥이도 각자 순번이 있다. */
+  F.registerBirth = function (k) {
+    S().player.kids.push(k);
+    if (G.HomeLife) k.artFamily = G.HomeLife.portraitFamily(k);
+  };
   /** 출생 소식에 붙는 한 줄: 누구를 닮았나 · 타고난 재주 · 늦둥이 */
   F.inheritNote = function (k) {
     var g = k && k.gen; if (!g) return '';
@@ -252,7 +257,7 @@
         var sex = sexes[t]; var k = newKid(sex, pr.gen);   // 아이가 생길 때 적어 둔 부모의 능력·나이로 (F.inherit)
         k.witness = !!atHome;                                         // 제독이 해산을 지켜보았나 — 출산 장면·첫 사이
         k.bond = atHome ? (c.bondBorn || 60) : (c.bondMissed || 40);
-        p.kids.push(k); born.push(k);
+        F.registerBirth(k); born.push(k);
       }
       p.preg = null; p.lastBirth = s.day;
       var what = twins ? '쌍둥이가' : (born[0].sex === 'f' ? '딸이' : '아들이');
@@ -746,6 +751,7 @@
     var heirLook = G.Img.heroLook ? G.Img.heroLook(p) : (p.look || 'admiral');
     var heirArt = { sex: k.sex === 'f' ? 'f' : 'm', folder: (G.HomeLife ? G.HomeLife.folder(k) : '') || '' };
     heirArt.variant = G.HomeLife && G.HomeLife.variant ? G.HomeLife.variant(k) : +(k.portraitVariant || 0);
+    if (G.HomeLife) heirArt.artFamily = G.HomeLife.portraitFamily(k);
     s.player = {
       look: heirLook, heir: heirArt,
       name: F.fullName(F.given(k), k.surname != null ? k.surname : sur), given: F.given(k), surname: k.surname != null ? k.surname : sur,   // 아버지의 성을 이어 간다

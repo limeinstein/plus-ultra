@@ -257,7 +257,7 @@
     var K = sens(); if (!(K.seaTurn > 0)) return;
     var diff = U.angDiff(st.dirCrs, st.pointerWant), ad = Math.abs(diff);
     if (!st.pointerTurning) { if (ad <= (K.deadDeg || 0) * Math.PI / 180) return; st.pointerTurning = true; }
-    var rate = K.seaTurn * dt * Math.max(1, ad / 1.2);       // 크게 비켜나면 조금 더 빨리
+    var rate = courseRate(dt, ad);                           // 방향키와 같은 셈 (courseRate) — 배의 키·배속을 곱하고, 크게 비켜나면 조금 더 빨리
     st.dirCrs += U.clamp(diff, -rate, rate); st.crs = st.dirCrs;
     if (ad <= rate + 0.004) st.pointerTurning = false;
   }
@@ -522,18 +522,30 @@
     S().fleet.ships.forEach(function (s) { var t = G.SHIP[s.type]; if (t) m = m == null ? (t.turn || 1) : Math.min(m, t.turn || 1); });
     return U.clamp(m == null ? 1 : m, 0.6, 1.5);
   }
-  /** 방향키로 침로 돌리기 (실제 시간 기준 — 배속과 상관없이 같은 손맛): 누른 방위 쪽으로 초당 약 75°(가장 둔한 배의 키만큼), 떼면 멈춘다 */
-  var ARROW_TURN = 0.9;
+  /* 침로를 돌리는 빠르기 — 방향키(방위로 가기)와 마우스 따라가기가 같은 셈을 쓴다 (2026-11-11 사용자 요청: 키보드·마우스 선회 차이).
+     예전에는 방향키 0.9라디안/실제 초 × 배의 키(배속과 상관없이), 마우스 1.5 × 비켜난 각(배의 키·배속과 상관없이)이라
+     같은 배·보통 감도에서 90° 도는 데 방향키 1.8초·마우스 1.0초, ×4 배속에서는 방향키의 도는 반경이 마우스의 약 2배·누르기(항로)의 약 12배였다.
+     이제: 조작 감도의 seaTurn × 함대에서 가장 둔한 배의 키 × 배속 (게임 속 시간 — 배속을 올려도 도는 반경이 같다) × 크게 비켜날수록 조금 더(비켜난 각/1.2).
+     seaTurn이 0(빠르게)이면 곧바로(null) — 둘 다 선체가 도는 빠르기(HULL_TURN, steer)만 남는다 */
+  var HULL_TURN = 2.6;   // 선체가 뱃머리를 돌리는 빠르기 (라디안/게임 속 초 × 배의 키) — 바다를 눌러 잡은 항로·숫자판 침로도 이 빠르기로 돈다
+  function courseRate(dt, ad) {
+    var K = sens(); if (!(K.seaTurn > 0)) return null;
+    return K.seaTurn * turnAbility() * (st.speed || 1) * Math.max(1, ad / 1.2) * dt;
+  }
+  SEA.courseRate = courseRate;
+  /** 방향키로 침로 돌리기: 누른 방위 쪽으로 마우스 따라가기와 같은 빠르기로(courseRate), 떼면 멈춘다 */
   function arrowTurn(dt) {
     if (!st.arrowSteer || st.dirCrs == null || helmMode()) return;
     var want = arrowAngle(); if (want == null) { st.arrowHeld = 0; return; }
     st.arrowHeld = (st.arrowHeld || 0) + dt;
     var diff = U.angDiff(st.dirCrs, want);
     if (Math.abs(diff) > 3.1) diff = Math.abs(diff);          // 정반대면 왼쪽(반시계)으로 돈다
-    var rate = ARROW_TURN * (sens().arrowK || 1) * turnAbility() * Math.min(1, 0.5 + st.arrowHeld * 1.5) * dt;   // 조작 감도
+    var rate = courseRate(dt, Math.abs(diff));
+    if (rate == null) { st.dirCrs = st.dirCrs + diff; st.crs = st.dirCrs; return; }   // 빠르게: 곧바로 (마우스와 같다)
     st.dirCrs += U.clamp(diff, -rate, rate); st.crs = st.dirCrs;
   }
   SEA.arrowTurn = arrowTurn;
+  SEA._steer = function (dt, spd) { steer(dt, spd); };   // 시험용 — 뱃머리 돌리기만 (tests/sea_turn_balance_smoke.js)
   function turnKey() { var k = st.keys; return (k.left ? 1 : 0) - (k.right ? 1 : 0); }
   function setCityTarget(c) {
     var d = c.dock || [c.lat, c.lon];
@@ -951,7 +963,7 @@
     }
     // battle
     if (!byMe && n.kind !== 'pirate') s.player.notoriety += 0;
-    if (byMe && n.kind !== 'pirate' && !(G.Court && G.Court.lawful(n)) && !(G.Company && G.Company.lawful(n))) s.player.notoriety += n.kind === 'navy' ? 12 : 8;   // 왕명으로 치는 적국의 배는 악명이 오르지 않는다
+    if (byMe && n.kind !== 'pirate' && !(G.Court && G.Court.lawful(n)) && !(G.Company && G.Company.lawful(n))) s.player.notoriety += G.Rel && G.Rel.fightNotoriety ? G.Rel.fightNotoriety(n, 'attack', n.kind === 'navy' ? 12 : 8) : (n.kind === 'navy' ? 12 : 8);   // 왕명으로 치는 적국의 배는 악명이 오르지 않는다 · 이슬람 세력의 배는 적게 (G.BALANCE.faithFoe)
     if (byMe && G.SeaFolk) G.SeaFolk.attacked(n);   // 먼저 공격하면 그 나라의 적대가 오른다
     st.npcs.splice(st.npcs.indexOf(n), 1);
     await UI.fade(function () { G.Game.go('battle', { npc: n }); });
@@ -1131,7 +1143,8 @@
       if (dir) {
         st.turnHeld = (st.turnHeld || 0) + dt;
         var ramp = Math.min(1, 0.45 + st.turnHeld * 1.6);
-        l.heading += dir * 2.1 * (sens().arrowK || 1) * dt * turnAbility() * ramp * (0.5 + 0.5 * (st.thr || 0));
+        // 돛을 다 폈을 때 선체가 도는 빠르기(HULL_TURN)와 같다 — 예전 2.1은 누르기·마우스(2.6)보다 느렸다 (2026-11-11)
+        l.heading += dir * HULL_TURN * (sens().arrowK || 1) * dt * turnAbility() * ramp * (0.5 + 0.5 * (st.thr || 0));
       } else st.turnHeld = 0;
       return;
     }
@@ -1159,7 +1172,7 @@
     var diff = U.angDiff(l.heading, want);
     // 키는 게임 속 시간에 맞춰 돌린다: 배속을 올려도 도는 반경이 같다
     // 큰 배는 선체를 천천히 돌린다 (게임 속 시간 기준 — 배속을 올려도 도는 반경이 같다). 진행 방향은 관성으로 뒤따른다(move)
-    var rate = 2.6 * dt * (spd || 1) * turnAbility(), ad = Math.abs(diff);
+    var rate = HULL_TURN * dt * (spd || 1) * turnAbility(), ad = Math.abs(diff);
     if (st.tackTheta && ad > 0.3) rate *= 1.6;   // 뱃머리를 바람 너머로 돌려 반대쪽 다리로 (태킹)
     if (dW < 0.6 && ad > 0.5) rate *= 1.8;        // 코앞의 길목은 크게 꺾는다 (move에서 속력도 줄인다)
     l.heading += U.clamp(diff, -rate, rate);

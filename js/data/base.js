@@ -499,8 +499,10 @@
     pointerControl: { seaDeadPx: 38, landDeadPx: 30, cityPickPx: 30, portLandPx: 70 },
     // 조작 감도 (설정 「조작 감도」, s.settings.ctrlSens — 없으면 보통). 마우스 따라가기와 방향키의 손맛
     //   seaDeadPx·landDeadPx = 배·탐험대 둘레에서 방향이 없는 것으로 치는 반지름(px) — 크면 커서 떨림에 덜 흔들린다
-    //   seaTurn·landTurn = 마우스를 옮겼을 때 침로가 따라 도는 빠르기(라디안/실제 초, 0이면 곧바로)
-    //   deadDeg = 커서가 이 각도(°)보다 덜 움직였으면 침로를 그대로 둔다 · arrowK = 방향키·손 조타로 뱃머리를 돌리는 빠르기 배수 · leadK = 화면이 뱃머리 앞을 내다보는 정도 배수
+    //   seaTurn = 바다에서 마우스 따라가기·방향키(방위로 가기)가 침로를 돌리는 빠르기 — 둘이 같은 셈 (js/scenes/sea.js courseRate, 2026-11-11):
+    //            라디안/게임 속 초 × 함대에서 가장 둔한 배의 키 × 배속(배속을 올려도 도는 반경이 같다), 0이면 곧바로(선체가 도는 빠르기만)
+    //   landTurn = 뭍에서 마우스를 옮겼을 때 침로가 따라 도는 빠르기(라디안/실제 초, 0이면 곧바로)
+    //   deadDeg = 커서가 이 각도(°)보다 덜 움직였으면 침로를 그대로 둔다 · arrowK = 손으로 키 잡기 방식에서 뱃머리를 돌리는 빠르기 배수 · leadK = 화면이 뱃머리 앞을 내다보는 정도 배수
     ctrlSens: {
       slow: { seaDeadPx: 70, landDeadPx: 55, seaTurn: 0.7, landTurn: 1.6, deadDeg: 12, arrowK: 0.7, leadK: 0.6 },
       normal: { seaDeadPx: 50, landDeadPx: 40, seaTurn: 1.5, landTurn: 3.5, deadDeg: 6, arrowK: 1, leadK: 1 },
@@ -544,6 +546,23 @@
     //   받아 줄 양을 넘겨(포화 1 넘게) 팔면 값이 e^(−crash × (포화 − 1))만큼 더 떨어진다(폭락).
     //   한 번에 많이 팔면 같은 지역 spillDist도 안의 다른 항구에도 포화가 spill × (1 − 거리/spillDist)만큼 번진다(상인들이 남는 물건을 실어 돌린다)
     market: { stock: [80, 140], dep: [120, 160], depPrice: 0.45, sat: [160, 140], satPrice: 0.45, crash: 0.8, prodCap: 0.4, relayCap: 0.7, spill: 0.2, spillDist: 7 },
+    // 중계무역 (자료 js/data/tradegoods.js RELAY · 규칙 rules.js R.relayMult·R.relayStockK): 산지가 아닌 큰 항구가 먼 곳의 물건을 들여와 판다
+    //   사는 값 = 그 항구 시세 × buy (최소 산지 값 × floor) · 그 항구가 사 주는 값 = 시세 × sell
+    //   유럽 바로 앞 중계항은 유럽 시장 값에 가깝게 판다: 사는 값 ≥ 이베리아 시세 × (nearCity[도시 이름] 또는 nearEU[이베리아까지 지역 거리])
+    //   재고(살 수 있는 양) = 보통 재고 × stock × stockNear[이베리아까지 지역 거리] × stockCity[도시 이름] × stockGood[물건] — 수량은 여기서 맞춘다
+    //   (2026-11-11 사용자 요청 — 베타 피드백 「알렉산드리아·베니스·이스탄불의 향신료·중국 도자기가 너무 싸고 너무 많다」.
+    //    전: 알렉산드리아 후추 60닢 300통 → 리스본 243닢, 베니스 정향 366닢 → 리스본 725닢, 이스탄불 중국 도자기 435닢 → 리스본 893닢)
+    relay: { buy: 0.8, sell: 0.6, floor: 1.15, stock: 0.6,
+      nearEU: { 1: 0.8 },                                                     // 거리 1: 베니스·이스탄불·카파(지중해)·앤트워프(북유럽)
+      nearCity: { '알렉산드리아': 0.62, '카이로': 0.62, '베이루트': 0.62 },          // 레반트·이집트 — 베네치아 갤리선이 향신료를 실어 가던 곳
+      stockNear: { 1: 0.45 },
+      stockCity: { '알렉산드리아': 0.45, '카이로': 0.45, '베이루트': 0.45 },
+      stockGood: {} },
+    // 이슬람 세력과의 싸움 (js/systems/relations.js G.Rel.faithFoe·fightNotoriety·faithFame — 2026-11-11 사용자 요청, 베타 피드백 「그라나다 사략함대를 막기만 했는데 악명 71」)
+    //   기독교 나라의 제독이 이슬람 세력(nations, 또는 다스리는 도시가 절반 넘게 이슬람인 나라)의 배와 싸울 때:
+    //   먼저 공격하면 악명 attack[배 갈래] (보통 군함 12 · 상선 8), 이기면 악명 win[배 갈래] (보통 5), 군함을 꺾으면 전투 명성 +winFame
+    //   레판토 같은 큰 해전은 원래부터 악명이 없고 그 해전의 명성만 받는다 (G.Rel.afterBattle)
+    faithFoe: { nations: ['그라나다 왕국', '오스만 제국', '맘루크 왕조'], attack: { navy: 3, merchant: 4 }, win: { navy: 0, merchant: 2 }, winFame: { navy: 10 } },
     // 토르데시야스·사라고사 조약 (js/systems/treaty.js, 자료 js/data/treaty.js): 새로 찾은 땅을 보고할 때 후원자 왕실의 몫이면 사례금 ×ownK,
     //   상대 왕실의 몫이면 ×otherK. 상대 왕실 반구의 상대 왕실 항구는 들어갈 수 없다 — 교섭 뇌물 bribe[0] + 크기 × bribe[1]
     treaty: { ownK: 1.15, otherK: 0.7, bribe: [1500, 600] },
@@ -553,7 +572,12 @@
     //   모자란 양 = (sat[0] + sat[1] × 크기) × needK × (배수 − 1) — 그만큼 팔아 채우면 값이 제자리로. 다른 상인들도 날마다 모자란 양의 npcFill씩 실어 온다.
     //   처음 rampIn 몫 동안 차츰 세지고 마지막 rampOut 몫 동안 차츰 가라앉는다.
     //   제독이 newsDist도 안에 있으면 사건이 일어날 때(조짐부터) 소식을 듣는다. 술집 소문은 rumorDist도 안의 사건, 한 번 들를 때 rumorAsk번(한 번에 rumorN가지)
-    econ: { perDay: 0.1, max: 14, seed: 7, warPerDay: 0.02, strength: [0.85, 1.15], buyShare: 0.75, stockK: 1.2, glutStock: 1.5, needK: 0.6, rampIn: 0.12, rampOut: 0.3, newsDist: 12, rumorDist: 40, rumorAsk: 2, rumorN: 2, npcFill: 0.005 },
+    // 전설의 갑옷 (js/data/items.js legendCity · js/city/misc.js MK.legendTalk): 그 도시 시장 상인이 다시 자랑할 확률 hereAgain · 이웃 지역 시장에서 소문을 귀띔할 확률 rumor
+    legendArmor: { hereAgain: 0.3, rumor: 0.3 },
+    econ: { perDay: 0.1, max: 14, seed: 7, warPerDay: 0.02, strength: [0.85, 1.15], buyShare: 0.75, stockK: 1.2, glutStock: 1.5, needK: 0.6, rampIn: 0.12, rampOut: 0.3, newsDist: 12, rumorDist: 40, rumorAsk: 2, rumorN: 2, npcFill: 0.005,
+      // 제독이 실어다 팔아 모자람이 풀림 (js/systems/economy.js E.sold): 남은 몫 fullLeft 아래면 「풀림」, 제독 몫이 partShare 넘으면 「한풀 꺾임」 · 그 도시 거리에서 localDays(꺾임 partDays)일, 이웃(hearDist도 · 같은 지역)에서 hearDays일 동안 이야기 · 도시마다 localTell/hearTell번까지
+      relief: { fullLeft: 0.06, partShare: 0.4, localDays: 45, partDays: 25, hearDays: 90, hearDist: 22, localTell: 6, hearTell: 2, keepDays: 240, max: 30,
+        localSure: 3, localLater: 0.5, hearChance: 0.45 } },   // 그 도시: 처음 localSure명은 꼭, 그 뒤엔 localLater · 이웃: hearChance
     // 육상 탐험: 식량·물은 쓰지 않고 금화 경비(landCost)만 나간다. 야영의 사냥·물 긷기(배의 식량·물 보급)는
     // 배(출발한 항구)가 near도 안에 보일 때만 할 수 있다 (js/systems/cargo.js G.Cargo.nearShip)
     // 주점 소문 (js/systems/tavernrumor.js): 한 주점이 품는 소문 n건, days일마다 새로, 가까움 무게의 실제 거리 눈금 geo(도), 온 세상이 떠드는 이야기 무게 hotK, 증거품 값 배율 evK

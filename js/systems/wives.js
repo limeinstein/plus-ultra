@@ -266,7 +266,7 @@
         var k = { name: '', unnamed: true, sex: sexes[t], born: { y: s.date.y, m: s.date.m, d: s.date.d }, sk: {}, lg: {}, st: null, edu: {}, mother: w.id, house: w.city };
         inborn(w, k, pr);
         k.witness = here; k.bond = here ? (fc.bondBorn || 60) : (fc.bondMissed || 40);
-        P().kids.push(k); born.push(k);
+        G.Family.registerBirth(k); born.push(k);
       }
       w.preg = null; w.lastBirth = s.day;
       var bk = twins ? '쌍둥이가' : born[0].sex === 'f' ? '딸이' : '아들이';

@@ -318,6 +318,9 @@
     var otherTotal = 0;
     while (left > 0) { var n = Math.min(chunk, left), p0 = sellP(c, id), o = Math.min(n, other); total += p0 * o + (own ? Math.min(p0, own.cost) : p0) * (n - o); otherTotal += p0 * o; other -= o; oSold += o; R.onSell(c, id, n); left -= n; }
     R.spill(c, id, q);      // 남는 물건은 상인들이 이웃 항구로 실어 돌린다
+    // 모자람 사건: 이번에 실어다 판 것으로 모자람이 풀렸나 — 풀렸으면 적어 두고 거리에 소문이 돈다 (js/systems/economy.js E.sold → js/systems/streetfolk.js)
+    var relief = G.Econ && G.Econ.sold ? G.Econ.sold(c, id, q) : [];
+    relief.forEach(function (rec, i) { setTimeout(function () { UI.toast(G.Econ.reliefToast(rec), 'scales', 8000); }, 900 + i * 400); });
     var lots = R.cargoLots(cg);
     var imported = oSold === q && Object.keys(lots).every(function (k) { return !lots[k].q || (k !== 'x' && +k !== c.id && lots[k].cost > 0); }) && !(G.Slave && G.Slave.is(id));
     var cost0 = cg.cost, paid = R.takeCargoLots(cg, c.id, oSold, q - oSold);
@@ -338,7 +341,7 @@
     cg.q -= q; if (cg.q <= 0) delete s.fleet.cargo[id];
     if (G.Ledger) G.Ledger.record(c);
     G.Game.refreshHud();
-    return { total: total, profit: profit, otherTotal: otherTotal, careerBonus: careerBonus };
+    return { total: total, profit: profit, otherTotal: otherTotal, careerBonus: careerBonus, relief: relief };
   }
   T.sellQty = sellQty;
 

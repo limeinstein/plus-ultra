@@ -57,6 +57,14 @@
       var happy = ['bumper', 'festival', 'wedding', 'textile'].indexOf(e.type) >= 0;
       var danger = ['war', 'border', 'plague', 'fire', 'drought', 'coldrain'].indexOf(e.type) >= 0;
       var title = G.Econ.title(e), why = e.why ? ' ' + e.why + '.' : '';
+      // 제독이 이 도시에 실어다 풀어 모자람이 가셨다 (js/systems/economy.js E.sold) — 걱정 대신 한시름 놓은 이야기
+      var rl = G.Econ.reliefOf ? G.Econ.reliefOf(e) : null;
+      if (rl && rl.city === c.id && G.GOOD[rl.g]) {
+        var gn = G.GOOD[rl.g].name;
+        out.push(entry('economy:relief:' + rl.id, 'happy', '이제 한시름 놓았어요!',
+          '요즘 화제는 ' + title + U.jx(title, '이었지요/였지요') + '.' + why + ' 그래도 배 한 척이 ' + U.eul(gn) + ' ' + U.num(Math.round(rl.q / 10) * 10) + '통이나 실어다 풀어서 장터 값이 제자리를 찾았어요.' + reaction(f, 'happy', ' 이 고마움은 오래 잊지 못할 거예요.'), false));
+        return;
+      }
       out.push(entry('economy:' + (e.id || e.type), happy ? 'happy' : 'worry', happy ? '장터에 반가운 소식이 있어요!' : '요즘 장터 사정이 걱정이에요.',
         '요즘 화제는 ' + title + '이지요.' + why + reaction(f, happy ? 'happy' : 'worry', happy ? ' 이 기쁨이 이웃들 밥상에도 닿으면 좋겠어요.' : ' 물건 값도 걱정이지만 식구들 살림이 먼저예요.'), danger));
     });

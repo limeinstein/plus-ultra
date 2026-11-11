@@ -152,6 +152,16 @@
   add('aztec', '케찰 깃털 머리장식', 'gift', 0.3, '신성한 새의 긴 초록 깃털 수백 개를 금판에 꽂은 머리장식.', { gv: 30 });
   add('inca', '황금 옥수수', 'treasure', 0.35, '금으로 빚은 옥수수 이삭. 태양 신전의 정원에 심겨 있었다고 한다.');
 
+  // ------------------------------------------------------------------ 수호 유물 — 지니고 있으면 특정 공격을 막는다 (2026-11-11 사용자 요청 「이지스의 방패 같은 아이템을 발견물의 증거로」)
+  //   ward: 막는 공격 (G.Ward.NAME) — gun 일기토 비밀무기(권총·던진 단검) · deathblow 일기토 일격필살 · roar 일기토 호통 · fire 해전의 불길(용머리 불·불 뿜는 괴물) · ram 바다 괴물의 들이받기
+  //   일기토는 제독이 직접 싸울 때, 해전은 우리 함대 모든 배. 발견의 증거이지만 후원자에게 보고해도 「그대가 지녀야 할 물건」이라며 돌려받는다 (js/systems/sponsor.js SP.submitProof)
+  //   막는 자리: js/games/duel.js (secret·deathblow·roar) · js/scenes/battle.js updateBalls (fire) · js/systems/seamonsters.js 돌진 (ram)
+  add('parthenon', '아이기스', 'armor', 0.45, '파르테논의 아테나 여신상이 들던 방패를 본떠 신전에 바친 청동 방패. 가운데에서 메두사의 머리가 노려본다. 제우스의 벼락도 튕겨 냈다는 방패라, 지니고 있으면 일기토에서 상대가 품에서 꺼낸 권총 탄환이나 던진 단검(비밀무기)이 튕겨 나간다.', { rid: 'r_parthenon_aegis', def: 12, ward: 'gun' });
+  add('troy', '아이아스의 방패', 'armor', 0.45, '일곱 겹 소가죽 위에 청동 한 겹을 씌운 탑 같은 방패. 트로이 성벽 아래에서 헥토르의 창이 여섯 겹을 뚫고 일곱 번째 가죽에서 멈췄다고 한다. 지니고 있으면 일기토에서 상대의 일격필살이 방패에 걸려 들어오지 않는다.', { rid: 'r_troy_ajax', def: 14, ward: 'deathblow' });
+  add('munmu', '만파식적', 'treasure', 0.4, '바다의 용이 된 문무왕이 보낸 대나무로 깎았다는 피리. 불면 적병이 물러가고 성난 파도가 잔다고 했다. 대왕암 앞 감은사 터 금당 밑, 용이 드나들었다는 구멍 곁에서 나왔다. 지니고 있으면 일기토에서 상대의 호통에 흔들리지 않는다.', { rid: 'r_munmu_manpa', ward: 'roar' });
+  add('cappadocia', '성 게오르기우스의 방패', 'armor', 0.4, '흰 바탕에 붉은 십자가를 그린 기사의 방패. 카파도키아에서 났다는 성인이 용을 찌를 때 들었던 바로 그 방패라고 바위 교회의 수도사들이 말한다. 용의 불길이 이 방패 앞에서 갈라졌다 — 지니고 있으면 해전에서 우리 함대에 불이 붙지 않는다(용머리 배의 불길·불 뿜는 바다 괴물).', { rid: 'r_cappadocia_george', def: 11, ward: 'fire' });
+  add('brendan', '성 브렌던의 종', 'treasure', 0.4, '수도사 브렌던이 가죽배 이물에 달고 다녔다는 손바닥만 한 쇠 종. 일행이 섬인 줄 알고 큰 고래 등에 올라 미사를 올렸을 때도 고래는 이 종소리를 듣고 가만히 있었다고 한다. 지니고 있으면 해전에서 바다 괴물이 우리 배를 들이받지 못하고 비켜 간다.', { rid: 'r_brendan_bell', ward: 'ram' });
+
   // 건물 불가사의의 유물 (js/data/wonders.js)
   if (G.WONDERS) G.WONDERS.relics.forEach(function (a) { add.apply(null, a); });
   // 동물의 새끼 · 전설 생물의 물건 · 종교 발견물의 성물 (js/data/discrelics.js — 2026-11-07). 유물 id 를 표에 적어 둔다
@@ -190,4 +200,16 @@
     G.RELIC[r.id] = r;
   });
   if (G.ITEM_KIND) { G.ITEM_KIND.book = '서적'; G.ITEM_KIND.fig = '선수상'; G.ITEM_KIND.animal = '동식물'; }
+
+  // ------------------------------------------------------------------ 수호 유물 (ward): 제독이 지닌 물건 가운데 그 공격을 막는 것
+  var W = G.Ward = {};
+  W.NAME = { gun: '권총·던진 단검', deathblow: '일격필살', roar: '호통', fire: '불길', ram: '바다 괴물의 들이받기' };
+  /** 막는 물건 (없으면 null) — kind: gun · deathblow · roar · fire · ram */
+  W.item = function (kind) {
+    var s = G.Game && G.Game.state; if (!s || !s.player || !s.player.items) return null;
+    for (var i = 0; i < s.player.items.length; i++) { var d = G.ITEM[s.player.items[i].id]; if (d && d.ward === kind) return d; }
+    return null;
+  };
+  /** 물건 설명 줄에 덧붙일 말: 「막음: 일격필살」 */
+  W.text = function (id) { var d = G.ITEM && G.ITEM[id]; return d && d.ward ? '막음: ' + W.NAME[d.ward] : ''; };
 })(window.G = window.G || {});

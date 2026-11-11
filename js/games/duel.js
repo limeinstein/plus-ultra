@@ -1082,7 +1082,10 @@
           effect(f.style === 'slash' ? 'trail_slash_down' : 'trail_' + f.style, deathPoint, faceOf(f), 0.5);
           await sleep(200);
           var deathHit = U.chance(p1);
+          var wardD = deathHit && o === me && !me.m && G.Ward ? G.Ward.item('deathblow') : null;   // 수호 유물(아이아스의 방패): 일격필살이 방패에 걸린다
+          if (wardD) deathHit = false;
           if (deathHit) { await impactHit(f, o, Math.max(o.hp, o.maxHp * 0.6), { mv: f.style, point: deathPoint, big: true, finisher: true }); say(who + '의 일격필살! 단칼에 베어 넘겼다!'); }
+          else if (wardD) { effect('clash_block', deathPoint, faceOf(f), 0.42); pose(o, 'block', 0.4); num(o, '막음', '255,226,150'); bubble(o, '어림없다!'); say(who + '의 일격필살이 ' + wardD.name + '에 걸려 멈췄다! 크게 빈틈을 드러냈다.'); setTimeout(function () { f.tx = 0; }, 200); }
           else { pose(o, 'block', 0.3); num(o, '빗나감', '220,220,220'); say(who + '의 일격필살이 빗나갔다! 크게 빈틈을 드러냈다.'); setTimeout(function () { f.tx = 0; }, 200); }
           if (deathMotion) { await sleep(420); stopMotion(); }
           if (!deathHit) { await sleep(deathMotion ? 0 : 300); await strike(o, o.style, { k: 1.4, sure: true, big: true }); }
@@ -1105,8 +1108,11 @@
           if (gun) { fx.push({ kind: 'flashS', x: posX(f) + (f === me ? 60 : -60), y: H * 0.86 - 56, t: 0, life: 0.2 }); for (var sm = 0; sm < 3; sm++) fx.push({ kind: 'smoke', x: posX(f) + (f === me ? 66 : -66), y: H * 0.86 - 56, d: f === me ? 1 : -1, t: -sm * 0.05, life: 1.4 }); if (G.Audio) G.Audio.sfx('gun'); }
           await sleep(150);
           var dd = o.maxHp * U.rf(gun ? 0.22 : 0.16, gun ? 0.3 : 0.22);
-          await impactHit(f, o, dd, { mv: 'thrust', point: contactPoint(f, o, 'thrust', 'hit'), big: true, projectile: true }); result.secret = result.secret || f === me;
-          bubble(o, gun ? '비겁한 놈!' : '단검이라니!'); say(who + U.jx(f === me && !me.m ? '제독' : f.name, '이/가') + ' 품에서 ' + (gun ? '권총을 꺼내 쏘았다!' : '단검을 던졌다!') + ' 구경꾼들이 야유한다.');
+          var wardG = o === me && !me.m && G.Ward ? G.Ward.item('gun') : null;   // 수호 유물(아이기스): 탄환·던진 단검이 튕겨 나간다
+          if (wardG) { effect('clash_block', contactPoint(f, o, 'thrust', 'block'), faceOf(f), 0.42); pose(o, 'block', 0.4); num(o, '막음', '255,226,150'); }
+          else await impactHit(f, o, dd, { mv: 'thrust', point: contactPoint(f, o, 'thrust', 'hit'), big: true, projectile: true });
+          result.secret = result.secret || f === me;
+          bubble(o, gun ? '비겁한 놈!' : '단검이라니!'); say(who + U.jx(f === me && !me.m ? '제독' : f.name, '이/가') + ' 품에서 ' + (gun ? '권총을 꺼내 쏘았다!' : '단검을 던졌다!') + (wardG ? ' 그러나 ' + (gun ? '탄환' : '단검') + U.jx(gun ? '탄환' : '단검', '이/가') + ' ' + wardG.name + '에 맞고 튕겨 나갔다!' : '') + ' 구경꾼들이 야유한다.');
           cheer[f === me ? 0 : 1] = 0; cheer[f === me ? 1 : 0] = 1.5;
           if (secretMotion) { await sleep(260); stopMotion(); }
           if (o.preFall > 0) await sceneWait((o.preFall + 0.02) * 1000);
@@ -1154,7 +1160,9 @@
           pose(f, 'shout', 0.7); bubble(f, shout);
           shakeT = 0.5; await sleep(700);
           if (roarMotion) stopMotion();
-          if (U.chance(p7)) {
+          var wardR = o === me && !me.m && G.Ward ? G.Ward.item('roar') : null;   // 수호 유물(만파식적): 호통에 흔들리지 않는다
+          if (wardR) { f.spirit = Math.max(0, f.spirit - 5); bubble(o, '……'); say('귓가에 ' + wardR.name + ' 소리가 감도는 듯하다 — 제독은 호통에 조금도 흔들리지 않았다.'); }
+          else if (U.chance(p7)) {
             if (o.hp <= o.maxHp * 0.25 && f === me) { pose(o, 'run', 3); bubble(o, '히익!'); say(U.esc(o.name) + U.jx(o.name, '이/가') + ' 호통에 겁을 먹고 달아났다!'); await sleep(700); end('rout'); return 'end'; }
             o.stun = 1; o.spirit = Math.max(0, o.spirit - 20); bubble(o, '...!'); say(U.esc(o.name) + U.jx(o.name, '이/가') + ' 호통에 얼어붙었다! (한 합 쉰다, 기세 −20)');
           } else { f.spirit = Math.max(0, f.spirit - 5); say(U.esc(o.name) + U.jx(o.name, '은/는') + ' 코웃음을 쳤다.'); }

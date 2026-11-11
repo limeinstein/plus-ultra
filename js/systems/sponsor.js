@@ -699,6 +699,7 @@
       var it = items[i], r = G.RELIC[it.id];
       if (it.disc !== d.id || it.evidence || !r || it.done) continue;
       if ((r.kind === 'book' || r.lead) && U.chance(SP.giveBackChance(sp, r))) { it.done = true; back.unshift(it); continue; }
+      if (r.ward) { it.done = true; back.unshift(it); continue; }   // 수호 유물(js/data/relics.js ward): 보고 확인만 하고 「그대가 지녀야 할 물건」이라며 늘 돌려준다
       items.splice(i, 1); given.unshift(it);
       if (s.player.equip.weapon === it.id && !R.hasItem(it.id)) s.player.equip.weapon = null;
       if (s.player.equip.armor === it.id && !R.hasItem(it.id)) s.player.equip.armor = null;

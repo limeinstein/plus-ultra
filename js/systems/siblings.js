@@ -121,6 +121,7 @@
       }
       // 아이 때의 그림을 그대로 (옛 제독이 사라지면 어머니·순번을 다시 셀 수 없으니)
       if (H) {
+        k.artFamily = H.portraitFamily(k);
         k.artFolder = H.folder(k) || '';
         k.sibOrder = Math.max(1, kids.filter(function (x) { return (x.sex === 'f') === (k.sex === 'f'); }).indexOf(k) + 1);
         if (H.variant) {
@@ -181,9 +182,7 @@
     }
   };
   function artKey(k, half) {
-    var H = HL(), I = G.Img;
-    var ch = I.chain.kid(k.sex, k.sibOrder || 1, H.stage(k) || 20, H.folder(k), half, H.variant(k));
-    return I.pick(ch);
+    return G.Img.pick(HL().chain(k, half));
   }
   SB.makeDef = function (k) {
     var s = S(), p = s.player, c = K(), T = st();
