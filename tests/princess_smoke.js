@@ -145,6 +145,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       said.length = 0;
       const gold0 = s.player.gold, fame0 = s.player.fame, rk0 = CT.rank(G.COURT.realms.ES);
       out.enter = await P.onEnter(G.SPONSOR.es_crown);
+      const weddingAchievements = G.U.clone(s.achv || {});
       const tt = CT.title(G.COURT.realms.ES);
       out.wed = s.player.wife + ':' + (CT.rank(G.COURT.realms.ES) - rk0) + ':' + (tt && tt.ko) + ':' + (s.player.gold - gold0) + ':' + (s.player.fame - fame0) + ':' + s.princess.end;
       out.title = P.title() + '|' + G.Game.hud.title() + '|' + G.Game.hud.titleTip().slice(0, 40);
@@ -156,7 +157,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       G.Game.state = s = G.State.deserialize(snap3); s.player.nation = 'ES'; G.Court.state().titles.ES = 3;
       await P.onEnter(G.SPONSOR.es_crown); out.esUp = CT.title(G.COURT.realms.ES).ko + ':' + CT.rank(G.COURT.realms.ES);
       // ---- 이미 가장 높으면 특진 대신 금화
-      G.Game.state = s = G.State.deserialize(snap3); G.Court.state().titles.ES = G.COURT.realms.ES.honor.length; const g1 = s.player.gold;
+      // 특진 대체금은 혼인 업적의 별도 포상과 구분한다 (이전 배포도 첫 혼인 업적으로 1,200닢을 더 받는다).
+      G.Game.state = s = G.State.deserialize(snap3); s.achv = G.U.clone(weddingAchievements); G.Court.state().titles.ES = G.COURT.realms.ES.honor.length; const g1 = s.player.gold;
       await P.onEnter(G.SPONSOR.es_crown); out.maxed = (s.player.gold - g1) + ':' + CT.rank(G.COURT.realms.ES) + ':' + P.title();
       // ---- 사양하면
       G.Game.state = s = G.State.deserialize(snap3); answer = { '혼인하겠습니까': 'no' }; const g2 = s.player.gold;
@@ -179,7 +181,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(/^부마\|부마 · 산티아고 기사단 기사\|부마/.test(r.title) && /^블랑카 왕녀:블랑카 왕녀:true$/.test(r.wife) && r.save, '칭호 「부마」(직위 칸 ' + r.title.split('|')[1] + ') · 아내는 블랑카 왕녀(술집에는 나오지 않음) · 저장');
     ok(r.after === '0::0', '끝난 뒤에는 메뉴·수첩·소식이 사라진다 (한 번뿐)');
     ok(r.esUp === '자작:4', '에스파냐 제독이면 제 나라 작위로 한 칸 (남작 → ' + r.esUp + ')');
-    ok(/^75000:3:부마$/.test(r.maxed) && /^true:30000::done$/.test(r.decline) && /^m_lis:30000:0::false$/.test(r.marriedEnd), '이미 가장 높으면 특진 대신 금화 · 사양하면 하사금만 · 그사이 결혼했으면 청혼 없이 하사금만');
+    ok(/^75000:3:부마$/.test(r.maxed) && /^true:30000::done$/.test(r.decline) && /^m_lis:30000:0::false$/.test(r.marriedEnd), '이미 가장 높으면 특진 대신 금화 · 사양하면 하사금만 · 그사이 결혼했으면 청혼 없이 하사금만: ' + JSON.stringify({maxed:r.maxed,decline:r.decline,marriedEnd:r.marriedEnd}));
     ok(/^1:failed:-400:0$/.test(r.late) && r.old, '기한(3년)을 넘기면 실패(명성 −400) · 옛 저장(state.princess 없음)에서도 탈 없다');
     ok(errors.length === 0, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
     console.log('\n통과');

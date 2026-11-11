@@ -167,6 +167,25 @@
     return '<button type="button" class="wp-card" data-wp="' + i + '">' + warrantSheet(p, i) +
       '<span class="wp-meta"><span data-flag="' + i + '"></span>' + note + '</span></button>';
   }
+  /** 벽보가 창 아래로 잘리지 않게 (피드백 2026-11-11) — 창 안 높이에 모든 줄이 들어가도록 벽보 폭을 줄인다. 넉넉하면 그대로 */
+  function fitPosters(content, n) {
+    var grid = content && content.querySelector('.wp-grid'), card = grid && grid.querySelector('.wp-card'), sheet = card && card.querySelector('.wp-sheet');
+    if (!sheet || !n || !content.clientHeight) return;
+    var cols = Math.min(n, (getComputedStyle(grid).gridTemplateColumns || '').split(' ').filter(Boolean).length || 4), rows = Math.ceil(n / cols);
+    var gap = parseFloat(getComputedStyle(grid).rowGap) || 12, cr = content.getBoundingClientRect(), k = cr.height / (content.offsetHeight || 1) || 1;
+    var top = (grid.getBoundingClientRect().top - cr.top) / k + content.scrollTop, padB = parseFloat(getComputedStyle(content).paddingBottom) || 0;
+    var avail = content.clientHeight - top - padB - 4, meta = card.offsetHeight - sheet.offsetHeight;
+    var w = Math.floor(((avail - (rows - 1) * gap) / rows - meta) * 2 / 3);
+    // 좁은 창의 두 열로는 네 줄이 생겨 최소 벽보 크기에서도 잘릴 수 있다. 가로 여유가 있으면 열을 늘려 모두 보인다.
+    var maxCols = Math.min(n, Math.max(cols, Math.floor((grid.clientWidth + gap) / (96 + gap))));
+    while (w < 96 && cols < maxCols) {
+      cols++; rows = Math.ceil(n / cols);
+      w = Math.floor(Math.min(((avail - (rows - 1) * gap) / rows - meta) * 2 / 3, (grid.clientWidth - (cols - 1) * gap) / cols));
+    }
+    if (w >= sheet.offsetWidth) return;
+    grid.style.gridTemplateColumns = 'repeat(' + cols + ',' + Math.max(96, w) + 'px)';
+    grid.style.justifyContent = 'center';
+  }
   W.board = async function (c) {
     var zone = zoneOf(c), list = W.posters(zone);
     if (!list.length) { await G.Scenes.city.say(owner(), '요즘 ' + zoneName(zone) + '에는 이름난 해적 소식이 없습니다. 벽보 자리가 비었지요.'); return; }
@@ -181,6 +200,7 @@
           var fl = el.querySelector('[data-flag="' + i + '"]'), im = p.band ? flagImg(p.band, 26) : null; if (fl && im) fl.appendChild(im);
           var card = el.querySelector('[data-wp="' + i + '"]'); if (card) card.onclick = function () { pick = p; api.close('pick'); };
         });
+        fitPosters(el, list.length);
       } });
     var v = await win.result;
     if (v === 'pick' && pick) await W.detail(c, pick);
@@ -229,7 +249,8 @@
     }
     var line = G.MaidTip.text(tip);
     G.State.log('식당 손님의 소문: ' + line);
-    await C.say(owner(), U.pick(['저쪽 탁자의 선원들이 하는 이야기를 들었는데요… ', '방금 들어온 어부가 그러는데, ']) + '\n' + line + '\f소문이라 오래 머물지는 않을 겁니다. 서두르셔야 할 거예요.');
+    var talk = G.MaidTip.speech ? G.MaidTip.speech(tip) : line;
+    await C.say(owner(), U.pick(['저쪽 탁자의 선원들이 하는 이야기를 들었는데요, ', '방금 들어온 어부가 그러는데요, ', '아까 술 한잔 걸친 뱃사람이 떠들고 갔는데요, ']) + talk + '\f뜬소문일 수도 있지만, 해적이란 놈들은 한곳에 오래 머물지 않으니 가 보시려면 서두르시는 게 좋을 겁니다.');
     UI.toast('수첩 「할 일」에 적었다 — ' + G.CITY_DATA[tip.port].name + ' 앞바다', 'scroll', 4200);
   };
 

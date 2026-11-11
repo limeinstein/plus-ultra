@@ -354,7 +354,7 @@
         if (x.errand) return { label: '작은 일거리를 청한다', right: '해도·조달·소문 확인', value: i, icon: 'seal', desc: '큰 모험 대신 후원자가 맡기는 쉬운 일 — 이름과 신뢰를 쌓는다' };
         if (x.batch) return { label: '찾아 둔 발견을 한꺼번에 보고한다 <span class="tag">' + x.n + '건</span>', right: '일괄 보고', value: i, icon: 'scroll', desc: '값진 것부터 차례로 보고 — 올해 이 후원자에게 두 번째부터는 사례금이 줄어든다 (한 건씩 보고할 때와 같은 셈)' };
         var gr = x.found && G.Disc.gradeOf ? G.Disc.gradeOf(x.d) : null;
-        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (gr ? ' <span class="tag">증거 · ' + gr.name + '</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: G.Disc.hintText(x.d), cat: x.circ ? '' : x.d.cat };   // cat: 갈래 단추로 거른다 (2026-10-29)
+        return { label: (x.circ ? '세계일주' : x.d.name) + (x.found ? ' <span class="tag">발견 완료</span>' : '') + (gr ? ' <span class="tag">증거 · ' + gr.name + '</span>' : '') + (x.fake ? ' <span class="tag">모조품으로 보고</span>' : '') + (x.dbl ? ' <span class="tag">이중 계약</span>' : '') + (x.found && G.Disc.isLate(x.d.id) ? ' <span class="tag">늦은 보고 · 명성·사례금 절반</span>' : '') + (x.found && G.Disc.proofThumbs ? G.Disc.proofThumbs(x.d.id, 'report') : ''), right: G.DISC_CATS[x.d.cat] + (G.tasteHit(sp.taste, x.d) ? ' ★' : ''), value: i, icon: x.found ? 'star' : 'scroll', desc: G.Disc.hintText(x.d), cat: x.circ ? '' : x.d.cat };   // cat: 갈래 단추로 거른다 (2026-10-29)
       }), { width: 720, text: SP.holderName(sp) + ' ' + SP.honor(sp) + '의 취향: <b>' + tasteTxt + '</b> <span class="muted">— ★ 취향에 맞으면 선금·사례를 후하게, 취향 밖이면 웅변으로 설득해 볼 수 있다</span>' + (tm ? ' · 성품: <b>' + tm.name + '</b> <span class="muted">— ' + tm.desc + '</span>' : ''),
         catName: function (k) { return G.DISC_CATS[k] || k; }, catOrder: Object.keys(G.DISC_CATS), catState: G.DiscPick ? G.DiscPick.state : null });
       if (pick == null) { await UI.say(L('pickCancel'), who); return; }
@@ -504,7 +504,7 @@
       var e = x.est;
       var q = x.d.name + ' ' + (G.DISC_CATS[x.d.cat] || '') + ' ' + (G.regionLabelAt ? G.regionLabelAt(x.d.reg, x.d.lon, x.d.lat) : '');   // 찾기 칸: 이름·갈래·지역
       return '<tr data-ck data-q="' + U.esc(q) + '"' + (G.DiscPick ? G.DiscPick.attrs(x.d, { val: x.ok ? e.pay : 0 }) : '') + (x.ok ? '' : ' class="muted"') + '><td>' + (x.ok ? '<input type="checkbox" data-i="' + i + '" checked>' : '') + '</td><td><b>' + U.esc(x.d.name) + '</b> <small class="muted">' + U.esc((G.DISC_CATS && G.DISC_CATS[x.d.cat]) || '') + '</small>' +
-        (G.Disc.isLate(x.d.id) ? ' <span class="tag">경쟁자가 먼저</span>' : '') + (x.gr ? ' <span class="tag">증거 · ' + U.esc(x.gr.name) + '</span>' : '') + '</td>' +
+        (G.Disc.isLate(x.d.id) ? ' <span class="tag">경쟁자가 먼저</span>' : '') + (x.gr ? ' <span class="tag">증거 · ' + U.esc(x.gr.name) + '</span>' : '') + (G.Disc.proofThumbs ? G.Disc.proofThumbs(x.d.id, 'report') : '') + '</td>' +   // 넘길 증거품 그림 (2026-11-11 피드백)
         (x.ok ? '<td class="num">' + U.num(e.pay) + '닢' + (e.cut ? ' <small class="muted">(깎임)</small>' : '') + '</td><td class="num">+' + U.num(e.fame) + '</td>' : '<td colspan="2" class="muted">관심 밖 — 따로 설득해 보고</td>') + '</tr>';
     }).join('');
     var tot = function (sel) { var p = 0, f = 0; ok.forEach(function (x) { if (sel.indexOf(x) >= 0) { p += x.est.pay; f += x.est.fame; } }); return [p, f]; };

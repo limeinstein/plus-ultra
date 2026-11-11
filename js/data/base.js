@@ -637,6 +637,9 @@
     // 오를레앙의 처녀 잔 (js/systems/joan.js): 못 본 척하거나 일기토에 지면 coolDays일 뒤에 다시 (태우기를 거절하면 그 두 배)
     joan: { coolDays: 30 },
     strand: { farDeg: 3, keepDays: 730, findR: 1.0, warn: [365, 90, 30] },
+    // 난이도별로 흐르는 날 (2026-11-11 피드백 — 대항해시대 3의 「입항 10일」이 가혹했다): 배로 입항할 때는 흐르지 않고,
+    // 성문으로 걸어 들어올 때와 출항할 때(출항 준비) 흐른다. js/scenes/city.js C.arrival · js/city/harbor.js H.depart (R.portDays)
+    portDays: { easy: 1, normal: 3, original: 10 },
     // 도크 (js/systems/dock.js): 모항 home척 · 다른 항구 other척까지. 모항이 아닌 도크에 keepDays일 넘게 두면 폐기. warn = 남은 날이 이만큼일 때 일러 줌
     dock: { home: 10, other: 3, keepDays: 730, warn: [90, 30] },
     sneak: { base: { holy: 0.1, islam: 0.4, closed: 0.25, treaty: 0.35, wanted: 0.3 },
@@ -704,7 +707,7 @@
     innWork: { maxDays: 90, restNights: 10, famePerDay: 1, langDays: [40, 80, 120] },   // 석 달을 넘겨 일할 수 없다 — 여관에서 열흘 넘게 묵으면 다시 석 달 (2026-10-20)
     // 식당 한 끼: 값 = base + 도시 등급×size + 음식 등급×tier, 하루 한 번 피로·체력을 회복 (js/city/restaurant.js)
     //   minSize = 식당이 서는 가장 작은 도시 등급 (그보다 작아도 이름난 음식이 있으면 선다 — js/data/cuisine_place.js)
-    restaurant: { base: 5, size: 3, tier: 4, rest: [0, 6, 8, 10], hp: [0, 1, 2, 3], minSize: 2, disc: [0, 2, 3, 4], so: [0, 1, 1, 2] },   // disc: 규율이 오르는 만큼 · so: 사교 명성이 살짝(사교 배수 ×3 전) (음식 등급별, 2026-10-17)
+    restaurant: { base: 5, size: 3, tier: 4, rest: [0, 6, 8, 10], hp: [0, 1, 2, 3], minSize: 2, disc: [0, 2, 3, 4], so: [0, 1, 1, 2], first: { so: 4, rest: 4, disc: 2 } },   // disc: 규율이 오르는 만큼 · so: 사교 명성이 살짝(사교 배수 ×3 전) (음식 등급별, 2026-10-17)
     // 커피 메뉴 (js/systems/coffee.js · 2026-10-30): 커피를 한 번에 minQty통 넘게 팔면 그 문화권 식당에 메뉴 하나 · 한 잔 값 = base + 도시 크기×size + 등급×tier
     //   so: 등급별 사교 명성(화면에는 3배) · first: 처음 맛보는 메뉴에 더 얹는 명성 · rest: 풀리는 피로
     coffee: { minQty: 10, base: 4, size: 2, tier: 3, so: [0, 2, 3, 4], first: 8, rest: 2 },

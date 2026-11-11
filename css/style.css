@@ -1032,6 +1032,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .hud.dense .cell.two span { font-size: 16px; }
 .hud .cell.two.val-warn span { color: #ff9f7a; }
 .hud .cell .dots { letter-spacing: -1px; color: #e8c878; font-size: 13px; margin-left: 3px; }
+.hud .cell .dots b.team { font-weight: inherit; color: #7fb2ee; }   /* 부관·통역 덕에 오른 단계 — 제독 본인 단계(금빛)와 나눈다 */
 .hud .supply-state { display: inline-block; margin-left: 4px; padding: 1px 5px; border-radius: 8px; font-size: 10px !important; line-height: 1.2; color: #2a160c !important; background: #e6b75a; vertical-align: 1px; }
 .hud .supply-state.crisis { color: #fff4e8 !important; background: #a82e24; animation: supplyPulse 1s ease-in-out infinite alternate; }
 @keyframes supplyPulse { from { box-shadow: 0 0 0 rgba(255,100,70,0); } to { box-shadow: 0 0 10px rgba(255,100,70,.85); } }
@@ -2141,3 +2142,14 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .wp-big { display:flex; align-items:flex-start; gap:20px; padding:16px; background:#deded9; color:#302f2d; }
 .wp-detail-sheet { flex:0 0 250px; box-shadow:1px 3px 5px #0004; }
 @media(max-width:650px) { .wp-grid{grid-template-columns:repeat(2,minmax(0,1fr))} .wp-detail-sheet {flex-basis:38%} }
+/* 보고·발표 목록의 증거품 그림 (js/systems/discovery.js D.proofThumbs · 2026-11-11 피드백) — 줄 높이를 거의 늘리지 않는 작은 그림, 올리면 떠 있는 카드로 크게 */
+.proof-th { display: inline-flex; gap: 3px; margin-left: 6px; vertical-align: middle; flex: 0 0 auto; align-self: center; }
+.proof-th .pt { width: 30px; height: 30px; object-fit: contain; border-radius: 5px; background: radial-gradient(circle, rgba(255,248,224,.9), rgba(180,143,87,.35)); box-shadow: inset 0 0 0 1px rgba(91,61,27,.3); cursor: help; }
+.proof-th .pt.ev { box-shadow: inset 0 0 0 1px rgba(30,53,82,.55); }
+.proof-th span.pt.none { display: inline-flex; align-items: center; justify-content: center; font-size: 11px; color: #5b3d1b; }
+.choice .proof-th .pt, .tbl .proof-th .pt { margin: -4px 0; }
+.proof-peek { position: fixed; z-index: 9999; display: none; gap: 12px; align-items: center; max-width: 380px; padding: 10px 14px 10px 10px; pointer-events: none;
+  background: linear-gradient(#f6ead0, #e8d5ac); color: #3a2614; border: 1px solid #8a6a3a; border-radius: 8px; box-shadow: 0 6px 22px rgba(0,0,0,.45); font-size: 15px; line-height: 1.45; }
+.proof-peek img { width: 128px; height: 128px; flex: 0 0 128px; object-fit: contain; border-radius: 6px; background: radial-gradient(circle, #fbf3df, #c9a874); }
+.proof-peek small { color: #7a5c33; }
+.proof-peek .pf { margin-top: 4px; font-size: 14px; color: #6a3a1a; }

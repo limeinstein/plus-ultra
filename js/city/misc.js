@@ -7,9 +7,14 @@
   // ================================================================ 여관 (inn)
   var INN = { title: '여관', icon: 'bed', paint: 'inn', exitLabel: '여관을 나온다' };
   C.B.inn = INN;
-  function innWife() { return C.npc('innkeeper', G.Img.npcGender('innkeeper', C.city()) === 'm' ? '여관 주인' : '여관 안주인'); }
+  /** 여관 주인이 남자인가 — 그림이 남자면 말투도 남자 말투 (피드백 2026-11-11: 프랑스 여관의 남자 주인이 「어머」 하며 여자 말투) */
+  function innMan() { return G.Img.npcGender('innkeeper', C.city()) === 'm'; }
+  function innWife() { return C.npc('innkeeper', innMan() ? '여관 주인' : '여관 안주인'); }
+  /** 같은 뜻을 안주인 말투(f)와 주인 말투(m)로 */
+  function innLine(f, m) { return innMan() ? m : f; }
   INN.enter = async function (c) {
-    await C.say(innWife(), C.hail(c, 'inn', ['어서 오세요. 쉬어 가실래요?', '어서 오세요. 방은 깨끗하게 치워 두었어요.', '먼 길 오셨네요. 푹 쉬고 가세요.']));
+    await C.say(innWife(), C.hail(c, 'inn', innLine(['어서 오세요. 쉬어 가실래요?', '어서 오세요. 방은 깨끗하게 치워 두었어요.', '먼 길 오셨네요. 푹 쉬고 가세요.'],
+      ['어서 오십시오. 묵어 가시겠습니까?', '어서 오십시오. 방은 깨끗이 치워 두었습니다.', '먼 길 오셨군요. 푹 쉬다 가십시오.'])));
     if (G.Story && G.Story.family) { try { await G.Story.family(c, 'inn'); } catch (e) { console.error(e); } }   // 이야기 모드: 고향 여관에서 아내와 어머니를 마주친다
   };
   INN.sub = function (c) { return '하룻밤 금화 ' + R.innCost(c) + '닢'; };
@@ -26,10 +31,10 @@
   INN.canSave = function (c) { var d = S().settings.diff; return d !== 'original' || R.isHomeNation(c); };
   INN.stay = async function (c) {
     var s = S(), cost = R.innCost(c);
-    var n = await UI.number({ title: '숙박', text: '선불이에요. 하룻밤에 금화 ' + cost + '닢인데, 며칠 묵으시겠어요?', min: 1, max: 60, value: 1, unit: '박',
+    var n = await UI.number({ title: '숙박', text: innLine('선불이에요. 하룻밤에 금화 ' + cost + '닢인데, 며칠 묵으시겠어요?', '방값은 미리 받습니다. 하룻밤에 금화 ' + cost + '닢인데, 며칠 묵으시겠습니까?'), min: 1, max: 60, value: 1, unit: '박',
       quick: [{ label: '1박', value: 1 }, { label: '7박', value: 7 }, { label: '30박', value: 30 }], info: function (d) { return '비용 금화 ' + U.num(d * cost) + '닢'; } });
     if (!n) return;
-    if (s.player.gold < n * cost) { await C.say(innWife(), '소지금이 모자라시네요.'); return; }
+    if (s.player.gold < n * cost) { await C.say(innWife(), innLine('소지금이 모자라시네요.', '손님, 가진 돈이 모자라시는군요.')); return; }
     s.player.gold -= n * cost;
     var msgs = [];
     await UI.fade(function () { msgs = G.Game.passDays(n); });
@@ -64,14 +69,15 @@
     var lv0 = li != null ? (s.player.lg[li] || 0) : 3;
     var j = innJob(), left = INN.workLeft();
     if (left <= 0) {
-      await C.say(w, '어머, 얼굴이 많이 상하셨어요. 벌써 석 달이나 쉬지 않고 일하셨잖아요. 그러다 쓰러지세요.\f여관에서 푹 쉬고 오세요. 열흘은 묵으셔야 해요. 그다음에 다시 일손을 부탁드릴게요.' +
+      await C.say(w, innLine('어머, 얼굴이 많이 상하셨어요. 벌써 석 달이나 쉬지 않고 일하셨잖아요. 그러다 쓰러지세요.\f여관에서 푹 쉬고 오세요. 열흘은 묵으셔야 해요. 그다음에 다시 일손을 부탁드릴게요.',
+        '이런, 얼굴이 많이 상하셨습니다. 벌써 석 달이나 쉬지 않고 일하셨지요. 그러다 쓰러지십니다.\f여관에서 푹 쉬고 오십시오. 열흘은 묵으셔야 합니다. 그다음에 다시 일손을 부탁드리지요.') +
         '\f(허드렛일은 석 달을 넘길 수 없다 — 여관에서 ' + (K.restNights - (j.rest || 0)) + '밤 더 묵으면 다시 석 달 일할 수 있다)');
       return;
     }
-    var v = await C.ask(w, '일손이 필요하긴 해요. 부엌일과 장작 패기를 해 주시면 품삯을 드릴게요.' + (lname && lv0 < 3 ? '\n(일하는 동안 ' + lname + U.jx(lname, '을/를') + ' 익힐 수 있지만, 바다의 제독이 허드렛일을 한다는 소문에 하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)' : '\n(하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)'),
+    var v = await C.ask(w, innLine('일손이 필요하긴 해요. 부엌일과 장작 패기를 해 주시면 품삯을 드릴게요.', '마침 일손이 모자라던 참입니다. 부엌일과 장작 패기를 해 주시면 품삯을 드리지요.') + (lname && lv0 < 3 ? '\n(일하는 동안 ' + lname + U.jx(lname, '을/를') + ' 익힐 수 있지만, 바다의 제독이 허드렛일을 한다는 소문에 하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)' : '\n(하루에 명성이 ' + K.famePerDay + '씩 내려갑니다)'),
       [10, 30].filter(function (d) { return d < left; }).map(function (d) { return { label: (d === 10 ? '열흘' : '한 달') + ' 일한다 (' + d + '일)', value: d }; })
         .concat([{ label: '남은 ' + left + '일을 다 일한다', value: left }, { label: '날수를 정한다 (최대 ' + left + '일)', value: -1 }, { label: '그만둔다', value: 0 }]));
-    if (v === -1) v = await UI.number({ title: '허드렛일', text: '며칠 일하시겠어요? (석 달 가운데 남은 날 ' + left + '일 · 다 채우면 여관에서 ' + K.restNights + '밤 묵어야 다시 일할 수 있다)', min: 1, max: left, value: Math.min(30, left), unit: '일',
+    if (v === -1) v = await UI.number({ title: '허드렛일', text: innLine('며칠 일하시겠어요?', '며칠 일하시겠습니까?') + ' (석 달 가운데 남은 날 ' + left + '일 · 다 채우면 여관에서 ' + K.restNights + '밤 묵어야 다시 일할 수 있다)', min: 1, max: left, value: Math.min(30, left), unit: '일',
       quick: [{ label: '열흘', value: Math.min(10, left) }, { label: '남은 날 모두', value: left }], info: function (d) { return '명성 −' + U.num(d * K.famePerDay); } });
     if (!v) return;
     v = Math.min(left, v);
@@ -100,7 +106,8 @@
     G.Game.refreshHud();
     if (s.life && s.life.end) return;
     var after = INN.workLeft();
-    await C.say(w, '수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!' + (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다.)' : '') + learned +
+    await C.say(w, innLine('수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내세요!',
+      '수고하셨습니다. 약속한 품삯입니다. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내십시오!') + (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다.)' : '') + learned +
       (after > 0 ? '\f(석 달 가운데 남은 날: ' + after + '일)' : '\f(석 달을 꼬박 일했다 — 여관에서 ' + K.restNights + '밤 넘게 묵어야 다시 일할 수 있다)'));
   };
   INN.func = async function (c) {

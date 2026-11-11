@@ -440,6 +440,61 @@
   /** 이 발견의 증거로 쓸 수 있는 소지품 (아직 쓰지 않은 해도·지도와 유물) */
   D.proofItems = function (id) { return S().player.items.filter(function (it) { return it.disc === id && R.isProof(it); }); };
   D.hasProof = function (id) { return D.proofItems(id).length > 0; };
+  /* 증거품 미리 보기 (2026-11-11 피드백 — 「보고할 때 넘어갈 증거품을 미리 보고 싶다」)
+     보고·발표 목록(항구 발표 · 후원자 한 건 보고 · 일괄 보고)의 줄 끝에 이 발견의 증거품을 작은 그림으로 붙인다.
+     마우스를 올리면 큰 그림과 이름 · 넘어가는 곳(해도소·후원자·제독)이 화면 구석에 잠깐 뜬다 — 목록을 가리지 않게 마우스 반대쪽에.
+     mode: 'announce'(스스로 발표) | 'report'(후원자에게 보고) */
+  var thumbCache = {};
+  /** 증거품 그림 주소: 사람이 그린 그림(images/)이 있으면 그 파일, 없으면 코드로 그린 유물·말아 둔 해도 그림 */
+  D.proofSrc = function (it) {
+    var rl = G.RELIC && G.RELIC[it.id], d = G.ITEM && G.ITEM[it.id];
+    var chain = rl ? G.Img.chain.relic(rl) : d && it.kind !== 'evidence' ? G.Img.chain.item(d) : ['items/evidence_' + (it.disc || it.sp)];
+    var key = G.Img && G.Img.pick(chain);
+    if (key) return G.Img.src(key);
+    var art = rl || (it.kind === 'evidence' || it.kind === 'clue' || !d ? { id: 'ev_' + (it.disc || it.sp || it.id), name: it.name || '해도', kind: 'book' } : d);
+    var ck = art.id + '|' + (art.name || '');
+    if (!thumbCache[ck] && G.Art && G.Art.relicArt) { try { thumbCache[ck] = G.Art.relicArt(art, 160, 160).toDataURL(); } catch (e) { thumbCache[ck] = null; } }
+    return thumbCache[ck] || null;
+  };
+  /** 이 증거품이 보고·발표 뒤 어디로 가는가 */
+  D.proofFate = function (it, mode) {
+    var rl = G.RELIC && G.RELIC[it.id];
+    if (mode === 'announce') return it.evidence ? '발표하면 왕실 해도소에 넘긴다' : '발표해도 제독이 갖는다 (팔거나 쓸 수 있다)';
+    if (it.evidence) return '보고하면 후원자에게 넘긴다';
+    return rl && (rl.kind === 'book' || rl.lead) ? '보고하면 후원자에게 넘긴다 — 서적·이어지는 물건은 돌려받기도 한다' : '보고하면 후원자에게 넘긴다';
+  };
+  /** 목록 줄에 붙일 작은 그림 줄 (HTML) — 증거품이 없으면 '' */
+  D.proofThumbs = function (id, mode) {
+    var list = D.proofItems(id);
+    if (!list.length) return '';
+    return '<span class="proof-th">' + list.map(function (it) {
+      var src = D.proofSrc(it), nm = R.itemName(it), kind = it.evidence ? '증거품' : '유물';
+      var data = ' data-pv-src="' + U.esc(src || '') + '" data-pv-name="' + U.esc(nm) + '" data-pv-kind="' + kind + '" data-pv-fate="' + U.esc(D.proofFate(it, mode)) + '"';
+      return src ? '<img class="pt' + (it.evidence ? ' ev' : '') + '" src="' + U.esc(src) + '" alt="' + U.esc(nm) + '" title=""' + data + '>'
+        : '<span class="pt none" title=""' + data + '>' + U.esc(nm.slice(0, 2)) + '</span>';
+    }).join('') + '</span>';
+  };
+  // 마우스를 올리면 크게 (하나의 떠 있는 카드 — 목록 창의 스크롤에 잘리지 않게 body에 둔다)
+  (function () {
+    var card = null;
+    function hide() { if (card) card.style.display = 'none'; }
+    function show(el) {
+      if (!card) { card = document.createElement('div'); card.className = 'proof-peek'; document.body.appendChild(card); }
+      var src = el.getAttribute('data-pv-src');
+      card.innerHTML = (src ? '<img src="' + U.esc(src) + '" alt="">' : '') + '<div><b>' + U.esc(el.getAttribute('data-pv-name')) + '</b> <small>' + U.esc(el.getAttribute('data-pv-kind')) + '</small>' +
+        '<div class="pf">' + U.esc(el.getAttribute('data-pv-fate')) + '</div></div>';
+      card.style.display = 'flex';
+      // 그림 줄 전체의 바깥(오른쪽, 모자라면 왼쪽)에 붙인다 — 곁의 다른 증거품 그림을 가리지 않게
+      var W = window.innerWidth, H = window.innerHeight, cw = card.offsetWidth, chh = card.offsetHeight;
+      var grp = (el.closest('.proof-th') || el).getBoundingClientRect();
+      var x = grp.right + 12 + cw <= W - 8 ? grp.right + 12 : grp.left - cw - 12;
+      card.style.left = Math.max(8, Math.min(W - cw - 8, x)) + 'px';
+      card.style.top = Math.max(8, Math.min(H - chh - 8, grp.top + grp.height / 2 - chh / 2)) + 'px';
+    }
+    document.addEventListener('mouseover', function (ev) { var el = ev.target && ev.target.closest && ev.target.closest('[data-pv-name]'); if (el) show(el); else hide(); });
+    document.addEventListener('mousedown', hide, true);
+    document.addEventListener('keydown', hide, true);
+  })();
   /** 소지품이 가득 찬 채 유물을 찾았다: 무엇을 버리고 챙길지, 두고 갈지 (두고 가면 다시 와서 가져갈 수 있다) */
   D.takeRelic = async function (d, r) {
     var s = S(), st = s.disc[d.id] || (s.disc[d.id] = {});

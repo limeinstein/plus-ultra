@@ -26,7 +26,7 @@ const {chromium}=require('../tools/procedural_art/node_modules/playwright-core')
    return {base:G.Img.base(),rows};
   });
   const remote=process.env.EXPECT_REMOTE_IMAGES==='1';
-  if(remote)assert(/^https:\/\/raw\.githubusercontent\.com\/limeinstein\/plus-ultra\/[a-f0-9]{40}\/images\/$/.test(result.base),result.base);
+  if(remote){if(process.env.EXPECT_IMAGE_BASE)assert.equal(result.base,process.env.EXPECT_IMAGE_BASE);else assert(/^https:\/\/raw\.githubusercontent\.com\/limeinstein\/plus-ultra\/[a-f0-9]{40}\/images\/$/.test(result.base),result.base);}
   else assert.equal(result.base,'images/');
   for(const r of result.rows){assert.equal(r.read,64*64*4);assert(r.exported);assert.equal(r.gl,0);if(remote)assert.equal(r.cors,'anonymous');}
   assert.deepStrictEqual(errors,[]);console.log(JSON.stringify({...result,errors}));

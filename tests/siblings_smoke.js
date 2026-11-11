@@ -58,7 +58,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const p = G.Game.state.player;
       return { name: p.name, gen: p.generation, sib: p.siblings.map(k => k.name + ':' + G.Family.kidAge(k)), kids: p.kids.length,
         art: p.siblings.filter(k => window.__art[k.name]).every(k => G.HomeLife.chain(k, true)[0].replace(/_v\d/, '') === window.__art[k.name].replace(/_v\d/, '')),
-        faces: ['m', 'f'].every(sx => { const v = p.siblings.filter(k => k.sex === sx).map(k => k.portraitVariant).concat(sx === 'm' ? [p.heir.variant] : []); return new Set(v).size === v.length; }),
+        faces: ['m', 'f'].every(sx => { const v = p.siblings.filter(k => k.sex === sx).map(k => k.lookFolder ? 'r:' + k.lookFolder : k.portraitVariant).concat(sx === 'm' ? [p.heir.variant] : []); return new Set(v).size === v.length; }),
         aboard: p.siblings.some(k => k.aboard), pics: window.__pics.slice(), said: window.__said.join('\n') };
     });
     ok(r.name === '주앙' && r.gen === 2 && r.kids === 0, '주앙이 뒤를 잇는다');

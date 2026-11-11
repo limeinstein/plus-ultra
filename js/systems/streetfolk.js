@@ -16,8 +16,9 @@
   function K() { return (G.FX && G.FX.streetFolk) || {}; }
 
   // ---------------------------------------------------------------- 뽑기
-  function canHave(type, c) {
-    var T = D().types[type]; if (!T) return false;
+  SF.roster = function () { return D().types; };
+  function canHave(T, c) {
+    if (!T.need) return true;
     var f = R.facilities(c);
     if (T.need === 'library') return !!f.library;
     if (T.need === 'port') return !!c.port;
@@ -59,18 +60,22 @@
     }
     return null;
   };
-  SF.types = function (c) { return Object.keys(D().types).filter(function (t) { return canHave(t, c); }); };
+  SF.types = function (c) {
+    var roster = SF.roster(c);
+    return Object.keys(roster).filter(function (type) { return canHave(roster[type], c); });
+  };
   /** 이번에 거리에 나올 사람들 — [{type, spec, x, y, dir, …}] */
   SF.spawn = function (c, streetW, heroX, ground, seed) {
     var k = K(), n = U.ri(k.min || 3, k.max || 4), pool = SF.types(c), out = [], cul = A.folkCulture ? A.folkCulture(c).cul : 'europe';
     var catW = cul === 'islam' || cul === 'eastasia' ? 1.6 : 0.8;   // 이슬람·동아시아 도시엔 고양이가 흔하다
-    var animal = false, tries = 0;
+    var roster = SF.roster(c), animal = false, tries = 0;
+    function sprite(type) { return roster[type].walk || SF.spriteOf(type, c); }
     while (out.length < n && pool.length && tries++ < 40) {
-      var t = U.weighted(pool, function (x) { var T = D().types[x]; return (T.w || 1) * (x === 'cat' ? catW : x === 'dog' ? 2 - catW * 0.6 : 1); });
+      var t = U.weighted(pool, function (x) { return (roster[x].w || 1) * (x === 'cat' ? catW : x === 'dog' ? 2 - catW * 0.6 : 1); });
       pool = pool.filter(function (x) { return x !== t; });
-      var spr = SF.spriteOf(t, c);
-      if (!D().types[t].animal && out.some(function (o) { return !o.animal && SF.spriteOf(o.type, c) === spr; })) continue;   // 빌린 그림이 겹치면 (조선: 마을 사람 = 뱃사람 그림) 한 사람만
-      if (D().types[t].animal) { if (animal) continue; animal = true; pool = pool.filter(function (x) { return !D().types[x].animal; }); }
+      var spr = sprite(t);
+      if (!roster[t].animal && out.some(function (o) { return !o.animal && sprite(o.type) === spr; })) continue;   // 빌린 그림이 겹치면 (조선: 마을 사람 = 뱃사람 그림) 한 사람만
+      if (roster[t].animal) { if (animal) continue; animal = true; pool = pool.filter(function (x) { return !roster[x].animal; }); }
       out.push(SF.make(t, c, streetW, heroX, ground, (seed || 0) + ':' + out.length + ':' + t + ':' + Math.floor(U.rng() * 1e6)));
     }
     // 거리를 거니는 동료 한 명 (입항마다 10% — js/systems/matestroll.js)
@@ -109,9 +114,9 @@
   SF.make = function (type, c, streetW, heroX, ground, seed) {
     // 짐승: 그 지역의 걷는 그림이 있으면 그 그림의 짐승으로 (지역마다 개 또는 고양이 한 마리)
     if (D().types[type] && D().types[type].animal && imgFrames(type, c)) { var pk = (D().petKind || {})[G.Img.folkStyle(c)] || 'dog'; if (D().types[pk]) type = pk; }
-    var k = K(), T = D().types[type], dp = k.depth || [12, 52], sc = k.scale || [0.92, 1.06];
-    var hasArt = !T.animal && G.Img.has && G.Img.has('portraits/street-folk/' + SF.spriteOf(type, c) + '_' + G.Img.folkStyle(c));
-    var artSex = hasArt ? SF.walkSex(SF.spriteOf(type, c), c) : null;   // 이름표·모습은 걷는 그림의 성별 (얼굴이 다르면 SF.speaker가 맞는 얼굴로 바꾼다)
+    var k = K(), T = SF.roster(c)[type] || D().types[type], dp = k.depth || [12, 52], sc = k.scale || [0.92, 1.06];
+    var hasArt = !T.walk && !T.animal && G.Img.has && G.Img.has('portraits/street-folk/' + SF.spriteOf(type, c) + '_' + G.Img.folkStyle(c));
+    var artSex = T.g || (hasArt ? SF.walkSex(SF.spriteOf(type, c), c) : null);   // 이름표·모습은 걷는 그림의 성별
     var nm = (artSex === 'f' && T.nameF) || (artSex === 'm' && T.nameM) || T.name;
     var depth = U.rf(dp[0], dp[1]), f0 = { type: type, name: nm, animal: !!T.animal, seed: seed }, sp = SF.speaker(f0, c);
     // 거리의 모습은 대화창 얼굴과 같은 성별로: 그 지역 그림이 있으면 그 그림의 성별, 없으면 코드 얼굴의 성별
@@ -129,7 +134,8 @@
     var I = G.Img; if (!I || !I.list || !I.has) return null;
     var name = SF.spriteOf(type, c), style = I.folkStyle ? I.folkStyle(c) : c.style;
     var cul = A.folkCulture ? A.folkCulture(c).cul : 'europe';
-    var cands = ['street-folk/' + name + '_' + style, 'street-folk/' + type + '_' + cul, 'street-folk/' + type];
+    var resident = SF.roster(c)[type];
+    var cands = resident && resident.walk ? [resident.walk] : ['street-folk/' + name + '_' + style, 'street-folk/' + type + '_' + cul, 'street-folk/' + type];
     for (var i = 0; i < cands.length; i++) {
       var key = cands[i];
       if (I.has(key)) { if (I.want) I.want(key); return [0, 1, 2, 3, 4, 5, 6, 7].map(function (n) { return { k: key, c: n }; }); }

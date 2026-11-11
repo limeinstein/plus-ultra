@@ -9,6 +9,12 @@
   // 건물에 들어갈 때마다 하루가 흘러 나갔다 들어오면 또 먹을 수 있던 것 — 이번 입항(R.sameStay)에도 한 끼로 막는다 (QA 2026-10-23)
   function used(c) { var s = S(), r = s.restaurant; return !!(r && r.last && R.sameStay(r.last[c.id], r.lastPv && r.lastPv[c.id])); }
   function price(c, d) { var k = K(); return Math.max(1, Math.round(k.base + c.size * k.size + d.tier * k.tier)); }
+  /** 처음 맛보는 음식인가 (커피의 「처음 맛본다」와 같이 — 2026-11-11). s.restaurant.tasted = {음식 id: 먹은 횟수}.
+      옛 저장은 제독의 미식 경험 기록(s.player.xp.food)에 남은 음식을 이미 먹은 것으로 본다 */
+  function dishId(d) { return d.id || d.name; }
+  function tasted(d) { var s = S(), r = s.restaurant, x = s.player && s.player.xp && s.player.xp.food, id = dishId(d); return !!((r && r.tasted && r.tasted[id]) || (x && x[id])); }
+  function firstK() { return K().first || { so: 4, rest: 4, disc: 2 }; }
+  function tastedCount() { var s = S(), t = (s.restaurant && s.restaurant.tasted) || {}, x = (s.player && s.player.xp && s.player.xp.food) || {}, all = {}; Object.keys(t).concat(Object.keys(x)).forEach(function (k) { all[k] = 1; }); return Object.keys(all).length; }
   function thumb(d) { var key = 'foods/' + d.id; return G.Img && G.Img.has(key) ? G.Img.src(key) : null; }
 
   var T = { title: '식당', icon: 'bread', paint: 'restaurant', exitLabel: '식당을 나온다' };
@@ -55,9 +61,9 @@
     var d = await UI.choose(c.name + ' 식당 차림표', ds.map(function (x) {
       var p = price(c, x);
       return { value: x, thumb: thumb(x), icon: thumb(x) ? null : 'bread',
-        label: '<b>' + U.esc(x.name) + '</b><br><small class="muted">' + U.esc(x.desc) + '</small>',
+        label: '<b>' + U.esc(x.name) + '</b>' + (tasted(x) ? '' : ' <small class="good-text">처음 맛본다</small>') + '<br><small class="muted">' + U.esc(x.desc) + '</small>',
         right: U.num(p) + '닢', disabled: already || S().player.gold < p, desc: x.desc };
-    }), { width: 790, icon: 'bread', text: already ? '이번에 이 도시에 들러서는 이미 한 끼를 먹었습니다. 다음에 들르면 다시 맛볼 수 있습니다.' : '이 고장의 대표 음식을 한 끼 먹으면 항해 피로가 줄고, 선원들의 규율이 오르며, 사교 명성도 살짝 오릅니다.' });
+    }), { width: 790, icon: 'bread', text: already ? '이번에 이 도시에 들러서는 이미 한 끼를 먹었습니다. 다음에 들르면 다시 맛볼 수 있습니다.' : '이 고장의 대표 음식을 한 끼 먹으면 항해 피로가 줄고, 선원들의 규율이 오르며, 사교 명성도 살짝 오릅니다. 「처음 맛본다」가 붙은 음식은 덤이 붙습니다 (피로 −' + firstK().rest + ' · 규율 +' + firstK().disc + ' · 사교 명성 +' + (G.Fame ? G.Fame.mul('so', firstK().so) : firstK().so) + ' 더).' });
     if (!d) return;
     await T.eat(c, d);
   };
@@ -67,18 +73,20 @@
     if (s.player.gold < p) { await C.say(owner(), '소지금이 모자랍니다.'); return; }
     s.player.gold -= p;
     s.restaurant = s.restaurant || {}; s.restaurant.last = s.restaurant.last || {}; s.restaurant.last[c.id] = s.day; (s.restaurant.lastPv = s.restaurant.lastPv || {})[c.id] = R.stayNo();
-    var before = s.fleet.fatigue || 0, rest = (k.rest[d.tier] == null ? 6 : k.rest[d.tier]);
+    var first = !tasted(d), fk = firstK();
+    s.restaurant.tasted = s.restaurant.tasted || {}; s.restaurant.tasted[dishId(d)] = (s.restaurant.tasted[dishId(d)] || 0) + 1;
+    var before = s.fleet.fatigue || 0, rest = (k.rest[d.tier] == null ? 6 : k.rest[d.tier]) + (first ? fk.rest || 0 : 0);
     s.fleet.fatigue = Math.max(0, before - rest);
     s.player.hp = Math.min(100, (s.player.hp || 100) + (k.hp[d.tier] || 0));
     // 든든한 한 끼는 선원들의 규율도 다잡고, 이 고장 사람들 사이에 제독의 이름이 살짝 오르내린다 (2026-10-17)
-    var d0 = s.fleet.discipline == null ? 60 : s.fleet.discipline, dUp = (k.disc && k.disc[d.tier]) || 0;
+    var d0 = s.fleet.discipline == null ? 60 : s.fleet.discipline, dUp = ((k.disc && k.disc[d.tier]) || 0) + (first ? fk.disc || 0 : 0);
     s.fleet.discipline = Math.min(100, d0 + dUp); dUp = Math.round(s.fleet.discipline - d0);
-    var so = (k.so && k.so[d.tier]) ? (G.Fame ? G.Fame.add('so', k.so[d.tier]) : 0) : 0;
+    var soWant = ((k.so && k.so[d.tier]) || 0) + (first ? fk.so || 0 : 0), so = soWant && G.Fame ? G.Fame.add('so', soWant) : 0;
     if (G.Growth) G.Growth.meal(d.tier, d.id || d.name);   // 미식 경험 — 처음 맛본 음식은 두 배 (js/systems/growth.js)
-    var gain = '피로 −' + (before - s.fleet.fatigue) + (dUp > 0 ? ' · 규율 +' + dUp : '') + (so > 0 ? ' · 사교 명성 +' + so : '');
+    var gain = (first ? '처음 맛본 음식 — ' : '') + '피로 −' + (before - s.fleet.fatigue) + (dUp > 0 ? ' · 규율 +' + dUp : '') + (so > 0 ? ' · 사교 명성 +' + so : '') + (first ? ' · 맛본 음식 ' + tastedCount() + '/' + ((G.CUISINES || []).length || '?') : '');
     if (G.Game.refreshHud) G.Game.refreshHud();
     if (G.State && G.State.log) G.State.log(c.name + ' 식당에서 ' + d.name + U.jx(d.name, '을/를') + ' 먹었다. (금화 ' + p + '닢 · ' + gain + ')');
     if (G.Audio) { G.Audio.sfx('pot'); setTimeout(function () { if (G.Audio) G.Audio.sfx('coin'); }, 380); }   // 냄비 소리, 값을 치른다
-    await C.say(owner(), d.name + U.jx(d.name, '은/는') + ' 이 고장의 맛을 잘 보여 주는 음식입니다.\f배도 든든해졌으니 좋은 항해가 되시길! (' + gain + ')');
+    await C.say(owner(), (first ? '처음 드셔 보시는군요! 이 고장 사람들은 이 맛을 아는 손님을 반긴답니다. 선원들에게도 자랑하실 만할 겁니다.\f' : '') + d.name + U.jx(d.name, '은/는') + ' 이 고장의 맛을 잘 보여 주는 음식입니다.\f배도 든든해졌으니 좋은 항해가 되시길! (' + gain + ')');
   };
 })(window.G = window.G || {});

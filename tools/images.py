@@ -92,8 +92,8 @@ if os.path.isfile(event_art_overrides):
 # 혼인 업적의 도감도 실제 달성 사건과 같은 그림을 쓴다 (2026-11-10).
 PREFERRED_FILES['achievement-events/happily'] = 'legend-events/happily_after_all.webp'
 
-# 옛이야기의 기본 원화 위에 셔우드·텔 이야기의 새 초상과 장면을 연결한다.
-for folk_art_name in ('asset-overrides.json', 'sherwood-tell-overrides.json'):
+# 옛이야기의 기본 원화 위에 각 이야기의 새 초상과 장면을 연결한다.
+for folk_art_name in ('asset-overrides.json', 'sherwood-tell-overrides.json', 'rapunzel-overrides.json'):
     folk_art_overrides = os.path.join(TOOLS, 'folktales_art_20261110', folk_art_name)
     if os.path.isfile(folk_art_overrides):
         with open(folk_art_overrides, encoding='utf-8') as folk_art_file:

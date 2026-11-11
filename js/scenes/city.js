@@ -252,10 +252,10 @@
     if (s.known.indexOf(c.id) < 0) s.known.push(c.id);
     s.visited[c.id] = (s.visited[c.id] || 0) + 1;
     if (!s.lastVisit) s.lastVisit = {};
-    // days in port
-    var pd = { easy: 1, normal: 3, original: 10 }[s.settings.diff] || 3;
+    // 흐르는 날: 배로 입항할 때는 흐르지 않고, 성문으로 걸어 들어올 때만 난이도의 1·3·10일 (R.portDays — 2026-11-11 피드백). 출항할 때는 harbor.js H.depart
+    var pd = byLand || arg.gate ? R.portDays() : 0;
     var voyDays = s.fleet.daysOut || 0;          // 항구에서 날이 지나면 0이 되므로 먼저 적어 둔다
-    var msgs = G.Game.passDays(pd);
+    var msgs = pd > 0 ? G.Game.passDays(pd) : [];
     s.lastVisit[c.id] = s.day;          // 해도의 도시 요약: 언제 들렀는지
     G.Game.refreshHud();
     // supplies spoil a little less in port; ship minor repairs are not automatic

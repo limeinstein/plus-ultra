@@ -258,10 +258,20 @@
   H.title = function () { var t = G.Court && G.Court.best(), sl = G.Slave ? G.Slave.title() : '', fm = G.Princess ? G.Princess.title() : '', gv = G.Colony ? G.Colony.title() : '', pv = G.Court && G.Court.privateer && G.Court.privateer() ? '사략선장' : ''; var head = [gv, pv, sl, fm].filter(Boolean).join(' · '); return head ? head + (t ? ' · ' + t.ko : '') : t ? t.ko : R.fameTitle(Game.state.player.fame); };   // 노예 무역에 손을 대면 「노예 상인」, 에스파냐 왕녀와 혼인하면 「부마」가 먼저 붙는다   // 노예 무역에 손을 대면 「노예 상인」이 먼저 붙는다
   H.titleTip = function () { var t = G.Court ? G.Court.titles() : [], sl = G.Slave ? G.Slave.title() : ''; return (G.Court && G.Court.privateer && G.Court.privateer() ? '사략선장 (사략허가장을 지닌 동안 — 해적의 습격 −' + G.Court.pirateCutPct() + '%) — ' : '') + (sl ? sl + ' (노예를 사고판 이름 — 남은 ' + G.Slave.remain() + '일) — ' : '') + (G.Princess && G.Princess.title() ? '부마 (에스파냐 국왕의 사위) — ' : '') + (t.length ? t.map(function (x) { return G.Court.fullName(x, true); }).join(' · ') + ' — ' : '') + R.fameTitle(Game.state.player.fame); };
   H.fameTip = function () { return G.Fame ? '통합 명성 = ' + G.Fame.text() : ''; };
+  /* 언어 칸: 제독 본인 단계(금빛 ●)와 부관·통역 덕에 오른 단계(파란 ●)를 나눠 보인다 —
+     예전에는 일행 단계만 ●로 보여, 통역이 아랍어를 잘하면 본인은 기초인데도 ●●●로 보였다 (2026-11-11 피드백 — 후계자의 아랍어) */
+  function langOwn(li) { var p = Game.state.player; return Math.min(3, (p.lg && p.lg[li]) || 0); }
   H.lang = function (c) {
     if (!c) return '';
-    var cl = R.cityLang(c), lv = cl.lv || 0;   // 포르투갈어가 통하는 항구면 그 말로 (js/systems/treaty.js)
-    return G.LANGS[cl.li] + ' <span class="dots">' + '●●●'.slice(0, lv) + '○○○'.slice(0, 3 - lv) + '</span>';
+    var cl = R.cityLang(c), lv = cl.lv || 0, own = Math.min(lv, langOwn(cl.li));   // 포르투갈어가 통하는 항구면 그 말로 (js/systems/treaty.js)
+    return G.LANGS[cl.li] + ' <span class="dots">' + '●●●'.slice(0, own) + (lv > own ? '<b class="team">' + '●●●'.slice(0, lv - own) + '</b>' : '') + '○○○'.slice(0, 3 - lv) + '</span>';
+  };
+  H.langTip = function (c) {
+    if (!c) return '';
+    var cl = R.cityLang(c), lv = cl.lv || 0, own = langOwn(cl.li), who = null;
+    if (lv > own && G.Tongues && G.Tongues.situation) { try { var sit = G.Tongues.situation({ li: cl.li }); who = sit && sit.mate ? sit.mate.name : null; } catch (e) { who = null; } }
+    return '이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 ' + G.LANG_LV[own] + (lv > own ? ' · 일행 ' + G.LANG_LV[lv] + ' (' + (who ? who + U.jx(who, '이/가') + ' 통역' : '부관·통역 덕') + ' — 파란 점)' : '') +
+      (cl.alt ? ' · 이 항구는 ' + G.LANGS[c.lang] + ' 대신 포르투갈어가 통한다 (' + G.Treaty.ptLang(c) + ')' : '');
   };
   H.gold = function () { return U.num(Game.state.player.gold) + '<small>닢</small>'; };
   H.date = function () { return U.fmtDate(Game.state.date); };
@@ -284,7 +294,7 @@
     UI.hud.show([
       { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
       { k: 'place', icon: 'castle', label: own ? '도시 · ' + own : '도시', text: c ? c.name : '' },
-      { k: 'lang', icon: 'scroll', label: '언어', text: H.lang(c), tip: c ? '이 도시의 말과 제독 일행이 하는 수준 (동료 통역·부관 포함) — ' + G.LANG_LV[R.cityLang(c).lv || 0] + (R.cityLang(c).alt ? ' · 이 항구는 ' + G.LANGS[c.lang] + ' 대신 포르투갈어가 통한다 (' + G.Treaty.ptLang(c) + ')' : '') : '' },
+      { k: 'lang', icon: 'scroll', label: '언어', text: H.lang(c), tip: H.langTip(c) },
       { k: 'lat', icon: 'compass', label: '위도', text: c ? U.fmtLat(c.lat) : H.lat() },
       { k: 'lon', label: '경도', text: c ? U.fmtLon(c.lon) : H.lon() },
       { k: 'food', icon: 'bread', label: '식량', text: food.text, tip: food.tip },
@@ -313,6 +323,8 @@
     UI.hud.tip('food', food.tip); UI.hud.tip('water', water.tip);
     UI.hud.set('fat', Math.round(f.fatigue || 0) + '%', (f.fatigue || 0) > 60);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
+    // 도시의 언어 칸: 세대 교체·말 공부·통역을 들이고 내보낸 뒤에도 바로 바뀌게 (예전에는 도시에 다시 들어와야 바뀌어, 선대의 ●●●가 남았다 — 2026-11-11 피드백)
+    if (S.loc && S.loc.mode === 'city') { var lc = G.CITY_DATA[S.loc.city]; if (lc) { UI.hud.set('lang', H.lang(lc)); UI.hud.tip('lang', H.langTip(lc)); } }
     if (G.Info && G.Info.refreshFleetPanels) G.Info.refreshFleetPanels();
     Game.checkTitle();
   };

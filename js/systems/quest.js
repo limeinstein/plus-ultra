@@ -91,8 +91,13 @@
         return rd >= 1 && rd <= 2;
       });
       if (!far2.length) return null;
-      var src = far2[Math.floor(rng() * far2.length)];
-      var gs = goodsOf(src); if (!gs.length) return null;
+      // 의뢰한 항구의 교역소에서 살 수 있는 물건(특산물·중계무역·출자로 는 물건)은 맡기지 않는다 — 리스본 조합이 리스본에서 파는 어육을 구해 오라던 것 (2026-11-11 피드백)
+      var hereG = R.cityGoods(c), src = null, gs = [];
+      for (var tr = 0; tr < 8 && !gs.length; tr++) {
+        src = far2[Math.floor(rng() * far2.length)];
+        gs = goodsOf(src).filter(function (id) { return hereG.indexOf(id) < 0; });
+      }
+      if (!gs.length) return null;
       var good2 = gs[Math.floor(rng() * gs.length)];
       var qty2 = 10 + Math.floor(rng() * 21);
       q.good = good2; q.qty = qty2; q.to = c.id;

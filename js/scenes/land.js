@@ -943,7 +943,8 @@
       delete s.landReturn;
     }
     st.busy++;                                    // 성 안으로 넘어가는 사이에 「도시로 들어가시겠습니까?」가 다시 뜨지 않게 (QA 2026-10-16)
-    try { await UI.fade(function () { G.Game.go('city', { cityId: c.id, arrive: true, via: isBaseCity ? 'sea' : 'land' }); }); } finally { st.busy = Math.max(0, st.busy - 1); }
+    // gate: 성문으로 걸어 들어왔다 — 출발한 도시로 돌아와도 난이도의 날이 흐른다 (R.portDays, 2026-11-11)
+    try { await UI.fade(function () { G.Game.go('city', { cityId: c.id, arrive: true, gate: true, via: isBaseCity ? 'sea' : 'land' }); }); } finally { st.busy = Math.max(0, st.busy - 1); }
     return true;
   }
   /** called from the city gate when the player resumes the expedition */

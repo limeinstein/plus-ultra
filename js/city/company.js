@@ -14,6 +14,16 @@
   function clerk(co) { return CO().staff('guildmaster', co.short + ' 서기', co); }
   function chief(co) { return CO().staff('trader', co.short + ' 상관장', co); }
   function broker() { return CO().staff('vendor', '중개인'); }
+  /** 높은 사람 앞의 말씨 (피드백 2026-11-11: 인도 부왕이 되어도 인도청 서기가 반말) —
+      회사 이사(계급 3)·부왕/총독(계급 4)이거나 작위가 있으면 하십시오체로 부를 이름을 돌려준다. 아니면 ''(하오체 그대로) */
+  function hon(co, c) {
+    var X = CO(), r = co && X.isMember(co) ? X.rank(co) : 0;
+    if (r >= 4) return X.rankName(co, r) + ' 각하';
+    if (r >= 3) return X.rankName(co, r) + '님';
+    return (c && G.Court && G.Court.address && G.Court.address(c)) || '';
+  }
+  /** 하오체 문장과 하십시오체 문장 중 고른다 — polite는 부를 이름(a)을 받는 함수 */
+  function say2(co, c, plain, polite) { var a = hon(co, c); return a ? polite(a) : plain; }
 
   // ================================================================ 함께 쓰는 것
   /** 회사 임무 게시판 (본부·상관) */
@@ -22,7 +32,8 @@
     if (m) {
       if (X.reportHere(c, m)) {
         var r = X.report(c);
-        await UI.say(m.kind === 'prize' ? '「' + m.name + '」호를 잡았다는 소식은 벌써 들었소! 이사회가 크게 기뻐하오. 약속한 포상금이오.' : '장부에 적었소. 그 바다가 한결 조용해졌다는구려. 수고했소.', who);
+        await UI.say(say2(co, c, m.kind === 'prize' ? '「' + m.name + '」호를 잡았다는 소식은 벌써 들었소! 이사회가 크게 기뻐하오. 약속한 포상금이오.' : '장부에 적었소. 그 바다가 한결 조용해졌다는구려. 수고했소.',
+          function (a) { return m.kind === 'prize' ? '「' + m.name + '」호를 잡으셨다는 소식은 벌써 들었습니다, ' + a + '! 이사회가 크게 기뻐합니다. 약속드린 포상금입니다.' : '장부에 올렸습니다. 그 바다가 한결 조용해졌다고 합니다. 수고 많으셨습니다, ' + a + '.'; }), who);
         await UI.alert('<b>' + U.esc(m.title) + '</b><br>' + (m.kind === 'prize' ? '회사 포상금' : '보수') + ' 금화 <b>' + num(r.pay) + '</b>닢' + (r.merit ? ' · 공헌 +' + r.merit : '') + (r.fame ? ' · 전투 명성 +' + r.fame : ''), '회사 임무 완수');
         if (G.Audio) G.Audio.sfx('coin');
         return;
@@ -33,7 +44,8 @@
     }
     if (X.rival(co)) { await UI.say(G.COMPANY[X.state().member].short + ' 사람에게 회사 일을 맡길 수는 없소. 우리 장부를 그쪽에 넘기려는 속셈이 아니라면 말이오.', who); return; }
     var offs = X.offers(c, co);
-    if (!offs.length) { await UI.say('지금은 맡길 일이 없소. 한 달쯤 지나면 게시판이 바뀌오.' + (X.isMember(co) ? '' : ' 회사 사람이 되면 더 큰 일을 맡길 수 있소.'), who); return; }
+    if (!offs.length) { await UI.say(say2(co, c, '지금은 맡길 일이 없소. 한 달쯤 지나면 게시판이 바뀌오.' + (X.isMember(co) ? '' : ' 회사 사람이 되면 더 큰 일을 맡길 수 있소.'),
+      function (a) { return a + ', 지금은 맡기실 만한 일이 없습니다. 한 달쯤 지나면 게시판이 바뀝니다.' + (X.isMember(co) ? '' : ' 회사에 드시면 더 큰 일도 맡기실 수 있습니다.'); }), who); return; }
     var rows = offs.map(function (o, i) { return { label: X.KINDS[o.kind].name + ' — ' + U.esc(o.title), icon: X.KINDS[o.kind].icon, right: '금화 ' + num(o.pay) + (o.merit ? ' · 공헌 ' + o.merit : ''), value: i, desc: o.desc }; });
     rows.push({ label: '돌아간다', icon: 'boot', value: -1 });
     var pickN = await UI.choose(co.short + ' 회사 임무', rows, { icon: 'scroll', width: 900, text: X.isMember(co) ? U.esc(X.rankName(co, X.rank(co))) + '에게 맡길 수 있는 일 — 한 번에 하나만 맡는다.' : '회사 사람이 아니면 단속 일만 맡을 수 있다 (보수 60% · 공헌 없음).' });
@@ -42,7 +54,7 @@
     var ok = await UI.ask(o.desc + ' — 기한 ' + o.days + '일 · ' + (o.kind === 'convoy' ? '수수료 최대' : o.kind === 'prize' ? '포상금' : '보수') + ' 금화 ' + num(o.pay) + '닢' + (o.supply ? ' (물자비 약 ' + num(o.supply) + '닢)' : ''), [{ label: '맡는다', value: 'yes' }, { label: '그만둔다', value: null }], who);
     if (ok !== 'yes') return;
     X.accept(o);
-    var line = { patrol: '좋소. 놈들을 쳐부수고 돌아오면 본부든 상관이든 알려 주시오.', convoy: '회사선 선장들에게 그대의 깃발을 따르라고 일러 두었소. 해적과 경쟁사 놈들이 냄새를 맡을 테니 조심하시오. 본부 부두에서 기다리겠소.', found: '물자는 그대가 마련해야 하오. 목재·대포·총을 싣고 가서 그 고장 사람들과 담판을 지으시오.', prize: '그 배 한 척이 작은 나라의 한 해 세금만큼 싣고 다니오. 붙잡든 가라앉히든, 놈들 장부에 구멍을 내시오.' }[o.kind];
+    var a = hon(co, c), line = a ? { patrol: '알겠습니다, ' + a + '. 놈들을 쳐부수고 돌아오시면 본부든 상관이든 알려 주십시오.', convoy: '회사선 선장들에게 ' + a + '의 깃발을 따르라고 일러 두었습니다. 해적과 경쟁사 놈들이 냄새를 맡을 테니 부디 조심하십시오. 본부 부두에서 기다리겠습니다.', found: '물자는 손수 마련하셔야 합니다. 목재·대포·총을 싣고 가셔서 그 고장 사람들과 담판을 지으십시오.', prize: '그 배 한 척이 작은 나라의 한 해 세금만큼 싣고 다닙니다. 붙잡든 가라앉히든, 놈들 장부에 구멍을 내 주십시오, ' + a + '.' }[o.kind] : { patrol:'좋소. 놈들을 쳐부수고 돌아오면 본부든 상관이든 알려 주시오.', convoy: '회사선 선장들에게 그대의 깃발을 따르라고 일러 두었소. 해적과 경쟁사 놈들이 냄새를 맡을 테니 조심하시오. 본부 부두에서 기다리겠소.', found: '물자는 그대가 마련해야 하오. 목재·대포·총을 싣고 가서 그 고장 사람들과 담판을 지으시오.', prize: '그 배 한 척이 작은 나라의 한 해 세금만큼 싣고 다니오. 붙잡든 가라앉히든, 놈들 장부에 구멍을 내시오.' }[o.kind];
     await UI.say(line, who);
     UI.toast('회사 임무를 맡았다 — ' + o.title, X.KINDS[o.kind].icon, 5200);
   }
@@ -106,9 +118,12 @@
   HQ.enter = async function (c, arg) {
     var X = CO(), co = G.COMPANY[arg]; if (!co) return false;
     var who = clerk(co), b = X.state();
-    if (X.isMember(co)) await C.say(who, U.pick(['어서 오시오, ' + X.rankName(co, b.rank) + '. 이사회가 그대 이야기를 자주 하오.', '돌아오셨구려! 장부가 기다리고 있었소.', '오늘 ' + co.short + ' 주가는 금화 ' + num(X.px(co)) + '닢이오. 바다 소식부터 들려주시오.']));
-    else if (X.rival(co)) await C.say(who, G.COMPANY[b.member].short + ' 사람이 여기는 무슨 일이오? …볼일만 보고 가시오.');
-    else await C.say(who, co.hqFull + '에 잘 오셨소. ' + co.desc);
+    var a = hon(co, c);
+    if (X.isMember(co) && X.rank(co) >= 4) await C.say(who, U.pick(['어서 오십시오, ' + a + '. 이사회가 각하의 소식만 기다리고 있었습니다.', '각하께서 돌아오셨군요! 바다 건너 회사의 땅 소식은 장부에 정리해 두었습니다.', '어서 오십시오, ' + a + '. 오늘 ' + co.short + ' 주가는 금화 ' + num(X.px(co)) + '닢입니다. 분부만 내려 주십시오.']));
+    else if (X.isMember(co) && a) await C.say(who, U.pick(['어서 오십시오, ' + a + '. 이사회에서 말씀이 자주 오갑니다.', '돌아오셨군요, ' + a + '! 장부가 기다리고 있었습니다.', '오늘 ' + co.short + ' 주가는 금화 ' + num(X.px(co)) + '닢입니다. 바다 소식부터 들려주십시오.']));
+    else if (X.isMember(co)) await C.say(who, U.pick(['어서 오시오, ' + X.rankName(co, b.rank) + '. 이사회가 그대 이야기를 자주 하오.', '돌아오셨구려! 장부가 기다리고 있었소.', '오늘 ' + co.short + ' 주가는 금화 ' + num(X.px(co)) + '닢이오. 바다 소식부터 들려주시오.']));
+    else if (X.rival(co)) await C.say(who, a ? a + ', ' + G.COMPANY[b.member].short + '에 계신 분께서 여기는 어인 일이십니까? …용무만 보고 가 주십시오.' : G.COMPANY[b.member].short + ' 사람이 여기는 무슨 일이오? …볼일만 보고 가시오.');
+    else await C.say(who, a ? co.hqFull + '에 잘 오셨습니다, ' + a + '. ' + co.desc : co.hqFull + '에 잘 오셨소. ' + co.desc);
     return true;
   };
   HQ.menu = function (c, arg) {
@@ -135,7 +150,8 @@
   }
   async function roster(c, co) {
     var X = CO(), b = X.state(), s = S(), who = clerk(co);
-    if (X.rival(co)) { await UI.say('이미 ' + G.COMPANY[b.member].name + U.jx(G.COMPANY[b.member].name, '에') + ' 몸담은 분이구려. 두 회사의 장부에 이름을 올릴 수는 없소. 그쪽을 정리하고 오시오.', who); return; }
+    if (X.rival(co)) { await UI.say(say2(co, c, '이미 ' + G.COMPANY[b.member].name + U.jx(G.COMPANY[b.member].name, '에') + ' 몸담은 분이구려. 두 회사의 장부에 이름을 올릴 수는 없소. 그쪽을 정리하고 오시오.',
+      function (a) { return a + ', 이미 ' + G.COMPANY[b.member].name + '에 몸담고 계시지요. 두 회사의 장부에 존함을 올릴 수는 없습니다. 그쪽을 정리하고 오십시오.'; }), who); return; }
     if (X.isMember(co)) {
       var nx = X.next(), btn = [];
       if (nx && nx.ok) btn.push({ label: nx.name + ' 승진 심사', value: 'up', cls: 'green' });
@@ -144,13 +160,14 @@
       if (v === 'up') {
         var r = X.promote();
         if (r) {
-          await UI.say(r.rank >= 4 ? '이사회가 한목소리로 정했소. 오늘부터 그대가 ' + r.name + '이오. 바다 건너 회사의 땅은 이제 그대가 다스리오.' : r.rank === 3 ? '이사회에 그대 자리를 마련했소. 이제 회사의 배당과 항로를 함께 정하시오.' : '그대에게 회사의 배와 깃발을 맡기오. 선단을 이끌고, 경쟁사의 배를 노려도 좋소.', who);
+          await UI.say(r.rank >= 4 ? '이사회가 한목소리로 정했습니다. 오늘부터 ' + r.name + ' 각하이십니다. 바다 건너 회사의 땅을 이제 각하께서 다스리십니다. 소인도 앞으로 각하를 모시겠습니다.' : r.rank === 3 ? '이사회에 자리를 마련해 두었습니다, ' + r.name + '님. 이제 회사의 배당과 항로를 함께 정해 주십시오.' : '그대에게 회사의 배와 깃발을 맡기오. 선단을 이끌고, 경쟁사의 배를 노려도 좋소.', who);
           UI.toast(co.short + ' ' + r.name + U.jx(r.name, '이/가') + ' 되었다!', 'crown', 5600);
           if (G.Audio) G.Audio.sfx('cheer');
         }
       } else if (v === 'leave') {
         if (await UI.confirm(co.name + U.jx(co.name, '을/를') + ' 떠나면 계급과 공헌이 모두 사라지고, 한 해 동안 어느 회사에도 들 수 없습니다. 주식은 그대로 남습니다. 떠날까요?', '떠난다', '남는다', '회사를 떠난다')) {
-          X.leave(); await UI.say('…그렇다면 할 수 없지. 장부에서 그대 이름을 지우겠소. 바다에서 마주치지 않기를.', who);
+          var la = hon(co, c);
+          X.leave(); await UI.say(la ? '…뜻이 그러시다면 어쩔 수 없지요. 장부에서 존함을 지우겠습니다, ' + la + '. 부디 바다에서 적으로 뵙지 않기를 바랍니다.' : '…그렇다면 할 수 없지. 장부에서 그대 이름을 지우겠소. 바다에서 마주치지 않기를.', who);
         }
       }
       return;
@@ -163,7 +180,9 @@
     var w = await UI.window({ title: co.name + ' 입회', icon: 'book', width: 1020, html: html, buttons: [{ label: '돌아간다', value: null }, { label: '입회한다', value: 'join', cls: 'green', disabled: !!why }] }).result;
     if (w !== 'join' || X.joinBlock(co)) return;
     var r2 = X.join(co); if (!r2) return;
-    await UI.say('좋소! ' + U.esc(s.player.name) + ', 오늘부터 그대는 ' + co.name + '의 ' + X.rankName(co, 1) + '이오. 바다 건너 상관에 가면 회사 창고를 열어 줄 것이고, 중개 주문서도 맡길 수 있소. 무엇보다 — 이제 ' + G.CITY_DATA[co.hq].name + ' 세관은 그대 짐을 뒤지지 않소.', who);
+    var ja = hon(co, c);
+    if (ja) await UI.say('기쁘게 받들겠습니다, ' + ja + '. 오늘부터 ' + co.name + '의 ' + X.rankName(co, 1) + U.jx(X.rankName(co, 1), '으로/로') + ' 장부에 올렸습니다. 바다 건너 상관에 가시면 회사 창고를 열어 드릴 것이고, 중개 주문서도 맡기실 수 있습니다. 무엇보다 — 이제 ' + G.CITY_DATA[co.hq].name + ' 세관이 짐을 뒤지는 일은 없을 것입니다.', who);
+    else await UI.say('좋소! ' + U.esc(s.player.name) + ', 오늘부터 그대는 ' + co.name + '의 ' + X.rankName(co, 1) + '이오. 바다 건너 상관에 가면 회사 창고를 열어 줄 것이고, 중개 주문서도 맡길 수 있소. 무엇보다 — 이제 ' + G.CITY_DATA[co.hq].name + ' 세관은 그대 짐을 뒤지지 않소.', who);
     UI.toast(co.name + '에 입회했다' + (r2.shares ? ' — ' + co.cert + ' ' + r2.shares + '주' : ' (설립 출자자)'), 'seal', 5600);
     if (G.Audio) G.Audio.sfx('coin');
   }
@@ -171,7 +190,9 @@
     var X = CO(), who = clerk(co);
     if (!X.isMember(co)) { await UI.say('독점품은 회사 사람에게서만 사들이오.', who); return; }
     var held = X.monoHeld(co);
-    if (!held.length) { await UI.say('짐칸에 우리 독점품이 없구려. ' + co.mono.map(function (id) { return G.GOOD[id].name; }).join('·') + U.jx(G.GOOD[co.mono[co.mono.length - 1]].name, '을/를') + ' 가져오면 시장보다 후하게 쳐주겠소.', who); return; }
+    var monoNames = co.mono.map(function (id) { return G.GOOD[id].name; }).join('·') + U.jx(G.GOOD[co.mono[co.mono.length - 1]].name, '을/를');
+    if (!held.length) { await UI.say(say2(co, c, '짐칸에 우리 독점품이 없구려. ' + monoNames + ' 가져오면 시장보다 후하게 쳐주겠소.',
+      function (a) { return a + ', 짐칸에 저희 독점품이 보이지 않습니다. ' + monoNames + ' 가져오시면 시장보다 후하게 쳐 드리겠습니다.'; }), who); return; }
     var rows = held.map(function (id) { var q = S().fleet.cargo[id].q, pr = X.monoPrice(c, co, id), rc = X.monoRecent(co, id); return { label: G.goodDot(id) + G.GOOD[id].name + ' ' + q + '통', right: '1통 ' + num(pr) + '닢 <small class="muted">(시장 ' + num(R.sellPrice(c, id)) + (rc ? ' · 요즘 넘긴 ' + rc + '통' : '') + ')</small>', value: id }; });
     if (held.length > 1) rows.unshift({ label: '모두 넘긴다', icon: 'sack', value: '*' });
     rows.push({ label: '돌아간다', icon: 'boot', value: null });
@@ -184,7 +205,8 @@
         info: (function (gid) { return function (k) { var g = X.monoValue(c, co, gid, k); return '받을 금화 <b>' + num(g) + '</b>닢 · 1통 평균 ' + num(g / Math.max(1, k)) + '닢'; }; })(id) }); if (!q) return; }
       var r = X.deliverMono(c, co, id, q); tot += r.value; mer += r.merit;
     }
-    if (tot) { await UI.say(U.pick(['좋은 물건이오. 앤트워프 상인들이 줄을 서겠군.', '장부에 적었소. 회사가 그대를 잊지 않을 것이오.', '이만하면 이번 배당이 두둑하겠소!']), who); UI.toast('독점품을 넘겼다 — 금화 +' + num(tot) + (mer ? ' · 공헌 +' + mer : ''), 'coin', 5000); if (G.Audio) G.Audio.sfx('coin'); }
+    if (tot) { await UI.say(say2(co, c, U.pick(['좋은 물건이오. 앤트워프 상인들이 줄을 서겠군.', '장부에 적었소. 회사가 그대를 잊지 않을 것이오.', '이만하면 이번 배당이 두둑하겠소!']),
+      function (a) { return U.pick(['좋은 물건입니다, ' + a + '. 앤트워프 상인들이 줄을 서겠습니다.', '장부에 올렸습니다. 회사가 ' + a + '의 공을 잊지 않을 것입니다.', '이만하면 이번 배당이 두둑하겠습니다, ' + a + '!']); }), who); UI.toast('독점품을 넘겼다 — 금화 +' + num(tot) + (mer ? ' · 공헌 +' + mer : ''), 'coin', 5000); if (G.Audio) G.Audio.sfx('coin'); }
   }
   async function desk(c, co) {
     var X = CO(), b = X.state(), n = b.shares[co.id] || 0;
@@ -209,8 +231,9 @@
   FA.sub = function (c) { var X = CO(), co = here(c); return !co ? '' : X.isMember(co) ? '창고 할당 ' + X.quotaLeft(co, c.id) + '통 남음' : X.rival(co) ? '경쟁 회사의 상관' : '회사 사람에게만 창고를 연다'; };
   FA.enter = async function (c) {
     var X = CO(), co = here(c); if (!co) return false;
-    var who = chief(co);
-    if (X.isMember(co)) await C.say(who, U.pick(['어서 오시오! 본국 배를 기다리던 참이오. 창고에 ' + X.postAt(co, c.id).g.map(function (id) { return G.GOOD[id].name; }).join('·') + U.jx(G.GOOD[X.postAt(co, c.id).g.slice(-1)[0]].name, '이/가') + ' 쌓여 있소.', '회사 사람이구려. 이 바다에서는 우리끼리 돕고 살아야지.', '마침 잘 왔소. 이 바다 장사 이야기를 해 줄 게 많소.']));
+    var who = chief(co), a = hon(co, c), goods = X.isMember(co) ? X.postAt(co, c.id).g.map(function (id) { return G.GOOD[id].name; }).join('·') + U.jx(G.GOOD[X.postAt(co, c.id).g.slice(-1)[0]].name, '이/가') : '';
+    if (X.isMember(co) && a) await C.say(who, U.pick(['어서 오십시오, ' + a + '! 본국 배를 기다리던 참입니다. 창고에 ' + goods + ' 쌓여 있습니다.', a + '께서 몸소 오시다니요. 이 상관 장부는 언제든 보여 드리겠습니다.', '마침 잘 오셨습니다, ' + a + '. 이 바다 장사 이야기를 드릴 게 많습니다.']));
+    else if (X.isMember(co)) await C.say(who, U.pick(['어서 오시오! 본국 배를 기다리던 참이오. 창고에 ' + X.postAt(co, c.id).g.map(function (id) { return G.GOOD[id].name; }).join('·') + U.jx(G.GOOD[X.postAt(co, c.id).g.slice(-1)[0]].name, '이/가') + ' 쌓여 있소.', '회사 사람이구려. 이 바다에서는 우리끼리 돕고 살아야지.', '마침 잘 왔소. 이 바다 장사 이야기를 해 줄 게 많소.']));
     else if (X.rival(co)) await C.say(who, '…' + G.COMPANY[X.state().member].short + ' 깃발이군. 여기는 ' + co.short + '의 상관이오. 창고 문은 열어 줄 수 없소.');
     else await C.say(who, co.name + '의 상관이오. 회사 창고는 회사 사람에게만 열리오. ' + G.CITY_DATA[co.hq].name + '의 본부에서 입회하면 이야기가 달라지지.');
     return true;
@@ -233,12 +256,14 @@
     if (!v) return;
     scope[c.id] = v;
     var nco = G.COMPANY[v];
-    await C.say(chief(nco), X.isMember(nco) ? '어서 오시오, 우리 회사 사람!' : X.rival(nco) ? '경쟁사 사람이 여긴 웬일이오?' : nco.name + '의 상관이오. 무슨 일이오?');
+    var na = hon(nco, c);
+    await C.say(chief(nco), X.isMember(nco) && na ? '어서 오십시오, ' + na + '!' : X.isMember(nco) ? '어서 오시오, 우리 회사 사람!' : X.rival(nco) ? '경쟁사 사람이 여긴 웬일이오?' : nco.name + '의 상관이오. 무슨 일이오?');
   }
   async function warehouse(c, co) {
     var X = CO(), s = S(), post = X.postAt(co, c.id), who = chief(co), left = X.quotaLeft(co, c.id);
     if (!post) return;
-    if (!left) { await UI.say('이번 철 그대 몫은 다 내주었소. ' + X.quotaRenew() + '일 뒤에 새 몫이 나오오. 계급이 오르면 몫도 늘지.', who); return; }
+    if (!left) { await UI.say(say2(co, c, '이번 철 그대 몫은 다 내주었소. ' + X.quotaRenew() + '일 뒤에 새 몫이 나오오. 계급이 오르면 몫도 늘지.',
+      function (a) { return a + ', 이번 철 몫은 다 내어 드렸습니다. ' + X.quotaRenew() + '일 뒤에 새 몫이 나옵니다.'; }), who); return; }
     var rows = post.g.filter(function (id) { return G.GOOD[id]; }).map(function (id) {
       var cp = X.costPrice(c, id); return { label: G.goodDot(id) + G.GOOD[id].name + (co.mono.indexOf(id) >= 0 ? ' <small class="good-text">독점품</small>' : ''), right: '1통 ' + num(cp) + '닢 <small class="muted">(교역소 ' + num(R.buyPrice(c, id)) + ')</small>', value: id };
     });
@@ -295,21 +320,24 @@
       return;
     }
     var o = X.legOffer(c, co, 1);
-    if (!o) { await UI.say('오늘은 이 상관에서 시작할 만한 주문이 없소. 다른 상관에 가 보시오.', who); return; }
+    if (!o) { await UI.say(say2(co, c, '오늘은 이 상관에서 시작할 만한 주문이 없소. 다른 상관에 가 보시오.', function (a) { return a + ', 오늘은 이 상관에서 시작할 만한 주문이 없습니다. 다른 상관에 들러 보십시오.'; }), who); return; }
     var mx = X.perk(X.rank(co)).chain;
     var v3 = await UI.ask('중개 주문서 — 상관과 이 바다의 큰 항구를 잇는 사슬. 고리마다 값은 그 자리에서 받고, 배수만큼 「연계 보너스」가 쌓인다. 고리를 마칠 때마다 정산하거나 다음 고리를 잇는다 (최대 ' + mx + '고리, 끝까지 이으면 보너스 ×' + k.jackpot + '). 기한을 넘기면 보너스가 날아간다. — 첫 고리: ' + legText(c, o, co), [{ label: '주문서를 받는다', value: 'take' }, { label: '돌아간다', value: null }], who);
     if (v3 !== 'take') return;
     X.chainTake(c, co, o);
-    await UI.say('이 도시 교역소에서 ' + G.GOOD[o.g].name + U.jx(G.GOOD[o.g].name, '을/를') + ' ' + o.q + '통 사서 ' + G.CITY_DATA[o.to].name + U.jx(G.CITY_DATA[o.to].name, '으로/로') + ' 가져가시오. 그 도시에 들어서면 회사 사람이 부두에서 받아 갈 것이오. 우리 회사 창고에 있는 것을 써도 좋소.', who);
+    var leg = '이 도시 교역소에서 ' + G.GOOD[o.g].name + U.jx(G.GOOD[o.g].name, '을/를') + ' ' + o.q + '통 사서 ' + G.CITY_DATA[o.to].name + U.jx(G.CITY_DATA[o.to].name, '으로/로');
+    await UI.say(say2(co, c, leg + ' 가져가시오. 그 도시에 들어서면 회사 사람이 부두에서 받아 갈 것이오. 우리 회사 창고에 있는 것을 써도 좋소.',
+      function () { return leg + ' 가져가 주십시오. 그 도시에 들어서시면 회사 사람이 부두에서 받아 갈 것입니다. 저희 회사 창고에 있는 것을 쓰셔도 좋습니다.'; }), who);
   }
   async function talk(c, co) {
     var X = CO(), b = X.state(), who = chief(co), rv = X.actives().filter(function (x) { return x.id !== co.id && X.posts(x).length; });
-    var lines = [];
-    lines.push('우리 ' + co.short + ' 주가는 지금 금화 ' + num(X.px(co)) + '닢이오 (' + pct(X.change(co)) + '). ' + (X.health(co) > 1.05 ? '요즘 회사 형편이 좋소.' : X.health(co) < 0.95 ? '요즘 회사 형편이 좋지 않소.' : '그럭저럭이오.'));
-    lines.push('이 바다의 ' + co.short + ' 상관은 ' + X.posts(co).map(function (p) { return G.CITY_DATA[p.c].name; }).join('·') + '. 회사는 ' + co.mono.map(function (id) { return G.GOOD[id].name; }).join('·') + U.jx(G.GOOD[co.mono[co.mono.length - 1]].name, '을/를') + ' 혼자 쥐려 하오 — 본국 세관이 회사 사람 아닌 이의 짐을 뒤지지.');
-    if (rv.length) { var r = U.pick(rv); lines.push(r.short + ' 놈들이 ' + X.posts(r).slice(0, 3).map(function (p) { return G.CITY_DATA[p.c].name; }).join('·') + '에 상관을 두고 있소. 그쪽 주가는 ' + num(X.px(r)) + '닢. ' + (X.isMember(co) && X.rank(co) >= 2 ? '그놈들 화물선을 털면 우리 주가가 오르고 그쪽은 떨어지지.' : '')); }
-    if (!X.isMember(co) && !X.rival(co)) lines.push(G.CITY_DATA[co.hq].name + '의 본부에서 입회하면 이 상관의 창고를 원가로 열어 주고, 중개 주문서도 맡길 수 있소.');
-    else if (X.isMember(co)) { var o = X.legOffer(c, co, 1); if (o && !b.chain) lines.push('오늘 이 상관에서 시작하는 주문서가 있소 — ' + legText(c, o, co) + '.'); }
+    var lines = [], a = hon(co, c), P = function (plain, polite) { return a ? polite : plain; };
+    var postNames = X.posts(co).map(function (p) { return G.CITY_DATA[p.c].name; }).join('·'), monoNames = co.mono.map(function (id) { return G.GOOD[id].name; }).join('·') + U.jx(G.GOOD[co.mono[co.mono.length - 1]].name, '을/를');
+    lines.push(P('우리 ', a + ', 저희 ') + co.short + ' 주가는 지금 금화 ' + num(X.px(co)) + P('닢이오 (', '닢입니다 (') + pct(X.change(co)) + '). ' + (X.health(co) > 1.05 ? P('요즘 회사 형편이 좋소.', '요즘 회사 형편이 좋습니다.') : X.health(co) < 0.95 ? P('요즘 회사 형편이 좋지 않소.', '요즘 회사 형편이 좋지 않습니다.') : P('그럭저럭이오.', '그럭저럭입니다.')));
+    lines.push('이 바다의 ' + co.short + ' 상관은 ' + postNames + P('. 회사는 ', '입니다. 회사는 ') + monoNames + P(' 혼자 쥐려 하오 — 본국 세관이 회사 사람 아닌 이의 짐을 뒤지지.', ' 혼자 쥐려 합니다 — 본국 세관이 회사 사람 아닌 이의 짐을 뒤지지요.'));
+    if (rv.length) { var r = U.pick(rv); lines.push(r.short + ' 놈들이 ' + X.posts(r).slice(0, 3).map(function (p) { return G.CITY_DATA[p.c].name; }).join('·') + P('에 상관을 두고 있소. 그쪽 주가는 ', '에 상관을 두고 있습니다. 그쪽 주가는 ') + num(X.px(r)) + P('닢. ', '닢입니다. ') + (X.isMember(co) && X.rank(co) >= 2 ? P('그놈들 화물선을 털면 우리 주가가 오르고 그쪽은 떨어지지.', '그놈들 화물선을 털면 저희 주가가 오르고 그쪽은 떨어질 것입니다.') : '')); }
+    if (!X.isMember(co) && !X.rival(co)) lines.push(G.CITY_DATA[co.hq].name + P('의 본부에서 입회하면 이 상관의 창고를 원가로 열어 주고, 중개 주문서도 맡길 수 있소.', '의 본부에서 입회하시면 이 상관의 창고를 원가로 열어 드리고, 중개 주문서도 맡기실 수 있습니다.'));
+    else if (X.isMember(co)) { var o = X.legOffer(c, co, 1); if (o && !b.chain) lines.push(P('오늘 이 상관에서 시작하는 주문서가 있소 — ', '오늘 이 상관에서 시작하는 주문서가 있습니다 — ') + legText(c, o, co) + '.'); }
     await UI.say(lines.join('\f'), who);
   }
 

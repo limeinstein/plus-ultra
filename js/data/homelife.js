@@ -17,6 +17,55 @@
     scale: { 5: 0.6, 10: 0.76, 15: 0.92, 20: 1 },  // 대화창 위에 설 때의 키 (어른 = 1)
   };
 
+  /* 아이의 생김새 — 부모의 국적·고장에 맞는 피부색·머리색 (2026-11-11 베타 피드백 #174 「백설공주의 첫딸이 흑인으로 나왔다」)
+     예전에는 공용 변형 그림 v1~v5를 이름·생일로 아무거나 골라, 어머니와 상관없는 얼굴이 나왔다. 이제 어머니가 가질 수 있는
+     피부색·머리색(person → region → style 차례로 찾는다)에 맞는 그림 가운데서만 고른다 (js/systems/homelife.js HL.lookOptions).
+     · skin: white(서양 백인) · olive(지중해·중동) · asian(동아시아) · brown(인도·동남아·아메리카 토착·태평양) · dark(아프리카)
+     · hair: black · brown · red · blond
+     · 맞는 그림이 하나도 없으면 어머니 고장의 그림(지역 폴더) → 예전처럼 아무 변형 */
+  G.KID_LOOK = {
+    // 공용 변형 그림 (images/portraits/family/<daughter|son>_age<N>_v<1~5>) — 그림을 보고 단 생김새. 한 그림이 여러 갈래에 들 수 있다
+    variant: {
+      f: { 1: { skin: ['white'], hair: ['red'] },              // 붉은 곱슬머리
+           2: { skin: ['white', 'asian'], hair: ['black'] },   // 검은 긴 머리 · 흰 살결 (동양인으로도, 서양인으로도 보인다)
+           3: { skin: ['dark', 'brown'], hair: ['black'] },    // 검은 곱슬머리 · 짙은 살결
+           4: { skin: ['white'], hair: ['brown'] },            // 밤색 곱슬머리
+           5: { skin: ['white'], hair: ['blond'] } },          // 금발
+      m: { 1: { skin: ['white'], hair: ['brown'] }, 2: { skin: ['white'], hair: ['brown'] }, 3: { skin: ['white'], hair: ['brown'] },
+           4: { skin: ['white'], hair: ['brown'] }, 5: { skin: ['white'], hair: ['brown'] } }   // 아들 변형은 다섯 모두 같은 얼굴(밤색 머리 · 흰 살결)
+    },
+    // 딸의 지역 그림 (images/portraits/family/<고장>/daughter_age5·10·15) — 그 그림의 생김새
+    folder: {
+      africa: { skin: ['dark'], hair: ['black'] }, arabia: { skin: ['olive'], hair: ['black'] }, britain: { skin: ['white'], hair: ['brown'] },
+      china: { skin: ['asian'], hair: ['black'] }, france: { skin: ['white'], hair: ['brown'] }, germany: { skin: ['white'], hair: ['brown'] },
+      greece: { skin: ['olive'], hair: ['black'] }, iberia: { skin: ['olive', 'white'], hair: ['brown'] }, india: { skin: ['brown'], hair: ['black'] },
+      italy: { skin: ['white'], hair: ['brown'] }, japan: { skin: ['asian'], hair: ['black'] }, korea: { skin: ['asian'], hair: ['black'] },
+      lowlands: { skin: ['white'], hair: ['brown'] }, native: { skin: ['brown'], hair: ['black'] }, ottoman: { skin: ['olive'], hair: ['brown'] },
+      persia: { skin: ['olive'], hair: ['black'] }, russia: { skin: ['white'], hair: ['brown'] }, seasia: { skin: ['brown', 'asian'], hair: ['black'] },
+      slav: { skin: ['white'], hair: ['brown'] }, tropic: { skin: ['brown'], hair: ['blond'] }
+    },
+    // 고장(여급 그림 묶음 이름 — G.Img.MAID_POOL)마다 그 고장 사람이 가질 수 있는 피부색·머리색
+    region: {
+      iberia: { skin: ['white', 'olive'], hair: ['black', 'brown'] }, france: { skin: ['white'], hair: ['brown', 'black', 'blond', 'red'] },
+      westeurope: { skin: ['white'], hair: ['brown', 'blond', 'red'] }, britain: { skin: ['white'], hair: ['brown', 'red', 'blond'] },
+      germany: { skin: ['white'], hair: ['blond', 'brown', 'red'] }, lowlands: { skin: ['white'], hair: ['blond', 'brown'] },
+      slav: { skin: ['white'], hair: ['brown', 'blond'] }, russia: { skin: ['white'], hair: ['blond', 'brown'] },
+      italy: { skin: ['white', 'olive'], hair: ['brown', 'black', 'red'] }, greece: { skin: ['olive', 'white'], hair: ['black', 'brown'] },
+      ottoman: { skin: ['olive', 'white'], hair: ['black', 'brown'] }, arabia: { skin: ['olive', 'brown'], hair: ['black'] },
+      persia: { skin: ['olive'], hair: ['black', 'brown'] }, india: { skin: ['brown'], hair: ['black'] },
+      seasia: { skin: ['brown', 'asian'], hair: ['black'] }, tropic: { skin: ['brown'], hair: ['black', 'blond'] },
+      china: { skin: ['asian'], hair: ['black'] }, japan: { skin: ['asian'], hair: ['black'] }, korea: { skin: ['asian'], hair: ['black'] },
+      africa: { skin: ['dark'], hair: ['black'] }, native: { skin: ['brown'], hair: ['black'] }, inca: { skin: ['brown'], hair: ['black'] }
+    },
+    // 사람마다 따로 정한 생김새 (옛이야기 인물처럼 고장보다 이야기가 정한 모습이 앞서는 사람)
+    person: {
+      snow_white: { skin: ['white', 'asian'], hair: ['black'] },     // 눈처럼 흰 살결에 흑단 같은 머리 — 동양인이나 서양 백인 (사용자 요청 2026-11-11)
+      cinderella: { skin: ['white'], hair: ['blond'] },
+      sleeping_beauty: { skin: ['white'], hair: ['blond'] },
+      little_mermaid: { skin: ['white'], hair: ['red'] }
+    }
+  };
+
   G.HOME_ACTS = [
     // ------------------------------------------------ 어린아이 (3~7살)
     { id: 'toyship', name: '대야에 장난감 배를 띄운다', icon: 'sail', min: 3, max: 7, pic: 'yard',

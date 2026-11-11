@@ -132,6 +132,20 @@
     var who = tip.kind === 'merchant' ? (tip.nation ? tip.nation + ' ' : '') + '상선대 ' + tip.n + '척' : tip.kind === 'navy' ? (tip.nation || '어느 나라') + ' 군함 ' + tip.n + '척' : (G.Ships ? G.Ships.pirateLabel(G.Ships.zone(tip.lon, tip.lat)) : '해적') + ' ' + tip.n + '척';
     return who + ' — ' + where + ' · ' + left + '일 안';
   };
+  /** 같은 소식을 사람이 들려주듯 — 식당 주인이 손님에게 들은 이야기를 옮길 때 (피드백 2026-11-11: 「4척, 말라가 앞바다 · 19일 안」처럼 장부 말투)
+      MT.text는 수첩·항해 일지에 남기는 짧은 줄로 그대로 쓴다. */
+  MT.speech = function (tip) {
+    var c = city(tip.city), p = city(tip.port), left = Math.max(0, tip.to - S().day), sea = p.name + ' 앞바다', head;
+    if (tip.kind === 'named') {
+      var pc = G.Wanted && G.Wanted.pirate ? G.Wanted.pirate(tip.cap) : null, crew = pc && G.Captains.crew ? G.Captains.crew(pc) : tip.capName;
+      head = crew + U.jx(crew, '이/가') + ' 배 ' + tip.n + '척을 이끌고 ' + sea + '에 나타났다고 합니다.';
+    } else if (tip.kind === 'pirate') head = (G.Ships ? G.Ships.pirateLabel(G.Ships.zone(tip.lon, tip.lat)) : '해적') + ' 무리가 배 ' + tip.n + '척으로 ' + sea + '에 숨어서 지나가는 배를 노리고 있다고 합니다.';
+    else if (tip.kind === 'merchant') head = (tip.nation ? tip.nation + ' ' : '') + '상선대 ' + tip.n + '척이 짐을 가득 싣고 ' + sea + '를 지나간다고 합니다.';
+    else head = (tip.nation || '어느 나라') + ' 군함 ' + tip.n + '척이 ' + sea + '를 지키고 있다고 합니다.';
+    var where = c && c.id !== p.id ? ' 여기서 ' + dirName(c, tip) + '으로 ' + daysTo(c, tip) + '일쯤 가면 닿는 바다지요.' : '';
+    var when = left <= 0 ? '' : left <= 7 ? ' 며칠 안에 자리를 뜬다니 서두르셔야 합니다.' : ' 앞으로 ' + left + '일 남짓은 그 근처에 머문다더군요.';
+    return head + where + when;
+  };
   /** 아직 유효한 소식 (나타났지만 만나기 전에 바다에서 사라진 것도 — npcs: 지금 바다의 배들) */
   function onSea(t, npcs) { return (npcs || []).some(function (n) { return n.tip === t.id; }); }
   MT.active = function (npcs) { var s = S(); return list().filter(function (t) { return t.met == null && s.day <= t.to && (t.spawned == null || !npcs || !onSea(t, npcs)); }); };

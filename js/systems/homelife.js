@@ -32,26 +32,107 @@
     } catch (e) { /* 그림 규칙이 없으면 기본 그림 */ }
     return '';
   };
-  /** 아이 그림 폴더: 딸은 어머니의 고장, 아들은 아버지(제독)의 생김새 (images/portraits/family/<폴더>/) */
-  HL.folder = function (k) { if (k.artFolder != null) return k.artFolder; return k.sex === 'f' ? HL.region(k) : (G.Img.heroLook ? G.Img.heroLook() : ''); };   // 동생이 된 아이는 아이 때 폴더 그대로 (siblings.js)
+  /** 아이 그림 폴더: 딸은 생김새로 고른 지역 그림(HL.variant가 정함) 또는 어머니의 고장, 아들은 아버지(제독)의 생김새 (images/portraits/family/<폴더>/) */
+  HL.folder = function (k) {
+    if (k.artFolder != null) return k.artFolder;   // 동생이 된 아이는 아이 때 폴더 그대로 (siblings.js)
+    if (k.sex !== 'f') return G.Img.heroLook ? G.Img.heroLook() : '';
+    HL.variant(k);
+    return k.lookFolder || HL.region(k);
+  };
+
+  // ---------------------------------------------------------------- 생김새: 어머니의 국적·고장에 맞는 피부색·머리색 (G.KID_LOOK — 2026-11-11 베타 피드백 #174)
+  var LOOKV = 1;    // 이 규칙으로 정한 아이 (k.lookOk) — 규칙이 바뀌면 올려 다시 고르게 한다
+  function KL() { return G.KID_LOOK || null; }
+  function union(list) {
+    var sk = {}, hr = {};
+    list.forEach(function (x) { if (!x) return; x.skin.forEach(function (v) { sk[v] = 1; }); x.hair.forEach(function (v) { hr[v] = 1; }); });
+    return { skin: Object.keys(sk), hair: Object.keys(hr) };
+  }
+  /** 그 사람의 고장들 (여급 그림 묶음 이름): 여급은 그 여급의 묶음, 부하는 양식(style)의 묶음 후보 모두 */
+  function regionsOf(id) {
+    var I = G.Img;
+    try {
+      if (id && G.MAID[id]) { var r = I.maidStyle(id, G.CITY_DATA[G.MAID[id].city]); return r ? [r] : []; }
+      if (id && G.MATE[id]) { var st = (G.Art.mateSpec(id) || {}).style || G.MATE[id].style; return (I.MAID_POOL[st] || []).slice(); }
+    } catch (e) { /* 그림 규칙이 없으면 모른다 */ }
+    return [];
+  }
+  /** 그 사람이 가질 수 있는 피부색·머리색 {skin:[], hair:[]} — 사람마다 정한 것 → 고장들을 합친 것. 모르면 null */
+  HL.personLook = function (id) {
+    var L = KL(); if (!L || !id) return null;
+    if (L.person[id]) return L.person[id];
+    var rs = regionsOf(id).map(function (r) { return L.region[r]; }).filter(Boolean);
+    return rs.length ? union(rs) : null;
+  };
+  /** 제독(아버지)의 고장들: 고향 도시 양식의 묶음 */
+  function fatherRegions() {
+    var p = S().player, c = G.CITY_DATA[p.home];
+    try { return c ? (G.Img.MAID_POOL[G.Img.folkStyle(c)] || []).slice() : []; } catch (e) { return []; }
+  }
+  function fits(t, want) {
+    return !!(t && want && t.skin.some(function (v) { return want.skin.indexOf(v) >= 0; }) && t.hair.some(function (v) { return want.hair.indexOf(v) >= 0; }));
+  }
+  /** 이 아이가 가질 수 있는 그림 [{v: 공용 변형 번호} | {folder: 지역 그림 폴더}] — 딸은 어머니의 생김새에 맞는 것만.
+      지역 그림은 옷차림이 그 고장 것이라 어머니나 아버지의 고장 그림만 쓴다. 어머니를 모르거나 아들이면 null (예전처럼 다섯 변형 아무거나) */
+  HL.lookOptions = function (k) {
+    var L = KL(), sx = k && k.sex === 'f' ? 'f' : 'm';
+    if (!L || !k || sx !== 'f') return null;          // 아들은 아버지(제독)를 닮는다 — 변형 다섯이 모두 같은 얼굴이고, 없으면 제독 생김새 폴더로 물러난다
+    var mom = k.mother || S().player.wife, want = HL.personLook(mom);
+    if (!want) return null;
+    var out = [];
+    for (var v = 1; v <= 5; v++) if (fits(L.variant[sx][v], want)) out.push({ v: v });
+    regionsOf(mom).concat(fatherRegions()).forEach(function (r) {
+      if (L.folder[r] && fits(L.folder[r], want) && !out.some(function (o) { return o.folder === r; })) out.push({ folder: r });
+    });
+    if (!out.length) { var r0 = HL.region(k); if (r0 && L.folder[r0]) out.push({ folder: r0 }); }   // 맞는 그림이 없으면 어머니 고장의 그림
+    return out.length ? out : null;
+  };
+  /** 생김새에 맞는 공용 변형 번호들 (동생들이 서로 다른 얼굴을 고를 때 — siblings.js). null = 제한 없음 */
+  HL.variantChoices = function (k) {
+    var o = HL.lookOptions(k); if (!o) return null;
+    return o.filter(function (x) { return x.v; }).map(function (x) { return x.v; });
+  };
+  function seedHash(k) {
+    var b = k.born || {}, seed = [k.name || '', b.y || 0, b.m || 0, b.d || 0, k.mother || '', order(k)].join('|'), h = 2166136261;
+    for (var i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
   function order(k) {
     if (k.sibOrder) return k.sibOrder;
     var same = (S().player.kids || []).filter(function (x) { return (x.sex === 'f') === (k.sex === 'f'); });
     return Math.max(1, same.indexOf(k) + 1);
   }
-  /** 자녀마다 이름·생일에서 안정적으로 정한 외형 변형(1~5). 옛 저장도 처음 보일 때 같은 규칙으로 채운다. */
+  /** 자녀마다 이름·생일에서 안정적으로 정한 외형 변형(1~5, 0 = 지역 그림 k.lookFolder). 성장해도 그대로.
+      딸은 어머니의 생김새에 맞는 그림 가운데서 고른다(HL.lookOptions). 옛 저장의 아이도 처음 보일 때 —
+      이미 고른 그림이 어머니와 맞으면 그대로 두고, 맞지 않으면(백설공주의 딸이 흑인 등) 맞는 그림으로 바꾼다 */
   HL.variant = function (k) {
     if (!k) return 0;
+    if (k.lookOk === LOOKV) return k.lookFolder ? 0 : (+k.portraitVariant || 0);
+    var opts = HL.lookOptions(k);
+    if (opts) {
+      var cur = +k.portraitVariant, keep = opts.filter(function (o) { return k.lookFolder ? o.folder === k.lookFolder : (o.v && o.v === cur); })[0];
+      var pick = keep || opts[seedHash(k) % opts.length];
+      k.portraitVariant = pick.v || 0;
+      if (pick.folder) k.lookFolder = pick.folder; else delete k.lookFolder;
+      k.lookOk = LOOKV;
+      return k.portraitVariant;
+    }
     var saved = +k.portraitVariant;
     if (saved >= 1 && saved <= 5) return saved;
-    var b = k.born || {}, seed = [k.name || '', b.y || 0, b.m || 0, b.d || 0, k.mother || '', order(k)].join('|'), h = 2166136261;
-    for (var i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
-    k.portraitVariant = (h >>> 0) % 5 + 1;
+    k.portraitVariant = seedHash(k) % 5 + 1;
     return k.portraitVariant;
   };
   /** 아이 그림 후보 (half = 무릎상) */
   HL.chain = function (k, half) {
-    return G.Img.chain.kid(k.sex, order(k), HL.stage(k) || 5, HL.folder(k), half, HL.variant(k));   // 아기는 가장 어린 그림
+    var st = HL.stage(k) || 5, v = HL.variant(k), out = G.Img.chain.kid(k.sex, order(k), st, HL.folder(k), half, v);   // 아기는 가장 어린 그림
+    // 지역 그림은 15살까지뿐 — 스무 살부터는 생김새가 맞는 공용 변형의 어른 그림, 없으면 그 지역 15살 그림 (아무 얼굴로 물러나지 않게)
+    if (!v && k.lookFolder && st > 15) {
+      var P = 'portraits/family/', b = k.sex === 'f' ? 'daughter' : 'son', sf = half ? '_half' : '', more = [];
+      (HL.variantChoices(k) || []).forEach(function (x) { more.push(P + b + '_age' + st + '_v' + x + sf); });
+      more.push(P + k.lookFolder + '/' + b + '_age15' + sf);
+      out = more.concat(out);
+    }
+    return out;
   };
   /** 대화에서 말하는 아이 */
   HL.speaker = function (k, withAge) {

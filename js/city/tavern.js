@@ -594,7 +594,7 @@
     if (G.MateKnow) cands.forEach(function (x) { if (!x.rival && G.MATE[x.id]) G.MateKnow.know(x.id, c.id, 'met'); });   // 명부에서 본 항해사 (수첩 「철새」 · js/systems/mateknow.js)
     if (!cands.length) {
       var away = keeper ? null : T.rivalsStaying(c).filter(function (r) { return r.atSea; })[0];
-      await C.say(keeper || master(), '배를 타겠다는 사람 말인가? 지금 이 도시에는 눈에 띄는 자가 없군.' + T.mateHint(c) + (away && G.RIVAL_STAYS[away.name].away ? '\f' + G.RIVAL_STAYS[away.name].away : ''));
+      await C.say(keeper || master(), (!keeper ? '배를 타겠다는 사람 말인가? 지금 이 도시에는 눈에 띄는 자가 없군.' : keeper.name === '여관 주인' ? '배를 타겠다는 사람 말씀입니까? 지금 이 도시에는 눈에 띄는 사람이 없습니다.' : '배를 타겠다는 사람 말이에요? 지금 이 도시에는 눈에 띄는 사람이 없네요.') + T.mateHint(c) + (away && G.RIVAL_STAYS[away.name].away ? '\f' + G.RIVAL_STAYS[away.name].away : ''));
       return;
     }
     for (;;) {

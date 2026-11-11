@@ -23,6 +23,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const out = {}, I = G.Img, K = I.chain, F = G.Family, UI = G.UI;
       UI.say = async () => {}; UI.alert = async () => {}; UI.toast = () => {}; UI.confirm = async () => true; UI.choose = async (t, o) => o[0].value; UI.ask = async (t, o) => o[0].value;
       UI.fade = async (fn) => {}; G.Game.go = () => {}; G.Game.refreshHud = () => {}; G.State.save = () => {};
+      // 외형·계승 검사에서는 무작위 친족의 합류 선택창을 열지 않는다. 노장 합류는 별도 시험이 검증한다.
+      G.BALANCE.oldGuard.kinChance = 0;
       function fresh(look) {
         const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 1; });
         const s = G.Game.state = G.State.newGame({ name: '아버지', nation: 'PT', job: 'explorer', age: 30, birth: { m: 4, d: 12 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk, lg: G.LANGS.map(() => 1), diff: 'normal' });

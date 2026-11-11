@@ -309,8 +309,47 @@
     if (S.chartPasses) copy.chartSurvey = b64(S.chartPasses);
     return safeStringify(copy);
   };
+  /* 합친 발견물·유물 (2026-11-11 날치 flyingfish → 나는 물고기 f_flying — G.DISC_ALIAS · G.ITEM_ALIAS): 옛 저장의 id를 새 id로 옮긴다.
+     발견 기록(s.disc)·단서(s.hints)는 합치고(어느 한쪽이라도 찾았거나 보고했으면 그대로 — 두 번 보상받지 않게), 나머지 자리(소지품·계약·일지 등)는 id 글자를 바꾼다 */
+  function mergeRec(a, b) {
+    Object.keys(b).forEach(function (k) {
+      var x = a[k], y = b[k];
+      if (Array.isArray(x) && Array.isArray(y)) y.forEach(function (v) { if (x.indexOf(v) < 0) x.push(v); });
+      else if (x == null || x === false || x === 0 || x === '') a[k] = y;
+    });
+  }
+  ST.migrateAlias = function (S) {
+    var DA = G.DISC_ALIAS || {}, IA = G.ITEM_ALIAS || {}, olds = Object.keys(DA), oldI = Object.keys(IA);
+    if (!S || (!olds.length && !oldI.length)) return S;
+    var txt = JSON.stringify(S);
+    if (!olds.concat(oldI).some(function (k) { return txt.indexOf('"' + k + '"') >= 0; })) return S;
+    olds.forEach(function (o) {
+      var n = DA[o];
+      ['disc', 'hints'].forEach(function (key) {
+        var m = S[key]; if (!m || m[o] == null) return;
+        if (m[n] == null) m[n] = m[o];
+        else if (Array.isArray(m[n]) && Array.isArray(m[o])) {
+          m[o].forEach(function (v) { var text = JSON.stringify(v); if (!m[n].some(function (x) { return JSON.stringify(x) === text; })) m[n].push(v); });
+        } else if (typeof m[n] === 'object' && typeof m[o] === 'object') mergeRec(m[n], m[o]);
+        delete m[o];
+      });
+    });
+    // ID 참조만 바꾼다. 제독 이름이나 일지 글이 우연히 옛 ID와 같아도 고치지 않는다.
+    var display = { name: 1, given: 1, surname: 1, text: 1, title: 1, desc: 1, note: 1, body: 1 };
+    function walk(v, key) {
+      if (typeof v === 'string') return display[key] ? v : (DA[v] || IA[v] || v);
+      if (Array.isArray(v)) return v.map(function (x) { return walk(x, key); });
+      if (v && typeof v === 'object') {
+        var out = {};
+        Object.keys(v).forEach(function (k) { out[DA[k] || IA[k] || k] = walk(v[k], k); });
+        return out;
+      }
+      return v;
+    }
+    return walk(S, '');
+  };
   ST.deserialize = function (json) {
-    var S = JSON.parse(json);
+    var S = ST.migrateAlias(JSON.parse(json));
     if (G.VoyagePlans) G.VoyagePlans.migrate(S);   // 옛 일지에서 지워졌던 경쟁자 발표 단서를 재조사 정보로 복구한다.
     if (G.TradeGoods) G.TradeGoods.migrate(S);     // 나뉜 교역품 (도자기 → 중국 도자기·유럽 도기 …)
     if (G.R && G.R.mergeItemList && S.player && S.player.items) G.R.mergeItemList(S.player.items);   // 같은 물건은 한 칸 (2026-10-20)

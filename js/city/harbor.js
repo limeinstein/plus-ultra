@@ -160,6 +160,13 @@
     s.flags.departed = true;
     if (G.CrewAuto) G.CrewAuto.refresh();   // 기함의 빈 방이나 다른 배 자리에 능력에 맞게 (js/systems/crewauto.js)
     if (c.id === s.player.home) s.circ = { cum: 0, from: c.id };
+    // 출항 준비에 난이도의 1·3·10일 (R.portDays — 입항 때가 아니라 출항 때. 2026-11-11 피드백)
+    var pdays = R.portDays();
+    if (pdays > 0) {
+      var dmsg = G.Game.passDays(pdays); G.Game.refreshHud();
+      UI.toast('출항 준비에 ' + pdays + '일이 걸렸다.', 'calendar', 2600);
+      dmsg.forEach(function (m) { if (m && m.text) UI.toast(m.text, m.icon || 'calendar', m.history ? 5200 : 3400); });
+    }
     await UI.fade(function () { G.Game.go('sea', autoTo != null ? { depart: c.id, autoTo: autoTo } : { depart: c.id }); });
   };
   function autoIds(c) {
@@ -803,7 +810,8 @@
         (G.Disc.needsProof(d) && !G.Disc.hasProof(d.id) ? ' <span class="tag">증거 없음</span>' : '') +
         (S().contract && S().contract.disc === d.id ? ' <span class="tag">후원자 계약</span>' : '') +
         '<small class="muted" style="display:block">' + U.esc(G.DISC_CATS[d.cat] + ' · ' + d.desc) +
-        (pf.length ? ' · 유물: ' + pf.map(function (it) { return R.itemName(it); }).join(', ') : '') + '</small></span></label>';
+        (pf.length ? ' · 유물: ' + pf.map(function (it) { return R.itemName(it); }).join(', ') : '') + '</small></span>' +
+        (G.Disc.proofThumbs ? G.Disc.proofThumbs(d.id, 'announce') : '') + '</label>';   // 넘길 증거품·유물을 작은 그림으로 — 마우스를 올리면 크게 (2026-11-11 피드백)
     }).join('');
     var picked = [];
     var win = UI.window({ title: '발표할 발견물 — 복수 선택', icon: 'flag', width: 760,

@@ -124,10 +124,20 @@
         k.artFolder = H.folder(k) || '';
         k.sibOrder = Math.max(1, kids.filter(function (x) { return (x.sex === 'f') === (k.sex === 'f'); }).indexOf(k) + 1);
         if (H.variant) {
-          var sx = k.sex === 'f' ? 'f' : 'm', v = H.variant(k);
-          for (var t = 0; t < 5 && usedV[sx][v]; t++) v = v % 5 + 1;
-          if (!usedV[sx][v]) k.portraitVariant = v;
-          usedV[sx][k.portraitVariant] = 1;
+          // 동생들끼리 얼굴이 겹치지 않게 — 생김새(어머니의 피부색·머리색)에 맞는 변형 안에서만 돌린다 (HL.variantChoices — 2026-11-11)
+          // 얼굴 = 공용 변형 번호 또는 지역 그림 폴더 (k.lookFolder)
+          var sx = k.sex === 'f' ? 'f' : 'm', v = H.variant(k), key = k.lookFolder ? 'r:' + k.lookFolder : v;
+          var opts = H.lookOptions ? H.lookOptions(k) : null;
+          if (!opts) opts = [1, 2, 3, 4, 5].map(function (x) { return { v: x }; });
+          if (usedV[sx][key]) {
+            var free = opts.filter(function (o) { return !usedV[sx][o.folder ? 'r:' + o.folder : o.v]; })[0];
+            if (free) {
+              k.portraitVariant = free.v || 0;
+              if (free.folder) { k.lookFolder = free.folder; k.artFolder = free.folder; } else delete k.lookFolder;
+              key = free.folder ? 'r:' + free.folder : free.v;
+            }
+          }
+          usedV[sx][key] = 1;
         }
       }
       if (!k.mother && p.wife) k.mother = p.wife;

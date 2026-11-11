@@ -254,12 +254,12 @@
   CT.galleryItems = galleryItems;
   function sYear() { return S().date.y; }
   function supplyGoods(sp, n) {
-    var here = G.CITY_DATA[sp.city], best = {};
+    var here = G.CITY_DATA[sp.city], best = {}, sold = R.cityGoods(here);   // 군주의 도시 교역소에서 살 수 있는 물건(중계무역 포함)은 납품 왕명으로 내리지 않는다 (2026-11-11 피드백)
     G.CITY_DATA.forEach(function (c) {
       if (!c.goods || !c.port || !R.cityExists(c)) return;
       var rd = (G.REGION_DIST[here.region] || [])[c.region]; if (rd == null) return;
       var d = G.Geo.dist(here.lon, here.lat, c.lon, c.lat);
-      c.goods.forEach(function (id) { if (!G.GOOD[id] || (G.GOOD[id].nw && sYear() < 1520) || (G.Sakoku && G.Sakoku.tradeBlock(c, id, 'buy')) || (G.Slave && G.Slave.is(id))) return; var b = best[id]; if (!b || rd < b.rd || (rd === b.rd && d < b.d)) best[id] = { id: id, rd: rd, d: d, city: c.id }; });
+      c.goods.forEach(function (id) { if (!G.GOOD[id] || sold.indexOf(id) >= 0 || (G.GOOD[id].nw && sYear() < 1520) || (G.Sakoku && G.Sakoku.tradeBlock(c, id, 'buy')) || (G.Slave && G.Slave.is(id))) return; var b = best[id]; if (!b || rd < b.rd || (rd === b.rd && d < b.d)) best[id] = { id: id, rd: rd, d: d, city: c.id }; });
     });
     var need = n < 2 ? 1 : n < 4 ? 2 : 3, list = [];
     for (; need >= 1 && !list.length; need--) list = Object.keys(best).map(function (k) { return best[k]; }).filter(function (b) { return b.rd >= need && G.GOOD[b.id].p >= 30; });
@@ -367,7 +367,7 @@
   CT.offers = function (sp) {
     var realm = CT.realmOf(sp), c = st(), n = CT.rank(realm), s = S();
     var o = c.offers[realm.id];
-    if (o && o.rank === n && o.version === 2 && s.day - o.day < CB().offerDays && o.list.length) return o.list;
+    if (o && o.rank === n && o.version === 3 && s.day - o.day < CB().offerDays && o.list.length) return o.list;
     var rng = U.makeRng(U.strHash('court:' + realm.id + ':' + n + ':' + s.seed + ':' + Math.floor(s.day / CB().offerDays)));
     // 발견물이 소진돼도 마지막 작위까지 갈 수 있도록 헌납·분할 납품을 함께 남긴다.
     var assured = ['supply', 'tribute'].map(function (kind) { return make(kind, sp, realm, n, rng); }).filter(Boolean);
@@ -375,7 +375,7 @@
     var kinds = Object.keys(G.COURT.kinds).filter(function (kind) { return kind !== 'supply' && kind !== 'tribute'; }), list = assured;
     for (var i = kinds.length - 1; i > 0; i--) { var j = Math.floor(rng() * (i + 1)), x = kinds[i]; kinds[i] = kinds[j]; kinds[j] = x; }
     for (var k = 0; k < kinds.length && list.length < (B().choices || 3); k++) { var got = make(kinds[k], sp, realm, n, rng); if (got) list.push(got); }
-    c.offers[realm.id] = { rank: n, day: s.day, list: list, version: 2 };
+    c.offers[realm.id] = { rank: n, day: s.day, list: list, version: 3 };
     return list;
   };
 

@@ -294,9 +294,11 @@
     '남방대륙 동쪽 먼 섬나라의 숲에 날개 없는 밤새가 산다고 한다.');
 
   // ================================================================== 바다
-  a('flyingfish', '날치', 15.00, -27.00, 'sea', 2, 5200, 1, 3, 'guinea', 1,
-    '가슴지느러미를 날개처럼 펴고 물 위를 수십 걸음이나 나는 물고기. 밤에 등불을 보고 갑판 위로 날아들기도 한다.',
-    '베르데 곶 서쪽 넓은 바다에서는 물고기가 날개를 펴고 물 위를 난다고 한다.', { r: 4 });
+  // 날치(flyingfish)는 바다 발견물 「나는 물고기」(f_flying, js/data/seadisc.js)와 같은 생물이라 하나로 합쳤다 (2026-11-11 피드백 —
+  // 날치를 찾아도 나는 물고기는 찾지 못해 콜론 이야기·경쟁자 발표가 이어지지 않았고, 날치는 4° 넘게 넓은 바다 어디서나 발견됐다).
+  // 옛 저장의 flyingfish 기록·치어는 불러올 때 f_flying 쪽으로 옮긴다 (G.DISC_ALIAS · G.ITEM_ALIAS → js/core/state.js ST.migrateAlias)
+  G.DISC_ALIAS = Object.assign(G.DISC_ALIAS || {}, { flyingfish: 'f_flying' });
+  G.ITEM_ALIAS = Object.assign(G.ITEM_ALIAS || {}, { r_flyingfish_baby: 'r_f_flying_baby' });
   a('sailfish', '돛새치', -3.30, 40.50, 'sea', 3, 7400, 5, 3, 'eafrica', 1,
     '등에 돛 같은 커다란 지느러미를 펼치고 바다를 가르는 물고기. 바다에서 가장 빠르다고 한다.',
     '말린디 앞바다에 돛을 펼친 듯한 물고기가 배보다 빠르게 헤엄친다고 한다.');
@@ -369,7 +371,7 @@
   lead('b_herodotus', ['ploverbird']);
   lead('b_mahuan', ['giraffe', 'lion']);
   lead('b_oviedo', ['iguana', 'armadillo', 'anteater', 'hermitcrab']);
-  lead('b_colon', ['mermaid', 'parrot', 'flyingfish']);
+  lead('b_colon', ['mermaid', 'parrot', 'f_flying']);   // 날치 = 나는 물고기 (f_flying)
   lead('b_pigafetta', ['sealion']);
   lead('b_munster', ['rhino', 'graywolf']);
   lead('b_shanhai', ['dragon', 'phoenix', 'whitetiger']); lead('b_samguk', ['dragon']);

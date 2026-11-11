@@ -62,7 +62,7 @@
   }
   function portCityOf(c) { var best = null, bd = 1e9; G.CITY_DATA.forEach(function (x) { if (!x.port || !R.cityExists(x)) return; var d = G.Geo.dist(c.lon, c.lat, x.lon, x.lat); if (d < bd) { bd = d; best = x; } }); return best ? best.id : c.id; }
   function nearestPort(c) { var p = G.CITY_DATA[portCityOf(c)]; return p && p.port ? dockOf(p) : null; }
-  /** 물자 조달: 후원자 도시에 없는 물건을 가까운 항구에서 */
+  /** 물자 조달: 후원자 도시에 없는 물건을 가까운 항구에서 (here = 후원자 도시 교역소의 물건 — 중계무역·출자로 는 것까지 빼고 고른다) */
   function procure(sp, rng) {
     var c = G.CITY_DATA[sp.city], here = R.cityGoods(c), cand = [];
     G.CITY_DATA.forEach(function (x) {
@@ -86,6 +86,7 @@
     var cand = G.DISCOVERIES.filter(function (d) {
       if (d.pw > Math.max(1, Math.min(2, sp.pw)) || d.how === 'special' || d.how === 'trade' || d.lon == null) return false;
       if (G.Disc.foundByMe(d.id) || (s.disc[d.id] && s.disc[d.id].rival) || !G.Disc.available(d)) return false;
+      if (d.how === 'city' && d.city === c.id) return false;   // 후원자의 도시 안에 있는 발견(세비야 대성당 종탑·로마 콜로세움 …)은 맡기지 않는다 — 건물 하나만 들어가면 끝나던 일 (2026-11-11 피드백)
       return G.Geo.dist(c.lon, c.lat, d.lon, d.lat) <= 35;
     });
     if (!cand.length) return null;

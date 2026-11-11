@@ -132,7 +132,7 @@
       (G.Career ? '<div class="muted" style="margin-top:6px;font-size:14px">잠재 특성의 실마리: ' + U.esc(G.Career.hint(p.job)) + '</div>' : '') +
       '<div class="sep"></div><h4 style="border:0;margin-bottom:6px">난이도</h4><div class="opt-row">' +
       opt('diff', 'easy', '쉬움', p.diff === 'easy') + opt('diff', 'normal', '보통', p.diff === 'normal') + opt('diff', 'original', '엄격 규칙', p.diff === 'original') + '</div>' +
-      '<div class="muted" style="margin-top:6px;font-size:15px;line-height:1.5">' + { easy: '입출항에 1일, 소지금 5000닢. 가볍게 즐기는 항해.', normal: '입출항에 3일. 균형 잡힌 모험.', original: '입출항에 10일, 저장은 자국 항구의 여관에서만. 옛 항해자의 고난 그대로.' }[p.diff] + '</div>' +
+      '<div class="muted" style="margin-top:6px;font-size:15px;line-height:1.5">' + { easy: '출항·성문 출입에 1일(입항은 바로), 소지금 5000닢. 가볍게 즐기는 항해.', normal: '출항·성문 출입에 3일(입항은 바로). 균형 잡힌 모험.', original: '출항·성문 출입에 10일(입항은 바로), 저장은 자국 항구의 여관에서만. 옛 항해자의 고난 그대로.' }[p.diff] + '</div>' +
       '<label style="display:block;margin-top:14px;font-size:16px"><input type="checkbox" id="skipintro"' + (p.skipIntro ? ' checked' : '') + '> 시작 안내 건너뛰기</label>' +
       '</div></div>';
     // column 3

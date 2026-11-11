@@ -113,6 +113,8 @@
     return best;
   };
   /** 이 도시에서 쓸 말: 그 도시의 말, 또는 포르투갈어가 통하는 항구(js/systems/treaty.js)라면 일행이 더 잘하는 쪽 — {li, lv, alt: 포르투갈어로 바꿨나} */
+  /** 성문으로 들어올 때·출항할 때 흐르는 날 (난이도 — G.BALANCE.portDays). 배로 입항할 때는 흐르지 않는다 */
+  R.portDays = function () { var t = (G.BALANCE && G.BALANCE.portDays) || { easy: 1, normal: 3, original: 10 }, d = R.S().settings && R.S().settings.diff; return t[d] != null ? t[d] : (t.normal != null ? t.normal : 3); };
   R.cityLang = function (c) {
     var li = c.lang, lv = R.lang(li);
     if (G.Treaty && li !== 1 && G.Treaty.ptLang(c)) { var pv = R.lang(1); if (pv > lv) return { li: 1, lv: pv, alt: true }; }

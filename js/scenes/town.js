@@ -153,6 +153,12 @@
   /** 도시의 거리를 준비한다. buildings: G.Scenes.city.buildings(c) */
   T.open = function (c, buildings) {
     var landmarks = landmarksFor(c), chains = [I.chain.bg(c), I.chain.hero()];
+    if (G.StreetFolk) {
+      var residents = G.StreetFolk.roster(c);
+      Object.keys(residents).forEach(function (type) {
+        if (residents[type].walk) chains.push([residents[type].walk]);
+      });
+    }
     I.chain.heroWalk().forEach(function (k) { chains.push([k]); });
     I.chain.heroRun().forEach(function (k) { chains.push([k]); });
     ['walk', 'run', 'back', 'idle', 'stride_walk', 'stride_run'].forEach(function (kind) { chains.push(I.chain.heroMotion(kind)); });

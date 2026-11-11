@@ -3,7 +3,7 @@
 const assert = require('assert'), fs = require('fs'), path = require('path');
 const {pathToFileURL} = require('url');
 const {chromium} = require('../tools/procedural_art/node_modules/playwright-core');
-const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/pirate-islands-20261107/runtime');
+const ROOT = path.resolve(__dirname, '..'), OUT = process.env.OUT || path.join(ROOT, 'artifacts/pirate-islands-20261107/runtime');
 const zones = process.argv.slice(2);
 (async () => {
   fs.mkdirSync(OUT, {recursive:true});
@@ -28,6 +28,46 @@ const zones = process.argv.slice(2);
     }, zones);
     assert(list.length>0);
     for (const d of list) {
+      // 시험에서 그림을 직접 읽기 전에 실제 입항과 건물에서 나온 뒤의 배치를 본다.
+      await page.evaluate(d => {
+        G.UI.toast=()=>{};
+        G.Game.go('city',{cityId:d.id,load:true});
+      },d);
+      await page.waitForFunction(id=>G.Town.active()&&G.Town.city().id===id&&!G.Scenes.city.isBusy(),d.id,{timeout:60000});
+      await page.evaluate(() => {
+        const st = G.Town.runtime(), roster = G.StreetFolk.roster(st.city);
+        function checkResidents() {
+          const locals = st.folks.filter(f => !f.mate);
+          const limits = G.FX.streetFolk;
+          if (locals.length < limits.min || locals.length > limits.max || new Set(locals.map(f => f.type)).size !== locals.length) {
+            throw Error(st.city.name + ' 거리 주민 수 또는 중복');
+          }
+          for (const f of locals) {
+            const r = roster[f.type];
+            if (f.name !== r.name || f.face.name !== r.name || !f.frames.every(fr => fr.k === r.walk) || !G.Img.get(r.walk)) {
+              throw Error(st.city.name + ' 거리 주민의 이름·보행 ' + f.type);
+            }
+          }
+        }
+        checkResidents();
+        G.Town.hidden(true);
+        G.Town.hidden(false);
+        checkResidents();
+        // 각 직업이 차지하는 추첨 구간의 한가운데를 골라 실제 등장 비중을 확인한다.
+        const types = G.StreetFolk.types(st.city);
+        const total = types.reduce((sum, type) => sum + roster[type].w, 0);
+        const random = G.U.rng;
+        let lower = 0;
+        try {
+          for (const type of types) {
+            const weight = roster[type].w;
+            G.U.rng = () => (lower + weight / 2) / total;
+            const group = G.StreetFolk.spawn(st.city, st.streetW, st.hero.x, 768, '지역 직업 시험');
+            if (group[0].type !== type) throw Error(st.city.name + ' 등장 비중 ' + type);
+            lower += weight;
+          }
+        } finally { G.U.rng = random; }
+      });
       const report = await page.evaluate(async d => {
         const P=G.PirateIslandArt,I=G.Img,C=G.Scenes.city,SF=G.StreetFolk,c=G.CITY_DATA[d.id], rows=[];
         const check=(v,m)=>{if(!v)throw Error(d.zone+': '+m);};
@@ -57,6 +97,8 @@ const zones = process.argv.slice(2);
         const walks=[];
         for(const type of SF.types(c)) {
           const f=SF.make(type,c,3000,700,768,'qa:'+type),key=P.walkKey(c,type),im=await I.load(key);
+          const resident=P.regions[c.lair].residents[type];
+          check(f.name===resident.name && f.face.name===resident.name && f.spec.sex===resident.g,'지역 직업 이름과 성별 '+type);
           check(f.frames.length===8&&f.frames.every(fr=>fr.k===key),'전용 보행 '+type);
           check(im&&im.naturalWidth===1520&&im.naturalHeight===888,'시트 규격 '+type);
           check(f.face.half[0]===P.faceKey(c,P.roleOf(key.split('/').pop()))+'_half','보행과 대화 인물 일치 '+type);
@@ -74,17 +116,6 @@ const zones = process.argv.slice(2);
         check(!I.chain.exterior('tavern',normal)[0].startsWith('pirate-islands/'),'일반 도시 외관');
         check(SF.types(normal).includes('boy'),'일반 도시 주민');
         return {zone:d.zone,place:d.place,buildings:rows,walks};
-      },d);
-      await page.evaluate(d => {
-        G.UI.toast=()=>{};
-        G.Game.go('city',{cityId:d.id,load:true});
-      },d);
-      await page.waitForFunction(id=>G.Town.active()&&G.Town.city().id===id&&!G.Scenes.city.isBusy(),d.id,{timeout:60000});
-      await page.evaluate(async d => {
-        const st=G.Town.runtime();
-        if(!st || st.city.id!==d.id)throw Error('실제 거리 진입 '+d.zone);
-        if(!st.folks.length || st.folks.some(f=>!G.PirateIslandArt.walkKey(st.city,f.type)))throw Error('실제 거리의 해적 주민');
-        await G.Img.preload(st.folks.map(f=>[G.PirateIslandArt.walkKey(st.city,f.type)]),15000);
       },d);
       await page.waitForTimeout(350);
       await page.screenshot({path:path.join(OUT,d.zone+'_street.png')});
