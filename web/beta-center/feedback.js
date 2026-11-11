@@ -13,6 +13,9 @@
   var submit = document.getElementById('feedback-submit');
   var filters = Array.prototype.slice.call(document.querySelectorAll('[data-filter]'));
   var posts = [];
+  var lastLists = [[], []];
+  var missingSources = [];
+  var refreshPending = false;
   var activeFilter = 'all';
   var startedAt = Date.now();
 
@@ -73,7 +76,7 @@
       return;
     }
     var waiting = node('p', 'post-meta', '답변을 불러오는 중입니다…');
-    container.appendChild(waiting);
+    container.replaceChildren(waiting);
     request(post.comments_url, { headers: { Accept: 'application/vnd.github+json' }, cache: 'no-store' }).then(function (comments) {
       waiting.remove();
       if (!comments.length) {
@@ -90,6 +93,7 @@
         container.appendChild(article);
       });
     }).catch(function () {
+      delete container.dataset.loaded;
       waiting.className = 'post-meta board-error';
       waiting.textContent = '답변을 불러오지 못했습니다. GitHub에서 확인해 주세요.';
     });
@@ -105,6 +109,7 @@
 
   function renderPost(post) {
     var details = node('details', 'post');
+    details.dataset.post = post.source + '-' + (post.id || post.number);
     var summary = node('summary');
     var state = node('span', 'state ' + (post.state === 'closed' ? 'closed' : ''), post.state === 'closed' ? '반영·완료' : '진행 중');
     var title = node('span', 'post-title');
@@ -148,6 +153,8 @@
   }
 
   function render() {
+    var opened = new Set(Array.from(board.querySelectorAll('details.post[open]'), function (el) { return el.dataset.post; }));
+    var archiveOpen = !!board.querySelector('.completed-board[open]');
     board.replaceChildren();
     var shown = posts.filter(function (post) {
       if (activeFilter === 'answered') return post.comments > 0;
@@ -158,12 +165,21 @@
     var completedPosts = shown.filter(function (post) { return post.state === 'closed'; });
     status.className = 'board-status';
     status.textContent = '피드백 ' + shown.length + '건 · 진행 중 ' + openPosts.length + '건 · 완료 ' + completedPosts.length + '건';
+    if (missingSources.length) {
+      status.className += ' board-error';
+      status.textContent += ' · ' + missingSources.join('·') + ' 글을 갱신하지 못했습니다. 새로고침해 주세요.';
+    }
     if (!shown.length) {
-      board.appendChild(node('p', 'board-empty', '이 조건에 맞는 피드백이 없습니다. 첫 항해 기록을 남겨 주세요.'));
+      board.appendChild(node('p', 'board-empty', missingSources.length ? '현재 표시할 수 있는 글이 없습니다.' : '이 조건에 맞는 피드백이 없습니다. 첫 항해 기록을 남겨 주세요.'));
       return;
     }
     openPosts.forEach(function (post) { board.appendChild(renderPost(post)); });
     if (completedPosts.length) renderCompleted(completedPosts);
+    var archive = board.querySelector('.completed-board');
+    if (archive && archiveOpen) archive.open = true;
+    board.querySelectorAll('details.post').forEach(function (el) {
+      if (opened.has(el.dataset.post)) el.open = true;
+    });
   }
 
   function normalizeGithub(items) {
@@ -185,8 +201,11 @@
     });
   }
 
-  function load() {
-    if (refresh.disabled) return;
+  function load(afterSubmit) {
+    if (refresh.disabled) {
+      if (afterSubmit === true) refreshPending = true;
+      return;
+    }
     refresh.disabled = true;
     status.textContent = '게시판을 불러오는 중입니다…';
     var github = request(API + '/issues?state=all&labels=beta-feedback&sort=updated&direction=desc&per_page=50', {
@@ -195,10 +214,12 @@
     var anonymous = request(FEEDBACK_API, { cache: 'no-store' }).then(normalizeAnonymous);
 
     Promise.allSettled([anonymous, github]).then(function (results) {
-      posts = [];
-      results.forEach(function (result) {
-        if (result.status === 'fulfilled') posts = posts.concat(result.value);
+      missingSources = [];
+      results.forEach(function (result, i) {
+        if (result.status === 'fulfilled') lastLists[i] = result.value;
+        else missingSources.push(i === 0 ? '익명' : 'GitHub');
       });
+      posts = lastLists[0].concat(lastLists[1]);
       posts.sort(function (a, b) { return new Date(b.updated_at) - new Date(a.updated_at); });
       if (!posts.length && results.every(function (result) { return result.status === 'rejected'; })) {
         throw new Error('board unavailable');
@@ -211,7 +232,10 @@
       var fallback = node('p', 'board-empty');
       fallback.append('잠시 뒤 다시 시도하거나 ', link('GitHub 게시판에서 직접 확인', BOARD_URL), '해 주세요.');
       board.appendChild(fallback);
-    }).finally(function () { refresh.disabled = false; });
+    }).finally(function () {
+      refresh.disabled = false;
+      if (refreshPending) { refreshPending = false; load(); }
+    });
   }
 
   form.addEventListener('submit', function (event) {
@@ -233,7 +257,7 @@
       form.reset();
       startedAt = Date.now();
       formStatus.textContent = '등록되었습니다. 공개 게시판에 곧 표시됩니다.';
-      load();
+      load(true);
     }).catch(function (error) {
       formStatus.className = 'form-status error';
       formStatus.textContent = /429/.test(error.message) ? '등록이 몰리고 있습니다. 잠시 뒤 다시 시도해 주세요.' : '등록하지 못했습니다. 내용을 확인하고 잠시 뒤 다시 시도해 주세요.';

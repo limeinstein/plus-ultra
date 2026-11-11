@@ -1,9 +1,8 @@
 /* 베타 센터 익명 피드백 회귀 점검.
-   기본은 file:// 원본, 배포본은 PAGE=http://127.0.0.1:4179/center/ node tests/beta_feedback_smoke.js */
+   기본은 테스트 브라우저 안에서 제공하는 원본, 배포본은 PAGE=http://127.0.0.1:4179/center/ node tests/beta_feedback_smoke.js */
 'use strict';
 const path = require('path');
 const fs = require('fs');
-const { pathToFileURL } = require('url');
 let playwright;
 try { playwright = require('playwright'); } catch (_) { playwright = require('../tools/procedural_art/node_modules/playwright-core'); }
 const { chromium } = playwright;
@@ -11,7 +10,7 @@ const { chromium } = playwright;
 const ROOT = path.resolve(__dirname, '..');
 const CENTER = path.join(ROOT, 'web', 'beta-center', 'index.html');
 const LOCAL = !process.env.PAGE;
-const PAGE = process.env.PAGE || pathToFileURL(CENTER).href;
+const PAGE = process.env.PAGE || 'http://127.0.0.1/center/';
 const VERSION = (fs.readFileSync(path.join(ROOT, 'js', 'scenes', 'title.js'), 'utf8').match(/T\.version\s*=\s*'([^']+)'/) || [])[1];
 function ok(value, message) { if (!value) throw new Error(message); console.log('  ✓ ' + message); }
 
@@ -22,11 +21,17 @@ let browser;
   let presence = null;
   let githubCompleted = false;
   let githubLoads = 0;
+  let anonymousUnavailable = false;
   browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox'] });
   const page = await browser.newPage({ viewport: { width: Number(process.env.WIDTH) || 960, height: Number(process.env.HEIGHT) || 900 } });
   page.on('pageerror', error => errors.push(String(error)));
   page.on('console', message => { if (message.type() === 'error' && !/Failed to load|net::|ERR_FILE_NOT_FOUND/.test(message.text())) errors.push(message.text()); });
   if (LOCAL) {
+    await page.route(PAGE + '*', route => {
+      const file = path.basename(new URL(route.request().url()).pathname);
+      if (!['feedback.js', 'telemetry.js', 'voyage-stats.js', 'styles.css', 'world-map-medieval.png'].includes(file)) return route.abort();
+      return route.fulfill({ path: path.join(path.dirname(CENTER), file) });
+    });
     await page.route(PAGE, route => route.fulfill({ status: 200, contentType: 'text/html', body: fs.readFileSync(CENTER, 'utf8').replace(/\{\{VERSION\}\}/g, VERSION).replace(/\{\{ASSET_HASH\}\}/g, 'qa') }));
     await page.route('**/telemetry.js*', route => route.fulfill({ status: 200, contentType: 'application/javascript', body: fs.readFileSync(path.join(ROOT, 'web', 'beta-center', 'telemetry.js'), 'utf8').replace(/\{\{VERSION\}\}/g, VERSION) }));
   }
@@ -40,6 +45,7 @@ let browser;
       submitted = route.request().postDataJSON();
       return route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ accepted: true, id: 8 }) });
     }
+    if (anonymousUnavailable) return route.fulfill({ status: 503, contentType: 'application/json', body: '{}' });
     return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ posts: [{
       id: 8, category: 'bug', title: '진행 중 글 보기 시험', detail: '진행 중인 글은 게시판 위에 표시됩니다.',
       steps: '', environment: 'Chrome', status: 'open', reply: '',
@@ -89,6 +95,12 @@ let browser;
   await page.locator('.completed-board .post').first().click();
   ok((await page.locator('.comment').first().innerText()).includes('개발팀 답변 표시 시험입니다.'), '익명 글 아래 관리자 답변 표시');
   ok((await page.locator('.completed-board .post-links a').first().getAttribute('href')).endsWith('/admin#feedback-7'), '익명 글에서 해당 관리자 답변 화면으로 연결');
+  anonymousUnavailable = true;
+  await page.locator('#refresh').click();
+  await page.waitForFunction(() => document.querySelector('#board-status').textContent.includes('익명 글을 갱신하지 못했습니다'));
+  ok(await page.locator('.completed-board .comment').isVisible(), '익명 조회가 실패해도 열어 둔 본문과 답글 유지');
+  anonymousUnavailable = false;
+  await page.locator('.completed-board > summary').click();
 
   ok(await page.locator('#board > .post').filter({ hasText: '로그인 피드백 시험' }).count() === 2, '답변만 있고 완료하지 않은 로그인 글은 진행 중 유지');
   githubCompleted = true;
