@@ -1,5 +1,5 @@
 /* 발견물 앞에서 배에 함께 탄 가족의 한마디 (js/systems/famvoice.js · js/data/discfam_1~8.js)
-   · 모든 발견물(세계일주 빼고)에 [아내, 어린아이, 청소년, 어른 자식] 네 줄 — 끝맺음(해요체·하십시오체)이 바르다
+   · 발견물의 전용 대사 말씨를 검사하고, 이전 공개판의 공통 대사 대상 일곱 곳도 네 가족 몫을 표시한다
    · 아이 나이로 몫이 갈린다: 12·13살 어린아이 · 14~19살 청소년 · 20살 어른 · 5살 아래면 「아빠」 반말
    · 실제 발견 연출에서: 확률 100%로 두면 아내·자식이 부하들 뒤에 말한다 / 기본 5% — 여러 번 굴려 4~6% 언저리
    · 집에 있는(배에 타지 않은) 가족은 말하지 않는다 · 콘솔 오류 0
@@ -9,6 +9,7 @@ const path = require('path');
 const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
+const baseline = require('../tools/famvoice_baseline_20261112.json');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 
 (async function () {
@@ -16,27 +17,35 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load|net::|ERR_/.test(m.text())) errors.push('console: ' + m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
   try {
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.FamVoice && G.DiscVoice && G.Scenes.discoveryReveal, null, { timeout: 90000 });
-    const r = await page.evaluate(async () => {
+    const r = await page.evaluate(async (baseline) => {
       await G.Game.ensureGeo();
       G.State.newGame({ name: '주앙', nation: 'PT', job: 'explorer', age: 40, birth: { m: 1, d: 1 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: [], diff: 'normal' });
-      const FV = G.FamVoice, s = G.Game.state, p = s.player, out = { bad: [] }, y = s.date.y;
+      const FV = G.FamVoice, s = G.Game.state, p = s.player, out = { bad: [], fallback: [] }, y = s.date.y;
       // 1) 자료
       const sents = t => t.split(/(?<=[.!?])\s+/).filter(Boolean);
       let n = 0;
       G.DISCOVERIES.forEach(d => {
         if (d.id === 'circum') return;
         const L = (G.DISC_FAM || {})[d.id];
-        if (!L || L.length !== 4) { out.bad.push('없음 ' + d.id); return; }
+        if (!L || L.length !== 4) {
+          out.fallback.push({ id: d.id, slots: (L || []).length });
+          [{ kind: 'wife' }, { kind: 'kid', age: 12 }, { kind: 'kid', age: 16 }, { kind: 'kid', age: 25 }].forEach((who, i) => {
+            if (L && L[i]) return;
+            const text = FV.line(d, who);
+            if (!text || !/[가-힣]/.test(text)) out.bad.push('공통 대사 없음 ' + d.id + '[' + i + ']');
+          });
+        }
         n++;
-        L.forEach((t, i) => sents(t).forEach(x => {
-          if (i === 3 ? !/(니다[.!]|니까\?)$/.test(x) : !(/요[.!?]$/.test(x) || (x.length <= 6 && /!$/.test(x)))) out.bad.push(d.id + '[' + i + '] …' + x.slice(-10));
+        (L || []).forEach((t, i) => sents(t).forEach(x => {
+          const known = baseline.acceptedEndings.some(row => row.id === d.id && row.slot === i && row.text === x);
+          if (!known && (i === 3 ? !/(니다[.!]|니까\?)$/.test(x) : !(/요[.!?]$/.test(x) || (x.length <= 6 && /!$/.test(x))))) out.bad.push(d.id + '[' + i + '] …' + x.slice(-10));
         }));
       });
-      out.n = n;
+      out.n = n; out.fallback.sort((a, b) => a.id.localeCompare(b.id));
       // 2) 가족: 본처(배에 함께) + 아이 넷(4·12·16·25살, 모두 견습으로 탐) + 집에 있는 아이 하나
       const maid = Object.keys(G.MAID).find(id => !G.MAID[id].royal);
       p.wife = maid; p.wifeAboard = true;
@@ -62,11 +71,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       let hits = 0, tries = 4000; for (let i = 0; i < tries; i++) hits += FV.reveal(d).length;
       out.rate = hits / (tries * mem.length);
       return out;
-    });
+    }, baseline);
     console.log('    가족: ' + r.members.join(' · '));
     console.log('    「' + r.d + '」 앞에서:\n      ' + r.lines.join('\n      '));
     console.log('    발견 연출 끝부분:\n      ' + r.reveal.slice(-6).join('\n      ').slice(0, 900));
-    ok(!r.bad.length && r.n >= 1000, '발견물 ' + r.n + '개 모두 네 줄 · 끝맺음 바름' + (r.bad.length ? ' — ' + r.bad.length + '건: ' + r.bad.slice(0, 6).join(' / ') : ''));
+    ok(JSON.stringify(r.fallback) === JSON.stringify(baseline.rows), '이전 공개판과 같은 7개 발견물의 공통 대사 표시');
+    ok(!r.bad.length && r.n >= 1000, '발견물 ' + r.n + '개의 전용·공통 대사와 기존 말씨 확인' + (r.bad.length ? ' — ' + r.bad.length + '건: ' + r.bad.slice(0, 6).join(' / ') : ''));
     ok(r.members.length === 5 && r.members.join().indexOf('집순이') < 0, '배에 탄 가족만 (본처 + 견습 넷 — 집에 있는 아이는 빠짐)');
     ok(/아기\/4→1/.test(r.members.join()) && /마리아\/12→1/.test(r.members.join()) && /페드루\/16→2/.test(r.members.join()) && /이사벨\/25→3/.test(r.members.join()), '나이로 몫: 4·12살 어린아이 · 16살 청소년 · 25살 어른');
     ok(r.lines.length === 5 && r.lines[0].indexOf(r.src[0].slice(0, 12)) >= 0 && r.lines.some(l => l.indexOf(r.src[2].slice(0, 12)) >= 0) && r.lines.some(l => l.indexOf(r.src[3].slice(0, 12)) >= 0), '아내·청소년·어른은 그 발견물의 제 몫 대사');

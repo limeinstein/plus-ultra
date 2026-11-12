@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+새 발견 장면 42종과 누락 증빙 원화 333종(2026-11-11 추가 자료)을 연결했다. 발견물은 `discoveries/<ID>.gif`·`discovery-ends/<ID>.jpg`·`discovery-sheets/<ID>.webp`의 24프레임 세트, 유물 289종은 `relics/<ID>.webp`, 발견 지도 18종·구입 단서 26종은 `items/evidence_<ID>.webp`의 256×256 투명 그림을 쓴다. [전체 그림](../artifacts/discovery-art-20261111/report.html) · [원본·제작 지시문·검증](../docs/art/discovery-art-20261111.md).
+
 새 소지품 43종(2026-11-11)은 `items/<아이템ID>.webp`의 256×256 투명 원화를 쓴다. 전설 갑옷 5·소중한 물건 16·서적과 해도 2·사건 물품 20종이며 기존 436개 소지품 원화는 보존했다. [전체 미리보기·원본·프롬프트·검증](../docs/art/new-item-art-20261111.md).
 
 교역 업적샷 6종(2026-11-10)은 `achievement-events/bigdeal_{eu,af,as,am,oc}.webp`·`tradeking.webp`의 1881×836 장면을 쓴다. 지역별 항구와 거래 물품을 구분하며 업적 달성 대화·도감에 함께 연결했다. [미리보기](../artifacts/trade-achievement-shots-20261110/preview.jpg) · [제작 지시문](../tools/trade_achievement_shots_20261110_prompts.json).

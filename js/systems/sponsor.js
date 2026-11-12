@@ -69,11 +69,15 @@
   SP.honor = function (sp) { if (sp.honor) return sp.honor; if (/왕비|왕대비/.test(SP.holder(sp) || '')) return '전하'; return HONOR[sp.type] || '님'; };   // honor: 조선 국왕 「전하」처럼 자료에서 정한 호칭
   /** 후원자 얼굴: 흉상(portrait) + 무릎상(half — portraits/sponsors/<그림>_half, 있을 때만) */
   SP.face = function (sp) {
-    if (!SP.present(sp)) { var b = SP.butler(sp); return { name: SP.stewardName(sp), portrait: b.portrait, half: [], lang: b.lang, li: b.li }; }   // 빈 자리: 집사(시종장)가 맞는다
-    var spec = A.sponsorSpec(sp, SP.holderIndex(sp)), half = G.Img.chain.halfOf(G.Art.portraitKeys(spec));
-    // 이야기 모드의 후원자(카사노바 남작)처럼 전용 그림이 없는 사람: 그 고장 귀족(왕·성직자·상인)의 무릎상으로 선다 — 흉상 대화창으로 돌아가지 않게
-    if (sp.tale) half = half.concat(['portraits/npc-roles/' + ((spec && spec.style) || 'ib') + '/' + ({ king: 'king', church: 'priest', merchant: 'merchant' }[sp.type] || 'noble') + '_half']);
-    return { name: SP.holderName(sp), portrait: spec, half: half, lang: SP.langLv(sp), li: SP.langLi(sp) };
+    var who;
+    if (SP.present(sp)) {
+      who = { name: SP.holderName(sp), portrait: A.sponsorSpec(sp, SP.holderIndex(sp)), lang: SP.langLv(sp), li: SP.langLi(sp) };
+    } else {
+      who = SP.butler(sp);
+      who.name = SP.stewardName(sp);
+    }
+    who.half = G.Img.chain.matchedHalf(A.portraitKeys(who.portrait));
+    return who;
   };
   function playerFace() { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; }
   /** 후원자와 마주 보는 대화 (왼쪽 제독 · 오른쪽 후원자). 두 사람 다 무릎상이 있으면 서 있는 모습으로 크게 */

@@ -44,9 +44,16 @@
     if ((m = x.match(/^(.*?)요([.!?]?)$/))) return m[1] + m[2];
     return x;
   }
+  // 영어: 머리말(「Look,」) 뒤에 붙는 관찰 첫 낱말을 작은 글자로 — 고유 이름은 건드리지 않게 흔한 낱말만
+  var LOWER_HEAD = /^(They|The|This|That|These|Those|There|Their|It|Its|If|Even|Each|Every|Here|When|While|Only|Some|Seen|With|Without|From|In|On|At|To|For|By|As|A|An|One|Two|All|Most|Many|No|Not|Just|Since|So|But|And|Long|Under|Over|Inside|Outside|Below|Above|Between|Unlike|Like|Though|Although|Because|Once|Now|Today|Whoever|Whatever|What|How|Why|Where|Who|Stand|Look|Put|Touch|Rub|Turn|Split|Boil|Roast|Follow|Dig|Cut|Drink|Leave|Walk|Go|Sail|Take|Set|Fire|Lashed|Weighed|Counting|Looking|Standing|Seeing|Watching|Spread|Spreading)\b/;
+  function lowerHead(t) { return LOWER_HEAD.test(t) ? t.charAt(0).toLowerCase() + t.slice(1) : t; }
   /** [하십시오체, 해요체] 한 쌍을 그 말씨로 */
   DV.conv = function (pair, reg) {
     var sp = pair[0], yo = pair[1] || pair[0];
+    if (G.I18N && !G.I18N.isKo()) {   // 다른 언어: 두 말씨가 같은 번역 한 줄 (tools/i18n/en/discfacts.tsv 등) — 말씨 바꾸기는 한국어에서만
+      var tr = G.I18N.tr(sp, true); if (tr == null && yo !== sp) tr = G.I18N.tr(yo, true);
+      if (tr != null) return tr.trim();
+    }
     if (reg === 'sp') return sp;
     if (reg === 'yo') return yo;
     if (reg === 'ban') return eachEnd(yo, toBan);
@@ -125,8 +132,10 @@
     if (opt.close) post = DV.conv(U.pickFresh('dv:close:' + opt.angle, opt.close), reg);
     else if (lv >= 3 && U.chance(0.35)) post = DV.conv(U.pickFresh(key + ':l3', LV3), reg);
     else if (U.chance(0.4)) post = DV.conv(U.pickFresh(key + ':post', F.post), reg);
+    var ko = !G.I18N || G.I18N.isKo();
+    if (!ko && pre) { pre = G.I18N.tx(pre); if (/,$/.test(pre.trim())) body = lowerHead(body); }   // 「Look, they say…」 — 쉼표 뒤 첫 낱말은 작게 (흔한 낱말만)
     var t = (pre ? pre + ' ' : '') + body + (post ? ' ' + post : '');
-    if (opt.d) t = t.replace(/\{d\}/g, '「' + opt.d + '」');
+    if (opt.d) t = t.replace(/\{d\}/g, ko ? '「' + opt.d + '」' : '"' + G.N(opt.d) + '"');
     return t;
   };
   /** 발견하는 순간: 특기가 맞는 부하들이 그 발견물의 관찰을 말한다 — [{m, d(부하 자료), sk, lv, text}] (서로 다른 사람, 최대 n) */

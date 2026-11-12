@@ -1,0 +1,107 @@
+제독	Admiral
+앞의 얼굴	Previous face
+◀ 앞 얼굴	◀ Prev face
+다음 얼굴	Next face
+다음 얼굴 ▶	Next face ▶
+이름	First name
+성	Surname
+다른 이름	Another name
+불리는 이름:	Known as:
+생일	Birthday
+월	month
+일	day
+나이	Age
+@세	@
+(젊을수록 체력·무력, 나이 들수록 지력·매력과 보너스 점수)	(younger: more Vitality and Strength; older: more Intelligence, Charm and bonus points)
+나이 보너스 — 능력 점수	Age bonus — stat points
+· 특기 점수	· skill points
+지식(지력 #) 보너스 — 특기 점수	Knowledge (Int #) bonus — skill points
+(지력 #이면 +#)	(+{2} at Int {1})
+국적	Nationality
+포르투갈 (리스본)	Portugal (Lisbon)
+에스파냐 (세빌리아)	Spain (Seville)
+직업	Profession
+탐험가	Explorer
+발굴자	Excavator
+사냥꾼	Hunter
+정복자	Conquistador
+전도사	Missionary
+상인	Merchant
+군인	Soldier
+난이도	Difficulty
+쉬움	Easy
+엄격 규칙	Strict
+시작 안내 건너뛰기	Skip the opening guide
+보너스	Bonus
+다시 굴리기	Reroll
+능력치	Stats
+특기 한도 #개 · 어학 한도 #개 (지력에 따라)	Up to # skills · # languages (by Intelligence)
+특기 · 어학	Skills · Languages
+남은 점수	Points left
+(나이 # + 지식 #)	(age # + knowledge #)
+타이틀로	Back to Title
+출항 준비 완료	Ready to Sail
+마흔이 되면 수염 난 #대 모습으로 바뀝니다	Grows a beard at forty (#s look)
+#대 모습 — 수염이 난 얼굴	#s look — bearded
+레콩키스타를 마무리하는 카스티야와 아라곤의 연합 왕국. 모국어 스페인어, 포르투갈어도 조금 한다.	The united kingdoms of Castile and Aragon, finishing the Reconquista. Native tongue Spanish, with a little Portuguese.
+아프리카 항로 개척에 앞선 해양 왕국. 모국어 포르투갈어, 스페인어도 조금 한다.	A seafaring kingdom leading the way down the African route. Native tongue Portuguese, with a little Spanish.
+항해와 측량에 능하다. 처음 시작하는 제독에게 권한다.	Skilled at navigation and surveying. Recommended for first-time admirals.
+역사와 웅변에 밝아 유적을 찾는 데 강하다.	Versed in history and eloquence — good at finding ruins.
+운용술이 뛰어나 오랜 탐험을 견딘다. 생물 발견에 강하다.	Excellent seamanship for long expeditions. Good at finding wildlife.
+검술의 달인. 해전과 지상전에서 두각을 나타낸다.	A master swordsman who shines in sea and land battles.
+신학을 익혀 교회의 신뢰를 얻고 선원의 마음을 붙든다.	Trained in theology — wins the Church's trust and the crew's hearts.
+회계에 능해 교역으로 부를 쌓는다.	Good with accounts — builds a fortune through trade.
+포술과 사격술을 익힌 군인. 전투에 강하다.	A soldier trained in gunnery and marksmanship. Strong in battle.
+잠재 특성의 실마리: @	Hint at a hidden trait: @
+낯선 지형과 자연을 직접 마주해 보자.	Face unfamiliar terrain and nature firsthand.
+옛 유적이나 보물을 직접 찾아 기록해 보자.	Find and record ancient ruins or treasure yourself.
+짐승을 사냥하고 전리품을 실어 보자.	Hunt beasts and load up the spoils.
+기함으로 더 많은 선원을 가진 적에게 접현해 보자.	Board an enemy with a bigger crew using your flagship.
+지친 선원들과 함께 예배처에서 기도해 보자.	Pray at a place of worship with your weary crew.
+타지에서 들여온 물건으로 이익을 남겨 보자.	Turn a profit on goods brought in from other lands.
+규율을 지킨 함대의 기함에서 포격해 보자.	Open fire from the flagship of a well-disciplined fleet.
+출항·성문 출입에 #일(입항은 바로), 소지금 #닢. 가볍게 즐기는 항해.	# day to leave port or pass a town gate (docking is instant), # gold to start. A relaxed voyage.
+출항·성문 출입에 #일(입항은 바로). 균형 잡힌 모험.	# days to leave port or pass a town gate (docking is instant). A balanced adventure.
+출항·성문 출입에 #일(입항은 바로), 저장은 자국 항구의 여관에서만. 옛 항해자의 고난 그대로.	# days to leave port or pass a town gate (docking is instant); save only at inns in your own country's ports. The old navigators' hardships, undiluted.
+아직 능력 점수 #점·특기 점수 #점이 남아 있습니다. 남긴 점수는 시작 후 배분할 수 없습니다. 그대로 시작할까요?	You still have # stat points and # skill points left. Unspent points can't be assigned after you start. Start anyway?
+배분으로 돌아가기	Back to assigning
+그대로 시작	Start anyway
+남은 보너스 점수	Bonus Points Left
+남은 점수가 부족합니다.	Not enough points left.
+지력이 부족해 더 많은 특기를 익힐 수 없습니다.	Your Intelligence is too low to learn more skills.
+지력이 부족해 더 많은 언어를 익힐 수 없습니다.	Your Intelligence is too low to learn more languages.
+나이 보너스 점수를 다 썼습니다. 나이가 많을수록 점수가 많습니다.	You've used all your age bonus points. Older admirals get more points.
+지력을 내리면 특기 점수나 한도가 모자랍니다. 특기·어학을 먼저 줄이십시오.	Lowering Intelligence would leave you short of skill points or slots. Reduce skills and languages first.
+특기·어학 점수가 모자랍니다. 배분을 줄이거나 지력을 올리십시오.	Not enough skill and language points. Assign fewer or raise Intelligence.
+특기가 #개로 현재 한도 #개를 넘습니다. 특기를 줄이거나 지력을 올리십시오.	You have # skills, over the current limit of #. Reduce skills or raise Intelligence.
+어학이 #개로 현재 한도 #개를 넘습니다. 어학을 줄이거나 지력을 올리십시오.	You have # languages, over the current limit of #. Reduce languages or raise Intelligence.
+이름을 입력하세요.	Please enter a name.
+첫 항해를 준비하는 중…	Preparing your first voyage…
+@ — @에 보너스	@ — bonus to @
+염소자리	Capricorn
+물병자리	Aquarius
+물고기자리	Pisces
+양자리	Aries
+황소자리	Taurus
+쌍둥이자리	Gemini
+게자리	Cancer
+사자자리	Leo
+처녀자리	Virgo
+천칭자리	Libra
+전갈자리	Scorpio
+궁수자리	Sagittarius
+기본 제독	Classic Admiral
+중세의 연금술사	Medieval Alchemist
+하얀 남방의 항해사	Navigator of the White South
+철갑 항해사	Armored Navigator
+망원경을 든 뱃사람	Sailor with a Spyglass
+근육질 검사	Brawny Swordsman
+모자를 돌리는 항해사	Hat-Twirling Navigator
+카리스마 제독	Charismatic Admiral
+돌격대장	Vanguard Captain
+귀족 학자 제독	Noble Scholar Admiral
+카사노바	Casanova
+정규군 장교	Army Officer
+가죽옷 모험가	Leather-Clad Adventurer
+검은 코트의 선장	Captain in a Black Coat
+@ #/#	@ #/#

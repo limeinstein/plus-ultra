@@ -14,7 +14,7 @@ fs.mkdirSync(OUT, { recursive: true });
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({ contentType: 'text/css', body: '' }));
     await page.addInitScript(() => { const raf = requestAnimationFrame.bind(window); requestAnimationFrame = cb => window.__pauseFrames ? 0 : raf(cb); });
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
+    await page.goto((process.env.WEB_BASE && new URL('index.html', process.env.WEB_BASE).href) || pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Hist && G.Game.sceneName === 'title' && !G.Loader.shown(), null, { timeout: 120000 });
     const audit = await page.evaluate(async () => {
       window.__pauseFrames = true;
@@ -24,7 +24,7 @@ fs.mkdirSync(OUT, { recursive: true });
       G.UI.clearScreen(); G.Game.showLayers(false, false, true); G.Game.refreshHud();
       const reject = Object.keys(G.PORTRAIT_REJECTED_HALVES), bad = [], hist = [];
       reject.forEach(k => { if (G.Img.has(k) || G.Img.pick([k]) || !G.Img.has(k.slice(0, -5))) bad.push(k); });
-      const preservedPools = G.Img.list('portraits/pools/').filter(k => k.endsWith('_half') && G.Img.has(k)).length;
+      const preservedPools = G.Img.list('portraits/pools/mates/').filter(k => /^portraits\/pools\/mates\/(pt|cn)\/.+_half$/.test(k) && G.Img.has(k)).length;
       Object.keys(G.HIST_FIG).forEach(id => {
         const sp = G.Hist.speaker(id), face = sp.portrait && G.Img.pick(G.Art.portraitKeys(sp.portrait)), half = G.Img.pick(sp.half);
         if (face && half && half !== face + '_half') bad.push(id + ':' + face + ' / ' + half);
@@ -59,10 +59,11 @@ fs.mkdirSync(OUT, { recursive: true });
         sources: [...document.querySelectorAll('.dlg-actor .rig-fallback')].map(im => decodeURIComponent(im.src)),
         pieces: document.querySelectorAll('.dlg-actor .rig-piece, .dlg-actor .rig-facefx').length }));
       assert.equal(actual.pieces, 0);
-      assert.equal(actual.tall, mode === 'normal' ? 2 : 0); assert.equal(actual.bust, mode === 'normal' ? 0 : 2);
+      const restored = mode === 'normal' || mode === 'maid';
+      assert.equal(actual.tall, restored ? 2 : 0); assert.equal(actual.bust, restored ? 0 : 2);
       if (mode === 'normal') assert(actual.sources.some(src => /cw_paterson_half\.webp/.test(src)));
       if (mode === 'legacy') { assert(actual.sources.some(src => /sponsors\/nl\/m\/01\.webp/.test(src))); assert(!actual.sources.some(src => /cw_paterson/.test(src))); }
-      if (mode === 'maid') assert(actual.sources.some(src => /maid-styles\/china\/1\.webp/.test(src)));
+      if (mode === 'maid') assert(actual.sources.some(src => /maid-styles\/china\/1_half\.webp/.test(src)));
       await page.screenshot({ path: path.join(OUT, mode + '.png') });
       await page.locator('.askrow button').last().click();
       await page.evaluate(() => window.__joinPending);

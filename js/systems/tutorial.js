@@ -103,7 +103,7 @@
       if (v == null) return;
       if (v === 'cont') { await G.Game.ensureGeo(); G.Game.state = old; G.Game.resume(); return; }
     }
-    var name = await UI.prompt('젊은 항해사의 이름', D.name, 14);
+    var name = await UI.prompt('젊은 항해사의 이름', G.N ? G.N(D.name) : D.name, 14);   // 다른 언어: 기본 이름도 그 언어로 (Alonso de Montero)
     if (name == null) return;
     name = String(name).trim() || D.name;
     await G.Game.ensureGeo();
@@ -133,9 +133,10 @@
   /** 튜토리얼을 마치고 본 게임으로 (keep) / 타이틀로 */
   async function finishWindow() {
     var s = S();
-    var html = '<div style="font-size:19px;line-height:1.7">튜토리얼을 마쳤습니다.<br>얻은 것: 동료 <b>' + Math.max(0, s.mates.length - 1) + '</b>명 · 발견 <b>' + s.stats.found + '</b> · 명성 <b>' + U.num(s.player.fame) + '</b> · 금화 <b>' + U.num(s.player.gold) + '</b>닢' +
-      '<div class="sep"></div><b>이 항해를 이어 간다</b> — 지금 상태(' + G.CITY_DATA[s.loc.city].name + ', ' + U.fmtDate(s.date) + ')를 그대로 본 게임으로 넘깁니다. 안내는 꺼집니다.<br>' +
-      '<b>타이틀로 돌아간다</b> — 처음부터 「새로운 항해」로 제독을 직접 만들 수 있습니다.</div>';
+    var html = G.T('<div style="font-size:19px;line-height:1.7">튜토리얼을 마쳤습니다.<br>얻은 것: 동료 <b>{mates}</b>명 · 발견 <b>{found}</b> · 명성 <b>{fame}</b> · 금화 <b>{gold}</b>닢' +
+      '<div class="sep"></div><b>이 항해를 이어 간다</b> — 지금 상태({city}, {date})를 그대로 본 게임으로 넘깁니다. 안내는 꺼집니다.<br>' +
+      '<b>타이틀로 돌아간다</b> — 처음부터 「새로운 항해」로 제독을 직접 만들 수 있습니다.</div>',   // G.T: 다른 언어로 통째로 (2026-11-12 영어 QA)
+      { mates: Math.max(0, s.mates.length - 1), found: s.stats.found, fame: U.num(s.player.fame), gold: U.num(s.player.gold), city: G.CITY_DATA[s.loc.city].name, date: U.fmtDate(s.date) });
     var v = await UI.window({ title: '첫 항해를 마치다', icon: 'laurel', width: 680, closable: false, html: html,
       buttons: [{ label: '타이틀로 돌아간다', value: 'title' }, { label: '이 항해를 이어 간다', value: 'keep', cls: 'navy' }] }).result;
     TU.end();
@@ -206,9 +207,9 @@
     }
     if (key !== shown) {
       shown = key;
-      box.innerHTML = '<div class="tb-h"><span class="tb-n">첫 항해 ' + (st.no <= 18 ? st.no + '/18' : '') + '</span><b>' + st.title + '</b>' +
+      box.innerHTML = '<div class="tb-h"><span class="tb-n">첫 항해 ' + (st.no <= 18 ? st.no + '/18' : '') + '</span><b>' + G.T(st.title) + '</b>' +
         '<span class="tb-btns">' + (helm ? '<a data-act="helm" class="tb-helm">루카에게 키를 맡긴다</a>' : '') + (again ? '<a data-act="again">다시 듣기</a>' : '') + (SKIP[st.id] ? '<a data-act="skip">이 단계 건너뛰기</a>' : '') + '<a data-act="quit">튜토리얼 끝내기</a></span></div>' +
-        (goal ? '<div class="tb-g">' + G.icon('check') + '<span>' + goal + '</span></div>' : '');
+        (goal ? '<div class="tb-g">' + G.icon('check') + '<span>' + G.T(goal) + '</span></div>' : '');   // G.T: 굵은 글(<b>)이 섞인 줄을 통째로 옮긴다 — 조각으로 옮기면 말 차례가 틀어진다
     }
     root.classList.add('tut-on');
     if (toasts) toasts.style.top = (toasts.getAttribute('data-zone') || 'top') === 'top' ? (box.offsetTop + box.offsetHeight + 8) + 'px' : '';   // 알림이 아래·왼쪽 아래 자리일 때는 건드리지 않는다 (js/ui/ui.js 알림 자리)
@@ -235,6 +236,8 @@
     if (st.id === 'auto' && t.f.prep_auto) drop('출항 준비');
     return want;
   }
+  /** 빛나게 할 단추 글을 지금 언어로 (화면 글자는 js/core/i18n.js가 이미 옮겨 두었다 — 2026-11-12 영어 QA) */
+  function tw(x) { if (!G.I18N || G.I18N.isKo()) return x; var t = G.I18N.tr(x, true); return (t != null ? t : G.N(x)).trim(); }
   function glow() {
     var root = ui(); if (!root) return;
     var t = T(), st = step(), want = t && st ? wants(t, st) : [];
@@ -246,7 +249,7 @@
       if (want.length && !el.classList.contains('exit') && !el.closest('.tutbox') && (!top || top.contains(el))) {
         var lb = labelOf(el), loose = el.classList.contains('choice') || el.tagName === 'TR' || el.classList.contains('tr');
         var head = el.classList.contains('btn') && !el.classList.contains('ghost');
-        for (var k = 0; k < want.length && !on; k++) on = loose ? lb.indexOf(want[k]) >= 0 : head ? lb.indexOf(want[k]) === 0 : lb === want[k];
+        for (var k = 0; k < want.length && !on; k++) { var wk = tw(want[k]); on = loose ? lb.indexOf(wk) >= 0 : head ? lb.indexOf(wk) === 0 : lb === wk; }
       }
       if (on !== el.classList.contains('tut-glow')) el.classList.toggle('tut-glow', on);
     }

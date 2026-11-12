@@ -121,6 +121,7 @@
       (G.Fame ? '<div>명성 갈래</div><div style="grid-column:span 3">' + G.Fame.html() + '</div>' : '') +
       (G.Court ? '<div>작위</div><div style="grid-column:span 3">' + G.Court.titlesHtml() + (G.Court.perkText() ? '<div class="muted" style="font-size:14px;margin-top:2px">' + G.Court.perkText() + '</div>' : '') + (G.Court.papersHtml() ? '<div style="margin-top:3px">' + G.Court.papersHtml() + '</div>' : '') + '</div>' : '') +
       (G.Hostile ? '<div>적대</div><div style="grid-column:span 3">' + G.Hostile.html() + '</div>' : '') +
+      (G.RoyalCourtship ? G.RoyalCourtship.info() : '') +
       '<div>무기</div><div>' + (p.equip.weapon ? G.ITEM[p.equip.weapon].name + ' (공격 ' + G.ITEM[p.equip.weapon].atk + ')' : '없음') + '</div><div>방어구</div><div>' + (p.equip.armor ? G.ITEM[p.equip.armor].name + ' (방어 ' + G.ITEM[p.equip.armor].def + ')' : '없음') + '</div>' +
       '<div>배우자</div><div>' + (p.wife ? U.esc(G.Family.wifeName()) + (p.preg && p.preg.told ? ' <small class="muted">(아기를 가짐 · ' + Math.max(1, Math.round((p.preg.due - s.day) / 30)) + '달 뒤)</small>' : '') + (G.Wives ? G.Wives.infoWife() : '') : '없음') + '</div>' + (G.Wives && G.Wives.infoElders ? G.Wives.infoElders() : '') + '<div>자녀</div><div>' + (p.kids.length ? p.kids.map(function (k) { return '<span' + (k.st && G.Family.kidStatLine ? ' title="' + U.esc(G.Family.kidStatLine(k)) + '"' : '') + '>' + G.Family.kidName(k) + '</span> <small class="muted">' + G.Family.kidAge(k) + '세' + (k.sex === 'f' ? ' 딸' : ' 아들') + (k.aboard ? ' · 견습' : '') + (G.Peter ? G.Peter.tag(k) : '') + (G.KidVoy ? G.KidVoy.tag(k) : '') + (k.married ? ' · ' + (k.married.kind === 'away' ? '집을 떠남' : '출가 — ' + U.esc(k.married.title)) : '') + (G.Wives ? G.Wives.kidTag(k) : '') + '</small>' + (k.unnamed ? '' : ' ' + G.Family.bondHearts(k)); }).join(', ') : '없음') + '</div></div>' +
       (G.Career ? G.Career.html() : '') + '<div class="sep"></div><div class="grid2">' +
@@ -660,7 +661,7 @@
     U.$$('[data-tk]', el).forEach(function (o) { o.onclick = function () { st.tackMode = o.dataset.tk; PAGES.menu(el, win); }; });
     U.$$('[data-keyact]', el).forEach(function (o) { o.onclick = function () {
       var action = o.dataset.keyact, old = o.textContent;
-      o.textContent = '새 키를 누르세요…'; o.classList.add('navy');
+      o.textContent = '새 키를 누르세요…'; o.dataset.waitKey = '1'; o.classList.add('navy');
       var off = UI.pushKey(function (e) {
         if (e.repeat) return true;
         var code = G.Keys.code(e); if (!code) return true;
@@ -669,7 +670,8 @@
         if (r && r.blocked) { var ba = G.Keys.action(r.blocked); UI.toast('그 키는 「' + (ba ? ba.label : r.blocked) + '」에 쓰고 있어 바꿀 수 없습니다 — 다른 키를 고르십시오.', 'info', 3600); }
         off(); G.State.rememberSettings(st); PAGES.menu(el, win); return true;
       });
-      o.onblur = function () { if (o.isConnected && o.textContent === '새 키를 누르세요…') { off(); o.textContent = old; o.classList.remove('navy'); } };
+      o.onblur = function () { if (o.isConnected && o.dataset.waitKey === '1') {   // 글자로 견주지 않는다 — 영어 화면에서는 「새 키를 누르세요…」가 옮겨져 있다 (2026-11-12 영어 QA)
+        delete o.dataset.waitKey; off(); o.textContent = old; o.classList.remove('navy'); } };
     }; });
     U.$$('[data-keyclr]', el).forEach(function (o) { o.onclick = function () { G.Keys.clear(st, o.dataset.keyclr); G.State.rememberSettings(st); PAGES.menu(el, win); }; });
     var kr = el.querySelector('[data-act=keyreset]'); if (kr) kr.onclick = function () { G.Keys.reset(st); PAGES.menu(el, win); };

@@ -66,8 +66,10 @@
   FV.line = function (d, who) {
     var slot = FV.slot(who), L = (G.DISC_FAM || {})[d.id], t = L && L[slot];
     if (!t) t = U.pick(FALLBACK[slot]);
-    if (slot === 1 && who.kind === 'kid' && who.age < cfg().tod) t = tod(t);
-    if (slot === 0 && !GRIM[d.id] && who.key && WIFE_POST[who.key] && U.chance(cfg().flavor)) t = t + ' ' + U.pick(WIFE_POST[who.key]);
+    var I = G.I18N, en = I && !I.isKo() ? I.tr(t, true) : null;   // 다른 언어: 번역(tools/i18n/en/discfam.tsv)을 쓰고 아기 말씨는 「Daddy」로만
+    if (en != null) { t = en.trim(); if (slot === 1 && who.kind === 'kid' && who.age < cfg().tod) t = t.replace(/\bFather\b/g, 'Daddy'); }
+    else if (slot === 1 && who.kind === 'kid' && who.age < cfg().tod) t = tod(t);
+    if (slot === 0 && !GRIM[d.id] && who.key && WIFE_POST[who.key] && U.chance(cfg().flavor)) { var w = U.pick(WIFE_POST[who.key]); t = t + ' ' + (en != null ? I.tx(w) : w); }
     return t;
   };
   /** 발견하는 순간: 배에 함께 탄 가족이 저마다 확률(5%)로 한마디 — [{text, speaker, who}]. opt.force: 확률 없이 모두 (시험) */

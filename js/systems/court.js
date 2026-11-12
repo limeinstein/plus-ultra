@@ -549,10 +549,16 @@
       : t.kind === 'envoy' ? (t.grade === 2 ? '이런 조건을 받아 오다니! 내 신하들 가운데도 그대만 한 사람이 없소.' : '조약을 맺고 왔구려. 수고했소. 두 나라 사이가 한결 편안해지겠소.')
       : '그대가 본 것을 들으니 내가 다스리는 땅이 얼마나 작은지 알겠소. 훌륭하오.';
     var pcR = t.kind === 'rescue' && G.EventShot ? await G.EventShot.princess('court_rescue', { realm: realm, name: t.who, city: G.CITY_DATA[sp.city] }) : null;   // 이벤트 샷: 돌아온 왕녀
+    var guest = t.kind === 'rescue' && G.RoyalCourtship && G.RoyalCourtship.rescued(realm, t.who);
     try {
       await UI.say(thanks, who);
-      if (pcR) await UI.say(U.pick(['…해적선 선창에서 저를 꺼내 주신 분이 바로 이 제독이에요. 그 밤의 일은 평생 잊지 않을게요.', '제독, 다시 이 궁정의 바닥을 밟게 될 줄은 몰랐어요. 고마워요 — 정말로.']), G.EventShot.princessSpeaker(realm, t.who));
+      if (pcR && !guest) await UI.say(U.pick(['…해적선 선창에서 저를 꺼내 주신 분이 바로 이 제독이에요. 그 밤의 일은 평생 잊지 않을게요.', '제독, 다시 이 궁정의 바닥을 밟게 될 줄은 몰랐어요. 고마워요 — 정말로.']), G.EventShot.princessSpeaker(realm, t.who));
     } finally { if (pcR) await pcR.stop(); }
+    if (guest) {
+      if (S() !== s || c.task !== t) return;
+      await G.RoyalCourtship.reunion(guest);
+      if (S() !== s || c.task !== t) return;
+    }
     c.task = null;
     await finish(sp, realm, t);
   };
@@ -827,6 +833,8 @@
       else { var tt = CT.title(realm), wait = CT.rank(realm) < CT.ladder(realm).length ? CT.waitDays(realm) : 0; sub = wait ? '다음 왕명까지 ' + wait + '일' : tt ? tt.ko : ''; dim = true; }
       out.push({ label: '왕명', icon: 'crown', sub: sub, dim: dim, onClick: function () { return CT.audience(sp); } });
       if (G.Garden) out.push(G.Garden.menuItem(sp, realm));   // 왕궁 안의 왕실 정원 — 식물을 바치는 곳 (js/city/garden.js)
+      var visit = G.RoyalCourtship && G.RoyalCourtship.palaceItem(sp, realm);
+      if (visit) out.push(visit);
       var held = CT.marques().filter(function (x) { return x.realm === realm; }).length + CT.exempts().filter(function (x) { return x.realm === realm; }).length;
       out.push({ label: '특허장', icon: 'seal', sub: CT.rank(realm) ? (held ? '가진 것 ' + held + '장' : '사략허가장 · 면세증') : '작위 필요', dim: !CT.rank(realm), onClick: function () { return CT.charters(sp); } });
     }

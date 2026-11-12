@@ -185,10 +185,15 @@
       await proposal(ctx);
       if (S() !== s) return true;
       await stopPic(shot); shot = null;
+      var royalGuest = G.RoyalCourtship && await G.RoyalCourtship.ball();
+      if (S() !== s) return true;
       await say(Ln.closing, {});
       fame(k.fame[0] + k.fame[1] * rankN() + (opts.debut ? 100 : 0), out, opts.debut ? '데뷔탕트' : '무도회');
       if (s.player.wife && !ctx.wifeHurt) s.player.wifeLove = Math.min(100, (s.player.wifeLove == null ? 70 : s.player.wifeLove) + 3);
-      G.State.log((opts.debut ? G.Family.given(opts.debut) + '의 데뷔탕트 무도회를 열었다' : '자택에서 무도회를 열었다') + ' — ' + guests.map(function (x) { return x.short; }).join('·') + U.jx(guests[guests.length - 1].short, '이/가') + ' 왔다.');
+      var names = guests.map(function (x) { return x.short; });
+      if (royalGuest) names.push(royalGuest.name);
+      G.State.log((opts.debut ? G.Family.given(opts.debut) + '의 데뷔탕트 무도회를 열었다' : '자택에서 무도회를 열었다') +
+        (names.length ? ' — ' + names.join('·') + U.jx(names[names.length - 1], '이/가') + ' 왔다.' : '.'));
       await UI().fade(function () { G.Game.passDays(1); });
       if (S() !== s) return true;
       if (G.Game.refreshHud) G.Game.refreshHud();

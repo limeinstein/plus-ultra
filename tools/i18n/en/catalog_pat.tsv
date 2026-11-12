@@ -1,0 +1,51 @@
+@ 술집	{1} tavern
+@ 시내 (그 건물을 누르면)	Inside {1} (click that building)
+경쟁자 @	Rival {1}
+@ #년	{1} ({2})
+@ 『@』 (@)	{1}, {2} ({3})
+『@』 (@)	{1} ({2})
+@ 『@』	{1}, {2}
+『@』	{1}
+〈@〉 무거움 — @, 이 단계에서 발견 #곳 (또는 열린 지 #년)	〈{1}〉 Heavy — {2}, after {3} discoveries at this stage (or {4} years after it opens)
+〈@〉 가장 무거움 — @, 이 단계에서 발견 #곳 (또는 열린 지 #년)	〈{1}〉 Heaviest — {2}, after {3} discoveries at this stage (or {4} years after it opens)
+〈@〉 가벼움 — @	〈{1}〉 Light — {2}
+〈@〉 맛보기 — @	〈{1}〉 Taste — {2}
+@(이|가) 알려진 뒤	once {1} is known
+@(이|가) 알려지면 곧바로	as soon as {1} is known
+@ 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: @)	Taverns and inns of {1} cities — each month moves to a neighboring city or stays (first: {2})
+@ 궁정의 왕명에서 이름이 정해지는 인물입니다. 구출 대상의 이름은 게임과 도감에서 똑같이 표시됩니다.	A figure whose name is set by the royal command of the {1} court. The name of the person to rescue is shown the same in the game and in the Codex.
+@ — #년 #월에 발표	{1} — announced {3}/{2}
+@ 시내 (건물에 들어가면)	Inside {1} (when you enter a building)
+@ 근처 뭍 (도시 밖을 탐험하면)	Land near {1} (when you explore outside the city)
+@ — 동식물	{1} — Fauna & flora
+@ — 서적	{1} — Book
+@ — 장신구	{1} — Accessory
+@ — 선수상	{1} — Figurehead
+@ — 보물	{1} — Treasure
+· 한국어: @	· Korean name: {1}
+〈@〉 관문 — @	〈{1}〉 Gateway — {2}
+@(이|가) 알려지고 맛보기 발견 #개를 찾으면 (또는 역사 속 발표 #년 전부터)	once {1} is known and you've found {2} taste discoveries (or from {3} years before the historical announcement)
+@ 또는 @(이|가) 알려지면 곧바로	as soon as {1} or {2} is known
+@, @	{1}, {2}
+@ — 아메리카에서 처음 살 때	{1} — when first bought in the Americas
+@ — 인도·중근동에서 처음 살 때	{1} — when first bought in India or the Near East
+@ — 중근동·동아시아에서 처음 살 때	{1} — when first bought in the Near East or East Asia
+먼저 「@」(을|를) 찾아야 한다	You must first find "{1}"
+먼저 「@」·「@」(을|를) 찾아야 한다	You must first find "{1}" and "{2}"
+@ 능숙	{1}: Fluent
+@ 보통	{1}: Normal
+@ 기초	{1}: Basic
+@ — 들어서면 마을 사람이, 술집에서는 주인이 (개척 단계와 상관없이)	{1} — townsfolk when you arrive, the keeper at the tavern (regardless of pioneering stage)
+@ 왕궁	{1} Palace
+@ — @을(를) 만나면 (세상을 떠난 뒤에는 시내 건물에서)	{1} — if you meet {2} (after their death, at a building in town)
+인물 #/#	People #/#
+이벤트 #/#	Events #/#
+업적 #/#	Achievements #/#
+발견물 #/#	Discoveries #/#
+음식 #/#	Foods #/#
+악기 #/#	Instruments #/#
+무기 #/#	Weapons #/#
+@ · 본 것 # / 전체 #개	{1} · seen # of #
+@ · 본 것 # / 전체 #개 (보이는 것 #)	{1} · seen # of # (showing #)
+@ · # / #개	{1} · # / #
+— 본 것 # / 전체 #. @	— seen # of #. {1}

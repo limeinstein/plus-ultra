@@ -10,6 +10,7 @@
   const params = new URLSearchParams(location.search);
   const PLAYER = params.get('view') !== 'assets' && (params.get('view') === 'player' || !location.hash || PRIMARY.includes(location.hash.slice(1)));
   document.body.classList.toggle('player-catalog', PLAYER);
+  if (G.I18N && G.I18N.lang !== 'ko') document.title = 'Loop of Good Hope Codex';
   const from = params.get('from');
   if (['index.html', 'game.html', 'Loop_of_Good_Hope.html'].includes(from)) $('#titleReturn').setAttribute('href', from);
   $('#helpBtn').hidden = PLAYER;
@@ -205,7 +206,7 @@
     const spec0 = A.sponsorSpec(sp, 0);
     add(tPeople, {
       group: 'sponsor', portrait: true, name: sp.title, sub: '후원자 · ' + c.name + ' · ' + G.SPONSOR_TYPE[sp.type],
-      meta: (hs => hs.slice(0, 6).map(h => h[2]).join(' → ') + (hs.length > 6 ? ' → … (' + hs.length + '대)' : ''))(sp.holders.filter(h => h[4] !== 'g')), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: A.portraitKeys(spec0), ar: '1 / 1', half: I.chain.halfFor(A.portraitKeys(spec0)),
+      meta: (hs => hs.slice(0, 6).map(h => h[2]).join(' → ') + (hs.length > 6 ? ' → … (' + hs.length + '대)' : ''))(sp.holders.filter(h => h[4] !== 'g')), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: A.portraitKeys(spec0), ar: '1 / 1', half: I.chain.matchedHalf(A.portraitKeys(spec0)),
       pic: () => portrait(spec0),
       detail: () => ({
         text: (bs => bs.length ? '인물 이야기 — ' + bs.join(' / ') : '')(sp.holders.filter(h => h[4] !== 'g').map(h => {
@@ -231,7 +232,7 @@
     add(tPeople, {
       group: 'maid', portrait: true, name: m.name, sub: '여급 · ' + c.name + ' 술집',
       meta: '좋아하는 사람: ' + G.LIKES[m.like].name + (m.from ? ' · ' + m.from + '년부터 등장' : '') + (reg ? ' · 그림: ' + (MAIDST[reg] || reg) : ''),
-      key: 'portraits/maids/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', half: I.chain.maidHalf(m.id, c).concat(I.chain.halfFor(A.portraitKeys(spec))),
+      key: 'portraits/maids/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', half: I.chain.matchedHalf(A.portraitKeys(spec)),
       pic: () => portrait(spec),
       detail: () => ({
         facts: [['일하는 곳', c.name + ' 술집'], m.from ? ['등장', m.from + '년부터'] : null, ['좋아하는 사람', G.LIKES[m.like].name],
@@ -315,31 +316,32 @@
     });
   });
 
-  // 사라진 에스파냐 왕녀 특별 이벤트
-  if (G.PRINCESS) {
-    const p = G.PRINCESS, k = 'portraits/princesses/' + p.id, hk = k + '_half';
-    const spec = A.withImg(A.npcSpec('princess_es', 'noble', 'ib', 'f'), [k]);
+  // 왕실 특명에 나오는 왕녀와 각 궁정의 이야기 그림
+  (G.PRINCESS_STORIES || []).forEach(p => {
+    const k = 'portraits/princesses/' + p.id, hk = k + '_half', realm = G.COURT.realms[p.realm].name;
+    const title = p.title || '사라진 에스파냐 왕녀';
+    const spec = A.withImg(A.npcSpec(p.id, 'noble', CITY[p.city].style, 'f'), [k]);
     add(tPeople, {
-      group: 'princess', portrait: true, name: p.name, sub: '특별 이벤트 · 에스파냐',
-      meta: '「사라진 왕녀」에서 레반트와 홍해까지 찾아가 구하는 국왕의 막내딸', key: k, kind: 'webp', chain: A.portraitKeys(spec), ar: '1 / 1', half: [hk],
+      group: 'princess', portrait: true, name: p.name, sub: '왕실 특명 · ' + realm,
+      meta: title, key: k, kind: 'webp', chain: A.portraitKeys(spec), ar: '1 / 1', half: [hk],
       pic: () => portrait(spec),
       detail: () => ({
-        text: '통합 명성이 높은 총각 제독에게 에스파냐 국왕이 비밀리에 구출을 부탁하는, 이 게임에서 지어낸 왕녀입니다.',
-        facts: [['이름', p.name], ['애칭', p.short], ['등장하는 이야기', '사라진 에스파냐 왕녀'], ['고향', (CITY[p.city] || {}).name || '에스파냐']],
-        files: [{ key: k, kind: 'webp', note: '블랑카 왕녀의 고유 얼굴상' }, { key: hk, kind: 'webp', note: '같은 인물의 고유 무릎상 — 옷단까지, 무릎 노출 없음' }]
+        text: p.clue || '레반트와 홍해에 걸쳐 행방을 찾는 에스파냐 왕녀입니다.',
+        facts: [['이름', p.name], ['애칭', p.short], ['등장하는 이야기', title], ['고향', CITY[p.city].name]],
+        files: [{ key: k, kind: 'webp', note: '얼굴상' }, { key: hk, kind: 'webp', note: '무릎상' }]
       })
     });
-  }
+  });
 
   // 왕명 이벤트의 왕녀·귀족 여성 — js/data/court.js의 실제 이름과 고유 그림을 쓴다.
   ((G.COURT && G.COURT.princesses) || []).forEach(p => {
     const realm = G.COURT.realms[p.realm], k = p.face, hk = p.half || k + '_half';
     add(tPeople, {
       group: 'princess', portrait: true, name: p.name, sub: '왕명 왕녀 · ' + realm.name,
-      meta: '「왕녀 구출」 왕명에서 해적에게 붙잡혀 간 인물', key: k, kind: 'webp', chain: [k], ar: '1 / 1', half: [hk],
+      meta: p.courtship ? '왕녀 구출 · 무도회 · 궁정에서의 연애' : '「왕녀 구출」 왕명에서 해적에게 붙잡혀 간 인물', key: k, kind: 'webp', chain: [k], ar: '1 / 1', half: [hk],
       pic: () => I.make([k], 512, 512, () => portrait(A.npcSpec(p.id, 'noble', p.style, 'f'))),
       detail: () => ({
-        text: realm.name + ' 궁정의 왕명에서 이름이 정해지는 인물입니다. 구출 대상의 이름은 게임과 도감에서 똑같이 표시됩니다.',
+        text: p.courtship ? '구출 뒤의 알현이나 자택 무도회에서 인연을 맺을 수 있습니다. 다시 만나기로 약속하면 이 나라의 궁정을 찾아가 마음을 전할 수 있습니다.' : realm.name + ' 궁정의 왕명에서 이름이 정해지는 인물입니다. 구출 대상의 이름은 게임과 도감에서 똑같이 표시됩니다.',
         facts: [['궁정', realm.name], ['등장하는 왕명', '해적에게 붙잡혀 간 왕녀를 구해 온다'], ['해적 소굴 후보', (realm.dens || []).map(id => CITY[id] && CITY[id].name).filter(Boolean).join(', ')]],
         files: [{ key: k, kind: 'webp', note: '이 왕녀만의 고유 얼굴상' }, { key: hk, kind: 'webp', note: '같은 인물의 고유 무릎상 — 옷단까지, 무릎 노출 없음' }]
       })
@@ -732,7 +734,10 @@
     return !!(it.portrait && M.n[it.name]);
   }
   const seenCount = t => t.items.filter(seenIt).length;
-  const matches = it => seenIt(it) && (!query || it.text.includes(query));
+  // 다른 말로 할 때는 옮긴 이름·부제로도 찾는다 (2026-11-12 영어)
+  const EN = G.I18N && G.I18N.lang !== 'ko';
+  const hay = it => !EN ? it.text : it._tx || (it._tx = (it.text + ' ' + [it.name, it.sub, it.meta].map(x => x ? G.I18N.tx(String(x)) : '').join(' ')).toLowerCase());
+  const matches = it => seenIt(it) && (!query || hay(it).includes(query));
   const visible = t => t.items.filter(it => matches(it) && (t.chip === 'all' || it.group === t.chip) && (t !== tDisc || filterDisc(it)));
 
   // ---------------------------------------------------------------- thumbnails (lazy, one per frame)

@@ -389,14 +389,14 @@
       live: function (s) { var b = s.barb || {}; return !b.stage && (dn(s) <= 15421231 || !!b.ok); }, text: [
       { y: '붉은 수염 해적 때문에 황제 폐하의 시름이 깊으시대요. 폐하께서 믿으시고 작위까지 받은 사람이라면 부르실 거라나요.',
         o: '붉은 수염 해적 때문에 황제 폐하의 시름이 깊으시다더군. 폐하께서 믿으시고 작위까지 받은 사람이라면 부르실 거라나.' }] },
-    // 사라진 왕녀 (js/systems/princess.js): 결혼하지 않은 남자 제독 · 에스파냐 국왕이 있을 때 · 한 번뿐
-    { id: 'princess', near: [P.seville], r: 9, live: function (s) {
+    // 첫 왕실 특명을 받기 전에 도는 소문
+    { id: 'princess', near: [P.seville, P.london, P.paris, P.istanbul, [-9.1, 38.7]], r: 9, live: function (s) {
       if (s.princess || female(s)) return false;
       var PR = G.Princess; if (PR && PR.single && !PR.single()) return false; if (!PR && s.player.wife) return false;
-      return !(PR && PR.crown) || !!PR.crown();
+      return !PR || G.PRINCESS_STORIES.some(function (d) { return PR.crown(d); });
     }, text: [
-      { y: '에스파냐 왕녀님 소식이 끊겼다고 쉬쉬하는 이야기가 있어요. 이름이 아주 높은, 아직 장가 안 간 제독을 왕께서 찾으신대요.',
-        o: '에스파냐 왕녀님 소식이 끊겼다고 쉬쉬하는 이야기가 있지. 이름이 아주 높은, 아직 장가 안 간 제독을 왕께서 찾으신다더군.' }] },
+      { y: '왕실 전령이 항구마다 믿을 만한 제독을 수소문한대요. 어느 궁정에서 보냈는지는 입을 꼭 다물더라고요.',
+        o: '왕실 전령이 항구마다 믿을 만한 제독을 수소문한다더군. 어느 궁정에서 보냈는지는 말해 주지 않소.' }] },
     // 명예혁명 (js/systems/glory.js): 1688.7~11 암스테르담(오라녜 공) · 1688.9~11 런던(제임스 2세)
     { id: 'glory_o', near: [[4.88, 52.34]], r: 4, d: [16880710, 16881130], live: function (s) { var g = s.glory; return !(g && (g.o || g.j)); }, text: [
       { y: '요즘 운하마다 화약통이 쌓여요. 오라녜 공이 바다 건너 장인어른 나라로 간다나요? 배를 아는 선장을 찾는대요.',

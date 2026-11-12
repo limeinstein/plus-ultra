@@ -1,0 +1,146 @@
+#세 (#월 #일생 · @)	{1} (born {2}/{3} · @)
+예금	Savings
+악명	Notoriety
+건강	Health
+명성 갈래	Fame by field
+탐험	Exploration
+교역	Trade
+전투	Combat
+사교	Social
+작위	Titles
+적대	Hostilities
+없음	None
+없음 — 통합 명성 #부터 국왕이 부른다	None — your king will summon you from # total fame
+@ (공격 #)	@ (Atk #)
+@ (방어 #)	@ (Def #)
+배우자	Spouse
+자녀	Children
+직업 잠재 특성 · 아직 드러나지 않음	Profession trait · not yet revealed
+직업 잠재 특성 · @	Profession trait · @
+지평선의 위안	Comfort of the Horizon
+층위의 눈	Eye for Strata
+빈틈없는 해체	Clean Butchery
+열세의 돌격	Outnumbered Charge
+한마음의 기도	Prayer of One Heart
+거래처의 사례	Partners' Reward
+질서 있는 일제사격	Orderly Broadside
+“해도에 없던 풍경이군. 이곳을 기억하면 다음 길도 찾을 수 있겠어.”	“A sight that's not on any chart. Remember this place and we'll find the next way too.”
+“흙의 층과 작은 흔적까지 남겨라. 보물보다 오래갈 것은 이 기록이다.”	“Record every layer of soil and every little trace. This record will outlast any treasure.”
+“가죽이 상하지 않게 결을 따라 벗겨라. 버릴 몫도 살릴 수 있다.”	“Skin it along the grain so the hide stays whole. Even the scraps can be saved.”
+“수가 적어도 물러서지 마라. 좁은 갑판에서는 먼저 자리를 잡는 쪽이 이긴다!”	“Don't fall back just 'cause we're fewer! On a narrow deck, whoever takes the ground first wins!”
+“믿는 이름은 달라도 무사히 돌아가고 싶은 마음은 같지. 함께 쉬어 가세.”	“We may pray to different names, but we all want to get home safe. Let's rest a while together.”
+“산 값과 운반한 수고를 장부에 남겨라. 신뢰가 쌓이면 거래처도 사례하는 법이지.”	“Put what you paid and what it took to haul it in the ledger. Build up trust, and your partners pay you back.”
+“각 포대는 명령을 기다려라. 같은 순간에 조준하고, 한 번에 쏜다!”	“Every battery, wait for the order! Aim together, fire as one!”
+지리·자연을 새로 발견하면 피로 # 회복. 하루 최대 #.	New geography or nature discoveries restore # fatigue. Up to # a day.
+유적·보물의 첫 발견 명성 +#%. 발견당 최대 #, 하루 최대 #. 보고 보상에는 미적용.	+#% fame for first finding ruins or treasure. Up to # per find, # a day. Doesn't apply to report rewards.
+사냥 후 실제로 싣는 전리품 +#%(버림). 하루 최대 #통. 짐칸 한도 적용.	+#% spoils actually loaded after a hunt (rounded down). Up to # barrels a day. Hold limits apply.
+기함의 접현 시작 시 아군 선원이 적보다 적으면 해당 백병전 공격력 +#%. 특기 조합과는 큰 쪽만 적용.	When your flagship boards with fewer crew than the enemy, +#% attack in that melee. Only the larger of this and skill combos applies.
+함께 기도하면 추가 규율 +#, 피로 -#. 하루 #회.	Praying together gives an extra +# discipline and -# fatigue. # time(s) a day.
+타지 매입분만 팔아 이익을 낸 거래에 순이익 #%의 사례금(버림). 하루 최대 #닢. 산 곳 없는 전리품·노예 거래 제외.	A #% bonus on net profit when you sell only goods bought elsewhere (rounded down). Up to # gold a day. Excludes spoils with no purchase origin and slave trading.
+규율 # 이상일 때 기함의 포격 명중률 +#%p. 특기 조합과 큰 쪽만 적용하며 최종 상한 95% 유지.	At discipline # or more, +#pp flagship gunnery accuracy. Only the larger of this and skill combos applies; the 95% cap stays.
+(동료 포함 실효 수준 ·	(effective level incl. companions ·
+제독 본인 ·	the admiral ·
+동료로 올린 것)	raised by companions)
+숨은 능력	Hidden Abilities
+(제독 본인의 LV3 특기 조합)	(combos of the admiral's own LV3 skills)
+제독 본인이 서로 맞는 특기 세 가지를 LV3까지 익히면 숨은 능력이 드러납니다.	Raise three matching skills to LV3 yourself and a hidden ability will reveal itself.
+통역	interpreter
+경험과 성장	Experience & Growth
+— 일을 해낼수록 능력치가 조금씩 오른다 (높을수록 더디다)	— stats rise bit by bit as you get things done (slower the higher they are)
+설득	Persuasion
+거래	Dealing
+일기토	Duels
+미식	Gourmet
+# / # · 올해 #/#	# / # · this year #/#
+최고 · 올해 #/#	Max · this year #/#
+/(.+·.+)/	⟦$1⟧
+기함 선실 — 부하 배치	Flagship Cabin — Assign Officers
+식량 / 물	Food / Water
+약 #일분	about # days' worth
+교역품 #통 · #/#종 · 무게 # / #	Trade goods # barrels · #/# kinds · weight # / #
+교역품 #통 · #/#종	Trade goods # barrels · #/# kinds
+규율	Discipline
+선수상	Figurehead
+함대 속력	Fleet Speed
+(바람을 고르게 받을 때의 평균)	(average in an even wind)
+조함	Handling
+짐	Cargo
+평균 선속	Avg. speed
+#°/일	#°/day
+배가 한 척이면 그 배의 선속이 곧 함대 속력입니다. 두 척 이상이면 가장 느린 배에 맞추되, 운용술로 예인 보조를 받고 편대 유지 부담을 줄입니다.	With one ship, its speed is the fleet's speed. With two or more, the fleet keeps pace with the slowest ship, but Seamanship gives it a tow and eases the strain of holding formation.
+적재 교역품	Cargo on Board
+발견물 # / #	Discoveries # / #
+해도 작성 #%	Charted #%
+해도의 상세함: ① 윤곽 #칸 · ② 강 #칸 · ③ 산 #칸 · ④ 지형 #칸 · 보고하지 않은 몫	Chart detail: ① coastline # cells · ② rivers # · ③ mountains # · ④ terrain # · unreported share
+(왕·학자 후원자에게 「해도 보고」) · 지도 제작 속도 +#%	(give a “Chart Report” to a royal or scholar patron) · mapping speed +#%
+(왕·학자 후원자에게 「해도 보고」) · 지도 제작 속도 -#%	(give a “Chart Report” to a royal or scholar patron) · mapping speed -#%
+개척 현황	Frontier Progress
+— 지금 단서를 들을 수 있는 미발견 발견물 #곳. 앞 단계가 알려질수록 더 먼 곳, 더 무거운 발견물의 단서가 열립니다. 칸에 마우스를 올리면 다음 조건이 보입니다.	— # undiscovered finds you can hear clues about now. As earlier stages become known, clues to farther, weightier discoveries open up. Hover over a box to see what's needed next.
+처음부터 아는 세계	The Known World
+동쪽 길	The Eastern Road
+서쪽 길	The Western Road
+미지	Unknown
+소문	Rumored
+항로 탐색	Seeking a Route
+개척	Opened
+깊은 곳	Deep
+끝까지	Fully Opened
+@ · #/#	@ · #/#
+@ 다음 목표 — 〈@〉	@ — next goal: 〈@〉
+「@」(을|를) 찾으면(또는 경쟁자가 발표하면) 이 땅이 열립니다.	Find “@” (or let a rival announce it) and this land opens up.
+@(이|가) 알려지면 소문이 돌기 시작합니다.	Rumors will start once @ becomes known.
+맛보기 발견(@)을 #개 찾으면 「@」의 단서가 나옵니다.	Find {2} of the first glimpses (@) and clues to “@” will surface.
+이곳에서 발견 #곳(지금 #곳)을 채우거나 몇 해가 지나면 더 무거운 발견물의 단서가 나옵니다.	Make # discoveries here (now #), or wait a few years, and clues to weightier finds will surface.
+이곳에서 발견 #곳(지금 #곳)을 채우면 가장 무거운 발견물의 단서가 나옵니다.	Make # discoveries here (now #) and clues to the weightiest finds will surface.
+모든 단서를 들을 수 있습니다.	Every clue can be heard.
+진행 중인 계약이 없습니다. 단서를 모아 왕궁이나 저택의 후원자를 찾아가 모험을 제안하십시오. 아직 이름이 없으면 후원자(또는 집사)에게 「작은 일거리」를 청해 해도 작성·물자 조달·소문 확인부터 시작할 수 있습니다.	No contract in progress. Gather clues and propose an expedition to a patron at a palace or mansion. If you're not known yet, ask a patron (or their steward) for “Small Jobs” and start with charting, supply runs and checking rumors.
+진행 중인 계약	Contract in Progress
+왕명	Royal Commands
+맡은 왕명이 없습니다. 통합 명성 #부터.	No royal command in hand. From # total fame.
+맡은 왕명이 없습니다. 통합 명성 #부터. 다른 나라의 군주를 알현해도 명예 작위가 걸린 왕명을 받을 수 있습니다.	No royal command in hand. From # total fame. An audience with a foreign monarch can also earn you a royal command with an honorary title at stake.
+맡은 왕명이 없습니다. 다른 나라의 군주를 알현해도 명예 작위가 걸린 왕명을 받을 수 있습니다.	No royal command in hand. An audience with a foreign monarch can also earn you a royal command with an honorary title at stake.
+직접 들은 소문과 거래처 정보, 공개된 발견의 재조사 의뢰를 적어 둡니다.	Notes on rumors you heard yourself, trading partner info, and requests to re-survey published discoveries.
+장소·기한·거래처 보기	Show places, deadlines and partners
+맡은 조합 의뢰	Guild Jobs Taken
+맡은 의뢰가 없습니다. 조합에서 의뢰를 살펴보십시오.	No jobs taken. Check the guild for work.
+거듭 지나온 길이 자세해집니다: 윤곽 → 강 → 산 → 지형. 휠로 확대·축소하고 끌어서 옮깁니다.	Routes you travel again and again grow more detailed: coastline → rivers → mountains → terrain. Scroll to zoom, drag to pan.
+도시 찾기	Find a city
+알고 있는 도시 이름	Name of a city you know
+여기	Here
+확대	Zoom in
+축소	Zoom out
+전체	All
+알려진 해도 전체	Whole known chart
+지금 위치	Current position
+재탐사 ① 윤곽 ② 강 ③ 산 ④ 지형	Resurvey ① coastline ② rivers ③ mountains ④ terrain
+미지의 삽화: 옛 항해자의 상상	Uncharted art: old navigators' imaginings
+⚑ 수도	⚑ Capital
+모형 크기: 대·중·소	Model size: large · medium · small
+▥ 발견한 유적·자연 경관	▥ Ruins and natural wonders found
+〰 항구	〰 Port
+┄ 내륙	┄ Inland
+⌜ 청록 모서리: 자동항해	⌜ Teal corner: autosail
+밑줄 색: 다스리는 나라	Underline color: ruling nation
+후원자	Patron
+계약	Contract
+? 단서(술집 소문·망루) — 올리면 이름, 누르면 단서	? Clue (tavern rumor · lookout) — hover for the name, click for the clue
+항로 경험	Route Experience
+— 한 항구에서 출항해 다른 항구에 곧장(다른 항구에 들르지 않고) 입항하면 두 항구 사이의 자동항해가 열립니다(오는 길도). 자동항해 중 손으로 몰면 풀리고, 다음 항구에 들어간 뒤 그 항구와 이어진 항로에서 다시 쓸 수 있습니다.	— Sail from one port straight to another (without stopping at a third) and autosail opens between them (both ways). Taking the helm cancels autosail; once you reach the next port you can use it again on routes linked to that port.
+아직 항구와 항구 사이를 오간 적이 없습니다. 익숙하지 않은 항로도 바닷길을 따라가지만(배속은 그대로) — 한 번 다녀오면 자동항해가 열립니다. 뭍에 막히면 바다를 눌러 돌아가야 합니다.	You haven't sailed port to port yet. Unfamiliar routes still follow the sea lanes (at normal speed) — make the trip once and autosail opens. If land blocks the way, click the sea to go around.
+항해자 @(이|가) @에서 모험의 첫걸음을 내디뎠다.	Navigator @ took the first step of adventure in @.
+@에서 @(이|가) 유행이다. @ 말로는 @ 값이 @ 올랐다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	There's a craze for {2} at {1}. {3} say {4} prices have gone up {5}, and the craze won't die down for {6}.
+@ 사이에서 @(이|가) 유행이다. @ 말로는 @ 값이 @로 뛰었다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	There's a craze for {2} among {1}. {3} say {4} prices have jumped to {5}, and the craze won't die down for {6}.
+@에서 @(이|가) 유행이다. @ 말로는 @ 값이 @로 뛰었다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	There's a craze for {2} at {1}. {3} say {4} prices have jumped to {5}, and the craze won't die down for {6}.
+리스본·세비야의 귀족들	the nobles of Lisbon and Seville
+세비야 상인들의 잔치	the feasts of Seville's merchants
+마드리드 궁정	the court in Madrid
+안트베르펜·암스테르담 상인들	the merchants of Antwerp and Amsterdam
+런던과 파리의 멋쟁이들	the dandies of London and Paris
+파리 궁정	the court in Paris
+로마 추기경들의 잔치	the feasts of Rome's cardinals
+피렌체 은행가들	Florentine bankers
+세 곱절	triple
+곱절 반	two and a half times
+곱절	double
+절반쯤 더	about half again
+서너 할쯤 더	thirty or forty percent

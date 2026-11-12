@@ -22,7 +22,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     setInterval(() => { if (TT.auto) TT.pump(); }, 16);
   });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto((process.env.WEB_BASE && new URL('index.html', process.env.WEB_BASE).href) || pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && G.Princess, null, { timeout: 90000 });
     let r = await page.evaluate(async () => {
       const out = {}, UI = G.UI, P = G.Princess, B = G.BALANCE.princess;
@@ -41,7 +41,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       setFame(s, 52000); s.player.wife = 'm_lis'; out.married = P.daily().length === 0 && !s.princess; s.player.wife = null;
       s.player.g = 'f'; out.female = P.daily().length === 0 && !s.princess; s.player.g = 'm';
       s.tut = { step: 0, f: {} }; out.tut = P.daily().length === 0 && !s.princess; delete s.tut;
-      const news = P.daily();
+      // 이 회귀 시험은 여섯 후보 중 원래 블랑카의 특명과 옛 저장을 끝까지 따라간다.
+      const pick = G.U.pick;
+      G.U.pick = list => list.includes(G.PRINCESS) ? G.PRINCESS : pick(list);
+      let news;
+      try { news = P.daily(); } finally { G.U.pick = pick; }
       out.news = news.length === 1 && !!news[0].history && /왕녀가 사라졌다/.test(news[0].text) && s.princess.stage === 0 && s.princess.sp === 'es_crown';
       out.once = P.daily().length === 0;
       // ---- 세빌리아 왕궁: 메뉴 · 할 일 · 전령
@@ -179,7 +183,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(/왕녀를 모셨다/.test(r.palace) && /국왕께 모셔 간다/.test(r.palace), '왕녀를 모시면 세빌리아 왕궁·할 일 판에 「모셔 간다」');
     ok(r.enter && /^m_princess:1:산티아고 기사단 기사:\d+:\d+:done$/.test(r.wed) && r.wedSaid, '귀환: 왕녀가 청혼 → 혼인 · 한 계급 특진(' + r.wed + ')');
     ok(/^부마\|부마 · 산티아고 기사단 기사\|부마/.test(r.title) && /^블랑카 왕녀:블랑카 왕녀:true$/.test(r.wife) && r.save, '칭호 「부마」(직위 칸 ' + r.title.split('|')[1] + ') · 아내는 블랑카 왕녀(술집에는 나오지 않음) · 저장');
-    ok(r.after === '0::0', '끝난 뒤에는 메뉴·수첩·소식이 사라진다 (한 번뿐)');
+    ok(r.after === '0::0', '끝난 직후에는 메뉴·수첩·소식이 사라진다');
     ok(r.esUp === '자작:4', '에스파냐 제독이면 제 나라 작위로 한 칸 (남작 → ' + r.esUp + ')');
     ok(/^75000:3:부마$/.test(r.maxed) && /^true:30000::done$/.test(r.decline) && /^m_lis:30000:0::false$/.test(r.marriedEnd), '이미 가장 높으면 특진 대신 금화 · 사양하면 하사금만 · 그사이 결혼했으면 청혼 없이 하사금만: ' + JSON.stringify({maxed:r.maxed,decline:r.decline,marriedEnd:r.marriedEnd}));
     ok(/^1:failed:-400:0$/.test(r.late) && r.old, '기한(3년)을 넘기면 실패(명성 −400) · 옛 저장(state.princess 없음)에서도 탈 없다');

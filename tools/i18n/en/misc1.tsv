@@ -1,0 +1,84 @@
+집사	Steward
+항해 수첩	Voyage Notebook
+물	Water
+적재	Cargo
+교역소 주인	Trading Post Owner
+이름	Name
+특기	Skills
+내구력	Durability
+#등급	Tier #
+적재량	Capacity
+돛	Sails
+선실	Cabins
+#칸	# slots
+현상수배	WANTED
+상인	Merchant
+필요 명성	Fame needed
+능력치	Stats
+부관	First Mate
+기함	Flagship
+거래처	Contacts
+기한	Deadline
+여급 @	Barmaid @
+사서	Librarian
+항해일지	Logbook
+자재	Materials
+선명	Name
+선종	Type
+선장	Captain
+모항	Home port
+도시 사업	Town Projects
+현재	Current
+생산시설	Production
+상관·창고	Trading House & Warehouse
+판로 개척	New Markets
+조선 기술	Shipbuilding
+천 닢	1,000 gold
+박	nights
+물건	Item
+동료	Companions
+단서	Clues
+당나귀	Donkeys
+마차	Wagons
+증거	Proof
+#점	#
+#통	# barrels
+#척	# ships
+#명	#
+#일분	# days' worth
+#박	# nights
+이 값은 너무 비싸지 않은가. 옆 가게는 더 싸던데.	Isn't that a bit steep? The shop next door was cheaper.
+배를 탈 사람을 찾나? 일거리를 기다리는 뱃사람들이 늘 여기 모여 있지.	Looking for hands? Sailors waiting for work always gather here.
+거기, 이쪽으로 오게. 포카나 하세.	You there, come over here. Let's play some poker.
+새 항로 하나에 세관 수입이 몇 곱절로 뜁니다.	One new route and customs revenue jumps several times over.
+원정을 도와 달라는 것이군요. 무엇을 찾으러 가려 하오?	So you want help with an expedition. What do you mean to go looking for?
+주님이 지으신 세상은 우리가 아는 것보다 훨씬 넓소.	The world the Lord made is far wider than we know.
+호오, 그렇다면 모험 목적을 말해 보게.	Oho. Then tell me the purpose of your venture.
+세상은 우리가 아는 것보다 훨씬 넓다네.	The world's a lot bigger than we know.
+@ 성문 옆 마구간에서 말·당나귀·마차를 구할 수 있지.	@ You can get horses, donkeys and wagons at the stables by the gate.
+그러고 보니 @	Come to think of it — @
+뜬소문일 수도 있지만, 해적이란 놈들은 한곳에 오래 머물지 않으니 가 보시려면 서두르시는 게 좋을 겁니다.	Could be just talk, but pirates never stay put for long — if you mean to go, you'd better hurry.
+수첩 「할 일」에 적었다 — @ 앞바다	Noted under "To Do" in your notebook — the waters off @
+@(와|과) @의 싸움이 바다로 번졌다. @에 화약 연기가 자욱하다고 한다.	The war between @ and @ has spilled onto the sea. They say the @ is thick with gunsmoke.
+@ 함대와 @ 함대가 @에서 맞붙었다는 소식이 들려온다.	Word is the @ fleet and the @ fleet have clashed in the @.
+@에서 @의 군함이 @의 배를 쫓아 포를 쏘았다고 한다.	They say in the {1}, a {2} warship chased down a ship of {3} and opened fire.
+@ 군함	@ warship
+교황령 함대	Papal fleet
+@(이|가) 술을 마시고 있다.	@ is having a drink.
+@에서 @(을|를) 판다고 한다.	They say they sell @ in @.
+@에서 훌륭한 @(을|를) 짠다고 한다.	They say they weave fine {2} in {1}.
+@에서 오래된 유물을 판다고 한다.	They say old relics are for sale in @.
+@ 이야기를 들을 수 있다	You can hear about @
+제독, 이것 좀 보십시오! 소문으로만 듣던 @입니다.	Admiral, look at this! It's the @ we've only ever heard about.
+제독, 저쪽을 보십시오! 소문으로만 듣던 @입니다.	Admiral, look over there! It's the @ we've only ever heard about.
+@에 처음으로 입항했다.	You docked at @ for the first time.
+@에 처음으로 성문을 지나 들어섰다.	You passed through the gates of @ for the first time.
+피렌체 학자가 보냈다는 편지 이야기가 뱃사람들 사이에 돌고 있네. @	There's talk among the sailors about a letter some Florentine scholar sent. @
+이 근처 바다에서 새로 목격된 괴물 소식은 없다.	No new monster sightings in these waters.
+기분 좋군!	That hits the spot!
+오늘은 해적 이야기가 없네요. 다들 날씨와 짐값 이야기뿐입니다.	No pirate talk today. Everyone's just going on about the weather and freight prices.
+그러고 보니 @ 시장에 「@」(이|가) 나왔다더군. 금화 #닢쯤 부른다던가. 진짜라면 왕이라도 탐낼 물건이지.	Come to think of it, I hear "{2}" has turned up at the {1} market. They're asking around {3} gold. If it's genuine, even a king would covet it.
+@에서 화산 분화가 일어났다.	A volcano erupted at @.
+새 항로 하나가 나라 하나보다 값질 때도 있지요.	Sometimes a single new route is worth more than a whole country.
+원정을 도와 달라는 말씀이군요. 무엇을 찾으러 가시려고요?	So you'd like help with an expedition. What are you hoping to find?
+세상은 우리가 아는 것보다 훨씬 넓겠지요.	The world must be far wider than we know.

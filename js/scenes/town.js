@@ -81,7 +81,7 @@
     sanmarco: 0.008, smmaggiore: 0.008, florenceduomo: 0.008, saintsernin: 0.008,
     edinburgh: 0.008, kyivsophia: 0.008, ironpagoda: 0.008, kinkakuji: 0.008,
     phrasisanphet: 0.008, vanmieu: 0.008, stpaulhill: 0.008, jokhang: 0.008,
-    dazhao: 0.008, suleymaniye: 0.008, ibntulun: 0.008};
+    dazhao: 0.008, suleymaniye: 0.008, ibntulun: 0.008, idkah: 0.038, karez: 0.038};
   var LANDMARK_HEIGHT = {
     pharos: 500, hwangnyong: 460, hagiasophia: 400, djenne: 370, delhimosque: 370,
     potala: 360, isfahanmosque: 380, rockdome: 350, notredame: 410, templomayor: 390,

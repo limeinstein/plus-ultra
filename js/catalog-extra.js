@@ -38,6 +38,12 @@
       note: '항해에서 겪은 이야기와 장면, 그 해까지 지나간 세계 소식을 다시 볼 수 있습니다.' });
     (G.CATALOG_SCENES || []).forEach(e => scene(events, { group: 'story', name: e.name, key: e.key, sub: e.story, text: e.text,
       facts: [['이야기', e.story]], hint: '모험 중 펼쳐지는 장면입니다. 사건의 진행에 따라 이 장면을 만나게 됩니다.' }));
+    (G.PRINCESS_STORIES || []).filter(p => p.title).forEach(p => {
+      [['clue', '발단', p.clue], ['rescue', '구출', p.found], ['return', '귀환', p.homecoming], ['wedding', '혼례', p.proposal]].forEach(([key, label, text]) => {
+        scene(events, { group: 'relations', name: p.title + ' · ' + label, sub: p.name, text, ar: '9 / 4',
+          key: 'events/princess/' + p.id + '_' + key, facts: [['왕녀', p.name], ['궁정', G.COURT.realms[p.realm].name]] });
+      });
+    });
     const at = { sea: '바다 위', tavern: '술집', return: '집에 돌아온 날', dock: '고향 부두', port: '항구', preg: '임신 소식', birth: '출산', home: '집', wed: '혼례' };
     const needs = { wife: '본처', wife2: '둘째 부인', lover: '애인', married: '혼인한 동반자', matewife: '동료였던 아내', maidwife: '여급이었던 아내', k1: '아이 한 명 이상', k2: '아이 두 명 이상', k3: '아이 세 명 이상', nokids: '아이 없음', girl: '딸', boy: '아들', small: '여덟 살 미만의 아이', big: '열두 살 이상의 아이', baby: '곁에 있는 갓난아기', preg: '임신', mate: '부관 동행', aboard: '아이 승선', second: '둘째 부인과 혼례', rich: '금화 1만 닢 초과', long: '150일 넘게 떠나 있었음', together: '동반자와 함께 귀향' };
     const needText = n => n.map(k => k[0] === '!' ? (needs[k.slice(1)] || k.slice(1)) + ' 조건이 아님' : needs[k] || k).join(' · ');

@@ -132,6 +132,12 @@
   POS.cookisles = { key: "map-discoveries/completion/cookisles", slot: 0, cols: 1, rows: 1 };
   // 2026-10-31 누락 외관 자동 등록 끝
 
+  // 초원·북유럽·시베리아 묶음에서 야외 외관이 있는 곳만 지도에 올린다.
+  (G.STEPPE_NORSE || []).forEach(function (id) {
+    var key = 'map-discoveries/completion/' + id;
+    if (G.Img && G.Img.has(key)) POS[id] = { key: key, slot: 0, cols: 1, rows: 1 };
+  });
+
   DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && POS[d.id]); };
   /* 지도 위에 남는 발견물 — 매 프레임 발견물 1,200여 개를 다 훑던 것(1~2ms)을 0.25초 동안 다시 쓴다 (항해 버벅임 2026-11-01) */
   var visMemo = null;

@@ -322,7 +322,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     });
     await shot;
     if (VERBOSE) console.log(JSON.stringify(r));
-    ok(/뭍으로 갑니다/.test(r.blocked) && r.teach && /당나귀와 떠난다.*빛남/.test(r.go) && r.land, '10 성문: 탈것 창에서 ' + r.go + ' → 뭍 · 라 코사·아라나가 걷기·「?」·야영을 일러 준다');
+    ok(/뭍으로 갑니다/.test(r.blocked) && r.teach && /당나귀(와| \d+필과) 떠난다.*빛남/.test(r.go) && r.land, '10 성문: 탈것 창에서 ' + r.go + ' → 뭍 · 라 코사·아라나가 걷기·「?」·야영을 일러 준다');
     ok(r.calls === '9:mountain,5:mountain' && r.gold > 0, '11 육상전: 도적 9명 — 지면 「약하게 하고 다시」(5명) → 승리 (대원 ' + r.crew + ', 금화 +' + r.gold + ')');
     ok(/^true:1:\d+:false$/.test(r.found) && +r.found.split(':')[2] > 0 && r.said === '111111', '12 발견: 헤라클레스의 동굴 (그 자리에서 명성 +' + r.found.split(':')[2] + ', 보고는 아직) · 대사 ' + r.said + ' · 뭍에서 ' + r.days + '일');
     ok(/출발지로 돌아간다/.test(r.glow), '13 귀환: 빛나는 단추 ' + r.glow);

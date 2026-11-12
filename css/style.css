@@ -357,6 +357,15 @@ table.tbl .up { color: #8a2a1e; } table.tbl .down { color: #2e6a36; }
 /* 만든 사람들·출처 (js/ui/credits.js) */
 .title-credits { pointer-events: auto; margin-top: 2px; padding: 2px 8px; border: 0; background: none; color: rgba(248,236,206,.62); font-family: var(--title-ko); font-size: 13px; letter-spacing: .06em; cursor: pointer; text-shadow: 0 1px 5px rgba(0,0,0,.95); }
 .title-credits:hover, .title-credits:focus-visible { color: #fff3cc; text-decoration: underline; }
+/* 언어 고르기 (js/core/i18n.js · title.js) — 오른쪽 위 모서리 */
+.title-lang { position: absolute; top: 22px; right: 26px; display: flex; align-items: center; gap: 8px; padding: 7px 14px; border: 1px solid rgba(248,236,206,.35); border-radius: 6px; background: rgba(20,14,8,.45); color: #f3e6c6; font-family: var(--serif); font-size: 17px; cursor: pointer; text-shadow: 0 1px 4px rgba(0,0,0,.9); }
+.title-lang:hover, .title-lang:focus-visible { background: rgba(40,28,14,.7); border-color: rgba(248,236,206,.7); }
+.title-lang .ic { width: 18px; height: 18px; }
+/* 한국어가 아닌 언어: 글이 길어지므로 타이틀 단추의 자간을 줄인다 */
+html:not([data-lang="ko"]) .title-menu .btn { letter-spacing: .01em; }
+html:not([data-lang="ko"]) .title-menu .title-row .btn { font-size: 18px; }
+/* 한국어가 아닌 언어: 영어 낱말이 칸 끝에서 아무 데서나 잘리지 않게 (#ui의 overflow-wrap:anywhere는 한글용) — 음절에서 하이픈으로 끊는다 (2026-11-12 영어 QA) */
+html:not([data-lang="ko"]) #ui { word-break: normal; overflow-wrap: break-word; -webkit-hyphens: auto; hyphens: auto; }
 .credits h4 { margin: 14px 0 6px; } .credits h4:first-child { margin-top: 0; }
 .credits-t { width: 100%; border-collapse: collapse; font-size: 15px; }
 .credits-t th { width: 32%; text-align: left; vertical-align: top; padding: 5px 10px 5px 0; font-weight: 700; }
@@ -1273,6 +1282,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .create .cr-skills .mini { width: 25px; height: 25px; font-size: 14px; }
 .create .statrow { margin: 3px 0; }
 .create .statrow.cr-stat { grid-template-columns: 70px 1fr 64px 30px 30px; gap: 6px; }
+html:not([data-lang="ko"]) .create .statrow.cr-stat { grid-template-columns: 96px 1fr 64px 30px 30px; }   /* Intelligence 같은 긴 낱말이 쪼개지지 않게 (2026-11-12 영어 QA) */
 .create .statrow .cr-bon { font-size: 12px; color: #2e6a3a; margin-left: 2px; }
 .create .cr-bonus { margin-top: 8px; font-size: 14px; line-height: 1.5; }
 .create .cr-bonus b { color: var(--ink); }
@@ -1478,6 +1488,7 @@ canvas.img-wait { background: linear-gradient(100deg, rgba(60,44,28,.35) 30%, rg
 .cmd.tut-glow::after, .choice.tut-glow::after, .btn.tut-glow::after, .hire-row.tut-glow::after, .todo .tr.tut-glow::after {
   content: '여기'; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); padding: 0 7px; font: 700 13px/20px var(--serif, serif); letter-spacing: 0;
   color: #04202e; background: #2fc6ff; border: 1px solid #0b3b52; border-radius: 10px; pointer-events: none; z-index: 3; box-shadow: 0 1px 3px rgba(0,0,0,.45); }
+html[data-lang="en"] .cmd.tut-glow::after, html[data-lang="en"] .choice.tut-glow::after, html[data-lang="en"] .btn.tut-glow::after, html[data-lang="en"] .hire-row.tut-glow::after, html[data-lang="en"] .todo .tr.tut-glow::after { content: 'Here'; }   /* CSS 글은 화면 번역이 닿지 않는다 (2026-11-12 영어 QA) */
 .btn.tut-glow::after { top: -10px; right: -8px; transform: none; }
 
 /* 생일 선물 (js/systems/lifespan.js) */

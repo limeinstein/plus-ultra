@@ -1,0 +1,120 @@
+{
+  "baseline": "8e8690c8882c05d3263609e2acc28ebb3d7ee615",
+  "rows": [
+    {
+      "id": "aleppomosque",
+      "slots": 0
+    },
+    {
+      "id": "alnuri",
+      "slots": 0
+    },
+    {
+      "id": "constbaths",
+      "slots": 0
+    },
+    {
+      "id": "manwoldae",
+      "slots": 0
+    },
+    {
+      "id": "septizodium",
+      "slots": 0
+    },
+    {
+      "id": "somnath",
+      "slots": 0
+    },
+    {
+      "id": "worcesterwall",
+      "slots": 0
+    }
+  ],
+  "acceptedEndings": [
+    {
+      "id": "folk_tibet",
+      "slot": 0,
+      "text": "숨이 조금 차요, 당신."
+    },
+    {
+      "id": "folk_hui",
+      "slot": 3,
+      "text": "경전은 아랍 글자로, 이야기는 한어로 한다니 두 세상을 잇는 사람들이군요."
+    },
+    {
+      "id": "folk_gaoshan",
+      "slot": 3,
+      "text": "섬 하나에 말이 여럿이라니, 큰 바다 사이 작은 땅에도 깊은 세상이 있군요."
+    },
+    {
+      "id": "folk_zhuang",
+      "slot": 0,
+      "text": "당신은 처음에 저한테 뭐라고 노래했었죠?"
+    },
+    {
+      "id": "folk_zhuang",
+      "slot": 3,
+      "text": "우리가 남기는 해도도 언젠가 그렇게 남겠지요."
+    },
+    {
+      "id": "folk_lolo",
+      "slot": 0,
+      "text": "우리 돛 기운 자리도 저렇게 예쁘면 좋을 텐데."
+    },
+    {
+      "id": "uppsala",
+      "slot": 3,
+      "text": "믿음은 바뀌어도 사람들이 모이는 자리는 그대로군요."
+    },
+    {
+      "id": "asbyrgi",
+      "slot": 3,
+      "text": "그 지혜 덕에 이 골짜기가 지켜져 왔겠지요."
+    },
+    {
+      "id": "lejre",
+      "slot": 1,
+      "text": "이건 바다에 띄우면 가라앉겠죠?"
+    },
+    {
+      "id": "oseberg",
+      "slot": 3,
+      "text": "우리 가문도 바다를 떠나서는 살 수 없겠지요."
+    },
+    {
+      "id": "mjolnir",
+      "slot": 3,
+      "text": "장사꾼의 지혜로군요."
+    },
+    {
+      "id": "nagyszentmiklos",
+      "slot": 2,
+      "text": "제가 먼저 읽어 내면 학자들이 깜짝 놀라겠죠?"
+    },
+    {
+      "id": "nagyszentmiklos",
+      "slot": 3,
+      "text": "칼을 쓰지 않고 지키는 것도 나라를 다스리는 길이지요."
+    },
+    {
+      "id": "khongoryn",
+      "slot": 1,
+      "text": "또 할래요, 또!"
+    },
+    {
+      "id": "otgontenger",
+      "slot": 2,
+      "text": "돌도 하나 얹었으니 우리 뱃길도 열어 주겠죠?"
+    },
+    {
+      "id": "idkah",
+      "slot": 2,
+      "text": "한 줌만 사 주세요, 네?"
+    },
+    {
+      "id": "amurleopard",
+      "slot": 1,
+      "text": "목도리 하면 따뜻하겠다."
+    }
+  ]
+}

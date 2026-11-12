@@ -21,7 +21,11 @@
   }
   C.fullName = fullName;
   /** 이름 목록의 「주앙 다 시우바」 → 이름 주앙, 성 다 시우바 */
-  function splitName(full) { var i = full.indexOf(' '); return i < 0 ? { given: full, surname: '' } : { given: full.slice(0, i), surname: full.slice(i + 1) }; }
+  function splitName(full) {
+    var i = full.indexOf(' '), n = i < 0 ? { given: full, surname: '' } : { given: full.slice(0, i), surname: full.slice(i + 1) };
+    if (G.N && G.I18N && !G.I18N.isKo()) { n.given = G.N(n.given); n.surname = n.surname && G.N(n.surname); }   // 한국어가 아닌 언어: 이름 목록의 이름도 그 언어로 (주앙 → João — 2026-11-12 영어 QA)
+    return n;
+  }
   function setName(full) { var n = splitName(full); p.given = n.given; p.surname = n.surname; p.name = fullName(p.given, p.surname); }
 
   function rollStats() {

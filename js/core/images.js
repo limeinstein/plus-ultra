@@ -838,11 +838,14 @@
   I.spreadCityMaids = spreadCityMaids;
   K.maidCity = function (c) { var k = I.maidPicCity(c); return k ? [k] : []; };
   K.maidCityHalf = function (c) { var k = I.maidPicCity(c); return k ? [k + '_half'] : []; };
+  /** 얼굴을 먼저 고른 뒤 그 얼굴의 무릎상만 쓴다. 짝이 없으면 대화창에서 얼굴상을 보여 준다. */
+  K.matchedHalf = function (faces) {
+    var face = I.pick(faces);
+    return face ? [face + '_half'] : [];
+  };
   /** 술집에 서 있는 여급의 전신(무릎까지) 그림 */
   K.maidHalf = function (id, c) {
-    var out = ['portraits/maids/' + id + '_half'], k = I.maidPic(id, c);
-    if (k) out.push(k + '_half');
-    return out;
+    return K.matchedHalf(K.maid(id, c));
   };
   /** 대화에서 쓰는 무릎상 (머리부터 무릎까지 서 있는 모습, 1024×1536, 투명) — 흉상 그림 이름 + _half.
       두 사람 다 무릎상이 있으면 대화창이 서 있는 모습으로 크게 바뀐다 (js/ui/ui.js dialogShell) */
@@ -876,6 +879,7 @@
   K.halfFor = function (chain) {
     chain = [].concat(chain || []);
     var out = [], picked = I.pick(chain);
+    if (picked && /^portraits\/pools\//.test(picked)) return [picked + '_half'];
     chain.forEach(function (k) { if (/^portraits\/(mates|sponsors|courtiers|maids|rivals|witches|fairy-tales|childhood-friends)\//.test(k) && !/_half$/.test(k)) out.push(k + '_half'); });
     if (picked && /^maid-styles\//.test(picked) && !/_half$/.test(picked)) out.push(picked + '_half');   // 이름 없는 그 고장 여급 (술집 여급 무릎상과 같은 그림)
     if (picked && /^portraits\/(npc|npc-roles)\//.test(picked)) {

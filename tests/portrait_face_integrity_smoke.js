@@ -24,7 +24,7 @@ const BROWSER = process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Appli
       if (m.type() === 'error' && !/Failed to load resource|fonts\.|net::/.test(m.text())) errors.push(m.text());
     });
     await page.route(/https:\/\/fonts\.(googleapis|gstatic)\.com\//, r => r.fulfill({ status: 200, contentType: 'text/css', body: '' }));
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'load', timeout: 120000 });
+    await page.goto((process.env.WEB_BASE && new URL('index.html', process.env.WEB_BASE).href) || pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'load', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && !G.Loader.shown(), null, { timeout: 120000 });
 
     await page.evaluate(async () => {
@@ -79,16 +79,17 @@ const BROWSER = process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Appli
     }
 
     const knee = await probe(false);
-    assert.strictEqual(knee.tall, 0, '전령의 옛 합성 무릎상은 표시하지 않음');
-    assert.strictEqual(knee.bust, 2, '옛 합성본이 포함된 장면은 두 사람 모두 원래 얼굴상');
-    assert(knee.actors.every(a => a.single && a.pieces === 0), '얼굴상도 원본 한 장만 표시');
-    assert(knee.actors.some(a => /portraits\/player\/navigator_white\.(png|webp)/.test(a.src)), '선택한 제독 얼굴 유지');
-    assert(knee.actors.some(a => /portraits\/pools\/sponsors\/es\/m\/02\.webp/.test(a.src)), '라코루냐 왕실 전령은 같은 인물의 얼굴 유지');
+    assert.strictEqual(knee.tall, 2, '복원한 전령과 제독의 무릎상');
+    assert.strictEqual(knee.bust, 0);
+    assert(knee.actors.every(a => a.single && a.pieces === 0), '무릎상 원화 한 장만 표시');
+    assert(knee.actors.some(a => /portraits\/pools\/sponsors\/es\/m\/02_half\.webp/.test(a.src)), '라코루냐 왕실 전령의 복원한 무릎상');
 
     const bust = await probe(true);
     assert.strictEqual(bust.tall, 0, '대체 장면은 무릎상 없음');
     assert.strictEqual(bust.bust, 2, '대체 장면은 얼굴상 둘');
     assert(bust.actors.every(a => a.single && a.pieces === 0), '얼굴상도 원본 한 장만 표시');
+    assert(bust.actors.some(a => /portraits\/player\/navigator_white\.(png|webp)/.test(a.src)), '선택한 제독 얼굴 유지');
+    assert(bust.actors.some(a => /portraits\/pools\/sponsors\/es\/m\/02\.webp/.test(a.src)), '전령의 기존 얼굴 유지');
     assert.deepStrictEqual(errors, [], '콘솔 오류 0');
     console.log(JSON.stringify({ knee, bust, errors }, null, 2));
   } finally {

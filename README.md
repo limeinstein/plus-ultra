@@ -1,5 +1,9 @@
 # Loop of Good Hope — 더 먼 바다로
 
+## 새 발견 장면·누락 증빙 원화 375종 (2026-11-11 추가 자료)
+
+북유럽·초원·몽골·위구르·시베리아의 발견 장면 42종, 유물 289종, 발견 증거 지도 18종과 구입 단서 26종을 내장 ImageGen으로 그려 연결했다. 전체 발견물 1,292종·유물 1,136종과 증거품을 조사해 이미지 연결 누락 0건을 확인했다. [전체 그림](artifacts/discovery-art-20261111/report.html) · [원본·제작 지시문·검증 기록](docs/art/discovery-art-20261111.md). 시험: `python tests/discovery_art_20261111_files.py --raw`, `node tests/discovery_art_20261111_smoke.cjs`.
+
 ## 새 소지품 원화 43종 (2026-11-11)
 
 전설 갑옷 5종·소중한 물건 16종·서적과 해도 2종·사건 물품 20종에 256×256 투명 전용 그림을 추가했다. 소지품·도감 표시와 콘솔 오류 0건을 확인했다. [전체 미리보기·원본·생성 프롬프트·검증](docs/art/new-item-art-20261111.md). 시험: `node tests/new_item_art_20261111_smoke.cjs`.

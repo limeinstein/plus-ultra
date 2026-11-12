@@ -42,9 +42,16 @@
   D.density = function () { var g = G.Game || {}; return (g.scale || 1) * (window.devicePixelRatio || 1) * (g.uiZoom || 1); };
   /** DEFAULT 글꼴: 화소가 넉넉하면(4K·레티나) 나눔명조, 아니면(27인치 FHD·QHD) 획 굵기가 고른 본명조 */
   D.AUTO_SHARP = 1.8;
-  D.fontNow = function () { var p = D.fontPref(); if (p !== 'auto') return fontById(p); return fontById(D.density() >= D.AUTO_SHARP ? 'nanum' : 'notoserif'); };
+  D.fontNow = function () {
+    var p = D.fontPref(), f = p !== 'auto' ? fontById(p) : fontById(D.density() >= D.AUTO_SHARP ? 'nanum' : 'notoserif');
+    // 한국어가 아닌 언어: 그 언어의 글꼴을 앞에 두고, 아직 옮기지 못한 한국어 글은 고른 한국어 글꼴로 (js/core/i18n.js)
+    var L = G.I18N && G.I18N.info(G.I18N.lang);
+    if (L && L.font) return { id: 'lang-' + L.id, label: L.font.name || L.label, note: '', css: L.font.css, stack: L.font.stack + ', ' + f.stack, weight: 400, ko: f };
+    return f;
+  };
   var loaded = {};
   function loadCss(f) {
+    if (f.ko) loadCss(f.ko);   // 한국어 글꼴도 함께 (아직 옮기지 못한 글)
     if (!f.css || loaded[f.id]) return;
     loaded[f.id] = true;
     var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = f.css; l.dataset.font = f.id;
@@ -72,10 +79,15 @@
   D.panelHtml = function () {
     var g = G.Game || {}, size = g.uiSizePref ? g.uiSizePref() : 'auto', font = D.fontPref(), now = D.fontNow(), ren = D.render();
     var esc = G.U ? G.U.esc : function (s) { return s; };
-    return '<div>글자 크기</div><div><div class="opt-row">' + D.SIZES.map(function (o) { return opt('data-dsz', o.id, size === o.id, o.label, o.note || Math.round(o.k * 100) + '%'); }).join('') + '</div>' +
+    var I = G.I18N, lang = I ? I.lang : 'ko';
+    var langRow = I ? '<div>언어 · Language</div><div><div class="opt-row">' + I.LANGS.map(function (l) {
+      var ok = I.ready(l.id);
+      return '<div class="opt' + (lang === l.id ? ' on' : '') + (ok ? '' : ' dim') + '" data-dlang="' + l.id + '" translate="no" title="' + (ok ? l.label : l.label + ' — 번역 준비 중 · in preparation') + '">' + l.label + (ok ? '' : ' <small>…</small>') + '</div>';
+    }).join('') + '</div><small class="muted">이 기기에만 기억합니다. 바뀐 언어는 다시 그리는 화면부터 보입니다.</small></div>' : '';
+    return langRow + '<div>글자 크기</div><div><div class="opt-row">' + D.SIZES.map(function (o) { return opt('data-dsz', o.id, size === o.id, o.label, o.note || Math.round(o.k * 100) + '%'); }).join('') + '</div>' +
       '<small class="muted">지금 ' + Math.round((g.uiZoom || 1) * 100) + '% — DEFAULT는 모니터 크기와 화소 밀도에 맞춰 정합니다. 창·메뉴도 함께 커지고 작아집니다 (이 기기에만 기억)</small></div>' +
-      '<div>글꼴</div><div><div class="opt-row">' + D.FONTS.map(function (f) { return opt('data-dfont', f.id, font === f.id, f.id === 'auto' ? f.label : '<span style="font-family:' + esc(f.stack).replace(/"/g, '&quot;') + '">' + f.label + '</span>', f.note); }).join('') + '</div>' +
-      '<small class="muted">지금 「' + now.label + '」 — ' + (font === 'auto' ? '화면이 촘촘하면 나눔명조, 27인치 FHD·QHD처럼 성기면 획이 고른 본명조를 씁니다' : esc(now.note)) + '</small></div>' +
+      (now.ko ? '<div>글꼴</div><div><small class="muted">「' + now.label + '」 글꼴을 씁니다 (한국어 글꼴: ' + now.ko.label + ')</small></div>' : '<div>글꼴</div><div><div class="opt-row">' + D.FONTS.map(function (f) { return opt('data-dfont', f.id, font === f.id, f.id === 'auto' ? f.label : '<span style="font-family:' + esc(f.stack).replace(/"/g, '&quot;') + '">' + f.label + '</span>', f.note); }).join('') + '</div>' +
+      '<small class="muted">지금 「' + now.label + '」 — ' + (font === 'auto' ? '화면이 촘촘하면 나눔명조, 27인치 FHD·QHD처럼 성기면 획이 고른 본명조를 씁니다' : esc(now.note)) + '</small></div>') +
       (D.zoomOk() ? '<div>글씨 렌더링</div><div><div class="opt-row">' + opt('data-dren', 'sharp', ren === 'sharp', '선명하게') + opt('data-dren', 'classic', ren === 'classic', '예전 방식') + '</div>' +
         '<small class="muted">선명하게: 글씨를 모니터의 실제 크기로 다시 그립니다 (기본) · 예전 방식: 화면을 통째로 늘립니다</small></div>' : '');
   };
@@ -85,6 +97,11 @@
     U.$$('[data-dsz]', el).forEach(function (o) { o.onclick = function () { if (G.Game.setUiSize) G.Game.setUiSize(o.dataset.dsz); D.applyFont(); redraw(); }; });
     U.$$('[data-dfont]', el).forEach(function (o) { o.onclick = function () { D.setFont(o.dataset.dfont); redraw(); }; });
     U.$$('[data-dren]', el).forEach(function (o) { o.onclick = function () { D.setRender(o.dataset.dren); D.applyFont(); redraw(); }; });
+    U.$$('[data-dlang]', el).forEach(function (o) { o.onclick = function () {
+      var id = o.dataset.dlang; if (!G.I18N || id === G.I18N.lang) return;
+      if (!G.I18N.ready(id)) { if (G.UI && G.UI.toast) G.UI.toast(G.T('이 언어는 번역을 준비하는 중입니다.'), 'info', 3200); return; }
+      G.I18N.set(id); D.langChanged = true; redraw();
+    }; });
   };
   /** 타이틀에서 여는 「화면·글꼴」 창 */
   D.open = function () {
@@ -97,7 +114,12 @@
       D.bind(el, draw);
     }
     draw();
-    return win.result;
+    D.langChanged = false;
+    return win.result.then(function (v) {   // 타이틀에서 언어를 바꿨으면 첫 화면을 다시 그린다
+      if (D.langChanged && G.Game && G.Game.sceneName === 'title') G.Game.go('title');
+      D.langChanged = false;
+      return v;
+    });
   };
 
   // 화면 배율(DPR)이 바뀌면(창을 다른 모니터로 옮기면) 다시 맞춘다 — resize가 오지 않는 브라우저도 있다

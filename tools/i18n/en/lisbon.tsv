@@ -1,0 +1,100 @@
+/(.+?) ([\d]+)세/	⟦$1⟧ ⟪R$2⟫
+/(.+?) 회장님/	Chairman ⟦$1⟧
+/(.+?) 왕비 전하/	Queen ⟦$1⟧
+/(.+?) 전하/	His Highness ⟦$1⟧
+/(.+?) 박사님/	Dr. ⟦$1⟧
+/(.+?) 상관장 각하/	His Excellency the Factor of ⟦$1⟧
+/(.+?) 상관장/	Factor of ⟦$1⟧
+기함 @호	Flagship @
+바칼라우 외 #가지	Bacalhau and # more
+@ · @ (세력 @ · 성품 @)	@ · @ (faction @ · temperament @)
+우주지 학자	Cosmographer
+모험 제안	Propose a Voyage
+보고	Report
+이야기	Talk
+해도 보고	Present Charts
+새로 그린 해도가 아직 적다	Not enough newly drawn charts yet
+해도 보고 — 새로 그린 해도가 아직 적다	Present Charts — not enough newly drawn charts yet
+저택을 나온다	Leave the Mansion
+실패	Failed
+작은 일거리 — @	Small Job — @
+보수 #닢 · 명성 +#	Pay # gold · fame +#
+보수 #닢	Pay # gold
+@: 출항할 때에는 말해 주십시오. 곧 준비하겠습니다.	@: Just say the word when you want to sail. We'll be ready in no time.
+@: 모항에 돌아오면 안심되는군요.	@: Feels good to be back in the home port.
+@: 제독, 이 마을에서 잠깐 쉽시다.	@: Admiral, let's take a breather in this town.
+@: 배는 잘 정박해 두었습니다.	@: The ships are safely moored.
+제독이 호위할 배를 찾는다는 말을 교역소 주인에게 들었소. 나는 @, @ 한 척으로 장사하는 사람이오.	The trading post owner tells me you're looking for a ship to escort, Admiral. Name's @ — I trade with a single @.
+@호	@
+저쪽 구석에서 해도를 펼쳐 놓은 사내 보이나? 제노바에서 온 크리스토발 콜론이라는 자일세. 페레스트렐루 집안 딸과 혼인해 리스본에 눌러앉았지. 제 배를 꾸려 다니는 사람이라 남의 밑에서 일하지는 않을 걸세.	See that fellow in the corner with the charts spread out? Name's Cristóbal Colón, from Genoa. Married a daughter of the Perestrelo family and settled down in Lisbon. He runs his own ship, so he won't work under anyone else.
+부두의 늙은 선원들이 입을 모아 말하더군. @	The old sailors on the docks all say the same thing: @
+장사꾼들이 이 자리에서 떠드는 걸 들었네만—	I heard the traders chattering right here—
+@ — 호감 @	@ — Affection @
+일손이 필요하긴 해요. 부엌일과 장작 패기를 해 주시면 품삯을 드릴게요. (일하는 동안 @(을|를) 익힐 수 있지만, 바다의 제독이 허드렛일을 한다는 소문에 하루에 명성이 #씩 내려갑니다)	We could use a hand, actually. Help in the kitchen and chop some firewood and I'll pay you. (You can pick up {1} while you work, but rumors of a sea admiral doing odd jobs will cost you {2} fame a day)
+마침 일손이 모자라던 참입니다. 부엌일과 장작 패기를 해 주시면 품삯을 드리지요. (일하는 동안 @(을|를) 익힐 수 있지만, 바다의 제독이 허드렛일을 한다는 소문에 하루에 명성이 #씩 내려갑니다)	As it happens we're short-handed. Help in the kitchen and chop some firewood and I'll pay you a wage. (You can pick up {1} while you work, but rumors of a sea admiral doing odd jobs will cost you {2} fame a day)
+별로 위도를 잰다. 위도만 표시된다.	Measures latitude by the stars. Shows latitude only.
+배에 사는 쥐를 잡아 식량을 지킨다.	Catches the ship's rats and protects the food stores.
+고운 빛깔의 리본.	A ribbon in a lovely color.
+청혼할 때 건네는 반지.	A ring to give when you propose.
+몸에 고정하는 받침과 울림줄을 갖춘 행진용 작은북. 두 채로 또렷한 장단을 치며 대열의 걸음을 맞춘다.	A marching snare drum with a body harness and snares. Two sticks beat a crisp rhythm to keep the ranks in step.
+작은 조개 모양 나무판 두 쌍. 손가락에 걸고 맞부딪쳐 이베리아 춤의 박자를 맞춘다.	Two pairs of small shell-shaped wooden clappers. Hooked on the fingers and clicked together to keep time for Iberian dances.
+둥글게 부푼 나무 몸통과 뒤로 꺾인 줄감개를 가진 현악기. 노래 반주에 어울린다.	A stringed instrument with a rounded wooden body and a bent-back pegbox. Perfect for accompanying songs.
+폼포니우스 멜라 『지지』	Pomponius Mela, De Chorographia
+원정을 후원해 달라? 좋소, 무엇을 찾으러 가겠다는 것이오?	Sponsor your expedition? Very well — what do you mean to go after?
+@ 사이에서 @(이|가) 유행이다. @ 말로는 @ 값이 @ 올랐다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	There's a craze for {2} among {1}. {3} say {4} prices have gone up {5}, and the craze won't die down for {6}.
+베네치아·제노바의 부자들	the rich of Venice and Genoa
+지중해 상인들	Mediterranean merchants
+@에서 지진이 일어났다.	An earthquake struck @.
+이탈리아	Italy
+원정 자금 말씀이시군요. 무엇을 찾으러 가시는지부터 들어 보지요.	Expedition funding, is it? Let's start with what you're going after.
+조급함	Impatient
+기한을 짧게 잡고 늦으면 크게 깎는다. 대신 선금이 후하다.	Sets short deadlines and docks you heavily if you're late. But the advance is generous.
+별 용건이 없으시면 이만. 저도 장부를 봐야 해서요.	If there's nothing else, I'll leave it there. I've got my ledgers to see to.
+나리와 맺은 계약은 없는 것 같습니다만?	I don't believe we have any contract with you, sir?
+/저는 (.+?)에 관한 이야기라면 언제든 귀가 솔깃합니다\./	My ears always prick up at anything about ⟦$1⟧.
+돈보다 귀한 건 남보다 먼저 아는 소식입니다.	More precious than money is news you hear before anyone else.
+오래 기다리셨습니다. 제가 @의 집사입니다. 무기는 여기서 보관하겠습니다. 그러면 안으로 들어가십시오.	Thank you for waiting. I'm @'s steward. I'll keep your weapons here. Please, go on in.
+허허, 그대가 요즘 소문난 항해자로구려. 바다에서 본 것을 들려주러 왔소?	Ho ho, so you're the navigator everyone's talking about. Come to tell me what you've seen at sea?
+허허, 그 목적부터 들어 봅시다.	Ho ho, let's hear the purpose first.
+용건이 없다면 나는 다시 책으로 돌아가겠소.	If there's no business, I'll return to my books.
+그대와 약속한 일은 없는 것 같은데?	I don't believe we had any agreement?
+/나는 (.+?)에 관한 이야기라면 언제든 귀를 기울이오\./	I'm always ready to hear about ⟦$1⟧.
+금보다 귀한 것은 새로운 지식이오.	More precious than gold is new knowledge.
+돈보다 귀한 것은 새로운 지식일세.	More precious than money is new knowledge.
+이 해도는 지난번에 본 것과 거의 같군요. 새 바다를 더 그리거나, 지나온 바다를 다시 지나며 강·산·지형까지 채워 오십시오.	This chart is almost the same as the one I saw last time. Chart new seas, or sail the old ones again and fill in the rivers, mountains and terrain.
+주인께서는 만나실 수 없지만, 믿을 만한 항해자에게 맡길 작은 일이 있다고 하셨습니다. 해내시면 주인께 말씀드려 두지요.	My master can't see you, but said there's a small job for a trustworthy navigator. Do it well and I'll put in a word with my master.
+「@」 소문 확인	Check the Rumor: "@"
+요즘 이런 소문이 도네. @ 정말인지 가서 확인해 오게. — 기한 #년, 선금 #닢	There's a rumor going round these days: {1} Go and see if it's true. — deadline {2} years, advance {3} gold
+@ @쪽 @ 해도	Chart of the {3} {2} of {1}
+@ 북위 #° · 서경 #° 부근의 물길과 바람을 살펴 해도를 그려 오게. (#° 거리) — 기한 #년, 선금 #닢	Survey the currents and winds of the {1} around {2}°N, {3}°W and bring back a chart. ({4}° away) — deadline {5} years, advance {6} gold
+@ #통 조달	Procure # barrels of @
+이곳에서는 @(을|를) 구하기 어렵네. @ 같은 곳에서 #통만 사다 주게. 값은 넉넉히 치르겠네. — 기한 #년	{1} are hard to come by here. Buy me {3} barrels somewhere like {2}. I'll pay you well. — deadline {4} years
+주인께서 믿을 만한 항해자에게 맡기시려는 일입니다. 해내시면 주인께 이름이 알려질 것입니다.	This is a job my master wishes to entrust to a reliable navigator. Do it well and your name will reach my master's ears.
+알겠습니다. 마음이 바뀌시면 다시 오십시오.	Very well. Come back if you change your mind.
+어디 들어 볼까요. 무엇을 찾고 싶으신가요?	Let's hear it. What would you like to go looking for?
+용건이 없으시다면 오늘은 이만 하지요.	If you have no business, let's leave it there for today.
+당신과 약속한 일은 없는 것 같은데요?	I don't think we had any arrangement?
+/나는 (.+?)에 관한 이야기라면 언제든 듣고 싶어요\./	I always love hearing about ⟦$1⟧.
+보석보다 귀한 건 새로운 이야기예요.	A new story is worth more than jewels.
+<b>이 근해의 해적선 #척을 쳐부순다</b> <small class="muted">해적 퇴치</small>	<b>Defeat # pirate ships in these waters</b> <small class="muted">Pirate Hunt</small>
+<b>@(을|를) @까지 모신다</b> <small class="muted">사람 이송</small>	<b>Escort @ to @</b> <small class="muted">Passenger</small>
+<b>해안에 묻힌 보물 (지도)</b> <small class="muted">보물 찾기</small>	<b>Treasure Buried on a Coast (map)</b> <small class="muted">Treasure Hunt</small>
+해적 퇴치	Pirate Hunt
+보물 찾기	Treasure Hunt
+@ 영토 · 국왕 @	@ territory · Monarch @
+누르면 @의 이야기	Click to hear @
+상인 @	Merchant @
+여관 안주인	Innkeeper
+신부	Priest
+@ · @(을|를) 떠돎 · #~#년	@ · roams @ · #–#
+@ · @(을|를) 떠돎 · #~#년 ·	@ · roams @ · #–# ·
+남자	Male
+여자	Female
+나는 모름	You: none
+고용 불가	Can't hire
+· @ @호 (짐칸 #통)	· @ @ (hold # barrels)
+목재 시장	Timber market
+배값 #% 할인 · 사업 투자 #등급	Ships #% off · business investment tier #
+이 도시 사업에 더 투자하면(#등급) 가까운 고장의 목재를, 더 많이(#등급) 투자하면 세계 각지의 목재를 들여올 수 있네.	Invest more in this town's projects (tier #) and I can bring in timber from nearby regions; invest more still (tier #) and timber from all over the world.
+선불이에요. 하룻밤에 금화 #닢인데, 며칠 묵으시겠어요?	It's paid in advance. # gold a night — how many nights will you stay?
+@에게 말을 건다	Talk to @

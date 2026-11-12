@@ -392,7 +392,7 @@
       if (G.Escort && f.trade) out = out.concat(G.Escort.todo(c));   // 교역소에서 호위를 청하는 상인
       if (G.Company) out = out.concat(G.Company.todo(c));   // 특허 회사: 주문서 납품 · 임무 보고 · 승진 심사
       if (G.WangMoon && G.WangMoon.todo) out = out.concat(G.WangMoon.todo(c));
-      if (G.Princess && f.palace) out = out.concat(G.Princess.todo(c));
+      if (G.Princess) out = out.concat(G.Princess.todo(c));
       if (G.Medici) out = out.concat(G.Medici.todo(c));   // 메디치 은행의 위기: 빚쟁이 · 잉글랜드 국왕 · 로렌초에게 전한다
       if (G.Story && G.Story.todo) out = G.Story.todo(c).concat(out);   // 이야기 모드: 아버지의 흔적 — 다음 갈 곳 (맨 위에)
       if (G.Colony) out = out.concat(G.Colony.todo(c));   // 개척 도시: 물자 · 국왕의 부름   // 사라진 왕녀: 부르심 · 모셔 간다

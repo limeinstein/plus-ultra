@@ -49,7 +49,7 @@ def inline(s):
 def table(rows):
     cells = [[c.strip() for c in r.strip().strip('|').split('|')] for r in rows]
     head, body = cells[0], [r for r in cells[2:]]
-    cls = 'gb-table gb-legend' if head and head[0] in ('번호', '#') else 'gb-table'
+    cls = 'gb-table gb-legend' if head and head[0] in ('번호', '#', 'No.') else 'gb-table'
     h = '<table class="%s"><thead><tr>' % cls + ''.join('<th>%s</th>' % inline(c) for c in head) + '</tr></thead><tbody>'
     for r in body:
         tds = ['<td>%s</td>' % inline(c) for c in r]
@@ -126,8 +126,8 @@ def block_html(lines):
     return '\n'.join(out)
 
 
-def main():
-    src = open(SRC, encoding='utf-8').read()
+def build(path):
+    src = open(path, encoding='utf-8').read()
     src = re.sub(r'<!--.*?-->', '', src, flags=re.S)
     chapters, cur = [], None
     for ln in src.split('\n'):
@@ -142,15 +142,36 @@ def main():
         body = block_html(ch['lines'])
         keys.update(re.findall(r'data-gk="([^"]+)"', body))
         data.append({'id': 'c%d' % (k + 1), 'title': ch['title'], 'secs': secs, 'html': body})
+    return data, keys
+
+
+# 다른 말 원고: docs/guidebook.<말>.md → G.GUIDEBOOK_I18N[말] (장·쪽 차례와 그림은 한국어 원고와 같게 둔다 — 2026-11-12 영어)
+LANGS = {'en': 'Loop of Good Hope Play Guidebook'}
+
+
+def main():
+    data, keys = build(SRC)
+    extra = {}
+    for lg, title in LANGS.items():
+        p = os.path.join(ROOT, 'docs', 'guidebook.%s.md' % lg)
+        if not os.path.exists(p):
+            continue
+        d2, k2 = build(p)
+        keys.update(k2)
+        if [len(c['secs']) for c in d2] != [len(c['secs']) for c in data]:
+            print('주의: %s 원고의 장·쪽 수가 한국어와 다릅니다' % lg)
+        extra[lg] = {'title': title, 'chapters': d2}
     missing = [k for k in sorted(keys) if not any(os.path.exists(os.path.join(ROOT, 'images', k + e)) for e in ('.webp', '.jpg', '.png'))]
-    js = ('/* 자동 생성 파일입니다 — 원고는 docs/guidebook.md. 고친 뒤 python tools/guidebook/build.py 로 다시 만든다.\n'
+    js = ('/* 자동 생성 파일입니다 — 원고는 docs/guidebook.md (영어: docs/guidebook.en.md). 고친 뒤 python tools/guidebook/build.py 로 다시 만든다.\n'
           '   게임 안 「플레이 가이드북」(조작 안내 → 플레이 가이드북, js/ui/guidebook.js)의 장(章)들. 그림은 images/guide/ (G.Img 키 data-gk) */\n'
           'window.G = window.G || {};\nG.GUIDEBOOK = {\n  title: %s,\n  chapters: %s\n};\n') % (
         json.dumps('Loop of Good Hope 플레이 가이드북', ensure_ascii=False),
         json.dumps(data, ensure_ascii=False, indent=1))
+    if extra:
+        js += 'G.GUIDEBOOK_I18N = %s;\n' % json.dumps(extra, ensure_ascii=False, indent=1)
     with open(OUT, 'w', encoding='utf-8', newline='\n') as f:
         f.write(js)
-    print('가이드북 %d장 · 그림 %d장 → js/data/guidebook.js' % (len(data), len(keys)))
+    print('가이드북 %d장 · 그림 %d장 → js/data/guidebook.js%s' % (len(data), len(keys), (' · ' + ', '.join(extra)) if extra else ''))
     if missing:
         print('그림 파일이 없습니다:', ', '.join(missing))
         sys.exit(1)

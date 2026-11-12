@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.328';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.329';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
   var bootPending = false;   // 처음 열 때의 불러오는 그림이 아직 준비 단계를 밟는 중 (타이틀을 떠나면 바로 걷는다 — T.exit)
 
@@ -26,6 +26,11 @@
       (window.PU_WEB_CHANNEL === 'beta' ? '<a class="title-beta-center" href="center/">베타 안내 · 피드백</a>' : '') +
       (G.Credits ? '<button type="button" class="title-credits">만든 사람들 · 출처</button>' : '') + '</div>';   // js/ui/credits.js (2026-11-04)
     UI.add(wrap);
+    if (G.I18N) {   // 언어 (js/core/i18n.js, 2026-11-12) — 오른쪽 위 모서리 (단추 줄이 길어지지 않게)
+      var bLang = U.el('button', 'title-lang', G.icon('globe') + '<span translate="no">' + U.esc((G.I18N.info(G.I18N.lang) || {}).label || '') + '</span>');
+      bLang.type = 'button'; bLang.title = 'Language · 언어'; bLang.onclick = function () { if (!UI.busy()) T.langMenu(); };
+      wrap.appendChild(bLang);
+    }
     var bCred = wrap.querySelector('.title-credits'); if (bCred) bCred.onclick = function () { if (!UI.busy()) G.Credits.open(); };
     var menu = wrap.querySelector('.title-menu');
     function btn(label, icon, fn, cls) { var b = U.el('button', 'btn ' + (cls || ''), G.icon(icon) + label); b.onclick = fn; menu.appendChild(b); return b; }
@@ -51,6 +56,7 @@
     if (G.Display) {   // 글자 크기·글꼴 (js/ui/display.js) — 조작 안내와 한 줄에 나란히 (단추가 늘어 화면 밑으로 밀리지 않게)
       var row = U.el('div', 'title-row'); menu.insertBefore(row, bHelp); row.appendChild(bHelp);
       var bDisp = btn('화면 · 글꼴', 'gear', function () { G.Display.open(); }); row.appendChild(bDisp);
+
     }
     bLoad.classList.add('disabled');
     bNew.classList.add('disabled'); bLoad.dataset.wait = '1'; if (bCont) bCont.classList.add('disabled');
@@ -135,8 +141,8 @@
     var gb = G.GUIDEBOOK && G.Guidebook;   // 플레이 가이드북 (js/ui/guidebook.js) — 이 창 맨 위 카드와 아래 단추로 연다
     UI.window({ title: '조작 안내', icon: 'info', width: 900, html:
       (gb ? '<div class="help-guide"><img class="hg-pic" alt=""><div><div class="hg-t">' + G.icon('book') + ' 플레이 가이드북 펼치기</div>' +
-        '<div class="hg-s">처음 바다에 나서는 제독을 위한 안내서 — 시작하기 · 도시 · 항해 · 교역 · 모험과 발견 · 전투 · 사람들 · 즐길거리 · 초보 선장을 위한 팁. 게임 화면 그림 ' + G.GUIDEBOOK.chapters.reduce(function (n, c) { return n + (c.html.match(/data-gk=/g) || []).length; }, 0) + '장과 함께 ' + G.GUIDEBOOK.chapters.length + '장으로 엮었습니다.</div></div></div>' : '') +
-      '<div style="font-size:17px;line-height:1.75">' +
+        '<div class="hg-s">' + G.T('처음 바다에 나서는 제독을 위한 안내서 — 시작하기 · 도시 · 항해 · 교역 · 모험과 발견 · 전투 · 사람들 · 즐길거리 · 초보 선장을 위한 팁. 게임 화면 그림 {pics}장과 함께 {ch}장으로 엮었습니다.', { pics: G.GUIDEBOOK.chapters.reduce(function (n, c) { return n + (c.html.match(/data-gk=/g) || []).length; }, 0), ch: G.GUIDEBOOK.chapters.length }) + '</div></div></div>' : '') +
+      G.T('<div style="font-size:17px;line-height:1.75">' +
       '<b>목표</b> — 도서관·술집·교역소에서 발견물의 <b>단서</b>를 모아 왕궁이나 저택의 <b>후원자</b>에게 모험을 제안합니다. 계약을 맺고 기한 안에 목적지를 찾아 보고하면 사례금과 <b>명성</b>을 얻습니다. 명성이 오르면 더 큰 후원자와 동료를 만날 수 있습니다.<div class="sep"></div>' +
       '<b>도시</b> — 오른쪽 메뉴에서 건물을 고릅니다. 메뉴와 선택창은 기본 ↑↓로 이동하고 Enter·Space로 고르며 Esc로 닫습니다. 항구: 출항·보급·함대편성 / 교역소: 매매·값 깎기 / 조선소: 배 구입·수리·개조 / 술집: 선원 모집·정보·동료·여급·포카 / 여관: 숙박·저장 / 성문: 육상 탐험.<br>' +
       '<b>항해</b> — 바다를 클릭하면 뱃길을 찾아 나아갑니다. 도시 표시를 클릭하면 그 항구로 향하고 도착하면 입항합니다.<br>' +
@@ -151,7 +157,7 @@
       '<b>해전</b> — 방향키로 기함을 그 방위로 몰고 기본 Space로 세웁니다. 바다를 클릭해 그곳으로 움직이고, 적함을 클릭하면 따라붙어 공격합니다. 옆구리를 적에게 향해야 포격합니다(현측에 든 적에게는 알아서 쏩니다). 가까이 붙어 B 키로 백병전을 겁니다. P는 일시정지. 배마다 번호가 붙고 <b>1번이 기함</b> — 적 기함을 가라앉히거나 나포하면 이기고, 우리 기함을 잃으면 집니다.<br>' +
       '<b>일기토</b> — 갑판(술집) 위에서 두 사람이 겨룹니다. 먼저 <b>방침</b>(1 결사돌진 · 2 강력공격 · 3 절대생포 · 4 호신중시)을 고르면 무력·검술에 따라 합이 저절로 오갑니다. 합마다 <b>다음 수</b>(0 자동 · 1 베기 · 2 찌르기 · 3 치기)를 고를 수 있고, 찌르기 → 베기 → 치기 → 찌르기로 화살표 쪽을 이깁니다(상대가 노리는 수는 검술이 높을수록 잘 읽힘). 기세가 차면 <b>기술</b>(일격필살·선제공격·측면공격·생포·거짓퇴각·비밀무기·유인·교체·설득·허보·호통·필살기)을 씁니다. Space 멈춤 · Esc 물러서기.<br>' +
       '<b>저장</b> — 플레이 중 1분마다 자동 저장되며, 5칸이 차면 가장 오래된 기록부터 갱신됩니다. 여관의 「기능」에는 자동 저장과 별개인 항해 일지 5칸이 있습니다.' +
-      '</div>', buttons: (gb ? [{ label: '플레이 가이드북', icon: 'book', cls: 'navy', onClick: function () { G.Guidebook.open(); return false; } }] : []).concat([{ label: '닫기', value: 1 }]),
+      '</div>'), buttons: (gb ? [{ label: '플레이 가이드북', icon: 'book', cls: 'navy', onClick: function () { G.Guidebook.open(); return false; } }] : []).concat([{ label: '닫기', value: 1 }]),
       onBuild: function (el) {
         var card = el.querySelector('.help-guide'); if (!card) return;
         card.onclick = function () { G.Guidebook.open(); };
@@ -159,6 +165,17 @@
         if (G.Img && G.Img.has('guide/01_title')) G.Img.resolve(['guide/01_title']).then(function (r) { if (r && r.img) pic.src = r.img.src; else pic.style.display = 'none'; });
         else pic.style.display = 'none';
       } });
+  };
+
+  /** 언어 고르기 (js/core/i18n.js) — 고르면 첫 화면을 그 언어로 다시 그린다 */
+  T.langMenu = async function () {
+    var I = G.I18N; if (!I || UI.busy()) return;
+    var opts = I.LANGS.map(function (l) { var ok = I.ready(l.id); return { label: '<span translate="no">' + l.label + '</span>', value: l.id, disabled: !ok, icon: l.id === I.lang ? 'check' : 'globe', right: ok ? '' : '<span translate="no">준비 중 · coming soon</span>' }; });
+    var id = await UI.choose('Language · 언어', opts, { width: 560 });
+    if (id == null || id === I.lang) return;
+    if (!I.ready(id)) { UI.toast(G.T('이 언어는 번역을 준비하는 중입니다.'), 'info', 3200); return; }
+    I.set(id);
+    G.Game.go('title');
   };
 
   /** 준비가 끝나기 전에 타이틀을 떠나면(시험·바로 가기) 불러오는 그림을 걷는다 — 다음 장면을 가리지 않게 */

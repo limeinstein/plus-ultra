@@ -1,0 +1,99 @@
+일시정지	Pause
+재개	Resume
+백병전	Board
+포격 정지	Hold Fire
+포격 재개	Resume Fire
+퇴각	Retreat
+교전 보기	Battle View
+기함 보기	Flagship View
+전장 전체	Whole Field
+아군 함대	Our Fleet
+적 함대	Enemy Fleet
+— 1번 기함을 무찌르면 승리	— defeat flagship No. 1 to win
+해상 괴물	Sea Monster
+— 잠수 중 공격 불가	— can't be attacked while submerged
+괴물	Monster
+처치	Slain
+해적선 #호	Pirate Ship #
+왜구선 #호	Wokou Ship #
+상선 #호	Merchant Ship #
+@ 군함 #호	@ Warship #
+군함 #호	Warship #
+@호	@
+침몰	Sunk
+이탈	Escaped
+나포	Captured
+달아남	Fled
+상실	Lost
+빼앗김	Seized
+빼앗김 — 이기면 되찾는다	Seized — win to take her back
+기함	Flagship
+선원 #	Crew #
+내구 # / #	Hull # / #
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · B: 백병전 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Arrows: steer flagship · Space: stop flagship · Click: move · Click enemy: attack · B: board · F: our guns on/off · P: pause · Wheel: zoom · +/−: speed · 1–7: fleet orders · Tab: select ship
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · 괴물에게 백병전·일기토 불가 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Arrows: steer flagship · Space: stop flagship · Click: move · Click enemy: attack · no boarding or duels against monsters · F: our guns on/off · P: pause · Wheel: zoom · +/−: speed · 1–7: fleet orders · Tab: select ship
+섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.	You can't pass through islands or coasts, and you can't retreat through a blocked side.
+함대 명령	Fleet Orders
+— 기함 전술 (함께 싸울 배 없음)	— flagship tactics (no ships fighting alongside)
+— 기함을 뺀 배 모두	— every ship but the flagship
+직접 조종	Steer Yourself
+기함 추종	Follow Flagship
+학익진	Crane Wing
+일제 공격	Concentrate Fire
+포격전	Gunnery Duel
+기함 호위	Guard Flagship
+자유 공격	Free Attack
+물러나기	Withdraw
+돌격	Charge
+포격 중심	Guns First
+자동 교전	Auto Battle
+노림	Target
+자리 지킴	Hold Position
+기함 혼자: 3 돌격 · 4 포격 중심 · 6 자동 교전 — 방향키·클릭으로 직접 몰면 풀립니다. 학익진·호위는 배가 2척 이상일 때.	Flagship alone: 3 Charge · 4 Guns First · 6 Auto Battle — steering with arrows or clicks cancels it. Crane Wing and Guard need 2+ ships.
+배를 고르면(줄·지도에서 클릭·Tab) 그 배에게만 — 적함 클릭: 노림 · 바다 클릭: 자리 지킴 · Esc: 풀기	Select a ship (click its row or on the chart, or Tab) to order just that ship — click enemy: target · click sea: hold position · Esc: deselect
+함께 싸울 배가 있어야 합니다 (함대 2척 이상).	You need ships to fight alongside you (a fleet of 2+).
+학익진은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Crane Wing needs ships to fight alongside you (a fleet of 2+).
+기함 호위은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Guard Flagship needs ships to fight alongside you (a fleet of 2+).
+직접 조종: 방향키·클릭으로 기함을 몹니다.	Steer Yourself: drive the flagship with arrows and clicks.
+함대 퇴각	Fleet retreat
+기함 뒤로 줄지어 따라가며 기함이 노리는 적을 함께 쏜다.	Line up behind the flagship and fire on whatever it targets.
+학이 날개를 펴듯 기함을 가운데 두고 양옆으로 벌려 적을 반원으로 감싼다. 여러 방향에서 쏘면 포격이 더 아프다.	Spread out on both sides of the flagship like a crane's wings and wrap the enemy in a half circle. Fire from many angles hurts more.
+모두 한 적에게 바짝 붙어 한꺼번에 쏜다(일제 사격). 선원이 넉넉하면 올라탄다.	Everyone closes on one enemy and fires at once (a volley). Boards if there's crew to spare.
+사정거리 끝에서 포로만 싸운다. 적이 다가오면 물러나 백병전을 피한다.	Fight with cannon only, at the edge of range. Back off when the enemy closes to avoid boarding.
+기함 곁을 둘러싸고, 기함에 다가오는 적부터 쏜다.	Surround the flagship and fire first at enemies closing on it.
+배마다 가장 가까운 적과 알아서 싸운다.	Each ship fights the nearest enemy on its own.
+그 배만 적에게서 먼 쪽으로 전장을 벗어난다 (배는 잃지 않는다).	Just that ship leaves the field away from the enemy (you don't lose it).
+@ — @	@ — @
+전장 해도	Battle Chart
+클릭: 그곳 보기	Click: look there
+적함 #척 · 화면 밖 #척	Enemy ships # · off-screen #
+기함 포격	Flagship Guns
+좌현	Port
+우현	Starboard
+선수	Bow
+장전 #% · #초	Loading #% · #s
+장전 완료	Loaded
+발사 준비	Ready to fire
+해전	Sea Battle
+아군 #척 · 선원 #	Ours # ships · crew #
+적 #척 · 선원 #	Enemy # ships · crew #
+@풍 · 연안 전장	@ wind · coastal waters
+@풍 · 격랑 해역	@ wind · rough seas
+@풍 · @	@ wind · @
+@풍	@ wind
+적 기함(1번 · @)을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.	Sink or capture the enemy flagship (No. 1 · @) and you win. Lose our flagship (No. 1) and you lose.
+해전 승리	Victory at Sea
+승리했다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	Victory! We took # gold in spoils. (Fame +#)
+적 기함을 무찔러 이겼다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	We beat their flagship and won! We took # gold in spoils. (Fame +#)
+남은 적 배는 흩어져 달아났다.	The remaining enemy ships scattered and fled.
+아군 포격 정지 — 적함을 누른 뒤 B로 백병전을 걸 수 있습니다. 적은 계속 포격합니다.	Our guns hold fire — click an enemy ship, then press B to board. The enemy keeps firing.
+아군 포격을 재개합니다.	Our guns open fire again.
+아군 함대 전체의 포격 켬/끔 (F). 적의 포격과 이미 발사된 포탄은 유지됩니다. B: 백병전 접근	Toggle fire for our whole fleet (F). Enemy fire and shots already in the air are unaffected. B: close to board
+기함이 멈춰 있습니다. 방향키로 몰거나 바다·적함을 클릭하십시오.	The flagship is dead in the water. Steer with the arrows or click the sea or an enemy ship.
+퇴각! 전장 가장자리로 벗어나십시오.	Retreat! Get off the edge of the field.
+해상 괴물에게는 백병전·나포·일기토를 할 수 없습니다.	You can't board, capture or duel a sea monster.
+아군과 적 함대가 함께 보이도록 배율을 맞춥니다.	Zooms so both fleets are in view.
+전장 해도: 파란 점은 아군, 붉은 점은 적군. 클릭하면 해당 위치를 살핍니다.	Battle chart: blue dots are ours, red dots are the enemy. Click to look at that spot.
+부채꼴은 사거리와 사격 방향, 차오르는 면과 호는 장전 진행도입니다. 점선 원은 약한 근접·추격 사격 범위입니다.	The fan shows range and firing arc; the filling area and arc show reloading. The dotted circle is the range of weak close-in and chase fire.
+해전 배속 ×# (키 + / −)	Battle speed ×# (keys + / −)
+#번 @(을|를) 골랐다. 적함 클릭 = 노림 · 바다 클릭 = 자리 지킴 · 1~7 = 이 배에만 명령 · Esc = 풀기	Selected No. {1} @. Click enemy = target · click sea = hold position · 1–7 = order this ship only · Esc = deselect

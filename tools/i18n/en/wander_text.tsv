@@ -1,0 +1,646 @@
+/카스티야 출신의 항해사\. (.+)/	A navigator from Castile. ⟦$1⟧
+/카스티야 출신의 여항해사\. (.+)/	A navigator from Castile. ⟦$1⟧
+/포르투갈 출신의 항해사\. (.+)/	A navigator from Portugal. ⟦$1⟧
+/포르투갈 출신의 여항해사\. (.+)/	A navigator from Portugal. ⟦$1⟧
+/이탈리아 출신의 항해사\. (.+)/	A navigator from Italy. ⟦$1⟧
+/이탈리아 출신의 여항해사\. (.+)/	A navigator from Italy. ⟦$1⟧
+/프랑스 출신의 항해사\. (.+)/	A navigator from France. ⟦$1⟧
+/프랑스 출신의 여항해사\. (.+)/	A navigator from France. ⟦$1⟧
+/잉글랜드 출신의 항해사\. (.+)/	A navigator from England. ⟦$1⟧
+/잉글랜드 출신의 여항해사\. (.+)/	A navigator from England. ⟦$1⟧
+/저지대 출신의 항해사\. (.+)/	A navigator from the Low Countries. ⟦$1⟧
+/저지대 출신의 여항해사\. (.+)/	A navigator from the Low Countries. ⟦$1⟧
+/독일 출신의 항해사\. (.+)/	A navigator from the German lands. ⟦$1⟧
+/독일 출신의 여항해사\. (.+)/	A navigator from the German lands. ⟦$1⟧
+/북유럽 출신의 항해사\. (.+)/	A navigator from the North. ⟦$1⟧
+/북유럽 출신의 여항해사\. (.+)/	A navigator from the North. ⟦$1⟧
+/동유럽 출신의 항해사\. (.+)/	A navigator from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여항해사\. (.+)/	A navigator from Eastern Europe. ⟦$1⟧
+/그리스 출신의 항해사\. (.+)/	A navigator from Greece. ⟦$1⟧
+/그리스 출신의 여항해사\. (.+)/	A navigator from Greece. ⟦$1⟧
+/튀르크 출신의 항해사\. (.+)/	A navigator from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여항해사\. (.+)/	A navigator from the Turkish lands. ⟦$1⟧
+/무어 출신의 항해사\. (.+)/	A navigator from the Moorish lands. ⟦$1⟧
+/무어 출신의 여항해사\. (.+)/	A navigator from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 항해사\. (.+)/	A navigator from Persia. ⟦$1⟧
+/페르시아 출신의 여항해사\. (.+)/	A navigator from Persia. ⟦$1⟧
+/인도 출신의 항해사\. (.+)/	A navigator from India. ⟦$1⟧
+/인도 출신의 여항해사\. (.+)/	A navigator from India. ⟦$1⟧
+/남쪽\ 바다 출신의 항해사\. (.+)/	A navigator from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여항해사\. (.+)/	A navigator from the Southern Seas. ⟦$1⟧
+/명나라 출신의 항해사\. (.+)/	A navigator from Ming China. ⟦$1⟧
+/명나라 출신의 여항해사\. (.+)/	A navigator from Ming China. ⟦$1⟧
+/조선 출신의 항해사\. (.+)/	A navigator from Joseon. ⟦$1⟧
+/조선 출신의 여항해사\. (.+)/	A navigator from Joseon. ⟦$1⟧
+/일본 출신의 항해사\. (.+)/	A navigator from Japan. ⟦$1⟧
+/일본 출신의 여항해사\. (.+)/	A navigator from Japan. ⟦$1⟧
+/서아프리카 출신의 항해사\. (.+)/	A navigator from West Africa. ⟦$1⟧
+/서아프리카 출신의 여항해사\. (.+)/	A navigator from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 항해사\. (.+)/	A navigator born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여항해사\. (.+)/	A navigator born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 항해사\. (.+)/	A navigator born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여항해사\. (.+)/	A navigator born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 항해사\. (.+)/	A navigator born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여항해사\. (.+)/	A navigator born in Brazil. ⟦$1⟧
+/카스티야 출신의 검객\. (.+)/	A swordsman from Castile. ⟦$1⟧
+/카스티야 출신의 여검객\. (.+)/	A swordswoman from Castile. ⟦$1⟧
+/포르투갈 출신의 검객\. (.+)/	A swordsman from Portugal. ⟦$1⟧
+/포르투갈 출신의 여검객\. (.+)/	A swordswoman from Portugal. ⟦$1⟧
+/이탈리아 출신의 검객\. (.+)/	A swordsman from Italy. ⟦$1⟧
+/이탈리아 출신의 여검객\. (.+)/	A swordswoman from Italy. ⟦$1⟧
+/프랑스 출신의 검객\. (.+)/	A swordsman from France. ⟦$1⟧
+/프랑스 출신의 여검객\. (.+)/	A swordswoman from France. ⟦$1⟧
+/잉글랜드 출신의 검객\. (.+)/	A swordsman from England. ⟦$1⟧
+/잉글랜드 출신의 여검객\. (.+)/	A swordswoman from England. ⟦$1⟧
+/저지대 출신의 검객\. (.+)/	A swordsman from the Low Countries. ⟦$1⟧
+/저지대 출신의 여검객\. (.+)/	A swordswoman from the Low Countries. ⟦$1⟧
+/독일 출신의 검객\. (.+)/	A swordsman from the German lands. ⟦$1⟧
+/독일 출신의 여검객\. (.+)/	A swordswoman from the German lands. ⟦$1⟧
+/북유럽 출신의 검객\. (.+)/	A swordsman from the North. ⟦$1⟧
+/북유럽 출신의 여검객\. (.+)/	A swordswoman from the North. ⟦$1⟧
+/동유럽 출신의 검객\. (.+)/	A swordsman from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여검객\. (.+)/	A swordswoman from Eastern Europe. ⟦$1⟧
+/그리스 출신의 검객\. (.+)/	A swordsman from Greece. ⟦$1⟧
+/그리스 출신의 여검객\. (.+)/	A swordswoman from Greece. ⟦$1⟧
+/튀르크 출신의 검객\. (.+)/	A swordsman from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여검객\. (.+)/	A swordswoman from the Turkish lands. ⟦$1⟧
+/무어 출신의 검객\. (.+)/	A swordsman from the Moorish lands. ⟦$1⟧
+/무어 출신의 여검객\. (.+)/	A swordswoman from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 검객\. (.+)/	A swordsman from Persia. ⟦$1⟧
+/페르시아 출신의 여검객\. (.+)/	A swordswoman from Persia. ⟦$1⟧
+/인도 출신의 검객\. (.+)/	A swordsman from India. ⟦$1⟧
+/인도 출신의 여검객\. (.+)/	A swordswoman from India. ⟦$1⟧
+/남쪽\ 바다 출신의 검객\. (.+)/	A swordsman from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여검객\. (.+)/	A swordswoman from the Southern Seas. ⟦$1⟧
+/명나라 출신의 검객\. (.+)/	A swordsman from Ming China. ⟦$1⟧
+/명나라 출신의 여검객\. (.+)/	A swordswoman from Ming China. ⟦$1⟧
+/조선 출신의 검객\. (.+)/	A swordsman from Joseon. ⟦$1⟧
+/조선 출신의 여검객\. (.+)/	A swordswoman from Joseon. ⟦$1⟧
+/일본 출신의 검객\. (.+)/	A swordsman from Japan. ⟦$1⟧
+/일본 출신의 여검객\. (.+)/	A swordswoman from Japan. ⟦$1⟧
+/서아프리카 출신의 검객\. (.+)/	A swordsman from West Africa. ⟦$1⟧
+/서아프리카 출신의 여검객\. (.+)/	A swordswoman from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 검객\. (.+)/	A swordsman born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여검객\. (.+)/	A swordswoman born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 검객\. (.+)/	A swordsman born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여검객\. (.+)/	A swordswoman born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 검객\. (.+)/	A swordsman born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여검객\. (.+)/	A swordswoman born in Brazil. ⟦$1⟧
+/카스티야 출신의 포수\. (.+)/	A gunner from Castile. ⟦$1⟧
+/카스티야 출신의 여포수\. (.+)/	A gunner from Castile. ⟦$1⟧
+/포르투갈 출신의 포수\. (.+)/	A gunner from Portugal. ⟦$1⟧
+/포르투갈 출신의 여포수\. (.+)/	A gunner from Portugal. ⟦$1⟧
+/이탈리아 출신의 포수\. (.+)/	A gunner from Italy. ⟦$1⟧
+/이탈리아 출신의 여포수\. (.+)/	A gunner from Italy. ⟦$1⟧
+/프랑스 출신의 포수\. (.+)/	A gunner from France. ⟦$1⟧
+/프랑스 출신의 여포수\. (.+)/	A gunner from France. ⟦$1⟧
+/잉글랜드 출신의 포수\. (.+)/	A gunner from England. ⟦$1⟧
+/잉글랜드 출신의 여포수\. (.+)/	A gunner from England. ⟦$1⟧
+/저지대 출신의 포수\. (.+)/	A gunner from the Low Countries. ⟦$1⟧
+/저지대 출신의 여포수\. (.+)/	A gunner from the Low Countries. ⟦$1⟧
+/독일 출신의 포수\. (.+)/	A gunner from the German lands. ⟦$1⟧
+/독일 출신의 여포수\. (.+)/	A gunner from the German lands. ⟦$1⟧
+/북유럽 출신의 포수\. (.+)/	A gunner from the North. ⟦$1⟧
+/북유럽 출신의 여포수\. (.+)/	A gunner from the North. ⟦$1⟧
+/동유럽 출신의 포수\. (.+)/	A gunner from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여포수\. (.+)/	A gunner from Eastern Europe. ⟦$1⟧
+/그리스 출신의 포수\. (.+)/	A gunner from Greece. ⟦$1⟧
+/그리스 출신의 여포수\. (.+)/	A gunner from Greece. ⟦$1⟧
+/튀르크 출신의 포수\. (.+)/	A gunner from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여포수\. (.+)/	A gunner from the Turkish lands. ⟦$1⟧
+/무어 출신의 포수\. (.+)/	A gunner from the Moorish lands. ⟦$1⟧
+/무어 출신의 여포수\. (.+)/	A gunner from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 포수\. (.+)/	A gunner from Persia. ⟦$1⟧
+/페르시아 출신의 여포수\. (.+)/	A gunner from Persia. ⟦$1⟧
+/인도 출신의 포수\. (.+)/	A gunner from India. ⟦$1⟧
+/인도 출신의 여포수\. (.+)/	A gunner from India. ⟦$1⟧
+/남쪽\ 바다 출신의 포수\. (.+)/	A gunner from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여포수\. (.+)/	A gunner from the Southern Seas. ⟦$1⟧
+/명나라 출신의 포수\. (.+)/	A gunner from Ming China. ⟦$1⟧
+/명나라 출신의 여포수\. (.+)/	A gunner from Ming China. ⟦$1⟧
+/조선 출신의 포수\. (.+)/	A gunner from Joseon. ⟦$1⟧
+/조선 출신의 여포수\. (.+)/	A gunner from Joseon. ⟦$1⟧
+/일본 출신의 포수\. (.+)/	A gunner from Japan. ⟦$1⟧
+/일본 출신의 여포수\. (.+)/	A gunner from Japan. ⟦$1⟧
+/서아프리카 출신의 포수\. (.+)/	A gunner from West Africa. ⟦$1⟧
+/서아프리카 출신의 여포수\. (.+)/	A gunner from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 포수\. (.+)/	A gunner born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여포수\. (.+)/	A gunner born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 포수\. (.+)/	A gunner born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여포수\. (.+)/	A gunner born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 포수\. (.+)/	A gunner born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여포수\. (.+)/	A gunner born in Brazil. ⟦$1⟧
+/카스티야 출신의 회계\. (.+)/	A purser from Castile. ⟦$1⟧
+/카스티야 출신의 여회계\. (.+)/	A purser from Castile. ⟦$1⟧
+/포르투갈 출신의 회계\. (.+)/	A purser from Portugal. ⟦$1⟧
+/포르투갈 출신의 여회계\. (.+)/	A purser from Portugal. ⟦$1⟧
+/이탈리아 출신의 회계\. (.+)/	A purser from Italy. ⟦$1⟧
+/이탈리아 출신의 여회계\. (.+)/	A purser from Italy. ⟦$1⟧
+/프랑스 출신의 회계\. (.+)/	A purser from France. ⟦$1⟧
+/프랑스 출신의 여회계\. (.+)/	A purser from France. ⟦$1⟧
+/잉글랜드 출신의 회계\. (.+)/	A purser from England. ⟦$1⟧
+/잉글랜드 출신의 여회계\. (.+)/	A purser from England. ⟦$1⟧
+/저지대 출신의 회계\. (.+)/	A purser from the Low Countries. ⟦$1⟧
+/저지대 출신의 여회계\. (.+)/	A purser from the Low Countries. ⟦$1⟧
+/독일 출신의 회계\. (.+)/	A purser from the German lands. ⟦$1⟧
+/독일 출신의 여회계\. (.+)/	A purser from the German lands. ⟦$1⟧
+/북유럽 출신의 회계\. (.+)/	A purser from the North. ⟦$1⟧
+/북유럽 출신의 여회계\. (.+)/	A purser from the North. ⟦$1⟧
+/동유럽 출신의 회계\. (.+)/	A purser from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여회계\. (.+)/	A purser from Eastern Europe. ⟦$1⟧
+/그리스 출신의 회계\. (.+)/	A purser from Greece. ⟦$1⟧
+/그리스 출신의 여회계\. (.+)/	A purser from Greece. ⟦$1⟧
+/튀르크 출신의 회계\. (.+)/	A purser from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여회계\. (.+)/	A purser from the Turkish lands. ⟦$1⟧
+/무어 출신의 회계\. (.+)/	A purser from the Moorish lands. ⟦$1⟧
+/무어 출신의 여회계\. (.+)/	A purser from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 회계\. (.+)/	A purser from Persia. ⟦$1⟧
+/페르시아 출신의 여회계\. (.+)/	A purser from Persia. ⟦$1⟧
+/인도 출신의 회계\. (.+)/	A purser from India. ⟦$1⟧
+/인도 출신의 여회계\. (.+)/	A purser from India. ⟦$1⟧
+/남쪽\ 바다 출신의 회계\. (.+)/	A purser from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여회계\. (.+)/	A purser from the Southern Seas. ⟦$1⟧
+/명나라 출신의 회계\. (.+)/	A purser from Ming China. ⟦$1⟧
+/명나라 출신의 여회계\. (.+)/	A purser from Ming China. ⟦$1⟧
+/조선 출신의 회계\. (.+)/	A purser from Joseon. ⟦$1⟧
+/조선 출신의 여회계\. (.+)/	A purser from Joseon. ⟦$1⟧
+/일본 출신의 회계\. (.+)/	A purser from Japan. ⟦$1⟧
+/일본 출신의 여회계\. (.+)/	A purser from Japan. ⟦$1⟧
+/서아프리카 출신의 회계\. (.+)/	A purser from West Africa. ⟦$1⟧
+/서아프리카 출신의 여회계\. (.+)/	A purser from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 회계\. (.+)/	A purser born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여회계\. (.+)/	A purser born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 회계\. (.+)/	A purser born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여회계\. (.+)/	A purser born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 회계\. (.+)/	A purser born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여회계\. (.+)/	A purser born in Brazil. ⟦$1⟧
+/카스티야 출신의 학자\. (.+)/	A scholar from Castile. ⟦$1⟧
+/카스티야 출신의 여학자\. (.+)/	A scholar from Castile. ⟦$1⟧
+/포르투갈 출신의 학자\. (.+)/	A scholar from Portugal. ⟦$1⟧
+/포르투갈 출신의 여학자\. (.+)/	A scholar from Portugal. ⟦$1⟧
+/이탈리아 출신의 학자\. (.+)/	A scholar from Italy. ⟦$1⟧
+/이탈리아 출신의 여학자\. (.+)/	A scholar from Italy. ⟦$1⟧
+/프랑스 출신의 학자\. (.+)/	A scholar from France. ⟦$1⟧
+/프랑스 출신의 여학자\. (.+)/	A scholar from France. ⟦$1⟧
+/잉글랜드 출신의 학자\. (.+)/	A scholar from England. ⟦$1⟧
+/잉글랜드 출신의 여학자\. (.+)/	A scholar from England. ⟦$1⟧
+/저지대 출신의 학자\. (.+)/	A scholar from the Low Countries. ⟦$1⟧
+/저지대 출신의 여학자\. (.+)/	A scholar from the Low Countries. ⟦$1⟧
+/독일 출신의 학자\. (.+)/	A scholar from the German lands. ⟦$1⟧
+/독일 출신의 여학자\. (.+)/	A scholar from the German lands. ⟦$1⟧
+/북유럽 출신의 학자\. (.+)/	A scholar from the North. ⟦$1⟧
+/북유럽 출신의 여학자\. (.+)/	A scholar from the North. ⟦$1⟧
+/동유럽 출신의 학자\. (.+)/	A scholar from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여학자\. (.+)/	A scholar from Eastern Europe. ⟦$1⟧
+/그리스 출신의 학자\. (.+)/	A scholar from Greece. ⟦$1⟧
+/그리스 출신의 여학자\. (.+)/	A scholar from Greece. ⟦$1⟧
+/튀르크 출신의 학자\. (.+)/	A scholar from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여학자\. (.+)/	A scholar from the Turkish lands. ⟦$1⟧
+/무어 출신의 학자\. (.+)/	A scholar from the Moorish lands. ⟦$1⟧
+/무어 출신의 여학자\. (.+)/	A scholar from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 학자\. (.+)/	A scholar from Persia. ⟦$1⟧
+/페르시아 출신의 여학자\. (.+)/	A scholar from Persia. ⟦$1⟧
+/인도 출신의 학자\. (.+)/	A scholar from India. ⟦$1⟧
+/인도 출신의 여학자\. (.+)/	A scholar from India. ⟦$1⟧
+/남쪽\ 바다 출신의 학자\. (.+)/	A scholar from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여학자\. (.+)/	A scholar from the Southern Seas. ⟦$1⟧
+/명나라 출신의 학자\. (.+)/	A scholar from Ming China. ⟦$1⟧
+/명나라 출신의 여학자\. (.+)/	A scholar from Ming China. ⟦$1⟧
+/조선 출신의 학자\. (.+)/	A scholar from Joseon. ⟦$1⟧
+/조선 출신의 여학자\. (.+)/	A scholar from Joseon. ⟦$1⟧
+/일본 출신의 학자\. (.+)/	A scholar from Japan. ⟦$1⟧
+/일본 출신의 여학자\. (.+)/	A scholar from Japan. ⟦$1⟧
+/서아프리카 출신의 학자\. (.+)/	A scholar from West Africa. ⟦$1⟧
+/서아프리카 출신의 여학자\. (.+)/	A scholar from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 학자\. (.+)/	A scholar born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여학자\. (.+)/	A scholar born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 학자\. (.+)/	A scholar born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여학자\. (.+)/	A scholar born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 학자\. (.+)/	A scholar born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여학자\. (.+)/	A scholar born in Brazil. ⟦$1⟧
+/카스티야 출신의 의사\. (.+)/	A doctor from Castile. ⟦$1⟧
+/카스티야 출신의 여의사\. (.+)/	A doctor from Castile. ⟦$1⟧
+/포르투갈 출신의 의사\. (.+)/	A doctor from Portugal. ⟦$1⟧
+/포르투갈 출신의 여의사\. (.+)/	A doctor from Portugal. ⟦$1⟧
+/이탈리아 출신의 의사\. (.+)/	A doctor from Italy. ⟦$1⟧
+/이탈리아 출신의 여의사\. (.+)/	A doctor from Italy. ⟦$1⟧
+/프랑스 출신의 의사\. (.+)/	A doctor from France. ⟦$1⟧
+/프랑스 출신의 여의사\. (.+)/	A doctor from France. ⟦$1⟧
+/잉글랜드 출신의 의사\. (.+)/	A doctor from England. ⟦$1⟧
+/잉글랜드 출신의 여의사\. (.+)/	A doctor from England. ⟦$1⟧
+/저지대 출신의 의사\. (.+)/	A doctor from the Low Countries. ⟦$1⟧
+/저지대 출신의 여의사\. (.+)/	A doctor from the Low Countries. ⟦$1⟧
+/독일 출신의 의사\. (.+)/	A doctor from the German lands. ⟦$1⟧
+/독일 출신의 여의사\. (.+)/	A doctor from the German lands. ⟦$1⟧
+/북유럽 출신의 의사\. (.+)/	A doctor from the North. ⟦$1⟧
+/북유럽 출신의 여의사\. (.+)/	A doctor from the North. ⟦$1⟧
+/동유럽 출신의 의사\. (.+)/	A doctor from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여의사\. (.+)/	A doctor from Eastern Europe. ⟦$1⟧
+/그리스 출신의 의사\. (.+)/	A doctor from Greece. ⟦$1⟧
+/그리스 출신의 여의사\. (.+)/	A doctor from Greece. ⟦$1⟧
+/튀르크 출신의 의사\. (.+)/	A doctor from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여의사\. (.+)/	A doctor from the Turkish lands. ⟦$1⟧
+/무어 출신의 의사\. (.+)/	A doctor from the Moorish lands. ⟦$1⟧
+/무어 출신의 여의사\. (.+)/	A doctor from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 의사\. (.+)/	A doctor from Persia. ⟦$1⟧
+/페르시아 출신의 여의사\. (.+)/	A doctor from Persia. ⟦$1⟧
+/인도 출신의 의사\. (.+)/	A doctor from India. ⟦$1⟧
+/인도 출신의 여의사\. (.+)/	A doctor from India. ⟦$1⟧
+/남쪽\ 바다 출신의 의사\. (.+)/	A doctor from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여의사\. (.+)/	A doctor from the Southern Seas. ⟦$1⟧
+/명나라 출신의 의사\. (.+)/	A doctor from Ming China. ⟦$1⟧
+/명나라 출신의 여의사\. (.+)/	A doctor from Ming China. ⟦$1⟧
+/조선 출신의 의사\. (.+)/	A doctor from Joseon. ⟦$1⟧
+/조선 출신의 여의사\. (.+)/	A doctor from Joseon. ⟦$1⟧
+/일본 출신의 의사\. (.+)/	A doctor from Japan. ⟦$1⟧
+/일본 출신의 여의사\. (.+)/	A doctor from Japan. ⟦$1⟧
+/서아프리카 출신의 의사\. (.+)/	A doctor from West Africa. ⟦$1⟧
+/서아프리카 출신의 여의사\. (.+)/	A doctor from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 의사\. (.+)/	A doctor born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여의사\. (.+)/	A doctor born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 의사\. (.+)/	A doctor born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여의사\. (.+)/	A doctor born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 의사\. (.+)/	A doctor born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여의사\. (.+)/	A doctor born in Brazil. ⟦$1⟧
+/카스티야 출신의 통역\. (.+)/	An interpreter from Castile. ⟦$1⟧
+/카스티야 출신의 여통역\. (.+)/	An interpreter from Castile. ⟦$1⟧
+/포르투갈 출신의 통역\. (.+)/	An interpreter from Portugal. ⟦$1⟧
+/포르투갈 출신의 여통역\. (.+)/	An interpreter from Portugal. ⟦$1⟧
+/이탈리아 출신의 통역\. (.+)/	An interpreter from Italy. ⟦$1⟧
+/이탈리아 출신의 여통역\. (.+)/	An interpreter from Italy. ⟦$1⟧
+/프랑스 출신의 통역\. (.+)/	An interpreter from France. ⟦$1⟧
+/프랑스 출신의 여통역\. (.+)/	An interpreter from France. ⟦$1⟧
+/잉글랜드 출신의 통역\. (.+)/	An interpreter from England. ⟦$1⟧
+/잉글랜드 출신의 여통역\. (.+)/	An interpreter from England. ⟦$1⟧
+/저지대 출신의 통역\. (.+)/	An interpreter from the Low Countries. ⟦$1⟧
+/저지대 출신의 여통역\. (.+)/	An interpreter from the Low Countries. ⟦$1⟧
+/독일 출신의 통역\. (.+)/	An interpreter from the German lands. ⟦$1⟧
+/독일 출신의 여통역\. (.+)/	An interpreter from the German lands. ⟦$1⟧
+/북유럽 출신의 통역\. (.+)/	An interpreter from the North. ⟦$1⟧
+/북유럽 출신의 여통역\. (.+)/	An interpreter from the North. ⟦$1⟧
+/동유럽 출신의 통역\. (.+)/	An interpreter from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여통역\. (.+)/	An interpreter from Eastern Europe. ⟦$1⟧
+/그리스 출신의 통역\. (.+)/	An interpreter from Greece. ⟦$1⟧
+/그리스 출신의 여통역\. (.+)/	An interpreter from Greece. ⟦$1⟧
+/튀르크 출신의 통역\. (.+)/	An interpreter from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여통역\. (.+)/	An interpreter from the Turkish lands. ⟦$1⟧
+/무어 출신의 통역\. (.+)/	An interpreter from the Moorish lands. ⟦$1⟧
+/무어 출신의 여통역\. (.+)/	An interpreter from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 통역\. (.+)/	An interpreter from Persia. ⟦$1⟧
+/페르시아 출신의 여통역\. (.+)/	An interpreter from Persia. ⟦$1⟧
+/인도 출신의 통역\. (.+)/	An interpreter from India. ⟦$1⟧
+/인도 출신의 여통역\. (.+)/	An interpreter from India. ⟦$1⟧
+/남쪽\ 바다 출신의 통역\. (.+)/	An interpreter from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여통역\. (.+)/	An interpreter from the Southern Seas. ⟦$1⟧
+/명나라 출신의 통역\. (.+)/	An interpreter from Ming China. ⟦$1⟧
+/명나라 출신의 여통역\. (.+)/	An interpreter from Ming China. ⟦$1⟧
+/조선 출신의 통역\. (.+)/	An interpreter from Joseon. ⟦$1⟧
+/조선 출신의 여통역\. (.+)/	An interpreter from Joseon. ⟦$1⟧
+/일본 출신의 통역\. (.+)/	An interpreter from Japan. ⟦$1⟧
+/일본 출신의 여통역\. (.+)/	An interpreter from Japan. ⟦$1⟧
+/서아프리카 출신의 통역\. (.+)/	An interpreter from West Africa. ⟦$1⟧
+/서아프리카 출신의 여통역\. (.+)/	An interpreter from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 통역\. (.+)/	An interpreter born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여통역\. (.+)/	An interpreter born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 통역\. (.+)/	An interpreter born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여통역\. (.+)/	An interpreter born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 통역\. (.+)/	An interpreter born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여통역\. (.+)/	An interpreter born in Brazil. ⟦$1⟧
+/카스티야 출신의 수도사\. (.+)/	A friar from Castile. ⟦$1⟧
+/카스티야 출신의 여수도사\. (.+)/	A nun from Castile. ⟦$1⟧
+/포르투갈 출신의 수도사\. (.+)/	A friar from Portugal. ⟦$1⟧
+/포르투갈 출신의 여수도사\. (.+)/	A nun from Portugal. ⟦$1⟧
+/이탈리아 출신의 수도사\. (.+)/	A friar from Italy. ⟦$1⟧
+/이탈리아 출신의 여수도사\. (.+)/	A nun from Italy. ⟦$1⟧
+/프랑스 출신의 수도사\. (.+)/	A friar from France. ⟦$1⟧
+/프랑스 출신의 여수도사\. (.+)/	A nun from France. ⟦$1⟧
+/잉글랜드 출신의 수도사\. (.+)/	A friar from England. ⟦$1⟧
+/잉글랜드 출신의 여수도사\. (.+)/	A nun from England. ⟦$1⟧
+/저지대 출신의 수도사\. (.+)/	A friar from the Low Countries. ⟦$1⟧
+/저지대 출신의 여수도사\. (.+)/	A nun from the Low Countries. ⟦$1⟧
+/독일 출신의 수도사\. (.+)/	A friar from the German lands. ⟦$1⟧
+/독일 출신의 여수도사\. (.+)/	A nun from the German lands. ⟦$1⟧
+/북유럽 출신의 수도사\. (.+)/	A friar from the North. ⟦$1⟧
+/북유럽 출신의 여수도사\. (.+)/	A nun from the North. ⟦$1⟧
+/동유럽 출신의 수도사\. (.+)/	A friar from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여수도사\. (.+)/	A nun from Eastern Europe. ⟦$1⟧
+/그리스 출신의 수도사\. (.+)/	A friar from Greece. ⟦$1⟧
+/그리스 출신의 여수도사\. (.+)/	A nun from Greece. ⟦$1⟧
+/튀르크 출신의 수도사\. (.+)/	A friar from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여수도사\. (.+)/	A nun from the Turkish lands. ⟦$1⟧
+/무어 출신의 수도사\. (.+)/	A friar from the Moorish lands. ⟦$1⟧
+/무어 출신의 여수도사\. (.+)/	A nun from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 수도사\. (.+)/	A friar from Persia. ⟦$1⟧
+/페르시아 출신의 여수도사\. (.+)/	A nun from Persia. ⟦$1⟧
+/인도 출신의 수도사\. (.+)/	A friar from India. ⟦$1⟧
+/인도 출신의 여수도사\. (.+)/	A nun from India. ⟦$1⟧
+/남쪽\ 바다 출신의 수도사\. (.+)/	A friar from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여수도사\. (.+)/	A nun from the Southern Seas. ⟦$1⟧
+/명나라 출신의 수도사\. (.+)/	A friar from Ming China. ⟦$1⟧
+/명나라 출신의 여수도사\. (.+)/	A nun from Ming China. ⟦$1⟧
+/조선 출신의 수도사\. (.+)/	A friar from Joseon. ⟦$1⟧
+/조선 출신의 여수도사\. (.+)/	A nun from Joseon. ⟦$1⟧
+/일본 출신의 수도사\. (.+)/	A friar from Japan. ⟦$1⟧
+/일본 출신의 여수도사\. (.+)/	A nun from Japan. ⟦$1⟧
+/서아프리카 출신의 수도사\. (.+)/	A friar from West Africa. ⟦$1⟧
+/서아프리카 출신의 여수도사\. (.+)/	A nun from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 수도사\. (.+)/	A friar born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여수도사\. (.+)/	A nun born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 수도사\. (.+)/	A friar born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여수도사\. (.+)/	A nun born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 수도사\. (.+)/	A friar born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여수도사\. (.+)/	A nun born in Brazil. ⟦$1⟧
+/카스티야 출신의 선대공\. (.+)/	A shipwright from Castile. ⟦$1⟧
+/카스티야 출신의 여선대공\. (.+)/	A shipwright from Castile. ⟦$1⟧
+/포르투갈 출신의 선대공\. (.+)/	A shipwright from Portugal. ⟦$1⟧
+/포르투갈 출신의 여선대공\. (.+)/	A shipwright from Portugal. ⟦$1⟧
+/이탈리아 출신의 선대공\. (.+)/	A shipwright from Italy. ⟦$1⟧
+/이탈리아 출신의 여선대공\. (.+)/	A shipwright from Italy. ⟦$1⟧
+/프랑스 출신의 선대공\. (.+)/	A shipwright from France. ⟦$1⟧
+/프랑스 출신의 여선대공\. (.+)/	A shipwright from France. ⟦$1⟧
+/잉글랜드 출신의 선대공\. (.+)/	A shipwright from England. ⟦$1⟧
+/잉글랜드 출신의 여선대공\. (.+)/	A shipwright from England. ⟦$1⟧
+/저지대 출신의 선대공\. (.+)/	A shipwright from the Low Countries. ⟦$1⟧
+/저지대 출신의 여선대공\. (.+)/	A shipwright from the Low Countries. ⟦$1⟧
+/독일 출신의 선대공\. (.+)/	A shipwright from the German lands. ⟦$1⟧
+/독일 출신의 여선대공\. (.+)/	A shipwright from the German lands. ⟦$1⟧
+/북유럽 출신의 선대공\. (.+)/	A shipwright from the North. ⟦$1⟧
+/북유럽 출신의 여선대공\. (.+)/	A shipwright from the North. ⟦$1⟧
+/동유럽 출신의 선대공\. (.+)/	A shipwright from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여선대공\. (.+)/	A shipwright from Eastern Europe. ⟦$1⟧
+/그리스 출신의 선대공\. (.+)/	A shipwright from Greece. ⟦$1⟧
+/그리스 출신의 여선대공\. (.+)/	A shipwright from Greece. ⟦$1⟧
+/튀르크 출신의 선대공\. (.+)/	A shipwright from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여선대공\. (.+)/	A shipwright from the Turkish lands. ⟦$1⟧
+/무어 출신의 선대공\. (.+)/	A shipwright from the Moorish lands. ⟦$1⟧
+/무어 출신의 여선대공\. (.+)/	A shipwright from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 선대공\. (.+)/	A shipwright from Persia. ⟦$1⟧
+/페르시아 출신의 여선대공\. (.+)/	A shipwright from Persia. ⟦$1⟧
+/인도 출신의 선대공\. (.+)/	A shipwright from India. ⟦$1⟧
+/인도 출신의 여선대공\. (.+)/	A shipwright from India. ⟦$1⟧
+/남쪽\ 바다 출신의 선대공\. (.+)/	A shipwright from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여선대공\. (.+)/	A shipwright from the Southern Seas. ⟦$1⟧
+/명나라 출신의 선대공\. (.+)/	A shipwright from Ming China. ⟦$1⟧
+/명나라 출신의 여선대공\. (.+)/	A shipwright from Ming China. ⟦$1⟧
+/조선 출신의 선대공\. (.+)/	A shipwright from Joseon. ⟦$1⟧
+/조선 출신의 여선대공\. (.+)/	A shipwright from Joseon. ⟦$1⟧
+/일본 출신의 선대공\. (.+)/	A shipwright from Japan. ⟦$1⟧
+/일본 출신의 여선대공\. (.+)/	A shipwright from Japan. ⟦$1⟧
+/서아프리카 출신의 선대공\. (.+)/	A shipwright from West Africa. ⟦$1⟧
+/서아프리카 출신의 여선대공\. (.+)/	A shipwright from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 선대공\. (.+)/	A shipwright born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여선대공\. (.+)/	A shipwright born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 선대공\. (.+)/	A shipwright born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여선대공\. (.+)/	A shipwright born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 선대공\. (.+)/	A shipwright born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여선대공\. (.+)/	A shipwright born in Brazil. ⟦$1⟧
+/카스티야 출신의 측량사\. (.+)/	A surveyor from Castile. ⟦$1⟧
+/카스티야 출신의 여측량사\. (.+)/	A surveyor from Castile. ⟦$1⟧
+/포르투갈 출신의 측량사\. (.+)/	A surveyor from Portugal. ⟦$1⟧
+/포르투갈 출신의 여측량사\. (.+)/	A surveyor from Portugal. ⟦$1⟧
+/이탈리아 출신의 측량사\. (.+)/	A surveyor from Italy. ⟦$1⟧
+/이탈리아 출신의 여측량사\. (.+)/	A surveyor from Italy. ⟦$1⟧
+/프랑스 출신의 측량사\. (.+)/	A surveyor from France. ⟦$1⟧
+/프랑스 출신의 여측량사\. (.+)/	A surveyor from France. ⟦$1⟧
+/잉글랜드 출신의 측량사\. (.+)/	A surveyor from England. ⟦$1⟧
+/잉글랜드 출신의 여측량사\. (.+)/	A surveyor from England. ⟦$1⟧
+/저지대 출신의 측량사\. (.+)/	A surveyor from the Low Countries. ⟦$1⟧
+/저지대 출신의 여측량사\. (.+)/	A surveyor from the Low Countries. ⟦$1⟧
+/독일 출신의 측량사\. (.+)/	A surveyor from the German lands. ⟦$1⟧
+/독일 출신의 여측량사\. (.+)/	A surveyor from the German lands. ⟦$1⟧
+/북유럽 출신의 측량사\. (.+)/	A surveyor from the North. ⟦$1⟧
+/북유럽 출신의 여측량사\. (.+)/	A surveyor from the North. ⟦$1⟧
+/동유럽 출신의 측량사\. (.+)/	A surveyor from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여측량사\. (.+)/	A surveyor from Eastern Europe. ⟦$1⟧
+/그리스 출신의 측량사\. (.+)/	A surveyor from Greece. ⟦$1⟧
+/그리스 출신의 여측량사\. (.+)/	A surveyor from Greece. ⟦$1⟧
+/튀르크 출신의 측량사\. (.+)/	A surveyor from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여측량사\. (.+)/	A surveyor from the Turkish lands. ⟦$1⟧
+/무어 출신의 측량사\. (.+)/	A surveyor from the Moorish lands. ⟦$1⟧
+/무어 출신의 여측량사\. (.+)/	A surveyor from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 측량사\. (.+)/	A surveyor from Persia. ⟦$1⟧
+/페르시아 출신의 여측량사\. (.+)/	A surveyor from Persia. ⟦$1⟧
+/인도 출신의 측량사\. (.+)/	A surveyor from India. ⟦$1⟧
+/인도 출신의 여측량사\. (.+)/	A surveyor from India. ⟦$1⟧
+/남쪽\ 바다 출신의 측량사\. (.+)/	A surveyor from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여측량사\. (.+)/	A surveyor from the Southern Seas. ⟦$1⟧
+/명나라 출신의 측량사\. (.+)/	A surveyor from Ming China. ⟦$1⟧
+/명나라 출신의 여측량사\. (.+)/	A surveyor from Ming China. ⟦$1⟧
+/조선 출신의 측량사\. (.+)/	A surveyor from Joseon. ⟦$1⟧
+/조선 출신의 여측량사\. (.+)/	A surveyor from Joseon. ⟦$1⟧
+/일본 출신의 측량사\. (.+)/	A surveyor from Japan. ⟦$1⟧
+/일본 출신의 여측량사\. (.+)/	A surveyor from Japan. ⟦$1⟧
+/서아프리카 출신의 측량사\. (.+)/	A surveyor from West Africa. ⟦$1⟧
+/서아프리카 출신의 여측량사\. (.+)/	A surveyor from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 측량사\. (.+)/	A surveyor born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여측량사\. (.+)/	A surveyor born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 측량사\. (.+)/	A surveyor born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여측량사\. (.+)/	A surveyor born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 측량사\. (.+)/	A surveyor born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여측량사\. (.+)/	A surveyor born in Brazil. ⟦$1⟧
+/카스티야 출신의 요리사\. (.+)/	A cook from Castile. ⟦$1⟧
+/카스티야 출신의 여요리사\. (.+)/	A cook from Castile. ⟦$1⟧
+/포르투갈 출신의 요리사\. (.+)/	A cook from Portugal. ⟦$1⟧
+/포르투갈 출신의 여요리사\. (.+)/	A cook from Portugal. ⟦$1⟧
+/이탈리아 출신의 요리사\. (.+)/	A cook from Italy. ⟦$1⟧
+/이탈리아 출신의 여요리사\. (.+)/	A cook from Italy. ⟦$1⟧
+/프랑스 출신의 요리사\. (.+)/	A cook from France. ⟦$1⟧
+/프랑스 출신의 여요리사\. (.+)/	A cook from France. ⟦$1⟧
+/잉글랜드 출신의 요리사\. (.+)/	A cook from England. ⟦$1⟧
+/잉글랜드 출신의 여요리사\. (.+)/	A cook from England. ⟦$1⟧
+/저지대 출신의 요리사\. (.+)/	A cook from the Low Countries. ⟦$1⟧
+/저지대 출신의 여요리사\. (.+)/	A cook from the Low Countries. ⟦$1⟧
+/독일 출신의 요리사\. (.+)/	A cook from the German lands. ⟦$1⟧
+/독일 출신의 여요리사\. (.+)/	A cook from the German lands. ⟦$1⟧
+/북유럽 출신의 요리사\. (.+)/	A cook from the North. ⟦$1⟧
+/북유럽 출신의 여요리사\. (.+)/	A cook from the North. ⟦$1⟧
+/동유럽 출신의 요리사\. (.+)/	A cook from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여요리사\. (.+)/	A cook from Eastern Europe. ⟦$1⟧
+/그리스 출신의 요리사\. (.+)/	A cook from Greece. ⟦$1⟧
+/그리스 출신의 여요리사\. (.+)/	A cook from Greece. ⟦$1⟧
+/튀르크 출신의 요리사\. (.+)/	A cook from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여요리사\. (.+)/	A cook from the Turkish lands. ⟦$1⟧
+/무어 출신의 요리사\. (.+)/	A cook from the Moorish lands. ⟦$1⟧
+/무어 출신의 여요리사\. (.+)/	A cook from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 요리사\. (.+)/	A cook from Persia. ⟦$1⟧
+/페르시아 출신의 여요리사\. (.+)/	A cook from Persia. ⟦$1⟧
+/인도 출신의 요리사\. (.+)/	A cook from India. ⟦$1⟧
+/인도 출신의 여요리사\. (.+)/	A cook from India. ⟦$1⟧
+/남쪽\ 바다 출신의 요리사\. (.+)/	A cook from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여요리사\. (.+)/	A cook from the Southern Seas. ⟦$1⟧
+/명나라 출신의 요리사\. (.+)/	A cook from Ming China. ⟦$1⟧
+/명나라 출신의 여요리사\. (.+)/	A cook from Ming China. ⟦$1⟧
+/조선 출신의 요리사\. (.+)/	A cook from Joseon. ⟦$1⟧
+/조선 출신의 여요리사\. (.+)/	A cook from Joseon. ⟦$1⟧
+/일본 출신의 요리사\. (.+)/	A cook from Japan. ⟦$1⟧
+/일본 출신의 여요리사\. (.+)/	A cook from Japan. ⟦$1⟧
+/서아프리카 출신의 요리사\. (.+)/	A cook from West Africa. ⟦$1⟧
+/서아프리카 출신의 여요리사\. (.+)/	A cook from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 요리사\. (.+)/	A cook born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여요리사\. (.+)/	A cook born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 요리사\. (.+)/	A cook born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여요리사\. (.+)/	A cook born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 요리사\. (.+)/	A cook born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여요리사\. (.+)/	A cook born in Brazil. ⟦$1⟧
+/카스티야 출신의 악사\. (.+)/	A musician from Castile. ⟦$1⟧
+/카스티야 출신의 여악사\. (.+)/	A musician from Castile. ⟦$1⟧
+/포르투갈 출신의 악사\. (.+)/	A musician from Portugal. ⟦$1⟧
+/포르투갈 출신의 여악사\. (.+)/	A musician from Portugal. ⟦$1⟧
+/이탈리아 출신의 악사\. (.+)/	A musician from Italy. ⟦$1⟧
+/이탈리아 출신의 여악사\. (.+)/	A musician from Italy. ⟦$1⟧
+/프랑스 출신의 악사\. (.+)/	A musician from France. ⟦$1⟧
+/프랑스 출신의 여악사\. (.+)/	A musician from France. ⟦$1⟧
+/잉글랜드 출신의 악사\. (.+)/	A musician from England. ⟦$1⟧
+/잉글랜드 출신의 여악사\. (.+)/	A musician from England. ⟦$1⟧
+/저지대 출신의 악사\. (.+)/	A musician from the Low Countries. ⟦$1⟧
+/저지대 출신의 여악사\. (.+)/	A musician from the Low Countries. ⟦$1⟧
+/독일 출신의 악사\. (.+)/	A musician from the German lands. ⟦$1⟧
+/독일 출신의 여악사\. (.+)/	A musician from the German lands. ⟦$1⟧
+/북유럽 출신의 악사\. (.+)/	A musician from the North. ⟦$1⟧
+/북유럽 출신의 여악사\. (.+)/	A musician from the North. ⟦$1⟧
+/동유럽 출신의 악사\. (.+)/	A musician from Eastern Europe. ⟦$1⟧
+/동유럽 출신의 여악사\. (.+)/	A musician from Eastern Europe. ⟦$1⟧
+/그리스 출신의 악사\. (.+)/	A musician from Greece. ⟦$1⟧
+/그리스 출신의 여악사\. (.+)/	A musician from Greece. ⟦$1⟧
+/튀르크 출신의 악사\. (.+)/	A musician from the Turkish lands. ⟦$1⟧
+/튀르크 출신의 여악사\. (.+)/	A musician from the Turkish lands. ⟦$1⟧
+/무어 출신의 악사\. (.+)/	A musician from the Moorish lands. ⟦$1⟧
+/무어 출신의 여악사\. (.+)/	A musician from the Moorish lands. ⟦$1⟧
+/페르시아 출신의 악사\. (.+)/	A musician from Persia. ⟦$1⟧
+/페르시아 출신의 여악사\. (.+)/	A musician from Persia. ⟦$1⟧
+/인도 출신의 악사\. (.+)/	A musician from India. ⟦$1⟧
+/인도 출신의 여악사\. (.+)/	A musician from India. ⟦$1⟧
+/남쪽\ 바다 출신의 악사\. (.+)/	A musician from the Southern Seas. ⟦$1⟧
+/남쪽\ 바다 출신의 여악사\. (.+)/	A musician from the Southern Seas. ⟦$1⟧
+/명나라 출신의 악사\. (.+)/	A musician from Ming China. ⟦$1⟧
+/명나라 출신의 여악사\. (.+)/	A musician from Ming China. ⟦$1⟧
+/조선 출신의 악사\. (.+)/	A musician from Joseon. ⟦$1⟧
+/조선 출신의 여악사\. (.+)/	A musician from Joseon. ⟦$1⟧
+/일본 출신의 악사\. (.+)/	A musician from Japan. ⟦$1⟧
+/일본 출신의 여악사\. (.+)/	A musician from Japan. ⟦$1⟧
+/서아프리카 출신의 악사\. (.+)/	A musician from West Africa. ⟦$1⟧
+/서아프리카 출신의 여악사\. (.+)/	A musician from West Africa. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 악사\. (.+)/	A musician born in New Spain. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여악사\. (.+)/	A musician born in New Spain. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 악사\. (.+)/	A musician born on the southern continent. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여악사\. (.+)/	A musician born on the southern continent. ⟦$1⟧
+/브라질\ 태생 출신의 악사\. (.+)/	A musician born in Brazil. ⟦$1⟧
+/브라질\ 태생 출신의 여악사\. (.+)/	A musician born in Brazil. ⟦$1⟧
+/(.+?) 태생의 항해사\. (.+)/	A navigator born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여항해사\. (.+)/	A navigator born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 검객\. (.+)/	A swordsman born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여검객\. (.+)/	A swordswoman born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 포수\. (.+)/	A gunner born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여포수\. (.+)/	A gunner born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 회계\. (.+)/	A purser born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여회계\. (.+)/	A purser born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 학자\. (.+)/	A scholar born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여학자\. (.+)/	A scholar born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 의사\. (.+)/	A doctor born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여의사\. (.+)/	A doctor born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 통역\. (.+)/	An interpreter born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여통역\. (.+)/	An interpreter born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 수도사\. (.+)/	A friar born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여수도사\. (.+)/	A nun born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 선대공\. (.+)/	A shipwright born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여선대공\. (.+)/	A shipwright born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 측량사\. (.+)/	A surveyor born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여측량사\. (.+)/	A surveyor born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 요리사\. (.+)/	A cook born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여요리사\. (.+)/	A cook born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 악사\. (.+)/	A musician born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여악사\. (.+)/	A musician born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 승려\. (.+)/	A monk born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여승려\. (.+)/	A nun born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 라마승\. (.+)/	A lama born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여라마승\. (.+)/	A lama born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 수행자\. (.+)/	An ascetic born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여수행자\. (.+)/	An ascetic born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 수피\. (.+)/	A Sufi born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여수피\. (.+)/	A Sufi born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 주술사\. (.+)/	A shaman born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여주술사\. (.+)/	A shaman born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 신관\. (.+)/	A priest born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여신관\. (.+)/	A priestess born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 소리꾼\. (.+)/	A sorikkun singer born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여소리꾼\. (.+)/	A sorikkun singer born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 비파법사\. (.+)/	A biwa hōshi born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여비파법사\. (.+)/	A biwa hōshi born in ⟦$1⟧. ⟦$2⟧
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 항해사\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A navigator by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 항해사\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A navigator by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 항해사/	⟦$1⟧ navigator
+여항해사	Navigator
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 검객\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A swordswoman by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 검객\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A swordsman by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 검객/	⟦$1⟧ swordsman
+여검객	Swordswoman
+검객	Swordsman
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 포수\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A gunner by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 포수\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A gunner by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 포수/	⟦$1⟧ gunner
+여포수	Gunner
+포수	Gunner
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 회계\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A purser by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 회계\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A purser by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 회계/	⟦$1⟧ purser
+여회계	Purser
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 학자\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A scholar by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 학자\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A scholar by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 학자/	⟦$1⟧ scholar
+여학자	Scholar
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 의사\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A doctor by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 의사\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A doctor by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 의사/	⟦$1⟧ doctor
+여의사	Doctor
+의사	Doctor
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 통역\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A interpreter by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 통역\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A interpreter by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 통역/	⟦$1⟧ interpreter
+여통역	Interpreter
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 수도사\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A nun by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 수도사\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A friar by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 수도사/	⟦$1⟧ friar
+여수도사	Nun
+수도사	Friar
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 선대공\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A shipwright by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 선대공\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A shipwright by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 선대공/	⟦$1⟧ shipwright
+여선대공	Shipwright
+선대공	Shipwright
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 측량사\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A surveyor by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 측량사\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A surveyor by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 측량사/	⟦$1⟧ surveyor
+여측량사	Surveyor
+측량사	Surveyor
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 요리사\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A cook by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 요리사\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A cook by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 요리사/	⟦$1⟧ cook
+여요리사	Cook
+요리사	Cook
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 악사\./	A woman of the ⟦$1⟧. When you found ⟦$2⟧, she asked to come aboard. A musician by trade.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 악사\./	A man of the ⟦$1⟧. When you found ⟦$2⟧, he asked to come aboard. A musician by trade.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 악사/	⟦$1⟧ musician
+여악사	Musician
+악사	Musician
+승려	Monk
+라마승	Lama
+수행자	Ascetic
+수피	Sufi
+주술사	Shaman
+신관	Priest
+소리꾼	Sorikkun singer
+비파법사	Biwa hōshi
+/(.+?)의 마을에서 나고 자랐다\. 바다 건너에서 온 배를 처음 보고, 수평선 너머를 보고 싶어 제독을 따라나섰다\./	Born and raised among the ⟦$1⟧. After seeing a ship from across the sea for the first time, followed the Admiral to see what lies beyond the horizon.
+@에서 태어났다. @	Born in {1}. {2}
+서른 해쯤 전 이 바다를 떠돌던 @(@)(과|와) 똑 닮았다는 말을 자주 듣는다.	People often say they're the spitting image of {1} ({2}), who roamed these seas some thirty years ago.
+철새 소식: 올해 떠돌이 항해사 #명이 새로 항구에 나타났다 — @.	Migrant news: # wandering sailors turned up in port this year — {1}.
+한 세대가 흘렀다. 항구를 떠돌던 철새들이 떠나고 #명의 새 얼굴이 나타났다 — 어딘가 윗대 뱃사람들을 닮았다는 소문이다.	A generation has passed. The migrants who drifted between ports are gone, and # new faces have appeared — rumor says they somehow resemble the sailors of the generation before.
+@(@)	{1} ({2})
+고용되지 못한 뱃사람들이 바다로 나갔다 — @. 그 함대를 나포하면 사로잡아 다시 고용할 수 있다.	Sailors no one hired have put to sea — {1}. Capture their fleets and you can take them alive and hire them again.
+@ → @	{1} → {2}
+@ 상선대 선장	captain of a {1} merchant fleet
+@ 군함대 제독	admiral of a {1} war fleet
+@ 해적단 두목	chief of the {1} pirates
+바다의 새 얼굴: @.	New faces at sea: {1}.
+@ 제독	{1} admiral
+해적 소문: @(이|가) 바다에 나타났다고 한다.	Pirate rumors: {1} — said to have appeared at sea.

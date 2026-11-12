@@ -1,0 +1,316 @@
+부관 @	First Mate @
+(대강 알아들음)	(gets the gist)
+/이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 (.+?) · 일행 (.+?) \((.+?)(?:이|가) 통역 — 파란 점\)$/	The local language and how well your party speaks it — Admiral: ⟦$1⟧ · party: ⟦$2⟧ (⟦$3⟧ interprets — blue dots)
+항해 수첩 열기	Open the voyage notebook
+@ 영토 · 국왕 @	@ territory · Monarch @
+술집에 함께할 만한 항해사 #명	# navigators in the tavern worth sailing with
+#일분	# days' worth
+함대 현황	Fleet Status
+(최저 # / 최대 #)	(min # / max #)
+항해 가능	Can sail
+# / #통	# / # barrels
+★ @	★ @
+시세 #%	Price #%
+술집 주인	Tavern Keeper
+술집에서 술을 마시거나 후원자에게서 「@」 이야기를 들을 수 있다	You can hear about "@" over drinks at the tavern or from a patron
+체력	Vitality
+무력	Strength
+조선소 목수	Shipwright
+(기본 #)	(base #)
+보너스를 지급한다 — 소지금 금화 #닢부터	Pay a Bonus — from # gold on hand
+정보를 듣는다 — 계약한 일이 없다	Ask for Information — no contract yet
+누르면 @의 이야기	Click to hear @
+그대로	As is
+유럽의 배	European ships
+처음 다는 사커 대포의 무게를 뺀 실제 짐칸	Real hold space after the weight of her first saker guns
+(짐칸 #)	(hold #)
+#~#명	#–# crew
+포문	Gunports
+#문	# ports
+속도	Speed
+맞바람	Upwind
+기함으로 쓰면 부하를 배치할 방 수 · 종선이면 창고로 고쳐 짐칸을 늘릴 수 있다	As flagship: rooms for assigning crew · as a consort: can be converted to storage for more hold space
+누르면 이 배의 역사와 게임 설정을 봅니다 · 권장 여유자금 약 #닢 (화물·보급·급료 준비, 실제 비용은 항로·선원에 따라 다릅니다)	Click to see this ship's history and game details · recommended spare funds about # gold (for cargo, supplies and wages; actual costs depend on route and crew)
+애정	Affection
+애정 # / #	Affection # / #
+고정 — 일괄 매각의 「전체 선택」과 보관함의 「모두 맡긴다」에서 빠진다	Pinned — excluded from "Select all" when bulk-selling and from "Store all" in the storeroom
+종류	Kind
+전체 동료	All Companions
+현상금 #닢	Bounty # gold
+왕실 정원사	Royal Gardener
+초원	Grassland
+스텝	Steppe
+산악	Mountains
+도크 — 도크 #/#척 · 모항	Dock — dock #/# ships · home port
+탐험·교역 계획 — 사건 예고·기한·재조사	Voyage & Trade Plans — event alerts, deadlines, re-surveys
+탐험·교역 계획 — 거래처 정보·역사적 교역 기회	Voyage & Trade Plans — contacts, historic trade openings
+호위 요청 — 호위할 상선을 찾아본다	Escort Requests — look for a merchant ship to escort
+#박	# nights
+상인 @	Merchant @
+술집 손님	Tavern Patron
+기초 #단계	Basic, level #
+기초	Basic
+식당 주인	Restaurant Owner
+소문 속 해적	Rumored Pirate
+여관 주인	Innkeeper
+수녀	Nun
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+) · 짐승을 잃기 쉽다$/	⟦$1⟧ pace ×$2 · fatigue ×$3 · animals are easily lost
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+)$/	⟦$1⟧ pace ×$2 · fatigue ×$3
+사막	Desert
+숲	Forest
+밀림	Jungle
+설원	Snowfield
+툰드라	Tundra
+빙원	Ice Field
+발견물 백과사전 — 아직 실린 것이 없다	Encyclopedia of Discoveries — nothing in it yet
+이베리아 참나무	Iberian Oak
+기함 변경 — 기함 @호	Change Flagship — flagship @
+바닥이 얕아 뭍 가까이(해안에서 #° 안)에서 더 빠르고, 여울·암초 사고를 입지 않는다.	Shallow-bottomed, so faster near land (within #° of the coast) and immune to shoal and reef accidents.
+얕은 흘수	Shallow Draft
+가볍고 날렵해 멀리까지 살핀다. 함대에 있으면 망루의 시야가 넓어진다.	Light and nimble, she scouts far ahead. With her in the fleet, the lookout sees farther.
+탐험선	Explorer
+가진 차례	Order owned
+고정한 것 먼저	Pinned first
+최저 #	Min #
+교대 넉넉 #	Comfortable shifts #
+그대로 · 하루 식량·물 각 #통 · 지금 실은 것으로 #일	As is · # barrels each of food and water a day · # days on what's aboard
+일분	days' worth
+비움	Empty
+사각돛이 많아 맞바람에 느리다 — 「개조」에서 삭구 개량·돛 바꾸기로 보강	Mostly square sails, slow upwind — improve with rigging upgrades or new sails under "Refit"
+약함	Weak
+(기함보다 #칸 많음)	(# more than the flagship)
+/(.+?) ([\d]+)$/	⟦$1⟧ $2
+인물 이야기	Their Story
+📜 이야기	📜 Story
+실존 인물 — 지명도가 높을수록 특기가 많다	A real historical figure — the better known, the more skills
+지명도 ★ 기록에 남은 사람	Renown ★ recorded in history
+· 월급	· Wage
+통함 보통	Understands: fair
+@(으로|로) 그럭저럭 뜻이 통한다. 처음에는 마음을 다 열지 않을 것이다.	You can just about get by in @. They won't open up to you right away.
+만나서 이야기한다	Meet and Talk
+# / #명	# / #
+특기 단계 합계	Skill levels total
+언어 단계 합계	Language levels total
+월급	Wage
+/(.+?) 단계$/	⟦$1⟧ level
+오름차순 ↑	Ascending ↑
+선실 배치	Cabin Assignments
+동료 사이	Relationships
+현재 고용한 전체 동료 목록	All companions currently hired
+동료 ↑	Companion ↑
+@ 상세 보기	View @
+/(.+?) · 지금 ([\d]+) \/ 본디 ([\d]+)단계 (.+)$/	⟦$1⟧ · now $2 / natural level $3 ⟦$4⟧
+마모라 해적 의회	Pirate Council of Mamora
+장비 중	Equipped
+#필	# head
+세이커포 #/#	Saker # / #
+역풍에 강한 탐험선	An explorer that handles headwinds well
+@에게 말을 건다	Talk to @
+함대 전체 선원을 몇 명으로 할까요? 모자라면 모집하고(한 사람 금화 #닢), 남으면 이 도시에서 내립니다.	How many sailors for the whole fleet? Any shortfall is hired (# gold a head); any surplus goes ashore here.
+최저 #명(모자라면 느리고 쉽게 지침) · 교대가 넉넉한 #명(피로가 덜 쌓임) · 최대 #명(백병전·일손). 사람이 많을수록 식량·물이 빨리 줄어듭니다.	Min # (short-handed: slow and tire easily) · comfortable # (less fatigue) · max # (boarding, extra hands). The more people, the faster food and water run out.
+#닢/통 · 하루 #통	# gold/barrel · # barrels a day
+들은 소식	News heard
+기다리는 소식	Awaited news
+남겨 둔 기록	Saved notes
+발표된 발견 재조사	Re-survey announced discoveries
+직접 들은 이야기만 적혀 있습니다. 더 자세한 사정은 현지에서 알아보십시오.	Only what you've heard firsthand is written here. Find out more on the spot.
+들은 이야기	What you heard
+장소	Place
+메모	Note
+아직 적어 둔 소식이 없습니다. 마을 사람이나 거래처와 이야기를 나눠 보십시오.	No news written down yet. Talk to townsfolk and your trading contacts.
+항구 관리인	Harbor Master
+갈 곳	Destination
+실어 올 물건	Cargo to bring back
+(상인의 돈으로 산다)	(bought with the merchant's money)
+까지 @(으로|로) (#일)	back to @ by then (# days)
+받는 몫	Your share
+상인이 남긴 이익의	of the merchant's profit
+(지금 시세면 약 #닢 · 적어도 품삯 #닢 · 기한을 넘기면 절반)	(about # gold at today's prices · at least # gold in wages · half if late)
+물자비	Supplies
+기한 동안의 식량·물 약 #닢	about # gold in food and water for the period
+(품삯은 적어도 그 #배)	(the wage is at least # times that)
+상인의 배는 함대를 따라다닙니다. 내 짐칸·선원과는 상관없지만,	The merchant's ship follows your fleet. It doesn't use your hold or crew, but
+함대가 그 배보다 빨리 가지 못합니다.	your fleet can't go faster than that ship.
+상선과 함께면 해적이 더 꾀고, 해전에서 그 배를 잃으면 호위는 실패합니다(명성 −#).	Merchant ships draw more pirates, and if you lose the ship in battle the escort fails (fame −#).
+사각	Square
+(기함 @호보다 #칸 적음)	(# fewer than the flagship @)
+맞바람에 그럭저럭 — 삭구 개량으로 보강	Fair upwind — improve with rigging upgrades
+높은 선루와 갑판 덕분에 백병전에서 유리하다 (공격·방어 모두).	High castles and decks give an edge in boarding (attack and defense).
+높은 갑판	High Deck
+동료 정렬 기준	Sort companions by
+정렬 방향	Sort direction
+동료 보기 전환	Switch companion view
+동료 상세	Companion details
+미숙 #단계	Novice, level #
+미숙	Novice
+숙련 #단계	Skilled, level #
+숙련	Skilled
+달인 #단계	Master, level #
+달인	Master
+모름 #단계	None, level #
+모름	None
+보통 #단계	Average, level #
+능숙 #단계	Fluent, level #
+능숙	Fluent
+★ 배에서 익힘 · 숫자는 현재 단계	★ learned aboard · numbers are current levels
+현상수배 벽보를 본다 — 대서양의 이름난 해적 #명	Read the Wanted Posters — # notorious pirates of the Atlantic
+조합장	Guildmaster
+수위	Gatekeeper
+· 초원	· Grassland
+맞춘 뒤 교역품 포함 항해 가능	After applying, days at sea including trade goods
+식량 #+#일 · 물 #+#일	Food #+# days · water #+# days
+(보급품+교역품 대체분 · 교역품을 팔면 감소)	(supplies + trade goods · selling the goods reduces this)
+보급품만	Supplies only
+(식량 #일 · 물 #일) · 자재 #통 · 사는 값 금화	(food # days · water # days) · materials # barrels · cost
+닢 · 남는 짐칸 #통	gold · hold space left # barrels
+곡식·어육·고기·유제품 같은 교역품은 식량으로, 맥주·포도주는 물 대신 쓸 수 있습니다(모자라면 바다에서 먹고 마십니다).	Trade goods such as grain, dried fish, meat and dairy count as food, and beer and wine can stand in for water (when short, the crew eats and drinks them at sea).
+이베리아 참나무 — 내구 +#%	Iberian Oak — hull +#%
+삼각 · 삼각	Lateen · Lateen
+삭구 개량: 안 함	Rigging upgrade: none
+안 함	None
+포문 #/#문 (늘릴 수 있음) · 이베리아 참나무 — 내구 +#%	Gunports #/# (can add more) · Iberian Oak — hull +#%
+금화 #닢 → 조선 기술 #등급 · 남는 돈 #닢	# gold → shipbuilding tier # · # gold left
+손님들의 해적 이야기를 듣는다 — 이름난 해적의 행방을 들을지도	Listen to Pirate Tales — you might hear where the famous pirates are
+비용 금화 #닢	Cost # gold
+값 높은 순	Highest price first
+아직 고른 물건이 없습니다	Nothing selected yet
+열람 — 서가에서 책을 고른다	Browse — pick a book from the shelves
+서가의 책 #권 · 지금 읽을 수 있는 책 #권 · 읽는 데 하루	# books on the shelves · # you can read now · reading takes a day
+책에 가까이 가면 제목과 지은이가 보입니다. 눌러서 펼쳐 봅니다. (방향키로 고르고 Enter)	Walk up to a book to see its title and author. Click to open it. (Choose with the arrow keys and press Enter)
+탐험 장비 — 화승총 · 창 · 흉갑	Expedition Gear — arquebuses · pikes · breastplates
+마구간에 #필 (대원 #명에 #필) · 금화 #닢	{1} head in the stables ({3} for {2} members) · {4} gold
+대원 #명에 필요한 수	Needed for # members
+· 새로 사는 것	· to buy
+· (#~#필)	· (#~# head)
+말 #필을 사서 맡긴다 (#닢)	Buy # horses and keep them here (# gold)
+책을 누르면 펼쳐 봅니다. 맨 윗칸은 항해일지 — #년마다 한 권으로 엮입니다.	Click a book to open it. The top shelf holds your logbooks — one volume every # years.
+꺼낼 물건과 수량을 골라 주십시오.	Choose what to take out and how many.
+승원 #명 · 짐칸 #통 (교역품 #통) — 식량·물·자재를 따로 정합니다.	# aboard · hold # barrels (trade goods #) — set food, water and materials separately.
+지금보다 줄이면	If you cut back from now,
+내려서 보급값의 #%에 되팔고, 그 자리에 교역품을 더 실을 수 있습니다.	the excess is sold back at #% of the supply price, freeing room for more trade goods.
+식량·물 함께	Food & water together
+(며칠 항해할 만큼)	(days of sailing)
+지금 보급품	Current supplies
+남길 보급품	Supplies to keep
+#닢/통 · 바다 위 수리에 씀 (내구 #에 #통)	{1} gold/barrel · used for repairs at sea ({3} barrels per {2} hull)
+/함대에는 최대 ([\d]+)척까지 편성할 수 있습니다\. (.*)$/	A fleet can hold up to $1 ships. The top ship is the flagship, commanded by the admiral. Captains, helmsmen, deck hands and lookouts for the other ships are assigned from your companions by ability.
+/함대에서 뺀 배를 도크에 맡겨 둡니다\. 모항\((.+?)\) 도크에는 ([\d]+)척까지 기한 없이, 다른 항구 도크에는 ([\d]+)척까지 맡길 수 있고 ([\d]+)년이 지나면 폐기됩(.*)$/	Ships taken out of the fleet can be left at a dock. Your home port (⟦$1⟧) dock holds up to $2 ships indefinitely; other ports' docks hold up to $3, and ships left there are scrapped after $4 years.
+기함 말고는 맡길 배가 없습니다.	You have no ships to leave besides the flagship.
+@ 도크 — #/#척	@ Dock — #/# ships
+맡긴 배가 없습니다.	No ships at the dock.
+· @ @호 (짐칸 #통)	· @ @ (hold # barrels)
+(@) — 편도 약 #일	(@) — about # days one way
+누적 출자	Total invested
+#닢 · #등급 없음	# gold · no tier yet
+다음 등급	Next tier
+#닢 추가	# gold more
+거래 우대	Trade privileges
+매입 #% 할인 · 매각 #% 우대	Buying #% off · selling #% better
+품목 확장 계획	Product expansion plan
+@ (#등급 · 누적 #닢)	@ (tier # · # gold invested)
+쌓인 배당	Dividends accrued
+/출자금과 시설 공사비는 돌려받지 못합니다\.(.*)$/	Investments and construction costs are not refundable. Investment brings trade privileges, new products and dividends; construction increases volumes. Each facility can be built in three stages, starting from investment tier $1.
+다음 공사비	Next construction cost
+산지·중계 공급망을 보강한다. 단계마다 공급 한도 #%, 하루 입하량 #% 증가	Strengthens local and relay supply chains. Each stage: supply limit +#%, daily restock +#%
+교역소 저장 시설을 넓힌다. 단계마다 공급 한도 #% 증가. 제독의 화물 보관함과는 별개	Expands the trading post's storage. Each stage: supply limit +#%. Separate from your own cargo storage
+상인·공방과 판로를 넓힌다. 단계마다 시장이 받아 줄 물량 #% 증가	Opens new outlets with merchants and workshops. Each stage: market demand +#%
+목재:	Timber:
+(내구 +#%)	(hull +#%)
+· 사업 투자 #등급	· business investment tier #
+다른 고장 목재를 쓰려면 목재 시장이 있는 도시에서 사업에 투자하거나, 투자한 도시에 목재를 실어 오게.	To use timber from other regions, invest in a town with a timber market, or ship timber to a town you've invested in.
+바르카	Barca
+가장 값싼 원양 배	The cheapest ocean-going ship
+포르투갈 사람들이 아프리카 해안을 더듬어 내려갈 때 쓴 외돛 작은 배. 짐은 적지만 싸고 얕은 물에 강하다.	The small single-masted boat the Portuguese used to feel their way down the African coast. Little cargo, but cheap and good in shallow water.
+느리지만 튼튼한 북해의 짐배	A slow but sturdy North Sea freighter
+두꺼운 판자로 지어 폭풍 피해가 적고 먼 바다의 파도에도 끄떡없다.	Built with thick planks — takes less storm damage and shrugs off the open ocean's waves.
+튼튼한 선체	Sturdy Hull
+판자를 겹쳐 붙인 북유럽의 외돛 범선. 느리지만 폭풍에 강하다.	A single-masted clinker-built ship of northern Europe. Slow, but tough in a storm.
+삼각돛으로 맞바람도 거슬러 오르는 포르투갈의 탐험선. 얕은 해안을 살피며 나아가기 좋다.	The Portuguese explorer whose lateen sails beat even into the wind. Ideal for probing shallow coasts.
+삼각·삼각	Lateen · Lateen
+삼각돛·살돛으로 맞바람에 강하다	Lateen and spritsails make her strong upwind
+강함	Strong
+(기함과 같음)	(same as flagship)
+대형카라벨	Large Caravel
+원양 탐험의 주력	The workhorse of ocean exploration
+사각돛을 더한 카라벨(카라벨라 레돈다). 순풍에서도 역풍에서도 고르게 달려 대양 탐험에 알맞다.	A caravel with square sails added (caravela redonda). Runs evenly with the wind or against it — made for ocean exploration.
+사각·삼각·삼각	Square · Lateen · Lateen
+높은 선루의 원양 무역선	An ocean-going trader with high castles
+앞뒤로 높은 선루를 올린 원양 무역선(나우). 선창이 넓고 백병전에 강하다.	An ocean-going trader (nau) with tall castles fore and aft. Roomy holds and strong in boarding.
+사각·사각·삼각	Square · Square · Lateen
+대형카락	Large Carrack
+인도 항로의 거대한 상선	The giant merchantman of the India route
+인도 항로를 오가던 거대한 카락. 향료를 가득 싣고 대양을 건넌다.	A huge carrack plying the India route, crossing the ocean laden with spices.
+사각·사각·삼각·삼각	Square · Square · Lateen · Lateen
+한 단위는 금화 #닢입니다. 이 조선소의 마지막 등급까지 필요한 금액만 받습니다.	One unit is # gold. You're charged only what's needed to reach this yard's top tier.
+대서양에서 활약하는 이름난 해적들의 현상수배 벽보입니다. 벽보를 누르면 자세히 봅니다.	Wanted posters for the notorious pirates of the Atlantic. Click a poster for details.
+쿨롱 함대	Coullon's Fleet
+실존 인물	Real person
+허풍쟁이 코너	Connor the Braggart
+하이브라질 해적단	Hy-Brasil Pirates
+검은 개 해리	Black Dog Harry
+갈고리 손 톰 크롤리	Tom Crawley the Hook
+소금 눈 피터 모건	Salt-Eye Peter Morgan
+방값은 미리 받습니다. 하룻밤에 금화 #닢인데, 며칠 묵으시겠습니까?	Rooms are paid in advance. It's # gold a night — how many nights will you be staying?
+팔 물건을 고르십시오. 「전체 선택」 뒤 남길 것만 끄면 됩니다. 물건 앞	Choose what to sell. Hit "Select all" and untick what you want to keep. Click the
+을 눌러 고정하면 「전체 선택」에서 빠집니다. 여러 개 가진 물건은 막대를 끌어 몇 개 팔지 정합니다. 먼 곳의 진귀한 유물일수록 값을 잘 쳐 줍니다.	in front of an item to pin it so "Select all" skips it. For items you have several of, drag the bar to choose how many to sell. Rare relics from far away fetch the best prices.
+#개 값	Price for #
+팔 수량	Qty to sell
+받을 돈	You receive
+철새	Migrants
+업적	Achievements
+교역 수첩	Trade Notes
+유럽 정세	European Affairs
+이동 장비	Mounts & Wagons
+소지품 칸을 쓰지 않음	Takes no inventory slot
+보유한 이동 장비가 없습니다. 도시 성문의 마구간에서 말·당나귀 같은 탈것을 사면 이곳에 표시됩니다.	You have no mounts. Buy horses, donkeys and the like at a town gate's stables and they'll show up here.
+/말·당나귀 같은 탈것은 소모품이 아닙니다\.(.*)$/	Mounts like horses and donkeys aren't consumed. You only lose those that fall on an expedition; the ones that come back are left at the stables of the town you set out from and reused.
+소지품 #/# · 발견의 증거는 칸을 차지하지 않는다 (보고·발표하면 차지한다)	Belongings #/# · proof of discoveries takes no slot (until you report or announce it)
+설명	Description
+버림	Discard
+얼마를 기부하시겠습니까? 악명이 줄고 세상의 평판이 오릅니다.	How much would you like to donate? It reduces your notoriety and improves your standing.
+읽은 책	Books read
+읽을 수 있는 책	Books you can read
+아직 읽을 수 없는 책	Books you can't read yet
+짐승을 사서 마구간에 맡겨 두거나, 맡긴 짐승을 되팔 수 있습니다.	Buy animals and keep them at the stables, or sell back the ones you keep here.
+탐험대	Expedition
+· 소지금	· gold on hand
+도보	On Foot
+돈이 들지 않는다	Costs nothing
+모든 땅 ×#	All terrain ×#
+짐을 저마다 지고 걷는다. 돈이 들지 않고 어디든 갈 수 있지만 느리고 쉽게 지친다.	Everyone shoulders a pack and walks. Free and goes anywhere, but slow and tiring.
+피로 ×# · 물 ×#(사막) · 싸움 +#% · 정찰 +#°	Fatigue ×# · water ×# (desert) · combat +#% · scouting +#°
+대원 모두 말을 탄 기마 탐험대. 초원과 평야에서 가장 빠르고 멀리 살피며 싸움에도 강하다. 사막·밀림·설원에서는 말이 쓰러진다.	Every member on horseback. Fastest on grassland and plains, scouts farthest and fights hard. Horses collapse in desert, jungle and snow.
+마구간에 #필 (대원 #명에 #필 · #명에 하나) · 금화 #닢	{1} head in the stables ({3} for {2} members · one per {4}) · {5} gold
+피로 ×# (가장 ×#)	Fatigue ×# (lowest ×#)
+짐바구니를 얹은 당나귀 행렬. 빠르지는 않아도 산길과 메마른 땅에 강하고 값이 싸다.	A train of donkeys with panniers. Not fast, but sure-footed on mountain trails and dry land, and cheap.
+말이 끈다	Horse-drawn
+마구간에 #대 (대원 #명에 #대 · #명에 하나) · 금화 #닢	{1} wagons in the stables ({3} for {2} members · one per {4}) · {5} gold
+· 스텝	· Steppe
+피로 ×# · 물 ×#(사막) · 식량 ×# · 싸움 +#%	Fatigue ×# · water ×# (desert) · food ×# · combat +#%
+/포장을 씌운 짐마차와 끄는 짐승(.*)$/	Covered wagons and draft animals (horses in Europe and the steppe, oxen in India, China and Africa). Easiest on flat ground, with room for plenty of supplies. Struggles in mountains and jungle.
+마구간에 둘 수	Can keep in stables
+대원 수만큼	As many as members
+지형 적합도	Terrain suitability
+아주 좋음(×# 넘게)	Excellent (over ×#)
+좋음	Good
+조금 나음	Slightly better
+나쁨(느리거나 짐승을 잃는다) · 짐승이 모자라면 효과가 그만큼 줄어든다	Poor (slow or animals are lost) · if you're short of animals the effect drops accordingly
+도서관에서 읽은 책 (필사본)	Books read at libraries (copies)
+발견물에서 얻은 책	Books found at discoveries
+항해일지 #권 · 필사본 #권 · 발견물의 책 #권	# logbooks · # copies · # books from discoveries
+#부	# copies
+빈 칸 — 도서관에서 읽은 책(필사본)이나 발견물에서 얻은 책을 꽂을 수 있다	Empty slot — shelve a book read at a library (a copy) or one found at a discovery
+맡긴 물건은 몇 개든 둘 수 있고 소지품 칸을 차지하지 않습니다. 아직 보고·발표하지 않은 발견의	Stored items take no inventory slots, however many. Proof of discoveries not yet reported or announced
+는 칸을 차지하지 않으니 들고 다니십시오 — 보고·발표하면 그때부터 칸을 차지합니다. 물건 앞	takes no slot either, so keep it on you — it starts taking a slot once reported or announced. Click the
+을 누르면	in front of an item to
+고정	pin
+— 「모두 맡긴다」와 시장의 「전체 선택」에서 빠집니다.	it — it's skipped by "Store all" and by "Select all" at the market.
+/장비 중인 것·아직 보고하지 않은 증거·고정\(📌\)한 것은 맡기지 않는다(.*)$/	Equipped items, unreported proof and pinned (📌) items aren't stored · navigation tools (limes, cats, sextants …) stay aboard and are skipped
+장비 중·증거·고정·항해도구 말고 모두 맡긴다	Store everything except equipped, proof, pinned and navigation tools
+맡긴 차례	Order stored
+보이는 것 선택	Select visible
+선택 해제	Clear selection
+맡긴 물건이 없다	Nothing stored
+고른 수량 꺼내기	Take out selected
+같은 일반 물건은 한 칸에 합칩니다. 유물처럼 개별 상태가 있는 물건은 각각 칸이 필요합니다.	Identical ordinary items share one slot. Items with their own condition, like relics, each need a slot.
+↑ @ 들어가기	↑ Enter the @

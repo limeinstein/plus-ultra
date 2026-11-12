@@ -221,7 +221,8 @@
     for (var i = 0; i < bs.length; i++) {
       var b = bs[i];
       if (b.disabled || b.classList.contains('disabled') || !b.offsetParent) continue;
-      if (b.textContent.replace(/\s+/g, '') === '수첩') return b;
+      var bt = b.textContent.replace(/\s+/g, '');
+      if (bt === '수첩' || (G.T && bt === G.T('수첩').replace(/\s+/g, ''))) return b;   // 영어 화면에서는 「Notebook」 (2026-11-12 영어 QA)
     }
     return null;
   }

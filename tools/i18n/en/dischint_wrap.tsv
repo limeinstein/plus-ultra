@@ -1,0 +1,61 @@
+/(.+) (\S+)에 가면 건물들을 하나하나 둘러보면 눈에 띌 걸세\./	⟦$1⟧ Go to ⟦$2⟧ and look the buildings over one by one — it'll catch your eye.
+/(.+) (\S+)에 가면 거리를 걷다 그 건물 앞에 가서 직접 보게\./	⟦$1⟧ Go to ⟦$2⟧, walk the streets, and stand in front of that building to see for yourself.
+/(.+) 그걸 만든 (.+?)(?:을|를) 만나 이야기해 보게\. 요즘 어디서 지내는지는 술집마다 소문이 다르더군\./	⟦$1⟧ Go and talk to ⟦$2⟧, who made it. Every tavern has a different rumor about where they're staying these days.
+단서 — @	Clue — @
+…연기 속에 보이네요. @	…I can see it in the smoke. @
+(알아듣기 힘든 말이지만) @	(Hard to make out, but) @
+이건 비밀인데 말이야... @	This stays between us, mind... @
+확실히 @	I know this much for sure: @
+이건 어떤 선원한테서 들은 이야기인데, @	This is something I heard from a sailor: @
+자네가 쫓는 그 이야기 말일세, 나도 들은 바가 있네. @	That tale you're chasing — I've heard something of it myself. @
+그러고 보니 이런 이야기를 들은 적이 있네. @	Come to think of it, I once heard a tale like this. @
+그대가 쫓는 그 이야기 말이오, (짐|과인)도 들은 바가 있소. @	That tale you pursue — We too have heard of it. @
+그러고 보니 이런 이야기가 (짐|과인)의 귀에 들어왔소. @	Come to think of it, word of this reached Our ears. @
+당신이 쫓는 그 이야기 말이에요, 나도 들은 게 있어요. @	That story you're chasing — I've heard a thing or two myself. @
+그러고 보니 이런 이야기를 들은 적이 있어요. @	Come to think of it, I heard a story like this once. @
+나리가 쫓는 그 이야기 말입니다, 저도 거래처에서 들은 게 있습니다. @	That story you're after, sir — I've heard something of it from my trading partners. @
+그러고 보니 거래처에서 이런 이야기를 들었습니다. @	Come to think of it, I heard this from one of my trading partners. @
+그대가 쫓는 그 이야기 말이오, 나도 읽은 바가 있소. @	That tale you pursue — I have read of it myself. @
+그러고 보니 이런 기록을 본 적이 있소. @	Come to think of it, I once came across a record like this. @
+그대가 쫓는 그 이야기 말이오, 순례자에게서 들은 바가 있소. @	That tale you pursue — I have heard of it from pilgrims. @
+그러고 보니 순례자들에게서 이런 이야기를 들었소. @	Come to think of it, I heard this from pilgrims. @
+제독이 쫓는 그 이야기 말입니다, 저도 보고서에서 본 적이 있습니다. @	That story you're chasing, Admiral — I've seen it in a report myself. @
+그러고 보니 이런 보고가 들어온 적이 있습니다. @	Come to think of it, a report like this once came in. @
+【단서가 바뀌었다】 「@」 — @ (찾는 곳: @)	[Clue changed] "{1}" — {2} (Look in: {3})
+「@」(을|를) 읽어 보니 이런 대목이 있습니다. @	Reading "{1}," there are passages like these. {2}
+@ 바로 이 근처라네. 성문을 나서면 금방이지.	@ It's right around here. Just out the town gate.
+@ 최근에는 목격 소식이 없네. 항구에서 새 소식을 기다려 보게.	@ No sightings lately. Wait for fresh news at the harbor.
+@ 바로 이 도시일세. 건물들을 하나하나 둘러보면 눈에 띌 걸세.	@ It's right here in this city. Look the buildings over one by one and it'll catch your eye.
+@ 바로 이 도시일세. 거리를 걷다 그 건물 앞에 가서 직접 보게.	@ It's right here in this city. Walk the streets, go stand in front of that building and see for yourself.
+@ 북쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ It's a long way off to the north. Head out to a port on the coast and take ship — it'll be # days at least.
+@ 여기서 북쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ They say it's about # days overland to the north from here.
+@ 북쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ It's to the north. About # days by sea, then go ashore and walk inland about # days, they say.
+@ 북쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ It's to the north. About # days by sea — once you reach those waters you'll know it, they say.
+@ 북동쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ It's a long way off to the northeast. Head out to a port on the coast and take ship — it'll be # days at least.
+@ 여기서 북동쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ They say it's about # days overland to the northeast from here.
+@ 북동쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ It's to the northeast. About # days by sea, then go ashore and walk inland about # days, they say.
+@ 북동쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ It's to the northeast. About # days by sea — once you reach those waters you'll know it, they say.
+@ 동쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ It's a long way off to the east. Head out to a port on the coast and take ship — it'll be # days at least.
+@ 여기서 동쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ They say it's about # days overland to the east from here.
+@ 동쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ It's to the east. About # days by sea, then go ashore and walk inland about # days, they say.
+@ 동쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ It's to the east. About # days by sea — once you reach those waters you'll know it, they say.
+@ 남동쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ It's a long way off to the southeast. Head out to a port on the coast and take ship — it'll be # days at least.
+@ 여기서 남동쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ They say it's about # days overland to the southeast from here.
+@ 남동쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ It's to the southeast. About # days by sea, then go ashore and walk inland about # days, they say.
+@ 남동쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ It's to the southeast. About # days by sea — once you reach those waters you'll know it, they say.
+@ 남쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ It's a long way off to the south. Head out to a port on the coast and take ship — it'll be # days at least.
+@ 여기서 남쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ They say it's about # days overland to the south from here.
+@ 남쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ It's to the south. About # days by sea, then go ashore and walk inland about # days, they say.
+@ 남쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ It's to the south. About # days by sea — once you reach those waters you'll know it, they say.
+@ 남서쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ It's a long way off to the southwest. Head out to a port on the coast and take ship — it'll be # days at least.
+@ 여기서 남서쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ They say it's about # days overland to the southwest from here.
+@ 남서쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ It's to the southwest. About # days by sea, then go ashore and walk inland about # days, they say.
+@ 남서쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ It's to the southwest. About # days by sea — once you reach those waters you'll know it, they say.
+@ 서쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ It's a long way off to the west. Head out to a port on the coast and take ship — it'll be # days at least.
+@ 여기서 서쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ They say it's about # days overland to the west from here.
+@ 서쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ It's to the west. About # days by sea, then go ashore and walk inland about # days, they say.
+@ 서쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ It's to the west. About # days by sea — once you reach those waters you'll know it, they say.
+@ 북서쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ It's a long way off to the northwest. Head out to a port on the coast and take ship — it'll be # days at least.
+@ 여기서 북서쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ They say it's about # days overland to the northwest from here.
+@ 북서쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ It's to the northwest. About # days by sea, then go ashore and walk inland about # days, they say.
+@ 북서쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ It's to the northwest. About # days by sea — once you reach those waters you'll know it, they say.
