@@ -44,6 +44,8 @@ def scene_frames(original):
 
 def build(asset, generated):
     revision = generated.get('revision', 1)
+    style = generated.get('sceneStyle') or asset.get('sceneStyle')
+    layout = generated.get('sceneLayout') or asset.get('sceneLayout')
     raw = OUT / 'raw' / (asset['id'] + (('-v%d' % revision) if revision > 1 else '') + '.png')
     raw.parent.mkdir(parents=True, exist_ok=True)
     if not raw.exists():
@@ -51,7 +53,9 @@ def build(asset, generated):
     receipt = OUT / 'packaged' / (asset['id'] + '.json')
     previous = read(receipt) if receipt.exists() else None
     outputs = [asset['output']] + ([asset['end'], asset['sheet']] if asset['kind'] == 'scene' else [])
-    if previous and previous['raw'] == raw.relative_to(ROOT).as_posix() and all(
+    same_source = (previous and previous['raw'] == raw.relative_to(ROOT).as_posix()
+                   and previous.get('sceneStyle') == style and previous.get('sceneLayout') == layout)
+    if same_source and all(
             (ROOT / row['file']).exists() and digest(ROOT / row['file']) == row['sha256'] for row in previous['files']):
         return previous
     for rel in outputs:
@@ -61,27 +65,38 @@ def build(asset, generated):
     with Image.open(raw) as original:
         original_size = list(original.size)
         if asset['kind'] == 'scene':
-            frames = scene_frames(original)
+            if style:
+                from scene_styles import animate
+                frames, durations = animate(style, asset['disc'], raw, original, layout)
+            else:
+                frames = scene_frames(original)
+                durations = [400] * len(frames)
             for rel in outputs:
                 (ROOT / rel).parent.mkdir(parents=True, exist_ok=True)
             gif = (ROOT / asset['output']).with_suffix('.build.tmp')
-            palette_source = Image.new('RGB', (1152, 512))
-            for i, n in enumerate((0, 7, 15, 23)):
-                palette_source.paste(frames[n], (i % 2 * 576, i // 2 * 256))
-            palette = palette_source.convert('P', palette=Image.Palette.ADAPTIVE, colors=128)
+            # 도면, 내부, 야경처럼 빛이 다른 장면도 공통 팔레트에 반영한다.
+            palette_source = Image.new('RGB', (192 * 6, 86 * math.ceil(len(frames) / 6)))
+            for i, frame in enumerate(frames):
+                palette_source.paste(frame.resize((192, 86), Image.Resampling.BOX), (i % 6 * 192, i // 6 * 86))
+            palette = palette_source.convert('P', palette=Image.Palette.ADAPTIVE, colors=256)
             quantized = [frame.quantize(palette=palette, dither=Image.Dither.FLOYDSTEINBERG) for frame in frames]
-            quantized[0].save(gif, 'GIF', save_all=True, append_images=quantized[1:], duration=400, loop=0, disposal=1, optimize=False)
+            quantized[0].save(gif, 'GIF', save_all=True, append_images=quantized[1:], duration=durations, loop=0, disposal=1, optimize=False)
             end = (ROOT / asset['end']).with_suffix('.build.tmp')
             frames[-1].save(end, 'JPEG', quality=94, optimize=True)
             sheet = Image.new('RGB', (3456, 1024))
-            for i, frame in enumerate(frames):
+            for i in range(24):
+                frame = frames[round(i * (len(frames) - 1) / 23)]
                 sheet.paste(frame, (i % 6 * 576, i // 6 * 256))
             atlas = (ROOT / asset['sheet']).with_suffix('.build.tmp')
             sheet.save(atlas, 'WEBP', quality=90, method=4)
             staged = [(gif, asset['output']), (end, asset['end']), (atlas, asset['sheet'])]
             with Image.open(gif) as check:
                 assert check.size == (576, 256) and check.n_frames >= 16, asset['id']
-            extra = {'frames': len(frames), 'durationMs': 9600, 'size': [576, 256]}
+            extra = {'frames': len(frames), 'durationMs': sum(durations), 'size': [576, 256]}
+            if style:
+                extra['sceneStyle'] = style
+            if layout:
+                extra['sceneLayout'] = layout
         else:
             rgba = original.convert('RGBA')
             alpha = rgba.getchannel('A')

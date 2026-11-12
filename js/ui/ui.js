@@ -1073,6 +1073,8 @@
     if (picWait) return picWait.then(function () { return UI.say(text, opts); });
     opts = withFace(opts || {});
     var pages = Array.isArray(text) ? text.slice() : String(text).split('\f');
+    // 다른 언어: 쪽을 다듬거나(괄호 안내·줄표) 얼굴 칸에 맞춰 자르기 전에 원문 그대로 사전에서 찾는다 — 다듬은 뒤의 글은 열쇠와 달라진다 (2026-11-12 영어 ⑤)
+    if (G.I18N && !G.I18N.isKo()) pages = pages.map(function (pg) { var e = G.I18N.tr(String(pg), true); return e != null ? e : pg; });
     if (!opts.raw) {
       var allNotes = [], orig = pages;
       pages = pages.map(function (pg) { var r = UI.tidySpeech(pg); allNotes = allNotes.concat(r.notes); return r.text; });
@@ -1134,6 +1136,7 @@
       modalRoot.appendChild(back);
       var body = box.querySelector('.body');
       // 고를 때 알아야 할 셈(금화·남은 날 …)은 알림으로 흘려보내지 않고 질문 아래 작은 글씨로 남긴다 (QA 2026-10-10)
+      if (G.I18N && !G.I18N.isKo()) { var tq = G.I18N.tr(String(text), true); if (tq != null) text = tq; }   // 다듬기 전에 원문으로 찾는다 (UI.say와 같이)
       var tt = opts.raw ? { text: String(text), notes: [] } : UI.tidySpeech(text);
       var note = tt.notes.length ? '<div class="ask-note">' + tt.notes.map(function (n) { return U.esc(n.replace(/<[^>]+>/g, '').replace(/^—\s*/, '')); }).join(' · ') + '</div>' : '';
       body.innerHTML = '<div>' + speech(box, tt.text, opts) + '</div>' + note + '<div class="askrow"></div>';

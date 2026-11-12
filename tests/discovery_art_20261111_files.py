@@ -6,7 +6,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageSequence
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'artifacts/discovery-art-20261111'
@@ -17,6 +17,12 @@ assert Counter(row['kind'] for row in assets) == {'scene': 42, 'relic': 289, 'ev
 records = json.loads((ROOT / 'tools/discovery_art_20261111/assets.json').read_text(encoding='utf-8'))
 assert {row['id'] for row in records} == {row['id'] for row in assets}, '제작 기록 누락'
 by_id = {row['id']: row for row in records}
+scene_formats = {
+    'ruin': (16, 9820), 'people': (16, 9820), 'treasure': (24, 8400),
+    'nat': (25, 9820), 'ani': (18, 7200), 'plant': (24, 8400)
+}
+assert Counter(row['sceneStyle'] for row in assets if row['kind'] == 'scene') == {
+    'ruin': 15, 'people': 3, 'treasure': 11, 'nat': 5, 'ani': 3, 'plant': 5}
 for row in assets:
     record = by_id[row['id']]
     if '--raw' in sys.argv:
@@ -27,7 +33,10 @@ for row in assets:
         assert hashlib.sha256(file.read_bytes()).hexdigest() == item['sha256'], item['file']
     if row['kind'] == 'scene':
         with Image.open(ROOT / row['output']) as gif:
-            assert gif.size == (576, 256) and gif.n_frames >= 16, row['id']
+            expected = scene_formats[row['sceneStyle']]
+            assert record['sceneStyle'] == row['sceneStyle'] and gif.size == (576, 256), row['id']
+            assert (gif.n_frames, sum(frame.info['duration'] for frame in ImageSequence.Iterator(gif))) == expected, row['id']
+            assert (record['frames'], record['durationMs']) == expected and gif.info.get('loop') == 0, row['id']
         with Image.open(ROOT / row['sheet']) as sheet:
             assert sheet.size == (3456, 1024), row['id']
             first = sheet.crop((0, 0, 576, 256)).convert('RGB')

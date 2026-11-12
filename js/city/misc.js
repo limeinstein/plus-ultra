@@ -732,10 +732,12 @@
     if (s.fleet.crew < 5) { await C.mate('제독, 저희들만으로 탐험을 하는 것은 무모한 짓입니다! 항구에서 사람을 모집한 후로 합시다.'); return; }
     var mt = await GT.outfit(c, 'depart');
     if (!mt) return;
-    var ok = await C.mateAsk('탐험을 떠납니까? ' + (mt.id === 'walk' ? '걸어서 갑니다. ' : G.Mounts.get(mt.id).name + ' ' + mt.n + unitOf(mt.id) + U.jx(unitOf(mt.id), '과/와') + ' 함께 갑니다. ') + '준비하는 데 10일 걸립니다. 좋습니까?', [{ label: '떠난다', value: true }, { label: '그만둔다', value: false }]);
+    // 탐험 준비에 난이도의 1·3·10일 (R.portDays — 출항 준비·성문으로 들어올 때와 같다. 전에는 난이도와 상관없이 늘 10일이었다, 2026-11-12 피드백)
+    var pdays = R.portDays();
+    var ok = await C.mateAsk('탐험을 떠납니까? ' + (mt.id === 'walk' ? '걸어서 갑니다. ' : G.Mounts.get(mt.id).name + ' ' + mt.n + unitOf(mt.id) + U.jx(unitOf(mt.id), '과/와') + ' 함께 갑니다. ') + '준비하는 데 ' + pdays + '일 걸립니다. 좋습니까?', [{ label: '떠난다', value: true }, { label: '그만둔다', value: false }]);
     if (!ok) { GT.undo(c, mt); return; }
     await UI.fade(function () {
-      G.Game.passDays(10);
+      if (pdays > 0) G.Game.passDays(pdays);
       if (S() !== s || (s.life && s.life.end)) { if (S() === s) GT.undo(c, mt); return; }
       G.Game.go('land', { from: c.id, mount: mt });
     });

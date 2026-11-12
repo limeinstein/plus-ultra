@@ -2,10 +2,16 @@
    그림을 바꿀 때 쓸 파일 이름(images/…)을 알려 준다. 그림은 js/art 의 함수를 그대로 쓴다. */
 (function (G) {
   'use strict';
+  // 첫 방문의 브라우저 언어 선택이 끝난 뒤 소개·인물 이야기를 구성한다.
+  function init() {
   const A = G.Art, I = G.Img;
   const $ = (s, r) => (r || document).querySelector(s);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const num = n => Number(n).toLocaleString('ko-KR');
+  // 다른 언어: 여러 조각을 이어 붙인 글은 조각마다 사전에서 찾아 잇는다 (통째로는 사전에 없다) — 2026-11-12 영어 ⑤
+  const KO = !G.I18N || G.I18N.isKo();
+  const TR = s => { if (KO || !s) return s; const e = G.I18N.tr(String(s), true); return e != null ? e : s; };
+  const NM = s => KO ? s : G.N(s);
   const PRIMARY = ['people', 'events', 'achievements', 'discoveries', 'foods', 'instruments', 'weapons'];
   const params = new URLSearchParams(location.search);
   const PLAYER = params.get('view') !== 'assets' && (params.get('view') === 'player' || !location.hash || PRIMARY.includes(location.hash.slice(1)));
@@ -182,7 +188,7 @@
     note: '파일: 동료 <code>portraits/mates/ID.png</code> · 후원자 <code>portraits/sponsors/ID.png</code> · 여급 <code>portraits/maids/ID.png</code> · 지역별 여급 <code>maid-styles/묶음/1.png</code>(흉상) <code>maid-styles/묶음/1_half.png</code>(서 있는 모습, 여러 장 가능) · 경쟁자 <code>portraits/rivals/이름.png</code> · 마을 사람 <code>portraits/npc/역할.png</code> · 왕명 왕녀·거리 사람 <code>portraits/street-folk/종류_양식</code> · 궁정 사람 <code>portraits/courtiers/후원자ID</code> · 얼굴(흉상) 512×512 · 대화창에 서는 무릎상은 같은 이름에 <code>_half</code>(1024×1536 투명) — 지역별 완성 무릎상이 있으면 얼굴 확장본보다 먼저 보여 줍니다'
   });
   const skillTxt = sk => Object.keys(sk || {}).map(k => (G.SKILL_BY_ID[k] || {}).name + ' ' + sk[k]).join(' · ');
-  const langTxt = lg => Object.keys(lg || {}).sort((a, b) => lg[b] - lg[a]).map(k => G.LANGS[k] + ' ' + G.LANG_LV[lg[k]]).join(', ');
+  const langTxt = lg => Object.keys(lg || {}).sort((a, b) => lg[b] - lg[a]).map(k => KO ? G.LANGS[k] + ' ' + G.LANG_LV[lg[k]] : TR(G.LANGS[k]) + ' ' + TR(G.LANG_LV[lg[k]]).toLowerCase()).join(', ');
   G.MATES.forEach(m => {
     const spec = A.mateSpec(m.id);
     add(tPeople, {
@@ -190,10 +196,10 @@
       meta: skillTxt(m.sk), key: 'portraits/mates/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', extra: m.desc, half: I.chain.mateHalf(m.id),
       pic: () => portrait(spec),
       detail: () => ({
-        text: m.desc + (G.BIOS && G.BIOS[m.name] ? ' 〔인물 이야기〕 ' + G.BIOS[m.name] : ''),
+        text: TR(m.desc) + (G.BIOS && G.BIOS[m.name] ? (KO ? ' 〔인물 이야기〕 ' : ' [Their story] ') + TR(G.BIOS[m.name]) : ''),
         facts: [
           ['능력치', G.STATS.map((s, i) => s.name + ' ' + m.st[i]).join(' · ')], ['특기', skillTxt(m.sk)], ['어학', langTxt(m.lg)],
-          ['만나는 곳', m.eventOnly ? '관련 이야기의 진행을 통해 합류' : (G.MATE_RANGE && G.MATE_RANGE[m.id] ? G.MATE_RANGE[m.id].zones.map(z => G.MATE_ZONES[z].name).join('·') + ' 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: ' + G.CITY_DATA[G.MATE_RANGE[m.id].home].name + ')' : m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집')],
+          ['만나는 곳', m.eventOnly ? '관련 이야기의 진행을 통해 합류' : (G.MATE_RANGE && G.MATE_RANGE[m.id] ? (KO ? G.MATE_RANGE[m.id].zones.map(z => G.MATE_ZONES[z].name).join('·') + ' 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: ' + G.CITY_DATA[G.MATE_RANGE[m.id].home].name + ')' : 'Taverns and inns in ' + G.MATE_RANGE[m.id].zones.map(z => TR(G.MATE_ZONES[z].name)).join(' · ') + ' cities — moves to a neighboring city or stays once a month (starts in ' + G.cityName(G.MATE_RANGE[m.id].home) + ')') : m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집')],
           ['만날 수 있는 때', m.y[0] + '~' + m.y[1] + '년' + (m.after ? (nm => ' · ' + nm + G.U.jx(nm, '이/가') + ' 알려진 뒤')(m.after.map(id => G.DISC[id] ? G.DISC[id].name : id).join('·')) : '')],
           ['필요한 명성', m.eventOnly ? '이야기의 합류 조건에 따름' : num(m.fame)], ['월급', num(m.wage) + '닢']
         ],
@@ -206,12 +212,12 @@
     const spec0 = A.sponsorSpec(sp, 0);
     add(tPeople, {
       group: 'sponsor', portrait: true, name: sp.title, sub: '후원자 · ' + c.name + ' · ' + G.SPONSOR_TYPE[sp.type],
-      meta: (hs => hs.slice(0, 6).map(h => h[2]).join(' → ') + (hs.length > 6 ? ' → … (' + hs.length + '대)' : ''))(sp.holders.filter(h => h[4] !== 'g')), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: A.portraitKeys(spec0), ar: '1 / 1', half: I.chain.matchedHalf(A.portraitKeys(spec0)),
+      meta: (hs => hs.slice(0, 6).map(h => KO ? h[2] : TR(h[2])).join(' → ') + (hs.length > 6 ? (KO ? ' → … (' + hs.length + '대)' : ' → … (' + hs.length + ' holders)') : ''))(sp.holders.filter(h => h[4] !== 'g')), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: A.portraitKeys(spec0), ar: '1 / 1', half: I.chain.matchedHalf(A.portraitKeys(spec0)),
       pic: () => portrait(spec0),
       detail: () => ({
-        text: (bs => bs.length ? '인물 이야기 — ' + bs.join(' / ') : '')(sp.holders.filter(h => h[4] !== 'g').map(h => {
+        text: (bs => bs.length ? (KO ? '인물 이야기 — ' : 'Their stories — ') + bs.join(' / ') : '')(sp.holders.filter(h => h[4] !== 'g').map(h => {
           const k = G.BIOS && (G.BIOS[h[2]] ? h[2] : Object.keys(G.BIOS).filter(x => x.length >= 3 && h[2].indexOf(x) >= 0).sort((a, b) => b.length - a.length)[0]);
-          return k ? h[2] + ': ' + G.BIOS[k] : null;
+          return k ? (KO ? h[2] : TR(h[2])) + ': ' + TR(G.BIOS[k]) : null;
         }).filter(Boolean)),
         facts: [
           ['사는 곳', c.name + ' · ' + (sp.place || (sp.bld === 'palace' ? palaceName(c) : '저택'))], ['신분', G.SPONSOR_TYPE[sp.type]],
@@ -277,7 +283,7 @@
       meta: ds.map(d => d.name + ' ' + d.rival[0] + '년').join(', '), key: 'portraits/rivals/' + nm, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', half: I.chain.rivalHalf(nm).concat(I.chain.halfFor(A.portraitKeys(spec))),
       pic: () => portrait(spec),
       detail: () => ({
-        text: (G.BIOS && G.BIOS[nm] ? G.BIOS[nm] + ' 〔게임에서〕 ' : '') + '정해진 때가 되면 아래 발견을 먼저 발표합니다. 술집에서 만나 일기토로 이기면 발표를 1~2년 늦출 수 있습니다.',
+        text: (G.BIOS && G.BIOS[nm] ? TR(G.BIOS[nm]) + (KO ? ' 〔게임에서〕 ' : ' [In the game] ') : '') + TR('정해진 때가 되면 아래 발견을 먼저 발표합니다. 술집에서 만나 일기토로 이기면 발표를 1~2년 늦출 수 있습니다.'),
         facts: ds.map(d => [d.rival[0] + '년 ' + d.rival[1] + '월', d.name]),
         files: [{ key: 'portraits/rivals/' + nm, kind: 'png', note: '경쟁자로 나올 때의 초상' }].concat(mate ? [{ key: 'portraits/mates/' + mate.id, kind: 'png', note: '위 파일이 없으면 동료 그림을 씀' }] : [])
       })
@@ -1017,4 +1023,7 @@
   });
   summary();
   renderAll();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
+  else init();
 })(window.G = window.G || {});

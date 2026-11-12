@@ -8600,1299 +8600,1397 @@
     "name": "감라 웁살라 — 신들의 무덤 언덕",
     "kind": "scene",
     "disc": "uppsala",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__uppsala.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__uppsala-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/uppsala.gif",
-        "bytes": 2452719,
-        "sha256": "314d7025e1f361987b6b1046e2cbc12560f838206dc92412fc5b098da2f0afff"
+        "bytes": 1399734,
+        "sha256": "4ed6e044366cd36178dbc7bd34496a2f31a158c8ba3847fe5dbb165ce903149b"
       },
       {
         "file": "images/discovery-ends/uppsala.jpg",
-        "bytes": 81050,
-        "sha256": "63376c9748906dc0bdc85ba8ff7423de3b814034747bb59dc586f89cced04a87"
+        "bytes": 47909,
+        "sha256": "dfd1630a482a311467c717d6629e79c3be67b5b5f579a654e11f955fa2d57e93"
       },
       {
         "file": "images/discovery-sheets/uppsala.webp",
-        "bytes": 1492542,
-        "sha256": "376e1a620f23e897bf7057c6a4778081ec8a6afbe80db576f3620b5d5deac45e"
+        "bytes": 751462,
+        "sha256": "9b50b91f012563bab5622c0d9b68483eb736868b72bffcc570839d61e8310427"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__gotlandstone",
     "name": "고틀란드의 그림돌",
     "kind": "scene",
     "disc": "gotlandstone",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__gotlandstone.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__gotlandstone-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/gotlandstone.gif",
-        "bytes": 2846719,
-        "sha256": "59d9610dc3e81c335a9ff556ffffadfd52357f2b9ee91428df9a11c5524b5776"
+        "bytes": 1585123,
+        "sha256": "a908217386d1d0e33a0905e428f0ff998d4e626b085ff0189c120ebca9c646b2"
       },
       {
         "file": "images/discovery-ends/gotlandstone.jpg",
-        "bytes": 91882,
-        "sha256": "7e379b1c3b5e6daa3b5575eb89d983c2a3ff55db69bf8b7043d089a5fb756f22"
+        "bytes": 55401,
+        "sha256": "a7e991978ff03d98c1b236d211219f2b2383997565cb8cf398c3d1e3f4b34d32"
       },
       {
         "file": "images/discovery-sheets/gotlandstone.webp",
-        "bytes": 1728626,
-        "sha256": "3c53ba4c90200e28fba1e6cd4055798e920e9e43915c8c8e0295b3d5eb67c446"
+        "bytes": 891234,
+        "sha256": "109bf493158991dd09f3049ec78d408780ad783f7f908ec318a1ddf6608aabaa"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__ramsund",
     "name": "람순드 바위 — 용을 벤 시구르드",
     "kind": "scene",
     "disc": "ramsund",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__ramsund.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__ramsund-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/ramsund.gif",
-        "bytes": 3078745,
-        "sha256": "45509414219f746b626d5cb0b9cb665c66a1589fa0effce5b21a7da5a31bb1b6"
+        "bytes": 1766372,
+        "sha256": "eeb3b4e1fc6d135d30e43e9a7696a244a56fe754cecc744650672d835caf3286"
       },
       {
         "file": "images/discovery-ends/ramsund.jpg",
-        "bytes": 100359,
-        "sha256": "7eac14702cae49b35224733a6f5c8f67bebaa164ef772989e197c58ccaf29ff2"
+        "bytes": 51470,
+        "sha256": "9713428521239e120be36944e19832f32841ce3ca728b4053d2a2873d1bbc3c1"
       },
       {
         "file": "images/discovery-sheets/ramsund.webp",
-        "bytes": 1908420,
-        "sha256": "3b9cfd9ba05dc98401cee0ff9c12293f6a00b55f5101ffaaffdbe925c0c2a177"
+        "bytes": 961578,
+        "sha256": "56eba8c7cdff6bf9c7811510aa7438a8a7782cad8117732354be6c3d01a759a8"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        5
+      ],
+      "skipFrames": [
+        12
+      ]
+    }
   },
   {
     "id": "scene__asbyrgi",
     "name": "아스뷔르기 — 슬레이프니르의 발굽 자국",
     "kind": "scene",
     "disc": "asbyrgi",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__asbyrgi.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__asbyrgi-v2.png",
     "originalSize": [
-      1881,
-      836
+      2172,
+      724
     ],
     "files": [
       {
         "file": "images/discoveries/asbyrgi.gif",
-        "bytes": 2734095,
-        "sha256": "6fa03246def43c93e5b50f9cd8dbe1aec4d628a216b9b231014f4b02b38f891e"
+        "bytes": 2424665,
+        "sha256": "1816529ebba75e822df79d08fc4c5aee4dd187dde89c497f42b9b4ca58ad534b"
       },
       {
         "file": "images/discovery-ends/asbyrgi.jpg",
-        "bytes": 94773,
-        "sha256": "22ae6fdc157027eb4f0db4e2e9b02efacdef6f58fe75d2b71d3b1608a0b25fb1"
+        "bytes": 34196,
+        "sha256": "cd0ce5f147d9e949c408f8ac3b665f3864a179959d43a5cc8c89e8ea2207628f"
       },
       {
         "file": "images/discovery-sheets/asbyrgi.webp",
-        "bytes": 1792502,
-        "sha256": "1d28910de51d460d749683d2046b125e841416412d38cb0c6cd785db840869f1"
+        "bytes": 1153710,
+        "sha256": "0464a977d1fdff493a21511d4c5b6ce809db41e01a93c5723b6d54d486c4579a"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 25,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "nat"
   },
   {
     "id": "scene__lejre",
     "name": "레이레 — 덴마크 첫 왕들의 전당",
     "kind": "scene",
     "disc": "lejre",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__lejre.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__lejre-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/lejre.gif",
-        "bytes": 2774473,
-        "sha256": "e6eaae45309a3670a0cc90c2d3dfd05f2b28cb906702ae0447e840039306deae"
+        "bytes": 1561784,
+        "sha256": "bd6068463bc4e43cae8645f50755b166cdf748207f9b5bb4bb150e573c509f5d"
       },
       {
         "file": "images/discovery-ends/lejre.jpg",
-        "bytes": 90920,
-        "sha256": "3473816a07b1e2cca5d5484eeb8047ac19e4e346ed1241feb70f84b104557753"
+        "bytes": 40050,
+        "sha256": "86c8ddff5a4f6bb77429439535b29f250bb8016371e865f6cb664b8e1a0c7925"
       },
       {
         "file": "images/discovery-sheets/lejre.webp",
-        "bytes": 1726084,
-        "sha256": "c5539e28c7a2f6fbd8a22eb0c91a4dfa5a65fe81ec5a5c1f04097631e0400e58"
+        "bytes": 863222,
+        "sha256": "0fd217fee1ed26d95421fa07eb7bb25ba8d40b27a436f5a59901331be3d39bcd"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__codexregius",
     "name": "왕의 사본 — 『에다』 노래책",
     "kind": "scene",
     "disc": "codexregius",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__codexregius.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__codexregius-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/codexregius.gif",
-        "bytes": 2715310,
-        "sha256": "8aed441566dde5fe895c9ffa8b50c7b276f6267ca01bf8addd82aae2341aaf7d"
+        "bytes": 1024092,
+        "sha256": "207562efb796ffe09e82189a952f26d6442f00e0a0644dda9d2fa676cfe181ff"
       },
       {
         "file": "images/discovery-ends/codexregius.jpg",
-        "bytes": 77193,
-        "sha256": "86c7e5c28d8af7c55e10e48837e92111451eca9aafaee708666551fd48b32ce5"
+        "bytes": 26437,
+        "sha256": "42bbe2cb7233501cd405846c46edef0fcf0e8faf3ca2a66cf27d16623a26dfbe"
       },
       {
         "file": "images/discovery-sheets/codexregius.webp",
-        "bytes": 1431362,
-        "sha256": "662f054f9a85a82be066a4c8bd315ff8ad4045604dd68b15a5bec42f75100e22"
+        "bytes": 322456,
+        "sha256": "6463305c5fde7c49de085c90fd01f73fe2086912ac602c7bf05515ee7399f6a5"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__lewischess",
     "name": "루이스 섬의 상아 체스 말",
     "kind": "scene",
     "disc": "lewischess",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__lewischess.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__lewischess-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/lewischess.gif",
-        "bytes": 2936535,
-        "sha256": "072fabd8f2e1eed83a8fca48aca8287c7cd059886e2dde5efb671346945ee06e"
+        "bytes": 984948,
+        "sha256": "216f29c0674787680a19fb2774ce64a6222b3f9664dd7d47ac72b4e315960722"
       },
       {
         "file": "images/discovery-ends/lewischess.jpg",
-        "bytes": 93133,
-        "sha256": "28c81465ce2d062aeca5108189c6c238c9611d443e6ce127df3b9feaaa755204"
+        "bytes": 16941,
+        "sha256": "5de6b9bf2a0d69f7757bc89b3f8a02d500722bad69110801dffe4d45ff11fcf5"
       },
       {
         "file": "images/discovery-sheets/lewischess.webp",
-        "bytes": 1768410,
-        "sha256": "a6bf68a6b1588a9bae92f334b352dac625da509ac2ab4de65002a85691e95274"
+        "bytes": 216814,
+        "sha256": "24e1999520b393bf1d70da6f48214ecb826868aa6df7531b717147396fde9025"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__gallehus",
     "name": "갈레후스의 황금 뿔",
     "kind": "scene",
     "disc": "gallehus",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__gallehus.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__gallehus-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/gallehus.gif",
-        "bytes": 2816906,
-        "sha256": "e5cfcb1e173618bf2fa0c73bbbf6c0c2e648aaaf570bb18b41205d55e31c2800"
+        "bytes": 1102030,
+        "sha256": "31e8a0fda2a3a5fea89abdaeb7232667b75c8c07adcf57c4c566c8faaa3f70f5"
       },
       {
         "file": "images/discovery-ends/gallehus.jpg",
-        "bytes": 89499,
-        "sha256": "81500544281e482727633b9e7f0dbf0585ed5f05ae76fd8e8a3ef0f207b7517a"
+        "bytes": 25661,
+        "sha256": "103784cb4e85a50ad62895b30239b46ef0f24d6516ab0cce9b921c973cfc576d"
       },
       {
         "file": "images/discovery-sheets/gallehus.webp",
-        "bytes": 1668292,
-        "sha256": "c5284198331ddfaaa0ac338024d3b50e0102d34a21af7536de544c03a400a451"
+        "bytes": 347364,
+        "sha256": "b6508963b8e1efaed11efce405fba027ad6ac40d192fb1e2fb18b28475684e75"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__oseberg",
     "name": "오세베르그의 배 무덤",
     "kind": "scene",
     "disc": "oseberg",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__oseberg.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__oseberg-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/oseberg.gif",
-        "bytes": 2940757,
-        "sha256": "28efbd32d2146e487a333cbedb4c35c6b3b891dfa356b9fbe09c27f74c561a01"
+        "bytes": 852549,
+        "sha256": "c9ec998336a534de12ec2aff171dd8cb0186483e89541327e9d12d3498b58a54"
       },
       {
         "file": "images/discovery-ends/oseberg.jpg",
-        "bytes": 91418,
-        "sha256": "29edbd95b4df13f317f71c156ae229cdd8da93f8ea128df70a4affde8cc16050"
+        "bytes": 17569,
+        "sha256": "8e6aa99917898e573efcd472b1f520382d02c42fcb03a2fe521c3bc90a24e170"
       },
       {
         "file": "images/discovery-sheets/oseberg.webp",
-        "bytes": 1701346,
-        "sha256": "4ac4d2d2ea1430d7d3be77f216b2e7f64222c19b9e5a1fb44ecac11fcd17e9f9"
+        "bytes": 199826,
+        "sha256": "b6926ae5bd49bda6a2892376a134e977d45f1b4f9d1d1fc35d1cb705069610d6"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__mjolnir",
     "name": "토르의 망치 은 부적",
     "kind": "scene",
     "disc": "mjolnir",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__mjolnir.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__mjolnir-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/mjolnir.gif",
-        "bytes": 2919827,
-        "sha256": "276ff45465d7201c8482d605804f16ce20ddec51a651580ea3b6f56ac25fa11f"
+        "bytes": 867567,
+        "sha256": "75c3ea4bbddb174fe601d3b364fbaf6ef536d51088c1b2bb92934126824c273f"
       },
       {
         "file": "images/discovery-ends/mjolnir.jpg",
-        "bytes": 90334,
-        "sha256": "e3edb0af4b5b885d4334f773540eb886b8048b8719ca9458563543f2dd084a1d"
+        "bytes": 17152,
+        "sha256": "ec0e36384a18bb5a4747c7c35cf37cca62488b049ee371bb2712a22711c47b0f"
       },
       {
         "file": "images/discovery-sheets/mjolnir.webp",
-        "bytes": 1676290,
-        "sha256": "bad51b44995f6a621de2180a043289847a100a37553c5590a80d1b05ad11adad"
+        "bytes": 194830,
+        "sha256": "45b6d0d4a2c5987f6e606f724e766284d4c22032a4c8f846b1648827a6a6dd6d"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__tolstaya",
     "name": "톨스타야 모길라 — 스키타이 왕의 황금 가슴걸이",
     "kind": "scene",
     "disc": "tolstaya",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__tolstaya.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__tolstaya-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/tolstaya.gif",
-        "bytes": 2830914,
-        "sha256": "1f761705c1465e3ecc0464824eee0e9aa3e20bc3e3fc632196f0c395a70fc8a7"
+        "bytes": 1017424,
+        "sha256": "9dd842d4fb301b80b6f24a2950db6a9cef30305b911d48f6d4ed3daae980986e"
       },
       {
         "file": "images/discovery-ends/tolstaya.jpg",
-        "bytes": 92475,
-        "sha256": "6e958a8fbefdd56895ff4b09d48275e0c2c5aa1c83a71b399591952a3a58028e"
+        "bytes": 31706,
+        "sha256": "7b85e1d2c29d3ec8a328d94b7f3706aab40b85271b301b10371ffbe6f43f77c7"
       },
       {
         "file": "images/discovery-sheets/tolstaya.webp",
-        "bytes": 1731120,
-        "sha256": "fbf5e3efac1e3d700f9024cbb99402c7ce3e7ac2af1ae3846064bf2889f8867e"
+        "bytes": 384368,
+        "sha256": "6423108505a3490116cdaab9544b97c7fe9beb09eeb9d0973201b51aeb1a234c"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__noinula",
     "name": "노인 울라 — 흉노 선우의 무덤",
     "kind": "scene",
     "disc": "noinula",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__noinula.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__noinula-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/noinula.gif",
-        "bytes": 2995291,
-        "sha256": "4c8446be85441ddde09518d1c15d8bc371b781ad1b84425bb2338e961eef6d70"
+        "bytes": 1563111,
+        "sha256": "9e41811ee2a35e746217ac745ca3cd7ce8baa0aafca68d83e6ef189530e8f826"
       },
       {
         "file": "images/discovery-ends/noinula.jpg",
-        "bytes": 94069,
-        "sha256": "516f0c5489279f4f1caabeafefa011b51ae53443c098d87a645b63f39744141b"
+        "bytes": 47671,
+        "sha256": "4c8de43fe6dbd9ba9c41a749e16f73e10d8d5e2ba80b0c6391be4108292ce5de"
       },
       {
         "file": "images/discovery-sheets/noinula.webp",
-        "bytes": 1804032,
-        "sha256": "44bdc95e07f4494c6cabad41bed590e98e41c6a03dee82b3fad4380f27bf86e8"
+        "bytes": 848904,
+        "sha256": "5a74426129ebf9f0a846b53799449ecc8f086596946fb815b486135426333d78"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        6
+      ],
+      "skipFrames": [
+        12,
+        13
+      ]
+    }
   },
   {
     "id": "scene__attila",
     "name": "아틸라의 세 겹 관",
     "kind": "scene",
     "disc": "attila",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__attila.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__attila-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/attila.gif",
-        "bytes": 2910259,
-        "sha256": "4b62ac4e1bae50d5a5fb43027d92426914f4618f8f9692d87e8073899cf5d833"
+        "bytes": 1269054,
+        "sha256": "be80ba4e3c8da116555a4a81a1343e55227ba7a7eeac3624e3b21325a661a693"
       },
       {
         "file": "images/discovery-ends/attila.jpg",
-        "bytes": 86049,
-        "sha256": "8fcbc680939b3f50fb4243e70dd6ca3eaba7d605d423f4feb3732b0c9304f005"
+        "bytes": 27511,
+        "sha256": "505d436a0c80eb8403effb15937e2305cc318258e18de829a2ef3337d42a2bd0"
       },
       {
         "file": "images/discovery-sheets/attila.webp",
-        "bytes": 1608974,
-        "sha256": "a516e320816bec5514caf1513dfba01542127b5efa92180682872d8cf48634c6"
+        "bytes": 379544,
+        "sha256": "663dc496da38996fd1d65830342dc0b49ba23f0eba4b4899e00432af85074356"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__filippovka",
     "name": "필리포프카의 황금 사슴",
     "kind": "scene",
     "disc": "filippovka",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__filippovka.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__filippovka-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/filippovka.gif",
-        "bytes": 2879520,
-        "sha256": "112a3fc06fab4f418be29c02c2b7a7e4506fce0a6bdfaf69eed512850a3dc2d9"
+        "bytes": 960682,
+        "sha256": "4e6b51dd38a2c8d22f332beb69cc3c414205fdd1e81bfbac20d7ce355851920f"
       },
       {
         "file": "images/discovery-ends/filippovka.jpg",
-        "bytes": 87192,
-        "sha256": "897e1ca01e3f634afbd38f4a3c37bbe2f571484de9d769e273880ac69abda3d7"
+        "bytes": 25199,
+        "sha256": "f9448728c9659e4b1e1ddddc98251c531d73a2408d5cd65302610cc2ecfd458e"
       },
       {
         "file": "images/discovery-sheets/filippovka.webp",
-        "bytes": 1616844,
-        "sha256": "f74022104e190619a1ea2a02bc3424a08c7485d44d4034dd0625c761c438f56a"
+        "bytes": 286998,
+        "sha256": "9af585e30dc68a3bb75cffa6a17ee4c6318349edf125b63764aadaff8b529376"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__sarkel",
     "name": "사르켈 — 하자르의 흰 성",
     "kind": "scene",
     "disc": "sarkel",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__sarkel.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__sarkel-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/sarkel.gif",
-        "bytes": 2624524,
-        "sha256": "8aeffb47c597c7c230382a37be5945b34825d6109323d31e777b172aaf9643b5"
+        "bytes": 1540078,
+        "sha256": "378c7ca4744941f2860257d41881442adcc0078db85a94a5485aedfa8ba56593"
       },
       {
         "file": "images/discovery-ends/sarkel.jpg",
-        "bytes": 87583,
-        "sha256": "3786b0cb1dba528f163d559abd1c03a0c8903a1dbede79b78c8d37fd36d308f2"
+        "bytes": 43591,
+        "sha256": "dfc12f223b141b4de7506f7ced2579c85017b72e8e10185b56e597f2a232c3b4"
       },
       {
         "file": "images/discovery-sheets/sarkel.webp",
-        "bytes": 1644620,
-        "sha256": "7c2624d2f4db16b66ad3d3d60ca8d620fd219d791753b9586f96660d311c77e2"
+        "bytes": 820564,
+        "sha256": "9fa49842683d884d6d9912248dcb1766c30bf6860e38231f93e4e84e6d91311c"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__nagyszentmiklos",
     "name": "너지센트미클로시의 황금 그릇",
     "kind": "scene",
     "disc": "nagyszentmiklos",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__nagyszentmiklos.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__nagyszentmiklos-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/nagyszentmiklos.gif",
-        "bytes": 2910046,
-        "sha256": "7b98fdc69323dd4707c85d3bef3b331b403a30b545705dbabac3f02a7bd720e6"
+        "bytes": 936367,
+        "sha256": "87f5f557c13b8b8d472546a9899f3ba982d2a449128fe406886efb6e8da84323"
       },
       {
         "file": "images/discovery-ends/nagyszentmiklos.jpg",
-        "bytes": 100443,
-        "sha256": "9b57489ad19af8baa375d47b44128ad07788eaeb18e0d2b710bf737960445b20"
+        "bytes": 17010,
+        "sha256": "bda11bb60566b163b5f0e9a97712abff7e9d554404260c12d436dfd36977be26"
       },
       {
         "file": "images/discovery-sheets/nagyszentmiklos.webp",
-        "bytes": 1919920,
-        "sha256": "b79b35e1c5fd6ab2c1780a0bf89ab212dc5c5ba458b46e22eb3825dd33ec90dd"
+        "bytes": 239264,
+        "sha256": "a2615f0ec7d3476365fc4b16276706eaa09cc0289fc45f82592cd047fb60482d"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__kumanbaba",
     "name": "쿠만의 돌 할머니",
     "kind": "scene",
     "disc": "kumanbaba",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__kumanbaba.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__kumanbaba-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/kumanbaba.gif",
-        "bytes": 2623551,
-        "sha256": "8a522779432f6cda9e9f2e3866e3cac2501250a7ce73618acd0389b925a0bd8e"
+        "bytes": 1475565,
+        "sha256": "32f337ab5075c2dfd28c3a4e6bf2c1bd55f1595f5ed9dcebe1824a76e7570320"
       },
       {
         "file": "images/discovery-ends/kumanbaba.jpg",
-        "bytes": 82020,
-        "sha256": "6487abd2b350723872525ba23f097c8760c065fc76350c601179689b76f3aecd"
+        "bytes": 46666,
+        "sha256": "2823c8dc2d25c614c77a2385dab00b664e77742ef40fb8c870125dcff64a3e2c"
       },
       {
         "file": "images/discovery-sheets/kumanbaba.webp",
-        "bytes": 1515862,
-        "sha256": "27ff71be680d3afbb15df48b6e5c4d229371fe377ce11d195db5c2947a9171ee"
+        "bytes": 739096,
+        "sha256": "8e6edd9b28d0bdaa8bdb3fa6fe78717ed8e890af03873f843667fa1425bd5364"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__folk_kazakh",
     "name": "카자흐 사람들 — 독수리 사냥꾼",
     "kind": "scene",
     "disc": "folk_kazakh",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__folk_kazakh.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__folk_kazakh-v2.png",
     "originalSize": [
-      1881,
-      836
+      1447,
+      1087
     ],
     "files": [
       {
         "file": "images/discoveries/folk_kazakh.gif",
-        "bytes": 2864694,
-        "sha256": "44bb65ed7d6c11754eab5f7a691bd10419a80e65ed35bbf0c4c573c28fe1ef9c"
+        "bytes": 1782760,
+        "sha256": "b0558ee1f4070967f226ade49ee73cccae2d89570979d9edd36113f593bd0636"
       },
       {
         "file": "images/discovery-ends/folk_kazakh.jpg",
-        "bytes": 89417,
-        "sha256": "bd51c886101a52d60fbc0c8644874972f724ad95e94b3bd835415c0d440f1111"
+        "bytes": 48904,
+        "sha256": "9db05118a9b2b6285cf8f969a57c5ed491c56356bc00f719a4bc4bd5e4788ca7"
       },
       {
         "file": "images/discovery-sheets/folk_kazakh.webp",
-        "bytes": 1660222,
-        "sha256": "87cd6e208c217cf16eb19e3ca4e8790d0f7ef87173f8ec830c23242e59b92af9"
+        "bytes": 837700,
+        "sha256": "4116240693f40db13decb97da7c9d5f13d70d43aa0e55a7fb6896e7b97f43700"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "people"
   },
   {
     "id": "scene__hunnicauldron",
     "name": "훈족의 청동 솥",
     "kind": "scene",
     "disc": "hunnicauldron",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__hunnicauldron.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__hunnicauldron-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/hunnicauldron.gif",
-        "bytes": 2979658,
-        "sha256": "9077b3d33b7e06fbb63aabb98017d11ac5a0b609ed0da87643acb711bfe3474d"
+        "bytes": 1009837,
+        "sha256": "4f6123080ee2992a753289b3383ce248739984ab826c1dff1ecc5992b9dd26f0"
       },
       {
         "file": "images/discovery-ends/hunnicauldron.jpg",
-        "bytes": 93070,
-        "sha256": "3a0b215d14bba9e7a7690cbc0fffd7c50833a4f5d38f6965fe32419a3608d326"
+        "bytes": 19177,
+        "sha256": "84ad9e1e01034895ab581248132f905fd9c183c06d722dd557053876466ce5eb"
       },
       {
         "file": "images/discovery-sheets/hunnicauldron.webp",
-        "bytes": 1748392,
-        "sha256": "150bc9cd40791817080b58330ee51cfe67080d2ec28b9d3bed380ded892281d2"
+        "bytes": 222112,
+        "sha256": "a70d16745990f9a127e4413960a123c28b95233c49e2d1914b68f62889b607a3"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__ukok",
     "name": "우코크 고원 — 얼음 속의 여인",
     "kind": "scene",
     "disc": "ukok",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__ukok.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__ukok-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/ukok.gif",
-        "bytes": 2838690,
-        "sha256": "1433903976e1fd507a3cb3b9936963845005e225ecd43d161be894aa564d434b"
+        "bytes": 1474491,
+        "sha256": "055ad9ac1ef89dd1b2c3966646d1fdb85d95d5a75b195c8338af7951df83c339"
       },
       {
         "file": "images/discovery-ends/ukok.jpg",
-        "bytes": 91306,
-        "sha256": "c891e6100380aa40570453c823f19b10d154b2c7c91a4fe7d1498a2494fbb3ee"
+        "bytes": 49212,
+        "sha256": "1b33fb246cbe0df46eb70e83b573b53ae046e04daaa8453e84d9ebead99063ed"
       },
       {
         "file": "images/discovery-sheets/ukok.webp",
-        "bytes": 1722864,
-        "sha256": "35c113fa764b0a61b741f6446eb5dac86b626cf1dcac7d093ec2b4d8beec89f3"
+        "bytes": 855502,
+        "sha256": "8a21e787efff87c7574df49d51e4ad854d6522d4b5ffb2400bbb49311bf0f4a1"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__elsentasarkhai",
     "name": "엘승 타사르하이 — 초원 속 모래띠",
     "kind": "scene",
     "disc": "elsentasarkhai",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__elsentasarkhai.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__elsentasarkhai-v2.png",
     "originalSize": [
-      1881,
-      836
+      2172,
+      724
     ],
     "files": [
       {
         "file": "images/discoveries/elsentasarkhai.gif",
-        "bytes": 2517458,
-        "sha256": "35f3965b427ae538cd22819b171f5e44580cd76af371704c46798c7a4dea95c5"
+        "bytes": 1961717,
+        "sha256": "a1bbc69861381ef872a0efdcd820b23a4766233c02eef18f9bebd520543e6fa1"
       },
       {
         "file": "images/discovery-ends/elsentasarkhai.jpg",
-        "bytes": 89908,
-        "sha256": "21d544041b75773bf58f07dded4562e1d615b958753bdc8bc0cc69fef32bc05d"
+        "bytes": 29454,
+        "sha256": "8726a555781f3e69f45fdc693408355b20a120e990820b1ef9fcb7e848dc7f89"
       },
       {
         "file": "images/discovery-sheets/elsentasarkhai.webp",
-        "bytes": 1668202,
-        "sha256": "bf3431602717a96f5cbc99d1fe189406ca9dc1d28a807b86fba2333b6dfdbea8"
+        "bytes": 984276,
+        "sha256": "57c3793f9fc9fa75166cb5564f1736e701fe9141d3a031ef65c32e7647ab07a2"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 25,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "nat"
   },
   {
     "id": "scene__khongoryn",
     "name": "홍고린 엘스 — 노래하는 모래언덕",
     "kind": "scene",
     "disc": "khongoryn",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__khongoryn.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__khongoryn-v2.png",
     "originalSize": [
-      1881,
-      836
+      2172,
+      724
     ],
     "files": [
       {
         "file": "images/discoveries/khongoryn.gif",
-        "bytes": 2483114,
-        "sha256": "6dbb43bc162ceed6faa9d27f6e45935884c5c56c55290651b7b211d3e74de73c"
+        "bytes": 1785228,
+        "sha256": "d5b297b2ccf93ad0385d91a96a81dd6dc8e70071f6bc150836e939d303f0e841"
       },
       {
         "file": "images/discovery-ends/khongoryn.jpg",
-        "bytes": 83905,
-        "sha256": "2ab321783cd8d9c68b681a4fbac0714ead4860392e6161e25d1c53bf4fc3b5c5"
+        "bytes": 23272,
+        "sha256": "65bba2c07a0a150cf807d1bf0a533dec2b78064ee3d71c7ee087b0a2176108b6"
       },
       {
         "file": "images/discovery-sheets/khongoryn.webp",
-        "bytes": 1551974,
-        "sha256": "fbc79fb26e3840fbebb0f6c7a6118de7f7753c334561e88b24946964f225eb14"
+        "bytes": 606412,
+        "sha256": "b13ecb6870ce3d0ee79ec42946ccf3cea0c377046dbfed697ee8257a25048b86"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 25,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "nat"
   },
   {
     "id": "scene__orkhonfalls",
     "name": "오르콘 폭포 — 붉은 폭포",
     "kind": "scene",
     "disc": "orkhonfalls",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__orkhonfalls.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__orkhonfalls-v2.png",
     "originalSize": [
-      1881,
-      836
+      2172,
+      724
     ],
     "files": [
       {
         "file": "images/discoveries/orkhonfalls.gif",
-        "bytes": 3021606,
-        "sha256": "3c0f42dd75c65632e0e42c213c464f95b2287e2d88776876eb9e79f73a046711"
+        "bytes": 2332432,
+        "sha256": "4be60d937739616bce15b05e34e723135db21ec1d4b49dd08c378ef8ea345843"
       },
       {
         "file": "images/discovery-ends/orkhonfalls.jpg",
-        "bytes": 92456,
-        "sha256": "6223e01a14cf1e37c54abca3017f8425bbbb61ee99babeca392effdece5efd31"
+        "bytes": 33676,
+        "sha256": "e4b96735e52381f9f00283d2578f0fc94a53901cc2f0187287b2ca18ce7c1eda"
       },
       {
         "file": "images/discovery-sheets/orkhonfalls.webp",
-        "bytes": 1739506,
-        "sha256": "9fe9e46dbaabb42ecf6bc7d7f2555674becb906209ce119f8b94e4fae47f0627"
+        "bytes": 1085786,
+        "sha256": "28a0bc9dfd7cb7e3982547e3b61e31998b6c94ff99ee541e4f902aa5ddfcf925"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 25,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "nat"
   },
   {
     "id": "scene__folk_mongol",
     "name": "몽골 초원 사람들 — 나담",
     "kind": "scene",
     "disc": "folk_mongol",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__folk_mongol.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__folk_mongol-v2.png",
     "originalSize": [
-      1881,
-      836
+      1448,
+      1086
     ],
     "files": [
       {
         "file": "images/discoveries/folk_mongol.gif",
-        "bytes": 2551362,
-        "sha256": "98bd55fc2a32a9adad69828767fa0dc572f51d3fe899637645c9304fe739133f"
+        "bytes": 1679838,
+        "sha256": "7656ad3283a4965f95cdb090e1521ab2031cd11d0926fb1f96d32732ffb4a8c5"
       },
       {
         "file": "images/discovery-ends/folk_mongol.jpg",
-        "bytes": 86099,
-        "sha256": "22c9bcf22faafe1fedbacc9157f8aa89a08ad030b8ffd4515d81e7d3a7775200"
+        "bytes": 50390,
+        "sha256": "6292590faa9ebc2a2ec4ed77912e5f2c152691e25622d692ccd0f77f5ad47ea2"
       },
       {
         "file": "images/discovery-sheets/folk_mongol.webp",
-        "bytes": 1607134,
-        "sha256": "ddbc2039e2000c03589fbac628f53b671a3955baa2ea944e9b4661f6b0803185"
+        "bytes": 844846,
+        "sha256": "0d697f060b8895c6413c304c49a3cfee25c6a588c4474f92e63efe78efb20e88"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "people"
   },
   {
     "id": "scene__otgontenger",
     "name": "오트곤텡게르 — 이름을 부르지 않는 산",
     "kind": "scene",
     "disc": "otgontenger",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__otgontenger.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__otgontenger-v2.png",
     "originalSize": [
-      1881,
-      836
+      2172,
+      724
     ],
     "files": [
       {
         "file": "images/discoveries/otgontenger.gif",
-        "bytes": 2426154,
-        "sha256": "2b2a59c3fb17feca095814aef0858a793fedf4c43704572bf0ae1e49ff10c249"
+        "bytes": 1893766,
+        "sha256": "a85eeb37fd3349ea63ee07f5d3a5993b78b5d190121a6765ea82ee20e8a7b748"
       },
       {
         "file": "images/discovery-ends/otgontenger.jpg",
-        "bytes": 87098,
-        "sha256": "48437c502448e28cbc08c9eda152c1133d0fecfcffbd42788b3133a69bf4f11b"
+        "bytes": 27838,
+        "sha256": "235fd3bb55917bbee27a9aee073ecca01760d52b65c6170c87b68ae1b08ebf13"
       },
       {
         "file": "images/discovery-sheets/otgontenger.webp",
-        "bytes": 1586696,
-        "sha256": "6cd34455d5d05f0062ecc10bb0691a5cfe7b9d602f598634200d6befbe2ebfc0"
+        "bytes": 817322,
+        "sha256": "477f02547173aa011cd110556a5cb692dfada026c3f8189da6778a44c5e8dc23"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 25,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "nat"
   },
   {
     "id": "scene__deluunboldog",
     "name": "델리운 볼독 — 테무진이 태어난 언덕",
     "kind": "scene",
     "disc": "deluunboldog",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__deluunboldog.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__deluunboldog-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/deluunboldog.gif",
-        "bytes": 2575719,
-        "sha256": "d20a8d78b3f555ae6ec695f01810e31a4ae67ccb86405e89b4f79c2f16a90ec8"
+        "bytes": 1517119,
+        "sha256": "482b3089744d1e2ee3f35b09c3abd74411bd0eb9ec9190555040e9a79bc36081"
       },
       {
         "file": "images/discovery-ends/deluunboldog.jpg",
-        "bytes": 88656,
-        "sha256": "2893b8fe9135736600b9c3e950e4663d4de819ef09749c245fb7908cd9c501d5"
+        "bytes": 49169,
+        "sha256": "3590ce2cbf97af984d84926b480103d9cc271b1a5e019a2996e622d68d213eda"
       },
       {
         "file": "images/discovery-sheets/deluunboldog.webp",
-        "bytes": 1647596,
-        "sha256": "ec7d9a9ac55942541cfd2184d491bba6b263f1832e75702a8ed1f2cb96a8194c"
+        "bytes": 938984,
+        "sha256": "85a54708dac9ee423e4b4643f1ed41014e3177dcf367a23fd2b5429080994a43"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__avraga",
     "name": "아우라가 — 칭기즈 칸의 큰 오르도",
     "kind": "scene",
     "disc": "avraga",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__avraga.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__avraga-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/avraga.gif",
-        "bytes": 2429263,
-        "sha256": "bb9657bb55c567014493f6d8b042e4dc7315e1de239fe7ab18a93f617d38e85a"
+        "bytes": 1513360,
+        "sha256": "061240af99bf2cadef95925117a103cd95c75e665d3e64eedeb192098bffb140"
       },
       {
         "file": "images/discovery-ends/avraga.jpg",
-        "bytes": 81809,
-        "sha256": "4bb747e207ad6591008852877b680a028c08aa3ad7916b9955214ba268f2a5d5"
+        "bytes": 36468,
+        "sha256": "bb4f6624dcd44b4e2c456f4f96077f8428eac82a272aca8402d6d74d898f754b"
       },
       {
         "file": "images/discovery-sheets/avraga.webp",
-        "bytes": 1531788,
-        "sha256": "d36900078a58ffe77e71aabb222e913edd869e71c303f9b017173afdb86714fa"
+        "bytes": 743558,
+        "sha256": "8ec22922b2745a03ccc5ba7abe344f749e9ce6c0bb43e59673380462045b0b9f"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        6
+      ],
+      "skipFrames": [
+        12,
+        13
+      ]
+    }
   },
   {
     "id": "scene__sulde",
     "name": "칭기즈 칸의 흰 술데",
     "kind": "scene",
     "disc": "sulde",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__sulde.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__sulde-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/sulde.gif",
-        "bytes": 2755597,
-        "sha256": "18602b512017c0bdb7269688b2fc477d125113dda1280fd3282245a963441bdb"
+        "bytes": 716125,
+        "sha256": "e5d8d79c778defc59bd4a39ebdeb082d34bdff53f575b43dc713ced17395ccf5"
       },
       {
         "file": "images/discovery-ends/sulde.jpg",
-        "bytes": 94247,
-        "sha256": "4d23a7b951a5364a8e7303bf0d11ce761861ddb67cac207ab76863dd0427f64e"
+        "bytes": 9488,
+        "sha256": "e6bfb6c9e3899c56e458155ed86e4d3c6697f0d94947ab36d84c37dbbbbed621"
       },
       {
         "file": "images/discovery-sheets/sulde.webp",
-        "bytes": 1781892,
-        "sha256": "98827f8ca88298af4ceb7423fe71a9f87483581fa336c3c1e77b86b6b586355f"
+        "bytes": 93920,
+        "sha256": "74d4d7819af269b42fc2df962097d4ae003733553fba49ec5cef9783a72de456"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "treasure"
   },
   {
     "id": "scene__saraibatu",
     "name": "사라이 바투 — 금장 칸국의 도읍",
     "kind": "scene",
     "disc": "saraibatu",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__saraibatu.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__saraibatu-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/saraibatu.gif",
-        "bytes": 2685427,
-        "sha256": "dc279513904cd639d5edb57a91522457aaebc60a069a2d79d66c2afd3a72d8cd"
+        "bytes": 1571087,
+        "sha256": "a7174af78fc50c3f6aa028065b06f228448213c5e20fa37e34b8d71226050feb"
       },
       {
         "file": "images/discovery-ends/saraibatu.jpg",
-        "bytes": 86144,
-        "sha256": "56b5d2d4fbc5a2998ba80f85856007d7c80df578dd20589477aef9bea9312a5d"
+        "bytes": 50721,
+        "sha256": "47730bd8c5bbc059ae06f9bb69531e35895b9f94fc5441b7c230490cd355523d"
       },
       {
         "file": "images/discovery-sheets/saraibatu.webp",
-        "bytes": 1606930,
-        "sha256": "0b497ac810def46e557d8a5734e7fc27b573f23d554b07bd84dc45618e29ddb9"
+        "bytes": 897814,
+        "sha256": "9dd698863163dab7bd407556bd849452f23260a5c8ec30d144bfb4c56c40d3ae"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__bezeklik",
     "name": "베제클리크 천불동",
     "kind": "scene",
     "disc": "bezeklik",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__bezeklik.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__bezeklik-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/bezeklik.gif",
-        "bytes": 2970004,
-        "sha256": "08b6a3d69a6a4d07a9b41e2432839336e3cacd753d76ea5c3bac72214e8d6333"
+        "bytes": 1614100,
+        "sha256": "f06446e0962d6469a43e3e785f085d2cf7069b5f495acdbf9ecad9661e9ff555"
       },
       {
         "file": "images/discovery-ends/bezeklik.jpg",
-        "bytes": 91383,
-        "sha256": "d67224e8e953083044f215ae9b22c46f6ab696206683cbc957f9074a1aa9e947"
+        "bytes": 57370,
+        "sha256": "5c4a8225a389d6610acc1928ec4acca6c015dab7c25257cba4c2d05f991bfc7f"
       },
       {
         "file": "images/discovery-sheets/bezeklik.webp",
-        "bytes": 1719044,
-        "sha256": "ac505cc75040cf61a759a75d19430265deabb1cc6a08df53be3b37d5da3cb10d"
+        "bytes": 844380,
+        "sha256": "aae8977ba4f8b81266bd1d80ab3e71b4daeddec3388a92e232c6117630dc21df"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__qocho",
     "name": "고창 고성 — 위구르 왕국의 흙성",
     "kind": "scene",
     "disc": "qocho",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__qocho.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__qocho-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/qocho.gif",
-        "bytes": 2829400,
-        "sha256": "d1e84cee46c1f53aad3fca4f8c67764c6e8e343936935ef5319df87fd9dcb98d"
+        "bytes": 1454939,
+        "sha256": "7f834e25bb4e813526d3ee6a4f2ae575cc276feaa075a9637ca43f6887680624"
       },
       {
         "file": "images/discovery-ends/qocho.jpg",
-        "bytes": 95154,
-        "sha256": "336596d9c1f96f6c8e19a58817834d2a3a2fecf42a4fb0f7c19ba28b98b6a2bf"
+        "bytes": 62477,
+        "sha256": "932770cee02bc3e8fb5df91ba194ed74f7bbde10291ab4a6fbccd50f3db84e23"
       },
       {
         "file": "images/discovery-sheets/qocho.webp",
-        "bytes": 1746846,
-        "sha256": "8b3ffb9e8bdfaabae78dce29a49f52e12873ec6d3be53fc58b3010e6400f4ce8"
+        "bytes": 786680,
+        "sha256": "f9c5ff7e37d4b7d7d07d27bd157eac18c8619bb813d231ec4818e8663b1fb367"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "skipFrames": [
+        9,
+        12
+      ]
+    }
   },
   {
     "id": "scene__karez",
     "name": "카레즈 — 땅밑을 흐르는 물길",
     "kind": "scene",
     "disc": "karez",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__karez.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__karez-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/karez.gif",
-        "bytes": 2768924,
-        "sha256": "956b9b8cb46fc00e8195dd22cafe1c96c5e17d3ce0fe97406eab104d3e7eabb5"
+        "bytes": 1500716,
+        "sha256": "7c29c47bbff9ad240c69cf892cb1f8ec32b34a3844e33b04a32f54be2ed08611"
       },
       {
         "file": "images/discovery-ends/karez.jpg",
-        "bytes": 93819,
-        "sha256": "924820b8cd4533ca0afdd4ff0816947ead6f17530d326e8f48c41f337d7b0834"
+        "bytes": 57358,
+        "sha256": "8baf07854bc09cd3081beb9d49b8827f63cb88535081fac71033509c557319ea"
       },
       {
         "file": "images/discovery-sheets/karez.webp",
-        "bytes": 1767748,
-        "sha256": "78fa2399b218e76999973cf5c83af267c6893bb6ef11931621a68dd78f8c29e6"
+        "bytes": 822214,
+        "sha256": "0ee36e040a43faa815aac3ac21991a200da3e256ff6a9b2d4c606cb86e535054"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin"
   },
   {
     "id": "scene__idkah",
     "name": "이드 카 모스크",
     "kind": "scene",
     "disc": "idkah",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__idkah.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__idkah-v2.png",
     "originalSize": [
-      1881,
-      836
+      1586,
+      992
     ],
     "files": [
       {
         "file": "images/discoveries/idkah.gif",
-        "bytes": 2800356,
-        "sha256": "dc8db5f0296edc2618a4ba496eba4c5fcf126774e33fd1f099c6cd9ed99fdd1c"
+        "bytes": 1546255,
+        "sha256": "c267b1cc53a2bee1ee6fccc5893d5813a24c7465350e534e749aba4028c9c1dc"
       },
       {
         "file": "images/discovery-ends/idkah.jpg",
-        "bytes": 100840,
-        "sha256": "f3753482ca94f57216e68c7cdac0588c62ac967bfd775b36f4b831740a014fdf"
+        "bytes": 43204,
+        "sha256": "c417ca3100dbc656fee01138f5b8522b0975bb6b49143b0d2af64b2bfc409591"
       },
       {
         "file": "images/discovery-sheets/idkah.webp",
-        "bytes": 1911108,
-        "sha256": "292ba1e754e678fe3e87b7aaf2e9925638896538e5a0e663576622671ee80b63"
+        "bytes": 770662,
+        "sha256": "a85f3d6fef02148388b5a42c169ebaafbe3bcf1897e313d3250ff5181f045dac"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        6
+      ],
+      "skipFrames": [
+        12,
+        13
+      ]
+    }
   },
   {
     "id": "scene__folk_uyghur",
     "name": "위구르 사람들 — 열두 무캄",
     "kind": "scene",
     "disc": "folk_uyghur",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__folk_uyghur.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__folk_uyghur-v2.png",
     "originalSize": [
-      1881,
-      836
+      1448,
+      1086
     ],
     "files": [
       {
         "file": "images/discoveries/folk_uyghur.gif",
-        "bytes": 3006573,
-        "sha256": "acd5c788b47707a3e3920fd39ed05b94a719de651ff4312afde4986491082ec7"
+        "bytes": 1931910,
+        "sha256": "e8c989ec4268f1488b72bdb6f4ad83e5d1026d46264795c13490017539a7834a"
       },
       {
         "file": "images/discovery-ends/folk_uyghur.jpg",
-        "bytes": 101012,
-        "sha256": "05b977e64118c0dccf6d1d3385737cb4e6d37dc71cb418111683f348f52c2d86"
+        "bytes": 57798,
+        "sha256": "961196eb307fb1b311e552f672a092fdb74832933db84681bc27743be710b015"
       },
       {
         "file": "images/discovery-sheets/folk_uyghur.webp",
-        "bytes": 1885290,
-        "sha256": "26d99692b52eb6e0645e853b691c8327659668730ee6e8780709a08d0362ea08"
+        "bytes": 957112,
+        "sha256": "8419aba927cc56e7ee649638a30b712c08b8b1c20faa825ef084bcb534c0335b"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 16,
+    "durationMs": 9820,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "people"
   },
   {
     "id": "scene__siberiancrane",
     "name": "시베리아흰두루미",
     "kind": "scene",
     "disc": "siberiancrane",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__siberiancrane.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__siberiancrane-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/siberiancrane.gif",
-        "bytes": 3033584,
-        "sha256": "56547fa57fb4e767a36df6e29280131003024f23097d0f4b1e0532f8978b4223"
+        "bytes": 2131356,
+        "sha256": "6078cea95455f323e8d650950b529bd7c51e388886dd121ebed232af70ad7aa5"
       },
       {
         "file": "images/discovery-ends/siberiancrane.jpg",
-        "bytes": 100606,
-        "sha256": "5bdd47f58135b14a7ad23deb808e4db5c083b5d85a087f45305779be85e8f6a2"
+        "bytes": 51136,
+        "sha256": "42cbd00ae3c69056620256b7b960d5cb1e2cdc4fb0ba22b36f2ca40ad475a754"
       },
       {
         "file": "images/discovery-sheets/siberiancrane.webp",
-        "bytes": 1901220,
-        "sha256": "4d67fb4a3a199673771544169c7759e37b752a4f5509056bdd9c719c3f5ccfb1"
+        "bytes": 836754,
+        "sha256": "2ba5a90bb666f22d724ea72bee6a33fcf108a93ac25900900f17c28ed331e080"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 18,
+    "durationMs": 7200,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ani"
   },
   {
     "id": "scene__wolverine",
     "name": "울버린 — 숲의 대식가",
     "kind": "scene",
     "disc": "wolverine",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__wolverine.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__wolverine-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/wolverine.gif",
-        "bytes": 3354280,
-        "sha256": "69efa65b08f44c4f8cbfa7579c4c642f10305143966f748e398e40711dd2f4e4"
+        "bytes": 2628867,
+        "sha256": "577bcd1b3b6894035dffb88805e27402935dabd74d8789a2a4d5a53b46fff6a7"
       },
       {
         "file": "images/discovery-ends/wolverine.jpg",
-        "bytes": 103221,
-        "sha256": "6970f788f302edf9d2b25ab173b8b62c5bc9d6d4a26a76454dafea5ab19bd3a1"
+        "bytes": 82625,
+        "sha256": "030fb2669899eada37df3a4654b15baee8cf49e9ba8d3a09016a162207628765"
       },
       {
         "file": "images/discovery-sheets/wolverine.webp",
-        "bytes": 1968218,
-        "sha256": "13853f371df1017a4d1f10dbd38fbf32713476a7e4041ceda8e04bae5f38e881"
+        "bytes": 1438156,
+        "sha256": "4d1d82b082afc3493287245af414a972910bb9c4c8b7ea3a0656eceb0d097beb"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 18,
+    "durationMs": 7200,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ani"
   },
   {
     "id": "scene__amurleopard",
     "name": "아무르표범",
     "kind": "scene",
     "disc": "amurleopard",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__amurleopard.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__amurleopard-v2.png",
     "originalSize": [
-      1881,
-      836
+      1774,
+      887
     ],
     "files": [
       {
         "file": "images/discoveries/amurleopard.gif",
-        "bytes": 3369495,
-        "sha256": "fc27f0324cc27efa96ce76ea099e114cec7b2f6b0640effc7c1b50fe4ea3ae5e"
+        "bytes": 2688081,
+        "sha256": "c5bd07dfd331b10f87042c0ff8d3affbe9627fc4b425b1179a732656a2e7ef3d"
       },
       {
         "file": "images/discovery-ends/amurleopard.jpg",
-        "bytes": 102757,
-        "sha256": "5f2b2e02f58eb3e8f133026981ffa3e978dafaa75a7cae1377154130ad55803b"
+        "bytes": 87960,
+        "sha256": "bb0a20ddf91dc15f97a88a955f2faea758c4ab5f3f4cee882937650ff96c069b"
       },
       {
         "file": "images/discovery-sheets/amurleopard.webp",
-        "bytes": 1954706,
-        "sha256": "1c8ae5bbd8d5425c937f50fda696803b4bee8241525327aded1fe6dcbbb59d07"
+        "bytes": 1438230,
+        "sha256": "c9d29f605929787912503d94dd67dc7301d293e9e000962a4097b866fb81ac9c"
       }
     ],
-    "frames": 24,
-    "durationMs": 9600,
+    "frames": 18,
+    "durationMs": 7200,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "ani"
   },
   {
     "id": "scene__siberianlarch",
     "name": "시베리아 낙엽송",
     "kind": "scene",
     "disc": "siberianlarch",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__siberianlarch.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__siberianlarch-v2.png",
     "originalSize": [
-      1881,
-      836
+      1983,
+      793
     ],
     "files": [
       {
         "file": "images/discoveries/siberianlarch.gif",
-        "bytes": 3163502,
-        "sha256": "fd801e29fdd589d60216b494b48f3b6ddd2df7b7a465b246ff03501a7d173f4b"
+        "bytes": 2192838,
+        "sha256": "ad374d24c2e1ae33c0901a40c39e1c0fbbfd820d1060f0028a92a9cccf4f830b"
       },
       {
         "file": "images/discovery-ends/siberianlarch.jpg",
-        "bytes": 102505,
-        "sha256": "3706ee3e346deaab91b7c1501ac29d8b709795ce19d70b607791141a0be65344"
+        "bytes": 100206,
+        "sha256": "90c4ff56ad56dc99dbd5393b4a6fcaa7adc5727186c2512ffdc888cb5fa6a026"
       },
       {
         "file": "images/discovery-sheets/siberianlarch.webp",
-        "bytes": 1915260,
-        "sha256": "fd2179c7940c14607dadabed6c8be7a04b36acc6b967a621103d1bdad5491efc"
+        "bytes": 1472622,
+        "sha256": "172a859ea4e402e373eb09238b570e565ddd73d28e91c46e33553610e4c64159"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "plant"
   },
   {
     "id": "scene__siberianpine",
     "name": "시베리아잣나무",
     "kind": "scene",
     "disc": "siberianpine",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__siberianpine.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__siberianpine-v3.png",
     "originalSize": [
       1881,
       836
@@ -9900,101 +9998,104 @@
     "files": [
       {
         "file": "images/discoveries/siberianpine.gif",
-        "bytes": 3098401,
-        "sha256": "6e73b5110529c51cbaf91bd924dd589236063e6139d35c99d10e84bf9fd61b85"
+        "bytes": 2268390,
+        "sha256": "d0e216cbceb6a58bbdc2b79ca3eed79a69f2245f3fc53192da8ea5082e484400"
       },
       {
         "file": "images/discovery-ends/siberianpine.jpg",
-        "bytes": 100143,
-        "sha256": "f8ab60a78ea137a8b09bfe456d7d826f2132b3fed84c63d21ba480b7ac0fb48d"
+        "bytes": 100695,
+        "sha256": "9fbd3f5e533e9d600e86fa8c98d310b676f9b40b67443bd92adae55e7dfc6970"
       },
       {
         "file": "images/discovery-sheets/siberianpine.webp",
-        "bytes": 1853260,
-        "sha256": "372b96e6e704e08316a5ff1a3eeaf32eb9008d867f306c91d21caf7e81f651e6"
+        "bytes": 1507134,
+        "sha256": "b4d78fd9c39f5bd145500cd2dc4aab8ee72777f51926a4c8a9a2f9e7ee81be3a"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "plant"
   },
   {
     "id": "scene__rhodiola",
     "name": "홍경천 — 황금 뿌리",
     "kind": "scene",
     "disc": "rhodiola",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__rhodiola.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__rhodiola-v2.png",
     "originalSize": [
-      1881,
-      836
+      1983,
+      793
     ],
     "files": [
       {
         "file": "images/discoveries/rhodiola.gif",
-        "bytes": 3056861,
-        "sha256": "098bae3b5722a0e1933335283187f0374ea76cbddeb2910a9f86461603709fdb"
+        "bytes": 2178704,
+        "sha256": "8cff712408aff6c267bab7030f84107165d3917a415bd20b27a4a84522fa6cd2"
       },
       {
         "file": "images/discovery-ends/rhodiola.jpg",
-        "bytes": 103427,
-        "sha256": "afb6e4bfcfa07d8e7a330fded464a0622433f623708ea955c1841148c81ba984"
+        "bytes": 96338,
+        "sha256": "1d1c775dc31fa411fa985866df535c6c6550319f0599394b90cbe8adf0ef1b0b"
       },
       {
         "file": "images/discovery-sheets/rhodiola.webp",
-        "bytes": 1925008,
-        "sha256": "b1cc02ef72a2bfd90c40219a7bf49acbc63254bb519f2f46741f0694d09e8638"
+        "bytes": 1419904,
+        "sha256": "b6d06394b7b2ad265623a6dd3b28659adf68af3337c2f4d8d50da989f3e3ff02"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "plant"
   },
   {
     "id": "scene__eleuthero",
     "name": "가시오갈피",
     "kind": "scene",
     "disc": "eleuthero",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__eleuthero.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__eleuthero-v2.png",
     "originalSize": [
-      1881,
-      836
+      1983,
+      793
     ],
     "files": [
       {
         "file": "images/discoveries/eleuthero.gif",
-        "bytes": 3259982,
-        "sha256": "0bb5c6b9885034d58e80545c17b01199492bef5727efd8797603be7f33c5813f"
+        "bytes": 2101926,
+        "sha256": "d837b9168f6b414b20b5200e9655cd0bf092e386dc4290f0dfe3bb5a0404c5f1"
       },
       {
         "file": "images/discovery-ends/eleuthero.jpg",
-        "bytes": 105883,
-        "sha256": "8eb836d100608468e41fca701c049663aab187cfbdf3a997623899709af4fe36"
+        "bytes": 87222,
+        "sha256": "a8c11951017e1d0a81dd811aaed4f7223e7e20f4102ad8ede311fbf5a7e4503a"
       },
       {
         "file": "images/discovery-sheets/eleuthero.webp",
-        "bytes": 1970178,
-        "sha256": "d351b0e4daefaee7082a1f29f683fed1dc96691bc2ad9785a54810f52ab9c9f9"
+        "bytes": 1362278,
+        "sha256": "dd7bde4ac6085f44b3da081048cfe0308c34f79278025bb9bedcaf58c1a8a1a8"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "plant"
   },
   {
     "id": "scene__poppy",
     "name": "양귀비 — 아피온의 꽃밭",
     "kind": "scene",
     "disc": "poppy",
-    "raw": "artifacts/discovery-art-20261111/raw/scene__poppy.png",
+    "raw": "artifacts/discovery-art-20261111/raw/scene__poppy-v2.png",
     "originalSize": [
       1881,
       836
@@ -10002,26 +10103,27 @@
     "files": [
       {
         "file": "images/discoveries/poppy.gif",
-        "bytes": 2995885,
-        "sha256": "f0ca515b7176bc359da943722ba3e147bce4ca64ca1921882aaf5b46df84e4a6"
+        "bytes": 2078401,
+        "sha256": "fa3b2bb0777130d916f83097c96749f4b41999901d6ada6bd18a29c973f58b63"
       },
       {
         "file": "images/discovery-ends/poppy.jpg",
-        "bytes": 105755,
-        "sha256": "c129e38541e07cb63aed0544494f056b6c1cc690497af1ce19ab45433ca4a6ee"
+        "bytes": 82672,
+        "sha256": "0d953acad63d27fe0d0d9e2533317fc839966db5028ff6dbece0cb21c5dd338c"
       },
       {
         "file": "images/discovery-sheets/poppy.webp",
-        "bytes": 1978888,
-        "sha256": "e86de212afae72c553c4eb3a8b8da83e2d8e06798fa08d330f110292c9502747"
+        "bytes": 1321486,
+        "sha256": "650310f47d9c1e9a5fa11089f17df23f0cc6baa603d058b4dd2ae01a3044eb91"
       }
     ],
     "frames": 24,
-    "durationMs": 9600,
+    "durationMs": 8400,
     "size": [
       576,
       256
-    ]
+    ],
+    "sceneStyle": "plant"
   },
   {
     "id": "clue__ts_lisbon",
