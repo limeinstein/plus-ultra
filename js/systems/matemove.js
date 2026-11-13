@@ -81,6 +81,11 @@
     s.mateLoc = s.mateLoc || {};
     var y = s.date.y;
     G.MATES.forEach(function (m) {
+      if (m.chinaRotation && !G.ChinaCrew.active(m.id, y, s.seed)) {
+        delete s.mateLoc[m.id];
+        if (s.mateRumorStay) delete s.mateRumorStay[m.id];
+        return;
+      }
       var held = rumorStay(m.id);
       if (held) { s.mateLoc[m.id] = held.city; return; }
       var cur = s.mateLoc[m.id];

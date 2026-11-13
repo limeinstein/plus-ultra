@@ -45,9 +45,10 @@
     var p = I.packs[id] || (I.packs[id] = { text: {}, pat: [], city: {}, good: {}, name: {}, person: {}, ready: false });
     ['text', 'city', 'good', 'name'].forEach(function (k) { if (pack[k]) for (var x in pack[k]) p[k][norm(x)] = pack[k][x]; });
     if (pack.person) for (var gk in pack.person) { var pg = p.person[gk] || (p.person[gk] = {}); for (var px in pack.person[gk]) pg[norm(px)] = pack.person[gk][px]; }
-    personIdx = null;
+    personIdx = null; trReset();
     if (pack.pat) pack.pat.forEach(function (r) { p.pat.push([new RegExp(r[0]), r[1]]); });
     if (pack.ready != null) p.ready = !!pack.ready;
+    if (pack.pjoin) p.pjoin = pack.pjoin;   // 지어 낸 사람 이름을 잇는 법 — { gs: 이름·성 사이, sf: 성·이름 사이, combo: 앞말·뒷말 사이, num: 'C'(대를 한자 숫자+世로) } · 없으면 빈칸 하나
     nameIdx = null;
     if (id === I.lang && document.body) I.sweep(document.body);
   };
@@ -63,7 +64,7 @@
       (G.GOODS || []).forEach(function (g) { if (g && p.good[g.id] != null && m[g.name] == null) m[g.name] = p.good[g.id]; });
       for (var k in p.name) m[k] = p.name[k];
     }
-    nameIdx = { lang: I.lang, map: m, ok: !!(G.CITY_DATA && G.GOODS), n: gn };
+    nameIdx = { lang: I.lang, map: m, ok: !!(G.CITY_DATA && G.GOODS), n: gn }; trReset();
     if (!nameIdx.ok) { var keep = nameIdx; nameIdx = null; return keep.map; }   // 자료를 다 읽기 전이면 다음에 다시 묶는다
     return m;
   }
@@ -92,7 +93,7 @@
     if (defs) for (var dk in defs) if (defs[dk] && defs[dk].name) list.push(defs[dk]);
     var map = {};
     list.forEach(function (m) { var k = norm(m.name); if (map[k] == null) { var e = personEn(k, p.person, m.nat, true); if (e != null) map[k] = e; } });
-    personIdx = { lang: I.lang, sig: sig, map: map };
+    personIdx = { lang: I.lang, sig: sig, map: map }; trReset();
     return map;
   }
   function personGuess(k) { var p = I.packs[I.lang]; return p && p.person ? personEn(k, p.person, null, false) : null; }
@@ -101,7 +102,7 @@
     if (m) { var b = personEn(m[1], P, nat, any); return b != null ? b + ' (' + G.N(m[2]) + ')' : null; }
     var base = s, suf = '';
     m = /^(.+?) (\d+)(세)?$/.exec(s);
-    if (m) { base = m[1]; suf = ' ' + (m[3] ? roman(+m[2]) : m[2]); }
+    if (m) { base = m[1]; suf = m[3] && PJ('num') === 'C' ? hanNum(+m[2]) + '世' : ' ' + (m[3] ? roman(+m[2]) : m[2]); }
     var F = P.F || {};
     if (F[base] != null && (any || base.length >= 2 || suf)) return F[base] + suf;
     var W = G.WANDER_NATIONS || {}, R = (G.REGION_FOLK && G.REGION_FOLK.pools) || {}, r, k;
@@ -121,17 +122,19 @@
   function wanderEn(s, N, d) {
     if (!d || !N.people) return null;
     var gv = N.people.map(function (p) { return p[0]; }), sr = N.people.map(function (p) { return p[1]; }), r;
-    if (N.order === 'sf') { r = pick2(s, sr, gv, N.sep || '', d); return r ? r[0] + ' ' + r[1] : null; }
-    r = pick2(s, gv, sr, ' ', d); return r ? r[0] + ' ' + r[1] : null;
+    if (N.order === 'sf') { r = pick2(s, sr, gv, N.sep || '', d); return r ? r[0] + PJ('sf') + r[1] : null; }
+    r = pick2(s, gv, sr, ' ', d); return r ? r[0] + PJ('gs') + r[1] : null;
   }
   function poolEn(s, p, d) {
     if (!d) return null;
     var gv = (p.m || []).concat(p.f || []), r;
     if (p.order === 'mono') return gv.indexOf(s) >= 0 && d[s] != null ? d[s] : null;
-    if (p.order === 'combo') { r = pick2(s, p.a || [], gv, ' ', d); return r ? r[0] + ' ' + r[1] : null; }
-    if (p.order === 'sf') { r = pick2(s, p.sur || [], gv, p.sep == null ? '' : p.sep, d); return r ? r[0] + ' ' + r[1] : null; }
-    r = pick2(s, gv, p.sur || [], ' ', d); return r ? r[0] + ' ' + r[1] : null;
+    if (p.order === 'combo') { r = pick2(s, p.a || [], gv, ' ', d); return r ? r[0] + PJ('combo') + r[1] : null; }
+    if (p.order === 'sf') { r = pick2(s, p.sur || [], gv, p.sep == null ? '' : p.sep, d); return r ? r[0] + PJ('sf') + r[1] : null; }
+    r = pick2(s, gv, p.sur || [], ' ', d); return r ? r[0] + PJ('gs') + r[1] : null;
   }
+  function PJ(k) { var p = I.packs[I.lang], j = p && p.pjoin; return j && j[k] != null ? j[k] : (k === 'num' ? '' : ' '); }
+  function hanNum(n) { var d = '〇一二三四五六七八九'; if (n < 10) return d[n]; if (n < 20) return '十' + (n % 10 ? d[n % 10] : ''); if (n < 100) return d[Math.floor(n / 10)] + '十' + (n % 10 ? d[n % 10] : ''); return String(n); }   // ⟪C$2⟫: 한자 숫자(주앙 2세 → 若昂二世)
   function roman(n) { if (!(n > 0 && n < 40)) return String(n); var r = '', t = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']]; t.forEach(function (p) { while (n >= p[0]) { r += p[1]; n -= p[0]; } }); return r; }
   /** 「·」나 「, 」로 이은 이름들: '일본·동아시아' → 'Japan · East Asia' */
   var depth = 0;
@@ -164,6 +167,8 @@
   }
   I.names = function (x) {
     if (I.lang === 'ko') return x;
+    var lead = /^\s*/.exec(x)[0], tail = /\s*$/.exec(x)[0];   // 붙잡은 조각의 앞뒤 빈칸(「 (사교 명성 −5)」)은 그대로 둔다
+    if ((lead || tail) && x.trim()) { var w = I.names(x.trim()); if (lead && !/^\s/.test(w)) w = lead + w; if (tail && !/\s$/.test(w)) w += tail; return w; }
     var v = one(x); if (v !== x) return v;
     var dot = /\s*·\s*/.test(x), parts = dot ? x.split(/\s*·\s*/) : splitTop(x, ', ');   // 「, 」는 괄호 밖에서만 나눈다 (「이름(독일 포수, 뉘른베르크), …」)
     return parts.map(function (a) { return one(a.trim()); }).join(dot ? ' · ' : ', ');
@@ -204,21 +209,52 @@
     I.miss[s]++;
   }
   /** 화면 글 한 마디를 옮긴다 — 바꿀 것이 없으면 null */
+  /* 옮긴 결과를 기억한다 — 틀(pat)이 붙잡은 조각을 다시 이름·문장으로 옮기는 길(names → seg → tr)이 깊어지면
+     긴 글(나라 지배 기록처럼 숫자·「·」가 많은 글)에서 같은 조각을 수만 번 다시 옮겨 몇 초씩 멈췄다 (2026-11-12)
+     · 언어·사전·이름 표·사람 이름 표가 바뀌면 비운다 · 깊이마다 따로 (깊이에 따라 결과가 다르다) */
+  var trCache = Object.create(null), trN = 0, NONE = {};
+  function trReset() { trCache = Object.create(null); trN = 0; }
   I.tr = function (s, quiet) {
     if (I.lang === 'ko' || !s || !HANGUL.test(s)) return null;
     var p = I.packs[I.lang]; if (!p) return null;
+    var ck = I.lang + depth + '\u0001' + s, cv = trCache[ck];
+    if (cv !== undefined) { if (cv === NONE) { if (!quiet && depth === 0) note(norm(s)); return null; } return cv; }
+    var r = trRaw(s, quiet, p);
+    if (trN > 50000) trReset();
+    trCache[ck] = r == null ? NONE : r; trN++;
+    return r;
+  };
+  function trRaw(s, quiet, p) {
     var n = norm(s), t = p.text[n];
     if (t == null) { var gn = G.N(n); if (gn !== n) t = gn; }   // 이름 표 · 게임이 지은 사람 이름
     if (t == null) for (var i = 0; i < p.pat.length; i++) {
       var r = p.pat[i]; if (!r[0].test(n)) continue;
-      var u = n.replace(r[0], r[1]).replace(/⟦([^⟧]*)⟧/g, function (a, x) { return I.names(x); }).replace(/⟪R(\d+)⟫/g, function (a, x) { return roman(+x); });   // ⟦$1⟧: 붙잡은 글이 이름(· 로 이은 이름들)이면 옮긴다 · ⟪R$2⟫: 로마 숫자(군주의 대 — 아폰수 5세 → Afonso V)
+      var u = n.replace(r[0], r[1]).replace(/⟦([^⟧]*)⟧/g, function (a, x) { return I.names(x); }).replace(/⟪R(\d+)⟫/g, function (a, x) { return roman(+x); }).replace(/⟪C(\d+)⟫/g, function (a, x) { return hanNum(+x); }).replace(/⟪l⟫([\s\S]*?)⟪\/l⟫/g, function (a, x) { return x.toLowerCase(); });   // ⟪l⟫…⟪/l⟫: 번역의 {1:lc} — 문장 가운데 배 종류 이름은 소문자로
+        // ⟦$1⟧: 붙잡은 글이 이름(· 로 이은 이름들)이면 옮긴다 · ⟪R$2⟫: 로마 숫자(군주의 대 — 아폰수 5세 → Afonso V)
       if (!HANGUL.test(u)) { t = u; break; }   // 옮긴 뒤에도 한국어가 남으면 옮기지 못한 것으로 친다
     }
     if (t == null && depth <= 3 && (n.indexOf(' · ') > 0 || n.indexOf(' / ') > 0)) t = joined(n);   // 「 · 」「 / 」로 이은 조각들 (도감 카드의 「육상 탐험 · 가치 120」처럼)
+    if (t == null && depth <= 3) t = lined(s, n);   // 여러 줄(title의 \n) · 앞머리 「— 」「· 」를 떼고 옮긴다 (2026-11-13 영어 QA)
     if (t == null) { if (!quiet) note(n); return null; }
     var lead = /^\s*/.exec(s)[0], tail = /\s*$/.exec(s)[0];
     return lead + t + tail;
-  };
+  }
+  /* 줄마다 옮긴다: 줄바꿈이 든 글(수첩·선실의 title 풍선)은 줄마다, 한 줄이면 앞머리 「— 」「· 」「• 」를 떼고 — 모두 옮겨지면 같은 꼴로 다시 잇는다 */
+  function lined(s, n) {
+    var ls = String(s).split('\n');
+    if (ls.length > 1 && ls.length <= 24) {
+      var out = [];
+      for (var i = 0; i < ls.length; i++) {
+        var a = ls[i]; if (!HANGUL.test(a)) { out.push(a); continue; }
+        depth++; try { var q = I.tr(a, true); } finally { depth--; }
+        if (q == null) return null; out.push(q);
+      }
+      return out.join('\n');
+    }
+    var m = /^([—·•]\s?)(.+)$/.exec(n);
+    if (m && HANGUL.test(m[2])) { depth++; try { var r = I.tr(m[2], true); } finally { depth--; } if (r != null) return m[1] + r.trim(); }
+    return null;
+  }
   /* 괄호·『』 밖의 「 / 」 다음 「 · 」에서 나눠 조각마다 옮기고, 모두 옮겨지면 같은 이음표로 다시 잇는다 — 하나라도 못 옮기면 null */
   function splitTop(s, sep) {
     var out = [], lv = 0, st = 0;
@@ -248,7 +284,7 @@
 
   // ---------------------------------------------------------------- 화면 글자 자동 번역
   var SKIP = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, INPUT: 1, SELECT: 0, CODE: 1, CANVAS: 1 };
-  var ATTRS = ['title', 'placeholder', 'alt', 'aria-label'];
+  var ATTRS = ['title', 'placeholder', 'alt', 'aria-label', 'label'];   // label: <optgroup>·<option>의 이름표
   function skipEl(el) {
     for (var e = el; e && e.nodeType === 1; e = e.parentNode) { if (SKIP[e.tagName] || e.getAttribute('translate') === 'no' || (e.classList && e.classList.contains('no-i18n'))) return true; }
     return false;
@@ -258,7 +294,7 @@
     var t = I.tr(v); if (t != null && t !== v) node.nodeValue = t;
   }
   function doAttrs(el) {
-    if (!el.getAttribute || skipEl(el)) return;
+    if (!el.getAttribute || el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || (el.getAttribute('translate') === 'no' || (el.classList && el.classList.contains('no-i18n'))) || (el.parentNode && skipEl(el.parentNode))) return;   // 입력칸(INPUT·TEXTAREA)도 placeholder·title·aria-label은 옮긴다 (2026-11-13) — 안의 글만 건드리지 않는다
     for (var i = 0; i < ATTRS.length; i++) {
       var a = el.getAttribute && el.getAttribute(ATTRS[i]); if (!a || !HANGUL.test(a)) continue;
       var t = I.tr(a); if (t != null && t !== a) el.setAttribute(ATTRS[i], t);
@@ -268,8 +304,9 @@
   I.sweep = function (root) {
     if (I.lang === 'ko' || !root) return;
     if (root.nodeType === 3) { doText(root); return; }
-    if (root.nodeType !== 1 || skipEl(root)) return;
+    if (root.nodeType !== 1) return;
     doAttrs(root);
+    if (skipEl(root)) return;
     var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT), n;
     while ((n = w.nextNode())) { if (n.nodeType === 3) doText(n); else doAttrs(n); }
   };

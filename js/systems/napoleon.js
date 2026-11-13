@@ -163,7 +163,7 @@
     var res = 'win';
     if (G.Games && G.Games.duel) {
       res = await withPic('napoleon_duel', '새벽 부두의 일기토', function () {
-        return G.Games.duel({ name: m.name, portrait: G.Art && G.Art.mateSpec ? G.Art.mateSpec(NAP) : null, look: 'rival', str: m.st[0], atk: 12, def: 6, skill: m.sk.sword || 2, mar: m.st[2], int: m.st[1], cha: m.st[3], style: 'it' }, { place: 'city', noSwap: true });
+        return G.Games.duel({ name: m.name, portrait: G.Art && G.Art.mateSpec ? G.Art.mateSpec(NAP) : null, look: 'rival', str: m.st[0], atk: 12, def: 6, skill: m.sk.sword || 2, mar: m.st[2], int: m.st[1], cha: m.st[3], style: 'thrust' }, { place: 'city', noSwap: true });
       });
     }
     var back = function () { var x = p.stole; if (!x) return; if (x.it) s.player.items.push(x.it); else if (x.gold) s.player.gold += x.gold; p.stole = null; };

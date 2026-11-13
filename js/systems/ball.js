@@ -359,7 +359,7 @@
       else if (v === 'duel') {
         if (G.Games && G.Games.duel && !BL.noDuel) {
           var m = G.MATE[G.BALL_WITCH.id];
-          var res = await G.Games.duel({ name: m.name, portrait: G.Art.mateSpec(m.id), look: 'rival', str: m.st[0], atk: 10, def: 6, skill: 2, mar: m.st[2], int: m.st[1], cha: m.st[3], style: 'ne' }, { place: 'city', noSwap: true });
+          var res = await G.Games.duel({ name: m.name, portrait: G.Art.mateSpec(m.id), look: 'rival', str: m.st[0], atk: 10, def: 6, skill: 2, mar: m.st[2], int: m.st[1], cha: m.st[3], style: 'slash' }, { place: 'city', noSwap: true });
           win = res === 'win';
         } else win = U.chance(U.clamp(0.3 + (R().skill('sword') || 0) * 0.18, 0.1, 0.9));
       }

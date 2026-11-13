@@ -298,7 +298,7 @@
     var res = 'lose';
     if (v === 'duel' && G.Games && G.Games.duel) {
       var m = G.MATE && G.MATE.h_xicotencatl, stt = m ? m.st : [76, 62, 84, 64];
-      res = await G.Games.duel({ name: '시코텐카틀', portrait: G.Art && G.Art.mateSpec ? G.Art.mateSpec('h_xicotencatl') : null, look: 'rival', str: stt[0], atk: 14, def: 6, skill: 3, mar: stt[2], int: stt[1], cha: stt[3], style: 'az' }, { place: 'land' });
+      res = await G.Games.duel({ name: '시코텐카틀', portrait: G.Art && G.Art.mateSpec ? G.Art.mateSpec('h_xicotencatl') : null, look: 'rival', str: stt[0], atk: 14, def: 6, skill: 3, mar: stt[2], int: stt[1], cha: stt[3], style: 'bash' }, { place: 'land' });
       if (res === 'win') {
         b.xico = 'duel';
         await play([

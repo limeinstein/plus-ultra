@@ -1667,6 +1667,7 @@
       if (G.ZhengHe && G.ZhengHe.seaPending()) await G.ZhengHe.atSea();   // 정화의 유령 보선 — 캘리컷 · 실론 · 말라카 · 황해 (js/systems/zhenghe.js)
       if (G.PiriMap && G.PiriMap.seaPending()) await G.PiriMap.atSea();   // 피리 레이스의 해도 — 산 브랜던의 섬 · 아브롤류스 암초 (js/systems/pirimap.js)
       if (G.Nights && G.Nights.seaPending()) await G.Nights.atSea();   // 신드바드 — 고래 섬 · 로크의 알 (js/systems/nights.js)
+      if (G.XiYou && G.XiYou.seaPending()) await G.XiYou.atSea();   // 서유기 — 화과산 수렴동 · 말라카 해협의 왜구 (js/systems/xiyou.js)
       if (G.Disaster) await UI.autoRun(function () { return G.Disaster.sea(); });   // 해일이 함대를 덮쳤다 (js/systems/disaster.js)
       // 망루: 수평선 너머를 살핀다
       var sensed = G.Explore.sense('sea', l.lon, l.lat);

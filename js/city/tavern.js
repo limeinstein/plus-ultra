@@ -559,6 +559,7 @@
   /** 고용 절차. 말은 일부만 통해도 되며, 덜 통할수록 처음 충성심이 낮다. 성사되면 true */
   T.hireMate = async function (c, m, who) {
     var s = S(), cm = comm(m);
+    if (m.chinaRotation && (!G.Frontier.mateReady(m) || s.flags['gone_' + m.id] || s.mates.some(function (x) { return x.id === m.id; }))) return false;
     who = who || T.duo(T.mateSpeaker(m));
     if (!cm.lv) { await C.mate('말이 한 마디도 통하지 않습니다. 통역을 구하거나 저 사람의 말을 익혀야겠습니다.'); return false; }
     if (s.player.fame < m.fame) { await UI.say('자네 밑에서 일하라고? 미안하지만 아직 자네 이름은 들어 본 적이 없군. (필요 명성 ' + U.num(m.fame) + ')', who); return false; }
@@ -670,7 +671,7 @@
     head.appendChild(U.el('div', 'mc-id',
       '<div class="nm">' + U.esc(m.name) + (G.Bio ? G.Bio.link(m.name, '📜 이야기') : '') + '</div>' +
       '<div class="mt">' + (m.g === 'f' ? '여자' : '남자') + ' · ' + (m.rival ? U.esc((G.SeaFolk.rivalCity(m.rival) || {}).name || '') + '에 머묾' : G.MateMove ? (function (z) { return z + U.jx(z, '을/를') + ' 떠돎'; })(G.MateMove.zoneNames(m.id)) : m.reg.map(function (r) { return G.REGIONS[r]; }).join('·')) +
-      ' · ' + m.y[0] + '~' + m.y[1] + '년' + (m.renown ? ' · <span class="renown" title="실존 인물 — 지명도가 높을수록 특기가 많다">지명도 ' + '★'.repeat(m.renown) + ' ' + G.RENOWN_NAME[m.renown] + '</span>' : '') + '</div>' +
+      ' · ' + (m.chinaRotation ? G.ChinaCrew.periodText(s.date.y) : m.y[0] + '~' + m.y[1] + '년') + (m.renown ? ' · <span class="renown" title="실존 인물 — 지명도가 높을수록 특기가 많다">지명도 ' + '★'.repeat(m.renown) + ' ' + G.RENOWN_NAME[m.renown] + '</span>' : '') + '</div>' +
       (m.rival ? '<div class="mt"><b class="warn">고용할 수 없다</b> — 스스로 함대를 꾸려 발견을 다투는 경쟁 탐험가</div>' : '<div class="mt">필요 명성 <b>' + U.num(m.fame) + '</b>' + (lock ? ' <span class="warn">(모자람 — 지금 내 명성 ' + U.num(s.player.fame) + ')</span>' : '') +
       ' · 월급 <b>금화 ' + U.num(R.mateWage(m.id)) + '닢</b></div>') +
       '<div class="mc-desc">' + U.esc(m.desc || '') + '</div>'));

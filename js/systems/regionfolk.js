@@ -87,11 +87,8 @@
   }
 
   // ---------------------------------------------------------------- 얼굴: 얼굴과 몸을 합성한 옛 묶음은 쓰지 않고 완성된 철새 초상 한 쌍만 쓴다
-  function face(style, g, type, z, pk) {
-    var fp = G.Wander && G.Wander.facePool ? G.Wander.facePool(style, g, type) : [];
-    var dedicated = G.WANDER_PORTRAITS && G.WANDER_PORTRAITS[style];
-    var own = dedicated && dedicated[g] || [];
-    fp = fp.filter(function (k) { return own.indexOf(k) >= 0 || /^portraits\/(npc-roles|fairy-tales)\//.test(k); });   // 그 고장의 전용 후보나 역할 그림만 쓴다
+  function face(style, g, type, pk) {
+    var fp = G.Wander && G.Wander.facePool ? G.Wander.facePool(style, g, type, pk, true) : [];
     return fp.length ? U.pick(fp) : null;
   }
 
@@ -118,7 +115,7 @@
     var style = c.style || 'ib', nm = nameFrom(pk, g, home);
     var tn = ((d.typeName[tk] || {})[style]) || T.nm;
     var tx = G.WANDER_TEXT, tr = U.pick(tk === 'bard' ? d.text.bard : (tx.trait[tk] || tx.trait.nav));
-    var portrait = face(style, g, tk, z, pk);
+    var portrait = face(style, g, tk, pk);
     s.wander.seq = (s.wander.seq || 0) + 1;
     var def = {
       id: 'wd_' + y + '_' + s.wander.seq, name: nm, g: g, wd: true, local: z, nat: pk, natName: natName(pk), type: tk, typeName: tn, st: st, sk: sk, lg: lg, fame: fame, wage: wage,

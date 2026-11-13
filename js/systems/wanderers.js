@@ -101,15 +101,17 @@
   // 새 그림으로 바뀐 사건 인물의 예전 그림. 이름·이야기는 잇지 않고 북유럽권 여성 철새의 생김새로만 다시 쓴다.
   var RETIRED_EVENT_FACES = ['portraits/fairy-tales/snow_white', 'portraits/fairy-tales/little_mermaid'];
   /** 그 양식·성별의 얼굴 후보 (역할 그림 + 같은 문화권 항해사의 초상) */
-  WD.facePool = function (style, g, type) {
+  WD.facePool = function (style, g, type, nat, local) {
     var A = G.Art, T = G.WANDER_TYPES[type] || {}, out = [];
     var dedicated = G.WANDER_PORTRAITS && G.WANDER_PORTRAITS[style];
-    var ready = dedicated && dedicated[g] && dedicated[g].filter(facePairOk);
+    // 명·대월처럼 같은 양식을 쓰는 고장도 국적 전용 그림은 따로 고른다.
+    var ready = dedicated && (!dedicated.nat || !nat || dedicated.nat === nat) && dedicated[g] && dedicated[g].filter(facePairOk);
     if (ready && ready.length) return ready;
     var roles = (g === 'f' ? FEMALE_ROLES : MALE_ROLES).filter(function (r) { return !A || !A.rolePortraitGender || A.rolePortraitGender(r, style) === g; });
     var pref = (T.role || []).filter(function (r) { return roles.indexOf(r) >= 0; });
     (pref.length ? pref.concat(pref) : []).concat(roles).forEach(function (r) { var k = 'portraits/npc-roles/' + style + '/' + r; if (facePairOk(k)) out.push(k); });
     if (g === 'f' && style === 'ne') RETIRED_EVENT_FACES.forEach(function (k) { if (facePairOk(k)) out.push(k); });
+    if (local) return out;   // 고장 사람은 전용 후보나 역할 그림만 쓴다.
     var cult = A && A.imageCulture ? A.imageCulture(style) : null;
     G.MATES.forEach(function (m) {
       if (m.wd || m.witch || m.g !== g || ICONIC[m.id]) return;
@@ -123,12 +125,15 @@
   WD.fixPortrait = function (d) {
     if (!d || d.ret) return d;   // 스무 해 만에 돌아온 사건 동료는 제 얼굴 그대로 (js/systems/oldguard.js)
     if (d.folk) return G.FolkJoin && G.FolkJoin.fixPortrait ? G.FolkJoin.fixPortrait(d) : d;
-    var pool = WD.facePool(d.style || 'ib', d.g, d.type);
-    if (d.local) {
-      var dedicated = G.WANDER_PORTRAITS && G.WANDER_PORTRAITS[d.style];
-      var own = dedicated && dedicated[d.g] || [];
-      pool = pool.filter(function (k) { return own.indexOf(k) >= 0 || /^portraits\/(npc-roles|fairy-tales)\//.test(k); });
-    }   // 고장 사람은 같은 문화권의 전용 후보나 역할 그림을 쓴다.
+    // 전용 명단이 생기기 전에 이미 고용한 중국 철새는 저장된 얼굴을 계속 쓴다.
+    if (d.wd && d.g === 'm' && d.style === 'cn' && /^portraits\/mates\/chinese-men\/(0[1-9]|1[0-8])$/.test(d.face)) {
+      var s = S();
+      if (s && s.mates && s.mates.some(function (m) { return m.id === d.id; })) {
+        d.halfKey = d.face + '_half';
+        return d;
+      }
+    }
+    var pool = WD.facePool(d.style || 'ib', d.g, d.type, d.nat || (d.local === 'china' ? 'CN' : d.local), d.local);
     if (pool.indexOf(d.face) < 0) d.face = pool.length ? pool[Math.abs(U.strHash('wander-pair:' + d.id)) % pool.length] : null;
     if (d.face && facePairOk(d.face)) d.halfKey = d.face + '_half';
     else if (d.wd) d.halfKey = null;
@@ -165,7 +170,7 @@
     var home = homes.length ? U.pick(homes) : null;
     var born = home != null ? city(home).name : N.name;
     // 얼굴: 윗대의 얼굴(성별이 같을 때) 또는 새로
-    var face = opts.face && opts.g === g ? opts.face : (function () { var pool = WD.facePool(N.style, g, tk); return pool.length ? U.pick(pool) : null; })();
+    var face = opts.face && opts.g === g ? opts.face : (function () { var pool = WD.facePool(N.style, g, tk, nk); return pool.length ? U.pick(pool) : null; })();
     var tx = G.WANDER_TEXT, tr = U.pick(tx.trait[tk] || tx.trait.nav);
     var desc = N.adj + ' 출신의 ' + (g === 'f' ? '여' : '') + T.nm + '. ' + tr;
     var story = born + '에서 태어났다. ' + U.pick(tx.past) + ' ' + U.pick(tx.dream);

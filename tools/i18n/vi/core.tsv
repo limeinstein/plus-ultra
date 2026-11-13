@@ -1,0 +1,231 @@
+항해 자료를 받는 중…	Đang nhận dữ liệu hải trình…
+해도를 펼치는 중...	Đang trải hải đồ...
+해도를 펼치는 중…	Đang trải hải đồ…
+바다를 그리는 중…	Đang vẽ biển cả…
+첫 화면을 꾸미는 중…	Đang bày màn hình đầu…
+그림을 불러오는 중…	Đang tải tranh…
+더 먼 바다로	Hướng tới biển xa
+지구 둘레를 항해하는 갤리온	Chiếc galleon đi vòng quanh địa cầu
+탐험의 시대, 1480 — 이베리아 반도	Thời đại Thám hiểm, 1480 — bán đảo Iberia
+게임 버전	Phiên bản trò chơi
+만든 사람들 · 출처	Người làm game · Nguồn
+베타 안내 · 피드백	Hướng dẫn bản beta · Góp ý
+이어하기	Chơi tiếp
+새로운 항해	Chuyến hải hành mới
+첫 항해 (튜토리얼)	Chuyến đi đầu tiên (Hướng dẫn)
+이야기 — 아버지의 사진	Câu chuyện — Ảnh của cha
+항해 일지 불러오기	Mở nhật ký hàng hải
+도감	Đồ giám
+조작 안내	Điều khiển
+화면 · 글꼴	Màn hình · Phông chữ
+Language · 언어	Language · Ngôn ngữ
+준비 중 · coming soon	Đang chuẩn bị · coming soon
+불러오지 못했습니다.	Không mở được.
+파일에서 불러오기	Mở từ tệp
+내려받아 둔 일지 파일 (.json)	Tệp nhật ký đã tải về (.json)
+일지를 파일로 내려받기	Tải nhật ký về thành tệp
+다른 기기·브라우저로 옮길 때	Khi chuyển sang thiết bị hay trình duyệt khác
+내려받을 일지가 없습니다.	Không có nhật ký nào để tải về.
+이 브라우저에 남은 항해 일지가 없습니다. 지난번에 기록한 일지가 보이지 않는다면 ① 브라우저를 닫을 때 쿠키·사이트 데이터를 지우는 설정, ② PC 최적화·백신 프로그램의 「인터넷 사용 흔적 삭제」, ③ 시크릿(InPrivate) 창 가운데 하나가 지운 것입니다. 내려받아 둔 일지 파일이 있으면 「파일에서 불러오기」로 이어 가고, 앞으로는 설정의 「일지를 파일로도」를 켜 두십시오.	Trình duyệt này không còn nhật ký hàng hải nào. Nếu không thấy nhật ký đã ghi lần trước thì nó đã bị xóa bởi một trong những thứ sau: ① cài đặt xóa cookie và dữ liệu trang khi đóng trình duyệt, ② tính năng “xóa dấu vết duyệt web” của phần mềm dọn máy hay diệt virus, ③ cửa sổ ẩn danh (InPrivate). Nếu có tệp nhật ký đã tải về, hãy chơi tiếp bằng “Mở từ tệp”, và từ nay hãy bật “Lưu nhật ký cả ra tệp” trong Cài đặt.
+지금 창은 시크릿(InPrivate) 창으로 보입니다 — 창을 닫으면 항해 일지가 모두 지워집니다. 보통 창에서 하시거나, 여관에서 기록한 뒤 「일지를 파일로 내려받기」로 남겨 두십시오.	Cửa sổ này có vẻ là cửa sổ ẩn danh (InPrivate) — đóng cửa sổ là mọi nhật ký hàng hải sẽ bị xóa. Hãy chơi trong cửa sổ thường, hoặc sau khi ghi ở nhà trọ thì dùng “Tải nhật ký về thành tệp” để giữ lại.
+플레이 가이드북 펼치기	Mở sách hướng dẫn chơi
+플레이 가이드북	Sách hướng dẫn chơi
+처음 바다에 나서는 제독을 위한 안내서 — 시작하기 · 도시 · 항해 · 교역 · 모험과 발견 · 전투 · 사람들 · 즐길거리 · 초보 선장을 위한 팁. 게임 화면 그림 {pics}장과 함께 {ch}장으로 엮었습니다.	Sách chỉ dẫn cho đô đốc lần đầu ra biển — Bắt đầu · Thành phố · Hải hành · Giao thương · Phiêu lưu và phát hiện · Chiến đấu · Con người · Thú vui · Mẹo cho thuyền trưởng mới. Gồm {ch} chương cùng {pics} tranh màn hình trò chơi.
+닫기	Đóng
+확인	Đồng ý
+알림	Thông báo
+예	Có
+아니오	Không
+취소	Hủy
+결정	Quyết định
+최소	Ít nhất
+최대	Nhiều nhất
+돌아간다	Quay lại
+닫는다	Đóng lại
+없음	Không có
+전체	Tất cả
+☑ 전체 선택	☑ Chọn tất cả
+☐ 전체 해제	☐ Bỏ chọn tất cả
+이름으로 찾기	Tìm theo tên
+정렬	Sắp xếp
+화면을 가로로 돌려 주십시오	Xin hãy xoay màn hình nằm ngang
+끌어서 옮기기 · 오른쪽 클릭: 제자리로	Kéo để di chuyển · Nhấp chuột phải: về chỗ cũ
+끌어서 알림 위치 옮기기 · 누르면 닫기 · 오른쪽 클릭: 제자리로 · 지난 소식은 윗줄 왼쪽 나침반	Kéo để dời chỗ thông báo · Nhấp để đóng · Nhấp chuột phải: về chỗ cũ · Tin cũ: la bàn góc trên bên trái
+지난 소식 — 띄우지 않은 상태·먼 소문과 대화 중에 모아 둔 소식도 여기에	Tin cũ — gồm cả tin trạng thái không hiện lên, tin đồn nơi xa và tin gom lại trong lúc trò chuyện
+지난 소식	Tin cũ
+아직 소식이 없습니다.	Chưa có tin gì.
+세상의 소식	Tin tức thế gian
+이 언어는 번역을 준비하는 중입니다.	Ngôn ngữ này đang được dịch.
+언어 · Language	Ngôn ngữ · Language
+이 기기에만 기억합니다. 바뀐 언어는 다시 그리는 화면부터 보입니다.	Chỉ ghi nhớ trên thiết bị này. Ngôn ngữ mới sẽ hiện ra từ những màn hình được vẽ lại.
+글자 크기	Cỡ chữ
+모니터 크기에 맞춤	Vừa với màn hình
+작게	Nhỏ
+보통	Vừa
+조금 크게	Hơi lớn
+크게	Lớn
+아주 크게	Rất lớn
+글꼴	Phông chữ
+글씨 렌더링	Cách hiển thị chữ
+선명하게	Sắc nét
+예전 방식	Kiểu cũ
+선명하게: 글씨를 모니터의 실제 크기로 다시 그립니다 (기본) · 예전 방식: 화면을 통째로 늘립니다	Sắc nét: vẽ lại chữ theo đúng kích thước thật của màn hình (mặc định) · Kiểu cũ: kéo giãn cả màn hình
+바다는 넓고 우리의 배는 작다. 그래도 제독, 저 수평선 너머에 무엇이 있는지 보러 갑시다. 리스본 시장에서 후추 한 자루가 금화 서른 닢이랍니다.	Biển thì rộng mà tàu ta thì nhỏ. Dẫu vậy, thưa Đô đốc, ta hãy đi xem bên kia chân trời có gì. Nghe nói ở chợ Lisboa một bao hồ tiêu đáng ba mươi đồng vàng.
+{y}년 {m}월 {d}일	{d}/{m}/{y}
+1월	Tháng 1
+2월	Tháng 2
+3월	Tháng 3
+4월	Tháng 4
+5월	Tháng 5
+6월	Tháng 6
+7월	Tháng 7
+8월	Tháng 8
+9월	Tháng 9
+10월	Tháng 10
+11월	Tháng 11
+12월	Tháng 12
+북위 {v}°	{v}°B
+남위 {v}°	{v}°N
+동경 {v}°	{v}°Đ
+서경 {v}°	{v}°T
+동	Đ
+북동	ĐB
+북	B
+북서	TB
+서	T
+남서	TN
+남	N
+남동	ĐN
+명성	Danh tiếng
+소지금	Tiền
+닢	 đồng
+무명의 항해자	Thủy thủ vô danh
+날짜	Ngày
+언어	Ngôn ngữ
+위도	Vĩ độ
+경도	Kinh độ
+식량	Lương thực
+식수	Nước ngọt
+피로	Mệt mỏi
+계약	Hợp đồng
+맺은 계약이 없습니다.	Chưa ký hợp đồng nào.
+직위	Chức vị
+가고 싶은 곳을 고르십시오	Xin chọn nơi muốn đến
+항구	Bến cảng
+교역소	Thương điếm
+조선소	Xưởng đóng tàu
+술집	Quán rượu
+식당	Quán ăn
+여관	Nhà trọ
+시장	Chợ
+교회	Nhà thờ
+도서관	Thư viện
+왕궁	Cung điện
+조합	Phường hội
+성문	Cổng thành
+자택	Tư gia
+총독 관저	Dinh thống đốc
+왕립 박물관	Bảo tàng Hoàng gia
+왕립 미술관	Phòng tranh Hoàng gia
+왕립 동물원	Vườn thú Hoàng gia
+제독	Đô đốc
+함대	Hạm đội
+소지품	Hành trang
+발견물	Phát hiện
+계약·의뢰	Hợp đồng·Ủy thác
+해도	Hải đồ
+일지	Nhật ký
+수첩	Sổ tay
+설정	Cài đặt
+설정 — 소리·화질·글씨 크기·키보드·타이틀로	Cài đặt — âm thanh, đồ họa, cỡ chữ, bàn phím, về màn hình đầu
+이 도시에서 할 일	Việc làm ở thành phố này
+도시	Thành phố
+거리 — ←→ 걷기 · Shift 뛰기 · ↑ 건물에 들어가기 · 마우스: 가고 싶은 곳이나 건물을 누른다	Phố — ←→ đi bộ · Shift chạy · ↑ vào tòa nhà · Chuột: nhấp vào nơi muốn đến hay tòa nhà
+나온다	Ra ngoài
+물건을 사고팝니다	Mua bán hàng hóa
+품목 갈래별 값	Giá theo nhóm hàng
+구입	Mua
+매각	Bán
+시세	Thời giá
+값 깎기	Mặc cả
+투자	Đầu tư
+일괄 거래	Mua bán hàng loạt
+골라서 한꺼번에 산다	Chọn rồi mua một lượt
+골라서 한꺼번에 판다	Chọn rồi bán một lượt
+고른 것 한꺼번에 산다	Mua một lượt hàng đã chọn
+고른 것 한꺼번에 판다	Bán một lượt hàng đã chọn
+모두 판다	Bán hết
+품목	Mặt hàng
+분류	Loại
+재고	Tồn kho
+보유	Đang có
+알려진 최고 매각가	Giá bán cao nhất đã biết
+산 곳	Nơi mua
+수량	Số lượng
+산 값	Giá mua
+여기 시세	Giá ở đây
+이익	Lời
+받아 줄 양	Lượng còn nhận
+다른 곳 최고가	Giá cao nhất nơi khác
+적재 여유	Chỗ trống
+통 · 무게 여유	 thùng · Sức chở còn
+통	 thùng
+품목·분류로 찾기	Tìm theo mặt hàng·loại
+귀함	Hiếm
+산지	Nơi sản xuất
+중계	Trung chuyển
+시대 ▲	Thời đại ▲
+이만큼까지는 값이 완만하게 떨어지고, 넘기면 폭락한다	Tới mức này giá giảm từ từ, vượt quá thì giá sụp
+값이 무너지기 전에 이 시장이 더 받아 줄 양	Lượng chợ này còn nhận thêm trước khi giá sụp
+이 물건이 나는 고장이라 흔하다 — 팔아도 헐값이고, 조금만 팔아도 값이 곤두박질친다.	Đây là nơi sản xuất món này nên nó rẻ — bán cũng chỉ được giá bèo, bán một ít thôi giá đã tụt thê thảm.
+입하는 품목마다 다릅니다. 일반품은 빠르게, 희귀품은 천천히 회복합니다. 생산시설·상관 투자로 공급을 늘릴 수 있습니다. 매각가는 들러 본 교역소의 기록입니다. 교역소에 들를 때마다 시세 수첩이 새로 적힙니다. 「특산 ×N」은 이 고장 산물 — 산지에서 먼 곳에서는 약 N배에 팔립니다. ▲▼는 세상의 시장 사건(가뭄·전쟁·풍작…)으로 모자라거나 넘치는 물건입니다.	Hàng về khác nhau theo từng mặt hàng: hàng thường hồi nhanh, hàng hiếm hồi chậm. Đầu tư cơ sở sản xuất hay thương quán sẽ tăng nguồn cung. Giá bán là ghi chép ở những thương điếm đã ghé. Mỗi lần ghé thương điếm, sổ thời giá được ghi mới. “Đặc sản ×N” là sản vật của vùng này — ở nơi xa vùng sản xuất bán được khoảng gấp N lần. ▲▼ là hàng thiếu hay thừa do biến cố chợ trên thế gian (hạn hán, chiến tranh, được mùa…).
+이 교역소에서 산 물건은 산 값보다 비싸게 되팔 수 없습니다(「여기서 산」 표시 — 다른 곳에서 산 몫부터 팝니다). 같은 물건을 한꺼번에 많이 팔면 값이 떨어지고, 「받아 줄 양」을 넘기면 폭락합니다(이웃 항구 값도 조금 떨어집니다). 그 물건이 나는 고장(「산지」)은 조금만 받아 줍니다. 산지에서 멀리 떨어진 곳(「귀함」)일수록 비싸게 팔립니다. 먹을거리·향신료·기호품은 오래 실어 두면 묵어서 값이 떨어지고, 더 오래되면 상해 줄어듭니다.	Hàng mua ở thương điếm này không thể bán lại tại đây đắt hơn giá đã mua (dấu “mua ở đây” — phần mua nơi khác được bán trước). Bán một lúc nhiều cùng một món thì giá hạ, vượt “Lượng còn nhận” thì giá sụp (giá ở các cảng lân cận cũng hạ chút ít). Nơi sản xuất món ấy (“Nơi sản xuất”) chỉ nhận một ít. Càng xa nơi sản xuất (“Hiếm”) càng bán được giá. Đồ ăn, hương liệu và hàng xa xỉ chở lâu sẽ cũ đi và mất giá, lâu hơn nữa thì hỏng và hao hụt.
+이 고장 산물이 비싸게 팔리는 곳	Nơi bán được giá sản vật vùng này
+갈래	Nhóm
+시장 물건 값:	Giá hàng ở chợ:
+다른 도시 (시세 수첩)	Thành phố khác (sổ thời giá)
+아직 다른 도시의 시세를 적어 둔 것이 없습니다. 교역소에 들를 때마다 시세 수첩에 적힙니다.	Bạn chưa ghi thời giá của thành phố nào khác. Mỗi lần ghé thương điếm, giá sẽ được ghi vào sổ thời giá.
+100% = 보통 값. 시세는 도시마다 품목 갈래별로 천천히 오르내리고, 시장 사건(풍작·기근·전쟁·축제·호경기…)이 겹칩니다. 화살표는 스무 날 전과 견준 것.	100% = giá thường. Thời giá ở mỗi thành phố lên xuống chậm theo nhóm hàng, cộng thêm biến cố chợ (được mùa, đói kém, chiến tranh, lễ hội, buôn bán thịnh…). Mũi tên là so với hai mươi ngày trước.
+항해	Hải hành
+선원	Thủy thủ
+기본	Mặc định
+탐색	Thám sát
+입항	Vào cảng
+상륙	Lên bờ
+낚시	Câu cá
+비 대책	Phòng mưa
+정지	Dừng
+역풍	Gió ngược
+순풍	Gió xuôi
+옆바람	Gió ngang
+교역품 대체분	Lấy từ hàng buôn
+일	ngày
+지도 확대	Phóng to bản đồ
+지도 축소	Thu nhỏ bản đồ
+선박 확대	Phóng to tàu
+기본 배율로 돌아가기	Về tỉ lệ mặc định
+지도 배율 · 휠 또는 +/− 키로 조절	Tỉ lệ bản đồ · chỉnh bằng con lăn chuột hay phím +/−
+항해 상태판 제자리로	Đưa bảng hải hành về chỗ cũ
+해도 제자리로	Đưa hải đồ về chỗ cũ
+바람 판 제자리로	Đưa bảng gió về chỗ cũ
+(천문판)	(thiên văn bàn)
+(육분의)	(kính lục phân)
+배를 완전히 세운 뒤 탐색할 수 있습니다.	Phải cho tàu dừng hẳn rồi mới thám sát được.
+↑ 항구 들어가기	↑ Vào cảng
+구름이 흘러가는 쪽이 바람이 부는 쪽 — 그쪽으로 달리면 순풍을 탄다	Mây trôi về phía nào thì gió thổi về phía ấy — chạy theo hướng đó là được gió xuôi
+식량품	Thực phẩm
+주류	Rượu
+향신료	Hương liệu
+기호품	Hàng xa xỉ
+섬유	Sợi
+직물	Vải vóc
+광석	Quặng
+귀금속	Kim loại quý
+사치품	Châu báu
+공예품	Đồ thủ công
+무기	Vũ khí
+기타	Khác
+방어구	Giáp trụ
+항해도구	Dụng cụ hải hành
+남자 선물	Quà cho đàn ông
+악기	Nhạc cụ

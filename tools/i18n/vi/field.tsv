@@ -1,0 +1,124 @@
+⚓ 멈춤	⚓ Đang dừng
+(시간은 흐른다)	(thời gian vẫn trôi)
+(자리를 비운 사이 시간을 멈췄다 — 아무 키나 누르면 다시 흐른다)	(thời gian đã dừng khi bạn vắng mặt — bấm phím bất kỳ để chạy tiếp)
+· 정지 — 바다를 누르거나 방향키로 출발 · 탐색 가능	· Dừng — nhấp vào biển hoặc dùng mũi tên để đi · có thể thám sát
+정지 — 바다를 누르거나 방향키로 출발 · 탐색 가능	Dừng — nhấp vào biển hoặc dùng mũi tên để đi · có thể thám sát
+정지 — 마우스 따라가기 켬: 가려는 쪽 바다를 누르면 따라갑니다 · 방향키로도 출발 · 탐색 가능	Dừng — bật theo chuột: nhấp vào vùng biển muốn đến là tàu đi theo · mũi tên cũng xuất phát được · có thể thám sát
+정지 — 스페이스로 다시 출발(항구 곁에서는 정박)	Dừng — Space để đi tiếp (cạnh cảng thì thả neo)
+표류 중 — 가려는 쪽 바다를 누르면 마우스를 따라갑니다	Đang trôi dạt — nhấp vào vùng biển muốn đến là tàu đi theo chuột
+돛을 거두고 멈추는 중	Đang cuốn buồm để dừng
+출발	Xuất phát
+정지	Dừng
+이 고장에서 구할 수 있는 탈것입니다. 탈것은 걸음을 빠르게 하고 피로를 덜어 주지만, 맞지 않는 땅에서는 힘을 못 쓰고 쓰러지기도 합니다.	Đây là các phương tiện có thể kiếm ở vùng này. Phương tiện giúp đi nhanh hơn và đỡ mệt, nhưng ở vùng đất không hợp thì kém sức, có khi còn quỵ ngã.
+탐험대로 돌아가기 전에 탈것을 바꿀 수 있습니다.	Có thể đổi phương tiện trước khi quay lại đoàn thám hiểm.
+짐승을 사서 마구간에 맡겨 두거나, 맡긴 짐승을 되팔 수 있습니다.	Có thể mua gia súc gửi ở chuồng ngựa, hoặc bán lại những con đang gửi.
+데려갈 수	Số mang theo
+마구간에 둘 수	Số gửi được ở chuồng
+필요한 만큼	Bao nhiêu tùy cần
+대원 수만큼	Bằng số người
+#필 (대원 #명에 #필)	{1} ({2} người cần {3})
+#필 (대원 #명에 #필 · #명에 하나)	{1} ({2} người cần {3} · {4} người một)
+#대 (대원 #명에 #대 · #명에 하나)	{1} ({2} người cần {3} · {4} người một)
+#대 (대원 #명에 #대)	{1} ({2} người cần {3})
+#패 (대원 #명에 #패 · #명에 하나)	{1} ({2} người cần {3} · {4} người một)
+#패 (대원 #명에 #패)	{1} ({2} người cần {3})
+#필 (대원 #명에 #필) · 금화 #닢	{1} ({2} người cần {3}) · {4} đồng vàng
+#필 (대원 #명에 #필 · #명에 하나) · 금화 #닢	{1} ({2} người cần {3} · {4} người một) · {5} đồng vàng
+#대 (대원 #명에 #대 · #명에 하나) · 금화 #닢	{1} ({2} người cần {3} · {4} người một) · {5} đồng vàng
+#대 (대원 #명에 #대) · 금화 #닢	{1} ({2} người cần {3}) · {4} đồng vàng
+#패 (대원 #명에 #패 · #명에 하나) · 금화 #닢	{1} ({2} người cần {3} · {4} người một) · {5} đồng vàng
+#패 (대원 #명에 #패) · 금화 #닢	{1} ({2} người cần {3}) · {4} đồng vàng
+@ #필과 떠난다 (#닢)	Lên đường với # @ (# đồng)
+@ #대와 떠난다 (#닢)	Lên đường với # @ (# đồng)
+@ #패와 떠난다 (#닢)	Lên đường với # @ (# đồng)
+@ #필과 떠난다	Lên đường với # @
+@ #대와 떠난다	Lên đường với # @
+@ #패와 떠난다	Lên đường với # @
+걸어서 떠난다	Đi bộ lên đường
+걸어서 가면 짐승을 데려가지 않는다	Đi bộ thì không mang gia súc theo
+그만둔다	Thôi vậy
+닫는다	Đóng lại
+시세: @	Thời giá: @
+노동력부족	thiếu nhân công
+항구에서 출항 준비 — 보급 필요	Chuẩn bị ra khơi ở cảng — cần tiếp tế
+@ #필과 떠난다 (+#닢)	Lên đường với # @ (+# đồng)
+@ #대와 떠난다 (+#닢)	Lên đường với # @ (+# đồng)
+@ #패와 떠난다 (+#닢)	Lên đường với # @ (+# đồng)
+바꿀 것이 없다	Không có gì để đổi
+짐꾼은 떠날 때 데려간다	Phu khuân vác được thuê lúc lên đường
+@ #(필을|대를|패를) 사서 맡긴다 (#닢)	Mua # @ gửi ở đây (# đồng)
+@ #(필을|대를|패를) 되판다 (+#닢)	Bán lại # @ (+# đồng)
+@쪽으로 항해 중	Đang đi về hướng @
+@쪽 침로	Hướng @
+@쪽 침로 — Space·방향키로 출발	Hướng @ — Space hoặc mũi tên để xuất phát
+@쪽으로 뱃머리를 돌리는 중	Đang quay mũi tàu về hướng @
+방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감	giữ phím mũi tên thì mũi tàu quay về hướng ấy
+Space 정지	Space dừng
+마우스를 따라 조타 중 (@ 끔)	Đang lái theo chuột (@ để tắt)
+@(으로|로) 자동항해 중	Đang tự động hải hành tới @
+@(으로|로) 바닷길 따라 항해 중	Đang đi theo đường biển tới @
+@(으로|로) 항해 중	Đang đi tới @
+@(으로|로) 가던 길에 멈춤 — Space·출발로 이어 가기	Dừng giữa đường tới @ — Space hoặc Xuất phát để đi tiếp
+목적지로 항해 중	Đang đi tới nơi đến
+목적지 가던 길에 멈춤 — Space·출발로 이어 가기	Dừng giữa đường tới nơi đến — Space hoặc Xuất phát để đi tiếp
+표류 중 — 바다를 누르면 그곳까지 갑니다 · 마우스 따라가기는 @	Đang trôi dạt — nhấp vào biển để đi tới đó · theo chuột: @
+맞바람 — 지그재그로 거슬러 오르는 중	Gió ngược — đang chạy chữ chi ngược gió
+맞바람 — 바람을 안고 천천히 거슬러 오르는 중	Gió ngược — đang đón gió chầm chậm tiến lên
+키를 잡는 동안 ×1	khi cầm lái ×1
+도착까지 약 #일 / 보급 #일분	Còn khoảng # ngày tới nơi / tiếp tế đủ # ngày
+폭풍	Bão
+무풍	Lặng gió
+순풍을 탔다 +#%	Được gió xuôi +#%
+폭풍 대비	Phòng bão
+폭우	Mưa lớn
+소나기	Mưa rào
+작업 계속	Tiếp tục làm việc
+교대 휴식	Nghỉ theo ca
+빗물 받기	Hứng nước mưa
+☂ 폭우	☂ Mưa lớn
+☂ 소나기	☂ Mưa rào
+갑판 작업 계속	Tiếp tục làm việc trên boong
+교대로 선실에서 쉬게 한다	Cho nghỉ theo ca trong khoang
+돛천을 펴 빗물을 받는다	Căng vải buồm hứng nước mưa
+속력은 그대로 — 젖은 채 일하니 피로가 쌓인다 (폭우면 앞이 안 보여 조금 느려진다)	Tốc độ không đổi — làm việc ướt sũng nên mệt mỏi tích lại (mưa lớn thì không nhìn rõ phía trước nên hơi chậm)
+비 오는 날을 쉬는 날로 — 피로가 풀리고 기강이 오른다, 대신 일손이 줄어 느려진다	Biến ngày mưa thành ngày nghỉ — hết mệt, kỷ luật tăng, nhưng ít người làm nên đi chậm
+물통을 채운다 — 젖은 갑판에서 일하니 피로가 조금 더 쌓인다	Đổ đầy thùng nước — làm việc trên boong ướt nên mệt thêm chút ít
+비가 올 때 쓸 수 있습니다	Dùng được khi trời mưa
+비를 맞는 동안의 대책	Cách đối phó trong khi mưa
+망루 · @쪽 가까운 곳 — @	Chòi canh · gần đây về phía @ — @
+망루 · @쪽 멀지 않은 곳 — @	Chòi canh · không xa về phía @ — @
+망루 · @쪽 먼 곳 — @	Chòi canh · xa về phía @ — @
+정찰대 · @쪽 가까운 곳 — @	Đội trinh sát · gần đây về phía @ — @
+정찰대 · @쪽 멀지 않은 곳 — @	Đội trinh sát · không xa về phía @ — @
+정찰대 · @쪽 먼 곳 — @	Đội trinh sát · xa về phía @ — @
+낯선 바다 빛깔이 보입니다.	Thấy màu nước biển lạ lắm.
+물길이 심상치 않습니다. 무언가 있습니다!	Dòng nước khác thường. Có gì đó ở kia!
+하늘빛이 이상합니다. 무언가 있는 것 같습니다.	Màu trời lạ quá. Hình như có gì đó.
+보기 드문 풍경이 어른거립니다.	Có cảnh lạ hiếm thấy lấp lánh đằng xa.
+사람이 쌓은 듯한 돌무더기가 보입니다.	Thấy một đống đá như do người chất lên.
+무너진 성벽 같은 것이 보입니다!	Thấy thứ gì như tường thành đổ nát!
+무언가 번쩍였습니다. 예사롭지 않습니다.	Có gì đó vừa lóe sáng. Không phải chuyện thường đâu.
+오래된 표식이 새겨진 바위가 보입니다.	Thấy tảng đá khắc dấu hiệu cổ xưa.
+처음 보는 짐승의 흔적이 있습니다.	Có dấu vết của loài thú chưa từng thấy.
+커다란 그림자가 지나갔습니다!	Một cái bóng khổng lồ vừa lướt qua!
+처음 보는 나무와 풀이 무리 지어 자랍니다.	Cây cỏ chưa từng thấy mọc thành từng đám.
+낯선 꽃빛이 언덕을 물들이고 있습니다.	Sắc hoa lạ đang nhuộm cả sườn đồi.
+연기가 오릅니다. 사람이 사는 것 같습니다.	Có khói bốc lên. Hình như có người sống.
+북소리 같은 것이 들립니다.	Nghe như có tiếng trống.
+무언가 있습니다.	Có gì đó ở kia.
+@ 상륙해서 조사해 볼 만합니다.	@ Đáng để lên bờ xem xét.
+해적선에서	Từ tàu hải tặc đã vớt được
+을 건졌다.	.
+를 건졌다.	.
+(소지품이 가득 차 버렸다)	(hành trang đã đầy)
+닻을 올리는 중…	Đang nhổ neo…
+바다와 땅을 그릴 준비를 하는 중…	Đang chuẩn bị vẽ biển và đất…
+배와 탐험대를 꾸리는 중…	Đang sắm sửa tàu và đoàn thám hiểm…
+항해 일지를 펼치는 중…	Đang mở nhật ký hải hành…
+항해를 준비하는 중…	Đang chuẩn bị hải hành…
+항해 자료를 받는 중…	Đang nhận dữ liệu hải trình…
+이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 @	Tiếng nói của thành phố này và mức đoàn Đô đốc nói được — bản thân Đô đốc @
+마을 사람	Dân làng
+처음 오신 분인가 보군요. @	Chắc ngài mới đến lần đầu. @
+바다 건너 오셨다고요? 그럼 이건 모르시겠네. @	Ngài từ bên kia biển tới à? Vậy chắc ngài chưa biết chuyện này. @
+여기 오셨으면 구경 한번 해 보시구려. @	Đã đến đây thì ngài nên đi xem thử. @

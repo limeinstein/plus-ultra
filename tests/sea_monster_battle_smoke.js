@@ -3,7 +3,7 @@
 const assert = require('assert/strict'), fs = require('fs'), path = require('path');
 const {pathToFileURL} = require('url');
 const {chromium} = require('playwright');
-const ROOT=path.resolve(__dirname,'..'), OUT=path.join(ROOT,'docs','sea-monster-battle');
+const ROOT=path.resolve(__dirname,'..'), OUT=process.env.OUT||path.join(ROOT,'docs','sea-monster-battle');
 async function run() {
   fs.mkdirSync(OUT,{recursive:true});
   const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',
@@ -14,7 +14,7 @@ async function run() {
     page.on('pageerror',e=>errors.push(e.stack));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
     await page.route(/fonts\.(googleapis|gstatic)\.com/,r=>r.fulfill({body:'',contentType:'text/css'}));
     await page.addInitScript(()=>{const raf=window.requestAnimationFrame;window.requestAnimationFrame=fn=>fn.name==='loop'?0:raf(fn);});
-    await page.goto(pathToFileURL(path.join(ROOT,'index.html')).href);
+    await page.goto(((process.env.WEB_BASE && new URL('index.html',process.env.WEB_BASE).href) || pathToFileURL(path.join(ROOT,'index.html')).href));
     await page.waitForFunction(()=>window.G&&G.Game.sceneName==='title'&&G.SeaMonsters);
     const world=await page.evaluate(async()=>{
       const s=G.Game.state=G.State.newGame({name:'괴물 토벌 시험',nation:'PT',job:'explorer',age:22,birth:{m:1,d:1},st:{str:60,int:60,mar:60,cha:60},sk:{nav:2,gun:2},lg:[],diff:'normal'});

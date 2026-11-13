@@ -18,7 +18,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_|Failed to load/.test(m.text())) errors.push(m.text()); });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto(((process.env.WEB_BASE && new URL('index.html',process.env.WEB_BASE).href) || pathToFileURL(path.join(ROOT, 'index.html')).href));
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     await page.evaluate(async () => {
       await G.Game.ensureGeo();
@@ -69,7 +69,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     const c = await page.evaluate(async () => {
       const said = []; G.UI.say = async (t, who) => { said.push((who && who.name || '') + ': ' + t); };
       const f = G.Town.folks().filter(x => x.mate)[0];
-      await G.Scenes.city.chatFolk(f); const first = said.slice(); said.length = 0;
+      if (f.face.lang !== 3 || f.face.li != null) throw Error('고용 동료의 언어'); await G.Scenes.city.chatFolk(f); const first = said.slice(); said.length = 0;
       await G.Scenes.city.chatFolk(f); return { first, second: said.slice() };
     });
     ok(c.first.length === 3 && /다가온다/.test(c.first[0]) && c.first.slice(1).every(x => x.startsWith(b.name + ':')), '말을 걸면: ' + c.first.map(x => x.slice(0, 50)).join(' / '));

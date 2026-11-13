@@ -17,21 +17,23 @@ def tr_to_tsv(trfile, lst, tsvfile):
 TOK = re.compile(r'(#|@|\((?:[^()|]+\|)+[^()|]+\))')
 def compile_row(ko, en):
     """→ ('text', ko, en) or ('pat', regex, repl)"""
+    if en == '""': en = ''   # 빈 번역도 눈에 보이게 적을 수 있다 (조사처럼 영어에서 생략하는 조각).
     if ko.startswith('/') and ko.endswith('/'):
         return ('pat', '^' + ko[1:-1] + '$', en)
     ko = re.sub(r'\s+', ' ', ko).strip()
     parts = TOK.split(ko)
     if len(parts) == 1: return ('text', ko, en)
     rx, caps = '', []
-    for p in parts:
+    for pi, p in enumerate(parts):
         if p == '#': caps.append('#'); rx += r'([\d,.]+)'
-        elif p == '@': caps.append('@'); rx += r'(.+?)'
+        elif p == '@': caps.append('@'); rx += r'(.*?)' if 0 < pi < len(parts) - 1 and parts[pi - 1] and parts[pi + 1] else r'(.+?)'   # 가운데 자리는 비어도 된다 (「…세워라.@」처럼 덧붙는 말이 없을 때 — 2026-11-13)
         elif p.startswith('(') and '|' in p: rx += '(?:' + '|'.join(re.escape(x) for x in p[1:-1].split('|')) + ')'
         else: rx += re.escape(p)
     # 번역의 자리 표시: {n} 명시 · 아니면 # / @ 차례대로
     nums = [i + 1 for i, c in enumerate(caps) if c == '#']; names = [i + 1 for i, c in enumerate(caps) if c == '@']
     def ref(i): return '⟦$%d⟧' % i if caps[i - 1] == '@' else '$%d' % i
-    out = re.sub(r'\{(\d+)\}', lambda m: '\x00%s\x00' % m.group(1), en)
+    out = re.sub(r'\{(\d+):lc\}', lambda m: '\u27eal\u27eb\x00%s\x00\u27ea/l\u27eb' % m.group(1), en)   # {1:lc}: 붙잡은 이름을 소문자로 (문장 가운데 배 종류 이름 — the royal galleon)
+    out = re.sub(r'\{(\d+)\}', lambda m: '\x00%s\x00' % m.group(1), out)
     ni, mi = iter(nums), iter(names)
     def rep(m):
         t = m.group(0)

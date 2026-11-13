@@ -799,6 +799,7 @@
       // · 어머니가 momYoung살보다 어리면 해마다 youngPer → penMax까지, 능력마다 penChance 확률로 0.5~1.5배를 뺀다 · 타고난 능력은 lo~hi
       inherit: { faW: [0.3, 0.7], noise: 6, mean: 55, pull: 0.15, gift: 0.1, giftAmt: [5, 12], lo: 25, hi: 90,
         momYoung: 17, youngPer: 1.5, momOld: 35, momPer: 1.2, momVery: 40, momVeryPer: 1.5, dadOld: 45, dadPer: 0.6, penMax: 18, penChance: 0.75, momMax: 45 } },   // momMax: 어머니가 이 나이를 넘으면 아이가 생기지 않는다
+    chinaCrew: { start: 1490, years: 10, count: 4 },  // 중국 항해사 24명을 한 번씩 배정한 뒤 새 순서로 다시 뽑는다.
     // 철새(떠돌이 항해사, wanderers.js): 새 게임에 startN명, 해마다 perYear명이 새로 나타난다.
     // cycle년마다(epoch부터 센다: 1510·1540·1570…) 세대가 바뀐다 — 고용하지 않은 철새는 떠나고, 그 가운데 rebornMax명의 「다음 세대」가 나타난다.
     // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).

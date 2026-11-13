@@ -1,0 +1,77 @@
+/받은 파일 (\d+)개/	Đã nhận $1 tệp
+/(\d+)일째/	Ngày thứ $1
+/(\d+)명/	$1 người
+/([NSEW]{1,2})풍/	Gió $1
+/풍속 (●+)/	Sức gió $1
+/물통 (\d+)일 \+ 교역품 대체분 (\d+)일 = 합계 (\d+)일\. 교역품을 팔면 대체분도 줄어듭니다\./	Nước $1 ngày + $2 ngày lấy từ hàng buôn = tổng cộng $3 ngày. Bán số hàng ấy thì phần thay thế cũng giảm.
+/식량 (\d+)일 \+ 교역품 대체분 (\d+)일 = 합계 (\d+)일\. 교역품을 팔면 대체분도 줄어듭니다\./	Lương thực $1 ngày + $2 ngày lấy từ hàng buôn = tổng cộng $3 ngày. Bán số hàng ấy thì phần thay thế cũng giảm.
+/선박을 ([\d.]+)배율로 보기/	Xem tàu ở tỉ lệ $1×
+/(.+) 입항/	Vào cảng ⟦$1⟧
+/(.+)에서 출항했다\./	Đã giương buồm rời ⟦$1⟧.
+/모항 (.+)를 떠나다/	Rời cảng nhà ⟦$1⟧
+/모항 (.+)을 떠나다/	Rời cảng nhà ⟦$1⟧
+/(.+) · 배 (\d+)척 · 선원 (\d+)명 — 갈매기들이 배웅한다/	$1 · $2 tàu · $3 thủy thủ — đàn hải âu tiễn đưa
+/(.+) · 속력 ([\d.]+)°/일 · 진로 (\S+) · 항해 (\d+)일째/	⟦$1⟧ · tốc độ $2°/ngày · hướng $3 · ngày thứ $4
+/☁ 편서풍 구름띠/	☁ Dải mây gió Tây
+/표류 중 — 바다를 누르면 그곳까지 갑니다 · 마우스 따라가기는 (.+)/	Đang trôi dạt — nhấp vào biển để đi tới đó · Theo chuột: ⟦$1⟧
+/마우스 따라가기 꺼짐: 누른 곳까지 갑니다 — 단축키 (.+)/	Tắt theo chuột: đi tới chỗ đã nhấp — phím tắt ⟦$1⟧
+/마우스 따라가기 켜짐: 가려는 쪽을 한 번 누르면 그 뒤로는 마우스를 옮기는 대로 방향을 틉니다 — 단축키 (.+)/	Bật theo chuột: nhấp một lần về hướng muốn đi, sau đó tàu đổi hướng theo chuột — phím tắt ⟦$1⟧
+/이 게임은 가로 화면\((\d+):(\d+)\)에 맞춰져 있습니다 · 누르면 그대로 계속합니다/	Trò chơi này làm cho màn hình nằm ngang ($1:$2) · Chạm để cứ tiếp tục
+/자동 저장 (\d+) — \(비어 있음\)/	Tự động lưu $1 — (trống)
+/여관 일지 (\d+) — \(비어 있음\)/	Nhật ký nhà trọ $1 — (trống)
+/자동 저장 (\d+) — (.+)/	Tự động lưu $1 — $2
+/여관 일지 (\d+) — (.+)/	Nhật ký nhà trọ $1 — $2
+/일지를 내려받았습니다: (.+)/	Đã tải nhật ký về: $1
+/불러오지 못했습니다: (.+)/	Không mở được: $1
+/VERSION (.+)/	VERSION $1
+/지금 (\d+)% — DEFAULT는 모니터 크기와 화소 밀도에 맞춰 정합니다\. 창·메뉴도 함께 커지고 작아집니다 \(이 기기에만 기억\)/	Hiện $1% — DEFAULT tự chỉnh theo kích thước và mật độ điểm ảnh của màn hình. Cửa sổ và menu cũng to nhỏ theo (chỉ ghi nhớ trên thiết bị này)
+/「(.+)」 글꼴을 씁니다 \(한국어 글꼴: (.+)\)/	Đang dùng phông chữ $1
+/(\d+)일/	$1 ngày
+/식량 (\d+)일\. 교역품 대체분은 없습니다\./	Lương thực đủ $1 ngày. Không có hàng buôn nào thay thế được.
+/물통 (\d+)일\. 교역품 대체분은 없습니다\./	Nước đủ $1 ngày. Không có hàng buôn nào thay thế được.
+/통합 명성 = 탐험 ([\d,]+) · 교역 ([\d,]+) · 전투 ([\d,]+) · 사교 ([\d,]+)/	Danh tiếng tổng = Thám hiểm $1 · Giao thương $2 · Chiến đấu $3 · Giao tế $4
+/(.+) 영토/	Lãnh thổ ⟦$1⟧
+/(.+) 영토 · (.+)/	Lãnh thổ ⟦$1⟧ · $2
+/(.+) · (.+)/	⟦$1⟧ · ⟦$2⟧
+/(.+) 저택/	Dinh thự ⟦$1⟧
+/조합 게시판에 의뢰 (\d+)건/	$1 ủy thác trên bảng phường hội
+/교역소에 호위를 청하는 상인이 있다 \((.+)까지\)/	Ở thương điếm có thương nhân cần hộ tống (tới ⟦$1⟧)
+/교역소 배당 금화 ([\d,]+)닢이 쌓였다/	Cổ tức thương điếm đã dồn được $1 đồng vàng
+/구입 — (.+)/	Mua — ⟦$1⟧
+/매각 — (.+)/	Bán — ⟦$1⟧
+/(.+) 시세/	Thời giá ở ⟦$1⟧
+/시세: (.+)/	Thời giá: $1
+/특산 ×([\d.]+)/	Đặc sản ×$1
+/(\d+)통의 무게 — 배가 버티는 무게에 들어간다/	Sức nặng của $1 thùng — tính vào sức chở của tàu
+/· 무게 ([\d.,]+)/	· nặng $1
+/· 무게 (.+)/	· nặng $1
+/공급 한도 ([\d,]+)통 · 가득 회복까지 (\d+)일\. 날짜가 지나야 입하하며, 같은 날 재방문으로 새 물량이 생기지 않습니다\./	Mức cung $1 thùng · $2 ngày thì đầy lại. Hàng chỉ về khi ngày qua; ghé lại trong cùng ngày không có thêm hàng.
+/하루 \+([\d.]+)통/	+$1 mỗi ngày
+// (\d+)가지 고름/	/ đã chọn $1
+// (\d+)(.+) 고름/	/ đã chọn $1
+/· 품목 (\d+)/(\d+)/	· mặt hàng $1/$2
+/가격\(1통\)/	Giá (1 thùng)
+/가격\((\d+)통\)/	Giá ($1 thùng)
+/1통 이익/	Lời / thùng
+/([\d,]+)통 이익/	Lời / $1 thùng
+/약 ([\d,]+)통/	khoảng $1 thùng
+/입하를 기다린다 \((\d+)일\)/	Chờ hàng về ($1 ngày)
+/이 고장에서 나는 물건이라 싸고 재고가 넉넉하다\. 산지에서 먼 (.+)에서는 산지 값의 약 ([\d.]+)배에 팔린다 \(시세·사건에 따라 다름\)\./	Hàng làm ra ở vùng này nên rẻ và nhiều. Ở ⟦$1⟧, xa nơi sản xuất, bán được khoảng gấp $2 lần giá gốc (tùy thời giá và biến cố).
+/산지에서 멀리 떨어진 고장이라 이 물건이 귀하다 — 기준 값의 약 ([\d.]+)배/	Vùng này xa nơi sản xuất nên món này hiếm — khoảng gấp $1 lần giá chuẩn
+/이 항구는 산지가 아니라 먼 곳\((.+)\)에서 들여와 판다 — 산지보다 비싸지만 더 먼 곳에 팔면 남는다/	Cảng này không phải nơi sản xuất mà mua từ nơi xa (⟦$1⟧) về bán — đắt hơn nơi sản xuất, nhưng đem bán ở nơi xa hơn thì vẫn lời
+/(\d+)% = 보통 값\. (.+)/	$1% = giá thường. Thời giá ở mỗi thành phố lên xuống chậm theo nhóm hàng, cộng thêm biến cố chợ (được mùa, đói kém, chiến tranh, lễ hội, buôn bán thịnh…). Mũi tên là so với hai mươi ngày trước.
+/(.+) → (.+)/	⟦$1⟧ → ⟦$2⟧
+/이 도시 산물: (.+?)( 외)?/	Sản vật thành phố này: ⟦$1⟧
+/받을 돈 약 금화/	Số tiền nhận khoảng
+/(.+?)(?:을|를) (.+?)까지 모신다/	Hộ tống ⟦$1⟧ tới ⟦$2⟧
+/(.+?)의 (.+?)에게서 빚을 받아 온다/	Đòi nợ ⟦$2⟧ ở ⟦$1⟧
+/(.+?)까지 (.+?) ([\d,]+)통 수송/	Chở $3 thùng ⟦$2⟧ tới ⟦$1⟧
+/공격 ([\d]+)/	Công $1
+/방어 ([\d]+)/	Thủ $1
+/남자 선물 ([\d]+)/	Quà đàn ông $1
+/매력 \+([\d]+)/	Duyên dáng +$1
+/사교 명성 \+([\d]+)/	Danh tiếng giao tế +$1
+/호감 (.+)/	Thiện cảm $1
+/(.+?) — 호감 (.+)/	⟦$1⟧ — Thiện cảm $2
+/(.+?)호/	⟦$1⟧
+/(\d+)세/	$1

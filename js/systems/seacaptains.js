@@ -161,6 +161,8 @@
     var s = S(), r = st(), b = B(), out = [];
     var nProm = Object.keys(r.prom).length;
     G.MATES.forEach(function (d) {
+      // 이 명단은 10년만 일자리를 찾는다. 항구에 없던 세월은 실업 기간에 넣지 않는다.
+      if (d.chinaRotation && !G.ChinaCrew.active(d.id, y, s.seed)) { delete r.seen[d.id]; return; }
       if (!available(d, y)) { return; }
       if (r.seen[d.id] == null) { r.seen[d.id] = y; return; }
       if (y - r.seen[d.id] < b.promoteYears || nProm >= b.promoteMax || !U.chance(b.promoteP)) return;

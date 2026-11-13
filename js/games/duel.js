@@ -154,8 +154,10 @@
     if (me.hp == null) me.hp = me.maxHp;
     if (opt.sprite) me.sprite = opt.sprite;
     var look = enemy.look || (/해적|두목/.test(enemy.name) ? 'pirate' : /함장|수비|장교/.test(enemy.name) ? 'captain' : /사내|주정/.test(enemy.name) ? 'brawler' : 'rival');
+    var style = enemy.style;
+    if (!Object.prototype.hasOwnProperty.call(MOVE, style)) style = look === 'pirate' ? 'slash' : look === 'captain' ? 'thrust' : U.pick(Object.keys(MOVE));
     var en = { name: enemy.name, portrait: enemy.portrait, maxHp: Math.round(60 + (enemy.str || 60) * 0.6), atk: enemy.atk || 8, def: enemy.def || 2, sword: enemy.skill || 0, might: enemy.mar || 55 + (enemy.skill || 0) * 5,
-      int: enemy.int || 45, cha: enemy.cha || 40, speech: 0, shoot: 0, style: enemy.style || (look === 'pirate' ? 'slash' : look === 'captain' ? 'thrust' : U.pick(['slash', 'thrust', 'bash'])), look: look, sprite: enemy.sprite || null };
+      int: enemy.int || 45, cha: enemy.cha || 40, speech: 0, shoot: 0, style: style, look: look, sprite: enemy.sprite || null };
     en.hp = en.maxHp;
     [me, en].forEach(function (f) { f.spirit = 20; f.x = 0; f.pose = 'idle'; f.pt = 0; f.stun = 0; f.dizzy = 0; f.flash = 0; f.used = {}; });
     me.side = 'me'; en.side = 'en';
@@ -177,10 +179,11 @@
         '<div class="rd-top"><div class="rd-side me"><div class="pp"></div><div class="info"><div class="nm"></div><div class="bar hp"><i></i><b></b></div><div class="bar sp"><i></i><b></b></div><div class="sub"></div></div></div>' +
         '<div class="rd-mid"><div class="rd-round"></div><div class="rd-rps">찌르기 <span>→</span> 베기 <span>→</span> 치기 <span>→</span> 찌르기<small>화살표 쪽을 이긴다</small></div></div>' +
         '<div class="rd-side en"><div class="info"><div class="nm"></div><div class="bar hp"><i></i><b></b></div><div class="bar sp"><i></i><b></b></div><div class="sub"></div></div><div class="pp"></div></div></div>' +
-        '<div class="rd-stage"><canvas width="' + W + '" height="' + H + '"></canvas><img class="rd-motion" alt="" aria-hidden="true"><div class="rd-cut-flash"></div><div class="rd-cut-title"><b></b><small></small></div><div class="rd-stance"></div></div>' +
+        '<div class="rd-arena"><div class="rd-stage"><canvas width="' + W + '" height="' + H + '"></canvas><img class="rd-motion" alt="" aria-hidden="true"><div class="rd-cut-flash"></div><div class="rd-cut-title"><b></b><small></small></div></div><div class="rd-stance"></div></div>' +
         '<div class="rd-log"></div>' +
         '<div class="rd-ctrl"><div class="rd-moves"><div class="lbl">다음 수 <span class="intent"></span></div><div class="row"></div></div><div class="rd-techs"><div class="lbl">기술 <small>기세를 쓴다</small></div><div class="grid"></div></div><div class="rd-sys"></div></div></div>';
       var win = UI.window({ title: '일기토', icon: 'sword', width: 1120, html: html, closable: false });
+      win.el.classList.add('duel-win');
       var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), motionEl = el.querySelector('.rd-motion'), cutTitleEl = el.querySelector('.rd-cut-title'), cutFlashEl = el.querySelector('.rd-cut-flash');
       // 초상에 양식이 없으면 지금 있는 도시(바다면 가까운 도시)의 양식으로 전투원 그림을 고른다
       var hereStyle = (function () { var s0 = G.Game.state, c0 = s0 && s0.loc && G.CITY_DATA && G.CITY_DATA[s0.loc.city]; return c0 && c0.style; })();
@@ -263,12 +266,18 @@
       function setPortrait(f, sel) { var box = el.querySelector(sel + ' .pp'); box.innerHTML = ''; if (f.portrait) box.appendChild(A.portraitCanvas(f.portrait, 84)); }
       setPortrait(me, '.rd-side.me'); setPortrait(en, '.rd-side.en');
       function say(t) { logs.push(t); logEl.innerHTML = logs.slice(-2).map(function (x, i, a) { return '<div' + (i < a.length - 1 ? ' class="old"' : '') + '>' + x + '</div>'; }).join(''); }
+      function gauges() {
+        [[me, '.rd-side.me'], [en, '.rd-side.en']].forEach(function (x) {
+          var f = x[0], b = el.querySelector(x[1]);
+          b.querySelector('.bar.hp i').style.width = Math.max(0, f.hp / f.maxHp * 100) + '%'; b.querySelector('.bar.hp b').textContent = '체력 ' + Math.max(0, Math.round(f.hp)) + ' / ' + f.maxHp;
+          b.querySelector('.bar.sp i').style.width = f.spirit + '%'; b.querySelector('.bar.sp b').textContent = '기세 ' + Math.round(f.spirit);
+        });
+      }
       function bars() {
+        gauges();
         [[me, '.rd-side.me'], [en, '.rd-side.en']].forEach(function (x) {
           var f = x[0], b = el.querySelector(x[1]);
           b.querySelector('.nm').innerHTML = U.esc(f.name) + (f.m ? ' <small>(동료)</small>' : '');
-          b.querySelector('.bar.hp i').style.width = Math.max(0, f.hp / f.maxHp * 100) + '%'; b.querySelector('.bar.hp b').textContent = '체력 ' + Math.max(0, Math.round(f.hp)) + ' / ' + f.maxHp;
-          b.querySelector('.bar.sp i').style.width = f.spirit + '%'; b.querySelector('.bar.sp b').textContent = '기세 ' + Math.round(f.spirit);
           b.querySelector('.sub').innerHTML = '무력 ' + f.might + ' · 검술 ' + f.sword + ' · 공격 ' + bt(f.atk, f.atkB) + ' · 방어 ' + bt(f.def, f.defB) + ' · 장기 ' + MOVE[f.style] + (f === me && stance ? ' · <b>' + STANCE[stance].name + '</b>' : '');
         });
         el.querySelector('.rd-round').innerHTML = stance ? '제 ' + (round + 1) + ' 합' : '방침을 고르십시오';
@@ -890,6 +899,7 @@
         if (mat === 'cloth' && (!s.settings || s.settings.duelInk !== false)) effect('ink_drops', point, dir, 0.28);
         num(b, '−' + d, b === me ? '255,140,120' : '255,236,160', strong || ko, point, level === 'comboHit');
         a.spirit = Math.min(100, a.spirit + 10); b.spirit = Math.min(100, b.spirit + 4);
+        gauges();
         cheer[b === me ? 1 : 0] = 1.2;
         trace('contact', { kind: 'hit', move: mv, level: level, x: point.x, y: point.y, front: point.front, dir: dir, material: mat });
         var amplitude = level === 'comboEnd' ? impact.shake.heavy : impact.shake[level];
@@ -1208,10 +1218,10 @@
             } else await exchange();
           }
           if (r) return;
-          round++; bars();
           if (en.hp <= 0) return end(stance === 'capture' ? 'capture' : 'ko');
           if (stance === 'capture' && en.hp <= en.maxHp * 0.15 && me.hp > 0) { pose(en, 'kneel', 5); bubble(en, '그, 그만! 항복한다!'); say(U.esc(en.name) + U.jx(en.name, '이/가') + ' 무릎을 꿇었다 — 사로잡았다!'); await sleep(500); return end('capture'); }
           if (me.hp <= 0) return end('lose');
+          round++; bars();
           prepareIntent(); techBtns();
         } catch (e) { console.error(e); }
         busy = false;
@@ -1220,6 +1230,7 @@
       function schedule() { clearTimeout(timer); if (!over && !paused && stance) timer = setTimeout(step, fast ? 650 : 1400); }
       function end(how) {
         if (over) return; over = true; clearTimeout(timer); busy = true;
+        bars();
         var winHow = { ko: 1, capture: 1, persuade: 1, rout: 1 };
         var res = winHow[how] ? 'win' : how === 'flee' ? 'flee' : 'lose';
         result.how = how === 'captured' || how === 'persuaded' ? 'lose' : how; result.stance = stance;

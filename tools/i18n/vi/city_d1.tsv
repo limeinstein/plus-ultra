@@ -1,0 +1,316 @@
+부관 @	Phó quan @
+(대강 알아들음)	(hiểu đại khái)
+/이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 (.+?) · 일행 (.+?) \((.+?)(?:이|가) 통역 — 파란 점\)$/	Tiếng nói của thành phố này và mức đoàn Đô đốc nói được — bản thân Đô đốc ⟦$1⟧ · cả đoàn ⟦$2⟧ (⟦$3⟧ thông dịch — chấm xanh)
+항해 수첩 열기	Mở sổ tay hải hành
+@ 영토 · 국왕 @	Lãnh thổ @ · Quốc vương @
+술집에 함께할 만한 항해사 #명	Trong quán rượu có # hoa tiêu đáng để đi cùng
+#일분	đủ # ngày
+함대 현황	Tình hình hạm đội
+(최저 # / 최대 #)	(ít nhất # / nhiều nhất #)
+항해 가능	Có thể ra khơi
+# / #통	# / # thùng
+★ @	★ @
+시세 #%	Thời giá #%
+술집 주인	Chủ quán rượu
+술집에서 술을 마시거나 후원자에게서 「@」 이야기를 들을 수 있다	Có thể nghe chuyện “@” khi uống rượu ở quán hoặc từ nhà bảo trợ
+체력	Thể lực
+무력	Vũ lực
+조선소 목수	Thợ mộc xưởng tàu
+(기본 #)	(cơ bản #)
+보너스를 지급한다 — 소지금 금화 #닢부터	Phát tiền thưởng — từ # đồng vàng trong túi
+정보를 듣는다 — 계약한 일이 없다	Nghe ngóng tin tức — chưa ký hợp đồng nào
+누르면 @의 이야기	Nhấp để nghe chuyện của @
+그대로	Giữ nguyên
+유럽의 배	Tàu châu Âu
+처음 다는 사커 대포의 무게를 뺀 실제 짐칸	Khoang hàng thực sau khi trừ sức nặng của pháo saker lắp lần đầu
+(짐칸 #)	(khoang hàng #)
+#~#명	#–# thủy thủ
+포문	Lỗ pháo
+#문	# lỗ
+속도	Tốc độ
+맞바람	Ngược gió
+기함으로 쓰면 부하를 배치할 방 수 · 종선이면 창고로 고쳐 짐칸을 늘릴 수 있다	Làm kỳ hạm: số phòng để bố trí thuộc hạ · làm tàu theo: có thể sửa thành kho để thêm chỗ chứa hàng
+누르면 이 배의 역사와 게임 설정을 봅니다 · 권장 여유자금 약 #닢 (화물·보급·급료 준비, 실제 비용은 항로·선원에 따라 다릅니다)	Nhấp để xem lịch sử con tàu và thông số trong trò chơi · nên có sẵn khoảng # đồng dự phòng (cho hàng hóa, tiếp tế, lương; chi phí thực tùy tuyến đường và thủy thủ)
+애정	Tình cảm
+애정 # / #	Tình cảm # / #
+고정 — 일괄 매각의 「전체 선택」과 보관함의 「모두 맡긴다」에서 빠진다	Ghim — không nằm trong “Chọn tất cả” khi bán hàng loạt và “Gửi tất cả” ở kho cất đồ
+종류	Loại
+전체 동료	Toàn bộ bạn đồng hành
+현상금 #닢	Tiền thưởng truy nã # đồng
+왕실 정원사	Thợ làm vườn hoàng gia
+초원	Đồng cỏ
+스텝	Thảo nguyên
+산악	Núi non
+도크 — 도크 #/#척 · 모항	Ụ tàu — ụ tàu #/# tàu · cảng nhà
+탐험·교역 계획 — 사건 예고·기한·재조사	Kế hoạch thám hiểm·giao thương — báo trước biến cố, kỳ hạn, khảo sát lại
+탐험·교역 계획 — 거래처 정보·역사적 교역 기회	Kế hoạch thám hiểm·giao thương — tin bạn hàng, cơ hội giao thương lịch sử
+호위 요청 — 호위할 상선을 찾아본다	Yêu cầu hộ tống — tìm thương thuyền cần hộ tống
+#박	# đêm
+상인 @	Thương nhân @
+술집 손님	Khách quán rượu
+기초 #단계	Cơ bản, bậc #
+기초	Cơ bản
+식당 주인	Chủ quán ăn
+소문 속 해적	Hải tặc trong lời đồn
+여관 주인	Chủ nhà trọ
+수녀	Nữ tu
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+) · 짐승을 잃기 쉽다$/	⟦$1⟧ bước đi ×$2 · mệt ×$3 · dễ mất gia súc
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+)$/	⟦$1⟧ bước đi ×$2 · mệt ×$3
+사막	Sa mạc
+숲	Rừng
+밀림	Rừng rậm
+설원	Đồng tuyết
+툰드라	Đài nguyên
+빙원	Đồng băng
+발견물 백과사전 — 아직 실린 것이 없다	Bách khoa thư phát hiện — chưa có gì được ghi vào
+이베리아 참나무	Gỗ sồi Iberia
+기함 변경 — 기함 @호	Đổi kỳ hạm — kỳ hạm @
+바닥이 얕아 뭍 가까이(해안에서 #° 안)에서 더 빠르고, 여울·암초 사고를 입지 않는다.	Đáy nông nên đi nhanh hơn khi gần bờ (trong vòng #° từ bờ biển), không gặp tai nạn bãi cạn hay đá ngầm.
+얕은 흘수	Mớn nước nông
+가볍고 날렵해 멀리까지 살핀다. 함대에 있으면 망루의 시야가 넓어진다.	Nhẹ nhàng nhanh nhẹn, trinh sát được rất xa. Có nó trong hạm đội thì tầm nhìn của chòi canh rộng hơn.
+탐험선	Tàu thám hiểm
+가진 차례	Thứ tự có được
+고정한 것 먼저	Đồ ghim trước
+최저 #	Ít nhất #
+교대 넉넉 #	Đủ người đổi ca #
+그대로 · 하루 식량·물 각 #통 · 지금 실은 것으로 #일	Giữ nguyên · mỗi ngày # thùng lương thực và # thùng nước · đủ # ngày với số đang chở
+일분	ngày
+비움	Trống
+사각돛이 많아 맞바람에 느리다 — 「개조」에서 삭구 개량·돛 바꾸기로 보강	Nhiều buồm vuông nên chậm khi ngược gió — cải thiện bằng cải tiến dây buồm hay thay buồm ở “Cải tạo”
+약함	Yếu
+(기함보다 #칸 많음)	(nhiều hơn kỳ hạm # chỗ)
+/(.+?) ([\d]+)$/	⟦$1⟧ $2
+인물 이야기	Chuyện về người này
+📜 이야기	📜 Câu chuyện
+실존 인물 — 지명도가 높을수록 특기가 많다	Nhân vật có thật — càng nổi tiếng càng nhiều sở trường
+지명도 ★ 기록에 남은 사람	Độ nổi tiếng ★ người được sử sách ghi lại
+· 월급	· Lương tháng
+통함 보통	Hiểu nhau: tạm được
+@(으로|로) 그럭저럭 뜻이 통한다. 처음에는 마음을 다 열지 않을 것이다.	Có thể tạm hiểu nhau bằng @. Lúc đầu người ấy sẽ chưa mở lòng hoàn toàn.
+만나서 이야기한다	Gặp và trò chuyện
+# / #명	# / #
+특기 단계 합계	Tổng bậc sở trường
+언어 단계 합계	Tổng bậc ngôn ngữ
+월급	Lương tháng
+/(.+?) 단계$/	Bậc ⟦$1⟧
+오름차순 ↑	Tăng dần ↑
+선실 배치	Bố trí khoang
+동료 사이	Quan hệ bạn đồng hành
+현재 고용한 전체 동료 목록	Danh sách mọi bạn đồng hành đang thuê
+동료 ↑	Bạn đồng hành ↑
+@ 상세 보기	Xem chi tiết @
+/(.+?) · 지금 ([\d]+) \/ 본디 ([\d]+)단계 (.+)$/	⟦$1⟧ · hiện $2 / bậc gốc $3 ⟦$4⟧
+마모라 해적 의회	Hội đồng hải tặc Mamora
+장비 중	Đang trang bị
+#필	# con
+세이커포 #/#	Pháo saker # / #
+역풍에 강한 탐험선	Tàu thám hiểm giỏi chống gió ngược
+@에게 말을 건다	Bắt chuyện với @
+함대 전체 선원을 몇 명으로 할까요? 모자라면 모집하고(한 사람 금화 #닢), 남으면 이 도시에서 내립니다.	Toàn hạm đội nên có bao nhiêu thủy thủ? Thiếu thì mộ thêm (mỗi người # đồng vàng), thừa thì cho xuống ở thành phố này.
+최저 #명(모자라면 느리고 쉽게 지침) · 교대가 넉넉한 #명(피로가 덜 쌓임) · 최대 #명(백병전·일손). 사람이 많을수록 식량·물이 빨리 줄어듭니다.	Ít nhất # (thiếu người thì chậm và dễ kiệt sức) · đủ người đổi ca # (ít tích mệt) · nhiều nhất # (giáp lá cà, thêm tay làm). Càng đông người thì lương thực và nước càng nhanh cạn.
+#닢/통 · 하루 #통	# đồng/thùng · mỗi ngày # thùng
+들은 소식	Tin đã nghe
+기다리는 소식	Tin đang chờ
+남겨 둔 기록	Ghi chép để lại
+발표된 발견 재조사	Khảo sát lại phát hiện đã công bố
+직접 들은 이야기만 적혀 있습니다. 더 자세한 사정은 현지에서 알아보십시오.	Chỉ ghi những chuyện tự tai nghe. Muốn biết rõ hơn thì hãy tìm hiểu tại chỗ.
+들은 이야기	Chuyện đã nghe
+장소	Địa điểm
+메모	Ghi chú
+아직 적어 둔 소식이 없습니다. 마을 사람이나 거래처와 이야기를 나눠 보십시오.	Chưa ghi lại tin nào. Hãy trò chuyện với dân trong phố hay bạn hàng.
+항구 관리인	Quản cảng
+갈 곳	Nơi đến
+실어 올 물건	Hàng chở về
+(상인의 돈으로 산다)	(mua bằng tiền của thương nhân)
+까지 @(으로|로) (#일)	về @ trước lúc đó (# ngày)
+받는 몫	Phần được hưởng
+상인이 남긴 이익의	phần lời của thương nhân
+(지금 시세면 약 #닢 · 적어도 품삯 #닢 · 기한을 넘기면 절반)	(theo thời giá hiện nay khoảng # đồng · tiền công ít nhất # đồng · quá hạn thì một nửa)
+물자비	Chi phí vật tư
+기한 동안의 식량·물 약 #닢	lương thực và nước trong thời hạn khoảng # đồng
+(품삯은 적어도 그 #배)	(tiền công ít nhất gấp # lần số đó)
+상인의 배는 함대를 따라다닙니다. 내 짐칸·선원과는 상관없지만,	Tàu của thương nhân đi theo hạm đội. Không dùng khoang hàng hay thủy thủ của bạn, nhưng
+함대가 그 배보다 빨리 가지 못합니다.	hạm đội không thể đi nhanh hơn con tàu ấy.
+상선과 함께면 해적이 더 꾀고, 해전에서 그 배를 잃으면 호위는 실패합니다(명성 −#).	Đi cùng thương thuyền thì hải tặc kéo đến nhiều hơn, và nếu mất con tàu ấy trong hải chiến thì hộ tống thất bại (danh tiếng −#).
+사각	Vuông
+(기함 @호보다 #칸 적음)	(ít hơn kỳ hạm @ # chỗ)
+맞바람에 그럭저럭 — 삭구 개량으로 보강	Ngược gió tạm được — cải thiện bằng cải tiến dây buồm
+높은 선루와 갑판 덕분에 백병전에서 유리하다 (공격·방어 모두).	Lâu thuyền và boong cao nên có lợi khi đánh giáp lá cà (cả công lẫn thủ).
+높은 갑판	Boong cao
+동료 정렬 기준	Sắp xếp bạn đồng hành theo
+정렬 방향	Chiều sắp xếp
+동료 보기 전환	Đổi kiểu xem bạn đồng hành
+동료 상세	Chi tiết bạn đồng hành
+미숙 #단계	Bập bõm, bậc #
+미숙	Bập bõm
+숙련 #단계	Thành thạo, bậc #
+숙련	Thành thạo
+달인 #단계	Bậc thầy, bậc #
+달인	Bậc thầy
+모름 #단계	Không biết, bậc #
+모름	Không biết
+보통 #단계	Bình thường, bậc #
+능숙 #단계	Lưu loát, bậc #
+능숙	Lưu loát
+★ 배에서 익힘 · 숫자는 현재 단계	★ học được trên tàu · con số là bậc hiện tại
+현상수배 벽보를 본다 — 대서양의 이름난 해적 #명	Xem cáo thị truy nã — # tên hải tặc khét tiếng Đại Tây Dương
+조합장	Trưởng phường hội
+수위	Lính gác cổng
+· 초원	· Đồng cỏ
+맞춘 뒤 교역품 포함 항해 가능	Sau khi áp dụng, số ngày đi biển gồm cả hàng buôn
+식량 #+#일 · 물 #+#일	Lương thực #+# ngày · nước #+# ngày
+(보급품+교역품 대체분 · 교역품을 팔면 감소)	(đồ tiếp tế + phần thay thế từ hàng buôn · bán hàng thì giảm)
+보급품만	Chỉ đồ tiếp tế
+(식량 #일 · 물 #일) · 자재 #통 · 사는 값 금화	(lương thực # ngày · nước # ngày) · vật liệu # thùng · giá mua
+닢 · 남는 짐칸 #통	đồng · khoang còn trống # thùng
+곡식·어육·고기·유제품 같은 교역품은 식량으로, 맥주·포도주는 물 대신 쓸 수 있습니다(모자라면 바다에서 먹고 마십니다).	Hàng buôn như ngũ cốc, cá khô, thịt, sản phẩm sữa dùng làm lương thực được, bia và rượu vang có thể thay nước (khi thiếu, thủy thủ sẽ ăn uống chúng trên biển).
+이베리아 참나무 — 내구 +#%	Gỗ sồi Iberia — độ bền +#%
+삼각 · 삼각	Tam giác · Tam giác
+삭구 개량: 안 함	Cải tiến dây buồm: không
+안 함	Không
+포문 #/#문 (늘릴 수 있음) · 이베리아 참나무 — 내구 +#%	Lỗ pháo #/# (có thể thêm) · Gỗ sồi Iberia — độ bền +#%
+금화 #닢 → 조선 기술 #등급 · 남는 돈 #닢	# đồng vàng → kỹ thuật đóng tàu bậc # · còn dư # đồng
+손님들의 해적 이야기를 듣는다 — 이름난 해적의 행방을 들을지도	Nghe khách kể chuyện hải tặc — biết đâu nghe được tung tích hải tặc khét tiếng
+비용 금화 #닢	Chi phí # đồng vàng
+값 높은 순	Giá cao trước
+아직 고른 물건이 없습니다	Chưa chọn món nào
+열람 — 서가에서 책을 고른다	Đọc — chọn sách trên giá
+서가의 책 #권 · 지금 읽을 수 있는 책 #권 · 읽는 데 하루	# cuốn trên giá · # cuốn đọc được ngay · đọc mất một ngày
+책에 가까이 가면 제목과 지은이가 보입니다. 눌러서 펼쳐 봅니다. (방향키로 고르고 Enter)	Lại gần cuốn sách sẽ thấy tên sách và tác giả. Nhấp để mở ra xem. (Chọn bằng phím mũi tên rồi bấm Enter)
+탐험 장비 — 화승총 · 창 · 흉갑	Trang bị thám hiểm — súng hỏa mai · giáo · giáp ngực
+마구간에 #필 (대원 #명에 #필) · 금화 #닢	Chuồng ngựa có {1} con ({2} người cần {3} con) · {4} đồng vàng
+대원 #명에 필요한 수	Số cần cho # người
+· 새로 사는 것	· mua mới
+· (#~#필)	· (#~# con)
+말 #필을 사서 맡긴다 (#닢)	Mua # con ngựa gửi ở đây (# đồng)
+책을 누르면 펼쳐 봅니다. 맨 윗칸은 항해일지 — #년마다 한 권으로 엮입니다.	Nhấp vào sách để mở ra xem. Ngăn trên cùng là nhật ký hàng hải — cứ # năm đóng thành một cuốn.
+꺼낼 물건과 수량을 골라 주십시오.	Hãy chọn món muốn lấy ra và số lượng.
+승원 #명 · 짐칸 #통 (교역품 #통) — 식량·물·자재를 따로 정합니다.	Trên tàu # người · khoang hàng # thùng (hàng buôn #) — lương thực, nước và vật liệu chọn riêng.
+지금보다 줄이면	Nếu giảm so với hiện tại,
+내려서 보급값의 #%에 되팔고, 그 자리에 교역품을 더 실을 수 있습니다.	phần thừa được bán lại với giá #% tiền tiếp tế, chỗ đó có thể chở thêm hàng buôn.
+식량·물 함께	Cả lương thực và nước
+(며칠 항해할 만큼)	(số ngày đi biển)
+지금 보급품	Đồ tiếp tế hiện có
+남길 보급품	Đồ tiếp tế giữ lại
+#닢/통 · 바다 위 수리에 씀 (내구 #에 #통)	{1} đồng/thùng · dùng để sửa tàu trên biển ({3} thùng cho {2} độ bền)
+/함대에는 최대 ([\d]+)척까지 편성할 수 있습니다\. (.*)$/	Hạm đội có thể gồm tối đa $1 tàu. Tàu trên cùng là kỳ hạm, do đô đốc chỉ huy. Thuyền trưởng, người lái, thủy thủ boong và lính canh của các tàu khác được chọn trong số bạn đồng hành theo năng lực.
+/함대에서 뺀 배를 도크에 맡겨 둡니다\. 모항\((.+?)\) 도크에는 ([\d]+)척까지 기한 없이, 다른 항구 도크에는 ([\d]+)척까지 맡길 수 있고 ([\d]+)년이 지나면 폐기됩(.*)$/	Tàu rút khỏi hạm đội có thể gửi ở ụ tàu. Ụ ở cảng nhà (⟦$1⟧) giữ được tối đa $2 tàu không thời hạn; ụ ở cảng khác giữ được tối đa $3 tàu, gửi quá $4 năm sẽ bị phá bỏ.
+기함 말고는 맡길 배가 없습니다.	Ngoài kỳ hạm không còn tàu nào để gửi.
+@ 도크 — #/#척	Ụ tàu @ — #/# tàu
+맡긴 배가 없습니다.	Không có tàu nào đang gửi.
+· @ @호 (짐칸 #통)	· @ @ (khoang hàng # thùng)
+(@) — 편도 약 #일	(@) — một chiều khoảng # ngày
+누적 출자	Tổng vốn đã góp
+#닢 · #등급 없음	# đồng · chưa có bậc
+다음 등급	Bậc kế tiếp
+#닢 추가	thêm # đồng
+거래 우대	Ưu đãi giao dịch
+매입 #% 할인 · 매각 #% 우대	Mua giảm #% · bán lợi thêm #%
+품목 확장 계획	Kế hoạch mở rộng mặt hàng
+@ (#등급 · 누적 #닢)	@ (bậc # · đã góp # đồng)
+쌓인 배당	Cổ tức tích lũy
+/출자금과 시설 공사비는 돌려받지 못합니다\.(.*)$/	Tiền góp vốn và chi phí xây dựng không được hoàn lại. Góp vốn mang lại ưu đãi giao dịch, mặt hàng mới và cổ tức; xây dựng làm tăng sản lượng. Mỗi cơ sở xây được ba giai đoạn, bắt đầu từ góp vốn bậc $1.
+다음 공사비	Chi phí xây dựng kế tiếp
+산지·중계 공급망을 보강한다. 단계마다 공급 한도 #%, 하루 입하량 #% 증가	Củng cố mạng cung ứng tại nơi sản xuất và trung chuyển. Mỗi giai đoạn: mức cung +#%, lượng hàng về mỗi ngày +#%
+교역소 저장 시설을 넓힌다. 단계마다 공급 한도 #% 증가. 제독의 화물 보관함과는 별개	Mở rộng kho chứa của thương điếm. Mỗi giai đoạn: mức cung +#%. Tách riêng với kho hàng của Đô đốc
+상인·공방과 판로를 넓힌다. 단계마다 시장이 받아 줄 물량 #% 증가	Mở rộng đầu ra với thương nhân và xưởng thợ. Mỗi giai đoạn: lượng chợ nhận thêm +#%
+목재:	Gỗ:
+(내구 +#%)	(độ bền +#%)
+· 사업 투자 #등급	· đầu tư kinh doanh bậc #
+다른 고장 목재를 쓰려면 목재 시장이 있는 도시에서 사업에 투자하거나, 투자한 도시에 목재를 실어 오게.	Muốn dùng gỗ vùng khác thì hãy đầu tư kinh doanh ở thành phố có chợ gỗ, hoặc chở gỗ về thành phố mình đã đầu tư.
+바르카	Barca
+가장 값싼 원양 배	Tàu đi biển khơi rẻ nhất
+포르투갈 사람들이 아프리카 해안을 더듬어 내려갈 때 쓴 외돛 작은 배. 짐은 적지만 싸고 얕은 물에 강하다.	Chiếc thuyền nhỏ một buồm người Bồ Đào Nha dùng để dò dẫm xuôi bờ biển châu Phi. Chở ít hàng nhưng rẻ và giỏi đi chỗ nước nông.
+느리지만 튼튼한 북해의 짐배	Tàu chở hàng Biển Bắc chậm nhưng chắc chắn
+두꺼운 판자로 지어 폭풍 피해가 적고 먼 바다의 파도에도 끄떡없다.	Đóng bằng ván dày nên ít bị bão làm hư hại, sóng ngoài khơi xa cũng chẳng hề hấn.
+튼튼한 선체	Thân tàu chắc chắn
+판자를 겹쳐 붙인 북유럽의 외돛 범선. 느리지만 폭풍에 강하다.	Thuyền buồm một cột của Bắc Âu, ván ghép chồng lên nhau. Chậm nhưng vững trong bão.
+삼각돛으로 맞바람도 거슬러 오르는 포르투갈의 탐험선. 얕은 해안을 살피며 나아가기 좋다.	Tàu thám hiểm Bồ Đào Nha, buồm tam giác giúp đi ngược cả gió. Rất hợp để dò men theo bờ biển nông.
+삼각·삼각	Tam giác · Tam giác
+삼각돛·살돛으로 맞바람에 강하다	Buồm tam giác và buồm sprit giúp đi ngược gió giỏi
+강함	Mạnh
+(기함과 같음)	(bằng kỳ hạm)
+대형카라벨	Caravel lớn
+원양 탐험의 주력	Chủ lực của thám hiểm đại dương
+사각돛을 더한 카라벨(카라벨라 레돈다). 순풍에서도 역풍에서도 고르게 달려 대양 탐험에 알맞다.	Caravel thêm buồm vuông (caravela redonda). Xuôi gió hay ngược gió đều chạy đều, hợp với thám hiểm đại dương.
+사각·삼각·삼각	Vuông · Tam giác · Tam giác
+높은 선루의 원양 무역선	Tàu buôn viễn dương lâu thuyền cao
+앞뒤로 높은 선루를 올린 원양 무역선(나우). 선창이 넓고 백병전에 강하다.	Tàu buôn viễn dương (nau) có lâu thuyền cao ở mũi và đuôi. Khoang rộng, mạnh khi đánh giáp lá cà.
+사각·사각·삼각	Vuông · Vuông · Tam giác
+대형카락	Carrack lớn
+인도 항로의 거대한 상선	Thương thuyền khổng lồ của tuyến Ấn Độ
+인도 항로를 오가던 거대한 카락. 향료를 가득 싣고 대양을 건넌다.	Chiếc carrack khổng lồ qua lại tuyến Ấn Độ, chở đầy hương liệu vượt đại dương.
+사각·사각·삼각·삼각	Vuông · Vuông · Tam giác · Tam giác
+한 단위는 금화 #닢입니다. 이 조선소의 마지막 등급까지 필요한 금액만 받습니다.	Một đơn vị là # đồng vàng. Chỉ thu số tiền cần để lên tới bậc cuối của xưởng này.
+대서양에서 활약하는 이름난 해적들의 현상수배 벽보입니다. 벽보를 누르면 자세히 봅니다.	Cáo thị truy nã những hải tặc khét tiếng hoành hành Đại Tây Dương. Nhấp vào tờ cáo thị để xem chi tiết.
+쿨롱 함대	Hạm đội Coullon
+실존 인물	Nhân vật có thật
+허풍쟁이 코너	Connor khoác lác
+하이브라질 해적단	Băng hải tặc Hy-Brasil
+검은 개 해리	Harry Chó Đen
+갈고리 손 톰 크롤리	Tom Crawley Tay Móc
+소금 눈 피터 모건	Peter Morgan Mắt Muối
+방값은 미리 받습니다. 하룻밤에 금화 #닢인데, 며칠 묵으시겠습니까?	Tiền phòng thu trước. Một đêm # đồng vàng, ngài nghỉ mấy đêm ạ?
+팔 물건을 고르십시오. 「전체 선택」 뒤 남길 것만 끄면 됩니다. 물건 앞	Hãy chọn món muốn bán. Bấm “Chọn tất cả” rồi bỏ chọn những món muốn giữ. Nhấp vào
+을 눌러 고정하면 「전체 선택」에서 빠집니다. 여러 개 가진 물건은 막대를 끌어 몇 개 팔지 정합니다. 먼 곳의 진귀한 유물일수록 값을 잘 쳐 줍니다.	trước món đồ để ghim, “Chọn tất cả” sẽ bỏ qua nó. Món có nhiều cái thì kéo thanh để chọn bán bao nhiêu. Di vật quý hiếm từ nơi càng xa càng được giá.
+#개 값	Giá # cái
+팔 수량	Số lượng bán
+받을 돈	Số tiền nhận
+철새	Chim di trú
+업적	Thành tựu
+교역 수첩	Sổ giao thương
+유럽 정세	Thời cuộc châu Âu
+이동 장비	Phương tiện di chuyển
+소지품 칸을 쓰지 않음	Không chiếm ô hành trang
+보유한 이동 장비가 없습니다. 도시 성문의 마구간에서 말·당나귀 같은 탈것을 사면 이곳에 표시됩니다.	Bạn không có phương tiện di chuyển nào. Mua ngựa, lừa và những loài cưỡi khác ở chuồng ngựa cạnh cổng thành thì chúng sẽ hiện ở đây.
+/말·당나귀 같은 탈것은 소모품이 아닙니다\.(.*)$/	Ngựa, lừa và các loài cưỡi khác không phải đồ tiêu hao. Chỉ mất những con ngã xuống trong chuyến thám hiểm; những con trở về được gửi lại chuồng ngựa ở thành phố xuất phát và dùng lại được.
+소지품 #/# · 발견의 증거는 칸을 차지하지 않는다 (보고·발표하면 차지한다)	Hành trang #/# · bằng chứng phát hiện không chiếm ô (đến khi báo cáo hay công bố)
+설명	Mô tả
+버림	Vứt bỏ
+얼마를 기부하시겠습니까? 악명이 줄고 세상의 평판이 오릅니다.	Ngài muốn quyên góp bao nhiêu? Tiếng xấu sẽ giảm và tiếng tăm trên đời sẽ tốt lên.
+읽은 책	Sách đã đọc
+읽을 수 있는 책	Sách đọc được
+아직 읽을 수 없는 책	Sách chưa đọc được
+짐승을 사서 마구간에 맡겨 두거나, 맡긴 짐승을 되팔 수 있습니다.	Có thể mua gia súc gửi ở chuồng ngựa, hoặc bán lại những con đang gửi.
+탐험대	Đoàn thám hiểm
+· 소지금	· tiền trong túi
+도보	Đi bộ
+돈이 들지 않는다	Không tốn tiền
+모든 땅 ×#	Mọi địa hình ×#
+짐을 저마다 지고 걷는다. 돈이 들지 않고 어디든 갈 수 있지만 느리고 쉽게 지친다.	Mỗi người tự đeo hành lý mà đi. Không tốn tiền và đi đâu cũng được, nhưng chậm và dễ mệt.
+피로 ×# · 물 ×#(사막) · 싸움 +#% · 정찰 +#°	Mệt ×# · nước ×# (sa mạc) · chiến đấu +#% · trinh sát +#°
+대원 모두 말을 탄 기마 탐험대. 초원과 평야에서 가장 빠르고 멀리 살피며 싸움에도 강하다. 사막·밀림·설원에서는 말이 쓰러진다.	Đoàn thám hiểm cưỡi ngựa, ai cũng có ngựa. Nhanh nhất trên đồng cỏ và đồng bằng, trinh sát xa nhất và đánh giỏi. Ở sa mạc, rừng rậm và đồng tuyết ngựa sẽ quỵ.
+마구간에 #필 (대원 #명에 #필 · #명에 하나) · 금화 #닢	Chuồng ngựa có {1} con ({2} người cần {3} con · {4} người một con) · {5} đồng vàng
+피로 ×# (가장 ×#)	Mệt ×# (thấp nhất ×#)
+짐바구니를 얹은 당나귀 행렬. 빠르지는 않아도 산길과 메마른 땅에 강하고 값이 싸다.	Đoàn lừa thồ gùi hàng. Không nhanh nhưng vững chân trên đường núi và đất khô, lại rẻ.
+말이 끈다	Ngựa kéo
+마구간에 #대 (대원 #명에 #대 · #명에 하나) · 금화 #닢	Chuồng ngựa có {1} xe ({2} người cần {3} xe · {4} người một xe) · {5} đồng vàng
+· 스텝	· Thảo nguyên
+피로 ×# · 물 ×#(사막) · 식량 ×# · 싸움 +#%	Mệt ×# · nước ×# (sa mạc) · lương thực ×# · chiến đấu +#%
+/포장을 씌운 짐마차와 끄는 짐승(.*)$/	Xe hàng có mui cùng gia súc kéo (ở châu Âu và thảo nguyên là ngựa, ở Ấn Độ, Trung Hoa và châu Phi là bò). Dễ đi nhất trên đất bằng, chở được nhiều đồ tiếp tế. Vất vả ở núi và rừng rậm.
+마구간에 둘 수	Số gửi được ở chuồng
+대원 수만큼	Bằng số người
+지형 적합도	Độ hợp địa hình
+아주 좋음(×# 넘게)	Rất tốt (trên ×#)
+좋음	Tốt
+조금 나음	Khá hơn chút
+나쁨(느리거나 짐승을 잃는다) · 짐승이 모자라면 효과가 그만큼 줄어든다	Kém (chậm hoặc mất gia súc) · thiếu gia súc thì hiệu quả giảm tương ứng
+도서관에서 읽은 책 (필사본)	Sách đọc ở thư viện (bản chép)
+발견물에서 얻은 책	Sách có được ở nơi phát hiện
+항해일지 #권 · 필사본 #권 · 발견물의 책 #권	# cuốn nhật ký hàng hải · # bản chép · # sách từ nơi phát hiện
+#부	# bản
+빈 칸 — 도서관에서 읽은 책(필사본)이나 발견물에서 얻은 책을 꽂을 수 있다	Ô trống — có thể cắm sách đọc ở thư viện (bản chép) hoặc sách có được ở nơi phát hiện
+맡긴 물건은 몇 개든 둘 수 있고 소지품 칸을 차지하지 않습니다. 아직 보고·발표하지 않은 발견의	Đồ gửi bao nhiêu cũng được và không chiếm ô hành trang. Bằng chứng của phát hiện chưa báo cáo hay công bố
+는 칸을 차지하지 않으니 들고 다니십시오 — 보고·발표하면 그때부터 칸을 차지합니다. 물건 앞	cũng không chiếm ô nên hãy mang theo — từ lúc báo cáo hay công bố nó mới bắt đầu chiếm ô. Nhấp vào
+을 누르면	trước món đồ để
+고정	ghim
+— 「모두 맡긴다」와 시장의 「전체 선택」에서 빠집니다.	— “Gửi tất cả” và “Chọn tất cả” ở chợ sẽ bỏ qua nó.
+/장비 중인 것·아직 보고하지 않은 증거·고정\(📌\)한 것은 맡기지 않는다(.*)$/	Đồ đang trang bị, bằng chứng chưa báo cáo và đồ đã ghim (📌) không được gửi · dụng cụ hải hành (chanh, mèo, kính lục phân…) ở lại trên tàu và được bỏ qua
+장비 중·증거·고정·항해도구 말고 모두 맡긴다	Gửi tất cả trừ đồ đang trang bị, bằng chứng, đồ đã ghim và dụng cụ hải hành
+맡긴 차례	Thứ tự gửi
+보이는 것 선택	Chọn những gì đang thấy
+선택 해제	Bỏ chọn
+맡긴 물건이 없다	Không có đồ gửi
+고른 수량 꺼내기	Lấy ra số đã chọn
+같은 일반 물건은 한 칸에 합칩니다. 유물처럼 개별 상태가 있는 물건은 각각 칸이 필요합니다.	Đồ thường giống nhau gộp chung một ô. Đồ có tình trạng riêng như di vật thì mỗi cái cần một ô.
+↑ @ 들어가기	↑ Vào @

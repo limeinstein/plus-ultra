@@ -1,0 +1,163 @@
+wheat	Lúa mì
+rice	Gạo
+maize	Ngô
+beans	Đậu
+potato	Khoai tây
+fish	Cá khô
+beef	Thịt bò
+dairy	Sản phẩm sữa
+sugar	Đường
+honey	Mật ong
+salt	Muối mỏ
+olive	Dầu ô liu
+palmoil	Dầu cọ
+wine	Rượu vang
+brandy	Rượu brandy
+rum	Rượu rum
+beer	Bia
+pepper	Hồ tiêu
+clove	Đinh hương
+nutmeg	Nhục đậu khấu
+cinnamon	Quế
+ginger	Gừng
+allspice	Tiêu Jamaica
+tea	Chè
+coffee	Cà phê
+cacao	Ca cao
+tobacco	Thuốc lá
+wool	Len thô
+cotton	Bông
+silkraw	Tơ sống
+hemp	Gai
+woolcloth	Vải len
+cottoncloth	Vải bông
+silk	Hàng lụa
+linen	Vải lanh
+chintz	Vải hoa in
+carpet	Thảm
+iron	Quặng sắt
+copper	Quặng đồng
+tin	Quặng thiếc
+mercury	Thủy ngân
+coal	Than đá
+gold	Vàng
+silver	Bạc
+gems	Đá quý
+pearl	Ngọc trai
+coral	San hô
+amber	Hổ phách
+jade	Phỉ thúy
+ivory	Ngà voi
+tortoise	Đồi mồi
+rhino	Sừng tê giác
+fur	Da lông thú
+ambergris	Long diên hương
+frankincense	Nhũ hương
+musk	Xạ hương
+sandalwood	Bạch đàn hương
+glass	Đồ thủy tinh
+porcelain	Đồ sứ Trung Hoa
+leathergoods	Đồ da
+jewelry	Đồ trang sức
+art	Mỹ thuật phẩm
+antique	Đồ cổ
+guns	Súng hỏa mai
+cannon	Đại pháo
+timber	Gỗ
+dye	Thuốc nhuộm
+hides	Da thuộc
+herbs	Dược liệu
+horses	Ngựa
+faience	Gốm châu Âu
+cnsilk	Lụa Trung Hoa
+calico	Vải trắng Ấn Độ
+eaart	Thư họa phương Đông
+banana	Chuối
+sweetpotato	Khoai lang
+sculpture	Đồ điêu khắc
+slaves	Nô lệ
+tigerskin	Da hổ
+p_bitterorange	Cam đắng
+p_marmelo	Mộc qua
+p_almond	Hạnh nhân
+p_madrono	Quả dâu tây cây
+p_chestnut	Hạt dẻ
+p_apple	Táo
+p_lingonberry	Việt quất đỏ
+p_cloudberry	Mâm xôi mây
+p_gooseberry	Lý gai
+p_blackcurrant	Lý chua đen
+p_fig	Sung khô
+p_lemon	Chanh vàng
+p_carob	Quả carob
+p_citron	Thanh yên
+p_marasca	Anh đào marasca
+p_baobab	Quả bao báp
+p_kola	Hạt cola
+p_watermelon	Dưa hấu
+p_marula	Quả marula
+p_shea	Bơ hạt mỡ
+p_date	Chà là
+p_pistachio	Hạt dẻ cười
+p_apricot	Mơ khô
+p_pomegranate	Lựu
+p_mulberry	Dâu tằm
+p_mango	Xoài
+p_jackfruit	Mít
+p_tamarind	Me
+p_amla	Chùm ruột Ấn Độ
+p_coconut	Dừa
+p_lychee	Vải thiều
+p_longan	Long nhãn
+p_persimmon	Hồng khô
+p_jujube	Táo tàu
+p_omija	Ngũ vị tử
+p_hamimelon	Dưa Hami
+p_wildapple	Táo dại Almaty
+p_walnut	Óc chó
+p_seabuckthorn	Hắc mai biển
+p_barberry	Hoàng mộc khô
+p_durian	Sầu riêng
+p_mangosteen	Măng cụt
+p_rambutan	Chôm chôm
+p_carambola	Khế
+p_salak	Quả salak
+p_mikan	Quýt Kishu
+p_yuzu	Quả yuzu
+p_nashi	Lê
+p_akebi	Quả akebi
+p_biwa	Sơn trà Nhật
+p_pineapple	Dứa
+p_avocado	Bơ
+p_tomato	Cà chua
+p_cashew	Hạt điều
+p_cherimoya	Mãng cầu cherimoya
+p_maesil	Mơ xanh
+p_orchid	Chậu lan
+p_chrysanthemum	Trà hoa cúc
+p_bamboo	Tre
+p_redpine	Gỗ thông hoàng tràng
+p_azalea	Rượu đỗ quyên
+p_tulip	Củ tulip
+p_rosewater	Nước hoa hồng
+p_whiterose	Cây giống hồng trắng
+p_bluerose	Hoa hồng xanh
+p_cork	Bần
+p_oak	Gỗ sồi
+p_pinenut	Hạt thông
+p_gumarabic	Gôm Ả Rập
+p_cedar	Gỗ bá hương
+p_teak	Gỗ tếch
+p_ginkgo	Bạch quả
+p_populus	Nhựa hồ đồng
+p_camphor	Long não
+p_sakura	Cây giống anh đào
+p_brazilwood	Gỗ vang Brazil
+p_cochineal	Rệp son
+p_saguaro	Quả xương rồng saguaro
+p_cactuspot	Chậu xương rồng
+p_larch	Gỗ thông rụng lá
+p_cedarnut	Hạt thông Siberia
+p_rhodiola	Rễ hồng cảnh thiên
+p_eleuthero	Rễ ngũ gia bì gai
+p_poppyseed	Hạt anh túc

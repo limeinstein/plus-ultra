@@ -60,8 +60,9 @@
     if (days <= 300) return '아홉 달쯤';
     return '한 해 남짓';
   };
-  U.shuffle = function (arr) {
-    for (var i = arr.length - 1; i > 0; i--) { var j = Math.floor(U.rng() * (i + 1)); var t = arr[i]; arr[i] = arr[j]; arr[j] = t; }
+  U.shuffle = function (arr, rand) {
+    rand = rand || U.rng;
+    for (var i = arr.length - 1; i > 0; i--) { var j = Math.floor(rand() * (i + 1)); var t = arr[i]; arr[i] = arr[j]; arr[j] = t; }
     return arr;
   };
   U.weighted = function (items, wfn) {

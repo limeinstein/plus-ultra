@@ -15,7 +15,7 @@ for f in sorted(glob.glob(os.path.join(HERE, 'en', '*.tsv'))):
         ko, en = line.split('\t', 1)
         if os.path.basename(f).startswith('names_'):   # names_*.tsv: 고유 이름 (G.N이 찾는 표) — 배·동료·발견물·물건·후원자·책
             NAMES.setdefault(re.sub(r'\s+', ' ', ko).strip(), en.strip()); continue
-        kind, a, b = compile_row(ko, en)
+        kind, a, b = compile_row(ko, en.replace('\\n', '\n'))   # 번역의 줄바꿈은 \n 으로 적는다
         if kind == 'text': TEXT[a] = b
         else: pats.append([a, b])
 # 틀 차례: 글자(붙잡지 않는 부분)가 많은 것부터 — 넓게 붙잡는 틀은 뒤로

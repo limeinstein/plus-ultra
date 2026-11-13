@@ -1073,7 +1073,10 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .mount-item small { color: var(--ink-soft); font-size: 13px; line-height: 1.35; }
 .mount-rule { margin-top: 8px; color: var(--ink-soft); font-size: 13px; line-height: 1.45; }
 /* 일기토 (방침·기술을 고르는 갑판 결투) */
-.rduel { display: flex; flex-direction: column; gap: 8px; }
+#ui:has(.duel-win) > .toasts { z-index: 59; } /* 술집·거리 알림은 결투창 뒤에 둔다 */
+.duel-win .content { display: flex; flex-direction: column; }
+.rduel { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.rduel > :not(.rd-arena) { flex: none; }
 .rduel .rd-top { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; }
 .rduel .rd-side { display: flex; gap: 10px; align-items: center; }
 .rduel .rd-side.en { justify-content: flex-end; text-align: right; }
@@ -1085,6 +1088,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .rduel .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(180deg, #c0503a, #7a2a1e); transition: width .25s; }
 .rduel .rd-side.en .bar i { left: auto; right: 0; }
 .rduel .bar.sp i { background: linear-gradient(180deg, #e8c060, #a87a20); }
+.rduel .bar.hp i { transition: none; }
 /* 글자는 막대 안에 따로 띄운다 — 글꼴(본명조·고딕 등)마다 줄 높이가 달라 막대 밖으로 밀려 잘리던 것 (2026-10-19) */
 .rduel .bar b { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: flex; align-items: center; font-size: 12px; font-weight: 700; padding: 0 6px; color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; line-height: 1; white-space: nowrap; }
 .rduel .rd-side.en .bar b { justify-content: flex-end; }
@@ -1094,8 +1098,9 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .rduel .rd-rps { font-size: 14px; color: var(--ink-soft); }
 .rduel .rd-rps span { color: #7a2a1e; font-weight: 800; }
 .rduel .rd-rps small { display: block; font-size: 12px; }
-.rduel .rd-stage { position: relative; }
-.rduel .rd-stage canvas { width: 100%; height: auto; display: block; border: 2px solid #7a5c33; box-shadow: 0 0 0 1px #2a1f16; }
+.rduel .rd-arena { position: relative; display: flex; justify-content: center; aspect-ratio: 1060 / 380; min-height: 0; background: #271d14; }
+.rduel .rd-stage { position: relative; height: 100%; max-width: 100%; aspect-ratio: 1060 / 380; }
+.rduel .rd-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; border: 2px solid #7a5c33; box-shadow: 0 0 0 1px #2a1f16; }
 .rduel .rd-motion { position: absolute; bottom: 13.9%; width: 40.75%; height: auto; opacity: 0; pointer-events: none; z-index: 2; image-rendering: auto; }
 .rduel .rd-motion.me { left: 19.3%; }
 .rduel .rd-motion.en { right: 19.3%; transform: scaleX(-1); }

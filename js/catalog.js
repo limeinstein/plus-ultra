@@ -191,8 +191,9 @@
   const langTxt = lg => Object.keys(lg || {}).sort((a, b) => lg[b] - lg[a]).map(k => KO ? G.LANGS[k] + ' ' + G.LANG_LV[lg[k]] : TR(G.LANGS[k]) + ' ' + TR(G.LANG_LV[lg[k]]).toLowerCase()).join(', ');
   G.MATES.forEach(m => {
     const spec = A.mateSpec(m.id);
+    const period = m.chinaRotation ? G.ChinaCrew.periodText() : m.y[0] + '~' + m.y[1] + '년';
     add(tPeople, {
-      group: 'mate', portrait: true, name: m.name, sub: (m.witch ? (m.legend ? '전설의 마녀' : '마녀로 몰렸던 여인') : '동료') + (m.eventOnly ? ' · 이야기로 합류' : ' · 명성 ' + num(m.fame) + ' 이상') + ' · ' + m.y[0] + '~' + m.y[1] + '년',
+      group: 'mate', portrait: true, name: m.name, sub: (m.witch ? (m.legend ? '전설의 마녀' : '마녀로 몰렸던 여인') : '동료') + (m.eventOnly ? ' · 이야기로 합류' : ' · 명성 ' + num(m.fame) + ' 이상') + ' · ' + period,
       meta: skillTxt(m.sk), key: 'portraits/mates/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', extra: m.desc, half: I.chain.mateHalf(m.id),
       pic: () => portrait(spec),
       detail: () => ({
@@ -200,7 +201,7 @@
         facts: [
           ['능력치', G.STATS.map((s, i) => s.name + ' ' + m.st[i]).join(' · ')], ['특기', skillTxt(m.sk)], ['어학', langTxt(m.lg)],
           ['만나는 곳', m.eventOnly ? '관련 이야기의 진행을 통해 합류' : (G.MATE_RANGE && G.MATE_RANGE[m.id] ? (KO ? G.MATE_RANGE[m.id].zones.map(z => G.MATE_ZONES[z].name).join('·') + ' 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: ' + G.CITY_DATA[G.MATE_RANGE[m.id].home].name + ')' : 'Taverns and inns in ' + G.MATE_RANGE[m.id].zones.map(z => TR(G.MATE_ZONES[z].name)).join(' · ') + ' cities — moves to a neighboring city or stays once a month (starts in ' + G.cityName(G.MATE_RANGE[m.id].home) + ')') : m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집')],
-          ['만날 수 있는 때', m.y[0] + '~' + m.y[1] + '년' + (m.after ? (nm => ' · ' + nm + G.U.jx(nm, '이/가') + ' 알려진 뒤')(m.after.map(id => G.DISC[id] ? G.DISC[id].name : id).join('·')) : '')],
+          ['만날 수 있는 때', period + (m.after ? (nm => ' · ' + nm + G.U.jx(nm, '이/가') + ' 알려진 뒤')(m.after.map(id => G.DISC[id] ? G.DISC[id].name : id).join('·')) : '')],
           ['필요한 명성', m.eventOnly ? '이야기의 합류 조건에 따름' : num(m.fame)], ['월급', num(m.wage) + '닢']
         ],
         files: [{ key: 'portraits/mates/' + m.id, kind: 'png', note: '이 동료의 초상' }]

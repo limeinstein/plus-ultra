@@ -47,8 +47,12 @@
   function speaker(m) {
     var T = G.Scenes && G.Scenes.city && G.Scenes.city.B && G.Scenes.city.B.tavern;
     var d = G.MATE[m.id];
-    if (T && T.mateSpeaker) { var sp = T.mateSpeaker(m); sp.name = d.name; return sp; }
-    return { name: d.name, portrait: A.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id), lang: 3 };
+    var sp = T && T.mateSpeaker ? T.mateSpeaker(m) : { portrait: A.mateSpec(m.id), half: G.Img.chain.mateHalf(m.id) };
+    sp.name = d.name;
+    // 데리고 다니는 동료는 이미 제독과 말이 통한다 — 낯선 말 흉내·통역 없이 그대로 (술집·여관의 부하 대화 js/city/matetalk.js 와 같다).
+    // 전에는 술집에서 처음 만나는 사람처럼 동료의 모국어(li)와 통하는 정도(lang)를 그대로 써서, 러시아 마녀가 거리에서 러시아어 흉내로만 말했다 (베타 피드백 #187, 2026-11-13)
+    sp.lang = 3; sp.li = null;
+    return sp;
   }
   /** 거리 사람 하나로 만든다 (js/systems/streetfolk.js SF.spawn 이 부른다) — 이번 입항에 거니는 사람이 없으면 null */
   MS.folk = function (c, streetW, heroX, ground, seed) {

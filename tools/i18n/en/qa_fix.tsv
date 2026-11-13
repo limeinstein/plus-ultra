@@ -1,0 +1,191 @@
+특기 단계	Skill level
+언어 단계	Language level
+체 # 지 # 무 # 매 #	VIT # INT # STR # CHA #
+#가지:	#:
+— 금화 #닢	— # gold
+명성 +#	Fame +#
+명성 −#	Fame −#
+교역 명성 +#	Trade fame +#
+칭호 「@」	Title "@"
+첫 달성 때 한 번 지급	paid once, the first time
+#% 기록	#% recorded
+남은 발견물 #가지	# discoveries left
+아직 실마리를 얻지 못한 발견물 #가지 · 책과 소문, 앞선 발견에서 단서를 찾자.	# discoveries with no lead yet · Look for clues in books, rumors and earlier discoveries.
+×# @	×# @
+재산 (소지금+예금) #/#닢	Wealth (cash + deposits) #/# gold
+아즈텍 사람들 또는 남쪽 비밀 수로가 알려지면 소문이 돌기 시작합니다.	Rumors start once the Aztecs or the secret southern channel become known.
+철새는 역사책에 이름이 없는 떠돌이 항해사입니다. 해마다 #명씩 새로 항구에 나타나고, #년마다 세대가 바뀝니다. 제독이	Drifters are wandering navigators whose names aren't in the history books. # new ones turn up in port each year, and a new generation arrives every # years. Listed here are drifters from
+닿은 대륙	the continents you've reached
+(@)을 고향으로 둔 철새와, 이미 만났거나 소식을 들은 철새가 적힙니다. 행방을 들은 철새와 여급이 찾아 준 사람은 한동안 그 항구에 머뭅니다.	(@), plus drifters you've already met or heard news of. Drifters whose whereabouts you've heard, and people the barmaid found for you, stay in that port for a while.
+(@)를 고향으로 둔 철새와, 이미 만났거나 소식을 들은 철새가 적힙니다. 행방을 들은 철새와 여급이 찾아 준 사람은 한동안 그 항구에 머뭅니다.	(@), plus drifters you've already met or heard news of. Drifters whose whereabouts you've heard, and people the barmaid found for you, stay in that port for a while.
+🔒 아직 닿지 못한 대륙의 철새 — @	🔒 Drifters of continents not yet reached — @
+(그 대륙의 항구에 처음 들어서면 열립니다)	(Unlocks when you first enter a port on that continent)
+· 사슬 # / #	· chains # / #
+@ 발견 진행	@ discovery progress
+칭호 「@」 · 금화 #닢	Title "@" · # gold
+금화 #닢 · 명성 +# · 칭호 「@」 · 첫 달성 때 한 번 지급	# gold · Fame +# · Title "@" · paid once, the first time
+— 금화 #닢 · 명성 +# · 칭호 「@」	— # gold · Fame +# · Title "@"
+— 금화 #닢 · 명성 +#	— # gold · Fame +#
+— 금화 #닢 · 교역 명성 +# · 칭호 「@」	— # gold · Trade fame +# · Title "@"
+— 교역 명성 +# · 칭호 「@」	— Trade fame +# · Title "@"
+@ 교역소 · 한 번에 낸 가장 큰 이익 #/#닢	@ trading posts · biggest single profit #/# gold
+시장 소식	Market News
+— 아직 들은 소식이 없습니다. 술집의 「장사 소문을 듣는다」·교역소 주인의 이야기·가까운 곳의 소식으로 알게 됩니다.	— No news heard yet. You'll learn of it through "Hear Trade Rumors" at the tavern, the trading post keeper's talk and news from nearby.
+소비시장의 시대 수요 (#년)	Era demand in consumer markets (#)
+#세기엔 은이 모자랐지만, #년 포토시 은광이 열린 뒤 아메리카 은이 쏟아져 값이 떨어지고 물가가 뛰었다(가격 혁명) · #~#세기 중국의 은 결제·납세와 마닐라 교역은 별도의 은 수요를 만든다	Silver was scarce in the #th century, but after the Potosí mine opened in #, American silver flooded in, its price fell and prices soared (the Price Revolution) · In the #th–#th centuries, China's silver payments and taxes and the Manila trade create a separate demand for silver
+#년 유럽 정세	European Affairs, #
+에서 본 나라들 —	's view of the nations —
+@ 우호	@ Friendly
+@ 동맹	@ Allied
+@ 냉랭	@ Cool
+@ 중립	@ Neutral
+@ 전쟁	@ War
+전쟁: 그 나라 교역소가 문을 닫고 군함이 덤빈다(쳐도 악명이 오르지 않는다) · 냉랭: 교역 #% 손해 · 우호/동맹: 교역이 활발해 #%/#% 이득	War: that nation's trading posts close and its warships attack (fighting them raises no notoriety) · Cool: #% trade loss · Friendly/Allied: brisk trade, #%/#% gain
+지금 벌어진 전쟁	Wars Now Under Way
+— @ ⚔ @	— @ ⚔ @
+· @ ⚔ @	· @ ⚔ @
+(지중해의 패권 다툼)	(struggle for the Mediterranean)
+(마차시 왕의 빈 점령)	(King Matthias's occupation of Vienna)
+(십자군의 적)	(enemy of the crusade)
+(국경 전쟁)	(border war)
+쓰지 않음	Unused
+항해술	Navigation
+운용술	Seamanship
+요리	Cooking
+음악	Music
+포술	Gunnery
+사격술	Marksmanship
+의학	Medicine
+웅변	Eloquence
+측량	Surveying
+역사학	History
+회계	Accounting
+조선기술	Shipbuilding
+신학	Theology
+과학	Science
+그림	Painting
+세공	Craftsmanship
+검술	Swordplay
+무력 #	Strength #
+검술 #	Swordplay #
+공격 #	Attack #
+공격 #(+#)	Attack #(+#)
+방어 #	Defense #
+장기 @	Specialty: @
+# 베기	# Slash
+# 찌르기	# Thrust
+# 치기	# Strike
+# 결사돌진	# Reckless Charge
+# 강력공격	# Power Attack
+# 절대생포	# Capture at All Costs
+# 호신중시	# Guard First
+술꾼	Drunkard
+체# 지# 무# 매#	VIT# INT# STR# CHA#
+# 빈 선실 — 보직을 맡지 않은 부하가 한 명씩 머무는 방. 남은 부하부터 자동으로 배치하며, 빈자리가 없을 때만 대기로 둔다. 조선소에서 다른 방으로 고칠 수 있다.	# empty cabins — rooms where crew without a post stay, one each. Leftover crew are placed automatically, and kept on standby only when no room is free. You can convert them to other rooms at the shipyard.
+파수대 — 돛대 꼭대기의 망루. 측량사가 오르면 측량·역사학이 쓰이고 먼 곳의 발견물을 먼저 알아본다. 보는 특기: ★측량 · ☆역사학 (☆는 절반만 친다) 사람을 두면: 발견물을 알아보는 거리가 늘고, 지도 제작 속도 +#% × 방의 힘	Crow's nest — the lookout at the masthead. When the surveyor climbs up, Surveying and History are put to use and distant discoveries are spotted first. Skills used: ★Surveying · ☆History (☆ counts half) With someone posted: discoveries are spotted from farther away, and mapping speed +#% × room power
+갑판 — 갑판을 맡은 사람이 선원들을 부린다. 보는 특기: ★운용술 · ☆검술 (☆는 절반만 친다) 사람을 두면: 규율이 덜 떨어진다	Deck — whoever runs the deck works the crew. Skills used: ★Seamanship · ☆Swordplay (☆ counts half) With someone posted: discipline drops less
+조타실 — 항해사가 키를 잡는다. 항해술·운용술이 함대에 쓰인다. 보는 특기: ★항해술 · ☆운용술 (☆는 절반만 친다) 사람을 두면: 날마다 쌓이는 피로가 준다	Wheelhouse — the navigator takes the helm. Navigation and Seamanship are applied to the fleet. Skills used: ★Navigation · ☆Seamanship (☆ counts half) With someone posted: daily fatigue builds up less
+부관실 — 부관이 머문다. 전투·교섭·의술 같은 특기를 제독 대신 맡고, 부하들의 불만을 다독인다. 보는 특기: ★웅변 · ☆신학 (☆는 절반만 친다) 사람을 두면: 달마다 부하들의 충성이 조금 오른다	First Mate's Cabin — the first mate stays here, handling skills like combat, negotiation and medicine for the admiral and soothing the crew's grievances. Skills used: ★Eloquence · ☆Theology (☆ counts half) With someone posted: crew loyalty rises a little each month
+선실 수련 @ #일 · 다음 단계 #년 / ☆@ #일 · 다음 단계 #년 #일	Cabin training @ # days · next level # yrs / ☆@ # days · next level # yrs # days
+특기 @	Skills @
+능력 @	Stats @
+체력 # · 지력 # · 무력 # · 매력 #	Vitality # · Intelligence # · Strength # · Charm #
+(저장은 여관에서)	(Save at an inn)
+바다·육상 탐험 — 켜면 가려는 쪽을 한 번 누른 뒤로는 마우스를 옮기는 대로 방향을 틉니다 · 끄면 누른 곳까지 갑니다 · 수첩 옆 단추나 SHIFT로도 바꿉니다	Sea · land exploration — when on, after you click once toward your heading, the ship turns wherever you move the mouse · when off, it goes to where you click · also toggled with the button beside the notebook or SHIFT
+동료·선원 급료 한 달	One month's wages for mates and crew
+방을 누르면 사람을 둡니다 · 방을 고치는 일은 조선소에서. 부하를 끌어다 방에 놓아도 됩니다.	Click a room to post someone · rooms are rebuilt at the shipyard. You can also drag crew into a room.
+#/# · 함대가 쓰는 단계	#/# · level the fleet uses
+발견의 여파 · 흥분 — 피로 # · 규율 +#	Aftermath of discovery · excitement — fatigue # · discipline +#
+발견의 여파 · 흥분	Aftermath of discovery · excitement
+규율 +#	Discipline +#
+규율 −#	Discipline −#
+피로 #	Fatigue #
+속력은 그대로 — 젖은 채 일하니 피로가 쌓인다 (폭우면 앞이 안 보여 조금 느려진다) (하루 피로 +# · 속력 ×#)	Keep speed — working wet builds fatigue (in a downpour you can't see ahead, so it slows a little) (daily fatigue +# · speed ×#)
+비 오는 날을 쉬는 날로 — 피로가 풀리고 기강이 오른다, 대신 일손이 줄어 느려진다 (하루 피로 -# · 속력 ×#)	Make rainy days rest days — fatigue eases and discipline rises, but fewer hands make it slower (daily fatigue −# · speed ×#)
+물통을 채운다 — 젖은 갑판에서 일하니 피로가 조금 더 쌓인다 (하루 피로 +# · 속력 ×#)	Fill the water casks — working on a wet deck builds a bit more fatigue (daily fatigue +# · speed ×#)
+비 대책: 갑판 작업 계속	Rain plan: keep working the deck
+비 대책: 쉬는 날	Rain plan: rest day
+비 대책: 물통 채우기	Rain plan: fill water casks
+비 대책: @	Rain plan: @
+Encyclopedia of Discoveries — #종 수록	Encyclopedia of Discoveries — # entries
+@에 새 직조 조합이 들어서 실과 염료가 모자란다. @ 값이 오르고 있다.	A new weavers' guild has set up in @ and yarn and dye are short. Prices of @ are rising.
+@ #	@ #
+@ #(+#)	@ #(+#)
+☆@	☆@
+#년 #일	# yr # d
+#일	# d
+@ @ · 다음 단계 @	@ @ · next level @
+@ @ · 다 늘었다	@ @ · maxed out
+선실 수련 +#	Cabin training +#
+수련 @	Training @
+★ 선실에서 지내며 는 특기 · (본디 n) 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기	★ skill growing from cabin life · (originally n) skill used less now because of low loyalty or injury
+지력	Intelligence
+매력	Charm
+아프리카 #명	Africa #
+중근동 #명	Near East #
+인도 #명	India #
+동남아시아 #명	Southeast Asia #
+동아시아 #명	East Asia #
+아메리카 #명	Americas #
+유럽 #명	Europe #
+오세아니아 #명	Oceania #
+충성	Loyalty
+/ # 고름	/ # selected
+소문의 물고기: @ — 이 바다에 산다고 한다.	Rumored fish: @ — said to live in these waters.
+@의 계절풍	monsoon of @
+@ 계절풍 ~@	@ monsoon ~@
+가장 적게는 #번 · 처음부터 #번 남음	Fewest possible: # · # left from the start
+이 칸으로 굴리면 문장이 @을 향한다	Roll to this square and the crest faces @
+이 칸으로 굴리면 문장이 @를 향한다	Roll to this square and the crest faces @
+문장이 @ 면에 있다 (보이지 않는 면)	The crest is on face @ (a hidden face)
+@ 상인들	merchants from @
+맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 방마다 키우는 특기가 있어 그 방에서 #년·#년·#년을 지내면 한 단계씩 는다(#까지) · 그 방의 보조 특기(☆)도 #배 느리게 는다 — ★가 선실에서 는 특기, (본디 n)은 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기. 자리가 없는 부하는 달마다 충성이 떨어진다.	People in adjoining rooms pick up each other's languages faster, and after three months, nine months and two years together they learn the admiral's mother tongue one level at a time. Each room trains a skill: #, # and # years in that room each raise it one level (up to #) · the room's secondary skill (☆) also grows, # times slower — ★ marks a skill growing in the cabin, (originally n) a skill used less now because of low loyalty or injury. Crew without a post lose loyalty every month.
+#번 기둥	Peg #
+#번 기둥 · 도착	Peg # · goal
+제단 위의 보석 #개 가운데 하나만 조금 무겁다. 「천칭을 한 번만 써서 진짜 보석을 가려내라. 틀리면 문은 닫힌다.」	Of the # gems on the altar, just one is slightly heavier. "Find the true gem using the scales only once. Get it wrong and the door closes."
+제단 위의 보석 #개 가운데 하나만 조금 무겁다. 「천칭을 두 번만 써서 진짜 보석을 가려내라. 틀리면 문은 닫힌다.」	Of the # gems on the altar, just one is slightly heavier. "Find the true gem using the scales only twice. Get it wrong and the door closes."
+제단 위의 보석 #개 가운데 하나만 조금 무겁다. 「천칭을 세 번만 써서 진짜 보석을 가려내라. 틀리면 문은 닫힌다.」	Of the # gems on the altar, just one is slightly heavier. "Find the true gem using the scales only three times. Get it wrong and the door closes."
+@. 그 항구에서 산지가 아닌 물건은 값이 크게 뛰었다.	@. Goods not produced in that port have shot up in price.
+@ 앞바다에 해적이 들끓어 배가 드나들지 못한다. 바깥에서 들여오던 물건이 모두 귀하다	Pirates swarm the waters off @ and ships can't get in or out. Everything brought in from outside is scarce
+↑ 북쪽	↑ North
+↓ 남쪽	↓ South
+← 서쪽	← West
+→ 동쪽	→ East
+↑ 북	↑ N
+↓ 남	↓ S
+← 서	← W
+→ 동	→ E
+@, #되 / #되	@, # / # measures
+# / #되	# / # measures
+#되	# measures
+처음 #걸음	# steps to start
+처음 #걸음 · 가장 짧은 길 #걸음	# steps to start · shortest path # steps
+수수께끼 # / # · 맞힘 # · 틀림 #	Riddle # / # · right # · wrong #
+(곱하면 @, 더하면 @ — 그런 두 수를 찾으면 된다)	(their product is @ and their sum is @ — find two such numbers)
+오늘 남은 미끼 # / #	Bait left today # / #
+위 칸 @	top lane @
+가운데 칸 @	middle lane @
+아래 칸 @	bottom lane @
+언덕(적 쪽)	hill (enemy side)
+언덕(우리 쪽)	hill (our side)
+언덕 (적 쪽)	hill (enemy side)
+언덕 (우리 쪽)	hill (our side)
+더위	Heat
+적 편성은 아직 모른다 — 약 #명 (정찰하면 알 수 있다)	Enemy forces still unknown — about # (scout to find out)
+적 편성은 아직 모른다 — 약 #명	Enemy forces still unknown — about #
+적 편성은 아직 모른다 — 약 #마리 (정찰하면 알 수 있다)	Enemy forces still unknown — about # beasts (scout to find out)
+적 편성은 아직 모른다 — 약 #마리	Enemy forces still unknown — about # beasts
+적 부대 약 #	Enemy force about #
+★ 적 부대 약 #	★ Enemy force about #
+아군 #	Allies #
+적 약 #	Enemy about #
+땅을 누르면 그곳까지 걷습니다	Click the ground to walk there
+방향키로도 걷습니다	You can walk with the arrow keys too
+탐험 #일째	Exploring, day #
+@ · 출발 도시까지 #° · @ 근처 (성문 마구간: @)	@ · #° to the starting city · near @ (gate stables: @)
+@ · 출발 도시까지 #° · @ 근처	@ · #° to the starting city · near @
+@ · 출발 도시까지 #°	@ · #° to the starting city
+산 · @	Mountains · @
+산 · 출발 도시까지 #° · @ 근처 (성문 마구간: @)	Mountains · #° to the starting city · near @ (gate stables: @)
+산 · 출발 도시까지 #° · @ 근처	Mountains · #° to the starting city · near @
+산 · 출발 도시까지 #°	Mountains · #° to the starting city

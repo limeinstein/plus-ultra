@@ -14,9 +14,9 @@ const OUT = process.env.OUT;
   const errors = [];
   try {
     const page = await browser.newPage({ viewport: { width: 1100, height: 800 } });
-    await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({contentType:'text/css',body:''}));
     page.on('pageerror', e => errors.push(e.message));
-    page.on('console', m => { if (m.type() === 'error' && !/ERR_FAILED|fonts\.(googleapis|gstatic)/.test(m.text())) errors.push(m.text()); });
+    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     await page.addInitScript(() => {
       window.__duelFrames = [];
       const draw = CanvasRenderingContext2D.prototype.drawImage;
@@ -35,7 +35,7 @@ const OUT = process.env.OUT;
         return draw.call(this, im, ...args);
       };
     });
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
+    await page.goto(((process.env.WEB_BASE && new URL('index.html', process.env.WEB_BASE).href) || pathToFileURL(path.join(ROOT, 'index.html')).href), { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     await page.evaluate(() => {
       G.State.newGame({ name: '모션 시험', nation: 'PT', job: 'explorer', age: 18,
@@ -46,6 +46,19 @@ const OUT = process.env.OUT;
         { sprite: 'aramis', place: 'deck', fastEnd: true });
     });
     await page.waitForFunction(() => { const d = G.Games._duelDebug; return d && [d.me, d.en].every(f => f.spriteImg && f.atkSheet && f.reactSheet); });
+    await page.setViewportSize({ width: 800, height: 450 });
+    await page.evaluate(() => G.UI.toast('일기토 조작 확인', 'info', 3000));
+    await page.waitForFunction(() => {
+      const stage = document.querySelector('.rd-stage canvas').getBoundingClientRect();
+      const buttons = document.querySelectorAll('.rd-stance button, .rd-ctrl button:not(.disabled)');
+      return stage.height > 100 && Math.abs(stage.width / stage.height - 1060 / 380) < 0.04 &&
+        Array.from(buttons).every(b => {
+          const r = b.getBoundingClientRect();
+          return r.top >= 0 && r.bottom <= innerHeight && r.left >= 0 && r.right <= innerWidth &&
+            b.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2));
+        });
+    });
+    await page.setViewportSize({ width: 1100, height: 800 });
     await page.evaluate(() => {
       G.Games._duelDebug.choose('allout');
       document.querySelector('.rd-sys .btn').click(); // 방침 화면을 닫고 자동 합만 멈춘다.
@@ -62,6 +75,12 @@ const OUT = process.env.OUT;
       await page.waitForFunction(target => {
         const f = G.Games._duelDebug[target]; return f.hp < f.maxHp;
       }, target);
+      const hp = await page.evaluate(target => {
+        const f = G.Games._duelDebug[target], bar = document.querySelector('.rd-side.' + target + ' .hp');
+        return { actual: f.hp, max: f.maxHp, text: bar.innerText, width: parseFloat(bar.querySelector('i').style.width) };
+      }, target);
+      assert(hp.text.includes(hp.actual + ' / ' + hp.max) && Math.abs(hp.width - hp.actual / hp.max * 100) < 0.01,
+        '피격과 동시에 체력 숫자와 막대를 갱신');
       await page.waitForFunction(target => G.Games._duelDebug[target].pose === 'idle', target);
       const frames = await page.evaluate(id => window.__duelFrames.filter(f => f.id === id && f.pose === 'hit'), id);
       assert(frames.length && frames.every(f => f.r === 3 && f.c === 0), id + ': 일반 피격에 무릎·쓰러짐 그림이 나오지 않음');
@@ -144,6 +163,7 @@ const OUT = process.env.OUT;
       await page.locator('.rd-stage').screenshot({ path: path.join(OUT, 'defeat-' + name + '.png') });
     }
     // 실제 승패 처리도 같은 동작을 이어 쓰고, fastEnd에서도 착지하기 전 닫히지 않는다.
+    const lastRound = await page.locator('.rd-round').innerText();
     await page.evaluate(() => {
       const d = G.Games._duelDebug;
       d.fast = false;
@@ -153,6 +173,7 @@ const OUT = process.env.OUT;
       window.__finish = d.use('secret');
     });
     await page.waitForFunction(() => G.Games._duelDebug.over);
+    assert.strictEqual(await page.locator('.rd-round').innerText(), lastRound, '승리 화면에 마지막 합 번호 유지');
     const finishing = await page.evaluate(() => ({ pt: G.Games._duelDebug.en.pt, dur: G.Games._duelDebug.en.poseDur,
       left: G.Games._duelDebug.en.poseT, visible: !!document.querySelector('.rduel') }));
     assert(finishing.visible && finishing.left > 0 && finishing.pt > 0 && finishing.dur === 1.26, '승패 처리에서 마지막 일격의 동작을 처음부터 다시 시작하지 않음');
@@ -178,6 +199,8 @@ const OUT = process.env.OUT;
     });
     await page.waitForFunction(() => G.Games._duelDebug.me.hp === 0);
     assert(await page.locator('.rduel').count(), '패배: 마지막 일격을 맞은 뒤 화면 유지');
+    await page.waitForFunction(() => G.Games._duelDebug.over);
+    assert.strictEqual(await page.locator('.rd-round').innerText(), '제 1 합', '첫 합 패배에서 둘째 합으로 넘어가지 않음');
     assert.strictEqual(await page.evaluate(() => window.__lossResult), 'lose');
     const loss = await page.evaluate(() => ({ pose: G.Games._duelDebug.me.pose, pt: G.Games._duelDebug.me.pt,
       duration: G.Games._duelDebug.me.poseDur }));

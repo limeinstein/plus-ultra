@@ -1,0 +1,99 @@
+일시정지	Tạm dừng
+재개	Tiếp tục
+백병전	Giáp lá cà
+포격 정지	Ngừng bắn
+포격 재개	Bắn tiếp
+퇴각	Rút lui
+교전 보기	Nhìn giao chiến
+기함 보기	Nhìn kỳ hạm
+전장 전체	Toàn chiến trường
+아군 함대	Hạm đội ta
+적 함대	Hạm đội địch
+— 1번 기함을 무찌르면 승리	— đánh bại kỳ hạm số 1 là thắng
+해상 괴물	Quái vật biển
+— 잠수 중 공격 불가	— không đánh được khi nó đang lặn
+괴물	Quái vật
+처치	Đã hạ
+해적선 #호	Tàu hải tặc số #
+왜구선 #호	Tàu Oa khấu số #
+상선 #호	Thương thuyền số #
+@ 군함 #호	Chiến hạm @ số #
+군함 #호	Chiến hạm số #
+@호	@
+침몰	Chìm
+이탈	Thoát ly
+나포	Bắt được
+달아남	Bỏ chạy
+상실	Mất
+빼앗김	Bị cướp
+빼앗김 — 이기면 되찾는다	Bị cướp — thắng thì lấy lại
+기함	Kỳ hạm
+선원 #	Thủy thủ #
+내구 # / #	Độ bền # / #
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · B: 백병전 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Mũi tên: lái kỳ hạm · Space: dừng kỳ hạm · Nhấp: di chuyển · Nhấp tàu địch: tấn công · B: giáp lá cà · F: bật/tắt pháo ta · P: tạm dừng · Con lăn: phóng to · +/−: tốc độ · 1~7: lệnh hạm đội · Tab: chọn tàu
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · 괴물에게 백병전·일기토 불가 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Mũi tên: lái kỳ hạm · Space: dừng kỳ hạm · Nhấp: di chuyển · Nhấp tàu địch: tấn công · không giáp lá cà·đấu tay đôi với quái vật · F: bật/tắt pháo ta · P: tạm dừng · Con lăn: phóng to · +/−: tốc độ · 1~7: lệnh hạm đội · Tab: chọn tàu
+섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.	Không thể đi xuyên đảo hay bờ biển, cũng không thể rút lui về phía bị chắn.
+함대 명령	Lệnh hạm đội
+— 기함 전술 (함께 싸울 배 없음)	— chiến thuật kỳ hạm (không có tàu cùng chiến đấu)
+— 기함을 뺀 배 모두	— mọi tàu trừ kỳ hạm
+직접 조종	Tự lái
+기함 추종	Theo kỳ hạm
+학익진	Hạc dực trận
+일제 공격	Tập trung hỏa lực
+포격전	Đấu pháo
+기함 호위	Hộ vệ kỳ hạm
+자유 공격	Tự do tấn công
+물러나기	Lui ra
+돌격	Xung phong
+포격 중심	Ưu tiên pháo
+자동 교전	Tự động giao chiến
+노림	Nhắm
+자리 지킴	Giữ vị trí
+기함 혼자: 3 돌격 · 4 포격 중심 · 6 자동 교전 — 방향키·클릭으로 직접 몰면 풀립니다. 학익진·호위는 배가 2척 이상일 때.	Kỳ hạm một mình: 3 Xung phong · 4 Ưu tiên pháo · 6 Tự động giao chiến — tự lái bằng mũi tên·nhấp chuột thì lệnh bị hủy. Hạc dực trận·hộ vệ cần từ 2 tàu trở lên.
+배를 고르면(줄·지도에서 클릭·Tab) 그 배에게만 — 적함 클릭: 노림 · 바다 클릭: 자리 지킴 · Esc: 풀기	Chọn tàu (nhấp vào dòng·trên bản đồ hoặc Tab) thì chỉ ra lệnh cho tàu ấy — nhấp tàu địch: nhắm · nhấp vào biển: giữ vị trí · Esc: bỏ chọn
+함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Phải có tàu cùng chiến đấu (hạm đội từ 2 tàu trở lên).
+학익진은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Hạc dực trận cần có tàu cùng chiến đấu (hạm đội từ 2 tàu trở lên).
+기함 호위은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Hộ vệ kỳ hạm cần có tàu cùng chiến đấu (hạm đội từ 2 tàu trở lên).
+직접 조종: 방향키·클릭으로 기함을 몹니다.	Tự lái: điều khiển kỳ hạm bằng mũi tên và nhấp chuột.
+함대 퇴각	Hạm đội rút lui
+기함 뒤로 줄지어 따라가며 기함이 노리는 적을 함께 쏜다.	Xếp hàng sau kỳ hạm và cùng bắn vào mục tiêu kỳ hạm nhắm.
+학이 날개를 펴듯 기함을 가운데 두고 양옆으로 벌려 적을 반원으로 감싼다. 여러 방향에서 쏘면 포격이 더 아프다.	Dàn ra hai bên kỳ hạm như cánh hạc dang rộng, bao địch thành nửa vòng tròn. Bắn từ nhiều hướng thì pháo đau hơn.
+모두 한 적에게 바짝 붙어 한꺼번에 쏜다(일제 사격). 선원이 넉넉하면 올라탄다.	Tất cả áp sát một tàu địch và bắn cùng lúc (bắn loạt). Thủy thủ dư dả thì nhảy sang.
+사정거리 끝에서 포로만 싸운다. 적이 다가오면 물러나 백병전을 피한다.	Chỉ đánh bằng pháo ở rìa tầm bắn. Địch tiến lại thì lùi ra để tránh giáp lá cà.
+기함 곁을 둘러싸고, 기함에 다가오는 적부터 쏜다.	Vây quanh kỳ hạm, bắn trước những tàu địch đang áp sát kỳ hạm.
+배마다 가장 가까운 적과 알아서 싸운다.	Mỗi tàu tự đánh với tàu địch gần nhất.
+그 배만 적에게서 먼 쪽으로 전장을 벗어난다 (배는 잃지 않는다).	Riêng tàu ấy rời chiến trường về phía xa địch (không bị mất tàu).
+@ — @	@ — @
+전장 해도	Hải đồ chiến trường
+클릭: 그곳 보기	Nhấp: xem chỗ đó
+적함 #척 · 화면 밖 #척	Tàu địch # · ngoài màn hình #
+기함 포격	Pháo kỳ hạm
+좌현	Mạn trái
+우현	Mạn phải
+선수	Mũi tàu
+장전 #% · #초	Nạp đạn #% · # giây
+장전 완료	Đã nạp xong
+발사 준비	Sẵn sàng bắn
+해전	Hải chiến
+아군 #척 · 선원 #	Ta # tàu · thủy thủ #
+적 #척 · 선원 #	Địch # tàu · thủy thủ #
+@풍 · 연안 전장	Gió @ · chiến trường ven bờ
+@풍 · 격랑 해역	Gió @ · vùng biển sóng dữ
+@풍 · @	Gió @ · @
+@풍	Gió @
+적 기함(1번 · @)을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.	Đánh chìm hoặc bắt được kỳ hạm địch (số 1 · @) là thắng. Mất kỳ hạm ta (số 1) là thua.
+해전 승리	Thắng trận trên biển
+승리했다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	Thắng rồi! Thu được # đồng vàng chiến lợi phẩm. (Danh tiếng +#)
+적 기함을 무찔러 이겼다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	Đánh bại kỳ hạm địch, thắng rồi! Thu được # đồng vàng chiến lợi phẩm. (Danh tiếng +#)
+남은 적 배는 흩어져 달아났다.	Các tàu địch còn lại tản ra bỏ chạy.
+아군 포격 정지 — 적함을 누른 뒤 B로 백병전을 걸 수 있습니다. 적은 계속 포격합니다.	Pháo ta ngừng bắn — nhấp vào tàu địch rồi bấm B để giáp lá cà. Địch vẫn tiếp tục bắn.
+아군 포격을 재개합니다.	Pháo ta bắn trở lại.
+아군 함대 전체의 포격 켬/끔 (F). 적의 포격과 이미 발사된 포탄은 유지됩니다. B: 백병전 접근	Bật/tắt pháo của cả hạm đội ta (F). Pháo địch và đạn đã bắn ra không bị ảnh hưởng. B: áp sát giáp lá cà
+기함이 멈춰 있습니다. 방향키로 몰거나 바다·적함을 클릭하십시오.	Kỳ hạm đang đứng yên. Lái bằng mũi tên hoặc nhấp vào biển hay tàu địch.
+퇴각! 전장 가장자리로 벗어나십시오.	Rút lui! Hãy thoát ra mép chiến trường.
+해상 괴물에게는 백병전·나포·일기토를 할 수 없습니다.	Không thể giáp lá cà, bắt giữ hay đấu tay đôi với quái vật biển.
+아군과 적 함대가 함께 보이도록 배율을 맞춥니다.	Chỉnh tỉ lệ để thấy cả hai hạm đội.
+전장 해도: 파란 점은 아군, 붉은 점은 적군. 클릭하면 해당 위치를 살핍니다.	Hải đồ chiến trường: chấm xanh là quân ta, chấm đỏ là quân địch. Nhấp để xem vị trí ấy.
+부채꼴은 사거리와 사격 방향, 차오르는 면과 호는 장전 진행도입니다. 점선 원은 약한 근접·추격 사격 범위입니다.	Hình quạt là tầm bắn và hướng bắn, phần tô dần và cung tròn là tiến độ nạp đạn. Vòng tròn chấm là tầm bắn yếu khi cận chiến và truy kích.
+해전 배속 ×# (키 + / −)	Tốc độ hải chiến ×# (phím + / −)
+#번 @(을|를) 골랐다. 적함 클릭 = 노림 · 바다 클릭 = 자리 지킴 · 1~7 = 이 배에만 명령 · Esc = 풀기	Đã chọn số {1} @. Nhấp tàu địch = nhắm · nhấp vào biển = giữ vị trí · 1~7 = ra lệnh riêng tàu này · Esc = bỏ chọn

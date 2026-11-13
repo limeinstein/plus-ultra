@@ -592,7 +592,7 @@
 자네 경리 말이 옳군. 기간을 #년으로 늘리지. 선금은 조금만 줄여 #닢일세.	Your purser has a point. I'll extend the term to {1} years. The advance comes down a little, to {2} gold.
 그것도 그렇군. 기간을 #년으로 늘리지. 대신 돈은 전부 #닢이 되겠군.	That's fair too. I'll extend the term to {1} years. Then the money comes to {2} gold in all.
 배도 한 척 내주려 했는데, 자네 함대는 이미 꽉 찼군.	I meant to lend you a ship as well, but your fleet's already full.
-먼 길이니 배도 한 척 필요하겠지. 원정이 끝나면 돌려준다는 조건으로 우리 @(을|를) 빌려주겠네. 선원은 자네가 채우게.	It's a long journey, so you'll need a ship too. I'll lend you our {1} on condition you return it when the expedition's over. You'll have to find the crew yourself.
+먼 길이니 배도 한 척 필요하겠지. 원정이 끝나면 돌려준다는 조건으로 우리 @(을|를) 빌려주겠네. 선원은 자네가 채우게.	It's a long journey, so you'll need a ship too. I'll lend you our {1:lc} on condition you return it when the expedition's over. You'll have to find the crew yourself.
 그러면, 기대하고 있겠네. 훌륭히 성공을 거두고 돌아오게.	Then I'll look forward to it. Come back having succeeded splendidly.
 긴 여행이 되리라 생각되는데 조심하게. 여행의 성공을 기도하고 있겠네.	It'll be a long journey, I imagine — take care. I'll be praying for its success.
 흐음, 보여 줄 것이 없다면 다음에 오게.	Hmm, if you've nothing to show me, come back another time.
@@ -736,7 +736,7 @@
 그대 경리의 말이 옳구려. 기한을 #년으로 늘리겠소. 선금은 조금 줄여 #닢이오.	Your purser speaks rightly. We shall extend the term to {1} years. The advance comes down a little, to {2} gold.
 그도 그렇구려. 기한을 #년으로 늘리겠소. 대신 선금은 모두 #닢이오.	That is fair. We shall extend the term to {1} years. In return, the advance totals {2} gold.
 배도 한 척 내주려 했건만, 그대의 함대가 이미 꽉 찼구려.	We meant to grant you a ship as well, but your fleet is already full.
-먼 길이니 배도 필요하겠지. 원정을 마치면 돌려준다는 조건으로 왕실의 @(을|를) 내주겠소. 선원은 그대가 채우시오.	It is a long voyage, so you will need a ship. We shall grant you the royal {1}, on condition you return it when the expedition ends. You must crew it yourself.
+먼 길이니 배도 필요하겠지. 원정을 마치면 돌려준다는 조건으로 왕실의 @(을|를) 내주겠소. 선원은 그대가 채우시오.	It is a long voyage, so you will need a ship. We shall grant you the royal {1:lc}, on condition you return it when the expedition ends. You must crew it yourself.
 그럼 기대하겠소. 왕실의 이름에 걸맞은 성과를 가지고 돌아오시오.	Then We shall look forward to it. Return with results worthy of the royal name.
 먼 길이 될 터이니 몸조심하시오. (짐|과인)이 그대의 항해를 위해 기도하겠소.	It will be a long journey — take care. We shall pray for your voyage.
 보여 줄 것이 없다면 다음에 오시오.	If you have nothing to show, come another time.
@@ -883,7 +883,7 @@
 경리의 말이 옳네요. 기한을 #년으로 늘려 드릴게요. 선금은 조금 줄여 #닢이에요.	Your purser is right. I'll extend the term to {1} years. The advance comes down a little, to {2} gold.
 그도 그렇네요. 기한을 #년으로 늘려 드릴게요. 대신 선금은 모두 #닢이에요.	That's fair too. I'll extend the term to {1} years. But the advance comes to {2} gold in all.
 배도 한 척 내드리려 했는데, 함대가 벌써 꽉 찼네요.	I meant to lend you a ship as well, but your fleet's already full.
-먼 길이니 배도 필요하겠지요. 원정을 마치면 돌려준다는 조건으로 우리 @(을|를) 빌려 드릴게요. 선원은 직접 채우세요.	It's a long journey, so you'll need a ship too. I'll lend you our {1} on condition you return it when the expedition's over. Please find the crew yourself.
+먼 길이니 배도 필요하겠지요. 원정을 마치면 돌려준다는 조건으로 우리 @(을|를) 빌려 드릴게요. 선원은 직접 채우세요.	It's a long journey, so you'll need a ship too. I'll lend you our {1:lc} on condition you return it when the expedition's over. Please find the crew yourself.
 그럼 기대할게요. 무사히, 좋은 소식과 함께 돌아오세요.	Then I'll look forward to it. Come back safely, with good news.
 긴 여행이 되겠지요. 부디 몸조심하세요. 항해가 무사하기를 기도할게요.	It'll be a long journey. Please take care. I'll pray for a safe voyage.
 보여 주실 것이 없다면 다음에 오세요.	If you have nothing to show me, please come another time.
@@ -1027,7 +1027,7 @@
 나리 경리 말이 맞습니다. 기한을 #년으로 늘리지요. 선금은 조금 줄여 #닢입니다.	Your purser's right, sir. I'll extend the term to {1} years. The advance comes down a little, to {2} gold.
 그도 그렇군요. 기한을 #년으로 늘리지요. 대신 선금은 모두 #닢입니다.	That's fair too. I'll extend the term to {1} years. But the advance comes to {2} gold in all.
 배도 한 척 내드리려 했는데, 함대에 자리가 없군요.	I meant to provide a ship as well, but there's no room in your fleet.
-먼 길이니 배도 필요하시겠지요. 원정이 끝나면 돌려주신다는 조건으로 우리 상회 @(을|를) 빌려 드리지요. 선원은 나리가 채우십시오.	It's a long journey, so you'll need a ship too. I'll lend you our firm's {1} on condition you return it when the expedition's over. You'll have to crew it yourself, sir.
+먼 길이니 배도 필요하시겠지요. 원정이 끝나면 돌려주신다는 조건으로 우리 상회 @(을|를) 빌려 드리지요. 선원은 나리가 채우십시오.	It's a long journey, so you'll need a ship too. I'll lend you our firm's {1:lc} on condition you return it when the expedition's over. You'll have to crew it yourself, sir.
 계약 성립입니다. 좋은 소식과 함께 돌아오십시오. 제 돈도 함께 가는 거니까요.	Contract concluded. Come back with good news — my money's sailing with you, after all.
 먼 길입니다, 몸조심하십시오. 무사히 돌아오셔야 셈이 끝납니다.	It's a long journey — take care. The account isn't closed until you're back safe.
 보여 주실 것이 없으면 다음에 오시지요.	If you've nothing to show me, come another time.
@@ -1169,7 +1169,7 @@
 그대 경리의 셈이 옳구려. 기한을 #년으로 늘리겠소. 선금은 그대로 두지요.	Your purser's arithmetic is correct. I'll extend the term to {1} years. The advance stays as it is.
 그대 경리의 셈이 옳구려. 기한을 #년으로 늘리겠소. 선금은 조금 줄여 #닢이오.	Your purser's arithmetic is correct. I'll extend the term to {1} years. The advance comes down a little, to {2} gold.
 배도 한 척 내주려 했는데, 그대 함대는 이미 꽉 찼구려.	I meant to lend you a ship as well, but your fleet's already full.
-먼 길이니 배도 필요하겠지요. 원정을 마치면 돌려준다는 조건으로 우리 @(을|를) 빌려주겠소. 선원은 그대가 채우시오.	It's a long journey, so you'll need a ship too. I'll lend you our {1} on condition you return it when the expedition's over. You'll have to crew it yourself.
+먼 길이니 배도 필요하겠지요. 원정을 마치면 돌려준다는 조건으로 우리 @(을|를) 빌려주겠소. 선원은 그대가 채우시오.	It's a long journey, so you'll need a ship too. I'll lend you our {1:lc} on condition you return it when the expedition's over. You'll have to crew it yourself.
 그럼 기대하겠소. 본 것은 빠짐없이 적어 오시오.	Then I'll look forward to it. Write down everything you see.
 긴 여행이 되겠구려. 몸조심하시오. 그대의 관측이 세상을 바꿀지도 모르오.	It'll be a long journey. Take care. Your observations may change the world.
 @ 올해는 이미 여러 번 사례했으니 이번에는 조금 줄이겠소.	@ I've already rewarded you several times this year, so I'll give a little less this time.
@@ -1290,7 +1290,7 @@
 셈이 꼼꼼하구려. 좋소, 선금을 #닢으로 올리겠소. 기한은 그대로 #년이오.	You're careful with your sums. Very well, I'll raise the advance to {1} gold. The term stays at {2} years.
 돈을 더 달라고요? ...좋소. 대신 기한은 #년으로 줄이겠소.	You want more money? ...Very well. But I'll shorten the term to {1} years.
 그대 경리의 말이 옳구려. 기한을 #년으로 늘리겠소. 선금은 그대로 두지요.	Your purser speaks rightly. I'll extend the term to {1} years. The advance stays as it is.
-먼 길이니 배도 필요하겠지요. 원정을 마치면 돌려준다는 조건으로 교회의 @(을|를) 빌려주겠소. 선원은 그대가 채우시오.	It's a long journey, so you'll need a ship too. I'll lend you the church's {1} on condition you return it when the expedition's over. You must crew it yourself.
+먼 길이니 배도 필요하겠지요. 원정을 마치면 돌려준다는 조건으로 교회의 @(을|를) 빌려주겠소. 선원은 그대가 채우시오.	It's a long journey, so you'll need a ship too. I'll lend you the church's {1:lc} on condition you return it when the expedition's over. You must crew it yourself.
 주님께서 그대의 돛에 순풍을 주시기를. 무사히 돌아오시오.	May the Lord send fair winds to your sails. Come back safely.
 긴 여행이 되겠구려. 그대와 선원들을 위해 날마다 기도하겠소.	It'll be a long journey. I'll pray for you and your crew every day.
 그대가 먼저 찾았다니 놀랍구려. 하지만 @(이|가) 이미 알렸으니 세상의 인정도, 내 사례도 절반이오. @	I'm amazed you found it first. But {1} has already announced it, so the world's recognition and my reward are both halved. {2}
@@ -1405,7 +1405,7 @@
 제독 경리의 말이 맞습니다. 기한을 #년으로 연장하겠습니다. 선금은 조정해 #닢입니다.	Your purser is correct, Admiral. I'll extend the term to {1} years. The advance is adjusted to {2} gold.
 그도 그렇군요. 기한을 #년으로 연장하겠습니다. 대신 선금은 모두 #닢입니다.	That's fair. I'll extend the term to {1} years. But the advance totals {2} gold.
 배도 한 척 배정하려 했는데, 제독 함대가 이미 꽉 찼군요.	I meant to assign you a ship as well, but your fleet's already full, Admiral.
-먼 길이니 배도 필요하시겠지요. 원정을 마치면 반납하는 조건으로 관청 소속 @(을|를) 대여하겠습니다. 선원은 제독이 채우십시오.	It's a long journey, so you'll need a ship too. I'll lend you the office's {1} on condition it's returned when the expedition ends. You'll crew it yourself, Admiral.
+먼 길이니 배도 필요하시겠지요. 원정을 마치면 반납하는 조건으로 관청 소속 @(을|를) 대여하겠습니다. 선원은 제독이 채우십시오.	It's a long journey, so you'll need a ship too. I'll lend you the office's {1:lc} on condition it's returned when the expedition ends. You'll crew it yourself, Admiral.
 계약이 성립했습니다. 기한을 지켜 성과를 보고하십시오.	The contract is concluded. Keep to the deadline and report your results.
 먼 길입니다. 무사히 돌아와 보고서를 올려 주십시오.	It's a long journey. Come back safely and file your report.
 내놓으실 것이 없다면 다음에 오십시오.	If you've nothing to present, come another time.
