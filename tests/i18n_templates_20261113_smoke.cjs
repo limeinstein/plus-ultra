@@ -24,7 +24,7 @@ const ROOT=path.resolve(__dirname,'..');
    eq(I.tr('검증 항해 새말',true),'Updated voyage','성공 캐시 무효화');
    I.set('zh-Hans');I.add('zh-Hans',{text:{'검증 항해 새말':'验证航海'},pat:[['^검증 (\\d+)세$','⟪C$1⟫世']]});
    for(const [n,t] of [[0,'〇'],[1,'一'],[10,'十'],[11,'十一'],[20,'二十'],[99,'九十九'],[100,'100']])eq(I.tr('검증 '+n+'세',true),t+'世','한자 숫자 '+n);
-   eq(I.tr('검증 항해 새말',true),'验证航海','언어별 캐시');eq(I.ready('zh-Hans'),false,'준비 상태 유지');
+   eq(I.tr('검증 항해 새말',true),'验证航海','언어별 캐시');eq(I.ready('zh-Hans'),true,'사전 갱신 뒤 공개 상태 유지');
    I.set('en');eq(I.tr('검증 항해 새말',true),'Updated voyage','영어 복귀');
    const box=document.createElement('div');box.innerHTML='<input value="검증 다음 줄" placeholder="검증 다음 줄" title="검증 항해 새말"><textarea placeholder="검증 다음 줄">검증 다음 줄</textarea><span translate="no" title="검증 다음 줄">검증 다음 줄</span>';
    document.body.append(box);I.sweep(box);

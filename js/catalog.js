@@ -10,13 +10,14 @@
   const num = n => Number(n).toLocaleString('ko-KR');
   // 다른 언어: 여러 조각을 이어 붙인 글은 조각마다 사전에서 찾아 잇는다 (통째로는 사전에 없다) — 2026-11-12 영어 ⑤
   const KO = !G.I18N || G.I18N.isKo();
+  const ENGLISH = G.I18N && G.I18N.lang === 'en';
   const TR = s => { if (KO || !s) return s; const e = G.I18N.tr(String(s), true); return e != null ? e : s; };
   const NM = s => KO ? s : G.N(s);
   const PRIMARY = ['people', 'events', 'achievements', 'discoveries', 'foods', 'instruments', 'weapons'];
   const params = new URLSearchParams(location.search);
   const PLAYER = params.get('view') !== 'assets' && (params.get('view') === 'player' || !location.hash || PRIMARY.includes(location.hash.slice(1)));
   document.body.classList.toggle('player-catalog', PLAYER);
-  if (G.I18N && G.I18N.lang !== 'ko') document.title = 'Loop of Good Hope Codex';
+  if (!KO) document.title = 'Loop of Good Hope ' + (ENGLISH ? 'Codex' : TR('도감'));
   const from = params.get('from');
   if (['index.html', 'game.html', 'Loop_of_Good_Hope.html'].includes(from)) $('#titleReturn').setAttribute('href', from);
   $('#helpBtn').hidden = PLAYER;
@@ -197,10 +198,10 @@
       meta: skillTxt(m.sk), key: 'portraits/mates/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', extra: m.desc, half: I.chain.mateHalf(m.id),
       pic: () => portrait(spec),
       detail: () => ({
-        text: TR(m.desc) + (G.BIOS && G.BIOS[m.name] ? (KO ? ' 〔인물 이야기〕 ' : ' [Their story] ') + TR(G.BIOS[m.name]) : ''),
+        text: TR(m.desc) + (G.BIOS && G.BIOS[m.name] ? (ENGLISH ? ' [Their story] ' : ' ' + TR('〔인물 이야기〕') + ' ') + TR(G.BIOS[m.name]) : ''),
         facts: [
           ['능력치', G.STATS.map((s, i) => s.name + ' ' + m.st[i]).join(' · ')], ['특기', skillTxt(m.sk)], ['어학', langTxt(m.lg)],
-          ['만나는 곳', m.eventOnly ? '관련 이야기의 진행을 통해 합류' : (G.MATE_RANGE && G.MATE_RANGE[m.id] ? (KO ? G.MATE_RANGE[m.id].zones.map(z => G.MATE_ZONES[z].name).join('·') + ' 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: ' + G.CITY_DATA[G.MATE_RANGE[m.id].home].name + ')' : 'Taverns and inns in ' + G.MATE_RANGE[m.id].zones.map(z => TR(G.MATE_ZONES[z].name)).join(' · ') + ' cities — moves to a neighboring city or stays once a month (starts in ' + G.cityName(G.MATE_RANGE[m.id].home) + ')') : m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집')],
+          ['만나는 곳', m.eventOnly ? '관련 이야기의 진행을 통해 합류' : (G.MATE_RANGE && G.MATE_RANGE[m.id] ? (!ENGLISH ? G.MATE_RANGE[m.id].zones.map(z => G.MATE_ZONES[z].name).join('·') + ' 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: ' + G.CITY_DATA[G.MATE_RANGE[m.id].home].name + ')' : 'Taverns and inns in ' + G.MATE_RANGE[m.id].zones.map(z => TR(G.MATE_ZONES[z].name)).join(' · ') + ' cities — moves to a neighboring city or stays once a month (starts in ' + G.cityName(G.MATE_RANGE[m.id].home) + ')') : m.reg.map(r => G.REGIONS[r]).join(', ') + '의 술집')],
           ['만날 수 있는 때', period + (m.after ? (nm => ' · ' + nm + G.U.jx(nm, '이/가') + ' 알려진 뒤')(m.after.map(id => G.DISC[id] ? G.DISC[id].name : id).join('·')) : '')],
           ['필요한 명성', m.eventOnly ? '이야기의 합류 조건에 따름' : num(m.fame)], ['월급', num(m.wage) + '닢']
         ],
@@ -213,10 +214,10 @@
     const spec0 = A.sponsorSpec(sp, 0);
     add(tPeople, {
       group: 'sponsor', portrait: true, name: sp.title, sub: '후원자 · ' + c.name + ' · ' + G.SPONSOR_TYPE[sp.type],
-      meta: (hs => hs.slice(0, 6).map(h => KO ? h[2] : TR(h[2])).join(' → ') + (hs.length > 6 ? (KO ? ' → … (' + hs.length + '대)' : ' → … (' + hs.length + ' holders)') : ''))(sp.holders.filter(h => h[4] !== 'g')), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: A.portraitKeys(spec0), ar: '1 / 1', half: I.chain.matchedHalf(A.portraitKeys(spec0)),
+      meta: (hs => hs.slice(0, 6).map(h => KO ? h[2] : TR(h[2])).join(' → ') + (hs.length > 6 ? (!ENGLISH ? ' → … (' + hs.length + '대)' : ' → … (' + hs.length + ' holders)') : ''))(sp.holders.filter(h => h[4] !== 'g')), key: 'portraits/sponsors/' + sp.id, kind: 'png', chain: A.portraitKeys(spec0), ar: '1 / 1', half: I.chain.matchedHalf(A.portraitKeys(spec0)),
       pic: () => portrait(spec0),
       detail: () => ({
-        text: (bs => bs.length ? (KO ? '인물 이야기 — ' : 'Their stories — ') + bs.join(' / ') : '')(sp.holders.filter(h => h[4] !== 'g').map(h => {
+        text: (bs => bs.length ? (ENGLISH ? 'Their stories — ' : TR('인물 이야기 —') + ' ') + bs.join(' / ') : '')(sp.holders.filter(h => h[4] !== 'g').map(h => {
           const k = G.BIOS && (G.BIOS[h[2]] ? h[2] : Object.keys(G.BIOS).filter(x => x.length >= 3 && h[2].indexOf(x) >= 0).sort((a, b) => b.length - a.length)[0]);
           return k ? (KO ? h[2] : TR(h[2])) + ': ' + TR(G.BIOS[k]) : null;
         }).filter(Boolean)),
@@ -284,7 +285,7 @@
       meta: ds.map(d => d.name + ' ' + d.rival[0] + '년').join(', '), key: 'portraits/rivals/' + nm, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', half: I.chain.rivalHalf(nm).concat(I.chain.halfFor(A.portraitKeys(spec))),
       pic: () => portrait(spec),
       detail: () => ({
-        text: (G.BIOS && G.BIOS[nm] ? TR(G.BIOS[nm]) + (KO ? ' 〔게임에서〕 ' : ' [In the game] ') : '') + TR('정해진 때가 되면 아래 발견을 먼저 발표합니다. 술집에서 만나 일기토로 이기면 발표를 1~2년 늦출 수 있습니다.'),
+        text: (G.BIOS && G.BIOS[nm] ? TR(G.BIOS[nm]) + (ENGLISH ? ' [In the game] ' : ' ' + TR('〔게임에서〕') + ' ') : '') + TR('정해진 때가 되면 아래 발견을 먼저 발표합니다. 술집에서 만나 일기토로 이기면 발표를 1~2년 늦출 수 있습니다.'),
         facts: ds.map(d => [d.rival[0] + '년 ' + d.rival[1] + '월', d.name]),
         files: [{ key: 'portraits/rivals/' + nm, kind: 'png', note: '경쟁자로 나올 때의 초상' }].concat(mate ? [{ key: 'portraits/mates/' + mate.id, kind: 'png', note: '위 파일이 없으면 동료 그림을 씀' }] : [])
       })

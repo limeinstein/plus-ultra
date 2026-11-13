@@ -39,8 +39,8 @@
   /** 칭호 안내는 규칙과 같은 이름·문턱으로 만든다. */
   function fameTitles() {
     var B = G.BALANCE, en = lang() !== 'ko', nm = function (x) { return en && G.N ? G.N(x) : x; };
-    return '<table class="gb-table fame-titles"><thead><tr><th>' + (en ? 'Fame needed' : '필요 명성') + '</th><th>' + (en ? 'Title' : '칭호') + '</th></tr></thead><tbody>' +
-      B.fameTitleNames.map(function (name, i) { var n = U.num(i ? B.fameTitles[i - 1] : 0); return '<tr><td>' + (en ? n + ' or more' : n + ' 이상') + '</td><td>' + U.esc(nm(name)) + '</td></tr>'; }).join('') + '</tbody></table>';
+    return '<table class="gb-table fame-titles"><thead><tr><th>' + (lang() === 'en' ? 'Fame needed' : G.T('필요 명성')) + '</th><th>' + (lang() === 'en' ? 'Title' : G.T('칭호')) + '</th></tr></thead><tbody>' +
+      B.fameTitleNames.map(function (name, i) { var n = U.num(i ? B.fameTitles[i - 1] : 0); return '<tr><td>' + (lang() === 'en' ? n + ' or more' : G.T(n + ' 이상')) + '</td><td>' + U.esc(nm(name)) + '</td></tr>'; }).join('') + '</tbody></table>';
   }
   /** 장들을 쪽으로 나눈다: [{ch, k(장 안의 쪽 번호), n(장의 쪽 수), title, html}] */
   GB.pages = function (B) {
@@ -85,7 +85,7 @@
       if (i < 0 || i >= pgs.length) return;
       cur = i; keepPg(i);
       var p = pgs[i], c = chs[p.ch];
-      var en = lang() !== 'ko';
+      var en = lang() === 'en';
       page.innerHTML = '<div class="gb-kicker">' + (en ? 'Chapter ' + (p.ch + 1) + ' ' : (p.ch + 1) + '장 ') + U.esc(c.title) + (p.n > 1 ? ' · ' + (en ? 'page ' + (p.k + 1) + '/' + p.n : (p.k + 1) + '/' + p.n + '쪽') : '') + '<span>' + (i + 1) + ' / ' + pgs.length + '</span></div>' +
         (p.k === 0 ? '<h2>' + U.esc(c.title) + '</h2>' : '') + p.html;
       U.$$('img[data-gk]', page).forEach(loadImg);
