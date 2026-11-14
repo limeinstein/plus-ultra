@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-14",
+  "tool": "built-in image_gen",
+  "references": [
+    {
+      "title": "동북아역사재단 강서대묘",
+      "url": "https://contents.nahf.or.kr/id/NAHF.iskk.d_0001_0010"
+    },
+    {
+      "title": "UNESCO Complex of Koguryo Tombs",
+      "url": "https://whc.unesco.org/en/list/1091/"
+    }
+  ],
+  "assets": [
+    {
+      "id": "scene__gangseo",
+      "disc": "gangseo",
+      "name": "강서대묘",
+      "kind": "scene",
+      "sceneStyle": "ruin",
+      "transparent": false,
+      "output": "images/discoveries/gangseo.gif",
+      "end": "images/discovery-ends/gangseo.jpg",
+      "sheet": "images/discovery-sheets/gangseo.webp",
+      "prompt": "Use case: historical-scene. Create ONE production animation storyboard for the historical discovery sequence of Gangseo Great Tomb (Kangso Great Tomb), Goguryeo, Korea. EXACT 4 columns by 4 rows, exactly SIXTEEN equally sized landscape panels in a landscape 2048x1536 sheet. Straight boundaries at exact quarters; edge-to-edge panels, no numbers, captions or gutters. Rich finely painted historical documentary realism and miniature cinematography. One consistent tomb: broad low rounded earthen mound covered in grass on open Korean farmland, small low rectangular granite-slab entrance; NO temple, tiled roof, pagoda or arch. Inside is one square stone chamber with smooth enormous granite slabs and a corbelled stone ceiling. Four wall guardians painted directly on stone: azure serpentine dragon on east, slender white tiger on west, vermilion long-tailed bird on south, black tortoise entwined with a snake on north. Subtle lotus/cloud ceiling painting. SEQUENCE left to right top to bottom: 1 wooden drafting table with ink ground plan and first foundation stones; 2 same miniature showing square stone chamber walls; 3 roof stones close the chamber; 4 earthen layers cover it; 5 complete grassy miniature mound on the table. 6 match cut to the same tomb at real scale in the countryside circa 1500. 7 approach the low stone doorway. 8 interior facing north, vivid black tortoise-and-snake mural on back wall, azure dragon on right east wall. 9 reverse interior looking south, vermilion bird mural flanking entrance and white tiger on right west wall. 10 step back out into grassy landscape. 11-16 six different elevated orbit bearings around the SAME mound with consistent dimensions and terrain, progressing noon, late afternoon, amber sunset, blue moonlit night, pale dawn, clear morning. Keep whole mound fully inside each exterior cell, important details within central 85%. No modern doors, barriers, tourists, lamps, museum labels, roads, machinery, electricity, skeletons, invented monumental stone facade or multiple main mounds.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1d849-5444-7103-9c1d-0239da2f0ca0\\exec-d4dcb01c-a119-4d93-91cf-d88e1f555082.png",
+      "raw": "artifacts/new-art-20261114/raw/scene__gangseo.png",
+      "sceneLayout": {
+        "columnsPerRow": [
+          4,
+          4,
+          4,
+          4
+        ],
+        "skipFrames": []
+      }
+    },
+    {
+      "id": "map__gangseo",
+      "disc": "gangseo",
+      "name": "강서대묘 지도 외관",
+      "kind": "map",
+      "transparent": true,
+      "output": "images/map-discoveries/completion/gangseo.webp",
+      "prompt": "Use case: stylized-concept. ONE historical exploration game world-map landmark miniature of Gangseo Great Tomb (Kangso Great Tomb), Goguryeo, Korean countryside. A broad LOW rounded grass-covered earthen burial mound, intact green turf dome, compact low rectangular entrance made from heavy grey granite slabs at its front base; entrance looks modest and tiny compared with the broad mound. A short worn earth approach and a narrow irregular grassy ground fringe. Elevated three-quarter orthographic isometric view, entire coherent mound visible. Rich refined realistic hand-painted travel illustration, naturally weathered stone, delicate grass texture, warm neutral daylight, crisp silhouette readable at tiny map scale. Square 1024x1024 canvas, actual transparent RGBA, minimum 10% empty transparent margin on all sides. No detached props, people, trees hiding the mound, artificial square base, pedestal, cutaway, tiled roof, palace, pagoda, arched portal, modern iron doors, sky, landscape rectangle, text, grid, watermark.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1d849-5444-7103-9c1d-0239da2f0ca0\\exec-28a34e52-02d6-4378-acea-f2a9047a1d1a.png",
+      "raw": "artifacts/new-art-20261114/raw/map__gangseo.png"
+    },
+    {
+      "id": "r_sasindo",
+      "disc": "gangseo",
+      "name": "사신도",
+      "kind": "relic",
+      "transparent": true,
+      "output": "images/relics/r_sasindo.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE historical maritime RPG inventory object icon, matching finely detailed realistic hand-painted museum artifact illustrations. One coherent object only, centered, three-quarter view, clean silhouette, rich convincing material texture, warm neutral directional light, subtle highlights. Square 1024x1024 image, actual transparent RGBA background, generous transparent margin at least 10% on every side. Entire object visible including rods and narrow tips. No environment, floor, rectangular backdrop, cast shadow field, frame, caption, watermark or logo. Subject: ONE partially unfurled antique Korean ivory SILK handscroll with dark wooden roller rods and restrained muted green silk mounting. The scroll surface contains four distinct small Goguryeo-style guardian mural figures arranged clearly in two pairs: azure long serpentine dragon, slender white tiger with dark stripes, vermilion long-tailed bird, black tortoise visibly entwined with a snake. Subtle ink mountain-and-river marks between the figures. Elegant lively ancient mural brushwork, mineral blue, vermilion, black and muted gold on warm silk. Wide rolled scroll angled slightly toward viewer, enough silk opened to see ALL FOUR different guardians separately. No readable letters, no modern map labels, no separate real animals outside the painted silk.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1d849-5444-7103-9c1d-0239da2f0ca0\\exec-fea5c0f3-492d-4229-9f1f-ab9306082b70.png",
+      "raw": "artifacts/new-art-20261114/raw/r_sasindo.png"
+    },
+    {
+      "id": "xy_last_sutra",
+      "name": "빠진 마지막 권의 빈 두루마리",
+      "kind": "item",
+      "transparent": true,
+      "output": "images/items/xy_last_sutra.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE historical maritime RPG inventory object icon, matching finely detailed realistic hand-painted museum artifact illustrations. One coherent object only, centered, three-quarter view, clean silhouette, rich convincing material texture, warm neutral directional light, subtle highlights. Square 1024x1024 image, actual transparent RGBA background, generous transparent margin at least 10% on every side. Entire object visible including rods and narrow tips. No environment, floor, rectangular backdrop, cast shadow field, frame, caption, watermark or logo. Subject: ONE ancient Buddhist scripture handscroll, partially opened wide between two simple dark wooden rollers. The whole warm ivory paper surface is COMPLETELY BLANK: zero letters, zero symbols, zero illustrations, zero seal marks. Fine handmade paper fibers, softly aged edges and gentle curved paper folds, restrained ochre silk mounting. The empty page is the main subject. Not a book, no inscriptions even on rollers, no extra props.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1d849-5444-7103-9c1d-0239da2f0ca0\\exec-df6dfff2-f92d-448a-9edf-66a2d1f8517a.png",
+      "raw": "artifacts/new-art-20261114/raw/xy_last_sutra.png"
+    },
+    {
+      "id": "xy_golden_staff",
+      "name": "수렴동의 금테 쇠막대",
+      "kind": "item",
+      "transparent": true,
+      "output": "images/items/xy_golden_staff.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE historical maritime RPG inventory object icon, matching finely detailed realistic hand-painted museum artifact illustrations. One coherent object only, centered, three-quarter view, clean silhouette, rich convincing material texture, warm neutral directional light, subtle highlights. Square 1024x1024 image, actual transparent RGBA background, generous transparent margin at least 10% on every side. Entire object visible including rods and narrow tips. No environment, floor, rectangular backdrop, cast shadow field, frame, caption, watermark or logo. Subject: ONE long straight heavy dark iron staff with thick polished gold bands encircling BOTH ends, inspired by the staff found behind the Water Curtain Cave waterfall. Unbroken simple cylindrical shaft, forged charcoal iron patina, two equal richly warm golden end sleeves with restrained incised scrollwork. Diagonal from lower left to upper right so the entire staff and both capped tips fit, visibly substantial diameter readable as a game icon. No spear point, no blade, no curved hook, no jewels, no pedestal, no glowing magic, no inscription.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1d849-5444-7103-9c1d-0239da2f0ca0\\exec-fb8df06a-0006-4455-94df-1542d38c5d2f.png",
+      "raw": "artifacts/new-art-20261114/raw/xy_golden_staff.png"
+    },
+    {
+      "id": "xy_butterfly_pin",
+      "name": "나비 머리꽂이",
+      "kind": "item",
+      "transparent": true,
+      "output": "images/items/xy_butterfly_pin.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE historical maritime RPG inventory object icon, matching finely detailed realistic hand-painted museum artifact illustrations. One coherent object only, centered, three-quarter view, clean silhouette, rich convincing material texture, warm neutral directional light, subtle highlights. Square 1024x1024 image, actual transparent RGBA background, generous transparent margin at least 10% on every side. Entire object visible including rods and narrow tips. No environment, floor, rectangular backdrop, cast shadow field, frame, caption, watermark or logo. Subject: ONE antique silver hairpin made by an Ayutthaya artisan: a delicately worked silver butterfly ornament at the top of a long slender single pointed silver hairpin shaft. Butterfly has exactly four elegant filigree wings, fine incised veins, small body and paired antennae. Natural tarnished silver shadows and bright polished raised edges; graceful diagonal orientation, butterfly large enough to recognize at inventory size, tip fully visible. Silver only, no colored gemstone, no live butterfly, no other jewelry or hair.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1d849-5444-7103-9c1d-0239da2f0ca0\\exec-328128ba-8c6c-4f42-b978-52b6ae5c4430.png",
+      "raw": "artifacts/new-art-20261114/raw/xy_butterfly_pin.png"
+    },
+    {
+      "id": "xy_curry_recipe",
+      "name": "말라바르 카레 비법서",
+      "kind": "item",
+      "transparent": true,
+      "output": "images/items/xy_curry_recipe.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE historical maritime RPG inventory object icon, matching finely detailed realistic hand-painted museum artifact illustrations. One coherent object only, centered, three-quarter view, clean silhouette, rich convincing material texture, warm neutral directional light, subtle highlights. Square 1024x1024 image, actual transparent RGBA background, generous transparent margin at least 10% on every side. Entire object visible including rods and narrow tips. No environment, floor, rectangular backdrop, cast shadow field, frame, caption, watermark or logo. Subject: ONE small folded handmade paper recipe note from a Malabar cook in Calicut circa 1500, opened into an uneven warm cream sheet with a clear central fold and gently curled corner. Fine dark ink cursive Malayalam-like recipe marks and small drawn ingredient sketches of peppercorns, cardamom pods and turmeric rhizome on the PAPER, a faint golden turmeric fingerprint near one edge. Handwritten personal kitchen note, modest and treasured, not an expensive bound cookbook. Writing should be tiny decorative manuscript marks, no legible modern title or English letters. No real loose spices, food bowl, utensils, or surrounding scenery.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1d849-5444-7103-9c1d-0239da2f0ca0\\exec-134b215c-bf68-4b74-90ed-c0d9e2ca1ba4.png",
+      "raw": "artifacts/new-art-20261114/raw/xy_curry_recipe.png"
+    }
+  ]
+}

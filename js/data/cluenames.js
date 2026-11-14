@@ -554,6 +554,7 @@
     gumiho: { clue: '구미호' },
     gwisin: { clue: '흰 옷 여인 귀신' },
     hyeonmu: { clue: '현무' },
+    gangseo: { clue: '평양 서쪽의 큰 무덤' },
     isonade: { clue: '꼬리로 낚는 괴물' },
     bakunawa: { clue: '달 삼키는 바다뱀' },
     xiangliu: { clue: '아홉 머리 뱀' },

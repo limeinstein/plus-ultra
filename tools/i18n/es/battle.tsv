@@ -1,0 +1,98 @@
+일시정지	Pausa
+재개	Reanudar
+백병전	Abordaje
+포격 정지	Alto el fuego
+포격 재개	Reanudar el fuego
+퇴각	Retirada
+교전 보기	Ver el combate
+기함 보기	Ver la capitana
+전장 전체	Todo el campo de batalla
+아군 함대	Flota propia
+적 함대	Flota enemiga
+— 1번 기함을 무찌르면 승리	— derrote a la capitana n.º 1 para ganar
+해상 괴물	Monstruo marino
+— 잠수 중 공격 불가	— no se le puede atacar mientras está sumergido
+괴물	Monstruo
+처치	Abatido
+해적선 #호	Barco pirata n.º #
+왜구선 #호	Barco wokou n.º #
+상선 #호	Mercante n.º #
+@ 군함 #호	Buque de guerra de @ n.º #
+군함 #호	Buque de guerra n.º #
+침몰	Hundido
+이탈	Fuera de combate
+나포	Apresado
+달아남	Huido
+상실	Perdido
+빼앗김	Arrebatado
+빼앗김 — 이기면 되찾는다	Arrebatado — si gana, lo recupera
+기함	Capitana
+선원 #	Tripulación #
+내구 # / #	Casco # / #
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · B: 백병전 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Flechas: gobernar la capitana · Espacio: detener la capitana · Clic: mover · Clic en enemigo: atacar · B: abordaje · F: fuego propio sí/no · P: pausa · Rueda: zoom · +/−: velocidad · 1~7: órdenes de flota · Tab: elegir barco
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · 괴물에게 백병전·일기토 불가 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Flechas: gobernar la capitana · Espacio: detener la capitana · Clic: mover · Clic en enemigo: atacar · Contra monstruos no hay abordaje ni duelo · F: fuego propio sí/no · P: pausa · Rueda: zoom · +/−: velocidad · 1~7: órdenes de flota · Tab: elegir barco
+섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.	Las islas y costas no se pueden atravesar, ni se puede retirar hacia un lado bloqueado.
+함대 명령	Órdenes de flota
+— 기함 전술 (함께 싸울 배 없음)	— tácticas de la capitana (sin barcos que luchen con ella)
+— 기함을 뺀 배 모두	— todos los barcos salvo la capitana
+직접 조종	Gobierno manual
+기함 추종	Seguir a la capitana
+학익진	Ala de grulla
+일제 공격	Ataque conjunto
+포격전	Duelo artillero
+기함 호위	Escolta de la capitana
+자유 공격	Ataque libre
+물러나기	Retirarse
+돌격	Cargar
+포격 중심	Centrado en artillería
+자동 교전	Combate automático
+노림	Objetivo
+자리 지킴	Mantener posición
+기함 혼자: 3 돌격 · 4 포격 중심 · 6 자동 교전 — 방향키·클릭으로 직접 몰면 풀립니다. 학익진·호위는 배가 2척 이상일 때.	Capitana sola: 3 cargar · 4 centrado en artillería · 6 combate automático — se anulan al gobernar con flechas o clics. Ala de grulla y escolta, con 2 barcos o más.
+배를 고르면(줄·지도에서 클릭·Tab) 그 배에게만 — 적함 클릭: 노림 · 바다 클릭: 자리 지킴 · Esc: 풀기	Al elegir un barco (clic en la lista o el mapa · Tab), solo para ese barco — clic en enemigo: objetivo · clic en el mar: mantener posición · Esc: anular
+함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Hace falta otro barco que luche (flota de 2 barcos o más).
+학익진은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	El ala de grulla necesita otro barco que luche (flota de 2 barcos o más).
+기함 호위은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	La escolta de la capitana necesita otro barco que luche (flota de 2 barcos o más).
+직접 조종: 방향키·클릭으로 기함을 몹니다.	Gobierno manual: gobierne la capitana con flechas y clics.
+함대 퇴각	Retirada de la flota
+기함 뒤로 줄지어 따라가며 기함이 노리는 적을 함께 쏜다.	Siguen en fila a la capitana y disparan al enemigo al que apunta ella.
+학이 날개를 펴듯 기함을 가운데 두고 양옆으로 벌려 적을 반원으로 감싼다. 여러 방향에서 쏘면 포격이 더 아프다.	Como una grulla que despliega las alas, se abren a ambos lados con la capitana en el centro y envuelven al enemigo en semicírculo. Disparar desde varias direcciones duele más.
+모두 한 적에게 바짝 붙어 한꺼번에 쏜다(일제 사격). 선원이 넉넉하면 올라탄다.	Todos se pegan a un mismo enemigo y disparan a la vez (andanada). Si hay tripulación de sobra, lo abordan.
+사정거리 끝에서 포로만 싸운다. 적이 다가오면 물러나 백병전을 피한다.	Solo luchan con cañones desde el límite del alcance. Si el enemigo se acerca, se retiran para evitar el abordaje.
+기함 곁을 둘러싸고, 기함에 다가오는 적부터 쏜다.	Rodean a la capitana y disparan primero a los enemigos que se le acercan.
+배마다 가장 가까운 적과 알아서 싸운다.	Cada barco lucha por su cuenta con el enemigo más cercano.
+그 배만 적에게서 먼 쪽으로 전장을 벗어난다 (배는 잃지 않는다).	Solo ese barco abandona el campo por el lado más alejado del enemigo (el barco no se pierde).
+@ — @	@ — @
+전장 해도	Carta del campo de batalla
+클릭: 그곳 보기	Clic: ver ese lugar
+적함 #척 · 화면 밖 #척	Barcos enemigos # · fuera de pantalla #
+기함 포격	Artillería de la capitana
+좌현	Babor
+우현	Estribor
+선수	Proa
+장전 #% · #초	Cargando #% · #s
+장전 완료	Cargado
+발사 준비	Listo para disparar
+해전	Batalla naval
+아군 #척 · 선원 #	Propios: # barcos · tripulación #
+적 #척 · 선원 #	Enemigos: # barcos · tripulación #
+@풍 · 연안 전장	Viento @ · aguas costeras
+@풍 · 격랑 해역	Viento @ · mar encrespado
+@풍 · @	Viento @ · @
+@풍	Viento @
+적 기함(1번 · @)을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.	Hunda o capture la capitana enemiga (n.º 1 · @) y ganará. Si perdemos nuestra capitana (n.º 1), perdemos.
+해전 승리	Victoria naval
+승리했다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	¡Victoria! Hemos tomado # monedas de botín. (Fama +#)
+적 기함을 무찔러 이겼다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	¡Hemos vencido a su capitana y ganado! Hemos tomado # monedas de botín. (Fama +#)
+남은 적 배는 흩어져 달아났다.	Los barcos enemigos que quedaban se dispersaron y huyeron.
+아군 포격 정지 — 적함을 누른 뒤 B로 백병전을 걸 수 있습니다. 적은 계속 포격합니다.	Alto el fuego propio — tras pulsar sobre un barco enemigo puede abordarlo con B. El enemigo sigue disparando.
+아군 포격을 재개합니다.	Se reanuda el fuego propio.
+아군 함대 전체의 포격 켬/끔 (F). 적의 포격과 이미 발사된 포탄은 유지됩니다. B: 백병전 접근	Fuego de toda la flota propia sí/no (F). Los disparos enemigos y las balas ya disparadas siguen. B: acercarse a abordar
+기함이 멈춰 있습니다. 방향키로 몰거나 바다·적함을 클릭하십시오.	La capitana está parada. Gobiérnela con las flechas o haga clic en el mar o en un enemigo.
+퇴각! 전장 가장자리로 벗어나십시오.	¡Retirada! Salga por el borde del campo de batalla.
+해상 괴물에게는 백병전·나포·일기토를 할 수 없습니다.	Contra los monstruos marinos no hay abordaje, captura ni duelo.
+아군과 적 함대가 함께 보이도록 배율을 맞춥니다.	Ajusta el zoom para ver a la vez las flotas propia y enemiga.
+전장 해도: 파란 점은 아군, 붉은 점은 적군. 클릭하면 해당 위치를 살핍니다.	Carta del campo: puntos azules propios, rojos enemigos. Haga clic para ver ese lugar.
+부채꼴은 사거리와 사격 방향, 차오르는 면과 호는 장전 진행도입니다. 점선 원은 약한 근접·추격 사격 범위입니다.	El abanico es el alcance y la dirección de tiro; la superficie y el arco que se llenan muestran la carga. El círculo punteado es el alcance del fuego débil cercano y de persecución.
+해전 배속 ×# (키 + / −)	Velocidad de batalla ×# (teclas + / −)
+#번 @(을|를) 골랐다. 적함 클릭 = 노림 · 바다 클릭 = 자리 지킴 · 1~7 = 이 배에만 명령 · Esc = 풀기	Ha elegido el n.º {1}, @. Clic en enemigo = objetivo · clic en el mar = mantener posición · 1–7 = órdenes solo a este barco · Esc = anular

@@ -146,7 +146,7 @@ def build(path):
 
 
 # 다른 말 원고: docs/guidebook.<말>.md → G.GUIDEBOOK_I18N[말] (장·쪽 차례와 그림은 한국어 원고와 같게 둔다 — 2026-11-12 영어)
-LANGS = {'en': 'Loop of Good Hope Play Guidebook', 'zh-Hans': 'Loop of Good Hope 游戏指南', 'zh-Hant': 'Loop of Good Hope 遊戲指南'}   # zh-Hant 원고는 tools/i18n/make_hant.py 가 만든다 (2026-11-13)
+LANGS = {'en': 'Loop of Good Hope Play Guidebook', 'zh-Hans': 'Loop of Good Hope 游戏指南', 'zh-Hant': 'Loop of Good Hope 遊戲指南', 'vi': 'Loop of Good Hope — Sách hướng dẫn chơi'}   # zh-Hant 원고는 tools/i18n/make_hant.py 가 만든다 (2026-11-13)
 
 
 def main():
@@ -162,7 +162,7 @@ def main():
             print('주의: %s 원고의 장·쪽 수가 한국어와 다릅니다' % lg)
         extra[lg] = {'title': title, 'chapters': d2}
     missing = [k for k in sorted(keys) if not any(os.path.exists(os.path.join(ROOT, 'images', k + e)) for e in ('.webp', '.jpg', '.png'))]
-    js = ('/* 자동 생성 파일입니다 — 원고는 docs/guidebook.md (영어: docs/guidebook.en.md · 중국어: docs/guidebook.zh-Hans.md / zh-Hant.md). 고친 뒤 python tools/guidebook/build.py 로 다시 만든다.\n'
+    js = ('/* 자동 생성 파일입니다 — 원고는 docs/guidebook.md (영어: docs/guidebook.en.md · 중국어: docs/guidebook.zh-Hans.md / zh-Hant.md · 베트남어: docs/guidebook.vi.md). 고친 뒤 python tools/guidebook/build.py 로 다시 만든다.\n'
           '   게임 안 「플레이 가이드북」(조작 안내 → 플레이 가이드북, js/ui/guidebook.js)의 장(章)들. 그림은 images/guide/ (G.Img 키 data-gk) */\n'
           'window.G = window.G || {};\nG.GUIDEBOOK = {\n  title: %s,\n  chapters: %s\n};\n') % (
         json.dumps('Loop of Good Hope 플레이 가이드북', ensure_ascii=False),

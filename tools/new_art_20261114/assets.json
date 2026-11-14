@@ -1,0 +1,214 @@
+[
+  {
+    "id": "scene__gangseo",
+    "name": "강서대묘",
+    "kind": "scene",
+    "disc": "gangseo",
+    "raw": "artifacts/new-art-20261114/raw/scene__gangseo.png",
+    "originalSize": [
+      1448,
+      1086
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/gangseo.gif",
+        "bytes": 1456019,
+        "sha256": "b3fc04ded52fa1bfa7214780f4bb762ccb88a0f4e65b8e88fc7ce452120f5cbb"
+      },
+      {
+        "file": "images/discovery-ends/gangseo.jpg",
+        "bytes": 44493,
+        "sha256": "f0015864fc993e7c18f057db8f1f60dada2cd21b952b32841edc151891502c28"
+      },
+      {
+        "file": "images/discovery-sheets/gangseo.webp",
+        "bytes": 713086,
+        "sha256": "5e152fd204aec3a59976fcece7d279d4f95bce20cbb661a9c398fe870c38d4df"
+      }
+    ],
+    "frames": 16,
+    "durationMs": 9820,
+    "size": [
+      576,
+      256
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "skipFrames": []
+    },
+    "rawSha256": "653bcaf541ae9f2eba6767ee4b74f6f99d94969507225b872d2b82df6c895023"
+  },
+  {
+    "id": "map__gangseo",
+    "name": "강서대묘 지도 외관",
+    "kind": "map",
+    "raw": "artifacts/new-art-20261114/raw/map__gangseo.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "size": [
+      512,
+      512
+    ],
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/gangseo.webp",
+        "bytes": 59096,
+        "sha256": "a51adcfc9bb428dd81fd1ef3537dd3876b75f5cf11433b12477a767a49ec3934"
+      }
+    ],
+    "rawSha256": "3a97358f1bc7465699a062af73586990da13fa143bb767a182b16c96bf2e70c2"
+  },
+  {
+    "id": "r_sasindo",
+    "name": "사신도",
+    "kind": "relic",
+    "disc": "gangseo",
+    "raw": "artifacts/new-art-20261114/raw/r_sasindo.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/relics/r_sasindo.webp",
+        "bytes": 29010,
+        "sha256": "4533a8be7967df342f02328509b309cd98350c54d3032b517634e2adf9de95b2"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      15,
+      14,
+      242,
+      232
+    ],
+    "rawSha256": "ec596abb2952526453940670e49cc67be092bea55d6fd01e8152ea96ed5ee5ba"
+  },
+  {
+    "id": "xy_last_sutra",
+    "name": "빠진 마지막 권의 빈 두루마리",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/new-art-20261114/raw/xy_last_sutra.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/xy_last_sutra.webp",
+        "bytes": 15570,
+        "sha256": "5a798ad87e3b488e4b0890c71789a29a21a64793e3289788c0657ded37b1acf5"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      18,
+      35,
+      242,
+      235
+    ],
+    "rawSha256": "6842ad33b879e44c64572c8bbd14bf9b2ef074efc47345adba34b17e058fbd14"
+  },
+  {
+    "id": "xy_golden_staff",
+    "name": "수렴동의 금테 쇠막대",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/new-art-20261114/raw/xy_golden_staff.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/xy_golden_staff.webp",
+        "bytes": 8920,
+        "sha256": "88df7c12f134b534528f7a79644275facbea2e4a9bc32051a63463826316ed3a"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      17,
+      17,
+      241,
+      242
+    ],
+    "rawSha256": "9cc3e4518e03755ffb78cdbd6dce874084f258b1977f3fe8908b2fcb5b3b7188"
+  },
+  {
+    "id": "xy_butterfly_pin",
+    "name": "나비 머리꽂이",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/new-art-20261114/raw/xy_butterfly_pin.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/xy_butterfly_pin.webp",
+        "bytes": 17346,
+        "sha256": "c64a6e8fedfe3c71dfafb3a07f5830c0f507e1ff691868031d7d1e9d61bb9d8b"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      16,
+      15,
+      239,
+      241
+    ],
+    "rawSha256": "2541ceca5c7d3f27a6133738695b37121d59cc9a7f26cd79582c2e7d11791f52"
+  },
+  {
+    "id": "xy_curry_recipe",
+    "name": "말라바르 카레 비법서",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/new-art-20261114/raw/xy_curry_recipe.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/xy_curry_recipe.webp",
+        "bytes": 23482,
+        "sha256": "3b9f376dcdb968aeee3f8781e40b2275cba3b604ac20f0a97c8bde2196b30fdf"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      21,
+      14,
+      240,
+      242
+    ],
+    "rawSha256": "11ea6b2b01ef8a6e8671dc1e54db275de9e74b1503f0d9398b48575e390397d0"
+  }
+]

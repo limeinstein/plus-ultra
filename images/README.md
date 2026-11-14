@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+강서대묘와 새 아이템 5종(2026-11-14)은 `discoveries/gangseo.gif`·`discovery-ends/gangseo.jpg`·`discovery-sheets/gangseo.webp`, `map-discoveries/completion/gangseo.webp`, `relics/r_sasindo.webp`, `items/xy_{last_sutra,golden_staff,butterfly_pin,curry_recipe}.webp`를 쓴다. 발견 GIF는 16장·9.82초, 재생 시트는 24칸, 지도 외관은 512×512 투명, 아이템은 256×256 투명이다. [미리보기·원본·프롬프트·검증](../docs/art/new-art-20261114.md).
+
 새 발견 장면 42종과 누락 증빙 원화 333종(2026-11-11 추가 자료)을 연결했다. 발견물은 `discoveries/<ID>.gif`·`discovery-ends/<ID>.jpg`·`discovery-sheets/<ID>.webp`의 24프레임 세트, 유물 289종은 `relics/<ID>.webp`, 발견 지도 18종·구입 단서 26종은 `items/evidence_<ID>.webp`의 256×256 투명 그림을 쓴다. [전체 그림](../artifacts/discovery-art-20261111/report.html) · [원본·제작 지시문·검증](../docs/art/discovery-art-20261111.md).
 
 새 소지품 43종(2026-11-11)은 `items/<아이템ID>.webp`의 256×256 투명 원화를 쓴다. 전설 갑옷 5·소중한 물건 16·서적과 해도 2·사건 물품 20종이며 기존 436개 소지품 원화는 보존했다. [전체 미리보기·원본·프롬프트·검증](../docs/art/new-item-art-20261111.md).

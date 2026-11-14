@@ -1,0 +1,646 @@
+/카스티야 출신의 항해사\. (.+)/	Hoa tiêu người Castilla. ⟦$1⟧
+/카스티야 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Castilla. ⟦$1⟧
+/포르투갈 출신의 항해사\. (.+)/	Hoa tiêu người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 항해사\. (.+)/	Hoa tiêu người Ý. ⟦$1⟧
+/이탈리아 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Ý. ⟦$1⟧
+/프랑스 출신의 항해사\. (.+)/	Hoa tiêu người Pháp. ⟦$1⟧
+/프랑스 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Pháp. ⟦$1⟧
+/잉글랜드 출신의 항해사\. (.+)/	Hoa tiêu người Anh. ⟦$1⟧
+/잉글랜드 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Anh. ⟦$1⟧
+/저지대 출신의 항해사\. (.+)/	Hoa tiêu người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여항해사\. (.+)/	Nữ hoa tiêu người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 항해사\. (.+)/	Hoa tiêu người Đức. ⟦$1⟧
+/독일 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Đức. ⟦$1⟧
+/북유럽 출신의 항해사\. (.+)/	Hoa tiêu người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 항해사\. (.+)/	Hoa tiêu người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Đông Âu. ⟦$1⟧
+/그리스 출신의 항해사\. (.+)/	Hoa tiêu người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 항해사\. (.+)/	Hoa tiêu người Thổ. ⟦$1⟧
+/튀르크 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Thổ. ⟦$1⟧
+/무어 출신의 항해사\. (.+)/	Hoa tiêu người xứ Moor. ⟦$1⟧
+/무어 출신의 여항해사\. (.+)/	Nữ hoa tiêu người xứ Moor. ⟦$1⟧
+/페르시아 출신의 항해사\. (.+)/	Hoa tiêu người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Ba Tư. ⟦$1⟧
+/인도 출신의 항해사\. (.+)/	Hoa tiêu người Ấn Độ. ⟦$1⟧
+/인도 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 항해사\. (.+)/	Hoa tiêu người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 항해사\. (.+)/	Hoa tiêu người nhà Minh. ⟦$1⟧
+/명나라 출신의 여항해사\. (.+)/	Nữ hoa tiêu người nhà Minh. ⟦$1⟧
+/조선 출신의 항해사\. (.+)/	Hoa tiêu người Triều Tiên. ⟦$1⟧
+/조선 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Triều Tiên. ⟦$1⟧
+/일본 출신의 항해사\. (.+)/	Hoa tiêu người Nhật Bản. ⟦$1⟧
+/일본 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 항해사\. (.+)/	Hoa tiêu người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여항해사\. (.+)/	Nữ hoa tiêu người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 항해사\. (.+)/	Hoa tiêu người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여항해사\. (.+)/	Nữ hoa tiêu người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 항해사\. (.+)/	Hoa tiêu người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여항해사\. (.+)/	Nữ hoa tiêu người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 항해사\. (.+)/	Hoa tiêu người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여항해사\. (.+)/	Nữ hoa tiêu người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 검객\. (.+)/	Kiếm khách người Castilla. ⟦$1⟧
+/카스티야 출신의 여검객\. (.+)/	Nữ kiếm khách người Castilla. ⟦$1⟧
+/포르투갈 출신의 검객\. (.+)/	Kiếm khách người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여검객\. (.+)/	Nữ kiếm khách người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 검객\. (.+)/	Kiếm khách người Ý. ⟦$1⟧
+/이탈리아 출신의 여검객\. (.+)/	Nữ kiếm khách người Ý. ⟦$1⟧
+/프랑스 출신의 검객\. (.+)/	Kiếm khách người Pháp. ⟦$1⟧
+/프랑스 출신의 여검객\. (.+)/	Nữ kiếm khách người Pháp. ⟦$1⟧
+/잉글랜드 출신의 검객\. (.+)/	Kiếm khách người Anh. ⟦$1⟧
+/잉글랜드 출신의 여검객\. (.+)/	Nữ kiếm khách người Anh. ⟦$1⟧
+/저지대 출신의 검객\. (.+)/	Kiếm khách người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여검객\. (.+)/	Nữ kiếm khách người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 검객\. (.+)/	Kiếm khách người Đức. ⟦$1⟧
+/독일 출신의 여검객\. (.+)/	Nữ kiếm khách người Đức. ⟦$1⟧
+/북유럽 출신의 검객\. (.+)/	Kiếm khách người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여검객\. (.+)/	Nữ kiếm khách người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 검객\. (.+)/	Kiếm khách người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여검객\. (.+)/	Nữ kiếm khách người Đông Âu. ⟦$1⟧
+/그리스 출신의 검객\. (.+)/	Kiếm khách người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여검객\. (.+)/	Nữ kiếm khách người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 검객\. (.+)/	Kiếm khách người Thổ. ⟦$1⟧
+/튀르크 출신의 여검객\. (.+)/	Nữ kiếm khách người Thổ. ⟦$1⟧
+/무어 출신의 검객\. (.+)/	Kiếm khách người xứ Moor. ⟦$1⟧
+/무어 출신의 여검객\. (.+)/	Nữ kiếm khách người xứ Moor. ⟦$1⟧
+/페르시아 출신의 검객\. (.+)/	Kiếm khách người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여검객\. (.+)/	Nữ kiếm khách người Ba Tư. ⟦$1⟧
+/인도 출신의 검객\. (.+)/	Kiếm khách người Ấn Độ. ⟦$1⟧
+/인도 출신의 여검객\. (.+)/	Nữ kiếm khách người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 검객\. (.+)/	Kiếm khách người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여검객\. (.+)/	Nữ kiếm khách người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 검객\. (.+)/	Kiếm khách người nhà Minh. ⟦$1⟧
+/명나라 출신의 여검객\. (.+)/	Nữ kiếm khách người nhà Minh. ⟦$1⟧
+/조선 출신의 검객\. (.+)/	Kiếm khách người Triều Tiên. ⟦$1⟧
+/조선 출신의 여검객\. (.+)/	Nữ kiếm khách người Triều Tiên. ⟦$1⟧
+/일본 출신의 검객\. (.+)/	Kiếm khách người Nhật Bản. ⟦$1⟧
+/일본 출신의 여검객\. (.+)/	Nữ kiếm khách người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 검객\. (.+)/	Kiếm khách người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여검객\. (.+)/	Nữ kiếm khách người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 검객\. (.+)/	Kiếm khách người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여검객\. (.+)/	Nữ kiếm khách người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 검객\. (.+)/	Kiếm khách người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여검객\. (.+)/	Nữ kiếm khách người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 검객\. (.+)/	Kiếm khách người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여검객\. (.+)/	Nữ kiếm khách người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 포수\. (.+)/	Pháo thủ người Castilla. ⟦$1⟧
+/카스티야 출신의 여포수\. (.+)/	Nữ pháo thủ người Castilla. ⟦$1⟧
+/포르투갈 출신의 포수\. (.+)/	Pháo thủ người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여포수\. (.+)/	Nữ pháo thủ người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 포수\. (.+)/	Pháo thủ người Ý. ⟦$1⟧
+/이탈리아 출신의 여포수\. (.+)/	Nữ pháo thủ người Ý. ⟦$1⟧
+/프랑스 출신의 포수\. (.+)/	Pháo thủ người Pháp. ⟦$1⟧
+/프랑스 출신의 여포수\. (.+)/	Nữ pháo thủ người Pháp. ⟦$1⟧
+/잉글랜드 출신의 포수\. (.+)/	Pháo thủ người Anh. ⟦$1⟧
+/잉글랜드 출신의 여포수\. (.+)/	Nữ pháo thủ người Anh. ⟦$1⟧
+/저지대 출신의 포수\. (.+)/	Pháo thủ người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여포수\. (.+)/	Nữ pháo thủ người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 포수\. (.+)/	Pháo thủ người Đức. ⟦$1⟧
+/독일 출신의 여포수\. (.+)/	Nữ pháo thủ người Đức. ⟦$1⟧
+/북유럽 출신의 포수\. (.+)/	Pháo thủ người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여포수\. (.+)/	Nữ pháo thủ người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 포수\. (.+)/	Pháo thủ người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여포수\. (.+)/	Nữ pháo thủ người Đông Âu. ⟦$1⟧
+/그리스 출신의 포수\. (.+)/	Pháo thủ người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여포수\. (.+)/	Nữ pháo thủ người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 포수\. (.+)/	Pháo thủ người Thổ. ⟦$1⟧
+/튀르크 출신의 여포수\. (.+)/	Nữ pháo thủ người Thổ. ⟦$1⟧
+/무어 출신의 포수\. (.+)/	Pháo thủ người xứ Moor. ⟦$1⟧
+/무어 출신의 여포수\. (.+)/	Nữ pháo thủ người xứ Moor. ⟦$1⟧
+/페르시아 출신의 포수\. (.+)/	Pháo thủ người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여포수\. (.+)/	Nữ pháo thủ người Ba Tư. ⟦$1⟧
+/인도 출신의 포수\. (.+)/	Pháo thủ người Ấn Độ. ⟦$1⟧
+/인도 출신의 여포수\. (.+)/	Nữ pháo thủ người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 포수\. (.+)/	Pháo thủ người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여포수\. (.+)/	Nữ pháo thủ người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 포수\. (.+)/	Pháo thủ người nhà Minh. ⟦$1⟧
+/명나라 출신의 여포수\. (.+)/	Nữ pháo thủ người nhà Minh. ⟦$1⟧
+/조선 출신의 포수\. (.+)/	Pháo thủ người Triều Tiên. ⟦$1⟧
+/조선 출신의 여포수\. (.+)/	Nữ pháo thủ người Triều Tiên. ⟦$1⟧
+/일본 출신의 포수\. (.+)/	Pháo thủ người Nhật Bản. ⟦$1⟧
+/일본 출신의 여포수\. (.+)/	Nữ pháo thủ người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 포수\. (.+)/	Pháo thủ người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여포수\. (.+)/	Nữ pháo thủ người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 포수\. (.+)/	Pháo thủ người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여포수\. (.+)/	Nữ pháo thủ người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 포수\. (.+)/	Pháo thủ người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여포수\. (.+)/	Nữ pháo thủ người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 포수\. (.+)/	Pháo thủ người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여포수\. (.+)/	Nữ pháo thủ người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 회계\. (.+)/	Kế toán người Castilla. ⟦$1⟧
+/카스티야 출신의 여회계\. (.+)/	Nữ kế toán người Castilla. ⟦$1⟧
+/포르투갈 출신의 회계\. (.+)/	Kế toán người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여회계\. (.+)/	Nữ kế toán người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 회계\. (.+)/	Kế toán người Ý. ⟦$1⟧
+/이탈리아 출신의 여회계\. (.+)/	Nữ kế toán người Ý. ⟦$1⟧
+/프랑스 출신의 회계\. (.+)/	Kế toán người Pháp. ⟦$1⟧
+/프랑스 출신의 여회계\. (.+)/	Nữ kế toán người Pháp. ⟦$1⟧
+/잉글랜드 출신의 회계\. (.+)/	Kế toán người Anh. ⟦$1⟧
+/잉글랜드 출신의 여회계\. (.+)/	Nữ kế toán người Anh. ⟦$1⟧
+/저지대 출신의 회계\. (.+)/	Kế toán người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여회계\. (.+)/	Nữ kế toán người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 회계\. (.+)/	Kế toán người Đức. ⟦$1⟧
+/독일 출신의 여회계\. (.+)/	Nữ kế toán người Đức. ⟦$1⟧
+/북유럽 출신의 회계\. (.+)/	Kế toán người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여회계\. (.+)/	Nữ kế toán người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 회계\. (.+)/	Kế toán người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여회계\. (.+)/	Nữ kế toán người Đông Âu. ⟦$1⟧
+/그리스 출신의 회계\. (.+)/	Kế toán người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여회계\. (.+)/	Nữ kế toán người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 회계\. (.+)/	Kế toán người Thổ. ⟦$1⟧
+/튀르크 출신의 여회계\. (.+)/	Nữ kế toán người Thổ. ⟦$1⟧
+/무어 출신의 회계\. (.+)/	Kế toán người xứ Moor. ⟦$1⟧
+/무어 출신의 여회계\. (.+)/	Nữ kế toán người xứ Moor. ⟦$1⟧
+/페르시아 출신의 회계\. (.+)/	Kế toán người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여회계\. (.+)/	Nữ kế toán người Ba Tư. ⟦$1⟧
+/인도 출신의 회계\. (.+)/	Kế toán người Ấn Độ. ⟦$1⟧
+/인도 출신의 여회계\. (.+)/	Nữ kế toán người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 회계\. (.+)/	Kế toán người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여회계\. (.+)/	Nữ kế toán người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 회계\. (.+)/	Kế toán người nhà Minh. ⟦$1⟧
+/명나라 출신의 여회계\. (.+)/	Nữ kế toán người nhà Minh. ⟦$1⟧
+/조선 출신의 회계\. (.+)/	Kế toán người Triều Tiên. ⟦$1⟧
+/조선 출신의 여회계\. (.+)/	Nữ kế toán người Triều Tiên. ⟦$1⟧
+/일본 출신의 회계\. (.+)/	Kế toán người Nhật Bản. ⟦$1⟧
+/일본 출신의 여회계\. (.+)/	Nữ kế toán người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 회계\. (.+)/	Kế toán người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여회계\. (.+)/	Nữ kế toán người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 회계\. (.+)/	Kế toán người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여회계\. (.+)/	Nữ kế toán người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 회계\. (.+)/	Kế toán người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여회계\. (.+)/	Nữ kế toán người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 회계\. (.+)/	Kế toán người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여회계\. (.+)/	Nữ kế toán người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 학자\. (.+)/	Học giả người Castilla. ⟦$1⟧
+/카스티야 출신의 여학자\. (.+)/	Nữ học giả người Castilla. ⟦$1⟧
+/포르투갈 출신의 학자\. (.+)/	Học giả người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여학자\. (.+)/	Nữ học giả người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 학자\. (.+)/	Học giả người Ý. ⟦$1⟧
+/이탈리아 출신의 여학자\. (.+)/	Nữ học giả người Ý. ⟦$1⟧
+/프랑스 출신의 학자\. (.+)/	Học giả người Pháp. ⟦$1⟧
+/프랑스 출신의 여학자\. (.+)/	Nữ học giả người Pháp. ⟦$1⟧
+/잉글랜드 출신의 학자\. (.+)/	Học giả người Anh. ⟦$1⟧
+/잉글랜드 출신의 여학자\. (.+)/	Nữ học giả người Anh. ⟦$1⟧
+/저지대 출신의 학자\. (.+)/	Học giả người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여학자\. (.+)/	Nữ học giả người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 학자\. (.+)/	Học giả người Đức. ⟦$1⟧
+/독일 출신의 여학자\. (.+)/	Nữ học giả người Đức. ⟦$1⟧
+/북유럽 출신의 학자\. (.+)/	Học giả người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여학자\. (.+)/	Nữ học giả người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 학자\. (.+)/	Học giả người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여학자\. (.+)/	Nữ học giả người Đông Âu. ⟦$1⟧
+/그리스 출신의 학자\. (.+)/	Học giả người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여학자\. (.+)/	Nữ học giả người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 학자\. (.+)/	Học giả người Thổ. ⟦$1⟧
+/튀르크 출신의 여학자\. (.+)/	Nữ học giả người Thổ. ⟦$1⟧
+/무어 출신의 학자\. (.+)/	Học giả người xứ Moor. ⟦$1⟧
+/무어 출신의 여학자\. (.+)/	Nữ học giả người xứ Moor. ⟦$1⟧
+/페르시아 출신의 학자\. (.+)/	Học giả người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여학자\. (.+)/	Nữ học giả người Ba Tư. ⟦$1⟧
+/인도 출신의 학자\. (.+)/	Học giả người Ấn Độ. ⟦$1⟧
+/인도 출신의 여학자\. (.+)/	Nữ học giả người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 학자\. (.+)/	Học giả người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여학자\. (.+)/	Nữ học giả người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 학자\. (.+)/	Học giả người nhà Minh. ⟦$1⟧
+/명나라 출신의 여학자\. (.+)/	Nữ học giả người nhà Minh. ⟦$1⟧
+/조선 출신의 학자\. (.+)/	Học giả người Triều Tiên. ⟦$1⟧
+/조선 출신의 여학자\. (.+)/	Nữ học giả người Triều Tiên. ⟦$1⟧
+/일본 출신의 학자\. (.+)/	Học giả người Nhật Bản. ⟦$1⟧
+/일본 출신의 여학자\. (.+)/	Nữ học giả người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 학자\. (.+)/	Học giả người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여학자\. (.+)/	Nữ học giả người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 학자\. (.+)/	Học giả người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여학자\. (.+)/	Nữ học giả người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 학자\. (.+)/	Học giả người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여학자\. (.+)/	Nữ học giả người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 학자\. (.+)/	Học giả người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여학자\. (.+)/	Nữ học giả người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 의사\. (.+)/	Thầy thuốc người Castilla. ⟦$1⟧
+/카스티야 출신의 여의사\. (.+)/	Nữ thầy thuốc người Castilla. ⟦$1⟧
+/포르투갈 출신의 의사\. (.+)/	Thầy thuốc người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여의사\. (.+)/	Nữ thầy thuốc người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 의사\. (.+)/	Thầy thuốc người Ý. ⟦$1⟧
+/이탈리아 출신의 여의사\. (.+)/	Nữ thầy thuốc người Ý. ⟦$1⟧
+/프랑스 출신의 의사\. (.+)/	Thầy thuốc người Pháp. ⟦$1⟧
+/프랑스 출신의 여의사\. (.+)/	Nữ thầy thuốc người Pháp. ⟦$1⟧
+/잉글랜드 출신의 의사\. (.+)/	Thầy thuốc người Anh. ⟦$1⟧
+/잉글랜드 출신의 여의사\. (.+)/	Nữ thầy thuốc người Anh. ⟦$1⟧
+/저지대 출신의 의사\. (.+)/	Thầy thuốc người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여의사\. (.+)/	Nữ thầy thuốc người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 의사\. (.+)/	Thầy thuốc người Đức. ⟦$1⟧
+/독일 출신의 여의사\. (.+)/	Nữ thầy thuốc người Đức. ⟦$1⟧
+/북유럽 출신의 의사\. (.+)/	Thầy thuốc người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여의사\. (.+)/	Nữ thầy thuốc người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 의사\. (.+)/	Thầy thuốc người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여의사\. (.+)/	Nữ thầy thuốc người Đông Âu. ⟦$1⟧
+/그리스 출신의 의사\. (.+)/	Thầy thuốc người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여의사\. (.+)/	Nữ thầy thuốc người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 의사\. (.+)/	Thầy thuốc người Thổ. ⟦$1⟧
+/튀르크 출신의 여의사\. (.+)/	Nữ thầy thuốc người Thổ. ⟦$1⟧
+/무어 출신의 의사\. (.+)/	Thầy thuốc người xứ Moor. ⟦$1⟧
+/무어 출신의 여의사\. (.+)/	Nữ thầy thuốc người xứ Moor. ⟦$1⟧
+/페르시아 출신의 의사\. (.+)/	Thầy thuốc người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여의사\. (.+)/	Nữ thầy thuốc người Ba Tư. ⟦$1⟧
+/인도 출신의 의사\. (.+)/	Thầy thuốc người Ấn Độ. ⟦$1⟧
+/인도 출신의 여의사\. (.+)/	Nữ thầy thuốc người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 의사\. (.+)/	Thầy thuốc người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여의사\. (.+)/	Nữ thầy thuốc người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 의사\. (.+)/	Thầy thuốc người nhà Minh. ⟦$1⟧
+/명나라 출신의 여의사\. (.+)/	Nữ thầy thuốc người nhà Minh. ⟦$1⟧
+/조선 출신의 의사\. (.+)/	Thầy thuốc người Triều Tiên. ⟦$1⟧
+/조선 출신의 여의사\. (.+)/	Nữ thầy thuốc người Triều Tiên. ⟦$1⟧
+/일본 출신의 의사\. (.+)/	Thầy thuốc người Nhật Bản. ⟦$1⟧
+/일본 출신의 여의사\. (.+)/	Nữ thầy thuốc người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 의사\. (.+)/	Thầy thuốc người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여의사\. (.+)/	Nữ thầy thuốc người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 의사\. (.+)/	Thầy thuốc người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여의사\. (.+)/	Nữ thầy thuốc người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 의사\. (.+)/	Thầy thuốc người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여의사\. (.+)/	Nữ thầy thuốc người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 의사\. (.+)/	Thầy thuốc người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여의사\. (.+)/	Nữ thầy thuốc người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 통역\. (.+)/	Thông dịch người Castilla. ⟦$1⟧
+/카스티야 출신의 여통역\. (.+)/	Nữ thông dịch người Castilla. ⟦$1⟧
+/포르투갈 출신의 통역\. (.+)/	Thông dịch người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여통역\. (.+)/	Nữ thông dịch người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 통역\. (.+)/	Thông dịch người Ý. ⟦$1⟧
+/이탈리아 출신의 여통역\. (.+)/	Nữ thông dịch người Ý. ⟦$1⟧
+/프랑스 출신의 통역\. (.+)/	Thông dịch người Pháp. ⟦$1⟧
+/프랑스 출신의 여통역\. (.+)/	Nữ thông dịch người Pháp. ⟦$1⟧
+/잉글랜드 출신의 통역\. (.+)/	Thông dịch người Anh. ⟦$1⟧
+/잉글랜드 출신의 여통역\. (.+)/	Nữ thông dịch người Anh. ⟦$1⟧
+/저지대 출신의 통역\. (.+)/	Thông dịch người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여통역\. (.+)/	Nữ thông dịch người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 통역\. (.+)/	Thông dịch người Đức. ⟦$1⟧
+/독일 출신의 여통역\. (.+)/	Nữ thông dịch người Đức. ⟦$1⟧
+/북유럽 출신의 통역\. (.+)/	Thông dịch người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여통역\. (.+)/	Nữ thông dịch người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 통역\. (.+)/	Thông dịch người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여통역\. (.+)/	Nữ thông dịch người Đông Âu. ⟦$1⟧
+/그리스 출신의 통역\. (.+)/	Thông dịch người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여통역\. (.+)/	Nữ thông dịch người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 통역\. (.+)/	Thông dịch người Thổ. ⟦$1⟧
+/튀르크 출신의 여통역\. (.+)/	Nữ thông dịch người Thổ. ⟦$1⟧
+/무어 출신의 통역\. (.+)/	Thông dịch người xứ Moor. ⟦$1⟧
+/무어 출신의 여통역\. (.+)/	Nữ thông dịch người xứ Moor. ⟦$1⟧
+/페르시아 출신의 통역\. (.+)/	Thông dịch người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여통역\. (.+)/	Nữ thông dịch người Ba Tư. ⟦$1⟧
+/인도 출신의 통역\. (.+)/	Thông dịch người Ấn Độ. ⟦$1⟧
+/인도 출신의 여통역\. (.+)/	Nữ thông dịch người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 통역\. (.+)/	Thông dịch người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여통역\. (.+)/	Nữ thông dịch người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 통역\. (.+)/	Thông dịch người nhà Minh. ⟦$1⟧
+/명나라 출신의 여통역\. (.+)/	Nữ thông dịch người nhà Minh. ⟦$1⟧
+/조선 출신의 통역\. (.+)/	Thông dịch người Triều Tiên. ⟦$1⟧
+/조선 출신의 여통역\. (.+)/	Nữ thông dịch người Triều Tiên. ⟦$1⟧
+/일본 출신의 통역\. (.+)/	Thông dịch người Nhật Bản. ⟦$1⟧
+/일본 출신의 여통역\. (.+)/	Nữ thông dịch người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 통역\. (.+)/	Thông dịch người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여통역\. (.+)/	Nữ thông dịch người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 통역\. (.+)/	Thông dịch người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여통역\. (.+)/	Nữ thông dịch người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 통역\. (.+)/	Thông dịch người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여통역\. (.+)/	Nữ thông dịch người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 통역\. (.+)/	Thông dịch người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여통역\. (.+)/	Nữ thông dịch người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 수도사\. (.+)/	Tu sĩ người Castilla. ⟦$1⟧
+/카스티야 출신의 여수도사\. (.+)/	Nữ tu người Castilla. ⟦$1⟧
+/포르투갈 출신의 수도사\. (.+)/	Tu sĩ người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여수도사\. (.+)/	Nữ tu người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 수도사\. (.+)/	Tu sĩ người Ý. ⟦$1⟧
+/이탈리아 출신의 여수도사\. (.+)/	Nữ tu người Ý. ⟦$1⟧
+/프랑스 출신의 수도사\. (.+)/	Tu sĩ người Pháp. ⟦$1⟧
+/프랑스 출신의 여수도사\. (.+)/	Nữ tu người Pháp. ⟦$1⟧
+/잉글랜드 출신의 수도사\. (.+)/	Tu sĩ người Anh. ⟦$1⟧
+/잉글랜드 출신의 여수도사\. (.+)/	Nữ tu người Anh. ⟦$1⟧
+/저지대 출신의 수도사\. (.+)/	Tu sĩ người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여수도사\. (.+)/	Nữ tu người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 수도사\. (.+)/	Tu sĩ người Đức. ⟦$1⟧
+/독일 출신의 여수도사\. (.+)/	Nữ tu người Đức. ⟦$1⟧
+/북유럽 출신의 수도사\. (.+)/	Tu sĩ người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여수도사\. (.+)/	Nữ tu người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 수도사\. (.+)/	Tu sĩ người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여수도사\. (.+)/	Nữ tu người Đông Âu. ⟦$1⟧
+/그리스 출신의 수도사\. (.+)/	Tu sĩ người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여수도사\. (.+)/	Nữ tu người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 수도사\. (.+)/	Tu sĩ người Thổ. ⟦$1⟧
+/튀르크 출신의 여수도사\. (.+)/	Nữ tu người Thổ. ⟦$1⟧
+/무어 출신의 수도사\. (.+)/	Tu sĩ người xứ Moor. ⟦$1⟧
+/무어 출신의 여수도사\. (.+)/	Nữ tu người xứ Moor. ⟦$1⟧
+/페르시아 출신의 수도사\. (.+)/	Tu sĩ người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여수도사\. (.+)/	Nữ tu người Ba Tư. ⟦$1⟧
+/인도 출신의 수도사\. (.+)/	Tu sĩ người Ấn Độ. ⟦$1⟧
+/인도 출신의 여수도사\. (.+)/	Nữ tu người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 수도사\. (.+)/	Tu sĩ người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여수도사\. (.+)/	Nữ tu người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 수도사\. (.+)/	Tu sĩ người nhà Minh. ⟦$1⟧
+/명나라 출신의 여수도사\. (.+)/	Nữ tu người nhà Minh. ⟦$1⟧
+/조선 출신의 수도사\. (.+)/	Tu sĩ người Triều Tiên. ⟦$1⟧
+/조선 출신의 여수도사\. (.+)/	Nữ tu người Triều Tiên. ⟦$1⟧
+/일본 출신의 수도사\. (.+)/	Tu sĩ người Nhật Bản. ⟦$1⟧
+/일본 출신의 여수도사\. (.+)/	Nữ tu người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 수도사\. (.+)/	Tu sĩ người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여수도사\. (.+)/	Nữ tu người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 수도사\. (.+)/	Tu sĩ người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여수도사\. (.+)/	Nữ tu người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 수도사\. (.+)/	Tu sĩ người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여수도사\. (.+)/	Nữ tu người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 수도사\. (.+)/	Tu sĩ người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여수도사\. (.+)/	Nữ tu người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 선대공\. (.+)/	Thợ đóng tàu người Castilla. ⟦$1⟧
+/카스티야 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Castilla. ⟦$1⟧
+/포르투갈 출신의 선대공\. (.+)/	Thợ đóng tàu người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 선대공\. (.+)/	Thợ đóng tàu người Ý. ⟦$1⟧
+/이탈리아 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Ý. ⟦$1⟧
+/프랑스 출신의 선대공\. (.+)/	Thợ đóng tàu người Pháp. ⟦$1⟧
+/프랑스 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Pháp. ⟦$1⟧
+/잉글랜드 출신의 선대공\. (.+)/	Thợ đóng tàu người Anh. ⟦$1⟧
+/잉글랜드 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Anh. ⟦$1⟧
+/저지대 출신의 선대공\. (.+)/	Thợ đóng tàu người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 선대공\. (.+)/	Thợ đóng tàu người Đức. ⟦$1⟧
+/독일 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Đức. ⟦$1⟧
+/북유럽 출신의 선대공\. (.+)/	Thợ đóng tàu người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 선대공\. (.+)/	Thợ đóng tàu người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Đông Âu. ⟦$1⟧
+/그리스 출신의 선대공\. (.+)/	Thợ đóng tàu người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 선대공\. (.+)/	Thợ đóng tàu người Thổ. ⟦$1⟧
+/튀르크 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Thổ. ⟦$1⟧
+/무어 출신의 선대공\. (.+)/	Thợ đóng tàu người xứ Moor. ⟦$1⟧
+/무어 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người xứ Moor. ⟦$1⟧
+/페르시아 출신의 선대공\. (.+)/	Thợ đóng tàu người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Ba Tư. ⟦$1⟧
+/인도 출신의 선대공\. (.+)/	Thợ đóng tàu người Ấn Độ. ⟦$1⟧
+/인도 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 선대공\. (.+)/	Thợ đóng tàu người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 선대공\. (.+)/	Thợ đóng tàu người nhà Minh. ⟦$1⟧
+/명나라 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người nhà Minh. ⟦$1⟧
+/조선 출신의 선대공\. (.+)/	Thợ đóng tàu người Triều Tiên. ⟦$1⟧
+/조선 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Triều Tiên. ⟦$1⟧
+/일본 출신의 선대공\. (.+)/	Thợ đóng tàu người Nhật Bản. ⟦$1⟧
+/일본 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 선대공\. (.+)/	Thợ đóng tàu người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 선대공\. (.+)/	Thợ đóng tàu người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 선대공\. (.+)/	Thợ đóng tàu người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 선대공\. (.+)/	Thợ đóng tàu người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여선대공\. (.+)/	Nữ thợ đóng tàu người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 측량사\. (.+)/	Trắc địa viên người Castilla. ⟦$1⟧
+/카스티야 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Castilla. ⟦$1⟧
+/포르투갈 출신의 측량사\. (.+)/	Trắc địa viên người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 측량사\. (.+)/	Trắc địa viên người Ý. ⟦$1⟧
+/이탈리아 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Ý. ⟦$1⟧
+/프랑스 출신의 측량사\. (.+)/	Trắc địa viên người Pháp. ⟦$1⟧
+/프랑스 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Pháp. ⟦$1⟧
+/잉글랜드 출신의 측량사\. (.+)/	Trắc địa viên người Anh. ⟦$1⟧
+/잉글랜드 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Anh. ⟦$1⟧
+/저지대 출신의 측량사\. (.+)/	Trắc địa viên người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여측량사\. (.+)/	Nữ trắc địa viên người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 측량사\. (.+)/	Trắc địa viên người Đức. ⟦$1⟧
+/독일 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Đức. ⟦$1⟧
+/북유럽 출신의 측량사\. (.+)/	Trắc địa viên người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 측량사\. (.+)/	Trắc địa viên người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Đông Âu. ⟦$1⟧
+/그리스 출신의 측량사\. (.+)/	Trắc địa viên người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 측량사\. (.+)/	Trắc địa viên người Thổ. ⟦$1⟧
+/튀르크 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Thổ. ⟦$1⟧
+/무어 출신의 측량사\. (.+)/	Trắc địa viên người xứ Moor. ⟦$1⟧
+/무어 출신의 여측량사\. (.+)/	Nữ trắc địa viên người xứ Moor. ⟦$1⟧
+/페르시아 출신의 측량사\. (.+)/	Trắc địa viên người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Ba Tư. ⟦$1⟧
+/인도 출신의 측량사\. (.+)/	Trắc địa viên người Ấn Độ. ⟦$1⟧
+/인도 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 측량사\. (.+)/	Trắc địa viên người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 측량사\. (.+)/	Trắc địa viên người nhà Minh. ⟦$1⟧
+/명나라 출신의 여측량사\. (.+)/	Nữ trắc địa viên người nhà Minh. ⟦$1⟧
+/조선 출신의 측량사\. (.+)/	Trắc địa viên người Triều Tiên. ⟦$1⟧
+/조선 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Triều Tiên. ⟦$1⟧
+/일본 출신의 측량사\. (.+)/	Trắc địa viên người Nhật Bản. ⟦$1⟧
+/일본 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 측량사\. (.+)/	Trắc địa viên người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여측량사\. (.+)/	Nữ trắc địa viên người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 측량사\. (.+)/	Trắc địa viên người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여측량사\. (.+)/	Nữ trắc địa viên người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 측량사\. (.+)/	Trắc địa viên người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여측량사\. (.+)/	Nữ trắc địa viên người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 측량사\. (.+)/	Trắc địa viên người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여측량사\. (.+)/	Nữ trắc địa viên người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 요리사\. (.+)/	Đầu bếp người Castilla. ⟦$1⟧
+/카스티야 출신의 여요리사\. (.+)/	Nữ đầu bếp người Castilla. ⟦$1⟧
+/포르투갈 출신의 요리사\. (.+)/	Đầu bếp người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여요리사\. (.+)/	Nữ đầu bếp người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 요리사\. (.+)/	Đầu bếp người Ý. ⟦$1⟧
+/이탈리아 출신의 여요리사\. (.+)/	Nữ đầu bếp người Ý. ⟦$1⟧
+/프랑스 출신의 요리사\. (.+)/	Đầu bếp người Pháp. ⟦$1⟧
+/프랑스 출신의 여요리사\. (.+)/	Nữ đầu bếp người Pháp. ⟦$1⟧
+/잉글랜드 출신의 요리사\. (.+)/	Đầu bếp người Anh. ⟦$1⟧
+/잉글랜드 출신의 여요리사\. (.+)/	Nữ đầu bếp người Anh. ⟦$1⟧
+/저지대 출신의 요리사\. (.+)/	Đầu bếp người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여요리사\. (.+)/	Nữ đầu bếp người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 요리사\. (.+)/	Đầu bếp người Đức. ⟦$1⟧
+/독일 출신의 여요리사\. (.+)/	Nữ đầu bếp người Đức. ⟦$1⟧
+/북유럽 출신의 요리사\. (.+)/	Đầu bếp người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여요리사\. (.+)/	Nữ đầu bếp người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 요리사\. (.+)/	Đầu bếp người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여요리사\. (.+)/	Nữ đầu bếp người Đông Âu. ⟦$1⟧
+/그리스 출신의 요리사\. (.+)/	Đầu bếp người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여요리사\. (.+)/	Nữ đầu bếp người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 요리사\. (.+)/	Đầu bếp người Thổ. ⟦$1⟧
+/튀르크 출신의 여요리사\. (.+)/	Nữ đầu bếp người Thổ. ⟦$1⟧
+/무어 출신의 요리사\. (.+)/	Đầu bếp người xứ Moor. ⟦$1⟧
+/무어 출신의 여요리사\. (.+)/	Nữ đầu bếp người xứ Moor. ⟦$1⟧
+/페르시아 출신의 요리사\. (.+)/	Đầu bếp người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여요리사\. (.+)/	Nữ đầu bếp người Ba Tư. ⟦$1⟧
+/인도 출신의 요리사\. (.+)/	Đầu bếp người Ấn Độ. ⟦$1⟧
+/인도 출신의 여요리사\. (.+)/	Nữ đầu bếp người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 요리사\. (.+)/	Đầu bếp người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여요리사\. (.+)/	Nữ đầu bếp người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 요리사\. (.+)/	Đầu bếp người nhà Minh. ⟦$1⟧
+/명나라 출신의 여요리사\. (.+)/	Nữ đầu bếp người nhà Minh. ⟦$1⟧
+/조선 출신의 요리사\. (.+)/	Đầu bếp người Triều Tiên. ⟦$1⟧
+/조선 출신의 여요리사\. (.+)/	Nữ đầu bếp người Triều Tiên. ⟦$1⟧
+/일본 출신의 요리사\. (.+)/	Đầu bếp người Nhật Bản. ⟦$1⟧
+/일본 출신의 여요리사\. (.+)/	Nữ đầu bếp người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 요리사\. (.+)/	Đầu bếp người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여요리사\. (.+)/	Nữ đầu bếp người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 요리사\. (.+)/	Đầu bếp người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여요리사\. (.+)/	Nữ đầu bếp người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 요리사\. (.+)/	Đầu bếp người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여요리사\. (.+)/	Nữ đầu bếp người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 요리사\. (.+)/	Đầu bếp người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여요리사\. (.+)/	Nữ đầu bếp người sinh ở Brasil. ⟦$1⟧
+/카스티야 출신의 악사\. (.+)/	Nhạc công người Castilla. ⟦$1⟧
+/카스티야 출신의 여악사\. (.+)/	Nữ nhạc công người Castilla. ⟦$1⟧
+/포르투갈 출신의 악사\. (.+)/	Nhạc công người Bồ Đào Nha. ⟦$1⟧
+/포르투갈 출신의 여악사\. (.+)/	Nữ nhạc công người Bồ Đào Nha. ⟦$1⟧
+/이탈리아 출신의 악사\. (.+)/	Nhạc công người Ý. ⟦$1⟧
+/이탈리아 출신의 여악사\. (.+)/	Nữ nhạc công người Ý. ⟦$1⟧
+/프랑스 출신의 악사\. (.+)/	Nhạc công người Pháp. ⟦$1⟧
+/프랑스 출신의 여악사\. (.+)/	Nữ nhạc công người Pháp. ⟦$1⟧
+/잉글랜드 출신의 악사\. (.+)/	Nhạc công người Anh. ⟦$1⟧
+/잉글랜드 출신의 여악사\. (.+)/	Nữ nhạc công người Anh. ⟦$1⟧
+/저지대 출신의 악사\. (.+)/	Nhạc công người vùng Đất Thấp. ⟦$1⟧
+/저지대 출신의 여악사\. (.+)/	Nữ nhạc công người vùng Đất Thấp. ⟦$1⟧
+/독일 출신의 악사\. (.+)/	Nhạc công người Đức. ⟦$1⟧
+/독일 출신의 여악사\. (.+)/	Nữ nhạc công người Đức. ⟦$1⟧
+/북유럽 출신의 악사\. (.+)/	Nhạc công người Bắc Âu. ⟦$1⟧
+/북유럽 출신의 여악사\. (.+)/	Nữ nhạc công người Bắc Âu. ⟦$1⟧
+/동유럽 출신의 악사\. (.+)/	Nhạc công người Đông Âu. ⟦$1⟧
+/동유럽 출신의 여악사\. (.+)/	Nữ nhạc công người Đông Âu. ⟦$1⟧
+/그리스 출신의 악사\. (.+)/	Nhạc công người Hy Lạp. ⟦$1⟧
+/그리스 출신의 여악사\. (.+)/	Nữ nhạc công người Hy Lạp. ⟦$1⟧
+/튀르크 출신의 악사\. (.+)/	Nhạc công người Thổ. ⟦$1⟧
+/튀르크 출신의 여악사\. (.+)/	Nữ nhạc công người Thổ. ⟦$1⟧
+/무어 출신의 악사\. (.+)/	Nhạc công người xứ Moor. ⟦$1⟧
+/무어 출신의 여악사\. (.+)/	Nữ nhạc công người xứ Moor. ⟦$1⟧
+/페르시아 출신의 악사\. (.+)/	Nhạc công người Ba Tư. ⟦$1⟧
+/페르시아 출신의 여악사\. (.+)/	Nữ nhạc công người Ba Tư. ⟦$1⟧
+/인도 출신의 악사\. (.+)/	Nhạc công người Ấn Độ. ⟦$1⟧
+/인도 출신의 여악사\. (.+)/	Nữ nhạc công người Ấn Độ. ⟦$1⟧
+/남쪽\ 바다 출신의 악사\. (.+)/	Nhạc công người Biển phương Nam. ⟦$1⟧
+/남쪽\ 바다 출신의 여악사\. (.+)/	Nữ nhạc công người Biển phương Nam. ⟦$1⟧
+/명나라 출신의 악사\. (.+)/	Nhạc công người nhà Minh. ⟦$1⟧
+/명나라 출신의 여악사\. (.+)/	Nữ nhạc công người nhà Minh. ⟦$1⟧
+/조선 출신의 악사\. (.+)/	Nhạc công người Triều Tiên. ⟦$1⟧
+/조선 출신의 여악사\. (.+)/	Nữ nhạc công người Triều Tiên. ⟦$1⟧
+/일본 출신의 악사\. (.+)/	Nhạc công người Nhật Bản. ⟦$1⟧
+/일본 출신의 여악사\. (.+)/	Nữ nhạc công người Nhật Bản. ⟦$1⟧
+/서아프리카 출신의 악사\. (.+)/	Nhạc công người Tây Phi. ⟦$1⟧
+/서아프리카 출신의 여악사\. (.+)/	Nữ nhạc công người Tây Phi. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 악사\. (.+)/	Nhạc công người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여악사\. (.+)/	Nữ nhạc công người sinh ở Tân Tây Ban Nha. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 악사\. (.+)/	Nhạc công người sinh ở đại lục phương Nam. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여악사\. (.+)/	Nữ nhạc công người sinh ở đại lục phương Nam. ⟦$1⟧
+/브라질\ 태생 출신의 악사\. (.+)/	Nhạc công người sinh ở Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여악사\. (.+)/	Nữ nhạc công người sinh ở Brasil. ⟦$1⟧
+/(.+?) 태생의 항해사\. (.+)/	Hoa tiêu sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여항해사\. (.+)/	Nữ hoa tiêu sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 검객\. (.+)/	Kiếm khách sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여검객\. (.+)/	Nữ kiếm khách sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 포수\. (.+)/	Pháo thủ sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여포수\. (.+)/	Nữ pháo thủ sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 회계\. (.+)/	Kế toán sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여회계\. (.+)/	Nữ kế toán sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 학자\. (.+)/	Học giả sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여학자\. (.+)/	Nữ học giả sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 의사\. (.+)/	Thầy thuốc sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여의사\. (.+)/	Nữ thầy thuốc sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 통역\. (.+)/	Thông dịch sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여통역\. (.+)/	Nữ thông dịch sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 수도사\. (.+)/	Tu sĩ sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여수도사\. (.+)/	Nữ tu sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 선대공\. (.+)/	Thợ đóng tàu sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여선대공\. (.+)/	Nữ thợ đóng tàu sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 측량사\. (.+)/	Trắc địa viên sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여측량사\. (.+)/	Nữ trắc địa viên sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 요리사\. (.+)/	Đầu bếp sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여요리사\. (.+)/	Nữ đầu bếp sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 악사\. (.+)/	Nhạc công sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여악사\. (.+)/	Nữ nhạc công sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 승려\. (.+)/	Nhà sư sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여승려\. (.+)/	Ni cô sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 라마승\. (.+)/	Lạt-ma sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여라마승\. (.+)/	Nữ lạt-ma sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 수행자\. (.+)/	Người tu khổ hạnh sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여수행자\. (.+)/	Nữ người tu khổ hạnh sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 수피\. (.+)/	Tu sĩ Sufi sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여수피\. (.+)/	Nữ tu sĩ Sufi sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 주술사\. (.+)/	Thầy pháp sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여주술사\. (.+)/	Nữ thầy pháp sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 신관\. (.+)/	Tư tế sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여신관\. (.+)/	Nữ tư tế sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 소리꾼\. (.+)/	Nghệ nhân hát pansori sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여소리꾼\. (.+)/	Nữ nghệ nhân hát pansori sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 비파법사\. (.+)/	Pháp sư đàn biwa sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여비파법사\. (.+)/	Nữ pháp sư đàn biwa sinh ra ở ⟦$1⟧. ⟦$2⟧
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 항해사\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là hoa tiêu.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 항해사\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là hoa tiêu.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 항해사/	Hoa tiêu ⟦$1⟧
+여항해사	Nữ hoa tiêu
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 검객\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là kiếm khách.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 검객\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là kiếm khách.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 검객/	Kiếm khách ⟦$1⟧
+여검객	Nữ kiếm khách
+검객	Kiếm khách
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 포수\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là pháo thủ.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 포수\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là pháo thủ.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 포수/	Pháo thủ ⟦$1⟧
+여포수	Nữ pháo thủ
+포수	Pháo thủ
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 회계\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là kế toán.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 회계\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là kế toán.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 회계/	Kế toán ⟦$1⟧
+여회계	Nữ kế toán
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 학자\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là học giả.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 학자\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là học giả.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 학자/	Học giả ⟦$1⟧
+여학자	Nữ học giả
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 의사\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là thầy thuốc.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 의사\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là thầy thuốc.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 의사/	Thầy thuốc ⟦$1⟧
+여의사	Nữ thầy thuốc
+의사	Thầy thuốc
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 통역\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là thông dịch.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 통역\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là thông dịch.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 통역/	Thông dịch ⟦$1⟧
+여통역	Nữ thông dịch
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 수도사\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là tu sĩ.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 수도사\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là tu sĩ.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 수도사/	Tu sĩ ⟦$1⟧
+여수도사	Nữ tu
+수도사	Tu sĩ
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 선대공\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là thợ đóng tàu.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 선대공\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là thợ đóng tàu.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 선대공/	Thợ đóng tàu ⟦$1⟧
+여선대공	Nữ thợ đóng tàu
+선대공	Thợ đóng tàu
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 측량사\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là trắc địa viên.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 측량사\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là trắc địa viên.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 측량사/	Trắc địa viên ⟦$1⟧
+여측량사	Nữ trắc địa viên
+측량사	Trắc địa viên
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 요리사\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là đầu bếp.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 요리사\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là đầu bếp.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 요리사/	Đầu bếp ⟦$1⟧
+여요리사	Nữ đầu bếp
+요리사	Đầu bếp
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 악사\./	Một người phụ nữ ⟦$1⟧. Khi tìm thấy ⟦$2⟧, cô xin được lên tàu và đi theo. Nghề là nhạc công.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 악사\./	Một người đàn ông ⟦$1⟧. Khi tìm thấy ⟦$2⟧, anh xin được lên tàu và đi theo. Nghề là nhạc công.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 악사/	Nhạc công ⟦$1⟧
+여악사	Nữ nhạc công
+악사	Nhạc công
+승려	Nhà sư
+라마승	Lạt-ma
+수행자	Người tu khổ hạnh
+수피	Tu sĩ Sufi
+주술사	Thầy pháp
+신관	Tư tế
+소리꾼	Nghệ nhân hát pansori
+비파법사	Pháp sư đàn biwa
+/(.+?)의 마을에서 나고 자랐다\. 바다 건너에서 온 배를 처음 보고, 수평선 너머를 보고 싶어 제독을 따라나섰다\./	Sinh ra và lớn lên trong làng của ⟦$1⟧. Lần đầu thấy con tàu từ bên kia biển tới, muốn nhìn thấy những gì nằm sau đường chân trời nên đã theo đô đốc lên đường.
+@에서 태어났다. @	Sinh ra ở {1}. {2}
+서른 해쯤 전 이 바다를 떠돌던 @(@)(과|와) 똑 닮았다는 말을 자주 듣는다.	Hay bị bảo là giống hệt {1} ({2}), người từng lang bạt vùng biển này chừng ba mươi năm trước.
+철새 소식: 올해 떠돌이 항해사 #명이 새로 항구에 나타났다 — @.	Tin chim di trú: năm nay có # hoa tiêu lang bạt mới xuất hiện ở cảng — {1}.
+한 세대가 흘렀다. 항구를 떠돌던 철새들이 떠나고 #명의 새 얼굴이 나타났다 — 어딘가 윗대 뱃사람들을 닮았다는 소문이다.	Một thế hệ đã trôi qua. Những chim di trú lang bạt các cảng đã ra đi, và # gương mặt mới xuất hiện — có lời đồn rằng họ phảng phất giống những thủy thủ đời trước.
+@(@)	{1} ({2})
+고용되지 못한 뱃사람들이 바다로 나갔다 — @. 그 함대를 나포하면 사로잡아 다시 고용할 수 있다.	Những thủy thủ không ai thuê đã ra khơi — {1}. Bắt được hạm đội của họ thì có thể bắt sống và thuê lại.
+@ → @	{1} → {2}
+@ 상선대 선장	thuyền trưởng đoàn thương thuyền {1}
+@ 군함대 제독	đô đốc hạm đội chiến hạm {1}
+@ 해적단 두목	thủ lĩnh băng hải tặc {1}
+바다의 새 얼굴: @.	Gương mặt mới trên biển: {1}.
+@ 제독	đô đốc {1}
+해적 소문: @(이|가) 바다에 나타났다고 한다.	Tin đồn hải tặc: nghe nói {1} đã xuất hiện trên biển.

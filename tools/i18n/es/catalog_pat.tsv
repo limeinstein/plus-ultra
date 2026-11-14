@@ -1,0 +1,51 @@
+@ 술집	Taberna de {1}
+@ 시내 (그 건물을 누르면)	Dentro de {1} (pulse ese edificio)
+경쟁자 @	Rival {1}
+@ #년	{1} ({2})
+@ 『@』 (@)	{1}, {2} ({3})
+『@』 (@)	{1} ({2})
+@ 『@』	{1}, {2}
+『@』	{1}
+〈@〉 무거움 — @, 이 단계에서 발견 #곳 (또는 열린 지 #년)	〈{1}〉 Pesado — {2}, tras {3} descubrimientos en esta etapa (o {4} años después de abrirse)
+〈@〉 가장 무거움 — @, 이 단계에서 발견 #곳 (또는 열린 지 #년)	〈{1}〉 Lo más pesado — {2}, tras {3} descubrimientos en esta etapa (o {4} años después de abrirse)
+〈@〉 가벼움 — @	〈{1}〉 Ligero — {2}
+〈@〉 맛보기 — @	〈{1}〉 Aperitivo — {2}
+@(이|가) 알려진 뒤	cuando se conozca {1}
+@(이|가) 알려지면 곧바로	en cuanto se conozca {1}
+@ 도시의 술집·여관 — 한 달에 한 번 이웃 도시로 옮기거나 머묾 (처음: @)	Tabernas y posadas de las ciudades de {1}: cada mes se traslada a una ciudad vecina o se queda (primera: {2})
+@ 궁정의 왕명에서 이름이 정해지는 인물입니다. 구출 대상의 이름은 게임과 도감에서 똑같이 표시됩니다.	Personaje cuyo nombre lo fija la orden real de la corte de {1}. El nombre de la persona a rescatar se muestra igual en el juego y en el Códice.
+@ — #년 #월에 발표	{1}: anunciado en {3}/{2}
+@ 시내 (건물에 들어가면)	Dentro de {1} (al entrar en un edificio)
+@ 근처 뭍 (도시 밖을 탐험하면)	Tierra cerca de {1} (al explorar fuera de la ciudad)
+@ — 동식물	{1} — Fauna y flora
+@ — 서적	{1} — Libro
+@ — 장신구	{1} — Adorno
+@ — 선수상	{1} — Mascarón de proa
+@ — 보물	{1} — Tesoro
+· 한국어: @	· Nombre coreano: {1}
+〈@〉 관문 — @	〈{1}〉 Puerta — {2}
+@(이|가) 알려지고 맛보기 발견 #개를 찾으면 (또는 역사 속 발표 #년 전부터)	cuando se conozca {1} y haya encontrado {2} descubrimientos de aperitivo (o desde {3} años antes del anuncio histórico)
+@ 또는 @(이|가) 알려지면 곧바로	en cuanto se conozca {1} o {2}
+@, @	{1}, {2}
+@ — 아메리카에서 처음 살 때	{1}: al comprarlo por primera vez en América
+@ — 인도·중근동에서 처음 살 때	{1}: al comprarlo por primera vez en la India o el Oriente Próximo
+@ — 중근동·동아시아에서 처음 살 때	{1}: al comprarlo por primera vez en el Oriente Próximo o Asia oriental
+먼저 「@」(을|를) 찾아야 한다	Primero hay que encontrar «{1}»
+먼저 「@」·「@」(을|를) 찾아야 한다	Primero hay que encontrar «{1}» y «{2}»
+@ 능숙	{1}: con soltura
+@ 보통	{1}: normal
+@ 기초	{1}: básico
+@ — 들어서면 마을 사람이, 술집에서는 주인이 (개척 단계와 상관없이)	{1}: la gente del pueblo al llegar; en la taberna, el tabernero (sea cual sea la etapa de colonización)
+@ 왕궁	Palacio de {1}
+@ — @을(를) 만나면 (세상을 떠난 뒤에는 시내 건물에서)	{1}: si conoce a {2} (después de su muerte, en un edificio de la ciudad)
+인물 #/#	Personas #/#
+이벤트 #/#	Acontecimientos #/#
+업적 #/#	Logros #/#
+발견물 #/#	Descubrimientos #/#
+음식 #/#	Comidas #/#
+악기 #/#	Instrumentos #/#
+무기 #/#	Armas #/#
+@ · 본 것 # / 전체 #개	{1} · vistos # de #
+@ · 본 것 # / 전체 #개 (보이는 것 #)	{1} · vistos # de # (mostrados #)
+@ · # / #개	{1} · # / #
+— 본 것 # / 전체 #. @	— vistos # de #. {1}

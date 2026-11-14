@@ -1,0 +1,61 @@
+/(.+) (\S+)에 가면 건물들을 하나하나 둘러보면 눈에 띌 걸세\./	⟦$1⟧ Vaya a ⟦$2⟧ y mire los edificios uno por uno: lo verá.
+/(.+) (\S+)에 가면 거리를 걷다 그 건물 앞에 가서 직접 보게\./	⟦$1⟧ Vaya a ⟦$2⟧, recorra las calles y póngase delante de ese edificio para verlo con sus propios ojos.
+/(.+) 그걸 만든 (.+?)(?:을|를) 만나 이야기해 보게\. 요즘 어디서 지내는지는 술집마다 소문이 다르더군\./	⟦$1⟧ Vaya a hablar con ⟦$2⟧, que lo hizo. En cada taberna dicen una cosa distinta sobre dónde para estos días.
+단서 — @	Pista — @
+…연기 속에 보이네요. @	…Lo veo en el humo. @
+(알아듣기 힘든 말이지만) @	(Cuesta entenderlo, pero) @
+이건 비밀인데 말이야... @	Esto que quede entre nosotros... @
+확실히 @	Esto lo sé con certeza: @
+이건 어떤 선원한테서 들은 이야기인데, @	Esto me lo contó un marinero: @
+자네가 쫓는 그 이야기 말일세, 나도 들은 바가 있네. @	Esa historia que usted persigue... yo también he oído algo. @
+그러고 보니 이런 이야기를 들은 적이 있네. @	Ahora que lo pienso, una vez oí una historia así. @
+그대가 쫓는 그 이야기 말이오, (짐|과인)도 들은 바가 있소. @	Esa historia que vos perseguís... también Nos hemos oído hablar de ella. @
+그러고 보니 이런 이야기가 (짐|과인)의 귀에 들어왔소. @	Ahora que lo pienso, llegó a Nuestros oídos una historia así. @
+당신이 쫓는 그 이야기 말이에요, 나도 들은 게 있어요. @	Esa historia que persigue... yo también he oído algo. @
+그러고 보니 이런 이야기를 들은 적이 있어요. @	Ahora que lo pienso, una vez oí una historia así. @
+나리가 쫓는 그 이야기 말입니다, 저도 거래처에서 들은 게 있습니다. @	Esa historia que busca, señor... yo también he oído algo de mis socios. @
+그러고 보니 거래처에서 이런 이야기를 들었습니다. @	Ahora que lo pienso, uno de mis socios me contó esto. @
+그대가 쫓는 그 이야기 말이오, 나도 읽은 바가 있소. @	Esa historia que vos perseguís... yo también he leído sobre ella. @
+그러고 보니 이런 기록을 본 적이 있소. @	Ahora que lo pienso, una vez vi un registro así. @
+그대가 쫓는 그 이야기 말이오, 순례자에게서 들은 바가 있소. @	Esa historia que vos perseguís... la he oído de boca de peregrinos. @
+그러고 보니 순례자들에게서 이런 이야기를 들었소. @	Ahora que lo pienso, unos peregrinos me contaron esto. @
+제독이 쫓는 그 이야기 말입니다, 저도 보고서에서 본 적이 있습니다. @	Esa historia que persigue, almirante... yo también la he visto en un informe. @
+그러고 보니 이런 보고가 들어온 적이 있습니다. @	Ahora que lo pienso, una vez llegó un informe así. @
+【단서가 바뀌었다】 「@」 — @ (찾는 곳: @)	[La pista ha cambiado] «{1}» — {2} (Dónde buscar: {3})
+「@」(을|를) 읽어 보니 이런 대목이 있습니다. @	Leyendo «{1}» hay pasajes como estos. {2}
+@ 바로 이 근처라네. 성문을 나서면 금방이지.	@ Está muy cerca de aquí. En cuanto salga por la puerta de la ciudad.
+@ 최근에는 목격 소식이 없네. 항구에서 새 소식을 기다려 보게.	@ Últimamente no hay noticias de avistamientos. Espere nuevas noticias en el puerto.
+@ 바로 이 도시일세. 건물들을 하나하나 둘러보면 눈에 띌 걸세.	@ Está aquí mismo, en esta ciudad. Mire los edificios uno por uno y lo verá.
+@ 바로 이 도시일세. 거리를 걷다 그 건물 앞에 가서 직접 보게.	@ Está aquí mismo, en esta ciudad. Recorra las calles, póngase delante de ese edificio y véalo con sus propios ojos.
+@ 북쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Está muy lejos, al norte. Vaya a un puerto de la costa y embarque: serán al menos # días.
+@ 여기서 북쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Dicen que está a unos # días por tierra al norte de aquí.
+@ 북쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Está al norte. Dicen que hay que ir unos # días por mar, desembarcar y caminar tierra adentro unos # días.
+@ 북쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Está al norte. Dicen que unos # días por mar: al llegar a esas aguas, lo reconocerá.
+@ 북동쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Está muy lejos, al nordeste. Vaya a un puerto de la costa y embarque: serán al menos # días.
+@ 여기서 북동쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Dicen que está a unos # días por tierra al nordeste de aquí.
+@ 북동쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Está al nordeste. Dicen que hay que ir unos # días por mar, desembarcar y caminar tierra adentro unos # días.
+@ 북동쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Está al nordeste. Dicen que unos # días por mar: al llegar a esas aguas, lo reconocerá.
+@ 동쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Está muy lejos, al este. Vaya a un puerto de la costa y embarque: serán al menos # días.
+@ 여기서 동쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Dicen que está a unos # días por tierra al este de aquí.
+@ 동쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Está al este. Dicen que hay que ir unos # días por mar, desembarcar y caminar tierra adentro unos # días.
+@ 동쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Está al este. Dicen que unos # días por mar: al llegar a esas aguas, lo reconocerá.
+@ 남동쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Está muy lejos, al sudeste. Vaya a un puerto de la costa y embarque: serán al menos # días.
+@ 여기서 남동쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Dicen que está a unos # días por tierra al sudeste de aquí.
+@ 남동쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Está al sudeste. Dicen que hay que ir unos # días por mar, desembarcar y caminar tierra adentro unos # días.
+@ 남동쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Está al sudeste. Dicen que unos # días por mar: al llegar a esas aguas, lo reconocerá.
+@ 남쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Está muy lejos, al sur. Vaya a un puerto de la costa y embarque: serán al menos # días.
+@ 여기서 남쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Dicen que está a unos # días por tierra al sur de aquí.
+@ 남쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Está al sur. Dicen que hay que ir unos # días por mar, desembarcar y caminar tierra adentro unos # días.
+@ 남쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Está al sur. Dicen que unos # días por mar: al llegar a esas aguas, lo reconocerá.
+@ 남서쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Está muy lejos, al sudoeste. Vaya a un puerto de la costa y embarque: serán al menos # días.
+@ 여기서 남서쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Dicen que está a unos # días por tierra al sudoeste de aquí.
+@ 남서쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Está al sudoeste. Dicen que hay que ir unos # días por mar, desembarcar y caminar tierra adentro unos # días.
+@ 남서쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Está al sudoeste. Dicen que unos # días por mar: al llegar a esas aguas, lo reconocerá.
+@ 서쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Está muy lejos, al oeste. Vaya a un puerto de la costa y embarque: serán al menos # días.
+@ 여기서 서쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Dicen que está a unos # días por tierra al oeste de aquí.
+@ 서쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Está al oeste. Dicen que hay que ir unos # días por mar, desembarcar y caminar tierra adentro unos # días.
+@ 서쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Está al oeste. Dicen que unos # días por mar: al llegar a esas aguas, lo reconocerá.
+@ 북서쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Está muy lejos, al noroeste. Vaya a un puerto de la costa y embarque: serán al menos # días.
+@ 여기서 북서쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Dicen que está a unos # días por tierra al noroeste de aquí.
+@ 북서쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Está al noroeste. Dicen que hay que ir unos # días por mar, desembarcar y caminar tierra adentro unos # días.
+@ 북서쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Está al noroeste. Dicen que unos # días por mar: al llegar a esas aguas, lo reconocerá.

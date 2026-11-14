@@ -325,7 +325,7 @@
   function itemHtml(id) {
     var d = G.DISC[id]; if (!d) return '';
     if (found(id)) return '<span class="ach-i ok">' + U.esc(d.name) + '</span>';
-    if (d.need && !G.Disc.needMet(d) && !S().hints[id]) return '<span class="ach-i lock">？？？</span>';
+    if ((d.need || d.needRelic) && !G.Disc.needMet(d) && !S().hints[id]) return '<span class="ach-i lock"' + (d.needRelic && G.RELIC && G.RELIC[d.needRelic] ? ' title="「' + U.esc(G.RELIC[d.needRelic].name) + '」' + U.jx(G.RELIC[d.needRelic].name, '이/가') + ' 있어야 열린다"' : '') + '>？？？</span>';
     return '<span class="ach-i">' + U.esc(d.name) + '</span>';
   }
   /** 완성 업적: 그림·진행·남은 기록을 한 카드에 모은다. 실마리 없는 발견물의 이름은 감춘다. */

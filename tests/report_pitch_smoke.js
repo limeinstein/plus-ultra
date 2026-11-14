@@ -73,13 +73,15 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const oldSp = G.SPONSORS.filter(x => G.Sponsor.present(x) && P.sponsorAge(x) === 'old')[0];
       if (young && oldSp) { const c = { id: young.id, angle: 'scholar', lv: 2 }; out.demo = P.demo(c, oldSp); }
       // 4) 부풀리기: 입담만 좋은 부하 + 신중한 학자 → 시큰둥하면 들킨다 → 깎인다
-      const talker = G.MATES.filter(m => (m.st || [])[3] >= 64 && (m.st || [])[1] < 58)[0];
+      // 신중한 학자의 낮은 호응도에서도 실제 후보가 되는 높은 매력의 표본을 쓴다.
+      // 항해사 자료가 늘면서 첫 매력 64 이상 인물은 후보 점수 문턱을 넘지 못할 수 있다.
+      const talker = G.MATES.filter(m => (m.st || [])[3] >= 80 && (m.st || [])[1] < 58)[0];
       const NOSK = {}; ['hist', 'sci', 'survey', 'art', 'music', 'acct', 'cook', 'craft', 'theo', 'nav', 'ops', 'sword', 'gun'].forEach(k => { NOSK[k] = 0; });   // 지식은 없고 입담만
       const sch = G.SPONSORS.filter(x => x.type === 'scholar' && G.Sponsor.present(x))[0];
       if (talker && sch) {
         G.Game.state = JSON.parse(snap); const s4 = G.Game.state;
         s4.mates = [{ id: talker.id, role: 'first', loyal: 90, sk: NOSK }];
-        const c = P.candidates(d, sch)[0]; out.talker = talker.name; out.talkerAngle = c && c.angle; out.caughtP = c && P.caughtP(c, sch);
+        const c = P.candidates(d, sch)[0]; if (!c) throw Error('부풀리기 검사 표본이 보고 후보가 아니다: ' + talker.id); out.talker = talker.name; out.talkerAngle = c.angle; out.caughtP = P.caughtP(c, sch);
         s4.contract = { sponsor: sch.id, disc: 'carnac', reward: 10000, due: U.dateNum(U.addDays(s4.date, 300)) };
         const snap4 = JSON.stringify(s4);
         const one = async (on) => { G.Game.state = JSON.parse(snap4); const s5 = G.Game.state; s5.settings = s5.settings || {}; s5.settings.pitch = on; const uc = U.chance; U.chance = (p) => p > 0.5; const g0 = s5.player.gold; await SP.report(sch); U.chance = uc; return s5.player.gold - g0; };

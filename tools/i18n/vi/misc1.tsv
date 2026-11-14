@@ -1,0 +1,84 @@
+집사	Quản gia
+항해 수첩	Sổ tay hàng hải
+물	Nước
+적재	Hàng chở
+교역소 주인	Chủ thương điếm
+이름	Tên
+특기	Sở trường
+내구력	Độ bền
+#등급	Hạng #
+적재량	Sức chở
+돛	Buồm
+선실	Khoang
+#칸	# ô
+현상수배	TRUY NÃ
+상인	Thương nhân
+필요 명성	Danh tiếng cần có
+능력치	Năng lực
+부관	Phó quan
+기함	Kỳ hạm
+거래처	Bạn hàng
+기한	Thời hạn
+여급 @	Cô hầu bàn @
+사서	Quản thư
+항해일지	Nhật ký hàng hải
+자재	Vật liệu
+선명	Tên tàu
+선종	Loại tàu
+선장	Thuyền trưởng
+모항	Cảng nhà
+도시 사업	Dự án thành phố
+현재	Hiện tại
+생산시설	Cơ sở sản xuất
+상관·창고	Thương quán & Kho
+판로 개척	Mở thị trường
+조선 기술	Kỹ thuật đóng tàu
+천 닢	1.000 đồng
+박	đêm
+물건	Vật phẩm
+동료	Bạn đồng hành
+단서	Manh mối
+당나귀	Lừa
+마차	Xe ngựa
+증거	Bằng chứng
+#점	#
+#통	# thùng
+#척	# chiếc
+#명	# người
+#일분	# ngày dùng
+#박	# đêm
+이 값은 너무 비싸지 않은가. 옆 가게는 더 싸던데.	Giá này không đắt quá sao? Tiệm bên cạnh còn rẻ hơn.
+배를 탈 사람을 찾나? 일거리를 기다리는 뱃사람들이 늘 여기 모여 있지.	Tìm người đi tàu à? Thủy thủ chờ việc lúc nào cũng tụ ở đây.
+거기, 이쪽으로 오게. 포카나 하세.	Này, lại đây. Làm một ván poker nào.
+새 항로 하나에 세관 수입이 몇 곱절로 뜁니다.	Chỉ một hải trình mới là thuế quan tăng gấp mấy lần.
+원정을 도와 달라는 것이군요. 무엇을 찾으러 가려 하오?	Ngài muốn được giúp cho chuyến thám hiểm à. Ngài định đi tìm thứ gì?
+주님이 지으신 세상은 우리가 아는 것보다 훨씬 넓소.	Thế giới Chúa tạo dựng rộng lớn hơn nhiều so với những gì chúng ta biết.
+호오, 그렇다면 모험 목적을 말해 보게.	Ồ, vậy thì nói cho ta nghe mục đích chuyến phiêu lưu của cậu.
+세상은 우리가 아는 것보다 훨씬 넓다네.	Thế giới này rộng lớn hơn nhiều so với những gì chúng ta biết.
+@ 성문 옆 마구간에서 말·당나귀·마차를 구할 수 있지.	@ Ở chuồng ngựa cạnh cổng thành có thể mua ngựa, lừa và xe ngựa.
+그러고 보니 @	Nghĩ lại thì @
+뜬소문일 수도 있지만, 해적이란 놈들은 한곳에 오래 머물지 않으니 가 보시려면 서두르시는 게 좋을 겁니다.	Có thể chỉ là tin đồn nhảm, nhưng bọn hải tặc chẳng bao giờ ở một chỗ lâu, nên nếu muốn đi thì ngài nên nhanh lên.
+수첩 「할 일」에 적었다 — @ 앞바다	Đã ghi vào mục “Việc cần làm” trong sổ tay — vùng biển ngoài khơi @
+@(와|과) @의 싸움이 바다로 번졌다. @에 화약 연기가 자욱하다고 한다.	Cuộc chiến giữa @ và @ đã lan ra biển. Nghe nói @ mịt mù khói thuốc súng.
+@ 함대와 @ 함대가 @에서 맞붙었다는 소식이 들려온다.	Có tin hạm đội @ và hạm đội @ đã giao chiến ở @.
+@에서 @의 군함이 @의 배를 쫓아 포를 쏘았다고 한다.	Nghe nói ở @, một chiến hạm @ đã đuổi theo tàu của @ mà nã pháo.
+@ 군함	Chiến hạm @
+교황령 함대	Hạm đội Lãnh thổ Giáo hoàng
+@(이|가) 술을 마시고 있다.	@ đang uống rượu.
+@에서 @(을|를) 판다고 한다.	Nghe nói ở {1} có bán {2}.
+@에서 훌륭한 @(을|를) 짠다고 한다.	Nghe nói ở @ dệt được @ rất đẹp.
+@에서 오래된 유물을 판다고 한다.	Nghe nói ở @ có bán cổ vật.
+@ 이야기를 들을 수 있다	Có thể nghe chuyện về @
+제독, 이것 좀 보십시오! 소문으로만 듣던 @입니다.	Đô đốc, xem cái này đi! Đây chính là @ mà ta chỉ mới nghe qua lời đồn.
+제독, 저쪽을 보십시오! 소문으로만 듣던 @입니다.	Đô đốc, nhìn đằng kia kìa! Đó chính là @ mà ta chỉ mới nghe qua lời đồn.
+@에 처음으로 입항했다.	Lần đầu cập cảng @.
+@에 처음으로 성문을 지나 들어섰다.	Lần đầu qua cổng thành mà vào @.
+피렌체 학자가 보냈다는 편지 이야기가 뱃사람들 사이에 돌고 있네. @	Đám thủy thủ đang bàn tán về lá thư một học giả Firenze gửi. @
+이 근처 바다에서 새로 목격된 괴물 소식은 없다.	Ở vùng biển gần đây không có tin quái vật mới xuất hiện.
+기분 좋군!	Sướng thật!
+오늘은 해적 이야기가 없네요. 다들 날씨와 짐값 이야기뿐입니다.	Hôm nay không có chuyện hải tặc. Ai cũng chỉ nói chuyện thời tiết với giá cước.
+그러고 보니 @ 시장에 「@」(이|가) 나왔다더군. 금화 #닢쯤 부른다던가. 진짜라면 왕이라도 탐낼 물건이지.	Nghĩ lại thì nghe nói ở chợ @ có “@” được bày bán. Hình như người ta hét giá chừng # đồng vàng. Nếu là thật thì đến vua cũng phải thèm muốn.
+@에서 화산 분화가 일어났다.	Núi lửa phun trào ở @.
+새 항로 하나가 나라 하나보다 값질 때도 있지요.	Có khi chỉ một hải trình mới lại quý hơn cả một quốc gia.
+원정을 도와 달라는 말씀이군요. 무엇을 찾으러 가시려고요?	Ngài muốn được giúp cho chuyến thám hiểm sao. Ngài mong tìm được gì?
+세상은 우리가 아는 것보다 훨씬 넓겠지요.	Thế giới hẳn rộng lớn hơn nhiều so với những gì chúng ta biết.

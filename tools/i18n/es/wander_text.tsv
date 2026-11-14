@@ -1,0 +1,646 @@
+/카스티야 출신의 항해사\. (.+)/	Un navegante de Castilla. ⟦$1⟧
+/카스티야 출신의 여항해사\. (.+)/	Una navegante de Castilla. ⟦$1⟧
+/포르투갈 출신의 항해사\. (.+)/	Un navegante de Portugal. ⟦$1⟧
+/포르투갈 출신의 여항해사\. (.+)/	Una navegante de Portugal. ⟦$1⟧
+/이탈리아 출신의 항해사\. (.+)/	Un navegante de Italia. ⟦$1⟧
+/이탈리아 출신의 여항해사\. (.+)/	Una navegante de Italia. ⟦$1⟧
+/프랑스 출신의 항해사\. (.+)/	Un navegante de Francia. ⟦$1⟧
+/프랑스 출신의 여항해사\. (.+)/	Una navegante de Francia. ⟦$1⟧
+/잉글랜드 출신의 항해사\. (.+)/	Un navegante de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여항해사\. (.+)/	Una navegante de Inglaterra. ⟦$1⟧
+/저지대 출신의 항해사\. (.+)/	Un navegante de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여항해사\. (.+)/	Una navegante de los Países Bajos. ⟦$1⟧
+/독일 출신의 항해사\. (.+)/	Un navegante de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여항해사\. (.+)/	Una navegante de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 항해사\. (.+)/	Un navegante del Norte. ⟦$1⟧
+/북유럽 출신의 여항해사\. (.+)/	Una navegante del Norte. ⟦$1⟧
+/동유럽 출신의 항해사\. (.+)/	Un navegante de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여항해사\. (.+)/	Una navegante de Europa del Este. ⟦$1⟧
+/그리스 출신의 항해사\. (.+)/	Un navegante de Grecia. ⟦$1⟧
+/그리스 출신의 여항해사\. (.+)/	Una navegante de Grecia. ⟦$1⟧
+/튀르크 출신의 항해사\. (.+)/	Un navegante de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여항해사\. (.+)/	Una navegante de las tierras turcas. ⟦$1⟧
+/무어 출신의 항해사\. (.+)/	Un navegante de las tierras moras. ⟦$1⟧
+/무어 출신의 여항해사\. (.+)/	Una navegante de las tierras moras. ⟦$1⟧
+/페르시아 출신의 항해사\. (.+)/	Un navegante de Persia. ⟦$1⟧
+/페르시아 출신의 여항해사\. (.+)/	Una navegante de Persia. ⟦$1⟧
+/인도 출신의 항해사\. (.+)/	Un navegante de la India. ⟦$1⟧
+/인도 출신의 여항해사\. (.+)/	Una navegante de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 항해사\. (.+)/	Un navegante de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여항해사\. (.+)/	Una navegante de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 항해사\. (.+)/	Un navegante de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여항해사\. (.+)/	Una navegante de la China de los Ming. ⟦$1⟧
+/조선 출신의 항해사\. (.+)/	Un navegante de Joseon. ⟦$1⟧
+/조선 출신의 여항해사\. (.+)/	Una navegante de Joseon. ⟦$1⟧
+/일본 출신의 항해사\. (.+)/	Un navegante de Japón. ⟦$1⟧
+/일본 출신의 여항해사\. (.+)/	Una navegante de Japón. ⟦$1⟧
+/서아프리카 출신의 항해사\. (.+)/	Un navegante de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여항해사\. (.+)/	Una navegante de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 항해사\. (.+)/	Un navegante nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여항해사\. (.+)/	Una navegante nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 항해사\. (.+)/	Un navegante nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여항해사\. (.+)/	Una navegante nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 항해사\. (.+)/	Un navegante nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여항해사\. (.+)/	Una navegante nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 검객\. (.+)/	Un espadachín de Castilla. ⟦$1⟧
+/카스티야 출신의 여검객\. (.+)/	Una espadachina de Castilla. ⟦$1⟧
+/포르투갈 출신의 검객\. (.+)/	Un espadachín de Portugal. ⟦$1⟧
+/포르투갈 출신의 여검객\. (.+)/	Una espadachina de Portugal. ⟦$1⟧
+/이탈리아 출신의 검객\. (.+)/	Un espadachín de Italia. ⟦$1⟧
+/이탈리아 출신의 여검객\. (.+)/	Una espadachina de Italia. ⟦$1⟧
+/프랑스 출신의 검객\. (.+)/	Un espadachín de Francia. ⟦$1⟧
+/프랑스 출신의 여검객\. (.+)/	Una espadachina de Francia. ⟦$1⟧
+/잉글랜드 출신의 검객\. (.+)/	Un espadachín de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여검객\. (.+)/	Una espadachina de Inglaterra. ⟦$1⟧
+/저지대 출신의 검객\. (.+)/	Un espadachín de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여검객\. (.+)/	Una espadachina de los Países Bajos. ⟦$1⟧
+/독일 출신의 검객\. (.+)/	Un espadachín de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여검객\. (.+)/	Una espadachina de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 검객\. (.+)/	Un espadachín del Norte. ⟦$1⟧
+/북유럽 출신의 여검객\. (.+)/	Una espadachina del Norte. ⟦$1⟧
+/동유럽 출신의 검객\. (.+)/	Un espadachín de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여검객\. (.+)/	Una espadachina de Europa del Este. ⟦$1⟧
+/그리스 출신의 검객\. (.+)/	Un espadachín de Grecia. ⟦$1⟧
+/그리스 출신의 여검객\. (.+)/	Una espadachina de Grecia. ⟦$1⟧
+/튀르크 출신의 검객\. (.+)/	Un espadachín de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여검객\. (.+)/	Una espadachina de las tierras turcas. ⟦$1⟧
+/무어 출신의 검객\. (.+)/	Un espadachín de las tierras moras. ⟦$1⟧
+/무어 출신의 여검객\. (.+)/	Una espadachina de las tierras moras. ⟦$1⟧
+/페르시아 출신의 검객\. (.+)/	Un espadachín de Persia. ⟦$1⟧
+/페르시아 출신의 여검객\. (.+)/	Una espadachina de Persia. ⟦$1⟧
+/인도 출신의 검객\. (.+)/	Un espadachín de la India. ⟦$1⟧
+/인도 출신의 여검객\. (.+)/	Una espadachina de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 검객\. (.+)/	Un espadachín de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여검객\. (.+)/	Una espadachina de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 검객\. (.+)/	Un espadachín de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여검객\. (.+)/	Una espadachina de la China de los Ming. ⟦$1⟧
+/조선 출신의 검객\. (.+)/	Un espadachín de Joseon. ⟦$1⟧
+/조선 출신의 여검객\. (.+)/	Una espadachina de Joseon. ⟦$1⟧
+/일본 출신의 검객\. (.+)/	Un espadachín de Japón. ⟦$1⟧
+/일본 출신의 여검객\. (.+)/	Una espadachina de Japón. ⟦$1⟧
+/서아프리카 출신의 검객\. (.+)/	Un espadachín de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여검객\. (.+)/	Una espadachina de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 검객\. (.+)/	Un espadachín nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여검객\. (.+)/	Una espadachina nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 검객\. (.+)/	Un espadachín nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여검객\. (.+)/	Una espadachina nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 검객\. (.+)/	Un espadachín nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여검객\. (.+)/	Una espadachina nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 포수\. (.+)/	Un artillero de Castilla. ⟦$1⟧
+/카스티야 출신의 여포수\. (.+)/	Una artillera de Castilla. ⟦$1⟧
+/포르투갈 출신의 포수\. (.+)/	Un artillero de Portugal. ⟦$1⟧
+/포르투갈 출신의 여포수\. (.+)/	Una artillera de Portugal. ⟦$1⟧
+/이탈리아 출신의 포수\. (.+)/	Un artillero de Italia. ⟦$1⟧
+/이탈리아 출신의 여포수\. (.+)/	Una artillera de Italia. ⟦$1⟧
+/프랑스 출신의 포수\. (.+)/	Un artillero de Francia. ⟦$1⟧
+/프랑스 출신의 여포수\. (.+)/	Una artillera de Francia. ⟦$1⟧
+/잉글랜드 출신의 포수\. (.+)/	Un artillero de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여포수\. (.+)/	Una artillera de Inglaterra. ⟦$1⟧
+/저지대 출신의 포수\. (.+)/	Un artillero de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여포수\. (.+)/	Una artillera de los Países Bajos. ⟦$1⟧
+/독일 출신의 포수\. (.+)/	Un artillero de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여포수\. (.+)/	Una artillera de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 포수\. (.+)/	Un artillero del Norte. ⟦$1⟧
+/북유럽 출신의 여포수\. (.+)/	Una artillera del Norte. ⟦$1⟧
+/동유럽 출신의 포수\. (.+)/	Un artillero de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여포수\. (.+)/	Una artillera de Europa del Este. ⟦$1⟧
+/그리스 출신의 포수\. (.+)/	Un artillero de Grecia. ⟦$1⟧
+/그리스 출신의 여포수\. (.+)/	Una artillera de Grecia. ⟦$1⟧
+/튀르크 출신의 포수\. (.+)/	Un artillero de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여포수\. (.+)/	Una artillera de las tierras turcas. ⟦$1⟧
+/무어 출신의 포수\. (.+)/	Un artillero de las tierras moras. ⟦$1⟧
+/무어 출신의 여포수\. (.+)/	Una artillera de las tierras moras. ⟦$1⟧
+/페르시아 출신의 포수\. (.+)/	Un artillero de Persia. ⟦$1⟧
+/페르시아 출신의 여포수\. (.+)/	Una artillera de Persia. ⟦$1⟧
+/인도 출신의 포수\. (.+)/	Un artillero de la India. ⟦$1⟧
+/인도 출신의 여포수\. (.+)/	Una artillera de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 포수\. (.+)/	Un artillero de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여포수\. (.+)/	Una artillera de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 포수\. (.+)/	Un artillero de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여포수\. (.+)/	Una artillera de la China de los Ming. ⟦$1⟧
+/조선 출신의 포수\. (.+)/	Un artillero de Joseon. ⟦$1⟧
+/조선 출신의 여포수\. (.+)/	Una artillera de Joseon. ⟦$1⟧
+/일본 출신의 포수\. (.+)/	Un artillero de Japón. ⟦$1⟧
+/일본 출신의 여포수\. (.+)/	Una artillera de Japón. ⟦$1⟧
+/서아프리카 출신의 포수\. (.+)/	Un artillero de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여포수\. (.+)/	Una artillera de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 포수\. (.+)/	Un artillero nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여포수\. (.+)/	Una artillera nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 포수\. (.+)/	Un artillero nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여포수\. (.+)/	Una artillera nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 포수\. (.+)/	Un artillero nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여포수\. (.+)/	Una artillera nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 회계\. (.+)/	Un contador de Castilla. ⟦$1⟧
+/카스티야 출신의 여회계\. (.+)/	Una contadora de Castilla. ⟦$1⟧
+/포르투갈 출신의 회계\. (.+)/	Un contador de Portugal. ⟦$1⟧
+/포르투갈 출신의 여회계\. (.+)/	Una contadora de Portugal. ⟦$1⟧
+/이탈리아 출신의 회계\. (.+)/	Un contador de Italia. ⟦$1⟧
+/이탈리아 출신의 여회계\. (.+)/	Una contadora de Italia. ⟦$1⟧
+/프랑스 출신의 회계\. (.+)/	Un contador de Francia. ⟦$1⟧
+/프랑스 출신의 여회계\. (.+)/	Una contadora de Francia. ⟦$1⟧
+/잉글랜드 출신의 회계\. (.+)/	Un contador de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여회계\. (.+)/	Una contadora de Inglaterra. ⟦$1⟧
+/저지대 출신의 회계\. (.+)/	Un contador de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여회계\. (.+)/	Una contadora de los Países Bajos. ⟦$1⟧
+/독일 출신의 회계\. (.+)/	Un contador de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여회계\. (.+)/	Una contadora de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 회계\. (.+)/	Un contador del Norte. ⟦$1⟧
+/북유럽 출신의 여회계\. (.+)/	Una contadora del Norte. ⟦$1⟧
+/동유럽 출신의 회계\. (.+)/	Un contador de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여회계\. (.+)/	Una contadora de Europa del Este. ⟦$1⟧
+/그리스 출신의 회계\. (.+)/	Un contador de Grecia. ⟦$1⟧
+/그리스 출신의 여회계\. (.+)/	Una contadora de Grecia. ⟦$1⟧
+/튀르크 출신의 회계\. (.+)/	Un contador de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여회계\. (.+)/	Una contadora de las tierras turcas. ⟦$1⟧
+/무어 출신의 회계\. (.+)/	Un contador de las tierras moras. ⟦$1⟧
+/무어 출신의 여회계\. (.+)/	Una contadora de las tierras moras. ⟦$1⟧
+/페르시아 출신의 회계\. (.+)/	Un contador de Persia. ⟦$1⟧
+/페르시아 출신의 여회계\. (.+)/	Una contadora de Persia. ⟦$1⟧
+/인도 출신의 회계\. (.+)/	Un contador de la India. ⟦$1⟧
+/인도 출신의 여회계\. (.+)/	Una contadora de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 회계\. (.+)/	Un contador de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여회계\. (.+)/	Una contadora de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 회계\. (.+)/	Un contador de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여회계\. (.+)/	Una contadora de la China de los Ming. ⟦$1⟧
+/조선 출신의 회계\. (.+)/	Un contador de Joseon. ⟦$1⟧
+/조선 출신의 여회계\. (.+)/	Una contadora de Joseon. ⟦$1⟧
+/일본 출신의 회계\. (.+)/	Un contador de Japón. ⟦$1⟧
+/일본 출신의 여회계\. (.+)/	Una contadora de Japón. ⟦$1⟧
+/서아프리카 출신의 회계\. (.+)/	Un contador de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여회계\. (.+)/	Una contadora de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 회계\. (.+)/	Un contador nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여회계\. (.+)/	Una contadora nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 회계\. (.+)/	Un contador nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여회계\. (.+)/	Una contadora nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 회계\. (.+)/	Un contador nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여회계\. (.+)/	Una contadora nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 학자\. (.+)/	Un erudito de Castilla. ⟦$1⟧
+/카스티야 출신의 여학자\. (.+)/	Una erudita de Castilla. ⟦$1⟧
+/포르투갈 출신의 학자\. (.+)/	Un erudito de Portugal. ⟦$1⟧
+/포르투갈 출신의 여학자\. (.+)/	Una erudita de Portugal. ⟦$1⟧
+/이탈리아 출신의 학자\. (.+)/	Un erudito de Italia. ⟦$1⟧
+/이탈리아 출신의 여학자\. (.+)/	Una erudita de Italia. ⟦$1⟧
+/프랑스 출신의 학자\. (.+)/	Un erudito de Francia. ⟦$1⟧
+/프랑스 출신의 여학자\. (.+)/	Una erudita de Francia. ⟦$1⟧
+/잉글랜드 출신의 학자\. (.+)/	Un erudito de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여학자\. (.+)/	Una erudita de Inglaterra. ⟦$1⟧
+/저지대 출신의 학자\. (.+)/	Un erudito de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여학자\. (.+)/	Una erudita de los Países Bajos. ⟦$1⟧
+/독일 출신의 학자\. (.+)/	Un erudito de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여학자\. (.+)/	Una erudita de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 학자\. (.+)/	Un erudito del Norte. ⟦$1⟧
+/북유럽 출신의 여학자\. (.+)/	Una erudita del Norte. ⟦$1⟧
+/동유럽 출신의 학자\. (.+)/	Un erudito de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여학자\. (.+)/	Una erudita de Europa del Este. ⟦$1⟧
+/그리스 출신의 학자\. (.+)/	Un erudito de Grecia. ⟦$1⟧
+/그리스 출신의 여학자\. (.+)/	Una erudita de Grecia. ⟦$1⟧
+/튀르크 출신의 학자\. (.+)/	Un erudito de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여학자\. (.+)/	Una erudita de las tierras turcas. ⟦$1⟧
+/무어 출신의 학자\. (.+)/	Un erudito de las tierras moras. ⟦$1⟧
+/무어 출신의 여학자\. (.+)/	Una erudita de las tierras moras. ⟦$1⟧
+/페르시아 출신의 학자\. (.+)/	Un erudito de Persia. ⟦$1⟧
+/페르시아 출신의 여학자\. (.+)/	Una erudita de Persia. ⟦$1⟧
+/인도 출신의 학자\. (.+)/	Un erudito de la India. ⟦$1⟧
+/인도 출신의 여학자\. (.+)/	Una erudita de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 학자\. (.+)/	Un erudito de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여학자\. (.+)/	Una erudita de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 학자\. (.+)/	Un erudito de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여학자\. (.+)/	Una erudita de la China de los Ming. ⟦$1⟧
+/조선 출신의 학자\. (.+)/	Un erudito de Joseon. ⟦$1⟧
+/조선 출신의 여학자\. (.+)/	Una erudita de Joseon. ⟦$1⟧
+/일본 출신의 학자\. (.+)/	Un erudito de Japón. ⟦$1⟧
+/일본 출신의 여학자\. (.+)/	Una erudita de Japón. ⟦$1⟧
+/서아프리카 출신의 학자\. (.+)/	Un erudito de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여학자\. (.+)/	Una erudita de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 학자\. (.+)/	Un erudito nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여학자\. (.+)/	Una erudita nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 학자\. (.+)/	Un erudito nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여학자\. (.+)/	Una erudita nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 학자\. (.+)/	Un erudito nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여학자\. (.+)/	Una erudita nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 의사\. (.+)/	Un médico de Castilla. ⟦$1⟧
+/카스티야 출신의 여의사\. (.+)/	Una médica de Castilla. ⟦$1⟧
+/포르투갈 출신의 의사\. (.+)/	Un médico de Portugal. ⟦$1⟧
+/포르투갈 출신의 여의사\. (.+)/	Una médica de Portugal. ⟦$1⟧
+/이탈리아 출신의 의사\. (.+)/	Un médico de Italia. ⟦$1⟧
+/이탈리아 출신의 여의사\. (.+)/	Una médica de Italia. ⟦$1⟧
+/프랑스 출신의 의사\. (.+)/	Un médico de Francia. ⟦$1⟧
+/프랑스 출신의 여의사\. (.+)/	Una médica de Francia. ⟦$1⟧
+/잉글랜드 출신의 의사\. (.+)/	Un médico de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여의사\. (.+)/	Una médica de Inglaterra. ⟦$1⟧
+/저지대 출신의 의사\. (.+)/	Un médico de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여의사\. (.+)/	Una médica de los Países Bajos. ⟦$1⟧
+/독일 출신의 의사\. (.+)/	Un médico de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여의사\. (.+)/	Una médica de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 의사\. (.+)/	Un médico del Norte. ⟦$1⟧
+/북유럽 출신의 여의사\. (.+)/	Una médica del Norte. ⟦$1⟧
+/동유럽 출신의 의사\. (.+)/	Un médico de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여의사\. (.+)/	Una médica de Europa del Este. ⟦$1⟧
+/그리스 출신의 의사\. (.+)/	Un médico de Grecia. ⟦$1⟧
+/그리스 출신의 여의사\. (.+)/	Una médica de Grecia. ⟦$1⟧
+/튀르크 출신의 의사\. (.+)/	Un médico de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여의사\. (.+)/	Una médica de las tierras turcas. ⟦$1⟧
+/무어 출신의 의사\. (.+)/	Un médico de las tierras moras. ⟦$1⟧
+/무어 출신의 여의사\. (.+)/	Una médica de las tierras moras. ⟦$1⟧
+/페르시아 출신의 의사\. (.+)/	Un médico de Persia. ⟦$1⟧
+/페르시아 출신의 여의사\. (.+)/	Una médica de Persia. ⟦$1⟧
+/인도 출신의 의사\. (.+)/	Un médico de la India. ⟦$1⟧
+/인도 출신의 여의사\. (.+)/	Una médica de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 의사\. (.+)/	Un médico de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여의사\. (.+)/	Una médica de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 의사\. (.+)/	Un médico de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여의사\. (.+)/	Una médica de la China de los Ming. ⟦$1⟧
+/조선 출신의 의사\. (.+)/	Un médico de Joseon. ⟦$1⟧
+/조선 출신의 여의사\. (.+)/	Una médica de Joseon. ⟦$1⟧
+/일본 출신의 의사\. (.+)/	Un médico de Japón. ⟦$1⟧
+/일본 출신의 여의사\. (.+)/	Una médica de Japón. ⟦$1⟧
+/서아프리카 출신의 의사\. (.+)/	Un médico de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여의사\. (.+)/	Una médica de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 의사\. (.+)/	Un médico nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여의사\. (.+)/	Una médica nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 의사\. (.+)/	Un médico nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여의사\. (.+)/	Una médica nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 의사\. (.+)/	Un médico nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여의사\. (.+)/	Una médica nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 통역\. (.+)/	Un intérprete de Castilla. ⟦$1⟧
+/카스티야 출신의 여통역\. (.+)/	Una intérprete de Castilla. ⟦$1⟧
+/포르투갈 출신의 통역\. (.+)/	Un intérprete de Portugal. ⟦$1⟧
+/포르투갈 출신의 여통역\. (.+)/	Una intérprete de Portugal. ⟦$1⟧
+/이탈리아 출신의 통역\. (.+)/	Un intérprete de Italia. ⟦$1⟧
+/이탈리아 출신의 여통역\. (.+)/	Una intérprete de Italia. ⟦$1⟧
+/프랑스 출신의 통역\. (.+)/	Un intérprete de Francia. ⟦$1⟧
+/프랑스 출신의 여통역\. (.+)/	Una intérprete de Francia. ⟦$1⟧
+/잉글랜드 출신의 통역\. (.+)/	Un intérprete de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여통역\. (.+)/	Una intérprete de Inglaterra. ⟦$1⟧
+/저지대 출신의 통역\. (.+)/	Un intérprete de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여통역\. (.+)/	Una intérprete de los Países Bajos. ⟦$1⟧
+/독일 출신의 통역\. (.+)/	Un intérprete de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여통역\. (.+)/	Una intérprete de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 통역\. (.+)/	Un intérprete del Norte. ⟦$1⟧
+/북유럽 출신의 여통역\. (.+)/	Una intérprete del Norte. ⟦$1⟧
+/동유럽 출신의 통역\. (.+)/	Un intérprete de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여통역\. (.+)/	Una intérprete de Europa del Este. ⟦$1⟧
+/그리스 출신의 통역\. (.+)/	Un intérprete de Grecia. ⟦$1⟧
+/그리스 출신의 여통역\. (.+)/	Una intérprete de Grecia. ⟦$1⟧
+/튀르크 출신의 통역\. (.+)/	Un intérprete de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여통역\. (.+)/	Una intérprete de las tierras turcas. ⟦$1⟧
+/무어 출신의 통역\. (.+)/	Un intérprete de las tierras moras. ⟦$1⟧
+/무어 출신의 여통역\. (.+)/	Una intérprete de las tierras moras. ⟦$1⟧
+/페르시아 출신의 통역\. (.+)/	Un intérprete de Persia. ⟦$1⟧
+/페르시아 출신의 여통역\. (.+)/	Una intérprete de Persia. ⟦$1⟧
+/인도 출신의 통역\. (.+)/	Un intérprete de la India. ⟦$1⟧
+/인도 출신의 여통역\. (.+)/	Una intérprete de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 통역\. (.+)/	Un intérprete de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여통역\. (.+)/	Una intérprete de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 통역\. (.+)/	Un intérprete de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여통역\. (.+)/	Una intérprete de la China de los Ming. ⟦$1⟧
+/조선 출신의 통역\. (.+)/	Un intérprete de Joseon. ⟦$1⟧
+/조선 출신의 여통역\. (.+)/	Una intérprete de Joseon. ⟦$1⟧
+/일본 출신의 통역\. (.+)/	Un intérprete de Japón. ⟦$1⟧
+/일본 출신의 여통역\. (.+)/	Una intérprete de Japón. ⟦$1⟧
+/서아프리카 출신의 통역\. (.+)/	Un intérprete de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여통역\. (.+)/	Una intérprete de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 통역\. (.+)/	Un intérprete nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여통역\. (.+)/	Una intérprete nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 통역\. (.+)/	Un intérprete nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여통역\. (.+)/	Una intérprete nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 통역\. (.+)/	Un intérprete nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여통역\. (.+)/	Una intérprete nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 수도사\. (.+)/	Un fraile de Castilla. ⟦$1⟧
+/카스티야 출신의 여수도사\. (.+)/	Una monja de Castilla. ⟦$1⟧
+/포르투갈 출신의 수도사\. (.+)/	Un fraile de Portugal. ⟦$1⟧
+/포르투갈 출신의 여수도사\. (.+)/	Una monja de Portugal. ⟦$1⟧
+/이탈리아 출신의 수도사\. (.+)/	Un fraile de Italia. ⟦$1⟧
+/이탈리아 출신의 여수도사\. (.+)/	Una monja de Italia. ⟦$1⟧
+/프랑스 출신의 수도사\. (.+)/	Un fraile de Francia. ⟦$1⟧
+/프랑스 출신의 여수도사\. (.+)/	Una monja de Francia. ⟦$1⟧
+/잉글랜드 출신의 수도사\. (.+)/	Un fraile de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여수도사\. (.+)/	Una monja de Inglaterra. ⟦$1⟧
+/저지대 출신의 수도사\. (.+)/	Un fraile de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여수도사\. (.+)/	Una monja de los Países Bajos. ⟦$1⟧
+/독일 출신의 수도사\. (.+)/	Un fraile de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여수도사\. (.+)/	Una monja de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 수도사\. (.+)/	Un fraile del Norte. ⟦$1⟧
+/북유럽 출신의 여수도사\. (.+)/	Una monja del Norte. ⟦$1⟧
+/동유럽 출신의 수도사\. (.+)/	Un fraile de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여수도사\. (.+)/	Una monja de Europa del Este. ⟦$1⟧
+/그리스 출신의 수도사\. (.+)/	Un fraile de Grecia. ⟦$1⟧
+/그리스 출신의 여수도사\. (.+)/	Una monja de Grecia. ⟦$1⟧
+/튀르크 출신의 수도사\. (.+)/	Un fraile de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여수도사\. (.+)/	Una monja de las tierras turcas. ⟦$1⟧
+/무어 출신의 수도사\. (.+)/	Un fraile de las tierras moras. ⟦$1⟧
+/무어 출신의 여수도사\. (.+)/	Una monja de las tierras moras. ⟦$1⟧
+/페르시아 출신의 수도사\. (.+)/	Un fraile de Persia. ⟦$1⟧
+/페르시아 출신의 여수도사\. (.+)/	Una monja de Persia. ⟦$1⟧
+/인도 출신의 수도사\. (.+)/	Un fraile de la India. ⟦$1⟧
+/인도 출신의 여수도사\. (.+)/	Una monja de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 수도사\. (.+)/	Un fraile de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여수도사\. (.+)/	Una monja de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 수도사\. (.+)/	Un fraile de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여수도사\. (.+)/	Una monja de la China de los Ming. ⟦$1⟧
+/조선 출신의 수도사\. (.+)/	Un fraile de Joseon. ⟦$1⟧
+/조선 출신의 여수도사\. (.+)/	Una monja de Joseon. ⟦$1⟧
+/일본 출신의 수도사\. (.+)/	Un fraile de Japón. ⟦$1⟧
+/일본 출신의 여수도사\. (.+)/	Una monja de Japón. ⟦$1⟧
+/서아프리카 출신의 수도사\. (.+)/	Un fraile de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여수도사\. (.+)/	Una monja de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 수도사\. (.+)/	Un fraile nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여수도사\. (.+)/	Una monja nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 수도사\. (.+)/	Un fraile nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여수도사\. (.+)/	Una monja nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 수도사\. (.+)/	Un fraile nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여수도사\. (.+)/	Una monja nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 선대공\. (.+)/	Un carpintero de ribera de Castilla. ⟦$1⟧
+/카스티야 출신의 여선대공\. (.+)/	Una carpintera de ribera de Castilla. ⟦$1⟧
+/포르투갈 출신의 선대공\. (.+)/	Un carpintero de ribera de Portugal. ⟦$1⟧
+/포르투갈 출신의 여선대공\. (.+)/	Una carpintera de ribera de Portugal. ⟦$1⟧
+/이탈리아 출신의 선대공\. (.+)/	Un carpintero de ribera de Italia. ⟦$1⟧
+/이탈리아 출신의 여선대공\. (.+)/	Una carpintera de ribera de Italia. ⟦$1⟧
+/프랑스 출신의 선대공\. (.+)/	Un carpintero de ribera de Francia. ⟦$1⟧
+/프랑스 출신의 여선대공\. (.+)/	Una carpintera de ribera de Francia. ⟦$1⟧
+/잉글랜드 출신의 선대공\. (.+)/	Un carpintero de ribera de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여선대공\. (.+)/	Una carpintera de ribera de Inglaterra. ⟦$1⟧
+/저지대 출신의 선대공\. (.+)/	Un carpintero de ribera de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여선대공\. (.+)/	Una carpintera de ribera de los Países Bajos. ⟦$1⟧
+/독일 출신의 선대공\. (.+)/	Un carpintero de ribera de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여선대공\. (.+)/	Una carpintera de ribera de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 선대공\. (.+)/	Un carpintero de ribera del Norte. ⟦$1⟧
+/북유럽 출신의 여선대공\. (.+)/	Una carpintera de ribera del Norte. ⟦$1⟧
+/동유럽 출신의 선대공\. (.+)/	Un carpintero de ribera de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여선대공\. (.+)/	Una carpintera de ribera de Europa del Este. ⟦$1⟧
+/그리스 출신의 선대공\. (.+)/	Un carpintero de ribera de Grecia. ⟦$1⟧
+/그리스 출신의 여선대공\. (.+)/	Una carpintera de ribera de Grecia. ⟦$1⟧
+/튀르크 출신의 선대공\. (.+)/	Un carpintero de ribera de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여선대공\. (.+)/	Una carpintera de ribera de las tierras turcas. ⟦$1⟧
+/무어 출신의 선대공\. (.+)/	Un carpintero de ribera de las tierras moras. ⟦$1⟧
+/무어 출신의 여선대공\. (.+)/	Una carpintera de ribera de las tierras moras. ⟦$1⟧
+/페르시아 출신의 선대공\. (.+)/	Un carpintero de ribera de Persia. ⟦$1⟧
+/페르시아 출신의 여선대공\. (.+)/	Una carpintera de ribera de Persia. ⟦$1⟧
+/인도 출신의 선대공\. (.+)/	Un carpintero de ribera de la India. ⟦$1⟧
+/인도 출신의 여선대공\. (.+)/	Una carpintera de ribera de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 선대공\. (.+)/	Un carpintero de ribera de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여선대공\. (.+)/	Una carpintera de ribera de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 선대공\. (.+)/	Un carpintero de ribera de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여선대공\. (.+)/	Una carpintera de ribera de la China de los Ming. ⟦$1⟧
+/조선 출신의 선대공\. (.+)/	Un carpintero de ribera de Joseon. ⟦$1⟧
+/조선 출신의 여선대공\. (.+)/	Una carpintera de ribera de Joseon. ⟦$1⟧
+/일본 출신의 선대공\. (.+)/	Un carpintero de ribera de Japón. ⟦$1⟧
+/일본 출신의 여선대공\. (.+)/	Una carpintera de ribera de Japón. ⟦$1⟧
+/서아프리카 출신의 선대공\. (.+)/	Un carpintero de ribera de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여선대공\. (.+)/	Una carpintera de ribera de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 선대공\. (.+)/	Un carpintero de ribera nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여선대공\. (.+)/	Una carpintera de ribera nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 선대공\. (.+)/	Un carpintero de ribera nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여선대공\. (.+)/	Una carpintera de ribera nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 선대공\. (.+)/	Un carpintero de ribera nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여선대공\. (.+)/	Una carpintera de ribera nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 측량사\. (.+)/	Un topógrafo de Castilla. ⟦$1⟧
+/카스티야 출신의 여측량사\. (.+)/	Una topógrafa de Castilla. ⟦$1⟧
+/포르투갈 출신의 측량사\. (.+)/	Un topógrafo de Portugal. ⟦$1⟧
+/포르투갈 출신의 여측량사\. (.+)/	Una topógrafa de Portugal. ⟦$1⟧
+/이탈리아 출신의 측량사\. (.+)/	Un topógrafo de Italia. ⟦$1⟧
+/이탈리아 출신의 여측량사\. (.+)/	Una topógrafa de Italia. ⟦$1⟧
+/프랑스 출신의 측량사\. (.+)/	Un topógrafo de Francia. ⟦$1⟧
+/프랑스 출신의 여측량사\. (.+)/	Una topógrafa de Francia. ⟦$1⟧
+/잉글랜드 출신의 측량사\. (.+)/	Un topógrafo de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여측량사\. (.+)/	Una topógrafa de Inglaterra. ⟦$1⟧
+/저지대 출신의 측량사\. (.+)/	Un topógrafo de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여측량사\. (.+)/	Una topógrafa de los Países Bajos. ⟦$1⟧
+/독일 출신의 측량사\. (.+)/	Un topógrafo de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여측량사\. (.+)/	Una topógrafa de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 측량사\. (.+)/	Un topógrafo del Norte. ⟦$1⟧
+/북유럽 출신의 여측량사\. (.+)/	Una topógrafa del Norte. ⟦$1⟧
+/동유럽 출신의 측량사\. (.+)/	Un topógrafo de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여측량사\. (.+)/	Una topógrafa de Europa del Este. ⟦$1⟧
+/그리스 출신의 측량사\. (.+)/	Un topógrafo de Grecia. ⟦$1⟧
+/그리스 출신의 여측량사\. (.+)/	Una topógrafa de Grecia. ⟦$1⟧
+/튀르크 출신의 측량사\. (.+)/	Un topógrafo de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여측량사\. (.+)/	Una topógrafa de las tierras turcas. ⟦$1⟧
+/무어 출신의 측량사\. (.+)/	Un topógrafo de las tierras moras. ⟦$1⟧
+/무어 출신의 여측량사\. (.+)/	Una topógrafa de las tierras moras. ⟦$1⟧
+/페르시아 출신의 측량사\. (.+)/	Un topógrafo de Persia. ⟦$1⟧
+/페르시아 출신의 여측량사\. (.+)/	Una topógrafa de Persia. ⟦$1⟧
+/인도 출신의 측량사\. (.+)/	Un topógrafo de la India. ⟦$1⟧
+/인도 출신의 여측량사\. (.+)/	Una topógrafa de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 측량사\. (.+)/	Un topógrafo de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여측량사\. (.+)/	Una topógrafa de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 측량사\. (.+)/	Un topógrafo de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여측량사\. (.+)/	Una topógrafa de la China de los Ming. ⟦$1⟧
+/조선 출신의 측량사\. (.+)/	Un topógrafo de Joseon. ⟦$1⟧
+/조선 출신의 여측량사\. (.+)/	Una topógrafa de Joseon. ⟦$1⟧
+/일본 출신의 측량사\. (.+)/	Un topógrafo de Japón. ⟦$1⟧
+/일본 출신의 여측량사\. (.+)/	Una topógrafa de Japón. ⟦$1⟧
+/서아프리카 출신의 측량사\. (.+)/	Un topógrafo de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여측량사\. (.+)/	Una topógrafa de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 측량사\. (.+)/	Un topógrafo nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여측량사\. (.+)/	Una topógrafa nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 측량사\. (.+)/	Un topógrafo nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여측량사\. (.+)/	Una topógrafa nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 측량사\. (.+)/	Un topógrafo nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여측량사\. (.+)/	Una topógrafa nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 요리사\. (.+)/	Un cocinero de Castilla. ⟦$1⟧
+/카스티야 출신의 여요리사\. (.+)/	Una cocinera de Castilla. ⟦$1⟧
+/포르투갈 출신의 요리사\. (.+)/	Un cocinero de Portugal. ⟦$1⟧
+/포르투갈 출신의 여요리사\. (.+)/	Una cocinera de Portugal. ⟦$1⟧
+/이탈리아 출신의 요리사\. (.+)/	Un cocinero de Italia. ⟦$1⟧
+/이탈리아 출신의 여요리사\. (.+)/	Una cocinera de Italia. ⟦$1⟧
+/프랑스 출신의 요리사\. (.+)/	Un cocinero de Francia. ⟦$1⟧
+/프랑스 출신의 여요리사\. (.+)/	Una cocinera de Francia. ⟦$1⟧
+/잉글랜드 출신의 요리사\. (.+)/	Un cocinero de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여요리사\. (.+)/	Una cocinera de Inglaterra. ⟦$1⟧
+/저지대 출신의 요리사\. (.+)/	Un cocinero de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여요리사\. (.+)/	Una cocinera de los Países Bajos. ⟦$1⟧
+/독일 출신의 요리사\. (.+)/	Un cocinero de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여요리사\. (.+)/	Una cocinera de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 요리사\. (.+)/	Un cocinero del Norte. ⟦$1⟧
+/북유럽 출신의 여요리사\. (.+)/	Una cocinera del Norte. ⟦$1⟧
+/동유럽 출신의 요리사\. (.+)/	Un cocinero de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여요리사\. (.+)/	Una cocinera de Europa del Este. ⟦$1⟧
+/그리스 출신의 요리사\. (.+)/	Un cocinero de Grecia. ⟦$1⟧
+/그리스 출신의 여요리사\. (.+)/	Una cocinera de Grecia. ⟦$1⟧
+/튀르크 출신의 요리사\. (.+)/	Un cocinero de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여요리사\. (.+)/	Una cocinera de las tierras turcas. ⟦$1⟧
+/무어 출신의 요리사\. (.+)/	Un cocinero de las tierras moras. ⟦$1⟧
+/무어 출신의 여요리사\. (.+)/	Una cocinera de las tierras moras. ⟦$1⟧
+/페르시아 출신의 요리사\. (.+)/	Un cocinero de Persia. ⟦$1⟧
+/페르시아 출신의 여요리사\. (.+)/	Una cocinera de Persia. ⟦$1⟧
+/인도 출신의 요리사\. (.+)/	Un cocinero de la India. ⟦$1⟧
+/인도 출신의 여요리사\. (.+)/	Una cocinera de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 요리사\. (.+)/	Un cocinero de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여요리사\. (.+)/	Una cocinera de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 요리사\. (.+)/	Un cocinero de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여요리사\. (.+)/	Una cocinera de la China de los Ming. ⟦$1⟧
+/조선 출신의 요리사\. (.+)/	Un cocinero de Joseon. ⟦$1⟧
+/조선 출신의 여요리사\. (.+)/	Una cocinera de Joseon. ⟦$1⟧
+/일본 출신의 요리사\. (.+)/	Un cocinero de Japón. ⟦$1⟧
+/일본 출신의 여요리사\. (.+)/	Una cocinera de Japón. ⟦$1⟧
+/서아프리카 출신의 요리사\. (.+)/	Un cocinero de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여요리사\. (.+)/	Una cocinera de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 요리사\. (.+)/	Un cocinero nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여요리사\. (.+)/	Una cocinera nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 요리사\. (.+)/	Un cocinero nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여요리사\. (.+)/	Una cocinera nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 요리사\. (.+)/	Un cocinero nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여요리사\. (.+)/	Una cocinera nacida en Brasil. ⟦$1⟧
+/카스티야 출신의 악사\. (.+)/	Un músico de Castilla. ⟦$1⟧
+/카스티야 출신의 여악사\. (.+)/	Una música de Castilla. ⟦$1⟧
+/포르투갈 출신의 악사\. (.+)/	Un músico de Portugal. ⟦$1⟧
+/포르투갈 출신의 여악사\. (.+)/	Una música de Portugal. ⟦$1⟧
+/이탈리아 출신의 악사\. (.+)/	Un músico de Italia. ⟦$1⟧
+/이탈리아 출신의 여악사\. (.+)/	Una música de Italia. ⟦$1⟧
+/프랑스 출신의 악사\. (.+)/	Un músico de Francia. ⟦$1⟧
+/프랑스 출신의 여악사\. (.+)/	Una música de Francia. ⟦$1⟧
+/잉글랜드 출신의 악사\. (.+)/	Un músico de Inglaterra. ⟦$1⟧
+/잉글랜드 출신의 여악사\. (.+)/	Una música de Inglaterra. ⟦$1⟧
+/저지대 출신의 악사\. (.+)/	Un músico de los Países Bajos. ⟦$1⟧
+/저지대 출신의 여악사\. (.+)/	Una música de los Países Bajos. ⟦$1⟧
+/독일 출신의 악사\. (.+)/	Un músico de las tierras alemanas. ⟦$1⟧
+/독일 출신의 여악사\. (.+)/	Una música de las tierras alemanas. ⟦$1⟧
+/북유럽 출신의 악사\. (.+)/	Un músico del Norte. ⟦$1⟧
+/북유럽 출신의 여악사\. (.+)/	Una música del Norte. ⟦$1⟧
+/동유럽 출신의 악사\. (.+)/	Un músico de Europa del Este. ⟦$1⟧
+/동유럽 출신의 여악사\. (.+)/	Una música de Europa del Este. ⟦$1⟧
+/그리스 출신의 악사\. (.+)/	Un músico de Grecia. ⟦$1⟧
+/그리스 출신의 여악사\. (.+)/	Una música de Grecia. ⟦$1⟧
+/튀르크 출신의 악사\. (.+)/	Un músico de las tierras turcas. ⟦$1⟧
+/튀르크 출신의 여악사\. (.+)/	Una música de las tierras turcas. ⟦$1⟧
+/무어 출신의 악사\. (.+)/	Un músico de las tierras moras. ⟦$1⟧
+/무어 출신의 여악사\. (.+)/	Una música de las tierras moras. ⟦$1⟧
+/페르시아 출신의 악사\. (.+)/	Un músico de Persia. ⟦$1⟧
+/페르시아 출신의 여악사\. (.+)/	Una música de Persia. ⟦$1⟧
+/인도 출신의 악사\. (.+)/	Un músico de la India. ⟦$1⟧
+/인도 출신의 여악사\. (.+)/	Una música de la India. ⟦$1⟧
+/남쪽\ 바다 출신의 악사\. (.+)/	Un músico de los Mares del Sur. ⟦$1⟧
+/남쪽\ 바다 출신의 여악사\. (.+)/	Una música de los Mares del Sur. ⟦$1⟧
+/명나라 출신의 악사\. (.+)/	Un músico de la China de los Ming. ⟦$1⟧
+/명나라 출신의 여악사\. (.+)/	Una música de la China de los Ming. ⟦$1⟧
+/조선 출신의 악사\. (.+)/	Un músico de Joseon. ⟦$1⟧
+/조선 출신의 여악사\. (.+)/	Una música de Joseon. ⟦$1⟧
+/일본 출신의 악사\. (.+)/	Un músico de Japón. ⟦$1⟧
+/일본 출신의 여악사\. (.+)/	Una música de Japón. ⟦$1⟧
+/서아프리카 출신의 악사\. (.+)/	Un músico de África Occidental. ⟦$1⟧
+/서아프리카 출신의 여악사\. (.+)/	Una música de África Occidental. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 악사\. (.+)/	Un músico nacido en Nueva España. ⟦$1⟧
+/누에바\ 에스파냐\ 태생 출신의 여악사\. (.+)/	Una música nacida en Nueva España. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 악사\. (.+)/	Un músico nacido en el continente del sur. ⟦$1⟧
+/남쪽\ 대륙\ 태생 출신의 여악사\. (.+)/	Una música nacida en el continente del sur. ⟦$1⟧
+/브라질\ 태생 출신의 악사\. (.+)/	Un músico nacido en Brasil. ⟦$1⟧
+/브라질\ 태생 출신의 여악사\. (.+)/	Una música nacida en Brasil. ⟦$1⟧
+/(.+?) 태생의 항해사\. (.+)/	Un navegante nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여항해사\. (.+)/	Una navegante nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 검객\. (.+)/	Un espadachín nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여검객\. (.+)/	Una espadachina nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 포수\. (.+)/	Un artillero nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여포수\. (.+)/	Una artillera nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 회계\. (.+)/	Un contador nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여회계\. (.+)/	Una contadora nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 학자\. (.+)/	Un erudito nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여학자\. (.+)/	Una erudita nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 의사\. (.+)/	Un médico nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여의사\. (.+)/	Una médica nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 통역\. (.+)/	Un intérprete nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여통역\. (.+)/	Una intérprete nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 수도사\. (.+)/	Un fraile nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여수도사\. (.+)/	Una monja nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 선대공\. (.+)/	Un carpintero de ribera nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여선대공\. (.+)/	Una carpintera de ribera nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 측량사\. (.+)/	Un topógrafo nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여측량사\. (.+)/	Una topógrafa nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 요리사\. (.+)/	Un cocinero nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여요리사\. (.+)/	Una cocinera nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 악사\. (.+)/	Un músico nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여악사\. (.+)/	Una música nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 승려\. (.+)/	Un monje nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여승려\. (.+)/	Una monja nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 라마승\. (.+)/	Un lama nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여라마승\. (.+)/	Una lama nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 수행자\. (.+)/	Un asceta nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여수행자\. (.+)/	Una asceta nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 수피\. (.+)/	Un sufí nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여수피\. (.+)/	Una sufí nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 주술사\. (.+)/	Un chamán nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여주술사\. (.+)/	Una chamana nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 신관\. (.+)/	Un sacerdote nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여신관\. (.+)/	Una sacerdotisa nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 소리꾼\. (.+)/	Un cantor de sori nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여소리꾼\. (.+)/	Una cantora de sori nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 비파법사\. (.+)/	Un biwa hōshi nacido en ⟦$1⟧. ⟦$2⟧
+/(.+?) 태생의 여비파법사\. (.+)/	Una biwa hōshi nacida en ⟦$1⟧. ⟦$2⟧
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 항해사\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Navegante de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 항해사\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Navegante de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 항해사/	Navegante de ⟦$1⟧
+여항해사	Navegante
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 검객\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Espadachina de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 검객\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Espadachín de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 검객/	Espadachín de ⟦$1⟧
+여검객	Espadachina
+검객	Espadachín
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 포수\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Artillera de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 포수\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Artillero de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 포수/	Artillero de ⟦$1⟧
+여포수	Artillera
+포수	Artillero
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 회계\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Contadora de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 회계\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Contador de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 회계/	Contador de ⟦$1⟧
+여회계	Contadora
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 학자\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Erudita de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 학자\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Erudito de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 학자/	Erudito de ⟦$1⟧
+여학자	Erudita
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 의사\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Médica de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 의사\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Médico de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 의사/	Médico de ⟦$1⟧
+여의사	Médica
+의사	Médico
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 통역\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Intérprete de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 통역\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Intérprete de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 통역/	Intérprete de ⟦$1⟧
+여통역	Intérprete
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 수도사\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Monja de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 수도사\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Fraile de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 수도사/	Fraile de ⟦$1⟧
+여수도사	Monja
+수도사	Fraile
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 선대공\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Carpintera de ribera de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 선대공\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Carpintero de ribera de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 선대공/	Carpintero de ribera de ⟦$1⟧
+여선대공	Carpintera de ribera
+선대공	Carpintero de ribera
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 측량사\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Topógrafa de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 측량사\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Topógrafo de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 측량사/	Topógrafo de ⟦$1⟧
+여측량사	Topógrafa
+측량사	Topógrafo
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 요리사\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Cocinera de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 요리사\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Cocinero de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 요리사/	Cocinero de ⟦$1⟧
+여요리사	Cocinera
+요리사	Cocinero
+/(.+?) 여자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 악사\./	Una mujer del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, ella pidió subir a bordo. Música de oficio.
+/(.+?) 남자\. (.+?)(?:을|를) 찾았을 때 배에 태워 달라며 따라나섰다\. 솜씨는 악사\./	Un hombre del pueblo ⟦$1⟧. Cuando el almirante encontró ⟦$2⟧, él pidió subir a bordo. Músico de oficio.
+/((?:카스티야|포르투갈|이탈리아|프랑스|잉글랜드|네덜란드|독일|북유럽|폴란드·루스|그리스|오스만|마그레브·이집트|페르시아|힌두스탄|말레이·시암|명|조선|일본|기니\ 해안|누에바\ 에스파냐|페루·누에바\ 그라나다|브라질)) 악사/	Músico de ⟦$1⟧
+여악사	Música
+악사	Músico
+승려	Monje
+라마승	Lama
+수행자	Asceta
+수피	Sufí
+주술사	Chamán
+신관	Sacerdote
+소리꾼	Cantor de sori
+비파법사	Biwa hōshi
+/(.+?)의 마을에서 나고 자랐다\. 바다 건너에서 온 배를 처음 보고, 수평선 너머를 보고 싶어 제독을 따라나섰다\./	Nació y se crio entre los ⟦$1⟧. Tras ver por primera vez un barco llegado del otro lado del mar, siguió al almirante para ver qué hay más allá del horizonte.
+@에서 태어났다. @	Nació en {1}. {2}
+서른 해쯤 전 이 바다를 떠돌던 @(@)(과|와) 똑 닮았다는 말을 자주 듣는다.	A menudo le dicen que es la viva imagen de {1} ({2}), que surcaba estos mares hace unos treinta años.
+철새 소식: 올해 떠돌이 항해사 #명이 새로 항구에 나타났다 — @.	Noticias de aves de paso: este año han aparecido en puerto # marinos errantes nuevos: {1}.
+한 세대가 흘렀다. 항구를 떠돌던 철새들이 떠나고 #명의 새 얼굴이 나타났다 — 어딘가 윗대 뱃사람들을 닮았다는 소문이다.	Ha pasado una generación. Las aves de paso que vagaban de puerto en puerto se han ido y han aparecido # caras nuevas; se rumorea que, de algún modo, se parecen a los marinos de la generación anterior.
+@(@)	{1} ({2})
+고용되지 못한 뱃사람들이 바다로 나갔다 — @. 그 함대를 나포하면 사로잡아 다시 고용할 수 있다.	Los marinos a los que nadie contrató se han hecho a la mar: {1}. Si apresa sus flotas, podrá capturarlos con vida y volver a contratarlos.
+@ → @	{1} → {2}
+@ 상선대 선장	capitán de una flota mercante de {1}
+@ 군함대 제독	almirante de una flota de guerra de {1}
+@ 해적단 두목	jefe de los piratas de {1}
+바다의 새 얼굴: @.	Caras nuevas en el mar: {1}.
+@ 제독	Almirante de {1}
+해적 소문: @(이|가) 바다에 나타났다고 한다.	Rumores de piratas: dicen que {1} ha aparecido en el mar.

@@ -1,0 +1,105 @@
+앞의 얼굴	Cara anterior
+◀ 앞 얼굴	◀ Cara anterior
+다음 얼굴	Cara siguiente
+다음 얼굴 ▶	Cara siguiente ▶
+이름	Nombre
+성	Apellido
+다른 이름	Otro nombre
+불리는 이름:	Le llaman:
+생일	Cumpleaños
+월	Mes
+나이	Edad
+@세	@
+(젊을수록 체력·무력, 나이 들수록 지력·매력과 보너스 점수)	(cuanto más joven, más Vitalidad y Fuerza; cuanto mayor, más Inteligencia, Carisma y puntos extra)
+나이 보너스 — 능력 점수	Extra por edad — puntos de aptitud
+· 특기 점수	· puntos de habilidad
+지식(지력 #) 보너스 — 특기 점수	Extra por conocimientos (Int #) — puntos de habilidad
+(지력 #이면 +#)	(+{2} con Int {1})
+국적	Nacionalidad
+포르투갈 (리스본)	Portugal (Lisboa)
+에스파냐 (세빌리아)	España (Sevilla)
+직업	Oficio
+탐험가	Explorador
+발굴자	Arqueólogo
+사냥꾼	Cazador
+정복자	Conquistador
+전도사	Misionero
+상인	Mercader
+군인	Soldado
+난이도	Dificultad
+쉬움	Fácil
+엄격 규칙	Reglas estrictas
+시작 안내 건너뛰기	Saltar la guía inicial
+보너스	Extra
+다시 굴리기	Volver a tirar
+능력치	Aptitudes
+특기 한도 #개 · 어학 한도 #개 (지력에 따라)	Hasta # habilidades · # idiomas (según la Inteligencia)
+특기 · 어학	Habilidades · Idiomas
+남은 점수	Puntos restantes
+(나이 # + 지식 #)	(edad # + conocimientos #)
+타이틀로	Al título
+출항 준비 완료	Listo para zarpar
+마흔이 되면 수염 난 #대 모습으로 바뀝니다	A los cuarenta le crece la barba (aspecto de los #)
+#대 모습 — 수염이 난 얼굴	Aspecto de los # — con barba
+레콩키스타를 마무리하는 카스티야와 아라곤의 연합 왕국. 모국어 스페인어, 포르투갈어도 조금 한다.	El reino unido de Castilla y Aragón, que culmina la Reconquista. Lengua materna: español; también habla algo de portugués.
+아프리카 항로 개척에 앞선 해양 왕국. 모국어 포르투갈어, 스페인어도 조금 한다.	Reino marinero pionero en abrir la ruta de África. Lengua materna: portugués; también habla algo de español.
+항해와 측량에 능하다. 처음 시작하는 제독에게 권한다.	Hábil en navegación y topografía. Recomendado para almirantes principiantes.
+역사와 웅변에 밝아 유적을 찾는 데 강하다.	Versado en historia y elocuencia, hábil para encontrar ruinas.
+운용술이 뛰어나 오랜 탐험을 견딘다. 생물 발견에 강하다.	Excelente marinería, resiste largas exploraciones. Hábil para descubrir fauna.
+검술의 달인. 해전과 지상전에서 두각을 나타낸다.	Maestro de la esgrima. Destaca en las batallas navales y terrestres.
+신학을 익혀 교회의 신뢰를 얻고 선원의 마음을 붙든다.	Formado en teología, se gana la confianza de la Iglesia y el corazón de la tripulación.
+회계에 능해 교역으로 부를 쌓는다.	Diestro en contabilidad, hace fortuna con el comercio.
+포술과 사격술을 익힌 군인. 전투에 강하다.	Soldado formado en artillería y puntería. Fuerte en combate.
+잠재 특성의 실마리: @	Pista de un rasgo oculto: @
+낯선 지형과 자연을 직접 마주해 보자.	Enfréntese en persona a terrenos y paisajes desconocidos.
+옛 유적이나 보물을 직접 찾아 기록해 보자.	Busque y registre en persona ruinas o tesoros antiguos.
+짐승을 사냥하고 전리품을 실어 보자.	Cace animales y cargue los trofeos.
+기함으로 더 많은 선원을 가진 적에게 접현해 보자.	Aborde con la capitana a un enemigo con más tripulación.
+지친 선원들과 함께 예배처에서 기도해 보자.	Rece en un lugar de culto junto a su tripulación agotada.
+타지에서 들여온 물건으로 이익을 남겨 보자.	Obtenga beneficio con mercancías traídas de otras tierras.
+규율을 지킨 함대의 기함에서 포격해 보자.	Dispare los cañones desde la capitana de una flota disciplinada.
+출항·성문 출입에 #일(입항은 바로), 소지금 #닢. 가볍게 즐기는 항해.	# día para salir del puerto o cruzar la puerta de una ciudad (atracar es inmediato), # monedas al empezar. Una travesía relajada.
+출항·성문 출입에 #일(입항은 바로). 균형 잡힌 모험.	# días para salir del puerto o cruzar la puerta de una ciudad (atracar es inmediato). Una aventura equilibrada.
+출항·성문 출입에 #일(입항은 바로), 저장은 자국 항구의 여관에서만. 옛 항해자의 고난 그대로.	# días para salir del puerto o cruzar la puerta de una ciudad (atracar es inmediato); solo se guarda en posadas de puertos de su país. Las penurias de los antiguos navegantes, tal cual.
+아직 능력 점수 #점·특기 점수 #점이 남아 있습니다. 남긴 점수는 시작 후 배분할 수 없습니다. 그대로 시작할까요?	Aún le quedan # puntos de aptitud y # de habilidad. Los puntos sin gastar no se podrán asignar después de empezar. ¿Empieza igualmente?
+배분으로 돌아가기	Volver a repartir
+그대로 시작	Empezar igualmente
+남은 보너스 점수	Puntos extra restantes
+남은 점수가 부족합니다.	No quedan puntos suficientes.
+지력이 부족해 더 많은 특기를 익힐 수 없습니다.	Le falta Inteligencia para aprender más habilidades.
+지력이 부족해 더 많은 언어를 익힐 수 없습니다.	Le falta Inteligencia para aprender más idiomas.
+나이 보너스 점수를 다 썼습니다. 나이가 많을수록 점수가 많습니다.	Ha gastado los puntos extra por edad. Cuanto mayor, más puntos.
+지력을 내리면 특기 점수나 한도가 모자랍니다. 특기·어학을 먼저 줄이십시오.	Si baja la Inteligencia, faltarán puntos o límite de habilidad. Reduzca primero habilidades e idiomas.
+특기·어학 점수가 모자랍니다. 배분을 줄이거나 지력을 올리십시오.	Faltan puntos de habilidad e idioma. Reduzca el reparto o suba la Inteligencia.
+특기가 #개로 현재 한도 #개를 넘습니다. 특기를 줄이거나 지력을 올리십시오.	Tiene # habilidades, más del límite actual de #. Reduzca habilidades o suba la Inteligencia.
+어학이 #개로 현재 한도 #개를 넘습니다. 어학을 줄이거나 지력을 올리십시오.	Tiene # idiomas, más del límite actual de #. Reduzca idiomas o suba la Inteligencia.
+이름을 입력하세요.	Escriba un nombre.
+첫 항해를 준비하는 중…	Preparando la primera travesía…
+@ — @에 보너스	@ — extra a @
+염소자리	Capricornio
+물병자리	Acuario
+물고기자리	Piscis
+양자리	Aries
+황소자리	Tauro
+쌍둥이자리	Géminis
+게자리	Cáncer
+사자자리	Leo
+처녀자리	Virgo
+천칭자리	Libra
+전갈자리	Escorpio
+궁수자리	Sagitario
+기본 제독	Almirante clásico
+중세의 연금술사	Alquimista medieval
+하얀 남방의 항해사	Navegante de los blancos mares del sur
+철갑 항해사	Navegante acorazado
+망원경을 든 뱃사람	Marino con catalejo
+근육질 검사	Espadachín musculoso
+모자를 돌리는 항해사	Navegante que hace girar el sombrero
+카리스마 제독	Almirante carismático
+돌격대장	Jefe de asalto
+귀족 학자 제독	Almirante noble y erudito
+카사노바	Casanova
+정규군 장교	Oficial del ejército regular
+가죽옷 모험가	Aventurero de cuero
+검은 코트의 선장	Capitán de casaca negra
+@ #/#	@ #/#

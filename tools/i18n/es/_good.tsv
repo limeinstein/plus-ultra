@@ -1,0 +1,163 @@
+wheat	Trigo
+rice	Arroz
+maize	Maíz
+beans	Judías
+potato	Patatas
+fish	Pescado seco
+beef	Carne de vaca
+dairy	Lácteos
+sugar	Azúcar
+honey	Miel
+salt	Sal gema
+olive	Aceite de oliva
+palmoil	Aceite de palma
+wine	Vino
+brandy	Aguardiente
+rum	Ron
+beer	Cerveza
+pepper	Pimienta
+clove	Clavo
+nutmeg	Nuez moscada
+cinnamon	Canela
+ginger	Jengibre
+allspice	Pimienta de Jamaica
+tea	Té
+coffee	Café
+cacao	Cacao
+tobacco	Tabaco
+wool	Lana
+cotton	Algodón en rama
+silkraw	Seda cruda
+hemp	Cáñamo
+woolcloth	Paño de lana
+cottoncloth	Tela de algodón
+silk	Tejido de seda
+linen	Lino
+chintz	Chintz
+carpet	Alfombras
+iron	Mineral de hierro
+copper	Mineral de cobre
+tin	Mineral de estaño
+mercury	Mercurio
+coal	Carbón
+gold	Oro
+silver	Plata
+gems	Piedras preciosas
+pearl	Perlas
+coral	Coral
+amber	Ámbar
+jade	Jade
+ivory	Marfil
+tortoise	Carey
+rhino	Cuerno de rinoceronte
+fur	Pieles
+ambergris	Ámbar gris
+frankincense	Incienso
+musk	Almizcle
+sandalwood	Sándalo
+glass	Cristalería
+porcelain	Porcelana china
+leathergoods	Artículos de cuero
+jewelry	Joyas
+art	Obras de arte
+antique	Antigüedades
+guns	Armas de fuego
+cannon	Cañones
+timber	Madera
+dye	Tintes
+hides	Cueros
+herbs	Hierbas medicinales
+horses	Caballos
+faience	Loza europea
+cnsilk	Seda china
+calico	Calicó indio
+eaart	Pinturas de Asia oriental
+banana	Plátanos
+sweetpotato	Batatas
+sculpture	Esculturas
+slaves	Esclavos
+tigerskin	Pieles de tigre
+p_bitterorange	Naranjas amargas
+p_marmelo	Membrillos
+p_almond	Almendras
+p_madrono	Madroños
+p_chestnut	Castañas
+p_apple	Manzanas
+p_lingonberry	Arándanos rojos
+p_cloudberry	Moras de los pantanos
+p_gooseberry	Grosellas espinosas
+p_blackcurrant	Grosellas negras
+p_fig	Higos secos
+p_lemon	Limones
+p_carob	Algarrobas
+p_citron	Cidras
+p_marasca	Guindas marascas
+p_baobab	Fruto del baobab
+p_kola	Nueces de cola
+p_watermelon	Sandías
+p_marula	Marula
+p_shea	Manteca de karité
+p_date	Dátiles
+p_pistachio	Pistachos
+p_apricot	Orejones
+p_pomegranate	Granadas
+p_mulberry	Moras
+p_mango	Mangos
+p_jackfruit	Yaca
+p_tamarind	Tamarindo
+p_amla	Amla
+p_coconut	Cocos
+p_lychee	Lichis
+p_longan	Longanes secos
+p_persimmon	Caquis secos
+p_jujube	Azufaifas
+p_omija	Bayas de omija
+p_hamimelon	Melones de Hami
+p_wildapple	Manzanas de Almaty
+p_walnut	Nueces
+p_seabuckthorn	Espino amarillo
+p_barberry	Agracejo seco
+p_durian	Durián
+p_mangosteen	Mangostanes
+p_rambutan	Rambutanes
+p_carambola	Carambolas
+p_salak	Salak
+p_mikan	Mandarinas de Kishu
+p_yuzu	Yuzu
+p_nashi	Peras nashi
+p_akebi	Akebi
+p_biwa	Nísperos del Japón
+p_pineapple	Piñas
+p_avocado	Aguacates
+p_tomato	Tomates
+p_cashew	Anacardos
+p_cherimoya	Chirimoyas
+p_maesil	Ciruelas verdes
+p_orchid	Orquídeas en maceta
+p_chrysanthemum	Té de crisantemo
+p_bamboo	Bambú
+p_redpine	Pino rojo real
+p_azalea	Vino de azalea
+p_tulip	Bulbos de tulipán
+p_rosewater	Agua de rosas
+p_whiterose	Esquejes de rosa blanca
+p_bluerose	Rosas azules
+p_cork	Corcho
+p_oak	Madera de roble
+p_pinenut	Piñones
+p_gumarabic	Goma arábiga
+p_cedar	Madera de cedro
+p_teak	Teca
+p_ginkgo	Nueces de ginkgo
+p_populus	Resina de álamo
+p_camphor	Alcanfor de Borneo
+p_sakura	Plantones de cerezo
+p_brazilwood	Palo brasil
+p_cochineal	Cochinilla
+p_saguaro	Fruto del saguaro
+p_cactuspot	Cactus en maceta
+p_larch	Madera de alerce
+p_cedarnut	Piñones de Siberia
+p_rhodiola	Raíz dorada
+p_eleuthero	Ginseng siberiano
+p_poppyseed	Semillas de amapola

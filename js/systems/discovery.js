@@ -100,7 +100,28 @@
   D.rumourW = function (d, src) { return !S().hints[d.id] ? 1 : D.canStack(d.id, src) ? CS().stackW : 0; };
   /** 세워진 건물인가 (불가사의의 built 해) */
   /** 앞 고리를 모두 찾았는가 (꼬리에 꼬리를 무는 발견 — 열리기 전에는 그 자리에 가도 찾지 못한다) */
-  D.needMet = function (d) { return !d || !d.need || d.need.every(function (id) { return D.foundByMe(id); }); };
+  D.needMet = function (d) { return !d || ((!d.need || d.need.every(function (id) { return D.foundByMe(id); })) && (!d.needRelic || D.hasRelic(d.needRelic))); };
+  /** 그 유물을 손에 넣은 적이 있는가 — 소지품·자택 보관함에 있거나, 발견 때 챙겼던 기록 (팔거나 기증해도 남는다) */
+  D.hasRelic = function (rid) {
+    var s = S(); if (!s || !rid) return false;
+    var p = s.player || {}, has = function (a) { return (a || []).some(function (it) { return it && it.id === rid; }); };
+    if (has(p.items) || has(p.storage)) return true;
+    var r = G.RELIC && G.RELIC[rid], st = r && s.disc && s.disc[r.relic];
+    return !!(st && st.relics && st.relics.indexOf(rid) >= 0);
+  };
+  /** 유물을 손에 넣었을 때: 그 유물이 여는 발견물(G.NEED_RELIC)의 실마리를 그 자리에서 얻는다 */
+  D.relicOpens = async function (rid) {
+    var opens = Object.keys(G.NEED_RELIC || {}).filter(function (id) { return G.NEED_RELIC[id] === rid && G.DISC[id] && !D.foundByMe(id); });
+    if (!opens.length) return;
+    var r = G.RELIC && G.RELIC[rid], sp = G.Scenes.mateSpeaker(R.skill('hist') ? 'surveyor' : 'first');
+    await UI.say((r ? '「' + r.name + '」' : '이 유물') + U.jx(r ? r.name : '유물', '을/를') + ' 펼치자 네 방위를 지키는 신수의 자취가 드러난다. 이제 사신이 깃든 곳을 알아볼 수 있다.', sp);
+    var got = [];
+    for (var i = 0; i < opens.length; i++) {
+      var id = opens[i];
+      if (D.addHint(id, 'relic:' + rid)) { got.push(G.DISC[id].name); if (G.RELIC_OPEN_LINE && G.RELIC_OPEN_LINE[id]) await UI.say(G.RELIC_OPEN_LINE[id], sp); }
+    }
+    if (got.length) UI.toast('단서를 얻었다: ' + got.map(function (n) { return '「' + n + '」'; }).join(' '), 'scroll', 5200);
+  };
   /* 미래의 건물 (2026-10-18): 1700년 이후에 세워질 건물(유적)은 그 자리·그 도시에 가면 언제든 「신기루로 본 발견」으로 끝난다.
      아직 없는 것을 잠깐 본 것이라 유물·노획은 없고, 발견 명성·가치는 거리·위치에 비해 적다 (G.BALANCE.mirage.futureK).
      도시 안 건물은 발견하기 전까지 거리에 일렁이며 서 있다가, 발견하는 순간 흩어져 사라진다 (js/scenes/town.js T.vanish).
@@ -330,6 +351,8 @@
     rel.forEach(function (r) { if (R.addItem(r.id, { disc: d.id })) got.push(r); else wait.push(r); });
     st.relics = got.map(function (r) { return r.id; });
     await G.Scenes.discoveryCard(d, fame, got.concat(wait));
+    // 유물이 여는 발견 (강서대묘의 사신도 → 사신): 손에 넣은 유물마다 (칸이 모자라 두고 간 것은 나중에 챙길 때 — D.takeRelic)
+    for (var go = 0; go < got.length; go++) { try { await D.relicOpens(got[go].id); } catch (e) { console.error(e); } }
     // 장면 그림이 없는 발견물도 부하들이 그 발견물의 관찰·바람을 말한다 (아메리카 1630년의 발견물·대학의 신기루 — js/data/amer1630.js)
     if (!revealed && G.Scenes.discoveryVoices) { try { await G.Scenes.discoveryVoices(d); } catch (e) { console.error(e); } }
     // 보는 사이 흩어져 사라진다 — 거리에서 본 도시 건물은 거리의 그림이 흩어지므로(city.lookAt → Town.vanish) 따로 띄우지 않는다
@@ -499,7 +522,7 @@
   D.takeRelic = async function (d, r) {
     var s = S(), st = s.disc[d.id] || (s.disc[d.id] = {});
     for (;;) {
-      if (R.addItem(r.id, { disc: d.id })) { (st.relics = st.relics || []).push(r.id); UI.toast(r.name + U.jx(r.name, '을/를') + ' 챙겼다.', { src: G.Img.itemSrc(r), icon: 'chest' }); return true; }
+      if (R.addItem(r.id, { disc: d.id })) { (st.relics = st.relics || []).push(r.id); UI.toast(r.name + U.jx(r.name, '을/를') + ' 챙겼다.', { src: G.Img.itemSrc(r), icon: 'chest' }); try { await D.relicOpens(r.id); } catch (e) { console.error(e); } return true; }
       var list = s.player.items.map(function (it, i) { return { it: it, i: i }; }).filter(function (x) { return !R.isProof(x.it); });
       var v = await UI.choose('소지품이 가득 찼습니다', list.map(function (x, k) {
         var dd = G.ITEM[x.it.id] || {};

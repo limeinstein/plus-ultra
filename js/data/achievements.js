@@ -124,7 +124,7 @@
     { ids: ['bulguksa', 'seokguram', 'hwangnyong', 'emille', 'sillacrown', 'cheonmado', 'munmu', 'muyeol'], n: 5 }, 400, 20000, '서라벌의 손님');
   a('동아시아', 'joseon', '해동의 보물', '고려와 조선이 남긴 글과 그릇, 경판을 찾았다.',
     { ids: ['hunmin', 'tripitaka', 'haeinsa', 'jongmyo', 'moonjar', 'goryeoceladon', 'baekjecenser', 'mireuksa'], n: 5 }, 400, 20000);
-  a('동아시아', 'foursymbols', '사신 — 하늘의 네 짐승', '동쪽의 용, 서쪽의 흰 범, 남쪽의 봉황, 북쪽의 현무를 모두 만났다.',
+  a('동아시아', 'foursymbols', '사신 — 하늘의 네 짐승', '동쪽의 용, 서쪽의 흰 범, 남쪽의 봉황, 북쪽의 현무를 모두 만났다. (강서대묘의 사신도를 손에 넣어야 사신의 자취가 열린다)',
     { ids: ['dragon', 'whitetiger', 'phoenix', 'hyeonmu'] }, 700, 35000, '사신을 거느린 자');
   a('동아시아', 'tianxia', '천자의 나라', '중원의 성벽과 궁궐, 황제들의 보물을 찾았다.',
     { ids: ['greatwall', 'qinshi', 'forbidden', 'weiyang', 'jadesuit', 'hanseal', 'bronze', 'porcelain', 'qingming'], n: 6 }, 450, 24000);

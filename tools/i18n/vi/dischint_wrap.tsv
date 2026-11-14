@@ -1,0 +1,61 @@
+/(.+) (\S+)에 가면 건물들을 하나하나 둘러보면 눈에 띌 걸세\./	⟦$1⟧ Đến ⟦$2⟧ rồi đi xem từng tòa nhà một là sẽ thấy ngay.
+/(.+) (\S+)에 가면 거리를 걷다 그 건물 앞에 가서 직접 보게\./	⟦$1⟧ Đến ⟦$2⟧, đi dạo trên phố rồi tự mình đến trước tòa nhà ấy mà xem.
+/(.+) 그걸 만든 (.+?)(?:을|를) 만나 이야기해 보게\. 요즘 어디서 지내는지는 술집마다 소문이 다르더군\./	⟦$1⟧ Hãy đi gặp ⟦$2⟧, người đã làm ra nó, mà hỏi chuyện. Dạo này người ấy ở đâu thì mỗi quán rượu đồn một kiểu.
+단서 — @	Manh mối — @
+…연기 속에 보이네요. @	…Tôi thấy nó trong làn khói. @
+(알아듣기 힘든 말이지만) @	(Khó nghe lắm, nhưng) @
+이건 비밀인데 말이야... @	Chuyện này là bí mật đấy nhé... @
+확실히 @	Chắc chắn là @
+이건 어떤 선원한테서 들은 이야기인데, @	Chuyện này tôi nghe từ một thủy thủ: @
+자네가 쫓는 그 이야기 말일세, 나도 들은 바가 있네. @	Câu chuyện cậu đang theo đuổi ấy mà, tôi cũng từng nghe qua. @
+그러고 보니 이런 이야기를 들은 적이 있네. @	Nghĩ lại thì tôi từng nghe một chuyện như thế này. @
+그대가 쫓는 그 이야기 말이오, (짐|과인)도 들은 바가 있소. @	Câu chuyện khanh đang theo đuổi, Trẫm cũng từng nghe qua. @
+그러고 보니 이런 이야기가 (짐|과인)의 귀에 들어왔소. @	Nghĩ lại thì chuyện như thế này từng lọt đến tai Trẫm. @
+당신이 쫓는 그 이야기 말이에요, 나도 들은 게 있어요. @	Câu chuyện ngài đang theo đuổi ấy mà, tôi cũng có nghe được chút ít. @
+그러고 보니 이런 이야기를 들은 적이 있어요. @	Nghĩ lại thì tôi từng nghe một chuyện như thế này. @
+나리가 쫓는 그 이야기 말입니다, 저도 거래처에서 들은 게 있습니다. @	Câu chuyện ngài đang theo đuổi, tôi cũng nghe được từ bạn hàng. @
+그러고 보니 거래처에서 이런 이야기를 들었습니다. @	Nghĩ lại thì tôi nghe chuyện này từ một bạn hàng. @
+그대가 쫓는 그 이야기 말이오, 나도 읽은 바가 있소. @	Câu chuyện ngài đang theo đuổi, ta cũng từng đọc qua. @
+그러고 보니 이런 기록을 본 적이 있소. @	Nghĩ lại thì ta từng thấy một ghi chép như thế này. @
+그대가 쫓는 그 이야기 말이오, 순례자에게서 들은 바가 있소. @	Câu chuyện ngài đang theo đuổi, ta từng nghe từ những người hành hương. @
+그러고 보니 순례자들에게서 이런 이야기를 들었소. @	Nghĩ lại thì ta nghe chuyện này từ những người hành hương. @
+제독이 쫓는 그 이야기 말입니다, 저도 보고서에서 본 적이 있습니다. @	Câu chuyện Đô đốc đang theo đuổi, tôi cũng từng thấy trong một bản báo cáo. @
+그러고 보니 이런 보고가 들어온 적이 있습니다. @	Nghĩ lại thì từng có một bản báo cáo như thế này gửi về. @
+【단서가 바뀌었다】 「@」 — @ (찾는 곳: @)	[Manh mối thay đổi] “@” — @ (Nơi tìm: @)
+「@」(을|를) 읽어 보니 이런 대목이 있습니다. @	Đọc “@” thì thấy có những đoạn thế này. @
+@ 바로 이 근처라네. 성문을 나서면 금방이지.	@ Ngay gần đây thôi. Ra khỏi cổng thành là tới.
+@ 최근에는 목격 소식이 없네. 항구에서 새 소식을 기다려 보게.	@ Dạo này không thấy ai nhìn thấy nữa. Hãy ra bến cảng chờ tin mới.
+@ 바로 이 도시일세. 건물들을 하나하나 둘러보면 눈에 띌 걸세.	@ Ngay trong thành phố này. Đi xem từng tòa nhà một là sẽ thấy ngay.
+@ 바로 이 도시일세. 거리를 걷다 그 건물 앞에 가서 직접 보게.	@ Ngay trong thành phố này. Đi dạo trên phố rồi tự mình đến trước tòa nhà ấy mà xem.
+@ 북쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Xa lắm, tận phía bắc. Ra cảng ven biển mà đi tàu, ít nhất cũng mất # ngày.
+@ 여기서 북쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Nghe nói từ đây đi đường bộ về phía bắc chừng # ngày.
+@ 북쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Ở phía bắc. Nghe nói đi biển chừng # ngày, rồi lên bờ đi bộ vào đất liền chừng # ngày nữa.
+@ 북쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Ở phía bắc. Nghe nói đi biển chừng # ngày — đến vùng biển ấy là sẽ biết.
+@ 북동쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Xa lắm, tận phía đông bắc. Ra cảng ven biển mà đi tàu, ít nhất cũng mất # ngày.
+@ 여기서 북동쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Nghe nói từ đây đi đường bộ về phía đông bắc chừng # ngày.
+@ 북동쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Ở phía đông bắc. Nghe nói đi biển chừng # ngày, rồi lên bờ đi bộ vào đất liền chừng # ngày nữa.
+@ 북동쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Ở phía đông bắc. Nghe nói đi biển chừng # ngày — đến vùng biển ấy là sẽ biết.
+@ 동쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Xa lắm, tận phía đông. Ra cảng ven biển mà đi tàu, ít nhất cũng mất # ngày.
+@ 여기서 동쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Nghe nói từ đây đi đường bộ về phía đông chừng # ngày.
+@ 동쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Ở phía đông. Nghe nói đi biển chừng # ngày, rồi lên bờ đi bộ vào đất liền chừng # ngày nữa.
+@ 동쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Ở phía đông. Nghe nói đi biển chừng # ngày — đến vùng biển ấy là sẽ biết.
+@ 남동쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Xa lắm, tận phía đông nam. Ra cảng ven biển mà đi tàu, ít nhất cũng mất # ngày.
+@ 여기서 남동쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Nghe nói từ đây đi đường bộ về phía đông nam chừng # ngày.
+@ 남동쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Ở phía đông nam. Nghe nói đi biển chừng # ngày, rồi lên bờ đi bộ vào đất liền chừng # ngày nữa.
+@ 남동쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Ở phía đông nam. Nghe nói đi biển chừng # ngày — đến vùng biển ấy là sẽ biết.
+@ 남쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Xa lắm, tận phía nam. Ra cảng ven biển mà đi tàu, ít nhất cũng mất # ngày.
+@ 여기서 남쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Nghe nói từ đây đi đường bộ về phía nam chừng # ngày.
+@ 남쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Ở phía nam. Nghe nói đi biển chừng # ngày, rồi lên bờ đi bộ vào đất liền chừng # ngày nữa.
+@ 남쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Ở phía nam. Nghe nói đi biển chừng # ngày — đến vùng biển ấy là sẽ biết.
+@ 남서쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Xa lắm, tận phía tây nam. Ra cảng ven biển mà đi tàu, ít nhất cũng mất # ngày.
+@ 여기서 남서쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Nghe nói từ đây đi đường bộ về phía tây nam chừng # ngày.
+@ 남서쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Ở phía tây nam. Nghe nói đi biển chừng # ngày, rồi lên bờ đi bộ vào đất liền chừng # ngày nữa.
+@ 남서쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Ở phía tây nam. Nghe nói đi biển chừng # ngày — đến vùng biển ấy là sẽ biết.
+@ 서쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Xa lắm, tận phía tây. Ra cảng ven biển mà đi tàu, ít nhất cũng mất # ngày.
+@ 여기서 서쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Nghe nói từ đây đi đường bộ về phía tây chừng # ngày.
+@ 서쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Ở phía tây. Nghe nói đi biển chừng # ngày, rồi lên bờ đi bộ vào đất liền chừng # ngày nữa.
+@ 서쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Ở phía tây. Nghe nói đi biển chừng # ngày — đến vùng biển ấy là sẽ biết.
+@ 북서쪽으로 아주 먼 곳일세. 바닷가 항구로 나가 배를 타고 #일은 가야 할 걸세.	@ Xa lắm, tận phía tây bắc. Ra cảng ven biển mà đi tàu, ít nhất cũng mất # ngày.
+@ 여기서 북서쪽으로 뭍길로 #일쯤 가면 있다고들 하네.	@ Nghe nói từ đây đi đường bộ về phía tây bắc chừng # ngày.
+@ 북서쪽이지. 뱃길로 #일쯤 가서 해안에 오른 뒤 뭍길로 #일쯤 걸어 들어가면 된다더군.	@ Ở phía tây bắc. Nghe nói đi biển chừng # ngày, rồi lên bờ đi bộ vào đất liền chừng # ngày nữa.
+@ 북서쪽이지. 뱃길로 #일쯤 가서 그 바다에 닿으면 알아볼 수 있다더군.	@ Ở phía tây bắc. Nghe nói đi biển chừng # ngày — đến vùng biển ấy là sẽ biết.

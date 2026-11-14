@@ -48,6 +48,8 @@
   // 기존 4×4 판의 산치 칸 윗부분에는 위 칸(제우스상)의 받침대가 걸쳐 있다.
   // 경계가 겹치지 않는 전용 투명 그림을 쓴다.
   POS.sanchi = { key: 'map-discoveries/sanchi', slot: 0, cols: 1, rows: 1 };
+  // 강서대묘는 봉분과 낮은 돌방 입구를 담은 전용 외관을 쓴다.
+  POS.gangseo = { key: 'map-discoveries/completion/gangseo', slot: 0, cols: 1, rows: 1 };
 
   // 2026-10-31 누락 외관 자동 등록 시작
   POS.aurora = { key: "map-discoveries/completion/aurora", slot: 0, cols: 1, rows: 1 };

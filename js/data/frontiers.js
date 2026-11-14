@@ -120,6 +120,16 @@
     cheonmado: '금관이 나온 무덤 곁의 다른 무덤에서 하늘을 달리는 흰 말 그림이 나왔다고 한다.'
   };
   if (G.CHAIN_LINE_MORE) for (var lk in G.CHAIN_LINE_MORE) CHAIN_LINE[lk] = G.CHAIN_LINE_MORE[lk];
+  // 유물이 열어 주는 발견 (2026-11-14 사용자 요청 — 업적 「사신 — 하늘의 네 짐승」): 그 유물(사신도)을 손에 넣어야 단서·발견이 열린다.
+  // 강서대묘(gangseo)를 찾으면 사신도(r_sasindo)를 함께 얻는다 — 한 번 손에 넣으면 팔거나 기증해도 권한은 남는다 (G.Disc.hasRelic · needMet · G.Frontier.available)
+  G.NEED_RELIC = { dragon: 'r_sasindo', whitetiger: 'r_sasindo', phoenix: 'r_sasindo', hyeonmu: 'r_sasindo' };
+  for (var nrid in G.NEED_RELIC) if (G.DISC && G.DISC[nrid]) G.DISC[nrid].needRelic = G.NEED_RELIC[nrid];
+  G.RELIC_OPEN_LINE = {
+    dragon: '사신도의 동쪽 벽 — 푸른 용 곁에 「동해, 울릉도 먼바다」라고 적혀 있다.',
+    whitetiger: '사신도의 서쪽 벽 — 흰 범 곁에 「서쪽 끝, 큰 숲과 바위산」이 그려져 있다.',
+    phoenix: '사신도의 남쪽 벽 — 다섯 빛깔 새 곁에 「오동나무 숲, 서안 서쪽 기산」이라고 적혀 있다.',
+    hyeonmu: '사신도의 북쪽 벽 — 뱀이 감은 검은 거북은 바로 이 무덤의 북벽에서 숨을 쉬는 듯하다.'
+  };
   G.chainLine = function (id) { return CHAIN_LINE[id] || (G.DISC && G.DISC[id] && G.DISC[id].chainLine) || ''; };
 
   // 큰 항로의 단서 (앞선 발견이 알려진 뒤에야 들을 수 있다): 리스본·세비야의 술집 주인과 후원자에게서 듣는다.

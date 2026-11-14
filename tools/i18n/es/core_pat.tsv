@@ -1,0 +1,77 @@
+/받은 파일 (\d+)개/	$1 archivos cargados
+/(\d+)일째/	Día $1
+/(\d+)명/	$1
+/([NSEW]{1,2})풍/	viento $1
+/풍속 (●+)/	Viento $1
+/물통 (\d+)일 \+ 교역품 대체분 (\d+)일 = 합계 (\d+)일\. 교역품을 팔면 대체분도 줄어듭니다\./	Agua para $1 días + $2 días sustituidos con mercancías = $3 días en total. Si vende esas mercancías, se reduce lo sustituido.
+/식량 (\d+)일 \+ 교역품 대체분 (\d+)일 = 합계 (\d+)일\. 교역품을 팔면 대체분도 줄어듭니다\./	Víveres para $1 días + $2 días sustituidos con mercancías = $3 días en total. Si vende esas mercancías, se reduce lo sustituido.
+/선박을 ([\d.]+)배율로 보기/	Ver los barcos a $1×
+/(.+) 입항/	Atracar en ⟦$1⟧
+/(.+)에서 출항했다\./	Zarpó de ⟦$1⟧.
+/모항 (.+)를 떠나다/	Dejando el puerto de origen, ⟦$1⟧
+/모항 (.+)을 떠나다/	Dejando el puerto de origen, ⟦$1⟧
+/(.+) · 배 (\d+)척 · 선원 (\d+)명 — 갈매기들이 배웅한다/	$1 · $2 barcos · $3 tripulantes — las gaviotas le despiden
+/(.+) · 속력 ([\d.]+)°/일 · 진로 (\S+) · 항해 (\d+)일째/	⟦$1⟧ · velocidad $2°/día · rumbo $3 · día $4
+/☁ 편서풍 구름띠/	☁ Franja de nubes de los vientos del oeste
+/표류 중 — 바다를 누르면 그곳까지 갑니다 · 마우스 따라가기는 (.+)/	A la deriva — haga clic en el mar para navegar hasta allí · Seguir el ratón: ⟦$1⟧
+/마우스 따라가기 꺼짐: 누른 곳까지 갑니다 — 단축키 (.+)/	Seguir el ratón desactivado: navega hasta donde haga clic — atajo ⟦$1⟧
+/마우스 따라가기 켜짐: 가려는 쪽을 한 번 누르면 그 뒤로는 마우스를 옮기는 대로 방향을 틉니다 — 단축키 (.+)/	Seguir el ratón activado: haga clic una vez hacia su rumbo y luego el barco girará según mueva el ratón — atajo ⟦$1⟧
+/이 게임은 가로 화면\((\d+):(\d+)\)에 맞춰져 있습니다 · 누르면 그대로 계속합니다/	Este juego está hecho para pantalla horizontal ($1:$2) · Toque para continuar igualmente
+/자동 저장 (\d+) — \(비어 있음\)/	Autoguardado $1 — (vacío)
+/여관 일지 (\d+) — \(비어 있음\)/	Diario de posada $1 — (vacío)
+/자동 저장 (\d+) — (.+)/	Autoguardado $1 — $2
+/여관 일지 (\d+) — (.+)/	Diario de posada $1 — $2
+/일지를 내려받았습니다: (.+)/	Cuaderno descargado: $1
+/불러오지 못했습니다: (.+)/	No se pudo cargar: $1
+/VERSION (.+)/	VERSIÓN $1
+/지금 (\d+)% — DEFAULT는 모니터 크기와 화소 밀도에 맞춰 정합니다\. 창·메뉴도 함께 커지고 작아집니다 \(이 기기에만 기억\)/	Ahora $1 % — DEFAULT se ajusta al tamaño y la densidad de píxeles del monitor. Las ventanas y los menús cambian de tamaño con él (solo se recuerda en este dispositivo)
+/「(.+)」 글꼴을 씁니다 \(한국어 글꼴: (.+)\)/	Se usa la fuente $1
+/(\d+)일/	$1 días
+/식량 (\d+)일\. 교역품 대체분은 없습니다\./	Víveres para $1 días. No hay mercancías que puedan sustituirlos.
+/물통 (\d+)일\. 교역품 대체분은 없습니다\./	Agua para $1 días. No hay mercancías que puedan sustituirla.
+/통합 명성 = 탐험 ([\d,]+) · 교역 ([\d,]+) · 전투 ([\d,]+) · 사교 ([\d,]+)/	Fama total = Exploración $1 · Comercio $2 · Combate $3 · Sociedad $4
+/(.+) 영토/	Territorio de ⟦$1⟧
+/(.+) 영토 · (.+)/	Territorio de ⟦$1⟧ · $2
+/(.+) · (.+)/	⟦$1⟧ · ⟦$2⟧
+/(.+) 저택/	Mansión de ⟦$1⟧
+/조합 게시판에 의뢰 (\d+)건/	$1 encargos en el tablón del gremio
+/교역소에 호위를 청하는 상인이 있다 \((.+)까지\)/	Un mercader de la lonja busca escolta (hasta ⟦$1⟧)
+/교역소 배당 금화 ([\d,]+)닢이 쌓였다/	Se han acumulado $1 monedas de dividendos de la lonja
+/구입 — (.+)/	Comprar — ⟦$1⟧
+/매각 — (.+)/	Vender — ⟦$1⟧
+/(.+) 시세/	Precios en ⟦$1⟧
+/시세: (.+)/	Mercado: $1
+/특산 ×([\d.]+)/	Local ×$1
+/(\d+)통의 무게 — 배가 버티는 무게에 들어간다/	Peso de $1 barriles — cuenta para lo que pueden cargar sus barcos
+/· 무게 ([\d.,]+)/	· peso $1
+/· 무게 (.+)/	· peso $1
+/공급 한도 ([\d,]+)통 · 가득 회복까지 (\d+)일\. 날짜가 지나야 입하하며, 같은 날 재방문으로 새 물량이 생기지 않습니다\./	Límite de oferta $1 barriles · $2 días para reponer del todo. Las existencias nuevas llegan solo con el paso de los días; volver el mismo día no añade nada.
+/하루 \+([\d.]+)통/	+$1 al día
+// (\d+)가지 고름/	/ $1 seleccionados
+// (\d+)(.+) 고름/	/ $1 seleccionados
+/· 품목 (\d+)/(\d+)/	· artículos $1/$2
+/가격\(1통\)/	Precio (barril)
+/가격\((\d+)통\)/	Precio ($1 barriles)
+/1통 이익/	Beneficio / barril
+/([\d,]+)통 이익/	Beneficio / $1 barriles
+/약 ([\d,]+)통/	unos $1 barriles
+/입하를 기다린다 \((\d+)일\)/	Esperar a que llegue mercancía ($1 días)
+/이 고장에서 나는 물건이라 싸고 재고가 넉넉하다\. 산지에서 먼 (.+)에서는 산지 값의 약 ([\d.]+)배에 팔린다 \(시세·사건에 따라 다름\)\./	Se produce aquí, así que es barato y abundante. Lejos de su origen, en ⟦$1⟧, se vende por unas $2 veces el precio local (varía según precios y sucesos).
+/산지에서 멀리 떨어진 고장이라 이 물건이 귀하다 — 기준 값의 약 ([\d.]+)배/	Lejos de donde se produce, así que aquí es raro — unas $1 veces el precio base
+/이 항구는 산지가 아니라 먼 곳\((.+)\)에서 들여와 판다 — 산지보다 비싸지만 더 먼 곳에 팔면 남는다/	Este puerto no es el de origen; trae esta mercancía de lejos (⟦$1⟧) — más cara que en el origen, pero rentable si se vende más lejos
+/(\d+)% = 보통 값\. (.+)/	$1 % = precio normal. Los precios oscilan despacio en cada ciudad según la categoría, además de los sucesos del mercado (cosechas, hambrunas, guerras, fiestas, bonanzas…). Las flechas comparan con hace veinte días.
+/(.+) → (.+)/	⟦$1⟧ → ⟦$2⟧
+/이 도시 산물: (.+?)( 외)?/	Productos locales: ⟦$1⟧
+/받을 돈 약 금화/	Recibirá unas
+/(.+?)(?:을|를) (.+?)까지 모신다/	Escoltar a ⟦$1⟧ hasta ⟦$2⟧
+/(.+?)의 (.+?)에게서 빚을 받아 온다/	Cobrar una deuda a ⟦$2⟧ en ⟦$1⟧
+/(.+?)까지 (.+?) ([\d,]+)통 수송/	Entregar $3 barriles de ⟦$2⟧ en ⟦$1⟧
+/공격 ([\d]+)/	Ataque $1
+/방어 ([\d]+)/	Defensa $1
+/남자 선물 ([\d]+)/	Regalo para hombres $1
+/매력 \+([\d]+)/	Carisma +$1
+/사교 명성 \+([\d]+)/	Fama social +$1
+/호감 (.+)/	Afecto $1
+/(.+?) — 호감 (.+)/	⟦$1⟧ — Afecto $2
+/(.+?)호/	⟦$1⟧
+/(\d+)세/	$1

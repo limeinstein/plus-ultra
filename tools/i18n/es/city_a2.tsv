@@ -1,0 +1,158 @@
+/역할을 바꿀 동료를 고르십시오\. 여기서 정하는 것은 <b>기함<\/b>의 부관·항해사·측량사·통역·경리 \(한 명씩 — 경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다\)입니다\. 기함의 선장은 제독입니다\.<br><small class="muted">기함 말고 다른 배의 선장·조타수·갑판·파수꾼·선실(.*)$/	Elija al compañero cuyo puesto quiere cambiar. Aquí se fijan el segundo de a bordo, el navegante, el topógrafo, el intérprete y el contador de la <b>nave capitana</b> (uno de cada — el contador usa la Contabilidad para rebajar precios en lonjas, mercados y ante los mecenas). El almirante capitanea la nave capitana.<br><small class="muted">Los capitanes, timoneles, gente de cubierta, vigías y camarotes de los demás barcos se asignan automáticamente según sus aptitudes.</small>
+같은 물건을 같은 나라나 지역에 들여와 산 값보다 #% 이상 비싸게 팔아 보게. #일 안에 #번 이상 그런 장사를 하면, 그때부터 조건을 채운 거래마다 #% 확률로 유행이 날 수 있지.	Pruebe a vender la misma mercancía en el mismo país o región por al menos un {1}% más de lo que pagó. Hágalo {3} veces o más en {2} días y, desde entonces, cada trato que cumpla la condición tendrá un {4}% de probabilidad de desatar una moda.
+같은 날 같은 도시에서 나눠 팔거나, 한 번 입항해 머무는 동안 거듭 판 것은 한 번으로 치네. 유행이 나면 #일 동안 값이 #배로 뛰지. 유행이 끝난 뒤에는 #일 동안 같은 곳에서 같은 물건의 유행이 다시 나지 않는다네.	Repartir una venta el mismo día en la misma ciudad, o vender de nuevo durante una misma estancia en puerto, cuenta como una sola vez. Cuando prende una moda, los precios suben a {2}× durante {1} días. Cuando pasa, la misma mercancía no vuelve a ponerse de moda en el mismo lugar durante {3} días.
+/이 조선소의 기술은 ([\d,.]+)등급일세 \(기본 ([\d,.]+)등급, 지금까지 들어온 투자 금화 ([\d,.]+)닢\)\. 금화 ([\d,.]+)닢을 더 대 주면 도크를 넓히고 장인을 불러 ([\d,.]+)등급 배를 지을 수 있네\.(.*)$/	Este astillero está en el nivel $1 (nivel base $2, con $3 monedas invertidas hasta ahora). Ponga otras $4 monedas y podré ampliar las dársenas y traer artesanos para construir barcos de nivel $5.
+/(.+?)의 취향: <b>(.+?)<\/b> <span class="muted">— ★ 취향에 맞으면 선금·사례를 후하게, 취향 밖이면 웅변으로 설득해 볼 수 있다<\/span> · 성품: <b>(.+?)<\/b> <span class="muted">— (.+?)<\/span>$/	Intereses de ⟦$1⟧: <b>⟦$2⟧</b> <span class="muted">— ★ si coinciden, adelanto y recompensa generosos; si no, puede intentar persuadir con Elocuencia</span> · Carácter: <b>⟦$3⟧</b> <span class="muted">— ⟦$4⟧</span>
+/짐은 (.+?)에 관한 이야기라면 언제든 귀를 기울이오\.$/	Siempre estamos dispuestos a escuchar relatos sobre ⟦$1⟧.
+/근래 궁정에서도 화제가 된 이야기가 있소\. 부두의 늙은 선원들이 입을 모아 말하더군\. (.+) 그 일을 해내겠다면 기꺼이 후원을 생각해 보겠소\.$/	Hay un relato que últimamente es la comidilla de la corte. Los viejos marineros de los muelles dicen todos lo mismo: ⟦$1⟧ Si lo lograrais, consideraríamos gustosos Nuestro patrocinio.
+/저는 (.+?)에 관한 건이라면 언제든 검토합니다\.$/	Siempre estoy dispuesto a estudiar cualquier asunto relacionado con ⟦$1⟧.
+/나는 (.+?)에 관한 이야기라면 언제든 듣고 싶소\.$/	Siempre me alegra oír cualquier cosa sobre ⟦$1⟧.
+/나는 (.+?)에 관한 이야기라면 언제든 귀를 기울이지\.$/	Cuénteme lo que sea sobre ⟦$1⟧ y tendrá mi atención.
+/<b>(.+?)<\/b> <small class="muted">(.+?)<\/small>$/	<b>⟦$1⟧</b> <small class="muted">⟦$2⟧</small>
+/(.+?) (<span class="pips">.*)$/	⟦$1⟧ $2
+/<b>(.+?)<\/b> <small class="good-text">처음 맛본다<\/small><br><small class="muted">(.+?)<\/small>$/	<b>⟦$1⟧</b> <small class="good-text">primera vez</small><br><small class="muted">⟦$2⟧</small>
+/(.+?) <small class="muted">(.+?)<\/small>$/	⟦$1⟧ <small class="muted">⟦$2⟧</small>
+토마토와 오이, 올리브유를 차갑게 갈아 낸 안달루시아 수프.	Sopa andaluza fría de tomate, pepino y aceite de oliva triturados.
+감자와 양파를 달걀에 섞어 두껍게 부친 스페인식 오믈렛.	Tortilla gruesa a la española de patata y cebolla mezcladas con huevo.
+소금에 절인 대구를 감자와 올리브유로 조리한 포르투갈 음식.	Plato portugués de bacalao salado guisado con patatas y aceite de oliva.
+감자와 푸른 잎채소, 소시지를 넣은 포르투갈식 수프.	Sopa portuguesa de patata, verdura de hoja y chorizo.
+쌀에 해산물이나 고기와 향신료를 더해 넓은 팬에 익힌 음식.	Arroz con marisco o carne y especias, cocinado en una paellera ancha.
+생선이나 고기와 채소를 넣어 큼직하게 구운 갈리시아식 파이.	Gran empanada gallega rellena de pescado o carne y verduras.
+가볍고 날렵한 찌르기용 검.	Espada ligera y ágil para estocadas.
+기사들이 즐겨 쓰는 양날검.	Espada de doble filo que gustan de usar los caballeros.
+무두질한 가죽 갑옷.	Armadura de cuero curtido.
+쇠고리를 엮은 사슬 갑옷.	Cota de malla de anillos de hierro entrelazados.
+진행 방향과 풍향을 정확히 알 수 있다.	Indica con precisión el rumbo y la dirección del viento.
+현재 위치의 위도와 경도를 알 수 있다.	Indica la latitud y la longitud de la posición actual.
+장기 항해의 괴혈병을 한동안(#일) 막아 준다. 이베리아·지중해·동아프리카·중근동·인도의 시장에서 판다.	Previene el escorbuto en las travesías largas durante un tiempo (# días). Se vende en los mercados de Iberia, el Mediterráneo, África oriental, Oriente Próximo y la India.
+목판으로 찍어 낸 카드 한 벌. 뱃사람들이 밤새 내기를 한다.	Una baraja estampada con planchas de madera. Los marineros apuestan toda la noche.
+안달루시아 헤레스의 독한 포도주(색). 북쪽 뱃사람들이 가장 탐내는 술.	El fuerte vino de Jerez de Andalucía (sack). La bebida que más codician los marineros del norte.
+돛과 밧줄까지 깎아 맞춘 카락선 모형. 뱃사람이면 누구나 눈을 떼지 못한다.	Maqueta de carraca con velas y cabos tallados al detalle. Ningún marinero puede apartar la vista.
+끈에 매달아 목에 거는 작은 금속 호각. 짧고 긴 소리를 나누어 군악 행렬의 출발과 정지를 알린다.	Pequeño silbato metálico que se cuelga al cuello con un cordón. Con toques cortos y largos marca la salida y la parada del desfile de la banda militar.
+나무 손잡이를 잡고 흔들면 안쪽 추자가 종 몸통을 치는 작은 종. 맑고 긴 울림으로 합주와 신호에 쓰인다.	Campanilla con mango de madera: al agitarla, el badajo golpea el cuerpo. Su sonido claro y largo sirve para conciertos y señales.
+한 손으로 손가락 구멍 세 개를 짚는 긴 피리. 다른 손으로 타보르 북을 치며 혼자 가락과 장단을 함께 연주한다.	Flauta larga de tres agujeros que se toca con una mano. Con la otra se golpea el tamboril, y así un solo músico toca la melodía y el ritmo a la vez.
+/단계가 오를수록 교역소 흥정이 잘 통하고 (.*)$/	Cuanto más alto el nivel, mejor regatea en las lonjas y más intentos tiene por visita; la carga va equilibrada y sus barcos soportan más peso. En el nivel máximo puede entrar en los mercados negros secretos de los grandes puertos. Como contador, rebaja precios en lonjas y mercados y consigue mejores adelantos y plazos de los mecenas.
+항해 중 피로 누적을 줄이고 폭풍을 피한다.	Reduce la fatiga acumulada en el mar y ayuda a evitar tormentas.
+선원의 규율을 유지하고 탐험 비용을 줄인다.	Mantiene la disciplina de la tripulación y reduce los costes de exploración.
+배와 야영지의 끼니를 맛있게 차려 피로를 덜어 준다. 교역품 발견물(향신료·작물)의 가치를 알아보고 높인다. 제독이나 부하 누구든 요리에 밝으면 된다.	Prepara comidas sabrosas a bordo y en el campamento y alivia la fatiga. Reconoce y realza el valor de los descubrimientos de mercancías (especias, cultivos). Basta con que el almirante o cualquier oficial sepa cocinar.
+노래와 악기로 선원들을 하나로 묶어 규율을 지킨다. 민족 발견물(사람들의 노래·춤·의식)의 가치를 높이고 반란 때 잔치로 달랠 수 있다. 제독이나 부하 누구든 음악에 밝으면 된다.	Une a la tripulación con canciones e instrumentos y mantiene la disciplina. Realza el valor de los descubrimientos de pueblos (canciones, danzas y ritos) y permite calmar un motín con una fiesta. Basta con que el almirante o cualquier oficial sepa música.
+백병전과 일기토, 지상전 기병을 강하게 한다.	Refuerza los abordajes, los duelos y la caballería en tierra.
+해전의 포격 명중과 위력을 높인다.	Aumenta la puntería y la potencia de los cañonazos en batalla naval.
+해전·지상전의 사격을 강하게 한다.	Refuerza el fuego de armas en batallas navales y terrestres.
+괴혈병과 전염병을 막고 부상자를 치료한다.	Previene el escorbuto y las epidemias y cura a los heridos.
+후원자 설득과 입항 교섭의 성공률을 높이고, 선금·기한 교섭에서 더 유리한 조건을 받아 낸다.	Aumenta el éxito al persuadir a los mecenas y al negociar la entrada en puerto, y consigue mejores condiciones al negociar adelantos y plazos.
+미발견 항구를 찾는 범위와 해도 작성 범위를 넓힌다.	Amplía el alcance para encontrar puertos desconocidos y el área de la carta náutica.
+육상의 발견물을 찾기 쉽게 하고 모조품을 가려낸다.	Facilita encontrar descubrimientos en tierra y detectar falsificaciones.
+항해 중 자재로 배를 수리할 수 있다.	Permite reparar los barcos en el mar con materiales.
+교회와 성직자에게 신뢰를 얻고 선원의 사기를 붙든다.	Gana la confianza de iglesias y clérigos y sostiene la moral de la tripulación.
+자연·생물 발견에 유리하며 괴혈병 예방에 도움이 된다.	Favorece los descubrimientos de naturaleza y fauna y ayuda a prevenir el escorbuto.
+발견한 것을 그려 남긴다. 제독이나 부하 누구든 그림에 밝으면 발견물의 가치가 오른다(명성·사례금·하사금).	Deja constancia en dibujos de lo descubierto. Si el almirante o cualquier oficial sabe dibujar, sube el valor de los descubrimientos (fama, recompensas, mercedes).
+보물과 공예품을 알아보고 손질한다. 제독이나 부하 누구든 세공에 밝으면 발견물(특히 보물·유적)의 가치와 유물 값이 오른다.	Reconoce y cuida tesoros y artesanías. Si el almirante o cualquier oficial domina la orfebrería, suben el valor de los descubrimientos (sobre todo tesoros y ruinas) y el precio de las reliquias.
+카다모스토 『항해기』	Cadamosto, «Navegaciones»
+마르코 폴로 『동방견문록』	Marco Polo, «Libro de las maravillas»
+호메로스 『일리아스』	Homero, «Ilíada»
+호메로스 『오디세이아』	Homero, «Odisea»
+헤로도토스 『역사』	Heródoto, «Historias»
+플리니우스 『박물지』	Plinio, «Historia natural»
+토스카넬리의 서한	La carta de Toscanelli
+『프레스터 존의 서한』	«Carta del Preste Juan»
+보라기네 『황금 전설』	Vorágine, «La leyenda dorada»
+『맨더빌 여행기』	«Libro de las maravillas de Mandeville»
+프톨레마이오스 『지리학』	Ptolomeo, «Geografía»
+스트라본 『지리지』	Estrabón, «Geografía»
+『베오울프』	«Beowulf»
+『빈랜드 사가』	«Sagas de Vinlandia»
+『노르웨이 왕 연대기』	«Crónica de los reyes de Noruega»
+『성 브렌던의 항해』	«La navegación de san Brandán»
+『원초 연대기』	«Crónica de Néstor»
+파우사니아스 『그리스 안내기』	Pausanias, «Descripción de Grecia»
+이븐 바투타 『여행기』	Ibn Battuta, «A través del islam»
+알 이드리시 『지리서』	Al-Idrisi, «Libro de Roger»
+『천일야화』	«Las mil y una noches»
+알 마크리지 『이집트지』	Al-Maqrizi, «Descripción de Egipto»
+『알함브라 연대기』	«Crónica de la Alhambra»
+알 마스우디 『황금 목장』	Al-Masudi, «Las praderas de oro»
+피르다우시 『샤나메』	Ferdousí, «Shahnameh»
+라시드 앗딘 『집사』	Rashid al-Din, «Compendio de crónicas»
+『이스파한 안내기』	«Guía de Isfahán»
+현장 『대당서역기』	Xuanzang, «Memorias de las regiones occidentales»
+마환 『영애승람』	Ma Huan, «Las maravillas de los océanos»
+사마천 『사기』	Sima Qian, «Memorias históricas»
+『산해경』	«Clásico de montañas y mares»
+『후한서』	«Libro de los Han posteriores»
+『송사』	«Historia de Song»
+주달관 『진랍풍토기』	Zhou Daguan, «Costumbres de Camboya»
+『라마야나』	«Ramayana»
+『비자야나가르 연대기』	«Crónica de Vijayanagara»
+『몽골 비사』	«Historia secreta de los mongoles»
+『쿠타드구 빌리그』	«Kutadgu Bilig»
+그리오의 구전 노래 (필사본)	Cantos orales de los griots (copia manuscrita)
+『트로아노 고사본』	«Códice Tro-Cortesiano»
+『보르자 고사본』	«Códice Borgia»
+키푸의 기록 (풀이본)	Registros de quipus (versión descifrada)
+『나가라크레타가마』	«Nagarakretagama»
+『파간 연대기』	«Crónica de Pagan»
+일연 『삼국유사』	Iryeon, «Samguk yusa»
+『고사기』	«Kojiki»
+신숙주 『해동제국기』	Sin Suk-ju, «Haedong jegukgi»
+『쇼소인 보물 목록』	«Inventario de tesoros del Shōsōin»
+비잔티온의 필론 『세계의 일곱 볼거리』	Filón de Bizancio, «Las siete maravillas del mundo»
+디오도로스 『역사 총서』	Diodoro, «Biblioteca histórica»
+수에토니우스 『황제 열전』	Suetonio, «Vidas de los doce césares»
+『로마의 경이』	«Mirabilia Urbis Romae»
+베르길리우스 『아이네이스』	Virgilio, «Eneida»
+아그넬루스 『라벤나 주교 열전』	Agnelo, «Libro pontifical de Rávena»
+법현 『불국기』	Faxian, «Relación de los reinos budistas»
+코스마스 『그리스도교 지지』	Cosmas, «Topografía cristiana»
+『케브라 나가스트』	«Kebra Nagast»
+『아리스테아스의 편지』	«Carta de Aristeas»
+반고 『한서』	Ban Gu, «Libro de Han»
+『이요국 풍토기』 일문	Fragmentos del «Iyo no kuni fudoki»
+이븐 알 나딤 『피흐리스트』	Ibn al-Nadim, «Fihrist»
+알 야쿠비 『여러 나라의 책』	Al-Yaqubi, «Libro de los países»
+이븐 주바이르 『여행기』	Ibn Yubair, «Viajes»
+『아즈마 카가미』	«Azuma kagami»
+단테 『신곡』	Dante, «Divina comedia»
+장 드 장됭 『파리 찬가』	Jean de Jandun, «Elogio de París»
+『프랑스 대연대기』	«Grandes crónicas de Francia»
+『스투를룽가 사가』	«Saga Sturlunga»
+『릴라의 이반 성인전』	«Vida de san Iván de Rila»
+초서 『캔터베리 이야기』	Chaucer, «Cuentos de Canterbury»
+탄조르 대사원 명문 탁본	Calco de las inscripciones del gran templo de Thanjavur
+『고팔라 왕통기』	«Gopala Vamshavali»
+『치앙마이 연대기』	«Crónica de Chiang Mai»
+조반니 빌라니 『새 연대기』	Giovanni Villani, «Nueva crónica»
+하페즈 『시집』	Hafez, «Diván»
+『명실록』	«Anales verídicos de los Ming»
+볼프람 폰 에셴바흐 『파르치팔』	Wolfram von Eschenbach, «Parzival»
+『구마노 참배기』	«Relato de la peregrinación a Kumano»
+한노 『항해기』	Hannón, «Periplo»
+스노리 스투를루손 『에다』	Snorri Sturluson, «Edda»
+몬머스의 제프리 『브리타니아 열왕사』	Godofredo de Monmouth, «Historia de los reyes de Britania»
+『오토기조시』	«Otogizōshi»
+『불가타 성경』	«Biblia Vulgata»
+『대월사기전서』	«Đại Việt sử ký toàn thư»
+압드 알라티프 알바그다디 『이집트 견문기』	Abd al-Latif al-Baghdadi, «Relato de Egipto»
+아리아노스 『알렉산드로스 원정기』	Arriano, «Anábasis de Alejandro»
+나시르 호스로 『여행기』	Naser-e Josrow, «Libro de viajes»
+아리스토텔레스 『동물지』	Aristóteles, «Historia de los animales»
+알 다미리 『동물의 삶』	Al-Damiri, «La vida de los animales»
+야쿠트 『지명 사전』	Yaqut, «Diccionario de los países»
+간자의 키라코스 『아르메니아 역사』	Kirakos de Gandzak, «Historia de Armenia»
+투르의 그레고리우스 『프랑크족의 역사』	Gregorio de Tours, «Historia de los francos»
+『칼릭스티누스 사본』 — 산티아고 순례자 안내서	«Códice Calixtino» — guía del peregrino a Santiago
+『샤르트르 성모 기적집』	«Milagros de Nuestra Señora de Chartres»
+고메스 이아네스 드 주라라 『기네 발견 연대기』	Gomes Eanes de Zurara, «Crónica de Guinea»
+안토니오 마네티 『브루넬레스키의 생애』	Antonio Manetti, «Vida de Brunelleschi»
+더럼의 시메온 『더럼 교회의 기원』	Simeón de Durham, «Sobre el origen de la iglesia de Durham»
+가스통 페뷔스 『사냥의 서』	Gastón Febus, «Libro de la caza»
+『왕통을 밝히는 거울』	«El espejo que ilumina la genealogía real»
+괴 로차와 『청사(푸른 연대기)』	Gö Lotsawa, «Los anales azules»
+유후 등 『구당서』	Liu Xu y otros, «Antiguo libro de Tang»
+기욤 드 뤼브룩 『동방 여행기』	Guillermo de Rubruk, «Viaje a Oriente»
+조반니 다 피안 델 카르피네 『몽골인의 역사』	Juan de Pian del Carpine, «Historia de los mongoles»
+요한 실트베르거 『여행기』	Johann Schiltberger, «Viajes»
+위징 등 『수서』	Wei Zheng y otros, «Libro de Sui»
+오사련 『대월사기전서』	Ngô Sĩ Liên, «Đại Việt sử ký toàn thư»
+『파라라톤』 — 왕들의 책	«Pararaton» — el libro de los reyes
+구양수 『귀전록』	Ouyang Xiu, «Guitian lu»

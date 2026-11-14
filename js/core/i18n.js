@@ -1,4 +1,4 @@
-/* 다국어 (G.I18N · G.T · G.N) — 2026-11-12 사용자 요청 「영어·중국어(간체·번체)·일본어·베트남어·스페인어까지」
+/* 다국어 (G.I18N · G.T · G.N) — 2026-11-12 사용자 요청 「영어·중국어(간체·번체)·일본어·베트남어·스페인어까지」 · 2026-11-14 독일어
    ■ 원문(한국어)이 곧 열쇠다. 한국어로 할 때는 아무것도 바뀌지 않는다 — 번역이 없는 문장도 한국어 그대로 나온다.
    ■ 세 갈래로 옮긴다
      ① 화면 글자 자동 번역: #ui·불러오기 화면에 들어온 글자 마디(text node)와 title·placeholder·alt를 사전(text)에서 통째로 찾아 바꾼다.
@@ -28,7 +28,8 @@
     { id: 'zh-Hant', label: '繁體中文', html: 'zh-Hant', font: { name: 'Noto Serif TC', css: GF + 'Noto+Serif+TC:wght@400;500;700&display=swap', stack: "'Noto Serif TC', 'Songti TC', 'PMingLiU', 'MingLiU'" } },
     { id: 'ja', label: '日本語', html: 'ja', font: { name: 'Noto Serif JP', css: GF + 'Noto+Serif+JP:wght@400;500;700&display=swap', stack: "'Noto Serif JP', 'Yu Mincho', 'YuMincho', 'Hiragino Mincho ProN', 'MS PMincho'" } },
     { id: 'vi', label: 'Tiếng Việt', html: 'vi', font: LATIN },
-    { id: 'es', label: 'Español', html: 'es', font: LATIN }
+    { id: 'es', label: 'Español', html: 'es', font: LATIN },
+    { id: 'de', label: 'Deutsch', html: 'de', font: LATIN }   // 2026-11-14 사용자 요청으로 독일어 추가
   ];
   I.packs = {};          // 언어 → {text, pat, city, good, name, ready}
   I.miss = {};           // 옮기지 못한 한국어 글 → 본 횟수
@@ -420,7 +421,7 @@
     var v = lsGet(KEY); if (v && I.info(v)) return v;
     if (location.protocol === 'file:') return 'ko';   // 파일로 연 게임(개발·시험)은 한국어 — 웹판(http·https)에서만 브라우저 언어를 본다
     var nav = String((navigator.languages && navigator.languages[0]) || navigator.language || 'ko').toLowerCase();
-    var guess = /^ko/.test(nav) ? 'ko' : /^zh-(tw|hk|mo|hant)/.test(nav) ? 'zh-Hant' : /^zh/.test(nav) ? 'zh-Hans' : /^ja/.test(nav) ? 'ja' : /^vi/.test(nav) ? 'vi' : /^es/.test(nav) ? 'es' : /^en/.test(nav) ? 'en' : 'ko';
+    var guess = /^ko/.test(nav) ? 'ko' : /^zh-(tw|hk|mo|hant)/.test(nav) ? 'zh-Hant' : /^zh/.test(nav) ? 'zh-Hans' : /^ja/.test(nav) ? 'ja' : /^vi/.test(nav) ? 'vi' : /^es/.test(nav) ? 'es' : /^de/.test(nav) ? 'de' : /^en/.test(nav) ? 'en' : 'ko';
     return I.ready(guess) ? guess : (I.ready('en') && guess !== 'ko' ? 'en' : 'ko');
   };
   I.apply = function () {

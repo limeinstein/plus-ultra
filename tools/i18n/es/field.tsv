@@ -1,0 +1,121 @@
+⚓ 멈춤	⚓ Parado
+(시간은 흐른다)	(el tiempo sigue corriendo)
+(자리를 비운 사이 시간을 멈췄다 — 아무 키나 누르면 다시 흐른다)	(el tiempo se detuvo mientras estaba ausente — pulse cualquier tecla para que vuelva a correr)
+· 정지 — 바다를 누르거나 방향키로 출발 · 탐색 가능	· Parado — pulse en el mar o use las flechas para zarpar · puede explorar
+정지 — 바다를 누르거나 방향키로 출발 · 탐색 가능	Parado — pulse en el mar o use las flechas para zarpar · puede explorar
+정지 — 마우스 따라가기 켬: 가려는 쪽 바다를 누르면 따라갑니다 · 방향키로도 출발 · 탐색 가능	Parado — seguir el ratón activado: pulse en el mar hacia donde quiera ir y lo seguirá · también puede zarpar con las flechas · puede explorar
+정지 — 스페이스로 다시 출발(항구 곁에서는 정박)	Parado — Espacio para zarpar de nuevo (junto a un puerto, atraca)
+표류 중 — 가려는 쪽 바다를 누르면 마우스를 따라갑니다	A la deriva — pulse en el mar hacia donde quiera ir y seguirá el ratón
+돛을 거두고 멈추는 중	Arriando velas para detenerse
+출발	Zarpar
+이 고장에서 구할 수 있는 탈것입니다. 탈것은 걸음을 빠르게 하고 피로를 덜어 주지만, 맞지 않는 땅에서는 힘을 못 쓰고 쓰러지기도 합니다.	Monturas disponibles en esta región. Aceleran la marcha y reducen el cansancio, pero en terreno inadecuado rinden poco y pueden desplomarse.
+탐험대로 돌아가기 전에 탈것을 바꿀 수 있습니다.	Puede cambiar de montura antes de volver con la expedición.
+짐승을 사서 마구간에 맡겨 두거나, 맡긴 짐승을 되팔 수 있습니다.	Puede comprar animales y dejarlos en el establo, o revender los que dejó allí.
+데려갈 수	Pueden llevarse
+마구간에 둘 수	Caben en el establo
+필요한 만큼	Los necesarios
+대원 수만큼	Tantos como miembros
+#필 (대원 #명에 #필)	{1} (un grupo de {2} necesita {3})
+#필 (대원 #명에 #필 · #명에 하나)	{1} (un grupo de {2} necesita {3} · uno por cada {4})
+#대 (대원 #명에 #대 · #명에 하나)	{1} (un grupo de {2} necesita {3} · uno por cada {4})
+#대 (대원 #명에 #대)	{1} (un grupo de {2} necesita {3})
+#패 (대원 #명에 #패 · #명에 하나)	{1} (un grupo de {2} necesita {3} · uno por cada {4})
+#패 (대원 #명에 #패)	{1} (un grupo de {2} necesita {3})
+#필 (대원 #명에 #필) · 금화 #닢	{1} (un grupo de {2} necesita {3}) · {4} monedas
+#필 (대원 #명에 #필 · #명에 하나) · 금화 #닢	{1} (un grupo de {2} necesita {3} · uno por cada {4}) · {5} monedas
+#대 (대원 #명에 #대 · #명에 하나) · 금화 #닢	{1} (un grupo de {2} necesita {3} · uno por cada {4}) · {5} monedas
+#대 (대원 #명에 #대) · 금화 #닢	{1} (un grupo de {2} necesita {3}) · {4} monedas
+#패 (대원 #명에 #패 · #명에 하나) · 금화 #닢	{1} (un grupo de {2} necesita {3} · uno por cada {4}) · {5} monedas
+#패 (대원 #명에 #패) · 금화 #닢	{1} (un grupo de {2} necesita {3}) · {4} monedas
+@ #필과 떠난다 (#닢)	Partir con @ ×# (# monedas)
+@ #대와 떠난다 (#닢)	Partir con @ ×# (# monedas)
+@ #패와 떠난다 (#닢)	Partir con @ ×# (# monedas)
+@ #필과 떠난다	Partir con @ ×#
+@ #대와 떠난다	Partir con @ ×#
+@ #패와 떠난다	Partir con @ ×#
+걸어서 떠난다	Partir a pie
+걸어서 가면 짐승을 데려가지 않는다	A pie no se llevan animales
+그만둔다	Dejarlo
+시세: @	Precio de mercado: @
+노동력부족	Falta mano de obra
+항구에서 출항 준비 — 보급 필요	Preparando la salida en el puerto — hace falta avituallarse
+@ #필과 떠난다 (+#닢)	Partir con @ ×# (+# monedas)
+@ #대와 떠난다 (+#닢)	Partir con @ ×# (+# monedas)
+@ #패와 떠난다 (+#닢)	Partir con @ ×# (+# monedas)
+바꿀 것이 없다	No hay nada que cambiar
+짐꾼은 떠날 때 데려간다	Los porteadores se llevan al partir
+@ #(필을|대를|패를) 사서 맡긴다 (#닢)	Comprar @ ×# y dejarlos en el establo (# monedas)
+@ #(필을|대를|패를) 되판다 (+#닢)	Revender @ ×# (+# monedas)
+@쪽으로 항해 중	Navegando hacia el @
+@쪽 침로	Rumbo @
+@쪽 침로 — Space·방향키로 출발	Rumbo @ — Espacio o flechas para zarpar
+@쪽으로 뱃머리를 돌리는 중	Virando la proa hacia el @
+방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감	Mantenga pulsada una flecha y la proa girará hacia ese lado
+Space 정지	Espacio: detenerse
+마우스를 따라 조타 중 (@ 끔)	Gobernando con el ratón (@ lo desactiva)
+@(으로|로) 자동항해 중	Navegación automática hacia @
+@(으로|로) 바닷길 따라 항해 중	Siguiendo las rutas marítimas hacia @
+@(으로|로) 항해 중	Navegando hacia @
+@(으로|로) 가던 길에 멈춤 — Space·출발로 이어 가기	Detenido camino de @ — Espacio o Zarpar para continuar
+목적지로 항해 중	Navegando hacia el destino
+목적지 가던 길에 멈춤 — Space·출발로 이어 가기	Detenido camino del destino — Espacio o Zarpar para continuar
+표류 중 — 바다를 누르면 그곳까지 갑니다 · 마우스 따라가기는 @	A la deriva — pulse en el mar para ir hasta allí · seguir el ratón: @
+맞바람 — 지그재그로 거슬러 오르는 중	Viento de proa — remontando en zigzag
+맞바람 — 바람을 안고 천천히 거슬러 오르는 중	Viento de proa — remontando despacio contra el viento
+키를 잡는 동안 ×1	×1 mientras lleva el timón
+도착까지 약 #일 / 보급 #일분	Llegada en unos # días / víveres para #
+폭풍	Tormenta
+무풍	Calma chicha
+순풍을 탔다 +#%	Viento a favor +#%
+폭풍 대비	Preparativos de tormenta
+폭우	Aguacero
+소나기	Chubasco
+작업 계속	Seguir trabajando
+교대 휴식	Descanso por turnos
+빗물 받기	Recoger agua de lluvia
+☂ 폭우	☂ Aguacero
+☂ 소나기	☂ Chubasco
+갑판 작업 계속	Seguir con las tareas en cubierta
+교대로 선실에서 쉬게 한다	Que descansen por turnos en los camarotes
+돛천을 펴 빗물을 받는다	Tender las velas para recoger agua de lluvia
+속력은 그대로 — 젖은 채 일하니 피로가 쌓인다 (폭우면 앞이 안 보여 조금 느려진다)	La velocidad no cambia — trabajar empapados acumula cansancio (con aguacero no se ve y se va algo más lento)
+비 오는 날을 쉬는 날로 — 피로가 풀리고 기강이 오른다, 대신 일손이 줄어 느려진다	Hacer del día de lluvia un día de descanso — se recupera el cansancio y sube la disciplina, pero con menos manos se va más lento
+물통을 채운다 — 젖은 갑판에서 일하니 피로가 조금 더 쌓인다	Llenar los barriles de agua — trabajar en cubierta mojada cansa un poco más
+비가 올 때 쓸 수 있습니다	Disponible cuando llueve
+비를 맞는 동안의 대책	Medidas mientras llueve
+망루 · @쪽 가까운 곳 — @	Vigía · cerca, al @ — @
+망루 · @쪽 멀지 않은 곳 — @	Vigía · no muy lejos, al @ — @
+망루 · @쪽 먼 곳 — @	Vigía · lejos, al @ — @
+정찰대 · @쪽 가까운 곳 — @	Exploradores · cerca, al @ — @
+정찰대 · @쪽 멀지 않은 곳 — @	Exploradores · no muy lejos, al @ — @
+정찰대 · @쪽 먼 곳 — @	Exploradores · lejos, al @ — @
+낯선 바다 빛깔이 보입니다.	Se ve un color de mar desconocido.
+물길이 심상치 않습니다. 무언가 있습니다!	Las corrientes son extrañas. ¡Hay algo!
+하늘빛이 이상합니다. 무언가 있는 것 같습니다.	El color del cielo es raro. Parece que hay algo.
+보기 드문 풍경이 어른거립니다.	Se vislumbra un paisaje poco común.
+사람이 쌓은 듯한 돌무더기가 보입니다.	Se ve un montón de piedras que parece apilado por manos humanas.
+무너진 성벽 같은 것이 보입니다!	¡Se ve algo parecido a una muralla derruida!
+무언가 번쩍였습니다. 예사롭지 않습니다.	Algo ha destellado. No es nada corriente.
+오래된 표식이 새겨진 바위가 보입니다.	Se ve una roca con antiguas marcas grabadas.
+처음 보는 짐승의 흔적이 있습니다.	Hay rastros de un animal nunca visto.
+커다란 그림자가 지나갔습니다!	¡Ha pasado una sombra enorme!
+처음 보는 나무와 풀이 무리 지어 자랍니다.	Crecen en grupos árboles y hierbas nunca vistos.
+낯선 꽃빛이 언덕을 물들이고 있습니다.	Flores de un color extraño tiñen la colina.
+연기가 오릅니다. 사람이 사는 것 같습니다.	Se ve humo. Parece que vive gente.
+북소리 같은 것이 들립니다.	Se oye algo parecido a tambores.
+무언가 있습니다.	Hay algo.
+@ 상륙해서 조사해 볼 만합니다.	@ Vale la pena desembarcar a echar un vistazo.
+해적선에서	Del barco pirata se recuperó
+을 건졌다.	.
+를 건졌다.	.
+(소지품이 가득 차 버렸다)	(el inventario está lleno)
+닻을 올리는 중…	Levando anclas…
+바다와 땅을 그릴 준비를 하는 중…	Preparando el mar y la tierra…
+배와 탐험대를 꾸리는 중…	Organizando barcos y expedición…
+항해 일지를 펼치는 중…	Abriendo el diario de navegación…
+항해를 준비하는 중…	Preparando la travesía…
+이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 @	La lengua de esta ciudad y cómo la habla su grupo — el almirante: @
+마을 사람	Lugareño
+처음 오신 분인가 보군요. @	Es la primera vez que viene, ¿verdad? @
+바다 건너 오셨다고요? 그럼 이건 모르시겠네. @	¿Viene del otro lado del mar? Entonces esto no lo sabrá. @
+여기 오셨으면 구경 한번 해 보시구려. @	Ya que está aquí, debería ir a verlo. @

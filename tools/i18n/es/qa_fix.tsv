@@ -1,0 +1,171 @@
+특기 단계	Nivel de habilidad
+언어 단계	Nivel de idioma
+체 # 지 # 무 # 매 #	VIT # INT # FUE # CAR #
+#가지:	#:
+— 금화 #닢	— # de oro
+명성 +#	Fama +#
+명성 −#	Fama −#
+교역 명성 +#	Fama comercial +#
+칭호 「@」	Título «@»
+첫 달성 때 한 번 지급	se paga una sola vez, la primera
+#% 기록	#% registrado
+남은 발견물 #가지	Quedan # descubrimientos
+아직 실마리를 얻지 못한 발견물 #가지 · 책과 소문, 앞선 발견에서 단서를 찾자.	# descubrimientos aún sin pista · Busque pistas en libros, rumores y descubrimientos anteriores.
+×# @	×# @
+재산 (소지금+예금) #/#닢	Riqueza (efectivo + depósitos) #/# de oro
+아즈텍 사람들 또는 남쪽 비밀 수로가 알려지면 소문이 돌기 시작합니다.	Los rumores empiezan cuando se conocen los aztecas o el canal secreto del sur.
+철새는 역사책에 이름이 없는 떠돌이 항해사입니다. 해마다 #명씩 새로 항구에 나타나고, #년마다 세대가 바뀝니다. 제독이	Los errantes son navegantes vagabundos cuyos nombres no figuran en los libros de historia. Cada año aparecen # nuevos en puerto, y cada # años llega una nueva generación. Aquí figuran los errantes originarios de
+닿은 대륙	los continentes a los que ha llegado
+(@)을 고향으로 둔 철새와, 이미 만났거나 소식을 들은 철새가 적힙니다. 행방을 들은 철새와 여급이 찾아 준 사람은 한동안 그 항구에 머뭅니다.	(@), además de los errantes que ya ha conocido o de los que ha oído noticias. Los errantes cuyo paradero conoce y las personas que le encontró la moza de la taberna se quedan un tiempo en ese puerto.
+(@)를 고향으로 둔 철새와, 이미 만났거나 소식을 들은 철새가 적힙니다. 행방을 들은 철새와 여급이 찾아 준 사람은 한동안 그 항구에 머뭅니다.	(@), además de los errantes que ya ha conocido o de los que ha oído noticias. Los errantes cuyo paradero conoce y las personas que le encontró la moza de la taberna se quedan un tiempo en ese puerto.
+🔒 아직 닿지 못한 대륙의 철새 — @	🔒 Errantes de continentes aún no alcanzados — @
+(그 대륙의 항구에 처음 들어서면 열립니다)	(Se desbloquea al entrar por primera vez en un puerto de ese continente)
+· 사슬 # / #	· cadenas # / #
+@ 발견 진행	Progreso de descubrimientos: @
+칭호 「@」 · 금화 #닢	Título «@» · # de oro
+금화 #닢 · 명성 +# · 칭호 「@」 · 첫 달성 때 한 번 지급	# de oro · Fama +# · Título «@» · se paga una sola vez, la primera
+— 금화 #닢 · 명성 +# · 칭호 「@」	— # de oro · Fama +# · Título «@»
+— 금화 #닢 · 명성 +#	— # de oro · Fama +#
+— 금화 #닢 · 교역 명성 +# · 칭호 「@」	— # de oro · Fama comercial +# · Título «@»
+— 교역 명성 +# · 칭호 「@」	— Fama comercial +# · Título «@»
+@ 교역소 · 한 번에 낸 가장 큰 이익 #/#닢	Puestos comerciales de @ · mayor beneficio en una sola venta #/# de oro
+시장 소식	Noticias del mercado
+— 아직 들은 소식이 없습니다. 술집의 「장사 소문을 듣는다」·교역소 주인의 이야기·가까운 곳의 소식으로 알게 됩니다.	— Aún no ha oído ninguna noticia. Se enterará con «Oír rumores comerciales» en la taberna, la charla del encargado del puesto comercial y las noticias de los alrededores.
+소비시장의 시대 수요 (#년)	Demanda de la época en los mercados de consumo (#)
+#세기엔 은이 모자랐지만, #년 포토시 은광이 열린 뒤 아메리카 은이 쏟아져 값이 떨어지고 물가가 뛰었다(가격 혁명) · #~#세기 중국의 은 결제·납세와 마닐라 교역은 별도의 은 수요를 만든다	En el siglo # la plata escaseaba, pero tras abrirse la mina de Potosí en #, la plata americana inundó el mercado, su precio cayó y se dispararon los precios (la revolución de los precios) · En los siglos #–#, los pagos e impuestos en plata de China y el comercio de Manila crean una demanda de plata aparte
+#년 유럽 정세	Asuntos europeos, #
+에서 본 나라들 —	: cómo ve a las naciones —
+@ 우호	@ Amistosa
+@ 동맹	@ Aliada
+@ 냉랭	@ Fría
+@ 중립	@ Neutral
+@ 전쟁	@ En guerra
+전쟁: 그 나라 교역소가 문을 닫고 군함이 덤빈다(쳐도 악명이 오르지 않는다) · 냉랭: 교역 #% 손해 · 우호/동맹: 교역이 활발해 #%/#% 이득	Guerra: los puestos comerciales de esa nación cierran y sus buques de guerra atacan (combatirlos no da mala fama) · Fría: #% de pérdida en el comercio · Amistosa/Aliada: comercio animado, #%/#% de ganancia
+지금 벌어진 전쟁	Guerras en curso
+— @ ⚔ @	— @ ⚔ @
+· @ ⚔ @	· @ ⚔ @
+(지중해의 패권 다툼)	(lucha por el dominio del Mediterráneo)
+(마차시 왕의 빈 점령)	(ocupación de Viena por el rey Matías)
+(십자군의 적)	(enemigo de la cruzada)
+(국경 전쟁)	(guerra fronteriza)
+쓰지 않음	Sin usar
+무력 #	Fuerza #
+검술 #	Esgrima #
+공격 #	Ataque #
+공격 #(+#)	Ataque #(+#)
+방어 #	Defensa #
+장기 @	Especialidad: @
+# 베기	# Tajo
+# 찌르기	# Estocada
+# 치기	# Golpe
+# 결사돌진	# Carga temeraria
+# 강력공격	# Ataque poderoso
+# 절대생포	# Capturar a toda costa
+# 호신중시	# Defensa primero
+술꾼	Bebedor
+체# 지# 무# 매#	VIT# INT# FUE# CAR#
+# 빈 선실 — 보직을 맡지 않은 부하가 한 명씩 머무는 방. 남은 부하부터 자동으로 배치하며, 빈자리가 없을 때만 대기로 둔다. 조선소에서 다른 방으로 고칠 수 있다.	# camarotes vacíos: estancias donde se aloja, uno por cada una, la tripulación sin puesto. La tripulación sobrante se coloca automáticamente y solo queda a la espera cuando no hay sitio libre. Puede convertirlos en otras estancias en el astillero.
+파수대 — 돛대 꼭대기의 망루. 측량사가 오르면 측량·역사학이 쓰이고 먼 곳의 발견물을 먼저 알아본다. 보는 특기: ★측량 · ☆역사학 (☆는 절반만 친다) 사람을 두면: 발견물을 알아보는 거리가 늘고, 지도 제작 속도 +#% × 방의 힘	Cofa: el vigía en lo alto del mástil. Cuando sube el topógrafo, se aprovechan la Topografía y la Historia y los descubrimientos lejanos se divisan antes. Habilidades usadas: ★Topografía · ☆Historia (☆ cuenta la mitad) Con alguien asignado: los descubrimientos se divisan desde más lejos y la velocidad de cartografía +#% × potencia de la estancia
+갑판 — 갑판을 맡은 사람이 선원들을 부린다. 보는 특기: ★운용술 · ☆검술 (☆는 절반만 친다) 사람을 두면: 규율이 덜 떨어진다	Cubierta: quien manda en cubierta hace trabajar a la tripulación. Habilidades usadas: ★Marinería · ☆Esgrima (☆ cuenta la mitad) Con alguien asignado: la disciplina baja menos
+조타실 — 항해사가 키를 잡는다. 항해술·운용술이 함대에 쓰인다. 보는 특기: ★항해술 · ☆운용술 (☆는 절반만 친다) 사람을 두면: 날마다 쌓이는 피로가 준다	Timonera: el navegante lleva el timón. La Navegación y la Marinería se aplican a la flota. Habilidades usadas: ★Navegación · ☆Marinería (☆ cuenta la mitad) Con alguien asignado: la fatiga diaria se acumula menos
+부관실 — 부관이 머문다. 전투·교섭·의술 같은 특기를 제독 대신 맡고, 부하들의 불만을 다독인다. 보는 특기: ★웅변 · ☆신학 (☆는 절반만 친다) 사람을 두면: 달마다 부하들의 충성이 조금 오른다	Camarote del segundo: aquí se aloja el segundo de a bordo, que se encarga de habilidades como el combate, la negociación y la medicina para el almirante y calma las quejas de la tripulación. Habilidades usadas: ★Elocuencia · ☆Teología (☆ cuenta la mitad) Con alguien asignado: la lealtad de la tripulación sube un poco cada mes
+선실 수련 @ #일 · 다음 단계 #년 / ☆@ #일 · 다음 단계 #년 #일	Entrenamiento en camarote @ # días · siguiente nivel # años / ☆@ # días · siguiente nivel # años # días
+특기 @	Habilidades @
+능력 @	Atributos @
+체력 # · 지력 # · 무력 # · 매력 #	Vitalidad # · Inteligencia # · Fuerza # · Carisma #
+(저장은 여관에서)	(Guarde en una posada)
+바다·육상 탐험 — 켜면 가려는 쪽을 한 번 누른 뒤로는 마우스를 옮기는 대로 방향을 틉니다 · 끄면 누른 곳까지 갑니다 · 수첩 옆 단추나 SHIFT로도 바꿉니다	Exploración marítima y terrestre: si está activada, tras hacer clic una vez hacia su rumbo, el barco gira hacia donde mueva el ratón · si está desactivada, va adonde haga clic · también se alterna con el botón junto al cuaderno o con SHIFT
+동료·선원 급료 한 달	Un mes de paga para oficiales y tripulación
+방을 누르면 사람을 둡니다 · 방을 고치는 일은 조선소에서. 부하를 끌어다 방에 놓아도 됩니다.	Haga clic en una estancia para asignar a alguien · las estancias se reforman en el astillero. También puede arrastrar a la tripulación a una estancia.
+#/# · 함대가 쓰는 단계	#/# · nivel que usa la flota
+발견의 여파 · 흥분 — 피로 # · 규율 +#	Secuelas del descubrimiento · euforia — fatiga # · disciplina +#
+발견의 여파 · 흥분	Secuelas del descubrimiento · euforia
+규율 +#	Disciplina +#
+규율 −#	Disciplina −#
+피로 #	Fatiga #
+속력은 그대로 — 젖은 채 일하니 피로가 쌓인다 (폭우면 앞이 안 보여 조금 느려진다) (하루 피로 +# · 속력 ×#)	Mantener la velocidad: trabajar mojados acumula fatiga (con aguacero no se ve por delante, así que se va algo más despacio) (fatiga diaria +# · velocidad ×#)
+비 오는 날을 쉬는 날로 — 피로가 풀리고 기강이 오른다, 대신 일손이 줄어 느려진다 (하루 피로 -# · 속력 ×#)	Hacer de los días de lluvia días de descanso: la fatiga se alivia y la disciplina sube, pero con menos manos se va más despacio (fatiga diaria −# · velocidad ×#)
+물통을 채운다 — 젖은 갑판에서 일하니 피로가 조금 더 쌓인다 (하루 피로 +# · 속력 ×#)	Llenar los barriles de agua: trabajar en una cubierta mojada acumula algo más de fatiga (fatiga diaria +# · velocidad ×#)
+비 대책: 갑판 작업 계속	Plan contra la lluvia: seguir trabajando en cubierta
+비 대책: 쉬는 날	Plan contra la lluvia: día de descanso
+비 대책: 물통 채우기	Plan contra la lluvia: llenar los barriles de agua
+비 대책: @	Plan contra la lluvia: @
+Encyclopedia of Discoveries — #종 수록	Enciclopedia de descubrimientos: # entradas
+@에 새 직조 조합이 들어서 실과 염료가 모자란다. @ 값이 오르고 있다.	Se ha establecido un nuevo gremio de tejedores en @ y faltan hilo y tinte. Los precios de @ están subiendo.
+@ #	@ #
+@ #(+#)	@ #(+#)
+☆@	☆@
+#년 #일	# años # días
+#일	# días
+@ @ · 다음 단계 @	@ @ · siguiente nivel @
+@ @ · 다 늘었다	@ @ · al máximo
+선실 수련 +#	Entrenamiento en camarote +#
+수련 @	Entrenamiento @
+★ 선실에서 지내며 는 특기 · (본디 n) 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기	★ habilidad que crece con la vida en el camarote · (originalmente n) habilidad menos usada ahora por baja lealtad o lesión
+아프리카 #명	África #
+중근동 #명	Oriente Próximo #
+인도 #명	India #
+동남아시아 #명	Sudeste asiático #
+동아시아 #명	Asia oriental #
+아메리카 #명	América #
+유럽 #명	Europa #
+오세아니아 #명	Oceanía #
+/ # 고름	/ # elegidos
+소문의 물고기: @ — 이 바다에 산다고 한다.	Pez del que se rumorea: @. Dicen que vive en estas aguas.
+@의 계절풍	monzón de @
+@ 계절풍 ~@	Monzón de @ ~@
+가장 적게는 #번 · 처음부터 #번 남음	Mínimo posible: # · quedan # desde el principio
+이 칸으로 굴리면 문장이 @을 향한다	Si lo hace rodar hasta esta casilla, el emblema mirará hacia @
+이 칸으로 굴리면 문장이 @를 향한다	Si lo hace rodar hasta esta casilla, el emblema mirará hacia @
+문장이 @ 면에 있다 (보이지 않는 면)	El emblema está en la cara @ (una cara oculta)
+@ 상인들	mercaderes de @
+맞닿은 방에서 지내면 서로의 말을 더 빨리 익히고, 석 달·아홉 달·두 해를 함께하면 제독의 모국어를 한 단계씩 배운다. 방마다 키우는 특기가 있어 그 방에서 #년·#년·#년을 지내면 한 단계씩 는다(#까지) · 그 방의 보조 특기(☆)도 #배 느리게 는다 — ★가 선실에서 는 특기, (본디 n)은 충성이 낮거나 다쳐서 지금은 덜 쓰는 특기. 자리가 없는 부하는 달마다 충성이 떨어진다.	Quienes están en estancias contiguas aprenden antes las lenguas de los otros, y tras tres meses, nueve meses y dos años juntos aprenden la lengua materna del almirante nivel a nivel. Cada estancia entrena una habilidad: #, # y # años en esa estancia la suben un nivel cada vez (hasta #) · la habilidad secundaria de la estancia (☆) también crece, # veces más despacio — ★ marca una habilidad que crece en el camarote, (originalmente n) una habilidad menos usada ahora por baja lealtad o lesión. La tripulación sin puesto pierde lealtad cada mes
+#번 기둥	Poste #
+#번 기둥 · 도착	Poste # · meta
+제단 위의 보석 #개 가운데 하나만 조금 무겁다. 「천칭을 한 번만 써서 진짜 보석을 가려내라. 틀리면 문은 닫힌다.」	De las # gemas del altar, solo una pesa un poco más. «Encuentra la gema verdadera usando la balanza una sola vez. Si te equivocas, la puerta se cierra».
+제단 위의 보석 #개 가운데 하나만 조금 무겁다. 「천칭을 두 번만 써서 진짜 보석을 가려내라. 틀리면 문은 닫힌다.」	De las # gemas del altar, solo una pesa un poco más. «Encuentra la gema verdadera usando la balanza solo dos veces. Si te equivocas, la puerta se cierra».
+제단 위의 보석 #개 가운데 하나만 조금 무겁다. 「천칭을 세 번만 써서 진짜 보석을 가려내라. 틀리면 문은 닫힌다.」	De las # gemas del altar, solo una pesa un poco más. «Encuentra la gema verdadera usando la balanza solo tres veces. Si te equivocas, la puerta se cierra».
+@. 그 항구에서 산지가 아닌 물건은 값이 크게 뛰었다.	@. Los productos que no se producen en ese puerto se han disparado de precio.
+@ 앞바다에 해적이 들끓어 배가 드나들지 못한다. 바깥에서 들여오던 물건이 모두 귀하다	Los piratas infestan las aguas frente a @ y los barcos no pueden entrar ni salir. Todo lo que se trae de fuera escasea
+↑ 북쪽	↑ Norte
+↓ 남쪽	↓ Sur
+← 서쪽	← Oeste
+→ 동쪽	→ Este
+↑ 북	↑ N
+↓ 남	↓ S
+← 서	← O
+→ 동	→ E
+@, #되 / #되	@, # / # medidas
+# / #되	# / # medidas
+#되	# medidas
+처음 #걸음	# pasos hasta la salida
+처음 #걸음 · 가장 짧은 길 #걸음	# pasos hasta la salida · camino más corto # pasos
+수수께끼 # / # · 맞힘 # · 틀림 #	Acertijo # / # · aciertos # · fallos #
+(곱하면 @, 더하면 @ — 그런 두 수를 찾으면 된다)	(su producto es @ y su suma es @: encuentra esos dos números)
+오늘 남은 미끼 # / #	Cebo restante hoy # / #
+위 칸 @	carril superior @
+가운데 칸 @	carril central @
+아래 칸 @	carril inferior @
+언덕(적 쪽)	colina (lado enemigo)
+언덕(우리 쪽)	colina (nuestro lado)
+언덕 (적 쪽)	colina (lado enemigo)
+언덕 (우리 쪽)	colina (nuestro lado)
+더위	Calor
+적 편성은 아직 모른다 — 약 #명 (정찰하면 알 수 있다)	Fuerzas enemigas aún desconocidas: unas # (explore para averiguarlo)
+적 편성은 아직 모른다 — 약 #명	Fuerzas enemigas aún desconocidas: unas #
+적 편성은 아직 모른다 — 약 #마리 (정찰하면 알 수 있다)	Fuerzas enemigas aún desconocidas: unas # fieras (explore para averiguarlo)
+적 편성은 아직 모른다 — 약 #마리	Fuerzas enemigas aún desconocidas: unas # fieras
+적 부대 약 #	Fuerza enemiga: unas #
+★ 적 부대 약 #	★ Fuerza enemiga: unas #
+아군 #	Aliados #
+적 약 #	Enemigos: unos #
+땅을 누르면 그곳까지 걷습니다	Haga clic en el suelo para caminar hasta allí
+방향키로도 걷습니다	También puede caminar con las teclas de flecha
+탐험 #일째	Explorando, día #
+@ · 출발 도시까지 #° · @ 근처 (성문 마구간: @)	@ · #° hasta la ciudad de partida · cerca de @ (establos de la puerta: @)
+@ · 출발 도시까지 #° · @ 근처	@ · #° hasta la ciudad de partida · cerca de @
+@ · 출발 도시까지 #°	@ · #° hasta la ciudad de partida
+산 · @	Montañas · @
+산 · 출발 도시까지 #° · @ 근처 (성문 마구간: @)	Montañas · #° hasta la ciudad de partida · cerca de @ (establos de la puerta: @)
+산 · 출발 도시까지 #° · @ 근처	Montañas · #° hasta la ciudad de partida · cerca de @
+산 · 출발 도시까지 #°	Montañas · #° hasta la ciudad de partida

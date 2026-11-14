@@ -1,0 +1,316 @@
+0	Lisboa
+1	Oporto
+2	La Coruña
+3	Bilbao
+4	Toledo
+5	Zaragoza
+6	Córdoba
+7	Sevilla
+8	Cádiz
+9	Málaga
+10	Granada
+11	Valencia
+12	Barcelona
+13	Mallorca
+14	París
+15	Ruan
+16	Tours
+17	Nantes
+18	Burdeos
+19	Toulouse
+20	Lyon
+21	Marsella
+22	Brujas
+23	Amberes
+24	Ámsterdam
+25	Bruselas
+26	Milán
+27	Turín
+28	Génova
+29	Venecia
+30	Florencia
+31	Pisa
+32	Ancona
+33	Roma
+34	Nápoles
+35	Cagliari
+36	Palermo
+37	Siracusa
+38	Londres
+39	Southampton
+40	Bristol
+41	York
+42	Edimburgo
+43	Dublín
+44	Hamburgo
+45	Lübeck
+46	Bremen
+47	Colonia
+48	Fráncfort
+49	Estrasburgo
+50	Magdeburgo
+51	Núremberg
+52	Augsburgo
+53	Praga
+54	Viena
+55	Berna
+56	Dánzig
+57	Königsberg
+58	Riga
+59	Nóvgorod
+60	Moscú
+61	Kiev
+62	Varsovia
+63	Budapest
+64	Estocolmo
+65	Visby
+66	Copenhague
+67	Oslo
+68	Bergen
+69	Belgrado
+70	Bucarest
+71	Ragusa
+72	Atenas
+73	Salónica
+74	Candia
+75	Famagusta
+76	Varna
+77	Moncastro
+78	Alejandría
+79	El Cairo
+80	Asuán
+81	Trípoli
+82	Túnez
+83	Argel
+84	Ceuta
+85	Casablanca
+86	Azores
+87	Madeira
+88	Las Palmas
+89	Arguin
+90	Cabo Verde
+91	Sierra Leona
+92	Taghaza
+93	Tombuctú
+94	Gao
+95	Djenné
+96	Kano
+97	São Jorge da Mina
+98	Ife
+99	Santo Tomé
+100	Luanda
+101	El Cabo
+102	Sofala
+103	Mozambique
+104	Zimbabwe
+105	Kilwa
+106	Zanzíbar
+107	Mombasa
+108	Malindi
+109	Mogadiscio
+110	Aksum
+111	Jartum
+112	Estambul
+113	Caffa
+114	Tana
+115	Sinop
+116	Trebisonda
+117	Ankara
+118	Antioquía
+119	Damasco
+120	Jerusalén
+121	Beirut
+122	Medina
+123	La Meca
+124	Adén
+125	Mascate
+126	Basora
+127	Bagdad
+128	Ormuz
+129	Shiraz
+130	Isfahán
+131	Tabriz
+132	Samarcanda
+133	Tashkent
+134	Urgench
+135	Herat
+136	Kabul
+137	Kasgar
+138	Turfán
+139	Lhasa
+140	Astracán
+141	Kazán
+142	Sibir
+143	Khovd
+144	Karakórum
+145	Delhi
+146	Lahore
+147	Ahmedabad
+148	Diu
+149	Bijapur
+150	Goa
+151	Cananor
+152	Calicut
+153	Vijayanagara
+154	Cochín
+155	Colombo
+156	Golconda
+157	Calcuta
+158	Ava
+159	Pegu
+160	Malaca
+161	Ligor
+162	Ayutthaya
+163	Phnom Penh
+164	Hue
+165	Thang Long
+166	Aceh
+167	Palembang
+168	Bantén
+169	Surabaya
+170	Brunéi
+171	Ternate
+172	Amboina
+173	Macao
+174	Cantón
+175	Quanzhou
+176	Fuzhou
+177	Hangzhou
+178	Nankín
+179	Wuchang
+180	Guilin
+181	Yunnan
+182	Chengdu
+183	Ganzhou
+184	Xi'an
+185	Kaifeng
+186	Jinan
+187	Taiyuan
+188	Pekín
+189	Liaodong
+190	Hanyang
+191	Nagasaki
+192	Sakai
+193	Kioto
+194	Santo Domingo
+195	Santiago
+196	La Habana
+197	Jamaica
+198	San Juan
+199	Veracruz
+200	Tenochtitlan
+201	Ciudad de México
+202	Tlaxcala
+203	Tlapa
+204	Mitla
+205	Acapulco
+206	Mérida
+207	Guatemala
+208	Trujillo
+209	León
+210	Panamá
+211	Santa Marta
+212	Coro
+213	Cumaná
+214	Pernambuco
+215	Bahía
+216	Río de Janeiro
+217	Buenos Aires
+218	Bogotá
+219	Quito
+220	Tumbes
+221	Chan Chan
+222	Lima
+223	Cusco
+224	Nazca
+225	Potosí
+226	Dongnae
+227	Gyeongju
+228	Pyongyang
+229	Hansando
+230	Mdewakanton
+231	Kituwa
+232	Onondaga
+233	Ossossané
+234	Hochelaga
+235	Stadacona
+236	Werowocomoco
+237	Sowams
+238	Coosa
+239	Natchez
+240	Calos
+241	Taos
+242	Acoma
+243	Mandan
+244	Syuxtun
+245	Ozette
+246	San Agustín
+247	San Juan de Terranova
+248	Tadoussac
+249	Port-Royal
+250	Jamestown
+251	Quebec
+252	Santa Fe
+253	Plymouth
+254	Nueva Ámsterdam
+255	Nueva York
+256	Boston
+257	Trois-Rivières
+258	St. Mary's City
+259	Providence
+260	Fuerte Cristina
+261	Montreal
+262	Charleston
+263	Filadelfia
+264	York Factory
+265	Pensacola
+266	Biloxi
+267	San Salvador
+268	Campeche
+269	Zacatecas
+270	Portobelo
+271	Belize
+272	Cartagena
+273	Guayaquil
+274	Asunción
+275	Santiago de Chile
+276	Valparaíso
+277	La Paz
+278	São Paulo
+279	Caracas
+280	Paramaribo
+281	Belém
+282	Sídney
+283	Hobart
+284	Brisbane
+285	Wellington
+286	Suzhou
+287	Xiamen
+288	Shanghái
+289	Dokdo
+290	Tomsk
+291	Irkutsk
+292	Yakutsk
+293	Okhotsk
+294	Petropavlovsk
+295	Urga
+296	Hohhot
+297	Edo
+298	KwaZulu
+299	Namanga
+300	Gcuwa
+301	Oyo
+302	Katsina
+303	Futa Toro
+304	Aït Benhaddou
+305	Tsodilo
+306	Agadez
+307	Borana
+308	Kumasi
+309	Zhangjiakou
+310	Chahar Ordo
+311	Ghulja
+312	Shenyang
+313	Jilin
+314	Liaoyang
+315	Gungnae
