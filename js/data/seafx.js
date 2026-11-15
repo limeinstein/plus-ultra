@@ -691,8 +691,9 @@
     sailRopeRadius: .19, reefRopeLength: 1.25, sailWrinkle: .32,
     idleModels: 3,            // 화면에서 사라진 선종은 최근 3종만 보관. 보이는 배는 같은 모형을 재사용한다.
     bufferShrinkFrames: 8, bufferShrinkRatio: .72, // 축소 뒤 전체 함대가 작은 버퍼에 들어가는 상태가 8프레임 이어지면 한 번만 축소
-    reuseMs: 33, reuseTurn: 0.02, // 항해: 같은 배는 이 ms 동안(뱃머리가 이 rad 넘게 돌지 않으면) 먼저 그린 3D 그림을 다시 쓴다 — 0이면 매 프레임 새로 (항해 버벅임 2026-11-01)
-    reuseBudget: 2, reuseMax: 120, // 한 프레임에 새로 그리는 배는 기함 말고 이만큼까지, 나머지는 이 ms까지 먼저 그린 그림으로 (차례로 돌아가며 그린다)
+    reuseMs: 40, reuseTurn: 0.02, // 같은 배는 짧게 보관한 3D 그림을 다시 써 60~144Hz 화면의 중복 렌더를 줄인다
+    reuseBudget: 1, reuseMax: 160, // 한 프레임에 새로 그리는 배는 한 척까지. 기함도 캐시에 넣고 방향 변화 때 즉시 갱신한다
+    fastSupersample: 1, fastReuseMs: 70, fastReuseBudget: 0, fastReuseMax: 240, fastShadows: false, // 빠른 화질: 낮은 내부 배율·그림자 생략·긴 캐시
     pirateSailTint: '#766c62' // 주변 해적선의 어두운 돛. 같은 선종의 아군 돛에는 적용하지 않는다.
   });
   // 거북선: 첨부 복원선 사진을 기준으로 한 미술 배치. 게임의 배 성능과 무관하다.

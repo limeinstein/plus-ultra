@@ -3,6 +3,17 @@
   'use strict';
   var P=G.Ship3D={},rt=null,failure=null,failedTypes={};
   function cfg(){return G.FX.ship3d;}
+  function drawCfg(){
+    var c=cfg(),s=G.Game&&G.Game.state,low=!!(s&&s.settings&&s.settings.res<1);
+    if(!c||!low)return c;
+    var q=Object.create(c);
+    q.supersample=c.fastSupersample==null?c.supersample:c.fastSupersample;
+    q.reuseMs=c.fastReuseMs==null?c.reuseMs:c.fastReuseMs;
+    q.reuseBudget=c.fastReuseBudget==null?c.reuseBudget:c.fastReuseBudget;
+    q.reuseMax=c.fastReuseMax==null?c.reuseMax:c.fastReuseMax;
+    q.shadows=c.fastShadows==null?c.shadows:c.fastShadows;
+    return q;
+  }
   function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
   function release(root,keptTextures){
     var gs=new Set(),ms=new Set(),ts=new Set();
@@ -146,10 +157,11 @@
     var da=Math.abs(angle-k.angle)%PI2;if(da>Math.PI)da=PI2-da;
     var age=now-k.at,fu=Math.abs((spec.furl||0)-k.furl);
     if(age<c.reuseMs&&da<(c.reuseTurn||.02)&&fu<.04)return true;                       // 방금 그린 그림
-    return r.inFrame&&r.renders>=(c.reuseBudget||2)&&spec.sid!=='f0'&&age<(c.reuseMax||120)&&da<.08&&fu<.1;   // 이 프레임 몫을 다 썼으면 조금 묵은 그림으로
+    var budget=c.reuseBudget==null?2:c.reuseBudget;
+    return r.inFrame&&r.renders>=budget&&age<(c.reuseMax||120)&&da<.08&&fu<.1;   // 기함도 포함해 이 프레임 몫을 다 썼으면 조금 묵은 그림으로
   }
   P.draw=function(ctx,x,y,angle,len,spec,t){
-    var c=cfg();if(!c||!c.enabled||!spec||!P.supports(spec.type))return false;
+    var c=drawCfg();if(!c||!c.enabled||!spec||!P.supports(spec.type))return false;
     var r=setup();if(!r||r.lost||r.renderer.getContext().isContextLost())return false;
     var start=performance.now(),tx=ctx.getTransform(),dev=Math.hypot(tx.a,tx.b),scale=len/c.baseLen;
     var naturalPixels=clamp(Math.ceil(r.span*scale*dev*c.supersample/32)*32,c.minBuffer,c.maxBuffer);

@@ -83,7 +83,8 @@
     var w = Math.round(1600 * k), h = Math.round(900 * k);
     if (w > 2880) { h = Math.round(h * 2880 / w); w = 2880; }
     if (worldCanvas.width !== w) { worldCanvas.width = w; worldCanvas.height = h; }
-    var ok = Math.min(2, s * dpr);
+    // 빠른 화질은 바다 본판뿐 아니라 배·포격·날씨가 그려지는 오버레이에도 같은 배율을 적용한다.
+    var ok = Math.min(2, s * dpr) * q;
     var ow = Math.round(1600 * ok), oh = Math.round(900 * ok);
     if (overlayCanvas.width !== ow) { overlayCanvas.width = ow; overlayCanvas.height = oh; }
     Game.overlayScale = ow / 1600;
@@ -216,17 +217,31 @@
   };
   Game.onKey = function (e) { return Game.scene && Game.scene.onKey ? Game.scene.onKey(e) === true : false; };
 
+  // 일기토처럼 자기 캔버스·프레임 루프를 가진 전면 장면 동안 뒤쪽 항해·해전을 멈춘다.
+  // 참조 횟수로 관리해 겹친 전면 장면이 있어도 먼저 끝난 하나가 배경을 섣불리 깨우지 않는다.
+  Game.pauseScene = function () {
+    Game._scenePause = (Game._scenePause || 0) + 1;
+    var resumed = false;
+    return function () {
+      if (resumed) return;
+      resumed = true;
+      Game._scenePause = Math.max(0, (Game._scenePause || 0) - 1);
+    };
+  };
+  Game.scenePaused = function () { return (Game._scenePause || 0) > 0; };
+
   var last = 0;
   function LP() { return (G.FX && G.FX.loop) || { maxDt: 0.1 }; }
   function loop(t) {
     var raw = (t - last) / 1000 || 0; last = t;
     var K = LP(), dt = Math.min(K.maxDt, Math.max(0, raw));   // 오래 멈췄던 장면(탭 전환·무거운 일) 뒤에 배가 순간 이동하지 않게
-    Game.time += dt;
-    // 느린 프레임에서도 사용자가 고른 해상도를 유지한다. 버퍼 크기 왕복으로 생기는 끊김도 피한다.
-    if (Game.scene && Game.scene.update) {
+    var scenePaused = Game.scenePaused();
+    if (!scenePaused) Game.time += dt;
+    // 일기토가 열린 동안 뒤쪽 항해·해전의 WebGL·2D 렌더링을 중복 실행하지 않는다.
+    if (!scenePaused && Game.scene && Game.scene.update) {
       try { Game.scene.update(dt); } catch (e) { console.error(e); }
     }
-    if (G.Birds) { try { G.Birds.update(dt); } catch (e) { console.error(e); } }
+    if (!scenePaused && G.Birds) { try { G.Birds.update(dt); } catch (e) { console.error(e); } }
     if (G.EraEnd && Game.state) { try { G.EraEnd.tick(); } catch (e) { console.error(e); } }   // 1700년 1월 1일 대항해시대의 끝 — 수명·이별보다 먼저 (js/systems/eraend.js)
     if (G.Life && Game.state) { try { G.Life.tick(); } catch (e) { console.error(e); } }
     if (G.MateLeave && Game.state) { try { G.MateLeave.tick(); } catch (e) { console.error(e); } }
