@@ -385,6 +385,32 @@
     marketInstrumentMax: 3, marketInstrumentDays: 7, // 악기는 시장마다 최대 세 종류만 진열하고, 게임 속 일주일마다 무작위로 교체한다.
     // 선수상: 함대에서 가장 센 덕 + 나머지 배의 덕 × figRest (R.fleetBonus). 폭풍 빈도는 stormFloor 아래로 줄지 않는다 (sea.js)
     figRest: 0.25, stormFloor: 0.35, stormDmgCut: 0.3,
+    // 흩어진 그리스 성소의 보상. 선수상은 장착, 무기·갑옷은 착용해야 적용된다.
+    // 공작 브로치는 전용 매력 +11. 같은 능력치는 가장 높은 물건 하나만 적용.
+    figSupplyCap: 0.20,
+    olympianApostles: {
+      nearCity: 0.65, retryDays: 1, puzzleLevel: 2, loyal: 80, wage: 110,
+      duel: { atk: 35, def: 24, skill: 2 }, land: { n: 30, party: 36 },
+      naval: { type: 'caravel', gun: 'saker', crew: 48, crewK: 0.60, gunK: 0.65, power: 0.4 },
+      melody: { notes: 5, rounds: 3, start: 3, showMs: 2600, mistakes: 2 },
+      pilgrimage: { fame: 800, gold: 50000 }, companions: { fame: 1000, gold: 60000 }
+    },
+    uninvitedApostles: {
+      retryDays: 7, deferDays: 1, wage: 120, loyal: 75, survivalCrew: 3, returnCrewK: 0.3,
+      openMargin: 1.2, openRadius: 0.45, probes: 8,
+      hpShare: [0.48, 0.40], minHp: 160, maxHp: 900, fame: [70, 100],
+      waves: [['ghost-ship', 'kraken'], ['ghost-ship', 'kraken', 'sea-serpent']],
+      rewards: { cupCha: 8, keyInt: 8, tridentAtk: 41, cupPrice: 3200, keyPrice: 3600, tridentPrice: 6800 }
+    },
+    olympianRelics: {
+      pergusa: { supply: 0.08, morale: 0.03 },
+      hermescave: { spd: 0.05, luck: 0.02 },
+      yria: { morale: 0.08, luck: 0.02 },
+      heraion: { gv: 18, price: 2800, statBonus: { k: 'cha', v: 11 } },
+      hephaistia: { def: 41 },
+      aretias: { atk: 41, style: 'thrust' },
+      vesta: { hp: 0.05, morale: 0.06 }
+    },
     // 피로 60을 넘으면 속력 × (1 − (피로 − 60) / fatigueDiv) → 피로 100에서 75% (R.fleetMotion)
     fatigueDiv: 160,
     // 선원이 최소 인원 × spareWatch 이상이면 교대가 넉넉해 하루 피로가 spareRest만큼 덜 쌓인다 (sea.js runDay)
@@ -802,6 +828,7 @@
     chinaCrew: { start: 1490, years: 10, count: 4 },  // 중국 항해사 24명을 한 번씩 배정한 뒤 새 순서로 다시 뽑는다.
     japanCrew: { start: 1550, years: 5, count: 2 },  // 일본 여성 항해사 10명을 두 명씩 배정하고 25년마다 새 순서로 섞는다.
     koreaCrew: { start: 1480, years: 3, count: 1 },  // 조선 여성 20명을 한 명씩 배정하고 60년마다 새 순서로 섞는다.
+    windsaltCrew: { start: 1487, years: 10, count: 10, cycle: 40 },  // 유럽 남성 30명: 세 차례 배정·10년 휴식 뒤 재추첨, 고용한 동료는 제외한다.
     // 철새(떠돌이 항해사, wanderers.js): 새 게임에 startN명, 해마다 perYear명이 새로 나타난다.
     // cycle년마다(epoch부터 센다: 1510·1540·1570…) 세대가 바뀐다 — 고용하지 않은 철새는 떠나고, 그 가운데 rebornMax명의 「다음 세대」가 나타난다.
     // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).

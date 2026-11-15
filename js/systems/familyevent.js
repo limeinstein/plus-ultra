@@ -194,6 +194,7 @@
     box.className = 'famscene wood brass-frame';
     box.style.cssText = 'left:' + Math.round((UIW() - w - 20) / 2) + 'px;top:' + (fx.top || 74) + 'px';
     var img = ev.canvas || document.createElement('img'); if (!ev.canvas) { img.src = I.src(ev.img); img.alt = ev.title || ''; } img.style.width = w + 'px'; img.style.height = h + 'px'; img.style.display = 'block';
+    if (ev.objectPosition) { img.style.objectPosition=ev.objectPosition; img.style.transformOrigin=ev.objectPosition; }
     var clip = document.createElement('div'); clip.className = 'fs-clip'; clip.style.width = w + 'px'; clip.style.height = h + 'px'; clip.appendChild(img);
     box.appendChild(clip);
     if (ev.title) { var t = document.createElement('div'); t.className = 'eventfx-title'; t.textContent = ev.title; box.appendChild(t); }

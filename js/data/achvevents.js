@@ -11,6 +11,18 @@
   'use strict';
   var E = G.ACHV_EVENTS = {};
   function e(id, sk, n, m, p, more) { var o = { sk: sk, n: [].concat(n), m: m, p: p || null }; for (var k in more || {}) o[k] = more[k]; E[id] = o; }
+  e('olympian_pilgrim','hist',[
+    '항해일지의 마지막 여백에 성소 하나가 더 그려졌다. 시칠리아의 호수에서 흑해의 섬, 로마의 화로에서 대서양의 전설까지. 흩어진 열두 신의 자취가 한 항로로 이어진다.',
+    '제독이 낡은 책장을 펼치자, 선원들이 신들의 열두 상징을 둥글게 놓았다. 마지막 빈자리가 채워지고 아침 햇살이 기록 위로 번진다.'
+  ],'이제 열두 곳 모두 우리 눈으로 본 기록입니다. 신들의 이야기가 우리의 항해가 되었군요.',
+    '다음은 이 길에서 만난 사람들과 함께 가자.',{pic:'achievement-events/olympian_pilgrim',picPosition:G.FX.olympianApostles.shotPosition});
+  e('olympian_companions','first',[
+    '마지막 사도가 배에 오른 저녁. 갑판에 열두 사람이 모였다. 공작의 깃, 밀 이삭, 화로의 불꽃과 바다의 삼지창이 같은 바람을 맞는다.',
+    '겨루었던 칼과 방패가 내려가고, 리라의 짧은 가락이 들린다. 열두 사도가 해도 위에 손을 모았다. 이제 시험을 내던 이들은 항로를 함께 고르는 동료다.'
+  ],null,'우리는 서로 다른 길에서 왔지만, 이제 같은 배를 탄다. 함께 출항하자.',{
+    pic:'achievement-events/olympian_companions',picPosition:G.FX.olympianApostles.shotPosition,
+    cast:[['apostle_hera','우리가 맺은 약속을 이 배의 닻으로 삼겠습니다.'],['apostle_athena','서로의 지혜를 더하면 더 먼 곳까지 갈 수 있습니다.'],['apostle_poseidon','좋아, 다음 파도도 함께 넘자고!'],['apostle_hestia','돌아올 자리는 언제나 따뜻하게 지킬게요.']]
+  });
 
   // ------------------------------------------------------------------ 재산 (2026-11-01)
   e('wealth_1m', 'acct', ['경리가 장부의 마지막 줄에 숫자를 적고, 펜을 내려놓았다.', '소지금과 금고의 예금을 더하니 금화 백만 닢. 항구의 상인들이 제독의 이름을 낮게 부르기 시작했다.'],

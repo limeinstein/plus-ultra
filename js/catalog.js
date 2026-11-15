@@ -192,7 +192,7 @@
   const langTxt = lg => Object.keys(lg || {}).sort((a, b) => lg[b] - lg[a]).map(k => KO ? G.LANGS[k] + ' ' + G.LANG_LV[lg[k]] : TR(G.LANGS[k]) + ' ' + TR(G.LANG_LV[lg[k]]).toLowerCase()).join(', ');
   G.MATES.forEach(m => {
     const spec = A.mateSpec(m.id);
-    const period = m.chinaRotation ? G.ChinaCrew.periodText() : m.japanRotation ? G.JapanCrew.periodText() : m.koreaRotation ? G.KoreaCrew.periodText() : m.y[0] + '~' + m.y[1] + '년';
+    const period = m.chinaRotation ? G.ChinaCrew.periodText() : m.japanRotation ? G.JapanCrew.periodText() : m.koreaRotation ? G.KoreaCrew.periodText() : m.windsaltRotation ? G.WindsaltCrew.periodText() : m.y[0] + '~' + m.y[1] + '년';
     add(tPeople, {
       group: 'mate', portrait: true, name: m.name, sub: (m.witch ? (m.legend ? '전설의 마녀' : '마녀로 몰렸던 여인') : '동료') + (m.eventOnly ? ' · 이야기로 합류' : ' · 명성 ' + num(m.fame) + ' 이상') + ' · ' + period,
       meta: skillTxt(m.sk), key: 'portraits/mates/' + m.id, kind: 'png', chain: A.portraitKeys(spec), ar: '1 / 1', extra: m.desc, half: I.chain.mateHalf(m.id),

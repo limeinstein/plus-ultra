@@ -1,0 +1,150 @@
+[
+  {
+    "id": "meet_hera",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The dignified peacock-crowned woman in purple and ivory greets a sea captain outside the Venetian stone gate at blue dawn. She holds a peacock-tipped staff and a sealed covenant, gestures toward two caravels anchored in the bay for her command trial. A single peacock feather lies beside a little votive stone, a solemn oath rather than a court audience. Location: Candia on Venetian Crete.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\01-hera-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-894d4a11-a32b-44e3-b74f-d6dbce6f4f90.png"
+  },
+  {
+    "id": "meet_demeter",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The wheat-crowned woman in green and gold stands on a country road outside the old city walls amid wheat fields. She offers one ripe ear of wheat to a sea captain. Behind her stand a granary, grain sacks and a modest orderly practice infantry formation with wooden spears. Warm late harvest light; poppies and the distant Sicilian sea. Location: Syracuse in Sicily.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\02-demeter-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-d143db72-c130-4988-9514-af2083b836e5.png",
+    "correction": {
+      "id": "meet_demeter_corrected",
+      "prompt": "Use case: precise-object-edit. Edit the supplied encounter illustration with one localized anatomical correction. The woman currently has THREE hands. Remove the EXTRA stray hand at her IMAGE-LEFT WAIST that is grasping a sheaf of wheat, and remove that unsupported sheaf extending up beside/behind her upper arm. Reconstruct the green/ivory draped clothing and background naturally in that small area. The woman must have EXACTLY TWO anatomically connected arms/hands: her existing arm extended across her torso offering ONE wheat ear toward the captain, and her existing other arm descending along her IMAGE-RIGHT side with the hand beside her thigh. Keep both of these legitimate arms/hands and their poses. Preserve her original face, hair, wheat/poppy crown, jewelry, clothing palette and cut, existing golden belt, the offering ear, captain, granary, army, city gate, landscape, lighting, composition and painterly finish. No new limbs or detached fingers. Do not alter any other character or redesign the scene.",
+      "referenced_image_paths": [
+        "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-bdae9c4c-e09f-499a-89f6-98e03b191d98.png"
+      ],
+      "transparent_background": false
+    }
+  },
+  {
+    "id": "meet_hestia",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The chestnut-haired woman in ivory and deep red welcomes a travel-worn sea captain outside a Roman city gate. She carries the same modest bronze bowl of sacred flame as the reference. Three small stone braziers arranged on an old altar suggest her test of carefully transferring the fire. Evening pilgrims, cypress trees, distant Roman ruins, intimate sacred warmth. Location: Rome.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\03-hestia-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-cb5753a6-d2b2-450d-a499-6deb646ca060.png"
+  },
+  {
+    "id": "meet_aphrodite",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The blonde woman in rose pink, ivory and pearls smiles knowingly at a sea captain on a flower-lined stone path just outside the Venetian walls above the sea. She holds her ornate antique mirror; beside her an ancient stone table supports a bronze balance and nine small gemstones for a trial of discernment. Wild roses, a seashell votive, gentle afternoon sea light, spiritual beauty with human warmth. Location: Candia on Venetian Crete.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\04-aphrodite-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-0611282b-dac2-4bb0-bb7d-763dc43c8936.png"
+  },
+  {
+    "id": "meet_artemis",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The dark-braided huntress in green and ivory, crescent ornament, same bow and quiver as reference, emerges from cypress woods outside the land walls of Constantinople at moonrise. She calmly faces a sea captain and points to a level clearing for a fair duel. A deer stands half-visible at the forest edge. Ancient marble votive stone, crescent moon, Ottoman walls distant, sacred silence. Location: Constantinople.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\05-artemis-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-1e7339a1-61af-4f0b-9160-9867d89ab384.png"
+  },
+  {
+    "id": "meet_athena",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The chestnut-braided woman in bronze armor and red-crested helmet stands beneath an olive tree outside the walls of Athens. Her owl-marked shield rests beside her; she unrolls a parchment field plan for a sea captain. Small groups of practice spearmen wait beyond. The Acropolis lies on the hill behind, one owl on a ruined column, clear morning light and thoughtful challenge. Location: Athens.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\06-athena-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-379358c0-8a27-43dc-ba10-578054d6d865.png"
+  },
+  {
+    "id": "meet_zeus",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The short light-brown-haired man in ivory and purple, eagle clasp and oak circlet, greets a sea captain beneath a great oak outside Athens' old stone gate. He holds his lightning-tipped ceremonial staff and gestures toward a level dueling ground. An eagle circles distant storm-lit hills; bright sunlight breaks through clouds. Restrained holy omen, approachable but commanding human apostle, no deity floating in sky. Location: Athens.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\07-zeus-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-6ef2f39f-0d16-4cae-89a3-6b4399b0d787.png"
+  },
+  {
+    "id": "meet_poseidon",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The smiling curly blond man in blue mantle with his trident greets a sea captain on a grassy volcanic cliff path outside an Azorean coastal town gate. Two small period caravels wait in the dark blue Atlantic below for a seafaring trial. A conch shell and tiny marine votive rest on a stone. Wind-tossed hair, basalt, sea spray, expansive ocean and subtle dolphin silhouette far below. Location: the Azores.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\08-poseidon-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-8cc654b3-f764-4c5e-ba57-5e343f9f63fa.png"
+  },
+  {
+    "id": "meet_apollo",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The dark-curled man in ivory and orange, laurel wreath and golden lyre, sits beside a worn marble milestone on an olive-lined road outside Athens' gate at sunrise. He plays a short phrase on the lyre for a listening sea captain. A parchment with a few simple non-letter musical marks rests on stone. Sun rays behind distant ancient sanctuary columns, intelligent poetic warmth, no stage performance. Location: Athens.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\09-apollo-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-0c6f751e-944d-41c0-8562-1d5d2026d623.png"
+  },
+  {
+    "id": "meet_ares",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The dark-curled man in bronze armor and crimson mantle stands outside the stone walls of Black Sea Trebizond in a rough grassy practice yard. He holds the same spear and shield, helmet at his side, offers a blunt training spear to a sea captain for a duel. Weathered red pennant, distant coastal fortress and sea, hard late-afternoon light, controlled courage and solemn respect. Location: Trebizond on the Black Sea.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\10-ares-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-7e00e903-1271-4073-9848-068805740e3e.png"
+  },
+  {
+    "id": "meet_hephaestus",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The short dark-haired smith in leather apron and orange mantle, hammer and tongs as reference, meets a sea captain at a small open-air forge on a road outside Thessalonica's old walls. A glowing piece of metal illuminates his confident face. Beyond, a tidy bronze-shield practice formation and wooden siege model suggest a test of equipment and command. Warm forge against cool dawn, no factory or modern tools. Location: Thessalonica.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\11-hephaestus-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-722a1889-7ee8-4c5d-b9d2-7a96ec112270.png"
+  },
+  {
+    "id": "meet_hermes",
+    "prompt": "Use case: illustration-story. Create one wide 16:9 historical fantasy sailing-RPG FIRST ENCOUNTER event illustration. Input image 1 is a CHARACTER IDENTITY REFERENCE: preserve this exact fictional ADULT apostle's distinct face, hairstyle, sex, opaque garments, palette, jewelry and patron emblems. Place that character naturally within a new scene, not a cutout or contact sheet. The other figure is a Renaissance sea captain, 16th-century dark doublet, short cloak, feathered soft cap, leather belt and sword, shown from behind or three-quarter back so the apostle is the clear face and focal subject. Main apostle occupies about one third of the frame, eye-level cinematic composition. Evoke a mortal sailor meeting a Greek god's messenger in the Age of Sail: tangible votive objects, a restrained omen in the landscape, human conversation and sacred wonder. Luminous refined semi-realistic hand-painted game art matching reference, detailed environment, period materials, natural believable lighting. Keep lower 20 percent relatively calm for dialogue overlay. No text, letters, modern objects, labels, panel grid, UI, watermark, halo of cartoon magic, floating god or excessive effects. Scene: The dark-brown-haired man in winged traveler hat, ivory chiton and purple mantle, caduceus and travel pouch as reference, greets a sea captain where the dusty road from Athens' city gate overlooks a harbor. He points toward two swift caravels in the bay, challenging a sailor to read wind and course. Roadside ancient herm stone without writing, fluttering small pennants, playful clever expression, bright wind-swept morning. Location: Athens.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\12-hermes-knee.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-5aa36231-6bb6-4a02-9b68-cdb3515e2f59.png"
+  },
+  {
+    "id": "men_fellowship",
+    "prompt": "Use case: illustration-story. Wide 16:9 historical fantasy sailing game event painting. Input image is a CHARACTER DESIGN REFERENCE contact sheet only, never copy grid, words or background. Show EXACTLY the SIX ADULT MALE apostles from the reference together, one each: Zeus short light-brown hair ivory/purple and eagle clasp/oak circlet; Poseidon curly blond hair blue mantle and trident; Apollo dark curls white/orange with golden lyre; Ares dark curls bronze armor crimson mantle and spear; Hephaestus short dark hair leather apron orange mantle and smith hammer; Hermes dark-brown hair winged traveler hat ivory/purple and caduceus. Preserve their individual reference faces and outfits. No women, no extra person, no duplicated heads. Scene: the six men meet on the spacious deck of a 16th-century caravel and lean around a sea chart and brass compass, amicably settling their first shared course. The absent captain is implied off camera. Each of the six has a readable face and his own role in discussion, trust and adventure rather than a formal lineup. Dawn Mediterranean harbor, period ropes, canvas sails, warm golden light. Subtle Greek sacred emblems and mortal companionship. Refined luminous semi-realistic hand-painted adventure game art. Lower 20 percent calm wooden deck for dialogue overlay. No text, labels, banner, UI, watermark or checkerboard.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\preview-knees.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-4ce4c476-c314-4cfc-92ea-73a23ebaee0d.png"
+  },
+  {
+    "id": "women_fellowship",
+    "prompt": "Use case: illustration-story. Wide 16:9 historical fantasy sailing game event painting. Input image is a CHARACTER DESIGN REFERENCE contact sheet only, never copy grid, words or background. Show EXACTLY the SIX ADULT FEMALE apostles from the reference together, one each: Hera wavy light brown hair ivory/purple peacock crown/staff; Demeter wavy blonde hair green/gold wheat crown holding wheat; Hestia chestnut loose updo white/red carrying a small bronze sacred flame bowl; Aphrodite blonde rose crown ivory/pink pearls antique mirror; Artemis dark braid green/white, crescent and bow/quiver; Athena chestnut braid bronze armor red-crested helmet and owl shield. Preserve all six distinct adult reference faces, hairstyles, costume shapes and palettes. No men, no extra person, no duplicated heads. Scene: the six women gather on the spacious deck of a 16th-century sailing ship at quiet dusk. Hestia safely places the small bronze flame bowl on a ship's table beside a compass and sea chart, while the other five form a natural loose semicircle, exchange knowing smiles and swear companionship to the captain implied off camera. All six faces unobstructed, warm sacred light, sea breeze and cloth, human camaraderie. Harbor and Greek islands in distance, period rope and canvas sails, restrained votive details. Luminous refined semi-realistic hand-painted adventure game art matching reference. Lower 20 percent calm deck for dialogue overlay. No text, labels, banner, UI, watermark or checkerboard.",
+    "referenced_image_paths": [
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\greek-apostles-20261115-v2\\preview-knees.png"
+    ],
+    "transparent_background": false,
+    "folder": "olympian-events",
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-9d596610-1b59-4f10-b3f9-b1d9acd5a143.png"
+  }
+]

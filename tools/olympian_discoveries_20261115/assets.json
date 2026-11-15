@@ -1,0 +1,621 @@
+[
+  {
+    "id": "scene_pergusa",
+    "name": "페르구사 호수",
+    "kind": "scene",
+    "disc": "pergusa",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/scene_pergusa.png",
+    "originalSize": [
+      2172,
+      724
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/pergusa.gif",
+        "bytes": 2488347,
+        "sha256": "0032c8ee58e5449ba9ac70c6e2a8fdc4314e7caf2c96b83f8a26e2cc01b6a62d"
+      },
+      {
+        "file": "images/discovery-ends/pergusa.jpg",
+        "bytes": 89518,
+        "sha256": "fe56a78b817db529a27d426953cd6f04d106d94b5784fa26c3d04c111a07bda3"
+      },
+      {
+        "file": "images/discovery-sheets/pergusa.webp",
+        "bytes": 1261204,
+        "sha256": "3e36718978462a521b8f7c981869ef7fecf01c975c59dc9da0939910bdf56f98"
+      }
+    ],
+    "frames": 25,
+    "durationMs": 9820,
+    "size": [
+      576,
+      256
+    ],
+    "sceneStyle": "nat-dawn"
+  },
+  {
+    "id": "r_pergusa",
+    "name": "데메테르·페르세포네의 보상",
+    "kind": "relic",
+    "disc": "pergusa",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/r_pergusa.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/relics/r_pergusa.webp",
+        "bytes": 19882,
+        "sha256": "72c36ea35f43e8c84074834b7989af8f51a9eb9cfe9576b5690cb83b72b4a2a6"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      34,
+      14,
+      231,
+      242
+    ]
+  },
+  {
+    "id": "map_pergusa",
+    "disc": "pergusa",
+    "name": "페르구사 호수 외관",
+    "kind": "map",
+    "output": "images/map-discoveries/completion/pergusa.webp",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/map_pergusa.png",
+    "size": [
+      512,
+      512
+    ],
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/pergusa.webp",
+        "bytes": 65012,
+        "sha256": "d7968e12e8ee028602b2181f24dbfd162df9974e8befe02966c76d294e7f6423"
+      }
+    ]
+  },
+  {
+    "id": "scene_hermescave",
+    "name": "킬레네산의 헤르메스 동굴",
+    "kind": "scene",
+    "disc": "hermescave",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/scene_hermescave.png",
+    "originalSize": [
+      1448,
+      1086
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/hermescave.gif",
+        "bytes": 1888650,
+        "sha256": "691b353d74cc6165ab64e57d9f3a47ba76ec2d1562a1ccb7b3d28c8817b961e0"
+      },
+      {
+        "file": "images/discovery-ends/hermescave.jpg",
+        "bytes": 55737,
+        "sha256": "f19edbae660d00c5138d52a1c32cd60b3558266db8257353da4ccfeb6bbb1839"
+      },
+      {
+        "file": "images/discovery-sheets/hermescave.webp",
+        "bytes": 951484,
+        "sha256": "c6c79d0417e55290eb281ab216494bde86b9f3e75df449ed7822f1bbc65a702b"
+      }
+    ],
+    "frames": 16,
+    "durationMs": 9820,
+    "size": [
+      576,
+      256
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "skipFrames": []
+    }
+  },
+  {
+    "id": "r_hermescave",
+    "name": "헤르메스의 보상",
+    "kind": "relic",
+    "disc": "hermescave",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/r_hermescave.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/relics/r_hermescave.webp",
+        "bytes": 20386,
+        "sha256": "5d74efd9a18892c48df2315448f00c84ba870dc44179271b4dce8cff3eb13d21"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      32,
+      14,
+      212,
+      242
+    ]
+  },
+  {
+    "id": "map_hermescave",
+    "disc": "hermescave",
+    "name": "킬레네산의 헤르메스 동굴 외관",
+    "kind": "map",
+    "output": "images/map-discoveries/completion/hermescave.webp",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/map_hermescave.png",
+    "size": [
+      512,
+      512
+    ],
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/hermescave.webp",
+        "bytes": 86700,
+        "sha256": "2d7de0f68872ffc0bae49052755074874654a2b7a69b749913005d1e33093bf5"
+      }
+    ]
+  },
+  {
+    "id": "scene_yria",
+    "name": "이리아의 디오니소스 성역",
+    "kind": "scene",
+    "disc": "yria",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/scene_yria.png",
+    "originalSize": [
+      1448,
+      1086
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/yria.gif",
+        "bytes": 1637097,
+        "sha256": "8d8dfd52fca658e4480d10464ad1f150ba4d21a2110dcce43c2cc28b92c2dbc3"
+      },
+      {
+        "file": "images/discovery-ends/yria.jpg",
+        "bytes": 52906,
+        "sha256": "c22602d6e1b7fa9da0de9c912ef8fcd9fd73576b9202973a3797693f24799acb"
+      },
+      {
+        "file": "images/discovery-sheets/yria.webp",
+        "bytes": 859250,
+        "sha256": "f1ab88ed17a026448a1d88421c73876488127c0808e2ab587f0b393bd8a0eb7b"
+      }
+    ],
+    "frames": 16,
+    "durationMs": 9820,
+    "size": [
+      576,
+      256
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "skipFrames": []
+    }
+  },
+  {
+    "id": "r_yria",
+    "name": "디오니소스의 보상",
+    "kind": "relic",
+    "disc": "yria",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/r_yria.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/relics/r_yria.webp",
+        "bytes": 16692,
+        "sha256": "defc8c1ff32aefc3bb953c7512836891802343b5c177a9cca2648fc2a828c3e4"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      59,
+      14,
+      189,
+      242
+    ]
+  },
+  {
+    "id": "map_yria",
+    "disc": "yria",
+    "name": "이리아의 디오니소스 성역 외관",
+    "kind": "map",
+    "output": "images/map-discoveries/completion/yria.webp",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/map_yria.png",
+    "size": [
+      512,
+      512
+    ],
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/yria.webp",
+        "bytes": 67986,
+        "sha256": "db9b51fcd43aac45dd79a0984b3aa739cbf01070a2c1ee645c0fea55b9cb42f9"
+      }
+    ]
+  },
+  {
+    "id": "scene_heraion",
+    "name": "사모스의 헤라 신전",
+    "kind": "scene",
+    "disc": "heraion",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/scene_heraion.png",
+    "originalSize": [
+      1448,
+      1086
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/heraion.gif",
+        "bytes": 1610816,
+        "sha256": "d239602ab05658b9b6468a550902e11e15d47e64ff2c0550805bfab38d3b9ba4"
+      },
+      {
+        "file": "images/discovery-ends/heraion.jpg",
+        "bytes": 58090,
+        "sha256": "2c456230d5795e21109f9bcf06e9923398420c8f3c27432201fc9ca0a1884b78"
+      },
+      {
+        "file": "images/discovery-sheets/heraion.webp",
+        "bytes": 874306,
+        "sha256": "b0ea00905852633fa5eec330c73d1a48e4cb769b278bfa312689c5935c221ab2"
+      }
+    ],
+    "frames": 16,
+    "durationMs": 9820,
+    "size": [
+      576,
+      256
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "skipFrames": []
+    }
+  },
+  {
+    "id": "r_heraion",
+    "name": "헤라의 보상",
+    "kind": "relic",
+    "disc": "heraion",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/r_heraion.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/relics/r_heraion.webp",
+        "bytes": 26786,
+        "sha256": "3cc563db3a2ebd5e5f0493fe439d5e8f6ba25a6656dc2570fc524c2268bbf1d1"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      17,
+      17,
+      234,
+      233
+    ]
+  },
+  {
+    "id": "map_heraion",
+    "disc": "heraion",
+    "name": "사모스의 헤라 신전 외관",
+    "kind": "map",
+    "output": "images/map-discoveries/completion/heraion.webp",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/map_heraion.png",
+    "size": [
+      512,
+      512
+    ],
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/heraion.webp",
+        "bytes": 71508,
+        "sha256": "42fbcc49d1b2f0e41dedcaf9b493f2890fa7876de740004996dceb4343ce5690"
+      }
+    ]
+  },
+  {
+    "id": "scene_hephaistia",
+    "name": "렘노스의 헤파이스티아 유적",
+    "kind": "scene",
+    "disc": "hephaistia",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/scene_hephaistia.png",
+    "originalSize": [
+      1448,
+      1086
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/hephaistia.gif",
+        "bytes": 1691334,
+        "sha256": "2443852763c1dee7c9f192fb666100a919299c66138590cd51da434548f5fad9"
+      },
+      {
+        "file": "images/discovery-ends/hephaistia.jpg",
+        "bytes": 53468,
+        "sha256": "3dabe8556305c485d013b37de0b089572ee3ad0aecab88d80357fc2de2c87cc6"
+      },
+      {
+        "file": "images/discovery-sheets/hephaistia.webp",
+        "bytes": 938750,
+        "sha256": "1000a88eb5d42bbd9b3f57a532a0019f8b947993d95739b6f0a431881ef195f2"
+      }
+    ],
+    "frames": 16,
+    "durationMs": 9820,
+    "size": [
+      576,
+      256
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "skipFrames": []
+    }
+  },
+  {
+    "id": "r_hephaistia",
+    "name": "헤파이스토스의 보상",
+    "kind": "relic",
+    "disc": "hephaistia",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/r_hephaistia.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/relics/r_hephaistia.webp",
+        "bytes": 23698,
+        "sha256": "9b68a9a1444f71ee9c95d2a2161a782242eac6ed9ad3a936e1fceef5cc5b123c"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      14,
+      17,
+      231,
+      237
+    ]
+  },
+  {
+    "id": "map_hephaistia",
+    "disc": "hephaistia",
+    "name": "렘노스의 헤파이스티아 유적 외관",
+    "kind": "map",
+    "output": "images/map-discoveries/completion/hephaistia.webp",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/map_hephaistia.png",
+    "size": [
+      512,
+      512
+    ],
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/hephaistia.webp",
+        "bytes": 69310,
+        "sha256": "a33f9acb17eb91ccaf15a0bc2fd01c378fa3d8add225becb76a9db95050edbcf"
+      }
+    ]
+  },
+  {
+    "id": "scene_aretias",
+    "name": "아레티아스 — 아레스의 섬",
+    "kind": "scene",
+    "disc": "aretias",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/scene_aretias.png",
+    "originalSize": [
+      2172,
+      724
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/aretias.gif",
+        "bytes": 2356151,
+        "sha256": "f113ce3d94f76663d6486a08ad655f9eff5c58ba47ce1137deeac07a664ae4b5"
+      },
+      {
+        "file": "images/discovery-ends/aretias.jpg",
+        "bytes": 80714,
+        "sha256": "6715d87affc737d06429e8eb30dcf339a1c841271c4256e3b1205483aa140e48"
+      },
+      {
+        "file": "images/discovery-sheets/aretias.webp",
+        "bytes": 1213176,
+        "sha256": "1f0a79bd4d763941a405eeb068708313f721257fb3e441e7a6d333b390500649"
+      }
+    ],
+    "frames": 25,
+    "durationMs": 9820,
+    "size": [
+      576,
+      256
+    ],
+    "sceneStyle": "nat-dawn"
+  },
+  {
+    "id": "r_aretias",
+    "name": "아레스의 보상",
+    "kind": "relic",
+    "disc": "aretias",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/r_aretias.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/relics/r_aretias.webp",
+        "bytes": 6730,
+        "sha256": "326836fb8e2d918bc6d121e4df9a55891bf5a2ada02302edfcaaa437c629e494"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      16,
+      14,
+      239,
+      242
+    ]
+  },
+  {
+    "id": "map_aretias",
+    "disc": "aretias",
+    "name": "아레티아스 — 아레스의 섬 외관",
+    "kind": "map",
+    "output": "images/map-discoveries/completion/aretias.webp",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/map_aretias.png",
+    "size": [
+      512,
+      512
+    ],
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/aretias.webp",
+        "bytes": 80780,
+        "sha256": "3374ab63be668205a02a9e632c80fe79fb39ade80a6eace55a60f56b98d1db8f"
+      }
+    ]
+  },
+  {
+    "id": "scene_vesta",
+    "name": "로마의 베스타 신전",
+    "kind": "scene",
+    "disc": "vesta",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/scene_vesta.png",
+    "originalSize": [
+      1448,
+      1086
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/vesta.gif",
+        "bytes": 1655973,
+        "sha256": "5e438a096bfa7068635f7f003664394a5775dd07c7ca464ebdd87ce36d5cb6c6"
+      },
+      {
+        "file": "images/discovery-ends/vesta.jpg",
+        "bytes": 51660,
+        "sha256": "da284d8d86a3976088ca9fd34577526b9778128f865eedaf95e31f29d33abae8"
+      },
+      {
+        "file": "images/discovery-sheets/vesta.webp",
+        "bytes": 803878,
+        "sha256": "7875348ffda27e72c0323617b001d33adda93388ab056dc9cfd42ad45ed871fe"
+      }
+    ],
+    "frames": 16,
+    "durationMs": 9820,
+    "size": [
+      576,
+      256
+    ],
+    "sceneStyle": "ruin",
+    "sceneLayout": {
+      "columnsPerRow": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "skipFrames": []
+    }
+  },
+  {
+    "id": "r_vesta",
+    "name": "헤스티아·베스타의 보상",
+    "kind": "relic",
+    "disc": "vesta",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/r_vesta.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/relics/r_vesta.webp",
+        "bytes": 18498,
+        "sha256": "b3cbec2331367243dd0a5a48605a8ac140508b325182d7e0122cc171cfcc727f"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      40,
+      14,
+      219,
+      242
+    ]
+  },
+  {
+    "id": "map_vesta",
+    "disc": "vesta",
+    "name": "로마의 베스타 신전 외관",
+    "kind": "map",
+    "output": "images/map-discoveries/completion/vesta.webp",
+    "raw": "artifacts/olympian-discoveries-20261115/raw/map_vesta.png",
+    "size": [
+      512,
+      512
+    ],
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/vesta.webp",
+        "bytes": 85474,
+        "sha256": "10aff1f73b04d46e2512fb0df5001d4a53aeeabf73a6b599c0429a4b836767d5"
+      }
+    ]
+  }
+]

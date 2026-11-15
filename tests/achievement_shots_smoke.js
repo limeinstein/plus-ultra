@@ -1,4 +1,4 @@
-/* 모든 업적 사건 그림 — manifest, 가로 9:4 규격, 일반·명성 업적 팝업 연결
+/* 모든 업적 사건 그림 — manifest, 기존 9:4·사도 16:9 규격, 일반·명성 업적 팝업 연결
    node tests/achievement_shots_smoke.js */
 'use strict';
 const path = require('path');
@@ -16,7 +16,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|ERR_NAME|net::/.test(m.text())) errors.push('console: ' + m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
   try {
     await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({ contentType: 'text/css', body: '' }));
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
@@ -33,7 +33,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
           im.onerror = () => resolve([0, 0]);
           im.src = G.Img.src(key);
         });
-        return [a.id, key, !!G.Img.file(key), size[0], size[1], !!a.fameRule, !!a.collectionRule, !!a.goldRule];
+        return [a.id, key, !!G.Img.file(key), size[0], size[1], !!a.fameRule, !!a.collectionRule, !!a.goldRule, event.picPosition || null];
       }));
 
       const sk = {}; G.SKILLS.forEach(x => { sk[x.id] = 0; });
@@ -80,11 +80,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
     const missing = result.rows.filter(r => !r[2]);
     // 기존 그림은 정확한 규격, 새 ImageGen 원본은 1~2px의 출력 편차만 허용한다.
-    const badSize = result.rows.filter(r => r[6] ? r[3] < 1800 || r[4] < 700 || r[3] / r[4] < 2.1 || r[3] / r[4] > 2.5 :
+    const apostleShots = ['olympian_pilgrim', 'olympian_companions'];
+    const badSize = result.rows.filter(r => apostleShots.includes(r[0]) ? r[3] !== 1672 || r[4] !== 941 || r[8] !== '50% 0%' : r[6] ? r[3] < 1800 || r[4] < 700 || r[3] / r[4] < 2.1 || r[3] / r[4] > 2.5 :
       r[5] || r[7] ? Math.abs(r[3] - 1881) > 2 || Math.abs(r[4] - 836) > 2 : r[3] !== 1881 || r[4] !== 836);
-    ok(result.total === 99, '기존 82개·발견물 완성 13개·재산 4개 업적을 모두 검사한다');
-    ok(!missing.length, '업적 99개 모두 manifest 사건 그림이 있다: ' + missing.map(r => r[0]).join(', '));
-    ok(!badSize.length, '업적 사건 그림 99개가 모두 고해상도 가로 장면 규격이다: ' + badSize.map(r => r[0] + ' ' + r[3] + '×' + r[4]).join(', '));
+    ok(result.total === 109 && apostleShots.every(id => result.rows.some(r => r[0] === id)), '기존 업적 107개와 새 사도 업적 2개를 모두 검사한다');
+    ok(!missing.length, '업적 109개 모두 manifest 사건 그림이 있다: ' + missing.map(r => r[0]).join(', '));
+    ok(!badSize.length, '업적 사건 그림 109개가 모두 고해상도 가로 장면 규격이다: ' + badSize.map(r => r[0] + ' ' + r[3] + '×' + r[4]).join(', '));
     ok(result.once && result.pop, '일반 업적 「Once Upon a Time」 달성과 팝업이 정상 동작한다');
     ok(result.shown[0][0] === 'achievement-events/onceupon' && result.shown[0][1] === 'Once Upon a Time' && result.shown.some(x => x[0] === 'stop'), '일반 업적도 전용 사건 그림을 열고 팝업 뒤 닫는다');
     ok(result.fameScenes.length === 22 && result.fameScenes.every(Boolean), '명성 업적 22개가 각각 전용 그림·제목·팝업을 표시하고 그림을 닫는다');
@@ -98,7 +99,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const im = document.querySelector('.famscene.on img');
       return im && im.complete && im.naturalWidth > 0 && im.src.includes('fame_balanced');
     });
-    const out = path.join(ROOT, 'artifacts', 'fame-achievement-shots-20261027');
+    const out = process.env.OUT || path.join(ROOT, 'artifacts', 'fame-achievement-shots-20261027');
     fs.mkdirSync(out, { recursive: true });
     await page.screenshot({ path: path.join(out, 'fame-balanced-in-game.png') });
     const gallery = await browser.newPage({ viewport: { width: 1600, height: 900 } });
@@ -106,7 +107,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(await gallery.locator('img').evaluateAll(ims => ims.length === 22 && ims.every(im => im.complete && im.naturalWidth > 0)), '미리보기에도 새 그림 22개가 모두 보인다');
     await gallery.screenshot({ path: path.join(out, 'fame-achievement-contact-sheet.png'), fullPage: true });
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
-    console.log('\n통과 — 업적 사건 그림 99개');
+    console.log('\n통과 — 업적 사건 그림 109개');
   } catch (e) {
     console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1;
   } finally { await browser.close(); }

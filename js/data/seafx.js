@@ -5,6 +5,7 @@
 (function (G) {
   'use strict';
   G.FX = {
+    olympianApostles: { meetDelay: 750, shotPosition: '50% 0%' }, // 성문 밖 등장 지연·세로 여백을 줄여도 관과 얼굴을 보존하는 그림 기준점.
     // 합성 효과음 크기 (js/systems/audio.js). 거리의 짐승 소리는 다른 효과음보다 작게 들린다.
     audio: { pet: { cat: 0.042, dog: 0.05 } },
     groundShadow: { castX: 0.65, castY: 0.35, castWidth: 1.45, castDepth: 1.35, castOpacity: 0.34,

@@ -50,6 +50,10 @@
   POS.sanchi = { key: 'map-discoveries/sanchi', slot: 0, cols: 1, rows: 1 };
   // 강서대묘는 봉분과 낮은 돌방 입구를 담은 전용 외관을 쓴다.
   POS.gangseo = { key: 'map-discoveries/completion/gangseo', slot: 0, cols: 1, rows: 1 };
+  // 흩어진 그리스 성소: 자연 경관과 건축물 각각의 전용 투명 외관.
+  ['pergusa', 'hermescave', 'yria', 'heraion', 'hephaistia', 'aretias', 'vesta'].forEach(function (id) {
+    POS[id] = { key: 'map-discoveries/completion/' + id, slot: 0, cols: 1, rows: 1 };
+  });
 
   // 2026-10-31 누락 외관 자동 등록 시작
   POS.aurora = { key: "map-discoveries/completion/aurora", slot: 0, cols: 1, rows: 1 };

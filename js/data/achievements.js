@@ -93,6 +93,13 @@
   a('발견물 완성', 'complete_art', '아름다움의 모든 이름', '미술품에 속한 발견물을 모두 직접 찾는다. 그림·조각·공예품과 예술을 모은 곳도 포함한다.',
     { collectionRule: 'art' }, DK.kindFame, DK.kindGold, '아름다움의 증인');
 
+  // 사도 초상과 같은 12신(헤스티아 포함). 이리아의 디오니소스 성역은 별도의 발견물이다.
+  var OK=G.BALANCE.olympianApostles, apostles=G.OLYMPIAN_APOSTLES;
+  a('전설과 사슬','olympian_pilgrim','열두 신의 순례자','12신을 대표하는 성소와 발견물 12곳을 모두 직접 발견한다.',
+    {ids:apostles.map(function(x){return x.discovery;})},OK.pilgrimage.fame,OK.pilgrimage.gold,'열두 신의 순례자');
+  a('동료','olympian_companions','올림포스의 동행자','12신의 사도 시험을 통과하고 사도 12명을 모두 부하로 맞는다. 한 번 고용한 기록은 남는다.',
+    {crew:apostles.map(function(x){return x.id;})},OK.companions.fame,OK.companions.gold,'올림포스의 동행자');
+
   // ------------------------------------------------------------------ 고대 문명
   a('고대 문명', 'wonders7', '고대 세계의 일곱 불가사의', '필론과 헤로도토스가 꼽은 일곱 경이를 모두 제 눈으로 보았다.',
     { ids: ['giza', 'hanging', 'artemis', 'zeus', 'mausoleum', 'colossus', 'pharos'] }, 900, 60000, '불가사의의 순례자');

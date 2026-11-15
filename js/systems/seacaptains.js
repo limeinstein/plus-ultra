@@ -133,7 +133,7 @@
   var LANG_GROUP = { 0: 'ES', 1: 'PT', 2: 'IT', 3: 'EN', 5: 'MM', 7: 'CN', 8: 'GJ', 12: 'MK', 13: 'JP', 14: 'KR' };
   CP.natOfMate = function (d) {
     if (!d) return null;
-    if (d.wd) return WD_GROUP[d.nat] || null;
+    if (d.wd || d.windsaltRotation) return WD_GROUP[d.nat] || null;
     var t = (d.desc || '') + ' ' + (d.story || '');
     for (var i = 0; i < KEYWORD.length; i++) if (KEYWORD[i][0].test(t)) return KEYWORD[i][1];
     for (var li in (d.lg || {})) if (d.lg[li] >= 3 && LANG_GROUP[li]) return LANG_GROUP[li];
@@ -165,6 +165,7 @@
       if (d.chinaRotation && !G.ChinaCrew.active(d.id, y, s.seed)) { delete r.seen[d.id]; return; }
       if (d.japanRotation && !G.JapanCrew.active(d.id, y, s.seed)) { delete r.seen[d.id]; return; }
       if (d.koreaRotation && !G.KoreaCrew.active(d.id, y, s.seed)) { delete r.seen[d.id]; return; }
+      if (d.windsaltRotation && !G.WindsaltCrew.active(d.id, y, s.seed)) { delete r.seen[d.id]; return; }
       if (!available(d, y)) { return; }
       if (r.seen[d.id] == null) { r.seen[d.id] = y; return; }
       if (y - r.seen[d.id] < b.promoteYears || nProm >= b.promoteMax || !U.chance(b.promoteP)) return;

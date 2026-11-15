@@ -103,7 +103,7 @@
   /** 두 함대 사이의 거리 (G.BALANCE.navalField): 호수의 큰 싸움·바다 괴물·달아나는 상선·그 밖 */
   function startSeparation() {
     var F = G.BALANCE.navalField, npc = st.npc || {};
-    return npc.lake ? F.lakeSeparation : npc.monster ? F.monsterSeparation : npc.kind === 'merchant' ? (F.merchantSeparation || F.separation) : F.separation;
+    return npc.lake ? F.lakeSeparation : (npc.monster || npc.monsters) ? F.monsterSeparation : npc.kind === 'merchant' ? (F.merchantSeparation || F.separation) : F.separation;
   }
   /** 줄의 j번째 배가 설 옆자리(간격 단위): 가운데 → 오른쪽 → 왼쪽 → … (기함은 줄 가운데) */
   function slotLat(j, m) {
@@ -314,6 +314,7 @@
 
   // ---------------------------------------------------------------- setup
   function enemyFleet(npc) {
+    if (npc.monsters && G.SeaMonsters) return npc.monsters.map(function (m) { return G.SeaMonsters.enemy({monster:m.id,eventMonster:m}); });
     if (npc.monster && G.SeaMonsters) return [G.SeaMonsters.enemy(npc)];
     var s = S(), n = npc.n || 1, list = [];
     var fameK = npc.K != null ? npc.K : Math.min(1, s.player.fame / ((G.BALANCE && G.BALANCE.pirateFame) || 4000));   // 해적은 명성과 우리 함대 크기로 정한 세기 (sea.js pirateK)
@@ -347,6 +348,7 @@
     // 의뢰로 쫓는 배(밀수선단·경쟁사 화물선·나포 대상)는 짐을 가득 실어 느리다 — 해전에서도 따라잡을 수 있게 (2026-11-07 베타 피드백 #156)
     if (side === 'en' && st && st.npc && G.Scenes.sea && G.Scenes.sea.isQuarry && G.Scenes.sea.isQuarry(st.npc)) b.loadSlow = R.questK().quarryBattle;   // speedOf가 곱한다
     b.reloadTotal = b.reload.slice();
+    if (side === 'en' && st.npc.allEnemies) b.flag = false;
     if (src.monster && G.SeaMonsters) G.SeaMonsters.decorate(b, src);
     return b;
   }
@@ -445,7 +447,7 @@
       s.stats.battles++;
       // 기함: 양쪽 모두 1번 배. 적 기함을 가라앉히거나 나포하면 이기고, 우리 기함을 잃으면 진다
       st.myFlag = st.ships.filter(function (b) { return b.side === 'me'; })[0] || null;
-      st.enFlag = st.ships.filter(function (b) { return b.side === 'en'; })[0] || null;
+      st.enFlag = npc.allEnemies ? null : st.ships.filter(function (b) { return b.side === 'en'; })[0] || null;
       // 처음 명령은 기함 호위 — 기함 추종으로 기함 뒤에 줄지어 서 있으면 적의 포탄과 갈고리가 기함에만 몰려
       // 갤리어스 해적에게 기함을 거의 매번 빼앗겼다 (QA 2026-11-06: 갤리온+프리깃 대 갤리어스 해적 — 추종 24판 모두 기함 상실, 호위 40판 중 23판)
       st.ships.forEach(function (b) { if (b.side === 'me' && !b.flag && !b.ally) b.order = 'guard'; });   // 큰 해전의 우리 편 함대는 제멋대로 싸운다(free)
@@ -471,7 +473,7 @@
     if (!arg.battle && npc.gunNote) setTimeout(function () { if (st === entered && !st.over) UI.toast(npc.gunNote, 'cannon', 6500); }, 6000);
     if (!arg.battle && npc.tacticNote) setTimeout(function () { if (st === entered && !st.over) UI.toast(npc.tacticNote, 'skull', 6500); }, 5600);   // 이름난 해적의 전술 (js/systems/corsairs.js)   // 큰 해전의 대포 이야기 (무적함대: 우리는 멀리, 저들은 세게)
     if (G.Audio) G.Audio.music('battle');
-    var foe = npc.monster ? G.SEA_MONSTER_ART[npc.monster].name : npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단';
+    var foe = npc.label || (npc.monster ? G.SEA_MONSTER_ART[npc.monster].name : npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단');
     UI.toast(arg.battle ? '저장한 해전을 이어갑니다.' : foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! ' + (st.terrain.hasLand ? '주변 섬과 해안은 통과할 수 없습니다. ' : '') + '방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5600);
   };
   B.exit = function (next) { if (st && st.unkey) st.unkey(); if (G.Ship3D) G.Ship3D.dispose(); var root = document.getElementById('ui'); if (root) root.classList.remove('at-battle'); if (G.Rain && next !== 'sea') G.Rain.leave(); st = null; battleState = null; ghostCv = null; };
@@ -499,7 +501,7 @@
     bar.appendChild(sp); el.speed = sp;
     el.board = btn('백병전', 'sword', function () { boardNearest(); }, 'red');
     el.holdFire = btn('', 'cannon', function () { B.holdFire(!st.holdFire); }); refreshFireButton();
-    if (st.npc.monster) { el.board.disabled = true; el.board.title = '해상 괴물에게는 백병전·나포·일기토를 할 수 없습니다.'; }
+    if (st.npc.monster || st.npc.monsters) { el.board.disabled = true; el.board.title = '해상 괴물에게는 백병전·나포·일기토를 할 수 없습니다.'; }
     el.flee = btn('퇴각', 'boot', function () { st.retreat = true; var f0 = flagship(); if (f0) { f0.steer = null; f0.halt = false; } UI.toast('퇴각! 전장 가장자리로 벗어나십시오.', 'boot'); });
     el.combatView = btn('교전 보기', 'target', function () { st.cameraMode = 'combat'; });
     el.combatView.title = '아군과 적 함대가 함께 보이도록 배율을 맞춥니다.';
@@ -1688,7 +1690,7 @@
     jolt(me, dx, dy, IMP().knock); jolt(en, -dx, -dy, IMP().knock);
   }
   function boardNearest() {
-    if (st && st.npc.monster) { UI.toast('해상 괴물은 포격과 충파로 쓰러뜨려야 합니다. 백병전·일기토는 없습니다.', 'cannon'); return; }
+    if (st && (st.npc.monster || st.npc.monsters)) { UI.toast('해상 괴물은 포격과 충파로 쓰러뜨려야 합니다. 백병전·일기토는 없습니다.', 'cannon'); return; }
     var fs = flagship(); if (!fs || st.over) return;
     var best = null, bd = 1e9;
     st.ships.forEach(function (o) {
@@ -1813,7 +1815,7 @@
     var foes = st.ships.filter(function (b) { return b.side === 'en' && b.alive; });
     var ef = st.enFlag, mf = st.myFlag;
     // 적 기함을 무찔렀다: 남은 적은 싸울 뜻을 잃고 흩어져 달아난다 → 승리
-    if (ef && !ef.alive && (ef.sunk || ef.captured) && foes.length) {
+    if (!st.npc.allEnemies && ef && !ef.alive && (ef.sunk || ef.captured) && foes.length) {
       var captured = 0, K = G.BALANCE.pirateSurrender;
       foes.forEach(function (b) {
         var close = mine.filter(function (m) { return Math.hypot(m.x - b.x, m.y - b.y) <= K.near; });
@@ -1830,7 +1832,7 @@
       finish('win'); return;
     }
     // 적 기함이 달아났다: 따르던 배도 모두 물러난다
-    if (ef && ef.fled && !ef.routed && foes.length) {
+    if (!st.npc.allEnemies && ef && ef.fled && !ef.routed && foes.length) {
       foes.forEach(function (b) { b.alive = false; b.fled = true; b.routed = true; });
       st.over = true; log('적 기함이 달아나자 남은 적도 모두 물러났다.');
       finish(st.ships.some(function (b) { return b.side === 'en' && (b.sunk || b.captured); }) ? 'win' : 'escaped-enemy'); return;
@@ -1851,6 +1853,8 @@
     else if (!mine.length) { st.over = true; var anyFled = st.ships.some(function (b) { return b.side === 'me' && b.fled; }); finish(anyFled ? 'retreat' : 'lose'); }
   }
   async function finish(res) {
+    // 사도의 연습선 시험은 실제 함대 손실·나포·해적 전리품 없이 육상으로 돌아간다.
+    if (st.npc.olympianTrial && G.OlympianApostles) { await G.OlympianApostles.finishNaval(st.npc,res); return; }
     // 튜토리얼의 해전에서 지거나 물러나면 되돌려서 다시 싸운다 (js/systems/tutorial.js)
     if (res !== 'win' && res !== 'escaped-enemy' && G.Tutorial && G.Tutorial.active && G.Tutorial.active()) { try { if (await G.Tutorial.battleLost(res)) return; } catch (e) { console.error(e); } }
     var s = S(), f = s.fleet;
@@ -1884,6 +1888,14 @@
     if (seizedLost.length) UI.toast(seizedLost.map(function (b) { return b.name + '호'; }).join('·') + ' — 적에게 빼앗긴 채 끌려갔다.', 'boot', 5200);   // 진 싸움의 알림창은 lines를 쓰지 않는다
     if (G.Growth) G.Growth.battle(res, (st.npc && st.npc.n) || st.ships.filter(function (b) { return b.side !== 'me'; }).length);   // 전투 경험 (js/systems/growth.js)
     if (G.Escort) { try { G.Escort.afterBattle(st.ships, res, lines); } catch (e) { console.error(e); } }   // 호위하던 상선을 잃었는가
+    // 사건 소환체: 함대의 실제 피해는 위에서 적용하되 세계 괴물·해적·국가 전리품은 처리하지 않는다.
+    if (st.npc.uninvitedWave && G.UninvitedApostles) {
+      if (!f.ships.length) { G.UninvitedApostles.recordLoss(st.npc); await ransom(true); return; }
+      var ua=G.BALANCE.uninvitedApostles;
+      if (f.crew<=0) f.crew=Math.max(ua.survivalCrew,Math.round(R.crewMin()*ua.returnCrewK));
+      G.Scenes.city.B.harbor.trimCrew && G.Scenes.city.B.harbor.trimCrew();
+      await G.UninvitedApostles.afterBattle(st.npc,res); return;
+    }
     if (st.npc.monster && G.SeaMonsters) {
       var monsterReward = G.SeaMonsters.afterBattle(st.npc, res, st.ships) || {};
       var monsterName = G.SEA_MONSTER_ART[st.npc.monster].name;
@@ -2836,16 +2848,16 @@
     // HUD texts
     var me = st.ships.filter(function (b) { return b.side === 'me' && b.alive; }), en = st.ships.filter(function (b) { return b.side === 'en' && b.alive; });
     UI.hud.set('me', '아군 ' + me.length + '척 · 선원 ' + U.sum(me, function (b) { return b.crew; }));
-    UI.hud.set('en', st.npc.monster && en[0] ? en[0].name + ' · ' + G.SeaMonsters.phaseLabel(en[0]) : '적 ' + en.length + '척 · 선원 ' + U.sum(en, function (b) { return b.crew; }));
+    UI.hud.set('en', st.npc.monsters ? '해상 괴물 ' + en.length + '기 · 모두 처치해야 승리' : st.npc.monster && en[0] ? en[0].name + ' · ' + G.SeaMonsters.phaseLabel(en[0]) : '적 ' + en.length + '척 · 선원 ' + U.sum(en, function (b) { return b.crew; }));
     UI.hud.set('wind', U.dirName(st.wind.dir + Math.PI) + '풍' + (st.npc && st.npc.place ? ' · ' + st.npc.place : st.terrain && st.terrain.hasLand ? ' · 연안 전장' : ' · 격랑 해역'));   // npc.place: 큰 해전의 자리 이름 (텍스코코 호수)
     if (st.pf % 6 === 0) refreshOrders();
     if ((st.pf = (st.pf || 0) + 1) % 15 === 0 && el.panel) {
       el.panel.innerHTML = '<div class="fp-h">' + G.icon('ship') + '아군 함대</div>' + st.ships.filter(function (b) { return b.side === 'me'; }).map(function (b) {
         return '<div class="fp-ship"><div class="flex"><span class="shipno' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag">기함</span>' : '') + '<small class="cream-muted" style="margin-left:6px">' + U.esc(R.captainName(b.src)) + '</small><span class="right cream-muted">' + (b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.fled ? '이탈' : b.seized ? '빼앗김 — 이기면 되찾는다' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'green dark') + '</div>';
-      }).join('') + '<div class="fp-h" style="margin-top:8px">' + G.icon('flag') + (st.npc.monster ? '해상 괴물 <small class="cream-muted">— 잠수 중 공격 불가</small>' : '적 함대 <small class="cream-muted">— 1번 기함을 무찌르면 승리</small>') + '</div>' + st.ships.filter(function (b) { return b.side === 'en'; }).map(function (b) {
+      }).join('') + '<div class="fp-h" style="margin-top:8px">' + G.icon('flag') + (st.npc.monsters ? '해상 괴물 <small class="cream-muted">— 전원 처치 · 잠수 중 공격 불가</small>' : st.npc.monster ? '해상 괴물 <small class="cream-muted">— 잠수 중 공격 불가</small>' : '적 함대 <small class="cream-muted">— 1번 기함을 무찌르면 승리</small>') + '</div>' + st.ships.filter(function (b) { return b.side === 'en'; }).map(function (b) {
         if (b.monster) return '<div class="fp-ship en"><div class="flex"><b>' + U.esc(b.name) + '</b><span class="right cream-muted">괴물</span></div><div class="cream-muted" style="font-size:14px">' + (b.alive ? G.SeaMonsters.phaseLabel(b) : '처치') + '</div>' + UI.bar(b.hp, b.maxHp, 'red dark') + '<small>내구 ' + Math.ceil(Math.max(0, b.hp)) + ' / ' + b.maxHp + '</small></div>';
         return '<div class="fp-ship en"><div class="flex"><span class="shipno en' + (b.flag ? ' flag' : '') + '">' + b.no + '</span><b>' + U.esc(b.name) + '</b>' + (b.flag ? '<span class="flagtag en">' + (b.monster ? '괴물' : '기함') + '</span>' : '') + '<span class="right cream-muted">' + (b.monster ? (b.alive ? G.SeaMonsters.phaseLabel(b) : '처치') : b.alive ? '선원 ' + b.crew : b.sunk ? '침몰' : b.captured ? '나포' : b.fled ? '달아남' : '상실') + '</span></div>' + UI.bar(b.hp, b.maxHp, 'red dark') + '</div>';
-      }).join('') + '<div class="cream-muted" style="font-size:14px;margin-top:6px">방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · ' + (st.npc.monster ? '괴물에게 백병전·일기토 불가 · ' : 'B: 백병전 · ') + 'F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기' + (st.terrain && st.terrain.hasLand ? '<br><b>섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.</b>' : '') + '</div>';
+      }).join('') + '<div class="cream-muted" style="font-size:14px;margin-top:6px">방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · ' + ((st.npc.monster || st.npc.monsters) ? '괴물에게 백병전·일기토 불가 · ' : 'B: 백병전 · ') + 'F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기' + (st.terrain && st.terrain.hasLand ? '<br><b>섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.</b>' : '') + '</div>';
     }
   }
 })(window.G = window.G || {});

@@ -24,7 +24,8 @@
     'tripitaka', 'kalachakra', 'porcelain', 'adamspeak',
     // 힌두·시크·그 밖의 믿음
     'angkor', 'madurai', 'brihadeeswarar', 'ellora', 'khajuraho', 'konark', 'vittala', 'harmandir', 'mahabali', 'shiva', 'kailash', 'manasarovar',
-    'tiantan', 'qufu', 'wudang', 'jongmyo', 'haleokeawe', 'templomayor', 'delphi', 'barkal', 'thebes', 'abusimbel', 'gadir', 'machupicchu']);
+    'tiantan', 'qufu', 'wudang', 'jongmyo', 'haleokeawe', 'templomayor', 'delphi', 'barkal', 'thebes', 'abusimbel', 'gadir', 'machupicchu',
+    'pergusa', 'hermescave', 'yria', 'heraion', 'hephaistia', 'aretias', 'vesta']);
   var ART = set(['monalisa', 'creation', 'lastsupper', 'birthvenus', 'david', 'urbinovenus', 'sistine', 'uffizi', 'louvre', 'laocoon', 'venusmilo', 'nike',
     'earthlydelights', 'babeltower', 'orgaz', 'saliera', 'qingming', 'nanbanscreen', 'lanting', 'shahnameh', 'cheonmado', 'rakubowl', 'tsukumonasu',
     'moonjar', 'goryeoceladon', 'tangsancai', 'qinghua', 'hermitage', 'bellasartes', 'nefertiti', 'zeus']);

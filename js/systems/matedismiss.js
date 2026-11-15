@@ -19,6 +19,7 @@
       (!d.chinaRotation || G.ChinaCrew.active(id, s.date.y, s.seed)) &&
       (!d.japanRotation || G.JapanCrew.active(id, s.date.y, s.seed)) &&
       (!d.koreaRotation || G.KoreaCrew.active(id, s.date.y, s.seed)) &&
+      (!d.windsaltRotation || G.WindsaltCrew.active(id, s.date.y, s.seed)) &&
       !(G.MatePower && G.MatePower.blocked(d)) && (!d.y || (s.date.y >= d.y[0] && s.date.y <= d.y[1])));
   };
   MD.wage = function (id, base) {

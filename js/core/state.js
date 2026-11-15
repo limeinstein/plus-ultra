@@ -88,8 +88,8 @@
       S.fleet.ships.push(ship);
     });
     S.fleet.crew = Math.min(U.sum(S.fleet.ships, function (s) { return s.crewMax; }), U.sum(S.fleet.ships, function (s) { return s.crewMin; }) + 8);
-    S.fleet.food = Math.ceil(R.dailyUse(S.fleet.crew) * 20);
-    S.fleet.water = Math.ceil(R.dailyUse(S.fleet.crew) * 20);
+    S.fleet.food = Math.ceil(R.dailyUse(S.fleet.crew, S.fleet) * 20);
+    S.fleet.water = Math.ceil(R.dailyUse(S.fleet.crew, S.fleet) * 20);
     S.fleet.mat = (G.BALANCE && G.BALANCE.matStart) || 10;     // 자재(수리용 목재·밧줄·돛천) — 바다 위 수리에 쓴다
     S.fleet.cargo = {};
     // starting mate

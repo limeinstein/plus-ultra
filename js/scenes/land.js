@@ -50,6 +50,15 @@
     if (G.Audio) G.Audio.music('land');
     if (G.EventFx) G.EventFx.preload('land');
     if (G.Party.preloadSprites) G.Party.preloadSprites(MT().id);
+    if (G.OlympianApostles) {
+      var apostleSt=st, apostleState=s;
+      setTimeout(function () {
+        if (st!==apostleSt || S()!==apostleState || G.Game.scene!==L || UI.busy() || st.busy) return;
+        st.busy++;
+        G.OlympianApostles.onLand(s.loc.lon,s.loc.lat,{stop:function(){st.path=null;st.dir=null;st.paused=true;refreshBar();}})
+          .catch(function(e){console.error(e);}).finally(function(){apostleSt.busy=Math.max(0,apostleSt.busy-1);});
+      },G.FX.olympianApostles.meetDelay);
+    }
   };
   // 탐험 배속 (바다와 같은 ×0.5 · ×1 · ×2 · ×4) — 고른 배속은 설정(settings.landSpeed)에 남아 다음 상륙에도 이어진다
   var LSPEEDS = [0.5, 1, 2, 4];
@@ -108,6 +117,10 @@
     btn('야영', 'tent', function () { camp(); });
     btn('해도', 'map', function () { chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
+    if (G.OlympianApostles) btn('12신의 사도','people',function(){
+      var here=st; here.busy++; here.path=null; here.dir=null; here.paused=true; refreshBar();
+      G.OlympianApostles.open().catch(function(e){console.error(e);}).finally(function(){here.busy=Math.max(0,here.busy-1);});
+    });
     el.follow = btn('마우스 따라가기', 'target', function () { toggleFollow(); }, 'follow');
     // 배속 (바다와 같은 모양 · 키: 설정의 속도 키 — 기본 ` 1 2 3)
     var sp = U.el('div', 'speedctl land-speed');
@@ -463,6 +476,10 @@
       for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
       // 사라진 왕녀: 홍해 요새에 다가가면 수비대가 막아선다 (js/systems/princess.js)
       // 탁군 땅: 도원의 세 형제 (js/systems/legends.js)
+      var apostleDaySt=st;
+      if (G.OlympianApostles && await G.OlympianApostles.onLand(l.lon,l.lat,{stop:function(){st.path=null;st.dir=null;st.paused=true;refreshBar();}})) {
+        apostleDaySt.busy=Math.max(0,apostleDaySt.busy-1); return;
+      }
       if (G.Legend) await G.Legend.onLand(l.lon, l.lat);
       if (G.Tale) await G.Tale.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 옛이야기의 아가씨들: 프랑스 숲의 신데렐라·백설공주 (js/systems/fairytales.js)
       if (G.TreasureHunt) await G.TreasureHunt.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 조합의 보물 지도: X 자리에 서면 판다 (js/systems/treasurehunt.js)

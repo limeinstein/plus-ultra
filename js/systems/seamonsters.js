@@ -106,8 +106,10 @@
       center: { lon: e.lon, lat: e.lat }, label: name(e.id), place: name(e.id) + ' 출몰 해역' };
   };
   M.enemy = function (npc) {
-    var t = M.strongest(S().date.y), e = M.sync()[npc.monster], max = t.hp * K().hpK;
-    var form = npc.monster === 'ghost-ship' ? G.SHIP[ghostHull(e)] : t;
+    // 사건의 소환체는 세계 출몰 기록이나 남은 내구를 읽지 않는다. 저장된 사건 규격만 쓴다.
+    var local=npc.eventMonster;
+    var t = M.strongest(S().date.y), e = local ? null : M.sync()[npc.monster], max = local ? local.hp : t.hp * K().hpK;
+    var form = npc.monster === 'ghost-ship' ? G.SHIP[local ? local.ghostHull : ghostHull(e)] : t;
     var hp = e && e.maxHp > 0 && e.hp != null ? Math.max(1, Math.min(max, max * e.hp / e.maxHp)) : max;
     return { type: form.id, ghostHull: npc.monster === 'ghost-ship' ? form.id : null, monster: npc.monster, name: name(npc.monster), hp: hp, maxHp: max,
       crew: form.crew[1], crewMax: form.crew[1], guns: { type: 'saker', n: t.ports }, sails: form.sails.slice() };

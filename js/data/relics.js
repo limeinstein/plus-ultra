@@ -191,7 +191,7 @@
       if (RH) { r.real = RH; if (RH.name) { r.name0 = r.name; r.name = RH.name; } if (RH.desc) { r.desc0 = r.desc; r.desc = RH.desc; } }
       if (x.kind === 'fig' && G.FIGUREHEADS) {
         var f = { id: id, name: r.name, price: r.price, rare: true, relic: x.disc, desc: r.desc };
-        ['spd', 'hp', 'luck', 'storm', 'monster', 'morale', 'battle'].forEach(function (b) { if (x.extra[b]) f[b] = x.extra[b]; });
+        ['spd', 'hp', 'luck', 'storm', 'monster', 'morale', 'battle', 'supply'].forEach(function (b) { if (x.extra[b]) f[b] = x.extra[b]; });
         G.FIGUREHEADS.push(f); G.FIGUREHEAD[id] = f;
       }
       if (G.ITEMS) { G.ITEMS.push(r); G.ITEM[id] = r; }

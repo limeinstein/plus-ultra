@@ -267,6 +267,11 @@
     if (id && typeof id === 'object') id = id.id;
     if (Object.prototype.hasOwnProperty.call(itemStatMemo, id)) return itemStatMemo[id];
     var d = G.ITEM && G.ITEM[id], K = IS(); if (!d) return null;
+    // 전용 보상에 적힌 능력치는 일반 장신구의 가격별 상한보다 우선한다. 실제 능력치의 전체 상한은 유지한다.
+    var bonus = d.statBonus;
+    if (bonus && (bonus.k === 'int' || bonus.k === 'cha') && typeof bonus.v === 'number' && isFinite(bonus.v) && bonus.v > 0) {
+      return (itemStatMemo[id] = { k: bonus.k, v: bonus.v });
+    }
     var k = d.kind, nm = d.name || '', what = null;
     if (k === 'book') what = 'int';
     else if (k === 'instrument') what = 'cha';
@@ -382,7 +387,9 @@
   R.crewMin = function () { return U.sum(R.S().fleet.ships, function (s) { return s.crewMin; }); };
   R.crewMax = function () { return U.sum(R.S().fleet.ships, function (s) { return s.crewMax; }); };
   R.maxKinds = function () { return 3 + R.S().fleet.ships.length * 2; };
-  R.dailyUse = function (crew) { var k = (G.BALANCE && G.BALANCE.ration) || 0.025, cb = G.SkillCombos ? G.SkillCombos.factor('supplyUse') : 1; return Math.max(0.4, (crew == null ? R.S().fleet.crew : crew) * k * cb); };
+  // 보급 선수상의 덕은 항해일수 표시와 실제 식량·물 소모에 똑같이 적용한다.
+  R.supplyUseK = function (fleet) { var cap = (G.BALANCE || {}).figSupplyCap || 0; return 1 - Math.min(cap, Math.max(0, R.fleetBonus('supply', fleet))); };
+  R.dailyUse = function (crew, fleet) { var k = (G.BALANCE && G.BALANCE.ration) || 0.025, cb = G.SkillCombos ? G.SkillCombos.factor('supplyUse') : 1; return Math.max(0.4, (crew == null ? R.S().fleet.crew : crew) * k * cb * R.supplyUseK(fleet)); };
   /** 교역품 가운데 먹고 마실 수 있는 것: 식량이 떨어지면 곡식·어육·고기·유제품을, 물이 떨어지면 맥주·포도주를 먹고 마신다
       (상하기 쉬운 것부터). 1통 = 식량·물 1통 */
   R.PROVISION = { food: ['fish', 'beef', 'dairy', 'potato', 'maize', 'wheat', 'rice', 'beans'], water: ['beer', 'wine'] };
@@ -426,9 +433,10 @@
   };
   R.figure = function (s) { return s.fig ? G.FIGUREHEAD[s.fig] : null; };
   /** 선수상의 덕: 함대에서 가장 센 것 하나는 그대로, 나머지 배의 것은 G.BALANCE.figRest만큼만 더한다 (여러 척에 같은 상을 달아도 한없이 쌓이지 않게) */
-  R.fleetBonus = function (key) {
-    var vs = [], k = (G.BALANCE && G.BALANCE.figRest != null) ? G.BALANCE.figRest : 1;
-    R.S().fleet.ships.forEach(function (s) { var f = R.figure(s); if (f && f[key]) vs.push(f[key]); });
+  R.fleetBonus = function (key, fleet) {
+    var s = R.S(), f = fleet || (s && s.fleet), vs = [], k = (G.BALANCE && G.BALANCE.figRest != null) ? G.BALANCE.figRest : 1;
+    if (!f || !f.ships) return 0;
+    f.ships.forEach(function (s) { var fig = R.figure(s); if (fig && fig[key]) vs.push(fig[key]); });
     vs.sort(function (a, b) { return b - a; });
     return vs.reduce(function (sum, x, i) { return sum + (i ? x * k : x); }, 0);
   };

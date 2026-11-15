@@ -1,5 +1,11 @@
 # images — 그림 교체 폴더
 
+초대받지 못한 세 사도(2026-11-15)는 `portraits/mates/apostle_{dionysus,poseidon_grey,hades}*.webp` 6개를 쓴다. 기존 원화를 복사해 니칸드로스의 포세이돈 초상을 유지하며, 사건 원화는 `olympian-events/uninvited_*.webp` 4개, 투명 보상 아이콘은 `items/ua_*.webp` 3개다. [원화·포장·프롬프트·사건·검증](../docs/art/uninvited-apostles-20261115.md).
+
+12신의 사도(2026-11-15)는 `portraits/mates/apostle_<slug>.webp`와 `_half.webp` 24개를 쓰며, 신의 호칭 대신 칼리스테·멜리사 등 고유 이름을 표시한다. 만남 원화 12개·남녀 각 6명 동행 2개는 `olympian-events/`, 두 완성 업적 원화는 `achievement-events/olympian_*.webp`에 있다. 데메테르 만남은 여분 손을 제거한 수정본이다. [전체 원화·사건·프롬프트·검증](../docs/art/olympian-apostles-20261115.md).
+
+유럽 철새 30명(2026-11-15)은 `portraits/mates/windsalt-men/<pt|en|es|de|nl><01~06>.webp`(얼굴 512×512), 같은 이름의 `_half.webp`(무릎 1024×1536) 투명 원화 60장을 쓴다. 각 인물의 서로 다른 동작과 얼굴상·무릎상을 1487년부터 10명씩 배정하는 40년 반복 모집에 연결했다. 현재 국적·등장 지역은 영국·스페인·포르투갈·네덜란드 네 나라이고, `de` 파일명은 저장 호환을 위해 유지한 초기 제작 번호다. [등장 규칙·지역·검증](../docs/art/windsalt-crew-20261115.md).
+
 조선 여성 동료 20명(2026-11-15)은 `portraits/mates/krcrew_<이름>.webp`(얼굴 512×512), 같은 이름의 `_half.webp`(무릎 1024×1536) 투명 원화를 쓴다. 첫 10명은 언어 외 특기 5개, 새 10명은 2~3개이며 1480년부터 3년마다 한 명을 추첨한다. [특기 배분·3년 주기·실제 화면·원본 대응](../docs/art/korea-crew-20261115.md).
 
 일본 여성 항해사 10명(2026-11-14)은 `portraits/mates/jpcrew_<이름>.webp`(얼굴 512×512), 같은 이름의 `_half.webp`(무릎 1024×1536) 투명 원화를 쓴다. 1550년부터 5년마다 2명을 추첨해 일본에서 모집하며, 25년마다 순서를 새로 섞는다. [얼굴·무릎 미리보기·프롬프트·등장 규칙·검증](../docs/art/japan-crew-20261114.md).

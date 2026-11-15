@@ -52,6 +52,13 @@ def animate(style, did, path, original, layout=None):
         return animals.animation(source), [animals.DURATION] * animals.FRAME_COUNT
     if style == 'plant':
         return plants.animation(source, did)
-    if style == 'nat':
-        return culture.nature.animation(source, did)
+    if style in ('nat', 'nat-dawn'):
+        frames, durations = culture.nature.animation(source, did)
+        if style == 'nat-dawn':
+            # 새 성소의 호수·섬은 밤을 지나 밝은 원경에서 멈춘다. 시간은 기존 9.82초 그대로.
+            seed = sum((i + 1) * ord(c) for i, c in enumerate(did))
+            skyline = culture.nature.SKYLINE.get(did, .15)
+            for i, (zoom, pan, phase) in enumerate(((1.24, .82, 0), (1.16, .70, .10), (1.08, .58, .22), (1, .5, .38))):
+                frames[-4+i] = culture.nature.grade(culture.nature.viewport(source, zoom, pan), phase, skyline, seed)
+        return frames, durations
     raise ValueError(f'{did} 발견물 연출 갈래를 확인하세요: {style}')

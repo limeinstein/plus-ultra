@@ -13,7 +13,8 @@
   function rumorStay(id) {
     var s = S(), h = s && s.mateRumorStay && s.mateRumorStay[id], m = G.MATE[id];
     if (!h) return null;
-    if (!m || (!m.wd && !h.any) || h.until <= s.day || !city(h.city) || !G.R.cityExists(city(h.city))) {
+    if (!m || (!m.wd && !m.windsaltRotation && !h.any) || h.until <= s.day || !city(h.city) || !G.R.cityExists(city(h.city)) ||
+        (m.windsaltRotation && MM.range(id).indexOf(h.city) < 0)) {
       delete s.mateRumorStay[id]; return null;
     }
     return h;
@@ -23,7 +24,7 @@
   /** 술집에서 실제로 알려 준 철새만 머물게 한다. 같은 사람·항구를 다시 들어도 남은 일수 그대로. */
   MM.hear = function (id, cityId) {
     var s = S(), m = G.MATE[id];
-    if (!m || !m.wd || s.flags['gone_' + id] || s.mates.some(function (x) { return x.id === id; })) return 0;
+    if (!m || (!m.wd && !m.windsaltRotation) || s.flags['gone_' + id] || s.mates.some(function (x) { return x.id === id; })) return 0;
     var at = MM.where(id); if (!at || at.id !== cityId) return 0;
     var h = rumorStay(id);
     if (!h) {
@@ -83,7 +84,8 @@
     G.MATES.forEach(function (m) {
       if ((m.chinaRotation && !G.ChinaCrew.active(m.id, y, s.seed)) ||
           (m.japanRotation && !G.JapanCrew.active(m.id, y, s.seed)) ||
-          (m.koreaRotation && !G.KoreaCrew.active(m.id, y, s.seed))) {
+          (m.koreaRotation && !G.KoreaCrew.active(m.id, y, s.seed)) ||
+          (m.windsaltRotation && !G.WindsaltCrew.active(m.id, y, s.seed))) {
         delete s.mateLoc[m.id];
         if (s.mateRumorStay) delete s.mateRumorStay[m.id];
         return;

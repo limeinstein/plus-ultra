@@ -156,10 +156,10 @@
     if (!a.ids) ids.sort(function (x, y) { return ((G.DISC[y] || {}).val || 0) - ((G.DISC[x] || {}).val || 0); });
     return ids.filter(function (id) { return G.Img && G.Img.file('discoveries/' + id); }).slice(0, n || 3);
   }
-  function show(img, title) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: img, title: title, noStand: true }) : null; }
+  function show(img, title, objectPosition) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: img, title: title, noStand: true, objectPosition: objectPosition }) : null; }
   /** 업적 전용 그림. 사건 자료가 지정한 그림을 우선하고, 업적별 고해상도 그림을 그 다음으로 쓴다. */
   function achievementPic(a, ev) {
-    if (ev.pic) return { img: ev.pic, title: ev.picTitle || a.name };
+    if (ev.pic) return { img: ev.pic, title: ev.picTitle || a.name, position: ev.picPosition };
     if (a.id === 'montcrew') return { img: 'legend-events/montcrew_oath', title: '열 사람이 한 배에' };
     if (a.id === 'happily') return { img: 'legend-events/happily_after_all', title: 'Happily After All' };
     if (G.Img && G.Img.file && G.Img.file('achievement-events/' + a.id)) return { img: 'achievement-events/' + a.id, title: a.name };
@@ -184,7 +184,7 @@
     var heldPic = G.FamEv && G.FamEv.suspendPic ? G.FamEv.suspendPic() : null;
     var fixedShot = achievementPic(a, ev), rb = ribbon(a), shots = fixedShot ? [] : pics(a, 3), pc = null, k = 0;
     function next() {   // 줄이 바뀔 때마다 다음 발견물 그림으로 (그림이 다 떨어지면 마지막 것을 그대로)
-      if (fixedShot) { if (!pc) pc = show(fixedShot.img, fixedShot.title); return; }
+      if (fixedShot) { if (!pc) pc = show(fixedShot.img, fixedShot.title, fixedShot.position); return; }
       if (k < shots.length) { var id = shots[k++]; pc = show('discoveries/' + id, (G.DISC[id] || {}).name || a.name); }
     }
     try {

@@ -143,6 +143,16 @@ def game_data():
             if sid in byid:
                 byid[sid]['holders'] = [(h[0], h[1], h[2], h[3]) for h in hs]
     d['mates'] = [{'id': m[0], 'name': m[1], 'g': m[2]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)', g: '(\w)'", people)]
+    if os.path.exists(os.path.join(ROOT, 'js/data/uninvitedapostles.js')):
+        d['mates'] += [{'id': m[0], 'name': m[1], 'g': m[2]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)', g: '(\w)'", read('js/data/uninvitedapostles.js'))]
+    # 12신의 사도는 행 자료에서 안정적인 ID와 고유 이름을 조립한다.
+    if os.path.exists(os.path.join(ROOT, 'js/data/olympianapostles.js')):
+        apostles = read('js/data/olympianapostles.js')
+        slugs = re.findall(r"^\s*\['([a-z]+)', '[^']+', '[^']+', '[^']+',", apostles, re.M)
+        names = re.search(r'var names=\[([^\]]+)\]', apostles)
+        if names:
+            labels = re.findall(r"'([^']+)'", names.group(1))
+            d['mates'] += [{'id': 'apostle_' + slug, 'name': name, 'g': 'f' if i < 6 else 'm'} for i, (slug, name) in enumerate(zip(slugs, labels))]
     # 이야기 속 동료(js/data/storycrew.js)도 G.MATES 에 들어간다
     if os.path.exists(os.path.join(ROOT, 'js/data/storycrew.js')):
         d['mates'] += [{'id': m[0], 'name': m[1], 'g': m[2]} for m in re.findall(r"\{ id: '(\w+)', name: '([^']*)', g: '(\w)'", read('js/data/storycrew.js'))]
@@ -160,6 +170,10 @@ def game_data():
         if r and d['discoveries']:
             d['discoveries'][-1]['rival'] = r.group(3)
     wonders_path = os.path.join(ROOT, 'js/data/wonders.js')
+    # 분산된 그리스 신화 발견물은 add(...) 도우미로 종류를 함께 적는다.
+    if os.path.exists(os.path.join(ROOT, 'js/data/olympiandisc.js')):
+        for did, name, cat in re.findall(r"^\s*add\('([^']+)',\s*'([^']+)',\s*'(\w+)'", read('js/data/olympiandisc.js'), re.M):
+            d['discoveries'].append({'id': did, 'name': name, 'cat': cat})
     if os.path.exists(wonders_path):
         wonders = read('js/data/wonders.js')
         for wid, name in re.findall(r"^\s*w\('([^']+)',\s*'([^']+)'", wonders, re.M):

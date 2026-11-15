@@ -7,6 +7,7 @@
      monster 바다 괴물이 저절로 물러날 확률 · 괴물에게 받는 피해 × max(0.5, 1 − monster)   js/systems/seamonsters.js · js/scenes/battle.js
      morale  항해 중 날마다 규율 + morale×2                                    js/scenes/sea.js runDay
      battle  해전에서 우리 포격 명중 × (1 + battle)                             js/scenes/battle.js
+     supply  식량·물 소모 × (1 − supply), 절약 상한은 G.BALANCE.figSupplyCap     js/core/rules.js R.dailyUse
    ■ 함대에 여러 개를 달면: 같은 덕은 가장 큰 것 하나는 그대로, 다른 배의 것은 G.BALANCE.figRest(¼)만 더한다 (R.fleetBonus). 속력만은 단 배에만.
    ■ 전설의 힘 (sp, js/data/figlegend.js) — 함대의 어느 배에 달아도 함대 전체에 미친다
      calm 폭풍 확률 하한 0.35 → 0.12 · guard 폭풍·사건·괴혈병으로 잃는 선원 절반 · regen 날마다 모든 배 선체 1% 메움
@@ -20,8 +21,8 @@
   function R() { return G.R; }
   function BAL() { return G.BALANCE || {}; }
   function pct(v) { var x = Math.round(Math.abs(v) * 1000) / 10; return (x % 1 ? x.toFixed(1) : String(x)); }
-  FX.ORDER = ['spd', 'hp', 'storm', 'monster', 'battle', 'luck', 'morale'];
-  FX.NAME = { spd: '속력', hp: '선체', storm: '폭풍', monster: '괴물', battle: '해전', luck: '행운', morale: '규율' };
+  FX.ORDER = ['spd', 'hp', 'storm', 'monster', 'battle', 'luck', 'morale', 'supply'];
+  FX.NAME = { spd: '속력', hp: '선체', storm: '폭풍', monster: '괴물', battle: '해전', luck: '행운', morale: '규율', supply: '보급' };
   FX.SP = {
     calm: { name: '고요한 바다', text: '폭풍을 만날 확률을 최대 −88%까지 줄인다 (보통 선수상은 −65%까지)' },
     guard: { name: '어머니의 품', text: '폭풍·바다 사건·괴혈병으로 잃는 선원이 절반으로 준다' },
@@ -42,7 +43,8 @@
       case 'monster': return '바다 괴물이 ' + pct(Math.min(1, v)) + '% 확률로 물러남 · 괴물에게 받는 피해 −' + pct(Math.min(0.5, v)) + '%';
       case 'battle': return '해전 포격 명중 ' + sg + p + '%';
       case 'luck': return '바다 사건을 무사히 넘길 확률 ' + sg + pct(v * 2) + '%p';
-      case 'morale': return '항해 중 규율 하루 ' + sg + (Math.round(Math.abs(v) * 20) / 10) + (v < 0 ? ' (깎임)' : '');
+      case 'morale': return '항해 중 규율 하루 ' + sg + (Math.round(Math.abs(v) * 200) / 100) + (v < 0 ? ' (깎임)' : '');
+      case 'supply': return '식량·물 소모 −' + pct(Math.min(BAL().figSupplyCap || 0, v)) + '% (하루 최소 소모는 유지)';
     }
     return '';
   };
@@ -61,8 +63,9 @@
     var floor = BAL().stormFloor != null ? BAL().stormFloor : 0.35;
     return FX.ORDER.filter(function (k) { return f[k]; }).map(function (k) {
       var v = f[k], sg = v < 0 ? '−' : '+';
+      if (k === 'supply') return '식량·물−' + pct(Math.min(BAL().figSupplyCap || 0, v)) + '%';
       if (k === 'hp') sg = v < 0 ? '+' : '−';
-      var val = k === 'luck' ? pct(v * 2) + '%p' : k === 'storm' ? pct(Math.min(1 - floor, v * 3)) + '%' : k === 'morale' ? (Math.round(Math.abs(v) * 20) / 10) + '/일' : k === 'monster' ? pct(Math.min(1, v)) + '%' : pct(v) + '%';
+      var val = k === 'luck' ? pct(v * 2) + '%p' : k === 'storm' ? pct(Math.min(1 - floor, v * 3)) + '%' : k === 'morale' ? (Math.round(Math.abs(v) * 200) / 100) + '/일' : k === 'monster' ? pct(Math.min(1, v)) + '%' : pct(v) + '%';
       return { spd: '속력', hp: '피해', storm: '폭풍', monster: '괴물 퇴치', battle: '명중', luck: '사건 회피', morale: '규율' }[k] + (k === 'storm' ? '−' : sg) + val;
     }).join(' · ');
   };
