@@ -1,0 +1,20 @@
+[
+  {
+    "id": "uninvited_poseidon_highfive",
+    "folder": "olympian-events",
+    "prompt": "Use case: identity-preserve and action-pose correction. IMAGE 1 is the existing Greek sea-apostle event illustration to EDIT. IMAGE 2 is the user's STRICT BODY-MOTION REFERENCE. The previous result was rejected because the men merely held their palms together like a static greeting. Correct that specifically: replace the two central men's ENTIRE body poses with the vigorous athletic rival high-five movement shown in IMAGE 2. Closely follow image 2's asymmetric silhouettes, low bent knees, wide planted feet, rotated hips, driving shoulders, large bent striking arms, and the free arms pulled back for counterbalance. The man on the LEFT (curly BLOND Nikandros in dark BLUE/ivory) is turned partly AWAY from the camera, showing a three-quarter back/side stance while looking toward his partner. The man on the RIGHT (long tied SILVER-GREY-haired Glaukos in TURQUOISE/ivory) is seen more from the FRONT, leaning and stepping dynamically toward the other man. Both bend their knees and shift their weight like the reference, not standing upright. One striking arm comes up and the other sweeps down/across in one explosive reciprocal palm-slap, with the shoulders and torso driving the swing. Show ONE BRIEF INSTANT of high-five impact: fingers OPEN AND SPREAD, wrists slightly bent back, palms meeting at an asymmetric diagonal point between them, distinct anatomically connected forearms. NOT symmetrical vertical palms held flat together; NOT a prayer pose, yoga pose, handshake, arm-wrestle or static fist bump. Their free arms should be bent and drawn back or out to counterbalance, NOT dangling loosely as in image 1. There must be clear sense of follow-through, cloth and hair thrown by the motion, very restrained painted motion accents around the swinging arms only. Keep the hands legible and plausible, each man exactly two arms and two hands, five fingers per hand, no duplicate arms or fused fingers. Reframe a little WIDER to show both complete figures from HEAD TO SANDALS with visible bent knees and wide footwork, matching the reference's strong full-body action. Keep their faces, adult identities, hair colors and styles, jewelry, ornate Greek costume colors/cuts and patron symbols exactly from IMAGE 1. Do not use the manga characters' faces, red uniforms, sneakers, basketball setting, lettering or manga drawing style. Keep the Renaissance ship deck at sunrise, safely stowed tridents at the outer rails, and the two groups of smiling witnesses at the back including the purple ivy-crowned man and the black-crowned man from IMAGE 1. Let the background groups recede a little to make room for the full-body action. Their expressions show fierce relief and mutual recognition after rivalry, not posing calmly for a portrait. The visual style stays the same luminous refined semi-realistic hand-painted adventure RPG art as image 1. Wide 16:9 image, no text, labels, UI, border or watermark. MAIN PRIORITY: faithfully use the actual energetic body mechanics and asymmetric body orientations of IMAGE 2 rather than repeating IMAGE 1's static palm-touch.",
+    "referenced_image_paths": [
+      "C:\\Users\\User\\AppData\\Local\\Temp\\codex-clipboard-d9831136-0391-47e7-b5e5-55eca34dbc57.png",
+      "C:\\Users\\User\\AppData\\Local\\Temp\\codex-clipboard-74189751-0cb4-41eb-abff-09938d5ea9f3.png"
+    ],
+    "transparent_background": false,
+    "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de0b-36e3-7d41-a4fd-916f3dc7093b\\exec-a62eaaf0-dd3d-4a27-9117-d3b48266d7d0.png",
+    "revision": "사용자 제공 동작 참고 이미지에 따라 정적인 손바닥 맞대기를 전신 동작의 하이파이브로 수정",
+    "previous_record": "highfive-v1.json",
+    "workspace_reference_paths": [
+      "references/highfive-before.png",
+      "references/highfive-motion.png"
+    ],
+    "preview_file": "uninvited_poseidon_highfive-v2.png"
+  }
+]

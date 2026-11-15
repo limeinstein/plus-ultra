@@ -300,7 +300,7 @@
     el.title = roomTitle(c);
     var h = '<div class="cb-h"><i class="cb-no">' + i + '</i>' + G.icon(c.icon) + '<b>' + c.name + '</b>' + powTag(o.pow) + '</div>' + linkTag(c, i);
     if (m) h += '<div class="cb-who"><span class="cb-face"></span><span class="cb-nm"><span class="n1">' + U.esc(G.MATE[m.id].name) + '</span><small>' + fitNote(m, c) + '</small>' + growShort(m) + '</span></div>';
-    else h += '<div class="cb-none">' + (c.id === 'hold' ? (o.yard ? '부하 배치 · 선실 개조' : '비어 있음 · 부하 배치 가능') : c.noStaff ? (o.storeLine || '짐칸') : '비어 있음') + '</div>';
+    else h += '<div class="cb-none">' + (CB().keptEmpty(i) ? '비워 둠 · 자동 채우기 제외' : c.id === 'hold' ? (o.yard ? '부하 배치 · 선실 개조' : '비어 있음 · 부하 배치 가능') : c.noStaff ? (o.storeLine || '짐칸') : '비어 있음') + '</div>';
     el.innerHTML = h;
     var art = artImage('cabins/' + c.id, 'cb-card-art', '') || (c.art ? artImage('cabins/' + c.art, 'cb-card-art', '') : null);   // 전용 그림이 없는 새 방은 비슷한 방 그림을 빌린다
     if (art) { el.classList.add('has-art'); el.insertBefore(art, el.firstChild); }
@@ -329,7 +329,7 @@
     if (!S().mates.length) { UI.toast('배치할 부하가 없습니다. 술집에서 부하를 찾아보십시오.', 'people'); return; }
     var v = await UI.choose(c.name + '에 둘 사람', mateOptions(c, cur), { width: 720, icon: c.icon, text: c.desc + skillLine(c) + (c.fx ? '<br><span class="muted">사람을 두면: ' + c.fx + '</span>' : '') + (c.lang ? '<br><span class="muted">「통역」 뒤는 그 사람이 옮겨 주는 말과 말 단계(3이 가장 능숙) — 괄호는 제독의 단계</span>' : '') + recLine(c) });
     if (v == null) return;
-    if (v === '-') { if (role) { cur.role = 'none'; } else CB().place(cur, null); return; }
+    if (v === '-') { if (role) { cur.role = 'none'; } else CB().vacate(cur); return; }
     var m = mateById(v); if (!m) return;
     if (role) setRole(m, role); else CB().place(m, i);
   }
@@ -348,7 +348,7 @@
     if (m.room != null || ROLE_OF_INV(m.role)) opts.push({ label: '자리에서 뺀다 (대기)', value: '-', icon: 'boot' });
     var v = await UI.choose(d.name + '의 자리', opts, { width: 660, text: '<b>특기</b> ' + skillsOf(m) + '<br><b>능력</b> ' + statsOf(m) + ' — ' + loyalTag(m) });
     if (v == null) return;
-    if (v === '-') { if (m.room != null) CB().place(m, null); if (ROLE_OF_INV(m.role)) m.role = 'none'; return; }
+    if (v === '-') { if (m.room != null) CB().vacate(m); if (ROLE_OF_INV(m.role)) m.role = 'none'; return; }
     if (v.indexOf('r:') === 0) setRole(m, ROLE_OF[v.slice(2)]); else CB().place(m, +v.slice(2));
   }
   function ROLE_OF_INV(role) { return role === 'first' || role === 'nav' || role === 'surveyor'; }
@@ -515,7 +515,7 @@
   /** 끌어다 놓기: 부하를 방(또는 명단)에 놓았을 때 */
   async function dropMate(id, to) {
     var m = mateById(id); if (!m) return;
-    if (to.k === 'none') { if (m.room != null) CB().place(m, null); if (ROLE_OF_INV(m.role)) m.role = 'none'; return; }
+    if (to.k === 'none') { if (m.room != null) CB().vacate(m); if (ROLE_OF_INV(m.role)) m.role = 'none'; return; }
     if (to.k === 'captain') { UI.toast('함장실은 제독의 방입니다.', 'crown'); return; }
     if (to.k === 'room' && CB().noStaff(CB().rooms()[to.i])) { UI.toast('창고에는 사람을 두지 않습니다.', 'chest'); return; }
     if (m.role === 'captain' && !await UI.confirm(G.MATE[m.id].name + '은(는) 지금 다른 배의 선장입니다. 기함으로 데려오겠습니까?', '데려온다', '그만둔다')) return;
@@ -691,7 +691,7 @@
   /** 「자동 배치」 — 물어본 뒤 다시 앉히고 알린다. 바뀐 사람 목록(그만두면 null) */
   CV.autoAll = async function (ask) {
     var CA = G.CrewAuto; if (!CA) return null;
-    if (ask !== false && !await UI.confirm('술집에서 정한 역할(부관·항해사·측량사·통역·경리)이 없는 부하를 모두 능력에 맞게 다시 앉힐까요?<br><small class="muted">손으로 정한 다른 배 선장은 그대로 둡니다.</small><br><small class="muted">기함 선실은 그 방에 맞는 특기를 가진 사람부터, 다른 배는 선장 → 조타수·갑판·파수꾼 → 선실 차례로 채웁니다.</small>', '자동 배치', '그만둔다', '자동 배치')) return null;
+    if (ask !== false && !await UI.confirm('술집에서 정한 역할(부관·항해사·측량사·통역·경리)이 없는 부하를 모두 능력에 맞게 다시 앉힐까요?<br><small class="muted">비워 둔 선실도 다시 채웁니다. 손으로 정한 다른 배 선장은 그대로 둡니다.</small><br><small class="muted">기함 선실은 그 방에 맞는 특기를 가진 사람부터, 다른 배는 선장 → 조타수·갑판·파수꾼 → 선실 차례로 채웁니다.</small>', '자동 배치', '그만둔다', '자동 배치')) return null;
     var moved = CA.autoAll(), idle = CA.idleCount();
     UI.toast((moved.length ? moved.length + '명의 자리를 능력에 맞게 바꿨다.' : '지금 배치가 이미 능력에 맞습니다.') + (idle ? ' 자리가 모자라 ' + idle + '명은 대기 — 큰 배를 들이거나 선실을 늘리십시오.' : ''), 'people', idle ? 6000 : 4000);
     return moved;
@@ -704,7 +704,7 @@
     opts = opts || {};
     var s = S();
     lastTotals = null;   // 창을 새로 열 때는 ▲▼ 없이
-    if (G.CrewAuto) G.CrewAuto.refresh();   // 자리 없는 부하를 빈 방·다른 배에 (손으로 「대기」로 뺀 사람은 창을 닫을 때까지 그대로)
+    if (G.CrewAuto) G.CrewAuto.refresh();   // 손으로 비워 둔 선실을 제외한 빈 방·다른 배에 부하를 앉힌다
     for (;;) {
       var sh = CB().flagship();
       if (!sh) { UI.toast('기함이 없습니다.', 'ship'); return; }
@@ -813,7 +813,7 @@
       else if (a.k === 'remodelAll' && opts.yard) await CV.remodelAll(opts.yard);
       else if (a.k === 'ocap') await CV.pickCaptain(a.uid);
       else if (a.k === 'set') await setFromPop(a);
-      else if (a.k === 'clear') { if (ROLE_OF[a.type]) { var rm = CB().roleMate(ROLE_OF[a.type]); if (rm) rm.role = 'none'; } else { var oc = CB().occupant(a.i); if (oc) CB().place(oc, null); } }
+      else if (a.k === 'clear') { if (ROLE_OF[a.type]) { var rm = CB().roleMate(ROLE_OF[a.type]); if (rm) rm.role = 'none'; } else { var oc = CB().occupant(a.i); if (oc) CB().vacate(oc); } }
       else if (a.k === 'remodel') await remodel(a.i, opts.yard);
       else if (a.k === 'drop') await dropMate(a.id, a.to);
       else if (a.k === 'captain') await UI.say('함장실은 제독의 방입니다. 맞닿은 부관실 사람과는 말을 빨리 익힙니다.', G.Scenes.mateSpeaker ? G.Scenes.mateSpeaker('first') : {});

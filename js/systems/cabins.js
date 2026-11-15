@@ -3,6 +3,7 @@
 
    저장 상태
    · 배: sh.cabins = ['deck', 'hold', 'galley', …]  (0번은 늘 갑판, 그 뒤가 고칠 수 있는 선실)
+         sh.cabinEmpty = {선실 번호: 방 종류} — 손으로 비운 방은 자동 채우기에서 제외
    · 부하: m.room = 선실 번호(기함의 sh.cabins 자리), m.roomType = 그 방의 종류(기함을 바꿀 때 같은 방을 찾아 옮긴다)
            m.lgx = {말 번호: 배운 단계}, m.lgd = {말 번호: 함께 지낸 날}
            m.skd = {특기: 선실에서 지낸 날}, m.skg = {특기: 늘어난 단계}, m.skw = {특기: 그 날을 쌓은 방 종류 · 여러 방이면 '*'}
@@ -36,6 +37,7 @@
     sh.cabins[0] = 'deck';
     while (sh.cabins.length < n) sh.cabins.push('hold');
     if (sh.cabins.length > n) sh.cabins.length = n;
+    if (sh.cabinEmpty) Object.keys(sh.cabinEmpty).forEach(function (i) { if (sh.cabinEmpty[i] !== sh.cabins[i]) delete sh.cabinEmpty[i]; });
     return sh.cabins;
   }
   /** 기함의 선실 목록 (없으면 만든다). 기함이 바뀌었으면 부하들을 같은 종류의 방으로 옮긴다 */
@@ -49,7 +51,7 @@
       s.mates.forEach(function (m) {
         if (m.room == null) return;
         var want = m.roomType, i = -1;
-        for (var k = 0; k < rooms.length; k++) if (rooms[k] === want && !taken[k]) { i = k; break; }
+        for (var k = 0; k < rooms.length; k++) if (rooms[k] === want && !taken[k] && !(sh.cabinEmpty && sh.cabinEmpty[k] === rooms[k])) { i = k; break; }
         if (i >= 0 && !CB.noStaff(want)) { m.room = i; taken[i] = 1; }
         else { delete m.room; delete m.roomType; if (m.role === 'purser' && want === 'account') m.role = 'none'; lost.push(m); }
       });
@@ -104,6 +106,14 @@
   CB.occupant = function (i) { var s = S(); return s.mates.filter(function (m) { return m.room === i; })[0] || null; };
   /** 고정 자리(부관실·조타실·파수대)에 있는 부하 */
   CB.roleMate = function (role) { var s = S(); return s.mates.filter(function (m) { return m.role === role; })[0] || null; };
+  /** 손으로 비워 둔 선실인가. 직접 사람을 앉히거나 「자동 배치」를 누를 때까지 비워 둔다. */
+  CB.keptEmpty = function (i) { var rooms = CB.rooms(), sh = CB.flagship(); return !!(sh && sh.cabinEmpty && sh.cabinEmpty[i] === rooms[i]); };
+  /** 화면에서 선실의 사람을 뺀다. 옮기기·교대 중의 임시 해제(CB.place)와 달리 빈방을 보존한다. */
+  CB.vacate = function (m) {
+    var rooms = CB.rooms(), sh = CB.flagship();
+    if (sh && m.room != null && rooms[m.room]) { sh.cabinEmpty = sh.cabinEmpty || {}; sh.cabinEmpty[m.room] = rooms[m.room]; }
+    CB.place(m, null);
+  };
   /** 부하가 지금 있는 곳의 이름 */
   CB.placeName = function (m) {
     if (m.role === 'captain') return R().roleName(m);
@@ -118,6 +128,7 @@
     var s = S(), rooms = CB.rooms();
     if (i == null) { if (m.role === 'purser' && m.roomType === 'account') m.role = 'none'; delete m.room; delete m.roomType; return; }
     var type = rooms[i]; if (!type || CB.noStaff(type)) return;   // 빈 선실에는 거주할 수 있고, 창고에는 사람을 두지 않는다
+    var sh = CB.flagship(); if (sh.cabinEmpty) delete sh.cabinEmpty[i];
     var old = CB.occupant(i);
     if (old && old !== m) CB.place(old, null);
     if (m.roomType === 'account' && type !== 'account' && m.role === 'purser') m.role = 'none';
@@ -133,6 +144,7 @@
   CB.remodel = function (i, type) {
     var rooms = CB.rooms(); if (i <= 0 || i >= rooms.length || !G.CABIN[type] || G.CABIN[type].fixed) return false;
     var m = CB.occupant(i);
+    var sh = CB.flagship(); if (rooms[i] !== type && sh.cabinEmpty) delete sh.cabinEmpty[i];
     rooms[i] = type;
     if (m) { if (CB.noStaff(type)) CB.place(m, null); else CB.place(m, i); }
     return true;
@@ -160,6 +172,7 @@
     });
     function seat(a, i) {
       if (i == null || taken[i] || !p.rooms[i] || CB.noStaff(p.rooms[i]) || (p.rooms[i] === 'account' && accountTaken)) return false;
+      if (sh.cabinEmpty && sh.cabinEmpty[i] === p.rooms[i] && rooms[i] === p.rooms[i]) return false;
       a.to = i; taken[i] = true;
       if (p.rooms[i] === 'account') accountTaken = true;
       return true;
@@ -188,6 +201,7 @@
     var p = CB.planRemodel(types); if (!p.ok || !p.changes.length) return p;
     var s = S();
     sh.cabins = p.rooms.slice(); s.player.gold -= p.cost;
+    if (sh.cabinEmpty) p.changes.forEach(function (i) { delete sh.cabinEmpty[i]; });
     p.placements.forEach(function (a) {
       var m = s.mates.filter(function (x) { return x.id === a.id; })[0];
       if (m.role === 'purser' && (a.to == null || p.rooms[a.to] !== 'account')) m.role = 'none';

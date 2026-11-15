@@ -8265,6 +8265,7 @@ G.IMAGE_FILES = {
   "olympian-events/meet_zeus": "olympian-events/meet_zeus.webp",
   "olympian-events/men_fellowship": "olympian-events/men_fellowship.webp",
   "olympian-events/uninvited_covenant": "olympian-events/uninvited_covenant.webp",
+  "olympian-events/uninvited_poseidon_highfive": "olympian-events/uninvited_poseidon_highfive.webp",
   "olympian-events/uninvited_reconciliation": "olympian-events/uninvited_reconciliation.webp",
   "olympian-events/uninvited_three": "olympian-events/uninvited_three.webp",
   "olympian-events/uninvited_two": "olympian-events/uninvited_two.webp",

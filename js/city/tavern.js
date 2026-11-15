@@ -985,7 +985,7 @@
         opts.push({ label: U.esc(sh.name) + '호 선장', icon: 'crown', value: 'ocap:' + sh.uid,
           right: cap === m ? '지금 이 배의 선장' + (G.CrewAuto.locked(m) ? ' (손으로 정함)' : '') : cap ? G.MATE[cap.id].name + '와 교대' : '선장 없음' });
       });
-      opts = opts.concat([{ label: '역할 없음', right: '빈 선실이나 다른 배 자리에 저절로', value: 'none' }, { label: '해고한다', value: 'fire', icon: 'boot' }]);
+      opts = opts.concat([{ label: '역할 없음', right: '현재 선실은 비워 두고 다른 빈자리로 저절로', value: 'none' }, { label: '해고한다', value: 'fire', icon: 'boot' }]);
       var v = await UI.choose(d.name + '의 역할', opts, { width: 600 });
       if (!v) continue;
       if (v === 'fire') {
@@ -1003,6 +1003,7 @@
   /** 역할을 맡긴다. 그 자리를 맡던 사람은 m이 하던 일을 넘겨받는다 */
   T.assign = function (m, v) {
     var s = S(), oldRole = m.role, oldShip = m.ship, oldRoom = m.room, other;
+    if (v === 'none' && G.Cabins && m.room != null) G.Cabins.vacate(m);
     if (v.indexOf('cap:') === 0) {
       var uid = v.slice(4);
       other = s.mates.filter(function (x) { return x !== m && x.role === 'captain' && x.ship === uid; })[0];

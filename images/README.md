@@ -1,6 +1,6 @@
 # images — 그림 교체 폴더
 
-초대받지 못한 세 사도(2026-11-15)는 `portraits/mates/apostle_{dionysus,poseidon_grey,hades}*.webp` 6개를 쓴다. 기존 원화를 복사해 니칸드로스의 포세이돈 초상을 유지하며, 사건 원화는 `olympian-events/uninvited_*.webp` 4개, 투명 보상 아이콘은 `items/ua_*.webp` 3개다. [원화·포장·프롬프트·사건·검증](../docs/art/uninvited-apostles-20261115.md).
+초대받지 못한 세 사도(2026-11-15)는 `portraits/mates/apostle_{dionysus,poseidon_grey,hades}*.webp` 6개를 쓴다. 기존 원화를 복사해 니칸드로스의 포세이돈 초상을 유지하며, 두 포세이돈 사도의 하이파이브를 포함한 사건 원화는 `olympian-events/uninvited_*.webp` 5개, 투명 보상 아이콘은 `items/ua_*.webp` 3개다. [원화·포장·프롬프트·사건·검증](../docs/art/uninvited-apostles-20261115.md).
 
 12신의 사도(2026-11-15)는 `portraits/mates/apostle_<slug>.webp`와 `_half.webp` 24개를 쓰며, 신의 호칭 대신 칼리스테·멜리사 등 고유 이름을 표시한다. 만남 원화 12개·남녀 각 6명 동행 2개는 `olympian-events/`, 두 완성 업적 원화는 `achievement-events/olympian_*.webp`에 있다. 데메테르 만남은 여분 손을 제거한 수정본이다. [전체 원화·사건·프롬프트·검증](../docs/art/olympian-apostles-20261115.md).
 

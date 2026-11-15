@@ -7,7 +7,7 @@
      파수꾼만은 측량 단계마다 지도 제작 속도 +5% (js/systems/cartography.js — 2026-10-29)
    · 자동으로 채우는 때(CA.refresh): 도시에 들어올 때 · 출항할 때 · 달마다(충성을 셈하기 전) · 부하가 들어왔을 때 · 기함을 바꿨을 때 · 해전 뒤 · 선실·편성 화면을 열 때.
      첫 항해 안내(튜토리얼) 중에는 저절로 채우지 않는다 — 제독이 선실에 앉혀 보는 단계가 있다.
-     이때는 자리가 없는 부하와 다른 배의 사람만 움직이고, 기함 선실에 앉은 사람은 그대로 둔다(기함의 빈 방은 채운다).
+     이때는 자리가 없는 부하와 다른 배의 사람만 움직이고, 기함 선실에 앉은 사람은 그대로 둔다(손으로 비워 둔 방을 제외한 기함의 빈 방은 채운다).
    · 「자동 배치」(CA.autoAll): 술집에서 정한 역할이 없는 부하 모두를 기함 선실과 다른 배 자리에 다시 앉힌다.
    · 다른 배의 선장은 손으로 바꿀 수 있다 (2026-10-31 사용자 요청): 「다른 배의 사람들」에서 선장 자리를 누르거나, 술집 부하편성에서 「○○호 선장」.
      손으로 정한 선장(m.capLock)은 자동 채우기·「자동 배치」가 바꾸지 않는다 — 「능력에 맞게 저절로」를 고르면 다시 자동.
@@ -137,7 +137,7 @@
     var out = [];
     if (CB()) {
       CB().rooms().forEach(function (t, i) {
-        if (t === 'account' || CB().noStaff(t)) return;
+        if (t === 'account' || CB().noStaff(t) || (mode !== 'all' && CB().keptEmpty(i))) return;
         var occ = CB().occupant(i);
         if (occ && pool.indexOf(occ) < 0) return;
         out.push({ k: 'room', i: i, type: t });
@@ -169,6 +169,7 @@
   CA.apply = function (mode) {
     var s = S(); if (!s || !s.mates || !s.fleet || !s.fleet.ships.length) return [];
     if (CB()) CB().rooms();
+    if (mode === 'all' && CB()) delete CB().flagship().cabinEmpty;   // 직접 누른 「자동 배치」는 비워 둔 선실도 다시 쓴다
     var plan = CA.plan(mode), pool = poolOf(mode), before = pool.map(function (m) { return { m: m, from: where(m), idle: CA.idle(m) }; });
     pool.forEach(function (m) {
       if (m.room != null) { delete m.room; delete m.roomType; }

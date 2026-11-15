@@ -20,13 +20,15 @@ fs.mkdirSync(out,{recursive:true});
    G.Scenes.title.exit();await G.Loader.hide();G.UI.clearScreen();
    G.State.newGame({name:'초대받지 못한 세 사도 검사',nation:'PT',job:'explorer',age:28,birth:{m:1,d:1},st:{str:70,int:60,mar:70,cha:60},sk:{nav:2,gun:2},lg:[0,4],diff:'normal'});
    const s=G.Game.state,A=G.UninvitedApostles,B=G.Scenes.battle,M=G.SeaMonsters;
+   window.uninvitedWinsBefore=s.stats.wins||0;
+   const realScene=A.scene;window.uninvitedSceneKeys=[];A.scene=async key=>{window.uninvitedSceneKeys.push(key);return realScene(key);};
    s.settings.res=.35;await G.Game.ensureGeo();
    window.originalUninvitedUI={say:G.UI.say,ask:G.UI.ask,scene:G.Achieve.scene};
    const spoken=[];G.UI.say=async(t,p)=>{spoken.push({t,name:p&&p.name});};G.UI.ask=async()=> 'later';G.Achieve.scene=async()=>{};
    s.loc={mode:'sea',lon:-25,lat:32,heading:0};G.Game.go('sea',{fresh:true});
    ck(A.openWater(),'먼바다 검사');ck(!A.eligible()&&!(await A.onSeaDay()),'12명 미달성은 사건 없음');
    s.crewEver={};G.OLYMPIAN_APOSTLES.slice(0,11).forEach(a=>{s.crewEver[a.id]=1;});ck(!A.eligible(),'11명으로 사건 열리지 않음');
-   s.crewEver[G.OLYMPIAN_APOSTLES[11].id]=1;s.achv={olympian_companions:{d:1}};ck(A.eligible(),'12명 뒤 사건 열림');
+   s.crewEver[G.OLYMPIAN_APOSTLES[11].id]=1;s.achv={olympian_companions:{d:1}};s.mates.push({id:'apostle_poseidon',role:'none',loyal:80});ck(A.eligible(),'12명 뒤 사건 열림');
    ck(G.OLYMPIAN_APOSTLES.length===12&&G.UNINVITED_APOSTLES.length===3,'원래 12명과 추가 3명 분리');
    ck(G.MATE.apostle_poseidon.name==='니칸드로스'&&G.MATE.apostle_poseidon_grey.name==='글라우코스','다른 포세이돈 사도 보존');
    ck(G.UNINVITED_APOSTLES.every(id=>G.MATE[id].eventOnly&&!G.MatePower.blocked(G.MATE[id])&&!G.MATE[id].name.includes('사도')),'고유 이름·사건 전용 등록');
@@ -75,23 +77,42 @@ fs.mkdirSync(out,{recursive:true});
   const end=await page.evaluate(async()=>{
    function ck(v,m){if(!v)throw Error(m);}const A=G.UninvitedApostles,s=G.Game.state;
    ck(G.UNINVITED_APOSTLES.every(id=>!s.mates.some(m=>m.id===id)),'완승해도 고용 보류 가능');
+   ck((s.stats.wins||0)===window.uninvitedWinsBefore+2,'두 차례 해전 승리 통계가 각각 한 번 기록됨');
+   ck(A.state().highFiveSeen&&window.uninvitedSceneKeys.filter(k=>k==='highfive').length===1,'합류 제안 전에 하이파이브 장면 한 번');
+   ck(window.uninvitedSceneKeys.indexOf('highfive')>window.uninvitedSceneKeys.indexOf('reconciliation'),'세 사도의 사과 뒤 두 포세이돈 사도가 화해');
    ck(s.player.items.some(it=>it.id==='ua_coral_trident'),'마지막 삼지창 보상');s.player.equip.weapon='ua_coral_trident';ck(G.R.atk()===41,'삼지창 장착 공격 41');
    s.uninvitedApostles=JSON.parse(JSON.stringify(s.uninvitedApostles));s.day++;
    G.UI.ask=async()=> 'join';ck(await A.onSeaDay(),'저장 후 승리 기록으로 고용');
    ck(A.state().stage===4&&G.UNINVITED_APOSTLES.every(id=>s.mates.some(m=>m.id===id)&&s.crewEver[id]),'세 사람 동시 합류');
    const n=s.mates.length,items=s.player.items.length;ck(!(await A.onSeaDay())&&s.mates.length===n&&s.player.items.length===items,'종료 후 습격·보상·고용 중복 없음');
+   ck(window.uninvitedSceneKeys.filter(k=>k==='highfive').length===1,'합류 보류·재회·고용 후 장면 중복 없음');
+   // 옛 완료 저장에는 새 연출 기록이 없다. 니칸드로스가 없으면 기다리고 실제 재합류 뒤 재생한다.
+   const oldSave=JSON.parse(JSON.stringify(s.uninvitedApostles));delete oldSave.highFiveSeen;s.uninvitedApostles=oldSave;
+   const nik=s.mates.find(m=>m.id==='apostle_poseidon');s.mates=s.mates.filter(m=>m.id!=='apostle_poseidon');
+   ck(!(await A.highFive())&&A.state().highFivePending,'부재한 니칸드로스를 강제로 등장시키지 않음');
+   ck(!(await A.onSeaDay()),'부재 중 화해 장면 보류');
+   s.mates.push(nik);const beforeItems=JSON.stringify(s.player.items),beforeWins=JSON.stringify(A.state().won);
+   ck(await A.onSeaDay(),'옛 완료 저장도 두 사람 재회 뒤 새 화해 장면');
+   ck(A.state().highFiveSeen&&!A.state().highFivePending&&JSON.stringify(s.player.items)===beforeItems&&JSON.stringify(A.state().won)===beforeWins,'화해 연출은 기존 보상·전투 기록을 바꾸지 않음');
+   ck(!(await A.onSeaDay()),'옛 저장 추가 장면도 한 번만 재생');
    ck(JSON.stringify(s.seaMonsters)===window.uninvitedCheck.worldBefore,'세계 괴물 내구·재등장·발견 보상 불변');
-   const keys=G.UNINVITED_APOSTLES.flatMap(id=>['portraits/mates/'+id,'portraits/mates/'+id+'_half']).concat(['uninvited_covenant','uninvited_two','uninvited_three','uninvited_reconciliation'].map(id=>'olympian-events/'+id),G.UNINVITED_APOSTLE_REWARDS.map(it=>'items/'+it.id));
+   const keys=G.UNINVITED_APOSTLES.flatMap(id=>['portraits/mates/'+id,'portraits/mates/'+id+'_half']).concat(['uninvited_covenant','uninvited_two','uninvited_three','uninvited_reconciliation','uninvited_poseidon_highfive'].map(id=>'olympian-events/'+id),G.UNINVITED_APOSTLE_REWARDS.map(it=>'items/'+it.id));
    for(const key of keys){ck(G.Img.file(key),'그림 연결 '+key);const im=new Image();im.src=G.Img.src(key);await im.decode();ck(im.naturalWidth>0,'그림 로딩 '+key);}
    const stats=G.UNINVITED_APOSTLE_REWARDS.map(it=>({name:it.name,kind:it.kind,atk:it.atk,bonus:it.statBonus}));
    G.UI.say=window.originalUninvitedUI.say;G.UI.ask=window.originalUninvitedUI.ask;G.Achieve.scene=window.originalUninvitedUI.scene;
    window.requestAnimationFrame=window.nativeRAF;
+   ck((s.stats.wins||0)===window.uninvitedWinsBefore+2,'화해 재생·고용 보류·옛 저장 재호출로 승리 통계가 늘지 않음');
    return {assets:keys.length,rewards:stats,wins:Object.keys(A.state().won),joined:G.UNINVITED_APOSTLES.map(id=>G.MATE[id].name),spoken:window.uninvitedCheck.spoken.length};
   });
-  // 네 사건 원화가 실제 대화창 뒤에 표시되는 모습.
-  for(const key of ['covenant','two','three','reconciliation']){
+  // 다섯 사건 원화가 실제 대화창 뒤에 표시되는 모습.
+  for(const key of ['covenant','two','three','reconciliation','highfive']){
    await page.evaluate(key=>{window.shotDone=false;G.UninvitedApostles.scene(key).then(()=>{window.shotDone=true;});},key);
-   await page.waitForTimeout(450);await page.screenshot({path:path.join(out,key+'-runtime.png')});
+   await page.waitForTimeout(450);
+   await page.waitForFunction(()=>{const im=document.querySelector('.famscene.on img');return im&&im.complete&&im.naturalWidth>0;});
+   const pictureStyle=await page.locator('.famscene.on img').evaluate(im=>({fit:getComputedStyle(im).objectFit,animation:getComputedStyle(im).animationName}));
+   if(key==='highfive'){assert.equal(pictureStyle.fit,'contain','화해 그림 전체 표시');assert.equal(pictureStyle.animation,'none','전신이 잘리는 확대 연출 차단');}
+   else assert.equal(pictureStyle.fit,'cover','기존 사건 그림의 표시 방식 유지');
+   await page.screenshot({path:path.join(out,key+'-runtime.png')});
    for(let i=0;i<65;i++){if(await page.evaluate(()=>window.shotDone))break;await page.keyboard.press('Enter');await page.waitForTimeout(150);}
    assert.equal(await page.evaluate(()=>window.shotDone),true,'장면 대화 종료 '+key);
   }

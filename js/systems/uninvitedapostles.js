@@ -25,7 +25,7 @@
     return true;
   };
   function pauseSea(){var st=G.Scenes.sea.runtime();if(st){st.paused=true;st.path=null;st.target=null;st.keys={};}}
-  function picture(e){return G.FamEv.showPic({img:e.pic,title:e.title,noStand:true,objectPosition:G.FX.olympianApostles.shotPosition});}
+  function picture(e){return G.FamEv.showPic({img:e.pic,title:e.title,noStand:true,objectPosition:G.FX.olympianApostles.shotPosition,objectFit:e.objectFit});}
   A.scene=async function(key){
     var e=E()[key], pc=picture(e);
     try{for(var i=0;i<e.lines.length;i++)await UI.say(e.lines[i][1],speaker(e.lines[i][0]));}
@@ -58,12 +58,22 @@
     b.active=wave;b.attempts[wave]=(b.attempts[wave]||0)+1;
     pauseSea();G.Game.go('battle',{npc:A.npc(wave)});return true;
   };
+  A.highFive=async function(){
+    var b=A.state();if(b.stage<3 || b.highFiveSeen)return false;
+    // 니칸드로스가 떠났거나 사망한 저장에서는 불러 세우지 않는다. 두 사람이 실제로 함께할 때 한 번 재생한다.
+    if(!member('apostle_poseidon') || (b.stage===4&&!member('apostle_poseidon_grey'))){b.highFivePending=true;return false;}
+    await A.scene('highfive');b.highFiveSeen=U.dateNum(S().date);delete b.highFivePending;
+    G.State.log('니칸드로스와 글라우코스가 손바닥을 힘껏 마주치며 서로를 인정했다. 두 진영의 동료들이 경계를 풀었다.');
+    return true;
+  };
   async function offer(){
     var b=A.state();if(b.stage!==3)return false;
-    var pc=picture(E().reconciliation);
+    var firstOffer=!b.offerSeen;
+    if(firstOffer){await A.scene('reconciliation');b.offerSeen=true;}
+    await A.highFive();
+    var pc=picture(b.highFiveSeen?E().highfive:E().reconciliation);
     try{
-      if(!b.offerSeen){if(pc)await pc.stop();await A.scene('reconciliation');pc=picture(E().reconciliation);b.offerSeen=true;}
-      else await UI.say('세 사람은 깨진 돛대 곁에서 제독의 답을 기다린다. 봉인은 이미 닫혔고, 이번에는 무기 대신 저마다의 이름을 내놓았다.',{});
+      if(!firstOffer)await UI.say('세 사람은 깨진 돛대 곁에서 제독의 답을 기다린다. 봉인은 이미 닫혔고, 이번에는 무기 대신 저마다의 이름을 내놓았다.',{});
       var v=await UI.ask('암펠리오스·글라우코스·멜란티오스를 동료로 맞을까? 월급은 각각 '+K().wage+'닢.',[
         {label:'세 사람의 이름을 선원 명부에 적는다',value:'join'},{label:'당장은 답하지 않는다',value:'later'}]);
       if(v!=='join'){b.next=S().day+K().deferDays;await UI.say('암펠리오스가 빈 잔을 거두고, 글라우코스는 해도를 말아 넣는다. 멜란티오스는 열쇠를 잠근 채 기다리겠다고 고개를 끄덕였다.',{});return true;}
@@ -82,6 +92,10 @@
   A.onSeaDay=async function(){
     if(busy || G.Game.sceneName!=='sea' || !S().loc || S().loc.mode!=='sea')return false;
     A.claimRewards();var b=A.state();
+    // 이미 세 사람을 맞은 옛 저장도 새 화해 장면을 볼 수 있다. 고용·전투·보상을 다시 처리하지 않는다.
+    if(b.stage===4&&!b.highFiveSeen&&member('apostle_poseidon')&&member('apostle_poseidon_grey')&&S().fleet.ships.length&&S().fleet.crew>0){
+      busy=true;pauseSea();try{return await A.highFive();}finally{busy=false;}
+    }
     if(!A.eligible() || b.stage===4 || (b.next||0)>S().day || !S().fleet.ships.length || S().fleet.crew<=0)return false;
     if(b.stage!==3 && !A.openWater())return false;
     busy=true;pauseSea();
