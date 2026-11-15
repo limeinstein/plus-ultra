@@ -183,6 +183,7 @@
         '<div class="rd-log"></div>' +
         '<div class="rd-ctrl"><div class="rd-moves"><div class="lbl">다음 수 <span class="intent"></span></div><div class="row"></div></div><div class="rd-techs"><div class="lbl">기술 <small>기세를 쓴다</small></div><div class="grid"></div></div><div class="rd-sys"></div></div></div>';
       var win = UI.window({ title: '일기토', icon: 'sword', width: 1120, html: html, closable: false });
+      var resumeScene = function () {};
       win.el.classList.add('duel-win');
       var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), motionEl = el.querySelector('.rd-motion'), cutTitleEl = el.querySelector('.rd-cut-title'), cutFlashEl = el.querySelector('.rd-cut-flash');
       // 초상에 양식이 없으면 지금 있는 도시(바다면 가까운 도시)의 양식으로 전투원 그림을 고른다
@@ -207,6 +208,8 @@
         I.load(bgkey).then(function (im) { if (im) bgImg = im; });
       }
       var fontFamily = getComputedStyle(document.body).fontFamily;
+      // 빠른 화질에서는 일기토도 30fps로 제한한다. 판정·입력·동작 시간은 실제 시간으로 계산되어 속도는 바뀌지 않는다.
+      var duelFrameMs = s.settings && s.settings.res < 1 ? 1000 / 30 : 0, lastPaint = -Infinity;
       var mask = document.createElement('canvas'), maskCtx = mask.getContext('2d');
       var strips = {};
       Object.keys(art.fx || {}).forEach(function (id) {
@@ -766,7 +769,11 @@
         sleepers = sleepers.filter(function (wait) { if (simTime + 0.01 < wait.end) return true; wait.resolve(); return false; });
         if (screenFlash > 0) screenFlash = Math.max(0, screenFlash - dt * D.flashDecay);
       }
-      (function loop() { if (!live) return; draw(); requestAnimationFrame(loop); })();
+      (function loop(now) {
+        if (!live) return;
+        if (!duelFrameMs || now - lastPaint >= duelFrameMs) { lastPaint = now; draw(); }
+        requestAnimationFrame(loop);
+      })();
 
       // ------------------------------------------------ 연출 도우미
       function sleep(ms) { return new Promise(function (r) { setTimeout(r, fast ? ms * 0.5 : ms); }); }
@@ -1325,7 +1332,9 @@
         if (G.Keys.is(e, 'cancel')) { el.querySelectorAll('.rd-sys .btn')[2].click(); return true; }
         return false;
       });
-      win.result.then(function () { live = false; unkey(); clearTimeout(timer); });
+      // 초기화가 모두 끝난 뒤에만 배경을 멈춘다. 일기토 창은 자체 프레임 루프로 그리므로 뒤의 항해·해전 렌더링은 필요 없다.
+      resumeScene = G.Game && G.Game.pauseScene ? G.Game.pauseScene() : resumeScene;
+      win.result.then(function () { live = false; resumeScene(); unkey(); clearTimeout(timer); });
       G.Games._duelDebug = { me: me, en: en, flags: flags, strike: strike, get shake() { return shakeOffset; }, get freeze() { return Math.max(0, freezeUntil - performance.now()); }, choose: chooseStance, use: async function (id) { for (var i = 0; i < 200 && busy && !over; i++) await new Promise(function (r) { setTimeout(r, 30); }); if (over) return; queued = id; clearTimeout(timer); await step(); for (var j = 0; j < 200 && busy && !over; j++) await new Promise(function (r) { setTimeout(r, 30); }); }, step: step, useTech: useTech, techOk: function (id) { return techOk(TECH.filter(function (x) { return x.id === id; })[0]); }, get over() { return over; }, set fast(v) { fast = v; } };
       bars(); stancePanel(); moveBtns(); techBtns(); sysBtns();
       if (opt.stance) chooseStance(opt.stance);
