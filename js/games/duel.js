@@ -182,7 +182,7 @@
         '<div class="rd-arena"><div class="rd-stage"><canvas width="' + W + '" height="' + H + '"></canvas><img class="rd-motion" alt="" aria-hidden="true"><div class="rd-cut-flash"></div><div class="rd-cut-title"><b></b><small></small></div></div><div class="rd-stance"></div></div>' +
         '<div class="rd-log"></div>' +
         '<div class="rd-ctrl"><div class="rd-moves"><div class="lbl">다음 수 <span class="intent"></span></div><div class="row"></div></div><div class="rd-techs"><div class="lbl">기술 <small>기세를 쓴다</small></div><div class="grid"></div></div><div class="rd-sys"></div></div></div>';
-      var win = UI.window({ title: '일기토', icon: 'sword', width: 1120, html: html, closable: false });
+      var win = UI.window({ title: '일기토', icon: 'sword', width: 1120, html: html, closable: false, pauseScene: true });
       win.el.classList.add('duel-win');
       var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), motionEl = el.querySelector('.rd-motion'), cutTitleEl = el.querySelector('.rd-cut-title'), cutFlashEl = el.querySelector('.rd-cut-flash');
       // 초상에 양식이 없으면 지금 있는 도시(바다면 가까운 도시)의 양식으로 전투원 그림을 고른다
@@ -766,7 +766,13 @@
         sleepers = sleepers.filter(function (wait) { if (simTime + 0.01 < wait.end) return true; wait.resolve(); return false; });
         if (screenFlash > 0) screenFlash = Math.max(0, screenFlash - dt * D.flashDecay);
       }
-      (function loop() { if (!live) return; draw(); requestAnimationFrame(loop); })();
+      var drawClock = {};
+      (function loop() {
+        if (!live) return;
+        if (UI.scenePaused(win.back)) last = performance.now();
+        else if (G.Game.frameDue(drawClock, performance.now())) draw();
+        requestAnimationFrame(loop);
+      })();
 
       // ------------------------------------------------ 연출 도우미
       function sleep(ms) { return new Promise(function (r) { setTimeout(r, fast ? ms * 0.5 : ms); }); }

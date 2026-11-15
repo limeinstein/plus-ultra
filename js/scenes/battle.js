@@ -476,7 +476,7 @@
     var foe = npc.label || (npc.monster ? G.SEA_MONSTER_ART[npc.monster].name : npc.kind === 'pirate' ? '해적' : npc.kind === 'navy' ? ((npc.nation ? npc.nation + ' ' : '') + '함대') : '상선단');
     UI.toast(arg.battle ? '저장한 해전을 이어갑니다.' : foe + U.jx(foe, '과/와') + ' 전투가 시작되었다! ' + (st.terrain.hasLand ? '주변 섬과 해안은 통과할 수 없습니다. ' : '') + '방향키로 기함을 몰고 Space로 세웁니다. 바다를 클릭해 움직이고, 적함을 클릭하면 공격합니다.', 'cannon', 5600);
   };
-  B.exit = function (next) { if (st && st.unkey) st.unkey(); if (G.Ship3D) G.Ship3D.dispose(); var root = document.getElementById('ui'); if (root) root.classList.remove('at-battle'); if (G.Rain && next !== 'sea') G.Rain.leave(); st = null; battleState = null; ghostCv = null; };
+  B.exit = function (next) { if (st && st.unkey) st.unkey(); if (G.Ship3D && next !== 'sea') G.Ship3D.dispose(); var root = document.getElementById('ui'); if (root) root.classList.remove('at-battle'); if (G.Rain && next !== 'sea') G.Rain.leave(); st = null; battleState = null; ghostCv = null; };
   B.debug = function () { return st; };
 
   // ---------------------------------------------------------------- UI

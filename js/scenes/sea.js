@@ -68,7 +68,7 @@
     if (G.Audio) G.Audio.music('sea');
     st.lastMini = -99;
   };
-  SEA.exit = function (next) { if (G.Ship3D) G.Ship3D.dispose(); if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; st.shipWater = {}; st.fx = G.SeaFX ? G.SeaFX.create() : null; if (st.unkey) st.unkey(); } };
+  SEA.exit = function (next) { if (G.Ship3D && next !== 'battle') G.Ship3D.dispose(); if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; st.shipWater = {}; st.fx = G.SeaFX ? G.SeaFX.create() : null; if (st.unkey) st.unkey(); } };
   function newRuntime() {
     return { cam: null, path: null, target: null, paused: false, speed: 1, dayAcc: 0, busy: 0, keys: {}, npcs: [], wake: [], storm: 0, stormDays: 0, calm: 0, t: 0, mouse: null, lastMini: -99, dayCount: 0, toastQ: [],
       vel: [0, 0], fx: G.SeaFX ? G.SeaFX.create() : null, pose: { roll: 0, pitch: 0, heave: 0 }, turnRate: 0, accel: 0 };

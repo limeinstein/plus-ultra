@@ -152,7 +152,10 @@
     var c=cfg();if(!c||!c.enabled||!spec||!P.supports(spec.type))return false;
     var r=setup();if(!r||r.lost||r.renderer.getContext().isContextLost())return false;
     var start=performance.now(),tx=ctx.getTransform(),dev=Math.hypot(tx.a,tx.b),scale=len/c.baseLen;
-    var naturalPixels=clamp(Math.ceil(r.span*scale*dev*c.supersample/32)*32,c.minBuffer,c.maxBuffer);
+    // 바로 앞에 그린 다른 선종의 폭(r.span)이 아니라 이 배의 실제 모형 폭으로 버퍼 크기를 정한다.
+    // 선종을 번갈아 그릴 때 같은 배의 해상도가 바뀌어 캔버스를 다시 할당하던 것을 막는다.
+    if(!r.models[spec.type]&&!select(r,spec.type))return false;
+    var naturalPixels=clamp(Math.ceil(r.models[spec.type].span*scale*dev*c.supersample/32)*32,c.minBuffer,c.maxBuffer);
     var key=c.reuseMs>0&&spec.sid!=null?String(spec.sid):null,k=key?reuse[key]:null,pixels=naturalPixels;
     // 파도에 따른 길이 변화가 32px 경계를 오갈 때 캐시 캔버스를 매번 다시 만들지 않는다. 처음·실제 배율 변경 때 한 단계 여유를 두며 해상도는 낮추지 않는다.
     if(key){if(!k||naturalPixels>k.pixels||naturalPixels<k.pixels-64)pixels=clamp(naturalPixels+32,c.minBuffer,c.maxBuffer);else pixels=k.pixels;}

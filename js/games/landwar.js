@@ -183,7 +183,7 @@
     return new Promise(function (resolve) {
       var html = '<div class="lwar"><div class="lw-stage"><canvas width="' + W + '" height="' + H + '"></canvas><div class="lw-pop" hidden></div><div class="lw-tip" hidden></div></div>' +
         '<div class="lw-bar"><div class="lw-log"></div><div class="lw-btns"></div></div></div>';
-      var win = UI.window({ title: '육상전 — ' + e.name, icon: 'sword', width: 1080, html: html, closable: false });
+      var win = UI.window({ title: '육상전 — ' + e.name, icon: 'sword', width: 1080, html: html, closable: false, pauseScene: true });
       var el = win.content, cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), btns = el.querySelector('.lw-btns'), logEl = el.querySelector('.lw-log');
       // 함선처럼 크게 그린 뒤 줄여 보여 준다. 전장과 클릭 좌표는 기존 1000×440이다.
       var pixelRatio = Math.max(1, LFX.resolution);
@@ -628,10 +628,13 @@
       function banner(text, life) { fxS = fxS.filter(function (e) { return e.kind !== 'banner'; }); fxS.push({ kind: 'banner', text: text, t: 0, life: life || 1.3 }); }
       function flashScreen(col, a, life) { fxS.push({ kind: 'flashS', col: col, a: a, t: 0, life: life || 0.3 }); }
       function focus(x, y, life) { cam = { x: x, y: y, z: 1.28, t: life || 1.3, life: life || 1.3 }; }
-      var last = performance.now(), live = true;
+      var last = performance.now(), live = true, drawClock = {};
       function loop() {
         if (!live) return;
-        var now = performance.now(), dt0 = Math.min(0.05, (now - last) / 1000); last = now;
+        var now = performance.now();
+        if (UI.scenePaused(win.back)) { last = now; requestAnimationFrame(loop); return; }
+        if (!G.Game.frameDue(drawClock, now)) { requestAnimationFrame(loop); return; }
+        var dt0 = Math.min(0.05, (now - last) / 1000); last = now;
         var dt = cam && cam.t > 0 ? dt0 * 0.4 : dt0;   // 결정적인 순간에는 느리게
         if (freezeT > 0) { freezeT -= dt0; dt = 0; }     // 세게 맞는 순간 아주 잠깐 멈춘다 (타격감)
         if (cam) { cam.t -= dt0; if (cam.t <= 0) cam = null; }

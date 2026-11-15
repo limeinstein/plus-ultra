@@ -258,6 +258,16 @@
   UI.clearScreen = function () { screenEl.innerHTML = ''; if (G.HudPin) G.HudPin.prune(); };
   UI.add = function (el) { el.style.pointerEvents = 'auto'; screenEl.appendChild(el); return el; };
   UI.busy = function () { return modalRoot.children.length > 0; };
+  // 자체 그림 반복이 있는 전투 창 뒤에서는 바다·탐험·해전을 다시 그리지 않는다.
+  // 창의 실제 연결 상태를 보므로 중첩 창·강제 제거 뒤에도 정지가 남지 않는다.
+  UI.scenePaused = function (back) {
+    if (!back) return !!(modalRoot && modalRoot.querySelector('[data-pause-scene]'));
+    // 육상전 안에서 일기토를 열면 육상전의 독립 반복도 쉰다. 앞쪽 전투 창만 움직인다.
+    for (var next = back.nextElementSibling; next; next = next.nextElementSibling) {
+      if (next.hasAttribute('data-pause-scene')) return true;
+    }
+    return false;
+  };
   /** 창이 올라가는 층 — 여기에 붙인 것이 있으면 UI.busy() (js/systems/eraend.js 온 화면 나레이션) */
   UI.modalRoot = function () { return modalRoot; };
 
@@ -1213,10 +1223,11 @@
   };
 
   // ---------------------------------------------------------------- window
-  /** opts: {title, icon, width, height, html, parch:true, closable:true, buttons:[{label, cls, value, icon}], onBuild(el, win), clear:false}
+  /** opts: {title, icon, width, height, html, parch:true, closable:true, buttons:[{label, cls, value, icon}], onBuild(el, win), clear:false, pauseScene:false}
       returns {el, content, close(value), result:Promise} */
   UI.window = function (opts) {
     var back = U.el('div', 'modal-back' + (opts.clear ? ' clear' : ''));
+    if (opts.pauseScene) back.setAttribute('data-pause-scene', '');
     var w = U.el('div', 'win wood brass-frame');
     if (opts.width) w.style.width = opts.width + 'px';
     if (opts.height) w.style.height = opts.height + 'px';

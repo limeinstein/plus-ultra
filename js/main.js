@@ -216,17 +216,27 @@
   };
   Game.onKey = function (e) { return Game.scene && Game.scene.onKey ? Game.scene.onKey(e) === true : false; };
 
-  var last = 0;
+  var last = 0, frameClock = {};
   function LP() { return (G.FX && G.FX.loop) || { maxDt: 0.1 }; }
+  // 144Hz에서도 60번을 고르게 나눈다. 지난 실제 시간은 loop의 dt로 모두 넘겨 날짜·이동 속도를 유지한다.
+  // 늦은 장면을 한꺼번에 따라 그리지 않으며, 미니게임의 독립된 그림 반복에도 같은 기준을 쓴다.
+  Game.frameDue = function (clock, t) {
+    var step = 1000 / (LP().maxFps || 60);
+    if (clock.next != null && t + 0.5 < clock.next) return false;
+    clock.next = clock.next == null || t > clock.next + step ? t + step : clock.next + step;
+    return true;
+  };
   function loop(t) {
+    if (!Game.frameDue(frameClock, t)) { requestAnimationFrame(loop); return; }
     var raw = (t - last) / 1000 || 0; last = t;
     var K = LP(), dt = Math.min(K.maxDt, Math.max(0, raw));   // 오래 멈췄던 장면(탭 전환·무거운 일) 뒤에 배가 순간 이동하지 않게
     Game.time += dt;
     // 느린 프레임에서도 사용자가 고른 해상도를 유지한다. 버퍼 크기 왕복으로 생기는 끊김도 피한다.
-    if (Game.scene && Game.scene.update) {
+    var pausedScene = UI.scenePaused && UI.scenePaused();
+    if (!pausedScene && Game.scene && Game.scene.update) {
       try { Game.scene.update(dt); } catch (e) { console.error(e); }
     }
-    if (G.Birds) { try { G.Birds.update(dt); } catch (e) { console.error(e); } }
+    if (!pausedScene && G.Birds) { try { G.Birds.update(dt); } catch (e) { console.error(e); } }
     if (G.EraEnd && Game.state) { try { G.EraEnd.tick(); } catch (e) { console.error(e); } }   // 1700년 1월 1일 대항해시대의 끝 — 수명·이별보다 먼저 (js/systems/eraend.js)
     if (G.Life && Game.state) { try { G.Life.tick(); } catch (e) { console.error(e); } }
     if (G.MateLeave && Game.state) { try { G.MateLeave.tick(); } catch (e) { console.error(e); } }
