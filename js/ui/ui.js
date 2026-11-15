@@ -51,6 +51,7 @@
   }
   function keyIs(e, action) {
     var keys = keySettings(), code = eventCode(e);
+    if (action === 'cancel' && code === 'Escape') return true;   // 취소 키를 바꿔도 Esc는 언제나 나가기
     if (keys[action] && code === keys[action]) return true;   // 「없음」('')인 동작은 어떤 키에도 맞지 않는다
     // 확정 키를 다른 키로 바꿨어도 숫자판 Enter는 확정으로 받는다 — 다른 동작이 Enter를 쓰지 않을 때만 (QA 2026-10-23)
     if (action === 'confirm' && e && e.code === 'NumpadEnter') return !Object.keys(keys).some(function (id) { return keys[id] === 'Enter'; });
@@ -228,7 +229,7 @@
   }
   function notebookKey(e) {
     if (!e || e.repeat || UI.busy() || !(G.Game && G.Game.state)) return false;
-    var t = e.target; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return false;
+    if (typingKey(e) || e.isComposing || e.ctrlKey || e.altKey || e.metaKey) return false;
     var nm = G.Game.sceneName; if (nm !== 'city' && nm !== 'sea' && nm !== 'land') return false;
     var tab = null;
     if (!keyIs(e, 'notebook')) {
@@ -243,6 +244,7 @@
   }
   UI.notebookKey = notebookKey;
   function routeKey(e) {
+    if (screenShortcutKey(e)) return true;
     if (notebookKey(e)) return true;
     for (var i = keyHandlers.length - 1; i >= 0; i--) if (keyHandlers[i](e) === true) return true;
     if (screenMenuKey(e)) return true;
@@ -269,13 +271,33 @@
     if (el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
     return el;
   }
-  /** 거리(마을 풍경)가 보이는 동안: 방향키·Enter는 제독이 쓴다 (←→ 걷기 · ↑/Enter 건물에 들어가기 — js/scenes/town.js).
-      오른쪽 건물 메뉴는 마우스로 누른다 — 예전엔 ↑↓가 메뉴와 제독을 함께 움직여 ↑로 건물에 들어갈 수 없었다 */
+  /** 거리에서는 방향키·Enter를 제독이 쓰고, 오른쪽 건물 메뉴는 표시된 단축키나 마우스로 고른다. */
   function townKeys() { return !!(G.Town && G.Town.active && G.Town.active() && !G.Town.hidden()); }
   UI.townKeys = townKeys;
+  // 도시 건물·실내 메뉴의 고정 바로가기. 글을 쓰거나 창을 열었을 때는 뒤쪽 메뉴로 새지 않는다.
+  var MENU_SHORTCUTS = '1234567890qwerasdfzxcv';
+  function typingKey(e) {
+    var t = e && e.target;
+    return !!(t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable));
+  }
+  function screenShortcutKey(e) {
+    if (!screenEl || UI.busy() || typingKey(e) || e.isComposing || e.ctrlKey || e.altKey || e.metaKey) return false;
+    var menu = screenEl.querySelector('.cmdmenu[data-shortcuts]');
+    if (!usable(menu) || menu.classList.contains('talk-hidden') || getComputedStyle(menu).visibility === 'hidden') return false;
+    if (G.Scenes && G.Scenes.city && G.Scenes.city.isBusy()) return false;
+    var code = eventCode(e), key = /^Digit[0-9]$/.test(code) ? code.slice(5) : /^Numpad[0-9]$/.test(code) ? code.slice(6) : /^Key[A-Z]$/.test(code) ? code.slice(3).toLowerCase() : '';
+    if (keyIs(e, 'cancel')) key = 'Escape';
+    var items = menu.querySelectorAll('.cmd[data-shortcut]');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].dataset.shortcut !== key || !usable(items[i])) continue;
+      if (!e.repeat) items[i].click();
+      return true;
+    }
+    return false;
+  }
   /** 화면 오른쪽 명령 메뉴: ↑↓로 고르고 Enter/Space로 실행. 장면의 이동키보다 먼저 받는다 (거리에서는 제외). */
   function screenMenuKey(e) {
-    if (!screenEl || UI.busy() || townKeys()) return false;
+    if (!screenEl || UI.busy() || townKeys() || typingKey(e) || keyIs(e, 'cancel')) return false;
     var menu = screenEl.querySelector('.cmdmenu'); if (!menu || menu.classList.contains('talk-hidden')) return false;
     var items = Array.prototype.slice.call(menu.querySelectorAll('.cmd'));
     var cur = menu.querySelector('.cmd.kbd-focus');
@@ -1229,7 +1251,7 @@
     function pressSolo() { if (closed || Date.now() - openedAt < 400) return; if (solo.onClick) { var r = solo.onClick(api); if (r === false) return; } api.close(solo.value); }
     var unkey = pushKey(function (e) {
       var typing = e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
-      if (keyIs(e, 'cancel') && opts.closable !== false && !typing) { api.close(null); return true; }
+      if (keyIs(e, 'cancel') && opts.closable !== false && (!typing || eventCode(e) === 'Escape')) { api.close(null); return true; }
       if (solo && (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) && !typing) { pressSolo(); return true; }
       if (opts.onKey && opts.onKey(e) === true) return true;
       if (!typing && (keyIs(e, 'up') || keyIs(e, 'left'))) { moveSelection(-1); return true; }
@@ -1344,8 +1366,8 @@
     fld.onchange = function () { set(fld.value); };
     fld.onkeydown = function (e) {
       if (e.isComposing) return;
-      if (keyIs(e, 'confirm')) { e.preventDefault(); e.stopPropagation(); set(fld.value); win.close('ok'); }
-      else if (keyIs(e, 'cancel')) { e.preventDefault(); e.stopPropagation(); win.close(null); }
+      if (keyIs(e, 'cancel')) { e.preventDefault(); e.stopPropagation(); win.close(null); }
+      else if (keyIs(e, 'confirm')) { e.preventDefault(); e.stopPropagation(); set(fld.value); win.close('ok'); }
     };
     win.content.querySelector('.mn').onclick = function () { set(val - (o.step || 1)); };
     win.content.querySelector('.pl').onclick = function () { set(val + (o.step || 1)); };
@@ -1458,14 +1480,19 @@
     var win = UI.window({ title: title, width: 520, html: '<input class="nfield" type="text" maxlength="' + (max || 16) + '" style="width:100%" value="' + U.esc(value || '') + '">',
       buttons: [{ label: '취소', value: null }, { label: '결정', value: 'ok', cls: 'navy' }] });
     var f = win.content.querySelector('input'); setTimeout(function () { f.focus(); f.select(); }, 30);
-    f.onkeydown = function (e) { if (keyIs(e, 'confirm')) win.close('ok'); e.stopPropagation(); };
+    f.onkeydown = function (e) {
+      if (keyIs(e, 'cancel')) { e.preventDefault(); win.close(null); }
+      else if (keyIs(e, 'confirm')) win.close('ok');
+      e.stopPropagation();
+    };
     return win.result.then(function (r) { return r === 'ok' ? f.value.trim() : null; });
   };
 
   // ---------------------------------------------------------------- command menu (right side)
-  /** items: [{label, icon, sub, dim, exit, onClick}] */
+  /** items: [{label, icon, sub, dim, exit, onClick}]. opts.shortcuts: 도시 건물·실내 바로가기 표시 */
   UI.cmdMenu = function (title, sub, items, opts) {
     var m = U.el('div', 'cmdmenu wood brass-frame' + (items.filter(Boolean).length > 9 ? ' many' : ''));
+    if (opts && opts.shortcuts) m.setAttribute('data-shortcuts', '');
     if (opts && opts.top != null) m.style.top = opts.top + 'px';
     if (opts && opts.left != null) { m.style.left = opts.left + 'px'; m.style.right = 'auto'; }
     m.innerHTML = '<h3>' + title + (sub ? '<small>' + sub + '</small>' : '') + '</h3><div class="items"></div>';
@@ -1489,11 +1516,20 @@
     }
     function hideTip() { tipFor = null; tip.classList.remove('on'); }
     m._showTip = showTip; m._hideTip = hideTip;
+    var shortcutIndex = 0;
     items.forEach(function (it) {
       if (!it) return;
       // 설명(sub): 짧은 수치·상태(「20·20일 · 자재 10」 「물건 값 131%」 「저장 가능」 따위)는 버튼 안 오른쪽에, 긴 설명은 버튼을 키우지 않게 풍선 도움말로
       var subTxt = it.sub != null ? String(it.sub).replace(/<[^>]*>/g, '').trim() : '', inline = subTxt && subInline(subTxt, opts);
       var d = U.el('div', 'cmd' + (it.dim ? ' dim' : '') + (it.exit ? ' exit' : ''), G.icon(it.icon || 'chev') + '<span>' + it.label + '</span>' + (inline ? '<span class="sub">' + it.sub + '</span>' : ''));
+      if (opts && opts.shortcuts) {
+        var shortcut = it.exit ? 'Escape' : MENU_SHORTCUTS.charAt(shortcutIndex++);
+        if (shortcut) {
+          d.classList.add('has-shortcut'); d.dataset.shortcut = shortcut;
+          d.setAttribute('aria-keyshortcuts', shortcut.length === 1 ? shortcut.toUpperCase() : shortcut);
+          d.appendChild(U.el('kbd', 'cmd-key', shortcut === 'Escape' ? 'Esc' : shortcut.toUpperCase())).setAttribute('aria-hidden', 'true');
+        }
+      }
       if (subTxt && !inline) makeTip(d, subTxt, it.label);
       d.onclick = function () { hideTip(); if (UI.busy()) return; it.onClick && it.onClick(); };
       d.addEventListener('mouseenter', function () { if (!m._fitted) fitCmdMenu(m); showTip(d); });   // 설명 없는 버튼에 오르면 앞 풍선을 거둔다

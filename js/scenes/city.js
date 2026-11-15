@@ -346,7 +346,7 @@
     if (G.Disc.cityBuildings) G.Disc.cityBuildings(c.id).forEach(function (d) {
       items.push({ label: d.name, icon: 'star', onClick: function () { C.lookAt(d.id); } });
     });
-    UI.cmdMenu(c.name, '가고 싶은 곳을 고르십시오', items, { top: 72 });
+    UI.cmdMenu(c.name, '가고 싶은 곳을 고르십시오', items, { top: 72, shortcuts: true });
     // bottom info row
     var bar = U.el('div', 'infobar wood');
     [['admiral', '제독', 'crown'], ['fleet', '함대', 'ship'], ['items', '소지품', 'chest'], ['disc', '발견물', 'star'], ['contract', '계약·의뢰', 'seal'], ['map', '해도', 'map'], ['log', '일지', 'log'], [null, '수첩', 'book']].forEach(function (b) {   // 수첩 = 단서·업적·교역 수첩 등 모든 탭 (바다·뭍의 「수첩」과 같다)
@@ -550,7 +550,7 @@
     });
     items.push({ label: B.exitLabel || U.j(typeof B.title === 'function' ? B.title(c, arg) : B.title, '을/를') + ' 나온다', icon: 'boot', exit: true, onClick: function () { C.run(function () { return C.leave(); }); } });
     var title = typeof B.title === 'function' ? B.title(c, arg) : B.title;
-    UI.cmdMenu(title, B.sub ? B.sub(c, arg) : '', items, { top: 72 });
+    UI.cmdMenu(title, B.sub ? B.sub(c, arg) : '', items, { top: 72, shortcuts: true });
     if (B.panel) { var pn = B.panel(c, arg); if (pn) UI.add(pn); }
     // 어느 건물에서든 구석의 책 아이콘으로 수첩을 열고, 닫으면 이 메뉴로 돌아온다.
     var notebook = U.el('button', 'btn bld-notebook', G.icon('book'));

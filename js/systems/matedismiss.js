@@ -17,6 +17,8 @@
     var r = MD.record(id), d = G.MATE[id], s = S();
     return !!(r && r.available && d && !s.flags['gone_' + id] && !row(id) &&
       (!d.chinaRotation || G.ChinaCrew.active(id, s.date.y, s.seed)) &&
+      (!d.japanRotation || G.JapanCrew.active(id, s.date.y, s.seed)) &&
+      (!d.koreaRotation || G.KoreaCrew.active(id, s.date.y, s.seed)) &&
       !(G.MatePower && G.MatePower.blocked(d)) && (!d.y || (s.date.y >= d.y[0] && s.date.y <= d.y[1])));
   };
   MD.wage = function (id, base) {

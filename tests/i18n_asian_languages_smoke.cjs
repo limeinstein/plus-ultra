@@ -15,7 +15,7 @@ const cases=[['vi','vi-VN','Tiếng Việt','Chuyến hải hành mới','Sẵn 
   async function choose(name,lang){await p.locator('.title-lang').click();const opt=p.locator('.choices > .choice').filter({hasText:name});await opt.waitFor();assert(!(await opt.getAttribute('class')).includes('dis'));await opt.click();await p.waitForFunction(l=>G.I18N.lang===l&&document.documentElement.lang===l,lang);await title();}
   console.log('첫 화면 열기',id);await p.goto(new URL('index.html',base).href,{waitUntil:'domcontentloaded',timeout:120000});await title();console.log('첫 화면 준비',id);
   assert.equal(await p.evaluate(()=>G.I18N.lang),new URL(base).protocol==='file:'?'ko':id,'첫 방문 브라우저 언어');
-  assert.deepEqual(await p.evaluate(()=>G.I18N.LANGS.filter(l=>!G.I18N.ready(l.id)).map(l=>l.id)),['ja','de']);
+  assert.deepEqual(await p.evaluate(()=>G.I18N.LANGS.filter(l=>!G.I18N.ready(l.id)).map(l=>l.id)),['ja','pt','de']);
   if(await p.evaluate(()=>G.I18N.lang!=='ko'))await choose('한국어','ko');
   await choose(label,id);console.log('언어 선택',id);
   assert.equal(await p.evaluate(()=>localStorage.getItem('pu.lang')),id);
@@ -23,6 +23,7 @@ const cases=[['vi','vi-VN','Tiếng Việt','Chuyến hải hành mới','Sẵn 
   console.log('화면 설정 열기',id);await p.evaluate(()=>{G.Display.open();});await p.waitForSelector('.disp-panel');
   assert((await p.locator('[data-dlang="'+id+'"]').getAttribute('class')).includes('on'));
   for(const lang of ['vi','zh-Hans','zh-Hant','es'])assert(!(await p.locator('[data-dlang="'+lang+'"]').getAttribute('class')).includes('dim'));
+  for(const lang of ['ja','pt','de'])assert((await p.locator('[data-dlang="'+lang+'"]').getAttribute('class')).includes('dim'));
   for(let i=0;i<6&&await p.evaluate(()=>G.UI.busy());i++)await p.keyboard.press('Escape');
   console.log('화면 설정 닫기',id);await title();await p.locator('.title-menu .btn').filter({hasText:voyage}).click();await p.waitForSelector('.create');console.log('새 항해',id);
   await p.waitForFunction(t=>document.querySelector('#go').textContent.includes(t),ready);

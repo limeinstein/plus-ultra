@@ -114,7 +114,7 @@
     if (local) return out;   // 고장 사람은 전용 후보나 역할 그림만 쓴다.
     var cult = A && A.imageCulture ? A.imageCulture(style) : null;
     G.MATES.forEach(function (m) {
-      if (m.wd || m.witch || m.g !== g || ICONIC[m.id]) return;
+      if (m.wd || m.witch || m.japanRotation || m.koreaRotation || m.g !== g || ICONIC[m.id]) return;
       var ms = m.style || REGION_STYLE[(m.reg || [])[0]] || 'ib';
       if (ms !== style && (!cult || !A.imageCulture || A.imageCulture(ms) !== cult)) return;
       var k = 'portraits/mates/' + m.id; if (facePairOk(k)) out.push(k);

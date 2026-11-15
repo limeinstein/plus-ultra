@@ -11,8 +11,15 @@
 (function (G) {
   'use strict';
   var D = G.Display = {};
-  function get(k, def) { try { var v = window.localStorage.getItem(k); return v == null ? def : v; } catch (e) { return (D._mem && D._mem[k] != null) ? D._mem[k] : def; } }
-  function put(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { (D._mem = D._mem || {})[k] = v; } }
+  function get(k, def) {
+    // 저장공간이 가득 차 쓰기만 실패할 수 있다. 이번에 고른 임시 설정을 이전 저장값보다 먼저 쓴다.
+    if (D._mem && D._mem[k] != null) return D._mem[k];
+    try { var v = window.localStorage.getItem(k); return v == null ? def : v; } catch (e) { return def; }
+  }
+  function put(k, v) {
+    try { window.localStorage.setItem(k, v); if (D._mem) delete D._mem[k]; }
+    catch (e) { (D._mem = D._mem || {})[k] = v; }
+  }
 
   // ---------------------------------------------------------------- 글자 크기 (main.js의 UI_SIZES와 같은 열쇠)
   /* auto = DEFAULT. 숫자는 창·글씨 배율 (1 = 1600×900 화면에서 짠 그대로) */

@@ -1909,6 +1909,9 @@ html[data-font="nanumgothic"] body, html[data-font="notosans"] body { letter-spa
 .cmdmenu:not(.many) .cmd.sub2 { padding-top: 2px; padding-bottom: 2px; }
 .cmdmenu:not(.many) .cmd.sub2 > span:not(.sub):not(.tipdot) { flex-shrink: 0; }   /* 두 줄로 접는 쪽은 작은 글 — 이름은 그대로 */
 .cmdmenu:not(.many) .cmd.sub2 > .sub { white-space: normal; flex: 0 1 auto; min-width: 0; max-width: 55%; line-height: 1.15; text-align: right; word-break: keep-all; }
+/* 도시 바로가기: 작은 황동빛 키를 오른쪽에 두고 메뉴 이름·수치와 겹치지 않게 자리를 비운다. */
+.cmdmenu .cmd.has-shortcut { position: relative; padding-right: 36px; }
+.cmdmenu .cmd > .cmd-key { position: absolute; right: 7px; top: 50%; transform: translateY(-50%); min-width: 12px; padding: 0 3px; border: 1px solid rgba(201,175,121,.22); border-radius: 2px; color: rgba(221,200,157,.7); background: rgba(16,12,8,.2); font: 11px/1.4 monospace; text-align: center; pointer-events: none; }
 /* 어린 맏아들을 기다리는 세월 (js/systems/family.js F.regency) */
 .regency { text-align: center; padding: 6px 4px 2px; }
 .regency .rg-date { font-size: 34px; font-weight: 800; color: var(--brass-deep, #57401f); letter-spacing: .04em; }

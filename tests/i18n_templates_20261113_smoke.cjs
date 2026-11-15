@@ -15,6 +15,19 @@ const ROOT=path.resolve(__dirname,'..');
   const report=await p.evaluate(async()=>{
    function eq(a,b,label){if(a!==b)throw Error(label+': '+JSON.stringify([a,b]));}
    const I=G.I18N;I.set('en');
+   // 대학 발견 때의 바람은 {나}를 한국어로 바꾸기 전에 통문장으로 번역되어야 한다.
+   let wishes=0;
+   for(const lang of ['en','zh-Hans','zh-Hant','vi','es']){
+    I.set(lang);
+    for(const pair of G.DISC_WISH.school.filter(pair=>pair.some(t=>t.includes('{나}')))){
+     for(const reg of ['sp','yo','ban','hao','hage']){
+      const line=G.DiscVoice.conv(pair,reg);
+      if(/[가-힣]|\{나\}/.test(line))throw Error(lang+' 대학 발견 대사: '+line);
+      wishes++;
+     }
+    }
+   }
+   I.set('en');
    eq(I.tr('검증 항해 새말',true),null,'새 번역의 첫 실패');
    I.add('en',{text:{'검증 항해 새말':'Verified voyage','검증 다음 줄':'Next line'}});
    eq(I.tr('검증 항해 새말',true),'Verified voyage','실패 캐시 무효화');
@@ -33,7 +46,7 @@ const ROOT=path.resolve(__dirname,'..');
    eq(box.lastChild.title,'검증 다음 줄','번역 제외 속성');
    const input=document.createElement('input');input.placeholder='검증 다음 줄';box.append(input);
    await new Promise(r=>setTimeout(r,100));eq(input.placeholder,'Next line','새로 삽입한 입력칸');box.remove();
-   return {cache:true,lines:true,inputAttributes:true,preservedValues:true,unready:I.LANGS.filter(l=>!I.ready(l.id)).map(l=>l.id)};
+   return {cache:true,lines:true,inputAttributes:true,preservedValues:true,wishes,unready:I.LANGS.filter(l=>!I.ready(l.id)).map(l=>l.id)};
   });
   await p.goto(new URL('catalog.html?view=assets',base).href,{waitUntil:'domcontentloaded'});
   await p.waitForFunction(()=>window.G&&G.XIYOU_FIGS&&document.querySelector('[data-tab="people"]'));

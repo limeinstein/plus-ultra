@@ -81,7 +81,9 @@
     s.mateLoc = s.mateLoc || {};
     var y = s.date.y;
     G.MATES.forEach(function (m) {
-      if (m.chinaRotation && !G.ChinaCrew.active(m.id, y, s.seed)) {
+      if ((m.chinaRotation && !G.ChinaCrew.active(m.id, y, s.seed)) ||
+          (m.japanRotation && !G.JapanCrew.active(m.id, y, s.seed)) ||
+          (m.koreaRotation && !G.KoreaCrew.active(m.id, y, s.seed))) {
         delete s.mateLoc[m.id];
         if (s.mateRumorStay) delete s.mateRumorStay[m.id];
         return;

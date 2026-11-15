@@ -1,5 +1,9 @@
 # images — 그림 교체 폴더
 
+조선 여성 동료 20명(2026-11-15)은 `portraits/mates/krcrew_<이름>.webp`(얼굴 512×512), 같은 이름의 `_half.webp`(무릎 1024×1536) 투명 원화를 쓴다. 첫 10명은 언어 외 특기 5개, 새 10명은 2~3개이며 1480년부터 3년마다 한 명을 추첨한다. [특기 배분·3년 주기·실제 화면·원본 대응](../docs/art/korea-crew-20261115.md).
+
+일본 여성 항해사 10명(2026-11-14)은 `portraits/mates/jpcrew_<이름>.webp`(얼굴 512×512), 같은 이름의 `_half.webp`(무릎 1024×1536) 투명 원화를 쓴다. 1550년부터 5년마다 2명을 추첨해 일본에서 모집하며, 25년마다 순서를 새로 섞는다. [얼굴·무릎 미리보기·프롬프트·등장 규칙·검증](../docs/art/japan-crew-20261114.md).
+
 강서대묘와 새 아이템 5종(2026-11-14)은 `discoveries/gangseo.gif`·`discovery-ends/gangseo.jpg`·`discovery-sheets/gangseo.webp`, `map-discoveries/completion/gangseo.webp`, `relics/r_sasindo.webp`, `items/xy_{last_sutra,golden_staff,butterfly_pin,curry_recipe}.webp`를 쓴다. 발견 GIF는 16장·9.82초, 재생 시트는 24칸, 지도 외관은 512×512 투명, 아이템은 256×256 투명이다. [미리보기·원본·프롬프트·검증](../docs/art/new-art-20261114.md).
 
 새 발견 장면 42종과 누락 증빙 원화 333종(2026-11-11 추가 자료)을 연결했다. 발견물은 `discoveries/<ID>.gif`·`discovery-ends/<ID>.jpg`·`discovery-sheets/<ID>.webp`의 24프레임 세트, 유물 289종은 `relics/<ID>.webp`, 발견 지도 18종·구입 단서 26종은 `items/evidence_<ID>.webp`의 256×256 투명 그림을 쓴다. [전체 그림](../artifacts/discovery-art-20261111/report.html) · [원본·제작 지시문·검증](../docs/art/discovery-art-20261111.md).
