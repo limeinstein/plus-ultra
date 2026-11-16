@@ -1,0 +1,19 @@
+{
+  "mode": "built-in image_gen",
+  "achievement": "liberator",
+  "name": "해방자",
+  "prompt": "Use case: stylized-concept. Asset: wide achievement event illustration for a historical ocean sailing RPG, achievement named \"Liberator\".\nReferences 1 and 2 are CHARACTER DESIGN AND PAINTING STYLE references: use these same Black African male navigators among the ensemble, keeping recognizable faces, muscular build, decorated woven attire for reference 1 and a plain waist sash / uncovered working upper body for reference 2. Do not reproduce their cutout backdrop or individual poses.\nCreate ONE fully painted cinematic landscape scene, aspect ratio 9:4, 1881x836 composition. A crew entirely of Black African adult male navigators stands together on the wooden deck of their sailing ship at sunrise. Eight men total: the two references in foreground, an older salt-and-pepper-haired man in a plain wet white linen shirt pointing to an unfurled shared nautical chart, a calm helmsman in an undecorated cotton tunic, and four companions tending ropes and celebrating the departure together. All characters are Black Africans and visibly distinct individuals with different adult ages, hairstyles, faces, poses and expressions. Strong muscular seafarers; sweat and sea spray on skin, salt-stained opaque white shirts, some uncovered shoulders/chests, colorful richly woven African cloth, beads and cowrie details. Fully clothed lower bodies.\nTheme: dignity, self-determination, equal fellowship, and the freedom to choose their own course. Central men exchange a firm friendly forearm clasp beside the chart while other crewmen raise hands toward the open sea and smile with pride. All are capable navigators participating in the voyage.\nStyle: polished painterly historical game event art, selectively stylized sculpted faces, precise hands and cloth folds matching the reference character painting; no photographic pores, no hyperreal photo, no plastic 3D, no flat crude blocks. Cohesive detailed illustration across faces, muscles, costumes, rigging and wooden deck.\nComposition: waist/knee-up foreground ensemble, faces large and readable, sweeping diagonal sail ropes, pale canvas sails lifted by fresh ocean wind behind them, golden horizon and cool turquoise Atlantic water. Keep main heads and hands safely inside the central 90% of the composition. Convey shared maritime leadership and calm celebratory strength. Rich but controlled color, warm sunrise and cool saltwater shadows.\nNo words, letters, captions, flags, UI, borders, logos, watermark, extra portraits or text. No chains, restraints, slavery imagery, captives, rescuers, violence or royal throne. Full opaque illustrated environment, not a transparent cutout.",
+  "references": [
+    "images/portraits/mates/african-windsalt/af21_half.webp",
+    "images/portraits/mates/african-windsalt/af02_half.webp"
+  ],
+  "key": "achievement-events/liberator",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1de5e-8bd8-74e3-a11e-af1b258cec18\\exec-af69dad3-faba-4add-9e40-64f42e3853ea.png",
+  "size": [
+    1881,
+    836
+  ],
+  "workspace_source": "artifacts/liberator-achievement-20261116/sources/liberator.png",
+  "file": "images/achievement-events/liberator.webp",
+  "sha256": "a44c7739814afee06f579afdb2032b2af453ce17cfa6d4321dcee72fe911b355"
+}

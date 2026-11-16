@@ -44,7 +44,7 @@
       sur: ['우스마노프', '라히모프', '유수포프', '카리모프', '사이도프', '토히로프', '누리딘', '바호디르', '쿠틀루그', '야쿠보프', '하이다르', '샤리포프'],
       m: ['알리셰르', '바흐롬', '쿠르바노', '자후르', '티무르', '사드르', '야흐요', '우마르', '파르하드', '루스탐', '사비르', '도우드'],
       f: ['굴나라', '딜노자', '아이굴', '자밀라', '나르기자', '시린', '말리카', '파리다', '조흐라', '라노'] },
-    SW: { name: '스와힐리 해안', order: 'mono', style: 'sw',
+    SW: { name: '스와힐리 해안', order: 'mono', style: 'sw', blackAfrican: true,
       m: ['하미시', '바카리', '줌베', '자파리', '오마리', '키본데', '살림', '라시디', '템보', '음와나', '하산 빈 알리', '무사 빈 하미시', '부와나 쿠부'],
       f: ['자우디아', '레헤마', '아샤', '하디자', '무와나이샤', '젬비', '아마니', '시티', '쿠루와', '파투마', '자이나비'] },
     VN: { name: '대월', order: 'sf', sep: ' ', style: 'cn',
@@ -412,7 +412,8 @@
     var f = famed(p.st, p.sk), c = G.CITY_DATA && G.CITY_DATA[p.home];
     var m = { id: p.id, name: p.name, g: p.g, st: p.st, sk: p.sk, lg: p.lg, fame: p.fame != null ? p.fame : f.fame, wage: p.fame != null ? Math.max(f.wage, Math.round(p.fame / 12 / 5) * 5) : f.wage,
       y: p.y, reg: c ? [c.region] : [], desc: p.desc, style: p.style || (VN[p.id] ? 'cn' : STYLE[z]) || 'ib', role: role, facePool: pool,
-      face: LEGEND_FACE[p.id] ? 'portraits/legendary/' + LEGEND_FACE[p.id] : borrowed, native: true, quiet: true };
+      face: LEGEND_FACE[p.id] ? 'portraits/legendary/' + LEGEND_FACE[p.id] : borrowed, native: true, quiet: true,
+      blackAfrican: pool === 'af' && (p.zones.indexOf('wafrica') >= 0 || p.zones.indexOf('eafrica') >= 0) };
     if (G.MATES && !G.MATE[m.id]) { G.MATES.push(m); G.MATE[m.id] = m; }
     if (G.MATE_RANGE) G.MATE_RANGE[m.id] = { zones: p.zones, home: p.home };
     if (G.BIOS && p.bio && !G.BIOS[p.name]) G.BIOS[p.name] = p.bio;

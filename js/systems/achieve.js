@@ -22,6 +22,18 @@
     return ev;
   }
   function mateName(id) { var m = G.MATE && G.MATE[id]; return m ? m.name : id; }
+  /** 게임의 출신 분류로 판정한다. 사진·초상·활동 지역·아프리카 언어만으로는 판정하지 않는다. */
+  AC.isBlackAfrican = function (id) {
+    var d = G.MATE && G.MATE[id]; if (!d) return false;
+    if (d.blackAfrican != null) return d.blackAfrican === true;
+    // 전용 표식이 없던 옛 저장의 철새·민족 합류 동료도 현재 출신 자료를 읽는다.
+    var nation = (G.WANDER_NATIONS || {})[d.nat] || (((G.REGION_FOLK || {}).pools || {})[d.nat]);
+    if (nation && nation.blackAfrican) return true;
+    var folk = (G.FOLK_JOIN || {})[d.folk];
+    if (folk && folk.blackAfrican) return true;
+    var range = (G.MATE_RANGE || {})[id];
+    return !!(d.native && d.facePool === 'af' && range && (range.zones || []).some(function (z) { return z === 'wafrica' || z === 'eafrica'; }));
+  };
   /** 혼인한 적이 있는 사람 { id: 날짜 } — 지금의 본처(player.wife)와 둘째 부인들(player.wives2)을 적어 둔다 */
   function wedEver() {
     var s = S(), ev = s.wedEver || (s.wedEver = {}), p = s.player || {};
@@ -30,6 +42,36 @@
     return ev;
   }
   AC.wedEver = wedEver;
+
+  /** 시장 수집 기록. 옛 저장은 소지품·자택 보관함에 남은 물건으로 보충한다. */
+  function collectionItem(id) { var d = G.ITEM && G.ITEM[id]; return !!(d && (d.marketCollection === 'jewels_20261116' || d.marketCollection === 'medicine_20261116')); }
+  AC.itemEver = function () {
+    var s = S(), p = s.player || {}, ev = s.marketItemsEver || (s.marketItemsEver = {});
+    (p.items || []).concat(p.storage || []).forEach(function (it) { if (it && collectionItem(it.id) && ev[it.id] == null) ev[it.id] = U.dateNum(s.date); });
+    return ev;
+  };
+  AC.itemCollectionPool = function (type) {
+    return (G.ITEMS || []).filter(function (it) {
+      if (!collectionItem(it.id)) return false;
+      if (type === 'all') return true;
+      if (type === 'medicine') return it.kind === 'medicine';
+      if (type === 'legend') return !!it.legendary;
+      return it.marketCollection === 'jewels_20261116';
+    }).map(function (it) { return it.id; });
+  };
+  /** 실제 획득이 성공했을 때만 부른다. 업적샷은 시장 거래 뒤·다음 항구에서 기존 대기열로 재생한다. */
+  AC.onItem = function (id) {
+    if (!collectionItem(id)) return [];
+    var s = S(), ev = AC.itemEver(), got = [];
+    if (ev[id] == null) ev[id] = U.dateNum(s.date);
+    AC.list().forEach(function (a) {
+      if (!a.itemCollectionRule || AC.done(a.id) || !AC.progress(a, []).done) return;
+      grant(a); got.push(a);
+      var pend = s.achvPend || (s.achvPend = []); if (pend.indexOf(a.id) < 0) pend.push(a.id);
+      UI.toast('수집 업적 달성 · ' + a.name, 'crown', 4800);
+    });
+    return got;
+  };
 
   AC.list = function () { return G.ACHIEVEMENTS || []; };
   /** 재산 = 소지금 + 금고 예금 (재산 업적 goldRule) */
@@ -56,6 +98,14 @@
       cats.forEach(function (cat) { rows.push({ label: (cat ? G.Fame.NAME[cat] : '통합') + ' 명성', count: G.Fame.get(cat), n: fr.min }); });
     }
     if (a.goldRule) rows.push({ label: '재산 (소지금+예금)', count: AC.wealth(), n: a.goldRule.min, money: true });
+    if (a.itemCollectionRule) {
+      var ev = AC.itemEver(), ip = AC.itemCollectionPool(a.itemCollectionRule), collected = ip.filter(function (id) { return ev[id] != null; });
+      if (a.itemCollectionRule === 'regions') {
+        var regions = [];
+        collected.forEach(function (id) { G.ITEM[id].reg.forEach(function (r) { if (regions.indexOf(r) < 0) regions.push(r); }); });
+        (G.REGIONS || []).forEach(function (rn, r) { rows.push({ label: rn, count: regions.indexOf(r) >= 0 ? 1 : 0, n: 1 }); });
+      } else rows.push({ itemCollection: true, label: '한 번 이상 수집', ids: ip, got: collected, count: collected.length, n: a.itemNeed });
+    }
     if (a.collectionRule) {
       var pool = AC.collectionPool(a.collectionRule), got = pool.filter(found);
       rows.push({ collection: true, label: '직접 발견', ids: pool, got: got, count: got.length, n: pool.length });
@@ -68,6 +118,10 @@
       rows.push({ label: cs.map(function (x) { return G.DISC_CATS[x]; }).join('·') + (r.reg != null ? ' (' + regName(r.reg) + ')' : ''), count: c, n: r.n });
     });
     if (a.crew) { var ev = crewEver(), had = a.crew.filter(function (id) { return !!ev[id]; }); rows.push({ crew: true, ids: a.crew, got: had, count: had.length, n: a.n || a.crew.length }); }
+    if (a.crewComposition === 'blackAfrican') {
+      var current = S().mates || [], eligible = current.filter(function (m) { return m && AC.isBlackAfrican(m.id); });
+      rows.push({ label: '현재 동료 중 아프리카 흑인 항해사', count: eligible.length, n: Math.max(G.BALANCE.liberatorAchievement.minCrew, current.length) });
+    }
     if (a.wed) { var we = wedEver(), wd = a.wed.filter(function (id) { return !!we[id]; }); rows.push({ crew: true, wed: true, ids: a.wed, got: wd, count: wd.length, n: a.n || a.wed.length }); }
     if (a.chains) rows.push({ label: '끝까지 푼 사슬', count: AC.chainsDone().length, n: a.chains });
     if (a.custom) rows = rows.concat(AC.rules[a.custom] ? AC.rules[a.custom]() : [{ label: a.desc, count: 0, n: 1 }]);   // 다른 파일이 셈을 맡는 업적 (해적왕 — pirate_lair.js · Dream Come True — fairy_home.js)
@@ -94,8 +148,9 @@
     // 보상보다 먼저 기록하여 명성을 주는 기존 업적과 함께 처리해도 중복 지급하지 않는다.
     store()[a.id] = { d: U.dateNum(s.date) };
     if (a.gold) s.player.gold += a.gold;
+    if (a.notoriety) s.player.notoriety = Math.max(0, (s.player.notoriety || 0) + a.notoriety);
     if (a.fame && G.Fame) G.Fame.add(a.fameCat || 'ex', a.fame);   // 재산 업적은 교역 명성
-    G.State.log('업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다' + (a.title ? ' — 칭호 「' + a.title + '」' : '') + ' (금화 ' + U.num(a.gold || 0) + ', 명성 +' + (a.fame || 0) + ')');
+    G.State.log('업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다' + (a.title ? ' — 칭호 「' + a.title + '」' : '') + ' (금화 ' + U.num(a.gold || 0) + ', 명성 +' + (a.fame || 0) + (a.notoriety ? ', 악명 ' + (a.notoriety > 0 ? '+' : '') + a.notoriety : '') + ')');
   }
   AC.check = function () {
     var s = S(), st = store(), my = mine(), got = [];
@@ -116,7 +171,7 @@
       UI.toast('명성 업적 달성 · ' + a.name + ' (금화 ' + U.num(a.gold) + '닢)', 'crown', 4800);
     });
   };
-  function rewardText(a) { return (a.gold || !a.fame ? '금화 ' + U.num(a.gold || 0) + '닢 · ' : '') + (a.fameCat && G.Fame && G.Fame.NAME && G.Fame.NAME[a.fameCat] ? G.Fame.NAME[a.fameCat] + ' ' : '') + '명성 +' + U.num(a.fame || 0) + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
+  function rewardText(a) { return (a.gold || !a.fame ? '금화 ' + U.num(a.gold || 0) + '닢 · ' : '') + (a.fameCat && G.Fame && G.Fame.NAME && G.Fame.NAME[a.fameCat] ? G.Fame.NAME[a.fameCat] + ' ' : '') + '명성 +' + U.num(a.fame || 0) + (a.notoriety ? ' · 악명 ' + (a.notoriety > 0 ? '+' : '') + U.num(a.notoriety) : '') + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
   /** 재산 업적: 문턱을 넘었으면 곧바로 기록·보상하고 알린다. 장면은 대기열(achvPend)로 → 거리로 나오거나 다음 항구에서 */
   AC.onWealth = function () {
     var s = S(), st = store(), got = [];
@@ -126,6 +181,17 @@
       grant(a); got.push(a);
       var pend = s.achvPend || (s.achvPend = []); if (pend.indexOf(a.id) < 0) pend.push(a.id);
       UI.toast('재산 업적 달성 · ' + a.name + ' (' + rewardText(a) + ')', 'crown', 4800);
+    });
+    return got;
+  };
+  /** 현재 편성 업적: 고용·해고·항구 메뉴·옛 저장에서 한 번만 지급하고 장면을 대기시킨다. */
+  AC.onCrewComposition = function () {
+    var s = S(), got = []; if (!s || !s.player) return got;
+    AC.list().forEach(function (a) {
+      if (!a.crewComposition || AC.done(a.id) || !AC.progress(a, []).done) return;
+      grant(a); got.push(a);
+      var pend = s.achvPend || (s.achvPend = []); if (pend.indexOf(a.id) < 0) pend.push(a.id);
+      UI.toast('동료 업적 달성 · ' + a.name + ' (' + rewardText(a) + ')', 'crown', 4800);
     });
     return got;
   };
@@ -283,7 +349,7 @@
     var st = store(), first = !st._init; st._init = 1;
     AC.check().forEach(function (a) {
       out.push({ icon: 'crown', text: '업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다 — ' + rewardText(a) + (first ? '' : ' (다음 항구에서)') });
-      if (!first) (s.achvPend = s.achvPend || []).push(a.id);
+      if (!first || a.crewComposition) (s.achvPend = s.achvPend || []).push(a.id);
     });
     return out;
   };
@@ -297,7 +363,8 @@
     if (om) Cc.main = function () {
       var r = om.apply(this, arguments);
       try {
-        if (AC.onWealth().length) setTimeout(function () {
+        var awards = AC.onWealth().concat(AC.onCrewComposition());
+        if (awards.length) setTimeout(function () {
           if (G.Game.scene === Cc && !(Cc.isBusy && Cc.isBusy()) && !UI.busy()) announce([]).catch(function (e) { console.error(e); });
         }, 60);
       } catch (e) { console.error(e); }
@@ -364,13 +431,36 @@
     });
     return h + '</div><p class="ac-footnote">기본 7갈래에 동물·식물·전설·미신·종교·미술품을 더했다. 한 발견물이 여러 갈래에 들 수 있다. 경쟁자가 먼저 찾았어도 직접 발견해야 세며, 이후 시대에 열리는 발견물도 전체 수에 포함한다. 이야기 전용 발견물은 이야기 모드에서만 센다.</p></section>';
   }
+  /** 시장 수집: 업적샷과 종류 수를 앞쪽에 모아 두고, 펼치면 품목별 기록을 보여 준다. */
+  function marketCollectionHtml(list, st) {
+    var cards = list.filter(function (a) { return !!a.itemCollectionRule; });
+    if (!cards.length) return '';
+    var h = '<section class="ac-collections market-collections" aria-label="보석·장신구·약재 수집 업적"><h4 class="achv-h">보석·장신구·약재 수집</h4>' +
+      '<p class="ac-intro">한 번 얻은 종류를 기록한다. 같은 물건 여러 개는 1종이며, 팔거나 약을 사용해도 기록이 남는다. 자택 보관함에 맡긴 물건도 포함한다.</p><div class="ac-grid">';
+    cards.forEach(function (a) {
+      var p = AC.progress(a, []), done = st[a.id], key = 'achievement-events/' + a.id, pct = Math.floor(100 * p.have / Math.max(1, p.need));
+      h += '<details id="market-collection-' + a.id + '" class="ac-card' + (a.itemCollectionRule === 'all' ? ' ac-grand' : '') + (done ? ' ac-earned' : '') + '"><summary>' +
+        '<div class="ac-art">' + (G.Img && G.Img.file(key) ? '<img src="' + U.esc(G.Img.src(key)) + '" alt="" loading="lazy">' : '') + '<span class="ac-stamp">' + (done ? '★ 달성' : pct + '% 수집') + '</span></div>' +
+        '<div class="ac-body"><div class="ac-kind">시장 수집</div><div class="ac-name">' + U.esc(a.name) + '</div>' +
+        '<div class="ac-count"><b>' + p.have + '</b><span> / ' + p.need + (a.itemCollectionRule === 'regions' ? ' 지역' : '종') + '</span><span class="ac-open">수집 기록 펼치기</span></div>' +
+        '<div class="achv-bar" role="progressbar" aria-label="' + U.esc(a.name) + ' 수집 진행" aria-valuemin="0" aria-valuemax="' + p.need + '" aria-valuenow="' + p.have + '"><i style="width:' + pct + '%"></i></div>' +
+        '<div class="ac-prize">' + rewardText(a) + '</div></div></summary><div class="ac-detail"><p>' + U.esc(a.desc) + '</p><div class="ac-missing">';
+      p.rows.forEach(function (r) {
+        if (r.itemCollection) h += r.ids.map(function (id) { return '<span class="ach-i' + (r.got.indexOf(id) >= 0 ? ' ok' : '') + '">' + U.esc(G.ITEM[id].name) + '</span>'; }).join(' ');
+        else h += '<span class="ach-i' + (r.count >= r.n ? ' ok' : '') + '">' + U.esc(r.label) + ' ' + r.count + '/' + r.n + '</span> ';
+      });
+      h += '</div><p class="muted">금화·명성·칭호는 첫 달성 때 한 번만 준다.</p></div></details>';
+    });
+    return h + '</div></section>';
+  }
   AC.page = function (el) {
     var list = AC.list(), st = store(), my = mine(), doneN = list.filter(function (a) { return st[a.id]; }).length;
     var titles = AC.titles(), chains = G.CHAINS || [];
     var h = '<div class="achv-page">' +
       '<div class="achv-top"><b>업적 ' + doneN + ' / ' + list.length + '</b> · 사슬 ' + AC.chainsDone().length + ' / ' + chains.length +
-      (titles.length ? '<div class="achv-titles">' + titles.map(function (t) { return '<span class="tag good-text">' + U.esc(t) + '</span>'; }).join(' ') + '</div>' : '<div class="muted">명성을 쌓고 발견물·동료를 모으면 업적을 이루고 칭호를 얻는다.</div>') +
+      (titles.length ? '<div class="achv-titles">' + titles.map(function (t) { return '<span class="tag good-text">' + U.esc(t) + '</span>'; }).join(' ') + '</div>' : '<div class="muted">명성을 쌓고 발견물·동료·시장 물품을 모으면 업적을 이루고 칭호를 얻는다.</div>') +
       '<div class="muted" style="font-size:14px">명성 업적은 달성 당시 기록을 남기며 금화·칭호를 한 번만 준다. 명성 하락·세대 승계 후에도 유지된다. 칭호에 추가 능력 효과는 없다.</div></div>';
+    h += marketCollectionHtml(list, st);
     h += collectionHtml(list, st, my);
     // 사슬 지도
     h += '<h4 class="achv-h">꼬리에 꼬리를 무는 사슬</h4><div class="muted" style="font-size:14px;margin:-4px 0 6px">앞 고리를 찾으면 다음 고리의 단서가 풀린다. 열리기 전에는 그 자리에 가도 찾을 수 없다.</div>';
@@ -381,7 +471,7 @@
     });
     // 갈래별 업적
     (G.ACHV_GROUPS || []).forEach(function (g) {
-      if (g === '발견물 완성') return;
+      if (g === '발견물 완성' || g === '시장 수집') return;
       var as = list.filter(function (a) { return a.group === g; }); if (!as.length) return;
       h += '<h4 class="achv-h">' + U.esc(g) + '</h4>';
       as.forEach(function (a) {
@@ -393,6 +483,7 @@
           '<div class="tx">' + U.esc(a.desc) + ' <span class="muted">— ' + rewardText(a) + '</span></div>' +
           '<div class="achv-bar"><i style="width:' + pct + '%"></i></div>' +
           '<div class="achv-items">' + p.rows.map(function (r) {
+            if (r.itemCollection) return r.ids.map(function (id) { var d = G.ITEM[id]; return '<span class="ach-i' + (r.got.indexOf(id) >= 0 ? ' ok' : '') + '">' + U.esc(d.name) + '</span>'; }).join(' ');
             if (r.crew) return r.ids.map(function (id) { return '<span class="ach-i' + (r.got.indexOf(id) >= 0 ? ' ok' : '') + '">' + U.esc(mateName(id)) + '</span>'; }).join(' ');
             if (r.ids) return (r.n < r.ids.length ? '<span class="muted">' + r.n + '가지:</span> ' : '') + r.ids.map(itemHtml).join(' ');
             return '<span class="ach-i' + (r.count >= r.n ? ' ok' : '') + '">' + U.esc(r.label) + ' ' + U.num(Math.min(r.count, r.n)) + '/' + U.num(r.n) + (r.money ? '닢' : '') + '</span>';

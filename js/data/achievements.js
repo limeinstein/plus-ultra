@@ -8,12 +8,13 @@
      crew + n     : 이 항해사들 가운데 n명(없으면 모두)을 한 번이라도 동료로 들였다 (state.crewEver — 떠나거나 죽어도 센다)
      wed + n      : 이 사람들 가운데 n명(없으면 모두)과 혼인했다 (본처·둘째 부인 — state.wedEver, 사별·이혼해도 센다)
      goldRule     : { min } — 재산(소지금 + 금고 예금)이 min닢에 이른다 (G.BALANCE.wealthAchievements)
+     itemCollectionRule: 종류 ID + itemNeed — 한 번 얻은 시장 특산품 종류 수 (매각·사용 뒤에도 유지)
      collectionRule: 종류 ID — 현재 등록된 해당 종류의 발견물을 모두 직접 찾는다 (빈 목록은 미달성)
    보상: fame(탐험 명성) · gold(금화) · title(칭호 — 수첩 「업적」에 모인다). 금액은 크게 잡았다. */
 (function (G) {
   'use strict';
   var A = G.ACHIEVEMENTS = [];
-  G.ACHV_GROUPS = ['발견물 완성', '명성', '명성 갈래', '고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '재산', '전설과 사슬', '조합', '동료', '해적'];
+  G.ACHV_GROUPS = ['발견물 완성', '시장 수집', '명성', '명성 갈래', '고대 문명', '신대륙', '동아시아', '남·서아시아', '유럽과 예술', '생물', '자연', '교역', '재산', '전설과 사슬', '조합', '동료', '해적'];
   function a(group, id, name, desc, rule, fame, gold, title) {
     var o = { group: group, id: id, name: name, desc: desc, fame: fame, gold: gold, title: title || null };
     for (var k in rule) o[k] = rule[k];
@@ -237,6 +238,9 @@
     { ids: ['hubble', 'iss', 'amundsen', 'kupe'], n: 3 }, 500, 40000, '별을 보는 제독');
 
   // ------------------------------------------------------------------ 동료
+  var LK = G.BALANCE.liberatorAchievement;
+  a('동료', 'liberator', '해방자', '현재 동료 항해사가 한 명 이상이며 모두 아프리카 흑인 항해사다. 제독과 일반 선원 수는 제외한다.',
+    { crewComposition: 'blackAfrican', notoriety: LK.notoriety }, LK.fame, 0);
   // 루이스 몬테이루와 함께 만든 이야기 속 동료 열 사람 (js/data/storycrew.js 맨 앞 열 명)
   a('동료', 'montcrew', '일당 수집 완료', '밀짚모자의 젊은 선장 루이스 몬테이루와 그와 함께 바다에 나설 아홉 사람을 모두 동료로 들였다.',
     { crew: ['monteiro', 'deleon', 'vandermeer', 'samios', 'beaumont', 'weiss', 'laskaris', 'ferraro', 'rosenthal', 'macleod'] }, 500, 30000, '일당의 선장');
@@ -259,4 +263,15 @@
   });
   a('교역', 'tradeking', '교역왕', '그 시대에 교역소가 있는 모든 대륙에서 대단한 거래를 이루었다 — 유럽·아프리카·아시아·아메리카 (시드니가 생긴 1788년부터는 오세아니아까지).',
     { custom: 'tradeking', fameCat: 'tr' }, TD.kingFame, TD.kingGold, '교역왕');
+  // 시장 수집 — 한 번 얻은 종류는 매각·사용·보관 뒤에도 기록에 남는다.
+  var MC = G.BALANCE.marketCollections;
+  a('시장 수집', "collect_jewel10", "보석함의 첫빛", "지역 특산 보석·장신구를 서로 다른 10종 수집했다.", { itemCollectionRule: MC['collect_jewel10'].type, itemNeed: MC['collect_jewel10'].need, fameCat: 'tr' }, MC['collect_jewel10'].fame, MC['collect_jewel10'].gold, "보석함의 주인");
+  a('시장 수집', "collect_jewel25", "항구의 감정가", "지역 특산 보석·장신구를 서로 다른 25종 수집했다.", { itemCollectionRule: MC['collect_jewel25'].type, itemNeed: MC['collect_jewel25'].need, fameCat: 'tr' }, MC['collect_jewel25'].fame, MC['collect_jewel25'].gold, "항구의 감정가");
+  a('시장 수집', "collect_jewel50", "세상의 장신구", "지역 특산 보석·장신구 50종을 모두 수집했다. 전설 장신구도 포함한다.", { itemCollectionRule: MC['collect_jewel50'].type, itemNeed: MC['collect_jewel50'].need, fameCat: 'tr' }, MC['collect_jewel50'].fame, MC['collect_jewel50'].gold, "세계의 보석 감정가");
+  a('시장 수집', "collect_jewel_regions", "열한 바다의 보석함", "11개 지역의 특산 보석·장신구를 지역마다 한 종류 이상 수집했다.", { itemCollectionRule: MC['collect_jewel_regions'].type, itemNeed: MC['collect_jewel_regions'].need, fameCat: 'tr' }, MC['collect_jewel_regions'].fame, MC['collect_jewel_regions'].gold, "보석 항로의 개척자");
+  a('시장 수집', "collect_legend_jewels", "전설을 꿰는 자", "라 페레그리나·브리싱가멘·하르모니아의 목걸이·솔로몬의 인장 반지·샤만타카 보석·야사카니의 곡옥을 모두 수집했다.", { itemCollectionRule: MC['collect_legend_jewels'].type, itemNeed: MC['collect_legend_jewels'].need, fameCat: 'ex' }, MC['collect_legend_jewels'].fame, MC['collect_legend_jewels'].gold, "전설의 보석 수집가");
+  a('시장 수집', "collect_medicine5", "여행 약상자", "지역 특산 약·약재를 서로 다른 5종 수집했다.", { itemCollectionRule: MC['collect_medicine5'].type, itemNeed: MC['collect_medicine5'].need, fameCat: 'so' }, MC['collect_medicine5'].fame, MC['collect_medicine5'].gold, "약상자를 챙긴 제독");
+  a('시장 수집', "collect_medicine10", "바다의 약재상", "지역 특산 약·약재를 서로 다른 10종 수집했다.", { itemCollectionRule: MC['collect_medicine10'].type, itemNeed: MC['collect_medicine10'].need, fameCat: 'so' }, MC['collect_medicine10'].fame, MC['collect_medicine10'].gold, "바다의 약재상");
+  a('시장 수집', "collect_medicine20", "동서 약재대전", "지역 특산 약·약재 20종을 모두 수집했다.", { itemCollectionRule: MC['collect_medicine20'].type, itemNeed: MC['collect_medicine20'].need, fameCat: 'so' }, MC['collect_medicine20'].fame, MC['collect_medicine20'].gold, "동서 약재의 감정가");
+  a('시장 수집', "collect_market70", "작은 보물의 대항해", "지역 특산 보석·장신구 50종과 약·약재 20종, 모두 70종을 수집했다.", { itemCollectionRule: MC['collect_market70'].type, itemNeed: MC['collect_market70'].need, fameCat: 'ex' }, MC['collect_market70'].fame, MC['collect_market70'].gold, "세상의 작은 보물을 모은 자");
 })(window.G = window.G || {});

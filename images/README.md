@@ -1,5 +1,13 @@
 # images — 그림 교체 폴더
 
+보석·장신구·약재 수집 업적샷 9종(2026-11-16)은 `achievement-events/collect_{jewel10,jewel25,jewel50,jewel_regions,legend_jewels,medicine5,medicine10,medicine20,market70}.webp`의 1881×836 장면을 쓴다. [전체 그림·원본·프롬프트·검증](../docs/art/market-collection-achievements-20261116.md).
+
+
+시장 장신구·보석·약 70종(2026-11-16)은 `items/regional_jewel_<지역>_<번호>.webp` 44종, `items/regional_legend_<번호>.webp` 6종, `items/regional_medicine_<번호>.webp` 20종의 256×256 투명 원화를 쓴다. [전체 그림·원본·프롬프트·검증](../docs/art/regional-item-art-20261116.md).
+
+
+아프리카 남성 항해사 30명(2026-11-16)은 `portraits/mates/african-windsalt/af01~af30.webp`(얼굴 512×512), 같은 이름의 `_half.webp`(무릎 1024×1536) 투명 원화 60장을 쓴다. 흰 셔츠 10명·상의 탈의 10명·전통 복장 10명이며, 전통 복장 중 4명은 화려한 부족 복식이다. [전체 미리보기·제작 기록](../docs/art/african-windsalt-20261116.md).
+
 초대받지 못한 세 사도(2026-11-15)는 `portraits/mates/apostle_{dionysus,poseidon_grey,hades}*.webp` 6개를 쓴다. 기존 원화를 복사해 니칸드로스의 포세이돈 초상을 유지하며, 두 포세이돈 사도의 하이파이브를 포함한 사건 원화는 `olympian-events/uninvited_*.webp` 5개, 투명 보상 아이콘은 `items/ua_*.webp` 3개다. [원화·포장·프롬프트·사건·검증](../docs/art/uninvited-apostles-20261115.md).
 
 12신의 사도(2026-11-15)는 `portraits/mates/apostle_<slug>.webp`와 `_half.webp` 24개를 쓰며, 신의 호칭 대신 칼리스테·멜리사 등 고유 이름을 표시한다. 만남 원화 12개·남녀 각 6명 동행 2개는 `olympian-events/`, 두 완성 업적 원화는 `achievement-events/olympian_*.webp`에 있다. 데메테르 만남은 여분 손을 제거한 수정본이다. [전체 원화·사건·프롬프트·검증](../docs/art/olympian-apostles-20261115.md).

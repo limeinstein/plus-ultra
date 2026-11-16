@@ -1,0 +1,177 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-11-16",
+  "scenes": [
+    {
+      "id": "collect_jewel10",
+      "name": "보석함의 첫빛",
+      "prompt": "Use case: historical-scene. Asset type: unique full-color achievement event shot for the Age of Sail exploration RPG Loop of Good Hope. Create one continuous cinematic panoramic scene, approximately 2.25:1 wide composition, with important faces, hands and main objects safely within the central 80% so it can be cropped to 1881x836. Classic richly detailed historical adventure game illustration, hand-painted semi-realistic oil painting, beautiful expressive adult faces, natural anatomy and hands, nuanced warm lighting, tactile textiles, realistic gold, gemstones, herbs and glass. Match the atmosphere of an exquisite illustrated Renaissance maritime game. No text, letters, numerals, captions, logos, watermarks, UI, borders, montage panels or split screens. All depicted people are adults. No modern electric equipment or lab coats. Scene: Inside a modest Renaissance harbor jeweler workshop at morning. A young adult sea captain in a practical dark red travel coat and an older woman goldsmith smile as they open a small wooden velvet-lined jewel box with amber beads, a carnelian signet ring, pearl earrings, a little silver scallop brooch and a gold cross necklace. Intimate discovery, close hands delicately lifting one gem with tweezers. A small sailing harbor through arched window, warm sunlight and realistic metals.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-75ddc8ac-9600-40c9-94ec-22858f7b7141.png",
+      "key": "achievement-events/collect_jewel10",
+      "file": "images/achievement-events/collect_jewel10.webp",
+      "workspace_source": "artifacts/market-collection-achievements-20261116/sources/collect_jewel10.png",
+      "size": [
+        1881,
+        836
+      ],
+      "source_size": [
+        1867,
+        842
+      ],
+      "sha256": "31334c31bfd34c859a80877a642c7db30e5a61515e59189d6d5f3ac4fa7d550e",
+      "bytes": 662810
+    },
+    {
+      "id": "collect_jewel25",
+      "name": "항구의 감정가",
+      "prompt": "Use case: historical-scene. Asset type: unique full-color achievement event shot for the Age of Sail exploration RPG Loop of Good Hope. Create one continuous cinematic panoramic scene, approximately 2.25:1 wide composition, with important faces, hands and main objects safely within the central 80% so it can be cropped to 1881x836. Classic richly detailed historical adventure game illustration, hand-painted semi-realistic oil painting, beautiful expressive adult faces, natural anatomy and hands, nuanced warm lighting, tactile textiles, realistic gold, gemstones, herbs and glass. Match the atmosphere of an exquisite illustrated Renaissance maritime game. No text, letters, numerals, captions, logos, watermarks, UI, borders, montage panels or split screens. All depicted people are adults. No modern electric equipment or lab coats. Scene: A bustling Mediterranean port jewelry bazaar in the sixteenth century. An adult woman sea captain in a blue embroidered sailing coat examines a ruby pendant through a simple handheld magnifying lens as an experienced Persian goldsmith and a Chinese merchant watch approvingly. Long velvet display counter with neatly separated turquoise rings, jade, amber, gold torcs and Byzantine pearl earrings. Rich diverse maritime trade, canopy shade and bright harbor behind. Faces and hands clearly drawn.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-dcb3aed2-9114-42ae-97f6-ea06c382a011.png",
+      "key": "achievement-events/collect_jewel25",
+      "file": "images/achievement-events/collect_jewel25.webp",
+      "workspace_source": "artifacts/market-collection-achievements-20261116/sources/collect_jewel25.png",
+      "size": [
+        1881,
+        836
+      ],
+      "source_size": [
+        1881,
+        836
+      ],
+      "sha256": "0e1c923bee4a32eb13a02239a85ec31284568bd6d59385b06623c0d7096244ea",
+      "bytes": 838628
+    },
+    {
+      "id": "collect_jewel50",
+      "name": "세상의 장신구",
+      "prompt": "Use case: historical-scene. Asset type: unique full-color achievement event shot for the Age of Sail exploration RPG Loop of Good Hope. Create one continuous cinematic panoramic scene, approximately 2.25:1 wide composition, with important faces, hands and main objects safely within the central 80% so it can be cropped to 1881x836. Classic richly detailed historical adventure game illustration, hand-painted semi-realistic oil painting, beautiful expressive adult faces, natural anatomy and hands, nuanced warm lighting, tactile textiles, realistic gold, gemstones, herbs and glass. Match the atmosphere of an exquisite illustrated Renaissance maritime game. No text, letters, numerals, captions, logos, watermarks, UI, borders, montage panels or split screens. All depicted people are adults. No modern electric equipment or lab coats. Scene: A grand private Renaissance collector gallery overlooking the sea at sunset. An adult woman collector in elegant emerald period dress and an adult male sea captain proudly unveil a long layered display cabinet densely but neatly arranged with culturally distinct ancient jewels: Egyptian scarab ring, Silla jade necklace, Celtic torc, Indian ruby necklace, Khmer gold necklace, Maya jade earflares, silver hairpins and beads. Two shipmates admire the full collection, celebratory yet intimate, golden window light, craftsmanship dominant.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-cd3a77e3-421a-4c0b-bcf1-6b3385324217.png",
+      "key": "achievement-events/collect_jewel50",
+      "file": "images/achievement-events/collect_jewel50.webp",
+      "workspace_source": "artifacts/market-collection-achievements-20261116/sources/collect_jewel50.png",
+      "size": [
+        1881,
+        836
+      ],
+      "source_size": [
+        1859,
+        846
+      ],
+      "sha256": "50e27a9b6a3f1214802bd99774a105cf9f88a8a7aaf7fc136a2c539ab7bd37e8",
+      "bytes": 706664
+    },
+    {
+      "id": "collect_jewel_regions",
+      "name": "열한 바다의 보석함",
+      "prompt": "Use case: historical-scene. Asset type: unique full-color achievement event shot for the Age of Sail exploration RPG Loop of Good Hope. Create one continuous cinematic panoramic scene, approximately 2.25:1 wide composition, with important faces, hands and main objects safely within the central 80% so it can be cropped to 1881x836. Classic richly detailed historical adventure game illustration, hand-painted semi-realistic oil painting, beautiful expressive adult faces, natural anatomy and hands, nuanced warm lighting, tactile textiles, realistic gold, gemstones, herbs and glass. Match the atmosphere of an exquisite illustrated Renaissance maritime game. No text, letters, numerals, captions, logos, watermarks, UI, borders, montage panels or split screens. All depicted people are adults. No modern electric equipment or lab coats. Scene: A sixteenth century ship great cabin transformed into a world jewelry exhibition. A round large wooden table with an unlabeled hand-painted world map and eleven separate velvet jewelry trays, each holding distinct jewels from Iberia, northern Europe, Mediterranean, Africa, Arabia, India, East Asia, Central Asia, Southeast Asia, Japan, and the Americas. Adult women and men traders from several maritime cultures compare gold, jade, amber, turquoise and pearls with curiosity and friendship. Ship windows and quiet blue sea, cheerful afternoon, one coherent scene.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-0981b2d5-9c62-469e-ba18-050da2f2f6d0.png",
+      "key": "achievement-events/collect_jewel_regions",
+      "file": "images/achievement-events/collect_jewel_regions.webp",
+      "workspace_source": "artifacts/market-collection-achievements-20261116/sources/collect_jewel_regions.png",
+      "size": [
+        1881,
+        836
+      ],
+      "source_size": [
+        1872,
+        840
+      ],
+      "sha256": "9e97e9bc97dcdefff606a46a7cf0f7807867a84a8bf5ca5f56861eaecb2b1739",
+      "bytes": 851542
+    },
+    {
+      "id": "collect_legend_jewels",
+      "name": "전설을 꿰는 자",
+      "prompt": "Use case: historical-scene. Asset type: unique full-color achievement event shot for the Age of Sail exploration RPG Loop of Good Hope. Create one continuous cinematic panoramic scene, approximately 2.25:1 wide composition, with important faces, hands and main objects safely within the central 80% so it can be cropped to 1881x836. Classic richly detailed historical adventure game illustration, hand-painted semi-realistic oil painting, beautiful expressive adult faces, natural anatomy and hands, nuanced warm lighting, tactile textiles, realistic gold, gemstones, herbs and glass. Match the atmosphere of an exquisite illustrated Renaissance maritime game. No text, letters, numerals, captions, logos, watermarks, UI, borders, montage panels or split screens. All depicted people are adults. No modern electric equipment or lab coats. Scene: A secluded stone treasure chamber lit by candles and a narrow shaft of moonlight. Exactly six magnificent legendary jewels displayed as focal objects on dark velvet: one enormous pear shaped white pearl pendant, ornate Nordic gold amber Brisingamen necklace, ancient Greek gold entwined serpent necklace with red jewel, thick gold emerald signet ring with a simple six-pointed geometric star, crimson orange sunburst gemstone pendant, and large curved green Japanese magatama jade on short red silk loop. An adult sea captain and an elderly scholar gaze in awe from the sides. Grounded lavish materials with subtle mythical atmosphere, no magic beams or floating symbols.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-f0ed7159-2ed1-4760-8996-fe0be57d4612.png",
+      "key": "achievement-events/collect_legend_jewels",
+      "file": "images/achievement-events/collect_legend_jewels.webp",
+      "workspace_source": "artifacts/market-collection-achievements-20261116/sources/collect_legend_jewels.png",
+      "size": [
+        1881,
+        836
+      ],
+      "source_size": [
+        1859,
+        846
+      ],
+      "sha256": "59c78b2a41003ddbdf1c1ae8846f4ea9b66420a4abfa71adc90b7e3cd8d57806",
+      "bytes": 675080
+    },
+    {
+      "id": "collect_medicine5",
+      "name": "여행 약상자",
+      "prompt": "Use case: historical-scene. Asset type: unique full-color achievement event shot for the Age of Sail exploration RPG Loop of Good Hope. Create one continuous cinematic panoramic scene, approximately 2.25:1 wide composition, with important faces, hands and main objects safely within the central 80% so it can be cropped to 1881x836. Classic richly detailed historical adventure game illustration, hand-painted semi-realistic oil painting, beautiful expressive adult faces, natural anatomy and hands, nuanced warm lighting, tactile textiles, realistic gold, gemstones, herbs and glass. Match the atmosphere of an exquisite illustrated Renaissance maritime game. No text, letters, numerals, captions, logos, watermarks, UI, borders, montage panels or split screens. All depicted people are adults. No modern electric equipment or lab coats. Scene: A small sixteenth century ship infirmary in gentle morning light. An adult woman ship surgeon with rolled linen sleeves and a cheerful adult sailor carefully pack a compact wooden travel medicine chest with a few distinct remedies: an aloe leaf and salve bowl, dried willow bark bundle, rosemary oil vial, ceramic herbal tea bowl and a small bandage roll. Caring expressions, tidy practical setting, no one visibly sick or wounded. Sea visible through round porthole, detailed herbs and glass.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-5462c4d8-e1f2-4cc4-a0c9-4af211f43df2.png",
+      "key": "achievement-events/collect_medicine5",
+      "file": "images/achievement-events/collect_medicine5.webp",
+      "workspace_source": "artifacts/market-collection-achievements-20261116/sources/collect_medicine5.png",
+      "size": [
+        1881,
+        836
+      ],
+      "source_size": [
+        1881,
+        836
+      ],
+      "sha256": "2bcc16b072bd682599596d15b45b63a6e33b0366f17b9a03b3282f780bcfca62",
+      "bytes": 707872
+    },
+    {
+      "id": "collect_medicine10",
+      "name": "바다의 약재상",
+      "prompt": "Use case: historical-scene. Asset type: unique full-color achievement event shot for the Age of Sail exploration RPG Loop of Good Hope. Create one continuous cinematic panoramic scene, approximately 2.25:1 wide composition, with important faces, hands and main objects safely within the central 80% so it can be cropped to 1881x836. Classic richly detailed historical adventure game illustration, hand-painted semi-realistic oil painting, beautiful expressive adult faces, natural anatomy and hands, nuanced warm lighting, tactile textiles, realistic gold, gemstones, herbs and glass. Match the atmosphere of an exquisite illustrated Renaissance maritime game. No text, letters, numerals, captions, logos, watermarks, UI, borders, montage panels or split screens. All depicted people are adults. No modern electric equipment or lab coats. Scene: A lively Indian Ocean apothecary stall near a tropical sailing harbor. An adult Indian woman herbalist and an adult East African ship surgeon exchange neatly wrapped remedies over a wooden table: fresh turmeric roots, triphala dried fruits, licorice sticks, myrrh resin, rosewater flask, green aloe and tied dried herbs. Two adult sailors inspect a small wooden medicine chest with wonder. Warm spices colors, sailboats, palm-lined harbor, sophisticated historical narrative painting, focus on diverse materials.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-fa05b4d6-c900-40c9-9476-5d3c838da72d.png",
+      "key": "achievement-events/collect_medicine10",
+      "file": "images/achievement-events/collect_medicine10.webp",
+      "workspace_source": "artifacts/market-collection-achievements-20261116/sources/collect_medicine10.png",
+      "size": [
+        1881,
+        836
+      ],
+      "source_size": [
+        1859,
+        846
+      ],
+      "sha256": "bb543736c1a7ecbf8676fe1af1cf891af839dcd29553158fe0d1b866b7092d04",
+      "bytes": 819860
+    },
+    {
+      "id": "collect_medicine20",
+      "name": "동서 약재대전",
+      "prompt": "Use case: historical-scene. Asset type: unique full-color achievement event shot for the Age of Sail exploration RPG Loop of Good Hope. Create one continuous cinematic panoramic scene, approximately 2.25:1 wide composition, with important faces, hands and main objects safely within the central 80% so it can be cropped to 1881x836. Classic richly detailed historical adventure game illustration, hand-painted semi-realistic oil painting, beautiful expressive adult faces, natural anatomy and hands, nuanced warm lighting, tactile textiles, realistic gold, gemstones, herbs and glass. Match the atmosphere of an exquisite illustrated Renaissance maritime game. No text, letters, numerals, captions, logos, watermarks, UI, borders, montage panels or split screens. All depicted people are adults. No modern electric equipment or lab coats. Scene: A scholarly maritime apothecary library in a sixteenth century East Asian port. An elderly Korean physician in plain ivory traditional robe, an adult European woman ship surgeon in dark blue coat and an adult Indian herbalist collaboratively arrange a complete diverse medicinal collection on a wide wooden workbench: mature wild ginseng root with red berries, turmeric, licorice, willow bark, yarrow, myrrh resin, triphala fruit, pill box, ceramic decoction bowl and rosewater bottles. An open book has only delicate botanical drawings, no writing. Calm mastery, many tidy apothecary drawers and warm paper-window light, affectionate collaboration.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-f0e2e49b-87be-470f-a89a-13d9d5cef5b9.png",
+      "key": "achievement-events/collect_medicine20",
+      "file": "images/achievement-events/collect_medicine20.webp",
+      "workspace_source": "artifacts/market-collection-achievements-20261116/sources/collect_medicine20.png",
+      "size": [
+        1881,
+        836
+      ],
+      "source_size": [
+        1879,
+        837
+      ],
+      "sha256": "cabb7bc30f583fe52b823648248fb2f08572796f94560dff4698fee7ed3c0ac8",
+      "bytes": 791580
+    },
+    {
+      "id": "collect_market70",
+      "name": "작은 보물의 대항해",
+      "prompt": "Use case: historical-scene. Asset type: unique full-color achievement event shot for the Age of Sail exploration RPG Loop of Good Hope. Create one continuous cinematic panoramic scene, approximately 2.25:1 wide composition, with important faces, hands and main objects safely within the central 80% so it can be cropped to 1881x836. Classic richly detailed historical adventure game illustration, hand-painted semi-realistic oil painting, beautiful expressive adult faces, natural anatomy and hands, nuanced warm lighting, tactile textiles, realistic gold, gemstones, herbs and glass. Match the atmosphere of an exquisite illustrated Renaissance maritime game. No text, letters, numerals, captions, logos, watermarks, UI, borders, montage panels or split screens. All depicted people are adults. No modern electric equipment or lab coats. Scene: A triumphant sea captain's collection exhibition in a Renaissance port hall, open arches overlooking moored Age of Sail ships at golden sunrise. Adult female and male shipmates from several cultures celebrate around one magnificent central long table: left side an open velvet gold and jewel cabinet displaying many distinct historical necklaces, rings, jade and amber; right side a complete medicinal chest displaying wild ginseng, tied herbs, glazed pots, amber vials and turmeric. Center a brass globe and a clean hand-painted map with routes but no labels. An adult woman captain raises a small gold pendant while the ship surgeon holds a ginseng root, smiling companions applaud. Warm generous adventurous finale, detailed bright painterly realism.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-c748993b-22ef-4976-bb79-d548c9cd30fc.png",
+      "key": "achievement-events/collect_market70",
+      "file": "images/achievement-events/collect_market70.webp",
+      "workspace_source": "artifacts/market-collection-achievements-20261116/sources/collect_market70.png",
+      "size": [
+        1881,
+        836
+      ],
+      "source_size": [
+        1881,
+        836
+      ],
+      "sha256": "76c4dc9b1670cb63a2e273aa57c6498d23a2308ecc67186bd496cbb9675bd753",
+      "bytes": 843114
+    }
+  ]
+}

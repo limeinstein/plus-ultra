@@ -17,6 +17,9 @@
     // 집 외관 높이: 평민·유력자·남작·백작·공작 (거리의 다른 건물과 견줄 때)
     homeBuilding: { heights: [340, 390, 415, 465, 520] },
     famScene: { w: 1008, top: 74 },            // 가족 사건 그림의 너비(높이는 576:256 비율)·위쪽 자리
+    crewPetFlight: { birds: ['parrot', 'budgie'], seconds: 8, turns: 2, launch: 0.18, land: 0.22,
+      radius: 1.8, minRadius: 90, maxRadius: 230, height: 1.5, minHeight: 80, maxHeight: 180,
+      ellipse: 0.42, size: 0.72, minSize: 44, maxSize: 100, deck: 0.12, frameMs: 90, fade: 6 }, // 동물 사건 뒤 이륙·두 바퀴·기함 복귀 (실제 초)
     // 조약 창: 군주들의 상징화와 실제 경계 해도는 같은 창에서 넘겨 본다.
     treaty: { windowW: 1120, mapW: 900, mapH: 300, sceneKey: 'legend-events/tordesillas_council_20261108_v2' },
     // 불러오는 그림 (js/ui/loader.js): 적어도 minShow ms 보여 주고 fadeMs 에 걸쳐 걷는다 · 장면 사이 검은 막이 fadeAfter ms 넘게 걸리면 작게 띄운다 ·

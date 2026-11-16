@@ -71,6 +71,7 @@
   ['khoikhoi', 'folk_zulu', 'folk_maasai', 'folk_xhosa', 'folk_san', 'folk_yoruba',
     'folk_hausa', 'folk_fulani', 'folk_akan', 'folk_mbuti', 'folk_oromo', 'punt'].forEach(function (id) {
     var p = G.FOLK_JOIN[id];
+    p.blackAfrican = true;
     p.portraits = p.portraits || {};
     p.portraits.m = ['portraits/folk-african-men/' + id];
   });

@@ -178,7 +178,7 @@
     s.wander.seq = (s.wander.seq || 0) + 1;
     var id = 'wd_' + y + '_' + s.wander.seq;
     var def = {
-      id: id, name: nm.name, g: g, wd: true, nat: nk, natName: N.name, type: tk, typeName: T.nm, st: st, sk: sk, lg: lg, fame: fame, wage: wage,
+      id: id, name: nm.name, g: g, wd: true, nat: nk, natName: N.name, blackAfrican: !!N.blackAfrican, type: tk, typeName: T.nm, st: st, sk: sk, lg: lg, fame: fame, wage: wage,
       y: [y, 9999], after: N.after ? N.after.slice() : undefined, reg: [], desc: desc, story: story, style: N.style, role: g === 'f' ? 'maid' : (T.role[0] || 'sailor'),
       face: face, halfKey: face && facePairOk(face) ? face + '_half' : null,
       zones: zones, home: home, gen: genOf(y), born: y, line: opts.prev ? opts.prev.line || opts.prev.id : id, prevName: opts.prev ? opts.prev.name : null, nameFrom: nm.from

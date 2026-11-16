@@ -118,7 +118,8 @@
     var portrait = face(style, g, tk, pk);
     s.wander.seq = (s.wander.seq || 0) + 1;
     var def = {
-      id: 'wd_' + y + '_' + s.wander.seq, name: nm, g: g, wd: true, local: z, nat: pk, natName: natName(pk), type: tk, typeName: tn, st: st, sk: sk, lg: lg, fame: fame, wage: wage,
+      id: 'wd_' + y + '_' + s.wander.seq, name: nm, g: g, wd: true, local: z, nat: pk, natName: natName(pk),
+      blackAfrican: !!((G.WANDER_NATIONS[pk] || d.pools[pk] || {}).blackAfrican), type: tk, typeName: tn, st: st, sk: sk, lg: lg, fame: fame, wage: wage,
       y: [y, 9999], reg: [c.region], desc: c.name + ' 태생의 ' + (g === 'f' ? '여' : '') + tn + '. ' + tr,
       story: c.name + '에서 태어났다. ' + U.pick(d.text.past) + ' ' + U.pick(d.text.dream),
       style: style, role: g === 'f' ? 'maid' : (T.role[0] || 'sailor'), face: portrait, halfKey: portrait ? portrait + '_half' : null,

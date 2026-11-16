@@ -1,0 +1,1643 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "id": "regional_jewel_0_0",
+      "name": "이베리아 금세공 십자가",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        0
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "중세 이베리아에서 신앙의 표지로 걸던 금 십자가.",
+      "prompt": "Use case: background-extraction. Keep exactly this antique gold cross necklace and its full detailed chain unchanged. Remove ALL background remnants, especially the gray/beige cloudy patch above the chain at the top of the image and any colored fringe around the outside or inside of the chain. Background and space inside chain must be entirely transparent, alpha zero. Keep only the gold cross, garnet, clasp and metal chain. Center the entire necklace in a square with generous empty 12% transparent margins; do not clip chain or pendant. No cast shadows, surface, backdrop, halos, smoky haze or scene. Preserve natural clean metal edges and exquisite gold details.",
+      "output": "images/items/regional_jewel_0_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_0_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-fbd50e71-8e9c-441c-bb3b-704e2e51b578.png",
+      "sha256": "61201524537f218065e74e298f8f7c4e3214097fef9bd564e9212a76781055d6",
+      "bytes": 17968,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_0_1",
+      "name": "그라나다 은제 귀걸이",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        0
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "나스르 왕조의 섬세한 은 세공을 본뜬 고리 귀걸이.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Pair of Nasrid Granada silver hoop earrings with lacy Moorish arabesque filigree.",
+      "output": "images/items/regional_jewel_0_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_0_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-91f290b8-69aa-4729-9e6d-b12064a77662.png",
+      "sha256": "d51c1a0f09d1d12816a10ff73596f03ee9bf82e13c4f167de0906341bc778eb6",
+      "bytes": 27028,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_0_2",
+      "name": "이베리아 금 토르크",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        0
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 이베리아 귀족이 목에 두르던 굵은 금 목고리.",
+      "prompt": "Use case: precise-object-edit. Input image is the edit target. Keep only the large Iberian gold torc neck ring. REMOVE the two little earrings inside the torc. All inside and outside spaces fully transparent. Preserve the main retained jewel's original design, materials, colors, surface details, and warm lighting. One inventory item only, no extra matching jewelry. Center complete retained object with 12% clear transparent margin; no backdrop, shadow, text, people or frame. Clean alpha edges.",
+      "output": "images/items/regional_jewel_0_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_0_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-fed001d5-22a3-451c-8a63-666ef73dea0e.png",
+      "sha256": "2e29775d0e1651cc0b0adcde400c5d6466cbc0ba54599235260279aaad99fd96",
+      "bytes": 22294,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_0_3",
+      "name": "성 야고보 조개 브로치",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        0
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "산티아고 순례자의 조개 표지를 은으로 만든 브로치.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Medieval Santiago pilgrim scallop shell brooch in chased silver, fan ribs, small clasp behind.",
+      "output": "images/items/regional_jewel_0_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_0_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-6c858393-9444-4a64-acf7-7a92843b9a8d.png",
+      "sha256": "e3191da291cc6cb38a044642e6208f1fc7c6a8284bb5d6d55babc3518e8ebb48",
+      "bytes": 33426,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_1_0",
+      "name": "발트 호박 목걸이",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        1
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대부터 북방 교역로를 따라 팔린 호박 구슬 목걸이.",
+      "prompt": "Use case: precise-object-edit. Input image is the edit target. Keep only the oval amber bead necklace. REMOVE the two earrings inside it. All inside and outside spaces fully transparent. Preserve the main retained jewel's original design, materials, colors, surface details, and warm lighting. One inventory item only, no extra matching jewelry. Center complete retained object with 12% clear transparent margin; no backdrop, shadow, text, people or frame. Clean alpha edges.",
+      "output": "images/items/regional_jewel_1_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_1_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-a4aaf5b3-00a0-45cf-99f9-e729ad8968a0.png",
+      "sha256": "0357a1f928af8fd340f155501c43da293a4dbbdcd62d1bef9766a2b5b609c58e",
+      "bytes": 22426,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_1_1",
+      "name": "켈트 금 토르크",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        1
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "철기시대 켈트인의 꼬임 무늬 금 목고리.",
+      "prompt": "Use case: precise-object-edit. Input image is the edit target. Keep only the large Celtic gold torc neck ring. REMOVE the two earrings inside the torc. All empty spaces fully transparent. Preserve the main retained jewel's original design, materials, colors, surface details, and warm lighting. One inventory item only, no extra matching jewelry. Center complete retained object with 12% clear transparent margin; no backdrop, shadow, text, people or frame. Clean alpha edges.",
+      "output": "images/items/regional_jewel_1_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_1_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-2393fee5-2053-4a28-8d7b-86cea429e724.png",
+      "sha256": "181915b676b10176fc5aa78135f2bc6a8fae8b504f12e838aacd221e96d4f916",
+      "bytes": 22406,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_1_2",
+      "name": "바이킹 은 팔찌",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        1
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "바이킹이 장신구와 교환 수단으로 쓰던 은 팔고리.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Viking heavy silver arm ring, open bracelet of twisted silver rods, flattened stamped terminals.",
+      "output": "images/items/regional_jewel_1_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_1_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-12191adb-9c95-4343-b8c2-d2a73fbeb5f7.png",
+      "sha256": "4704e8958b41d09978fd1624abd2f7881af441b87f11fb336df736db01c3845a",
+      "bytes": 20850,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_1_3",
+      "name": "토르의 망치 펜던트",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        1
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "북유럽에서 수호의 뜻으로 걸던 묠니르 모양 목걸이.",
+      "prompt": "Use case: precise-object-edit. Input image is the edit target. Keep only the Thor hammer pendant necklace with leather cord. REMOVE the two little matching earrings beside the hammer. All empty spaces fully transparent. Preserve the main retained jewel's original design, materials, colors, surface details, and warm lighting. One inventory item only, no extra matching jewelry. Center complete retained object with 12% clear transparent margin; no backdrop, shadow, text, people or frame. Clean alpha edges.",
+      "output": "images/items/regional_jewel_1_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_1_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-53ff7ffe-855c-4ab2-afd4-66f7574f3a97.png",
+      "sha256": "a59e7b2de26548e809d3dbc647bd63567dc2cff79285c9e83a1790d4e4b8d9f4",
+      "bytes": 16722,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_2_0",
+      "name": "에트루리아 금 귀걸이",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        2
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 에트루리아의 미세한 금 알갱이 세공 귀걸이.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Pair of ancient Etruscan gold earrings, exquisite tiny gold granulation, ornate disc and small hanging amphora shapes.",
+      "output": "images/items/regional_jewel_2_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_2_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-dcba8271-cae4-4a74-be6c-a2a4329292c4.png",
+      "sha256": "cb3a2868b0c86c87d02f24ba99d10a30a72548c7047f240486b46553dc427bc1",
+      "bytes": 28070,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_2_1",
+      "name": "로마 홍옥 인장 반지",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        2
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 로마에서 인장을 새겨 쓰던 홍옥수 반지.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Ancient Roman gold signet ring with oval red carnelian intaglio stone, carved classical male profile.",
+      "output": "images/items/regional_jewel_2_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_2_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-6951c74c-18c7-4687-a405-a1eb798ac6e0.png",
+      "sha256": "5366f26fd6c5fd5ebcaad0782a341fa6867f9b009e2815804f5c87c1145d2d36",
+      "bytes": 31210,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_2_2",
+      "name": "비잔틴 진주 귀걸이",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        2
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "동로마의 금 세공에 진주를 매단 귀걸이.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Pair of Byzantine gold crescent earrings, filigree arc and dangling natural white pearls.",
+      "output": "images/items/regional_jewel_2_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_2_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-d3e181a8-de9d-4599-8037-4343a16422d4.png",
+      "sha256": "fe04866b230f721399d9394c93eca32c4226c8353bdfe5967d19b007cce58c1a",
+      "bytes": 37054,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_2_3",
+      "name": "르네상스 카메오 펜던트",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        2
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "16세기 유럽에서 사랑받은 옆얼굴 부조 보석 목걸이.",
+      "prompt": "Use case: precise-object-edit. Input image is the edit target. Keep only the cameo pendant necklace. REMOVE the two earrings hanging left and right below it. All empty spaces fully transparent. Preserve the main retained jewel's original design, materials, colors, surface details, and warm lighting. One inventory item only, no extra matching jewelry. Center complete retained object with 12% clear transparent margin; no backdrop, shadow, text, people or frame. Clean alpha edges.",
+      "output": "images/items/regional_jewel_2_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_2_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-5648ee0e-7932-467d-b474-cecd34350b4e.png",
+      "sha256": "11b2135c71bdf3f2f5e744b3ec4e24d74b62132e0c7a54faf3597b343b92f057",
+      "bytes": 17566,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_3_0",
+      "name": "이집트 스카라베 반지",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        3
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 이집트에서 재생을 상징하던 쇠똥구리 모양 인장 반지.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Ancient Egyptian scarab swivel ring, carved deep blue lapis scarab beetle held in an antique gold ring.",
+      "output": "images/items/regional_jewel_3_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_3_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-364ea9c4-e721-4878-84a7-7b6c79837cbc.png",
+      "sha256": "5eaa2615ee98dc51e7f61a8fcb66d7b76072b94febcc2e4c7f1832f964fee21e",
+      "bytes": 34448,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_3_1",
+      "name": "누비아 금 목걸이",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        3
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 나일강 상류 금 세공 전통의 구슬 목걸이.",
+      "prompt": "Use case: precise-object-edit. Input image is the edit target. Keep only the Nubian gold necklace with ram head pendant. REMOVE the two earrings inside it. All empty spaces fully transparent. Preserve the main retained jewel's original design, materials, colors, surface details, and warm lighting. One inventory item only, no extra matching jewelry. Center complete retained object with 12% clear transparent margin; no backdrop, shadow, text, people or frame. Clean alpha edges.",
+      "output": "images/items/regional_jewel_3_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_3_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-d315d3a0-6515-45e3-ab66-c0f673cecbb6.png",
+      "sha256": "b6ee185260ae499f2f8a74cb45f3a6aeadef8f59ae01990283c7b7862722320d",
+      "bytes": 20906,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_3_2",
+      "name": "카르타고 금 펜던트",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        3
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 북아프리카에서 부적처럼 지니던 금 장식.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the central ancient Carthaginian gold face pendant and its small hanging loop. Remove the necklace chain and both earrings. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_3_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_3_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-f3309289-7989-47b2-818e-02380c584dcf.png",
+      "sha256": "63fbacb9e19d43a5543d4b7383ff3681222165b5feb050c2e00901f3e6e89370",
+      "bytes": 23158,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_3_3",
+      "name": "서아프리카 홍옥수 구슬",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        3
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "사하라 교역을 통해 유통된 붉은 홍옥수 구슬 장신구.",
+      "prompt": "Use case: background-extraction. Input is the edit target. Preserve ONLY the illustrated jewelry object exactly: all its existing design, material, color, stones, gold/silver metal and fine edges. Remove ALL remaining rectangular gray/beige smoky background patches, haze, reflected backdrop and cast shadow. Every pixel that is not part of the jewelry must be fully transparent alpha zero, both outside and inside any necklace loop or ring hole. Do not put the jewel on any surface. No backdrop color, no gradient, no square patch, no glow, no scene. Clean transparent cutout for a dark game UI, complete object centered with clear 12% transparent margins. Absolutely no extra objects or matching earrings.",
+      "output": "images/items/regional_jewel_3_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_3_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-9bfb15b0-f02b-422b-b50a-68740a2eca15.png",
+      "sha256": "aa649747dae3580f7bbdd0912fdf2f6b0264e8df6e3ef1d1d9815b3557b94673",
+      "bytes": 20492,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_4_0",
+      "name": "수메르 청금석 목걸이",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        4
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 메소포타미아에서 금과 청금석을 번갈아 꿴 목걸이.",
+      "prompt": "Use case: precise-object-edit. Input image is the edit target. Keep only the Sumerian lapis and gold necklace with gold leaf pendant. REMOVE the two earrings inside the necklace. All empty spaces fully transparent. Preserve the main retained jewel's original design, materials, colors, surface details, and warm lighting. One inventory item only, no extra matching jewelry. Center complete retained object with 12% clear transparent margin; no backdrop, shadow, text, people or frame. Clean alpha edges.",
+      "output": "images/items/regional_jewel_4_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_4_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-03831573-c608-4abc-82dd-d3ca167eace1.png",
+      "sha256": "754a45985eb116d270e99175c407de6900bb253a80d11582ba5d316c8b14f377",
+      "bytes": 20144,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_4_1",
+      "name": "페르시아 터키석 반지",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        4
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "푸른 터키석을 박은 페르시아의 인장 반지.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Medieval Persian silver signet ring, large oval natural turquoise cabochon and finely engraved floral silver setting.",
+      "output": "images/items/regional_jewel_4_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_4_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-66ea64a6-5290-4930-a830-8fb942360019.png",
+      "sha256": "eb98e52f1fd193906d23835a596013512d88fab2cd38d5768d143d01647cecbc",
+      "bytes": 32730,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_4_2",
+      "name": "아라비아 은 팔찌",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        4
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "아라비아 장인이 무늬를 새긴 두꺼운 은 팔찌.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Traditional Arabian heavy silver cuff bracelet, incised geometric bands, tiny raised silver studs, antique patina.",
+      "output": "images/items/regional_jewel_4_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_4_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-53350134-c445-48a2-94fb-1067a9c83644.png",
+      "sha256": "92c90d913de52933195ef506c9c76f461ec3e7de7dd52de40ee5f4872ce07769",
+      "bytes": 38566,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_4_3",
+      "name": "사산 왕조 금 귀걸이",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        4
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 이란 금 세공 전통의 늘어뜨린 귀걸이.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Pair of ancient Sasanian Persian gold pendant earrings, round gold bead top, crescent gold loops, subtle garnet accents.",
+      "output": "images/items/regional_jewel_4_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_4_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-167dff76-3da5-4867-9d5a-3192e3feb7b2.png",
+      "sha256": "a82c5f1da41dc365af082d74c5d2190b7a75941112b02cddfc11bc2f5bcfb613",
+      "bytes": 34866,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_5_0",
+      "name": "인도 루비 목걸이",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        5
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "오래된 인도 보석 교역에서 귀하게 여긴 붉은 강옥 목걸이.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the complete oval ruby bead necklace and its central pendant. Remove the two earrings inside it. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_5_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_5_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-adedbea2-927d-4e92-84a2-8cf8f1f6b87c.png",
+      "sha256": "3128ae8f0139bda1243d0a7fa531f64d8cf41b49b9cbe91b7c939be59c4200d1",
+      "bytes": 18150,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_5_1",
+      "name": "인도 나바라트나 펜던트",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        5
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "아홉 보석에 천체의 뜻을 담은 인도의 장식.",
+      "prompt": "Use case: precise-object-edit. Input image is the edit target. Keep only the central circular nine-gem navaratna pendant and its little gold top bail. REMOVE the gold chain necklace and both side earrings entirely. Center and enlarge the pendant alone. Transparent background. Preserve the main retained jewel's original design, materials, colors, surface details, and warm lighting. One inventory item only, no extra matching jewelry. Center complete retained object with 12% clear transparent margin; no backdrop, shadow, text, people or frame. Clean alpha edges.",
+      "output": "images/items/regional_jewel_5_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_5_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-d4bb9c96-6e54-4817-88d2-0a70e3cf8da3.png",
+      "sha256": "3c68ee96173646fe5f37aab65eb89c680c0c1c481ff48287b754b8b3697ee65a",
+      "bytes": 23100,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_5_2",
+      "name": "인도 금 코걸이",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        5
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "인도에서 장식과 의례에 쓰던 금 코걸이.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Historic Indian gold nose ring, delicate large hoop with a cluster of tiny pearls and one ruby, no person.",
+      "output": "images/items/regional_jewel_5_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_5_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-587c48d6-aac7-4be5-a690-a5e3fa2aa05f.png",
+      "sha256": "9490989af17f944cc36e7b0ff3f866ba0c1a2b29014934c601b2ce4f89eb755b",
+      "bytes": 23786,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_5_3",
+      "name": "실론 사파이어 반지",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        5
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "인도양 보석 산지 실론의 푸른 사파이어 반지.",
+      "prompt": "Use case: background-extraction. Input is the edit target. Preserve ONLY the illustrated jewelry object exactly: all its existing design, material, color, stones, gold/silver metal and fine edges. Remove ALL remaining rectangular gray/beige smoky background patches, haze, reflected backdrop and cast shadow. Every pixel that is not part of the jewelry must be fully transparent alpha zero, both outside and inside any necklace loop or ring hole. Do not put the jewel on any surface. No backdrop color, no gradient, no square patch, no glow, no scene. Clean transparent cutout for a dark game UI, complete object centered with clear 12% transparent margins. Absolutely no extra objects or matching earrings.",
+      "output": "images/items/regional_jewel_5_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_5_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-6415967c-7ced-4013-a921-8b184940a0ab.png",
+      "sha256": "601f66d577ee4a6fdf0adc1978f9ff256c1d1be86846a4c00cd54d7f416a526e",
+      "bytes": 28006,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_6_0",
+      "name": "중국 옥벽 펜던트",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        6
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 중국의 둥근 구멍 뚫린 옥 장식을 작게 깎은 패옥.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Ancient Chinese jade bi disk pendant, circular pale green nephrite disk with round central hole and subtle incised spiral patterns, short silk hanging loop.",
+      "output": "images/items/regional_jewel_6_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_6_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-482fbcfb-1a52-41da-85da-cf0ac4213d6c.png",
+      "sha256": "135d0f82509b0984407b45389b98b1f294bc1ded084f9170885fa6afd353b426",
+      "bytes": 15534,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_6_1",
+      "name": "중국 점취 금비녀",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        6
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "금속 바탕에 물총새 깃털을 붙이는 전통의 머리 장식.",
+      "prompt": "Use case: background-extraction. Input is the edit target. Preserve ONLY the illustrated jewelry object exactly: all its existing design, material, color, stones, gold/silver metal and fine edges. Remove ALL remaining rectangular gray/beige smoky background patches, haze, reflected backdrop and cast shadow. Every pixel that is not part of the jewelry must be fully transparent alpha zero, both outside and inside any necklace loop or ring hole. Do not put the jewel on any surface. No backdrop color, no gradient, no square patch, no glow, no scene. Clean transparent cutout for a dark game UI, complete object centered with clear 12% transparent margins. Absolutely no extra objects or matching earrings.",
+      "output": "images/items/regional_jewel_6_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_6_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-779b5ccb-b147-48f3-97ca-cc48afc7a7d5.png",
+      "sha256": "8d9c0ef86a960d774523d27985162a5ab632e0b02c025a542bee33061841c20d",
+      "bytes": 11456,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_6_2",
+      "name": "신라 곡옥 목걸이",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        6
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "삼국시대 신라의 굽은 옥과 금 구슬을 꿴 목걸이.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the oval Silla Korean jade gogok and gold necklace. Remove both earrings inside it. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_6_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_6_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-0ca0eac3-0645-498f-a682-8830f2baa4cf.png",
+      "sha256": "860dafc67d64d9b8bffca004d42b6a98de2cc572e7c34b1f08a7427ce0032aa0",
+      "bytes": 20980,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_6_3",
+      "name": "고려 은제 향낭",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        6
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "향을 담아 몸에 차던 고려의 작은 은 향 주머니.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Goryeo Korean small silver openwork incense pouch pendant, rounded filigree silver container with hinged seam, fine chain loop and small silk tassel.",
+      "output": "images/items/regional_jewel_6_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_6_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-c70bf190-2853-4828-b3f2-d260434eca15.png",
+      "sha256": "d2e5949d2accbe75a6a3790a4ffda3aae5264f7c07e2e8da374312516fcdc493",
+      "bytes": 36462,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_7_0",
+      "name": "박트리아 금 펜던트",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        7
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 박트리아의 교역 문화가 담긴 금 장식.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the central Bactrian heart shaped gold pendant with turquoise inlay and dangling gold disks, including its small top bail. Remove necklace and both earrings. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_7_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_7_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-5aa71385-b5de-4566-97cd-6a57bab8e4a2.png",
+      "sha256": "6649bd49ad38ae97e845ffcc171e6022bd2a291431303507ed760829f890f475",
+      "bytes": 31940,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_7_1",
+      "name": "소그드 홍옥수 반지",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        7
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "실크로드 상인이 아끼던 홍옥수 인장 반지.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Silk Road Sogdian signet ring, red carnelian engraved seal stone in thick patinated gold ring, geometric shoulders.",
+      "output": "images/items/regional_jewel_7_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_7_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-b317548a-a2ab-4e59-986f-e75c5838b671.png",
+      "sha256": "3f30dd6796555c14c88e858a1582564c84cd40c107a03507faee4c3957123a3a",
+      "bytes": 32188,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_7_2",
+      "name": "스키타이 사슴 금패",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        7
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "유라시아 초원 유목민의 사슴 무늬 금 장식판.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Ancient Scythian gold plaque shaped as a recumbent stag, folded legs beneath body and large sweeping branching antlers, embossed animal-style gold.",
+      "output": "images/items/regional_jewel_7_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_7_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-b6438b7c-e1f7-4593-9db4-820266dff876.png",
+      "sha256": "91c375c134416f5f5bff11750ce39fe0d5331bb679e9ac58bab1c8ba14952bfd",
+      "bytes": 35432,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_7_3",
+      "name": "티베트 터키석 목걸이",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        7
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "히말라야 교역로의 푸른 터키석 구슬 목걸이.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the oval chunky turquoise, coral and silver necklace. Remove both earrings inside it. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_7_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_7_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-23598104-93f8-45d2-903a-c4759ed1414e.png",
+      "sha256": "2a5c11c78a4ef86fe845556414069a283177767c6ed96b280840d441aec6aace",
+      "bytes": 23108,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_8_0",
+      "name": "참파 금 귀걸이",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        8
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "중세 참파 왕국 금 세공 전통의 귀걸이.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Pair of medieval Champa gold ear ornaments, thick open ring shapes with three pointed floral projections, Southeast Asian goldsmith craftsmanship.",
+      "output": "images/items/regional_jewel_8_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_8_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-d47e3204-2fe3-4301-93fc-55d758fda30f.png",
+      "sha256": "1c86891c36609bc12a18baaa5e6fff6c470495a1f3e8ca4c59af4893ec0b3c5e",
+      "bytes": 21256,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_8_1",
+      "name": "자바 금 팔찌",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        8
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대·중세 자바의 힌두 불교 문화권 금 팔찌.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Ancient Javanese gold bracelet, thick open cuff with repoussé floral scrolls and subtly sculpted kala face terminals, Hindu Buddhist craft.",
+      "output": "images/items/regional_jewel_8_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_8_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-142ca57c-cf4d-4a34-b9eb-9f424b348841.png",
+      "sha256": "0705d0b4510815b6eff212de1503dbe54248f8e4b1807fad9b3136916ca0ef05",
+      "bytes": 24582,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_8_2",
+      "name": "크메르 금 목걸이",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        8
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "앙코르 시대 조각에서 볼 수 있는 금 목걸이 양식.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the complete oval Khmer gold necklace and lotus shaped central pendant. Remove both earrings inside it. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_8_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_8_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-52db511a-82cc-40dc-92a7-afda5b40027a.png",
+      "sha256": "c65d82fc7e4e239f0ffbe1cd321aa1039294be8db643b377eae3891b04dfecdd",
+      "bytes": 32748,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_8_3",
+      "name": "필리핀 링링오",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        8
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 필리핀과 주변 해역에서 교역된 틈 있는 옥 귀장식.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Ancient Philippine lingling-o jade ear ornament, pale green nephrite open circular C shape with three distinct budlike projections, clean simple authentic carved stone.",
+      "output": "images/items/regional_jewel_8_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_8_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-d58f7696-38de-4add-84a5-80aebcaada0c.png",
+      "sha256": "e5acf39e8d3b876ebd2d0d99e46543a6683712764464c4a489b1fd69fa639a3b",
+      "bytes": 19066,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_9_0",
+      "name": "일본 곡옥 목걸이",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        9
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 일본에서 의례와 장식에 쓰던 마가타마 목걸이.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the complete Japanese jade magatama necklace on cord. Remove both earrings inside it. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_9_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_9_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-bfa6a463-dfcd-48e8-9d13-965d36ac9865.png",
+      "sha256": "05e6160b53f349f3a85e9103621f6ae3bcb2ea920368fb8b7659b5d77396bf2c",
+      "bytes": 20632,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_9_1",
+      "name": "일본 금 귀고리",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        9
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고분시대에 쓰던 금빛 고리 귀장식.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Pair of Japanese Kofun period gold earrings, simple thick open circular gold rings with lightly worn hammered surfaces, no gemstones.",
+      "output": "images/items/regional_jewel_9_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_9_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-b8dcd3be-95a6-453c-add2-69b2c0edad24.png",
+      "sha256": "5ceb7fbc8f25805b00a6ee0f43b224029e1b98d359b92fb641385ea2a091eeec",
+      "bytes": 21950,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_9_2",
+      "name": "일본 수정 염주",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        9
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "중세 일본에서 지니던 수정 구슬 불교 염주.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the loop of clear crystal Buddhist prayer beads with its brown tassels. Remove the two matching crystal earrings at the lower right. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_9_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_9_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-29b1ffbd-dc47-422b-be9d-a5fcb1f2f5f3.png",
+      "sha256": "70938523e7bdd9fc8c1fc617c45a506721a28604e9faf2315168fd1a28953794",
+      "bytes": 20220,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_9_3",
+      "name": "일본 은제 비녀",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        9
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "머리를 고정하고 꾸미는 은제 간자시.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Historic Japanese silver kanzashi hairpin, long slim silver pin with delicate plum blossom ornament and small dangling silver petal.",
+      "output": "images/items/regional_jewel_9_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_9_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-f5281940-b433-40d1-96e2-820e301ceddc.png",
+      "sha256": "40386658e6c4d397aed2b49d55e00878e2646497829a86c3f9df6ba5de354786",
+      "bytes": 12850,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_10_0",
+      "name": "마야 옥 귀장식",
+      "kind": "gift",
+      "price": 3600,
+      "gv": 20,
+      "reg": [
+        10
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 마야 지배층이 귓불에 끼우던 큰 옥 장식.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Pair of ancient Maya green jade earflare frontals, thick circular jade disks with wide hollow center, carved stepped floral contours, rich mottled jade.",
+      "output": "images/items/regional_jewel_10_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_10_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-4a3f429a-ba5c-4a38-99ee-c460a0b25ce6.png",
+      "sha256": "f6a54a1ade0fc4a7a05f834d96b6c549b0ddb68746f5ffdf319541b27666f2d4",
+      "bytes": 23624,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_10_1",
+      "name": "아즈텍 터키석 모자이크",
+      "kind": "gift",
+      "price": 6400,
+      "gv": 25,
+      "reg": [
+        10
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "멕시코의 작은 터키석 조각을 맞춘 장식.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep the turquoise mosaic double headed serpent pectoral necklace. Remove both little earrings inside it. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_10_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_10_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-f89e8cce-cb54-4f70-98ea-f94af69b6eef.png",
+      "sha256": "dc3e647ac2af30f2689a67dc09a5e3f152a04e12638146492a57d6e802ac8c3b",
+      "bytes": 24500,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_10_2",
+      "name": "무이스카 툼바가 펜던트",
+      "kind": "gift",
+      "price": 9800,
+      "gv": 30,
+      "reg": [
+        10
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "콜롬비아 고대 금속공예의 금·구리 합금 목걸이.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep ONLY the central Muisca gold copper alloy anthropomorphic ceremonial figure pendant with broad geometric headdress and wirework limbs, including its small hanging bail. Remove necklace and both earrings. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_10_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_10_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-c8296411-a471-4f88-a55e-ab05d8eec936.png",
+      "sha256": "680d6ccf712403c6d9e68016b00de1f3a2555381b723acbb076ab52579ff2178",
+      "bytes": 28788,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_jewel_10_3",
+      "name": "모체 금 코장식",
+      "kind": "gift",
+      "price": 14000,
+      "gv": 35,
+      "reg": [
+        10
+      ],
+      "marketCollection": "jewels_20261116",
+      "desc": "고대 페루 모체 문화의 얇은 금판 코 장식.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the large Moche gold crescent nose ornament with its embossed face and turquoise. Remove both little dangling matching earrings underneath. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_jewel_10_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_jewel_10_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-0fcc8128-bb85-41d0-a2e8-4f1e9c9cec9e.png",
+      "sha256": "01c8fedf181abe548fcf8081711661229a639420a9b84bf127f60faae9b18c98",
+      "bytes": 23656,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_legend_0",
+      "name": "라 페레그리나 진주",
+      "kind": "gift",
+      "price": 300000,
+      "gv": 50,
+      "reg": [
+        0
+      ],
+      "legendary": true,
+      "marketCollection": "jewels_20261116",
+      "desc": "16세기 신대륙에서 유럽 왕실로 건너간 이름난 배 모양 진주. 전설적인 명성의 실존 보석을 소재로 한 시장 상품.",
+      "from": 1560,
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the large central La Peregrina pear shaped white pearl suspended from the elaborate gold ruby pendant bail. Remove the two small matching side earrings. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_legend_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_legend_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-ced111e5-0cb7-445d-9cc6-33e1e5cc2647.png",
+      "sha256": "607c09926039f1125f4ecb2167aee696e6c3098d2250a7b55a071a3db5eae758",
+      "bytes": 14640,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_legend_1",
+      "name": "브리싱가멘",
+      "kind": "gift",
+      "price": 380000,
+      "gv": 50,
+      "reg": [
+        1
+      ],
+      "legendary": true,
+      "marketCollection": "jewels_20261116",
+      "desc": "여신 프레이야가 지녔다고 전하는 북유럽 신화의 목걸이.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the complete Freyja Brisingamen gold and amber necklace with its large sunburst pendant. Remove both earrings inside the necklace. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_legend_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_legend_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-87a84f69-8657-4d79-a5f9-f51c5a2a6383.png",
+      "sha256": "df90edc232a43acd9a64e60a73e3cacc3138db4bc06e93f55921599d251200e3",
+      "bytes": 27626,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_legend_2",
+      "name": "하르모니아의 목걸이",
+      "kind": "gift",
+      "price": 460000,
+      "gv": 50,
+      "reg": [
+        2
+      ],
+      "legendary": true,
+      "marketCollection": "jewels_20261116",
+      "desc": "그리스 신화에서 아름다움과 파멸을 함께 가져왔다는 목걸이.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the Greek gold necklace with entwined serpent heads, red center jewel and pearl drops. Remove both earrings inside the necklace. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_legend_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_legend_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-7181b4a7-4a86-4e7f-819a-57a8ce5947a4.png",
+      "sha256": "bca3a862abddf56a8d8c64d76996f8e7973ae98756f6c9b9bbae43eea9595c22",
+      "bytes": 25570,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_legend_3",
+      "name": "솔로몬의 인장 반지",
+      "kind": "gift",
+      "price": 540000,
+      "gv": 50,
+      "reg": [
+        4
+      ],
+      "legendary": true,
+      "marketCollection": "jewels_20261116",
+      "desc": "정령을 다스렸다고 전하는 솔로몬 왕의 전설 속 반지.",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Legendary Seal of Solomon signet ring, massive ancient gold ring with deep green emerald seal face bearing a six-pointed geometric star only, ornate ancient Near Eastern engraved shoulders, absolutely no letters or text.",
+      "output": "images/items/regional_legend_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_legend_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-8abd43fb-23d3-4a1f-9c6d-effd3a660e2f.png",
+      "sha256": "43d3e4a7c9ca46c13e4cffc2a95cb93c13f1f13d5a4daf5f6d9c67933bc796f8",
+      "bytes": 36970,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_legend_4",
+      "name": "샤만타카 보석",
+      "kind": "gift",
+      "price": 620000,
+      "gv": 50,
+      "reg": [
+        5
+      ],
+      "legendary": true,
+      "marketCollection": "jewels_20261116",
+      "desc": "인도 신화에서 태양신의 빛과 황금을 품었다는 보석.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep ONLY the large central crimson orange gemstone sunburst gold pendant with its small top bail and seed pearls. Remove ENTIRE necklace chain and both earrings. Center and enlarge that one pendant. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_legend_4.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_legend_4.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-7fa93872-5a1b-49f4-b4b6-c1519f53dfaa.png",
+      "sha256": "c5cd96b8d9a4c6c05109cad67f0c40beffe334e569a1f7e3e70630a872b18dfe",
+      "bytes": 29728,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_legend_5",
+      "name": "야사카니의 곡옥",
+      "kind": "gift",
+      "price": 700000,
+      "gv": 50,
+      "reg": [
+        9
+      ],
+      "legendary": true,
+      "marketCollection": "jewels_20261116",
+      "desc": "일본 왕권의 세 보물 가운데 하나로 전하는 곡옥. 시장의 물건이 진품인지는 알 수 없다.",
+      "prompt": "Use case: precise-object-edit. The image is the edit target. Keep only the large central comma shaped green jade magatama with its small top gold fitting and short red silk loop. Remove the ENTIRE long red bead necklace and the two small jade earrings. Center and enlarge just the large jade pendant with a short red loop. Retain the main object's beautiful original design, metals, stones, colors, carving and warm lighting exactly. Exactly ONE inventory item. All removed areas and ALL background must become genuinely transparent alpha zero. No extra matching jewelry, scenery, shadows, haze, labels, lettering, frames, or pedestals. Center the complete retained object with 12 percent clear transparent margins.",
+      "output": "images/items/regional_legend_5.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_legend_5.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-df37c87c-52f8-4155-8110-aee0c0286d6c.png",
+      "sha256": "271918d5f73a4ef258999f611baa961556e014b993952af6a1959d3a2239080a",
+      "bytes": 17922,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_0",
+      "name": "얄보칠",
+      "kind": "medicine",
+      "price": 1575,
+      "reg": [
+        6
+      ],
+      "heal": 35,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "시대를 넘어 들어온 특별한 외용약. 실제 용법과 별개인 게임 속 회복 아이템. 사용하면 일기토·질병으로 줄어든 건강을 즉시 35 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Albocil special external medicine game item: small dark amber glass vial filled with reddish brown medicine, plain red lacquer stopper, tiny ivory blank paper label, slender wooden applicator placed alongside. No text, no logos, no brand packaging.",
+      "output": "images/items/regional_medicine_0.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_0.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-4a3ef02b-30a1-49bb-8598-b7a9e9d56340.png",
+      "sha256": "3e2239960c9f7430e68d40261142eeb358985c9b20a77d817e3b78b81b5d190e",
+      "bytes": 19746,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_1",
+      "name": "호랑이연고",
+      "kind": "medicine",
+      "price": 1350,
+      "reg": [
+        8
+      ],
+      "heal": 30,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "시대를 넘어 들어온 특별한 향유 연고. 근대의 호랑이연고를 소재로 한 게임 상품. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Tiger balm special ointment game item: small squat hexagonal clear glass jar with amber herbal ointment, red metal lid resting beside jar, tiny embossed tiger silhouette on lid but no letters, restrained apothecary item, no text or brand logo.",
+      "output": "images/items/regional_medicine_1.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_1.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-5b67d24c-446f-4a4e-89b6-81039b123b15.png",
+      "sha256": "c35d863bb97f7a7afa9ff742f0af1fc4c15fba48a1ca9709076f139af202ae56",
+      "bytes": 25030,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_2",
+      "name": "총명탕",
+      "kind": "medicine",
+      "price": 1800,
+      "reg": [
+        6
+      ],
+      "heal": 40,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "동아시아의 전통 처방을 소재로 한 탕약. 사용하면 일기토·질병으로 줄어든 건강을 즉시 40 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Korean chongmyeongtang traditional herbal decoction: small dark brown glazed ceramic medicine bowl of amber herbal tea with wrapped paper herb packet and a few dried botanical slices beside it, compact cohesive item grouping, no text.",
+      "output": "images/items/regional_medicine_2.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-10f22e84-83fd-44e1-bbf3-bd044f9b4f63.png",
+      "sha256": "f3ea4b7282d4e187a042e061d8ec6140140b5b179d7eb8c004fa0858c3130c9c",
+      "bytes": 26528,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_3",
+      "name": "산삼",
+      "kind": "medicine",
+      "price": 4500,
+      "reg": [
+        6
+      ],
+      "heal": 100,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "깊은 산에서 귀하게 얻은 야생 인삼. 사용하면 일기토·질병으로 줄어든 건강을 즉시 100 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Rare Korean wild mountain ginseng root, one mature ivory tan root with realistic branching human-like root shape, fine wiry rootlets, short stem and three small green leaves with a cluster of red berries, not a person.",
+      "output": "images/items/regional_medicine_3.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-5ff6821e-a656-4df6-b58f-890e99a106ae.png",
+      "sha256": "fadd6bcf86e22933451d2477fd58e0d4af07e0f0d0eac4e6ea2582fed17dc704",
+      "bytes": 30098,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_4",
+      "name": "로즈메리 향유",
+      "kind": "medicine",
+      "price": 900,
+      "reg": [
+        0
+      ],
+      "heal": 20,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "이베리아의 향기로운 로즈메리를 담은 향유. 사용하면 일기토·질병으로 줄어든 건강을 즉시 20 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Iberian rosemary medicinal oil: small antique green glass vial with cork, golden herbal oil and one rosemary sprig leaning against it, no writing.",
+      "output": "images/items/regional_medicine_4.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_4.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-2fb77f2c-059f-493b-a6ab-e756126c08b3.png",
+      "sha256": "c6fe41f521dcc31ded55779f7b9ec39adf0f851d2dddcc36bed13adb8b64b486",
+      "bytes": 27562,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_5",
+      "name": "꿀 밀랍 연고",
+      "kind": "medicine",
+      "price": 1125,
+      "reg": [
+        0
+      ],
+      "heal": 25,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "꿀과 밀랍을 소재로 한 전통 연고. 사용하면 일기토·질병으로 줄어든 건강을 즉시 25 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Traditional honey and beeswax ointment: small rustic terracotta jar filled with pale golden salve, round wooden lid angled beside it, small beeswax piece, compact icon, no writing.",
+      "output": "images/items/regional_medicine_5.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_5.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-0ed67749-d943-426d-8a97-f7ec36ece1f9.png",
+      "sha256": "d3b8170ae90683932de101afeb6a79811d227d802caf4c9fb5a3714140067318",
+      "bytes": 27512,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_6",
+      "name": "버드나무 껍질",
+      "kind": "medicine",
+      "price": 1125,
+      "reg": [
+        1
+      ],
+      "heal": 25,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "북방에서 모은 버드나무 껍질 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 25 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Northern European willow bark remedy: several curled strips of brown willow bark bundled with natural linen cord, pale inner bark visible, one small narrow green willow leaf, no container or writing.",
+      "output": "images/items/regional_medicine_6.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_6.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-976d234a-450a-4927-a1c6-12e7538d60f6.png",
+      "sha256": "c4d7d8188f642aa14e7a7db24bd812755ff0b5595779cf5374b58e8695854670",
+      "bytes": 26402,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_7",
+      "name": "서양톱풀 약포",
+      "kind": "medicine",
+      "price": 1350,
+      "reg": [
+        1
+      ],
+      "heal": 30,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "유럽의 전통 약초 서양톱풀을 묶은 약포. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: European yarrow medicinal herb bundle: tied dried fernlike green yarrow leaves and delicate clusters of cream white flowers, a small folded linen medicine pouch, no writing.",
+      "output": "images/items/regional_medicine_7.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_7.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-e33924fc-3b29-4597-a18f-c23cc040be9b.png",
+      "sha256": "67befbe4268bd792bb0c64de5fc7796c3a2696c4ded2756a0ce9d1ce73cdcf25",
+      "bytes": 36094,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_8",
+      "name": "테리아카",
+      "kind": "medicine",
+      "price": 2475,
+      "reg": [
+        2
+      ],
+      "heal": 55,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "고대에서 중세·근세까지 유명했던 복합 약제. 사용하면 일기토·질병으로 줄어든 건강을 즉시 55 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Historic Mediterranean theriac medicine: ornate antique small blue and white glazed apothecary ceramic jar with lid, dark brown thick compound visible at rim, bronze spoon resting alongside, no lettering or symbols.",
+      "output": "images/items/regional_medicine_8.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_8.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-89468908-55a6-47d6-8867-e6327dbc6b91.png",
+      "sha256": "b96c7e180ae126197a6b02505b8b700d0e8b667f3af22803232f533de4877d49",
+      "bytes": 28376,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_9",
+      "name": "히포크라테스 약초즙",
+      "kind": "medicine",
+      "price": 1350,
+      "reg": [
+        2
+      ],
+      "heal": 30,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "고대 지중해 의술에서 착안한 게임 속 혼합 약초즙. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Ancient Greek inspired medicinal herbal juice: squat small red brown terracotta flask with narrow neck and cork, a few green medicinal leaves tied at neck, a small shallow cup of green amber extract, no writing.",
+      "output": "images/items/regional_medicine_9.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_9.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-810ee748-10df-46a8-85e1-421db9eb5ab5.png",
+      "sha256": "a0949bdefa3af94473cd63898e1bc93a7d5b86915e91d7c7d5622c606cd3b33b",
+      "bytes": 25724,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_10",
+      "name": "알로에 연고",
+      "kind": "medicine",
+      "price": 1350,
+      "reg": [
+        3
+      ],
+      "heal": 30,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "아프리카의 알로에를 소재로 만든 연고. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: African aloe ointment remedy: small plain clay bowl filled with translucent pale green salve, one cut fleshy aloe vera leaf resting alongside exposing clear gel, compact grouping, no writing.",
+      "output": "images/items/regional_medicine_10.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_10.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-6e286a97-05c7-4004-bbb6-9a32c76c6858.png",
+      "sha256": "a6eca2d00e174b2caa038d40198711547dd593458f4a254d717a2267f6a4786e",
+      "bytes": 23776,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_11",
+      "name": "몰약 향유",
+      "kind": "medicine",
+      "price": 1575,
+      "reg": [
+        3
+      ],
+      "heal": 35,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "홍해 교역의 귀한 몰약을 담은 향유. 사용하면 일기토·질병으로 줄어든 건강을 즉시 35 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Red Sea myrrh medicinal oil: antique small amber glass stoppered vial, golden brown liquid and several rough reddish myrrh resin nuggets at base, no text.",
+      "output": "images/items/regional_medicine_11.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_11.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-c8819fff-ee6f-49db-b041-f9f6c495b132.png",
+      "sha256": "8569af1a944a5c7c94fd8ab11ac4d584d44378b1fd0dd6ddceaa2c2a43ae1e92",
+      "bytes": 20834,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_12",
+      "name": "장미수 약병",
+      "kind": "medicine",
+      "price": 1125,
+      "reg": [
+        4
+      ],
+      "heal": 25,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "중근동의 장미 증류 전통에서 착안한 약병. 사용하면 일기토·질병으로 줄어든 건강을 즉시 25 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Middle Eastern rosewater medicine: small graceful pale blue glass flask with brass stopper, clear rose-tinted liquid, one pink damask rose and two loose petals at base, no writing.",
+      "output": "images/items/regional_medicine_12.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_12.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-0acfbfe9-3b26-4598-a664-c0a9a004e22a.png",
+      "sha256": "5b0f9bf32dc6bb9ae972189ba689fa420d5a6cb373d976508e5476c7438564bf",
+      "bytes": 21114,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_13",
+      "name": "감초 약포",
+      "kind": "medicine",
+      "price": 1350,
+      "reg": [
+        4,
+        7
+      ],
+      "heal": 30,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "교역로를 따라 유통된 달콤한 감초 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Silk Road licorice medicinal bundle: several short ochre brown licorice root sticks with yellow cut cross sections tied with simple flax cord, little blank folded paper packet, no writing.",
+      "output": "images/items/regional_medicine_13.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_13.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-598c0bb9-94f8-4828-a653-ca70e98d39d6.png",
+      "sha256": "fd376e718e73dc33070604e1b8df9e7000843a0a83296e4000acbea1ad621fcc",
+      "bytes": 25960,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_14",
+      "name": "트리팔라",
+      "kind": "medicine",
+      "price": 1800,
+      "reg": [
+        5
+      ],
+      "heal": 40,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "인도 전통 의술의 세 가지 열매 배합. 사용하면 일기토·질병으로 줄어든 건강을 즉시 40 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Indian triphala traditional remedy: small wooden bowl holding dark herbal powder with three distinct dried fruits amla bibhitaki haritaki beside it, compact grouping, no writing.",
+      "output": "images/items/regional_medicine_14.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_14.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-37abad47-19ca-46d7-a81e-8b151a77906a.png",
+      "sha256": "1378fde9230bebe5b07042c3e98e28ccd407bbeb09a607bf9e1f0d1aa0b24591",
+      "bytes": 32236,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_15",
+      "name": "아슈와간다 약재",
+      "kind": "medicine",
+      "price": 2025,
+      "reg": [
+        5
+      ],
+      "heal": 45,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "인도의 전통 약초를 말려 묶은 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 45 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Indian ashwagandha herbal remedy: bundle of dried pale tan roots tied with red cotton cord, a few green leaves and two orange berries in papery husks, no writing.",
+      "output": "images/items/regional_medicine_15.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_15.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-9f1f5f06-2ad7-47e5-bab2-8f766550636a.png",
+      "sha256": "681cce1d1c051bac6123546e5665045d734fcf50bd425b0b450573cc22a595c6",
+      "bytes": 34326,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_16",
+      "name": "히말라야 약환",
+      "kind": "medicine",
+      "price": 2250,
+      "reg": [
+        7
+      ],
+      "heal": 50,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "산악 교역로의 복합 약재를 소재로 한 게임 속 환약. 사용하면 일기토·질병으로 줄어든 건강을 즉시 50 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Himalayan herbal medicinal pills: small aged brass lidded round box tipped open to reveal dark brown round pills, three pills beside it, subtle Tibetan geometric brass chasing, no letters.",
+      "output": "images/items/regional_medicine_16.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_16.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-a109ffa4-e244-4bea-bac4-7d54c784c6c9.png",
+      "sha256": "234d14484670a58f505250ad0e7c5d8a02647f666a38b6abc08c27b418f0d50e",
+      "bytes": 26818,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_17",
+      "name": "강황 약포",
+      "kind": "medicine",
+      "price": 1575,
+      "reg": [
+        8
+      ],
+      "heal": 35,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "동남아시아의 황금빛 강황 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 35 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Southeast Asian turmeric remedy: three fresh knobbly orange turmeric roots, one cut to show vivid orange flesh, small folded banana-leaf packet of orange powder, no writing.",
+      "output": "images/items/regional_medicine_17.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_17.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-bbb94d27-89dd-403f-9db4-9f345d617d0a.png",
+      "sha256": "29b1f970fdb4c02144dc76f9387a34cca2f8e3b2934953647675786590962fb6",
+      "bytes": 25462,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_18",
+      "name": "진피 약포",
+      "kind": "medicine",
+      "price": 1350,
+      "reg": [
+        9
+      ],
+      "heal": 30,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "일본에서 말린 감귤 껍질을 담은 약포. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: Japanese chinpi dried citrus peel medicinal packet: several curled orange dried tangerine peel pieces arranged spilling from a folded cream washi paper packet tied with fine straw, no writing.",
+      "output": "images/items/regional_medicine_18.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_18.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-3804fa3c-1aa2-4b73-abd7-97e2cbfb12cc.png",
+      "sha256": "aa0a2cb58829c4d70397b72315ffbe667b0978a955c076680afc3948ebf2db0c",
+      "bytes": 25812,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    },
+    {
+      "id": "regional_medicine_19",
+      "name": "코파이바 수지",
+      "kind": "medicine",
+      "price": 1800,
+      "reg": [
+        10
+      ],
+      "heal": 40,
+      "consumable": 1,
+      "marketCollection": "medicine_20261116",
+      "desc": "남아메리카의 나무에서 얻은 전통 수지 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 40 회복한다(최대 100).",
+      "prompt": "Use case: stylized-concept. Paint ONE luxurious hand-painted realistic historical trading RPG inventory item. Warm restrained museum lighting upper left, crisp silhouette, intricate handcrafted detail, natural antique materials, matching classic Age of Sail inventory art. Centered complete isolated object, square composition, 12 percent empty margin, three-quarter front view. Actual transparent background. No text, letters, labels, logo, frame, pedestal, scene, hands, people, cast shadow or floating particles. Necklaces complete oval; earrings a pair. Subject: South American copaiba resin medicine: small rustic brown ceramic vial with cork filled with golden clear resin, a glossy amber resin droplet at mouth and a small green copaiba leaf sprig, no writing.",
+      "output": "images/items/regional_medicine_19.webp",
+      "source": "artifacts\\regional-item-art-20261116\\raw\\regional_medicine_19.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-34efff12-a9ab-475f-bbf7-182f4a3278b0.png",
+      "sha256": "2191c086d507a0aeb84da6191c784b82ea1d50ab21d478ed6ee6d5d45ea32575",
+      "bytes": 22016,
+      "tool": "built-in image_gen",
+      "size": [
+        256,
+        256
+      ]
+    }
+  ]
+}

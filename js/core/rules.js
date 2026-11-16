@@ -144,6 +144,11 @@
 
   // ---------------------------------------------------------------- items
   R.hasItem = function (id) { return R.S().player.items.some(function (it) { return it.id === id; }); };
+  /** 배에 데리고 있는 고양이. 발견 기록·자택 보관함의 고양이는 제외한다. */
+  R.ratGuard = function () {
+    var ids = G.BALANCE.ratGuards;
+    return R.S().player.items.filter(function (it) { return ids.indexOf(it.id) >= 0; })[0] || null;
+  };
   R.itemQty = function (it) { return it && it.qty > 1 ? it.qty : 1; };
   R.itemCount = function (id) { return R.S().player.items.reduce(function (n, it) { return n + (it.id === id ? R.itemQty(it) : 0); }, 0); };
   /** 소지품 칸 수 */
@@ -193,15 +198,16 @@
   R.mergeItems = function () { var S = R.S(); if (S && S.player) R.mergeItemList(S.player.items); };
   /** 이 물건이 들어갈 기존 칸 (없으면 null) */
   R.stackFor = function (o) { if (!R.stackable(o)) return null; return R.S().player.items.filter(function (x) { return x !== o && x.id === o.id && R.stackable(x); })[0] || null; };
+  function noteCollectedItem(id) { if (G.Achieve && G.Achieve.onItem) G.Achieve.onItem(id); }
   R.addItem = function (id, extra) {
     var S = R.S();
     var o = { id: id }; if (extra) for (var k in extra) o[k] = extra[k];
     var def = G.ITEM[id];
     var into = R.stackFor(o);
-    if (into) { absorb(into, o); return true; }   // 같은 물건이 있으면 그 칸에 (칸이 차도 받는다)
+    if (into) { absorb(into, o); noteCollectedItem(id); return true; }   // 같은 물건이 있으면 그 칸에 (칸이 차도 받는다)
     if (!R.isProof(o) && R.slotsUsed() >= R.ITEM_MAX) return false;   // 발견 증거는 칸이 차도 챙긴다
     if (def && def.consumable) o.n = def.consumable;
-    S.player.items.push(o); return true;
+    S.player.items.push(o); noteCollectedItem(id); return true;
   };
   /** 시장의 같은 일반 아이템은 한 칸에 묶는다. 발견 증거·유물처럼 개별 상태가 있는 물건에는 쓰지 않는다. */
   //   from·paid: 산 도시와 1개에 치른 값 — 산 도시가 다르면 따로 묶는다(같은 도시 시장에는 치른 값보다 비싸게 되팔 수 없다, js/city/misc.js)
@@ -216,12 +222,12 @@
       }
       it.qty = R.itemQty(it) + n; delete it.from; delete it.paid;
       if (Object.keys(b).length) it.buys = b;
-      return true;
+      noteCollectedItem(id); return true;
     }
     if (R.slotsUsed() >= R.ITEM_MAX) return false;
     var o = { id: id, qty: n }, def = G.ITEM[id]; if (def && def.consumable) o.n = def.consumable;
     if (fk != null) o.from = fk; if (paid != null) o.paid = paid;
-    S.player.items.push(o); return true;
+    S.player.items.push(o); noteCollectedItem(id); return true;
   };
   R.removeItemObject = function (it) {
     var S = R.S(), i = S.player.items.indexOf(it); if (i < 0) return false;
@@ -289,6 +295,17 @@
       if (v > 0) out = { k: what, v: v };
     }
     return (itemStatMemo[id] = out);
+  };
+  /** 물건 하나의 능력치 한 줄: 「지력 +5」 (없으면 '') */
+  // 피해 원인과 관계없이 제독 건강(일기토도 같은 값을 사용)을 즉시 회복한다.
+  R.useMedicine = function (id) {
+    var d = G.ITEM[id], s = R.S();
+    if (!d || d.kind !== 'medicine' || !R.itemCount(id) || s.player.hp >= 100) return 0;
+    var before = s.player.hp;
+    if (!R.useCharge(id)) return 0;
+    s.player.hp = Math.min(100, before + d.heal);
+    if (G.State) G.State.log(d.name + ' 사용 — 건강 ' + before + ' → ' + s.player.hp + '.');
+    return s.player.hp - before;
   };
   /** 물건 하나의 능력치 한 줄: 「지력 +5」 (없으면 '') */
   R.itemStatText = function (id) { var o = R.itemStatOf(id), n = o && (G.STATS || []).filter(function (s) { return s.id === o.k; })[0]; return o ? (n ? n.name : o.k) + ' +' + o.v : ''; };

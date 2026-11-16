@@ -1,0 +1,152 @@
+{
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "id": "parrot",
+      "type": "sprite",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-24f70540-faf7-43d1-9cdc-adfef30acd78.png",
+      "prompt": "Production-ready 2D GAME SPRITE SHEET on a truly TRANSPARENT background. Exactly 4 columns by 2 rows, EIGHT equal square cells, no borders or text. Each cell contains ONE same scarlet macaw with red body, yellow-and-blue wings, long red-and-blue tail, in flight, facing RIGHT, viewed from a slightly elevated three-quarter side angle appropriate above a sailing ship. All eight cells have identical body scale and centered body anchor, whole bird including wings and tail comfortably inside each square cell with generous transparent padding. Reading left-to-right top row then bottom: eight consecutive smooth wingbeat phases for seamless looping flight, wings rise, spread fully, downstroke and return. Crisp detailed hand-painted realistic game art matching warm historic maritime painting; recognizable species colors, clean alpha edges, NO scenery, NO shadow, NO grid, NO labels, NO people. Each frame exactly one bird, no duplicate bird in a cell. Sprite used to fly up from a ship, circle and return.",
+      "target": "images/effects/crew_pet_parrot.png"
+    },
+    {
+      "id": "budgie",
+      "type": "sprite",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-7dad476a-0d4a-4b97-986c-b8bfa8670ab7.png",
+      "prompt": "Production-ready 2D GAME SPRITE SHEET on a truly TRANSPARENT background. Exactly 4 columns by 2 rows, EIGHT equal square cells, no borders or text. Each cell contains ONE same small green-and-yellow budgerigar with black wing barring and long tapered tail, in flight, facing RIGHT, viewed from a slightly elevated three-quarter side angle appropriate above a sailing ship. All eight cells have identical body scale and centered body anchor, whole bird including wings and tail comfortably inside each square cell with generous transparent padding. Reading left-to-right top row then bottom: eight consecutive smooth wingbeat phases for seamless looping flight, wings rise, spread fully, downstroke and return. Crisp detailed hand-painted realistic game art matching warm historic maritime painting; recognizable species colors, clean alpha edges, NO scenery, NO shadow, NO grid, NO labels, NO people. Each frame exactly one bird, no duplicate bird in a cell. Sprite used to fly up from a ship, circle and return.",
+      "target": "images/effects/crew_pet_budgie.png"
+    },
+    {
+      "id": "shiba",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-cb64cf85-71af-451d-8fa7-a311548e3223.png",
+      "prompt": "Create ONE dedicated FEMALE-ONLY crew pet recovery game event illustration for 시바견. Single wide 2.25:1 image. Three clearly adult WOMEN sailors only, no men anywhere, on a 16th-century wooden sailing ship deck, practical modest linen shirts, working vests and trousers, tied-back hair, distinct natural faces. Main subject: a red Shiba Inu puppy with upright ears and curled tail, chasing a little knotted rope held by a laughing sailor. Crucial emotional storytelling: the women's faces and gentle hands prominently visible, unmistakable delighted affection for an adorable pet, warm crinkled eyes, wide spontaneous smiles, one woman leaning her cheek close to the animal, another gently stroking or supporting it with anatomically correct hands. Natural tender handling, eye contact with the pet. Medium-close intimate composition showing faces AND the whole animal clearly, not distant generic crew portraits. Warm amber natural light, richly textured historical oil-painting realism like a tender visual-novel date scene, expressive realistic faces and correct species anatomy. Ocean, ropes and folded sails behind. No text, watermark, borders, collage or modern objects.",
+      "target": "images/crew-pet-events/shiba_women.webp"
+    },
+    {
+      "id": "pug",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-f93ea9ab-f7ab-4442-9e23-94ffbd178e9a.png",
+      "prompt": "Create ONE dedicated FEMALE-ONLY crew pet recovery game event illustration for 퍼그. Single wide 2.25:1 image. Three clearly adult WOMEN sailors only, no men anywhere, on a 16th-century wooden sailing ship deck, practical modest linen shirts, working vests and trousers, tied-back hair, distinct natural faces. Main subject: a small fawn pug puppy with black muzzle and curled tail, offering its paw to a seated sailor while others laugh. Crucial emotional storytelling: the women's faces and gentle hands prominently visible, unmistakable delighted affection for an adorable pet, warm crinkled eyes, wide spontaneous smiles, one woman leaning her cheek close to the animal, another gently stroking or supporting it with anatomically correct hands. Natural tender handling, eye contact with the pet. Medium-close intimate composition showing faces AND the whole animal clearly, not distant generic crew portraits. Warm amber natural light, richly textured historical oil-painting realism like a tender visual-novel date scene, expressive realistic faces and correct species anatomy. Ocean, ropes and folded sails behind. No text, watermark, borders, collage or modern objects.",
+      "target": "images/crew-pet-events/pug_women.webp"
+    },
+    {
+      "id": "corgi",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-5bdad278-ac7d-44ea-aac0-95ef715ddf9c.png",
+      "prompt": "Create ONE dedicated FEMALE-ONLY crew pet recovery game event illustration for 웰시코기. Single wide 2.25:1 image. Three clearly adult WOMEN sailors only, no men anywhere, on a 16th-century wooden sailing ship deck, practical modest linen shirts, working vests and trousers, tied-back hair, distinct natural faces. Main subject: a red-and-white Welsh corgi puppy with short legs and large ears, trotting after a cloth ball between sailors. Crucial emotional storytelling: the women's faces and gentle hands prominently visible, unmistakable delighted affection for an adorable pet, warm crinkled eyes, wide spontaneous smiles, one woman leaning her cheek close to the animal, another gently stroking or supporting it with anatomically correct hands. Natural tender handling, eye contact with the pet. Medium-close intimate composition showing faces AND the whole animal clearly, not distant generic crew portraits. Warm amber natural light, richly textured historical oil-painting realism like a tender visual-novel date scene, expressive realistic faces and correct species anatomy. Ocean, ropes and folded sails behind. No text, watermark, borders, collage or modern objects.",
+      "target": "images/crew-pet-events/corgi_women.webp"
+    },
+    {
+      "id": "shihtzu",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-6ba747e1-28a1-44f6-acd7-4dbdfc391d14.png",
+      "prompt": "Create ONE dedicated FEMALE-ONLY crew pet recovery game event illustration for 시츄. Single wide 2.25:1 image. Three clearly adult WOMEN sailors only, no men anywhere, on a 16th-century wooden sailing ship deck, practical modest linen shirts, working vests and trousers, tied-back hair, distinct natural faces. Main subject: a small long-haired white and brown Shih Tzu puppy, being gently brushed on a sailor's lap. Crucial emotional storytelling: the women's faces and gentle hands prominently visible, unmistakable delighted affection for an adorable pet, warm crinkled eyes, wide spontaneous smiles, one woman leaning her cheek close to the animal, another gently stroking or supporting it with anatomically correct hands. Natural tender handling, eye contact with the pet. Medium-close intimate composition showing faces AND the whole animal clearly, not distant generic crew portraits. Warm amber natural light, richly textured historical oil-painting realism like a tender visual-novel date scene, expressive realistic faces and correct species anatomy. Ocean, ropes and folded sails behind. No text, watermark, borders, collage or modern objects.",
+      "target": "images/crew-pet-events/shihtzu_women.webp"
+    },
+    {
+      "id": "dachshund",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-dd8b057c-1d8c-4069-8436-1afc0d75242a.png",
+      "prompt": "Create ONE dedicated FEMALE-ONLY crew pet recovery game event illustration for 닥스훈트. Single wide 2.25:1 image. Three clearly adult WOMEN sailors only, no men anywhere, on a 16th-century wooden sailing ship deck, practical modest linen shirts, working vests and trousers, tied-back hair, distinct natural faces. Main subject: a smooth-haired chestnut dachshund puppy with long body and short legs, playing tug with a short rag and a seated sailor. Crucial emotional storytelling: the women's faces and gentle hands prominently visible, unmistakable delighted affection for an adorable pet, warm crinkled eyes, wide spontaneous smiles, one woman leaning her cheek close to the animal, another gently stroking or supporting it with anatomically correct hands. Natural tender handling, eye contact with the pet. Medium-close intimate composition showing faces AND the whole animal clearly, not distant generic crew portraits. Warm amber natural light, richly textured historical oil-painting realism like a tender visual-novel date scene, expressive realistic faces and correct species anatomy. Ocean, ropes and folded sails behind. No text, watermark, borders, collage or modern objects.",
+      "target": "images/crew-pet-events/dachshund_women.webp"
+    },
+    {
+      "id": "papillon",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-9ee3b74a-0ff0-4372-b9cf-68f193b5b26d.png",
+      "prompt": "Create ONE dedicated FEMALE-ONLY crew pet recovery game event illustration for 파피용. Single wide 2.25:1 image. Three clearly adult WOMEN sailors only, no men anywhere, on a 16th-century wooden sailing ship deck, practical modest linen shirts, working vests and trousers, tied-back hair, distinct natural faces. Main subject: a white-and-chestnut papillon puppy with butterfly ears, jumping lightly toward a sailor's open hands. Crucial emotional storytelling: the women's faces and gentle hands prominently visible, unmistakable delighted affection for an adorable pet, warm crinkled eyes, wide spontaneous smiles, one woman leaning her cheek close to the animal, another gently stroking or supporting it with anatomically correct hands. Natural tender handling, eye contact with the pet. Medium-close intimate composition showing faces AND the whole animal clearly, not distant generic crew portraits. Warm amber natural light, richly textured historical oil-painting realism like a tender visual-novel date scene, expressive realistic faces and correct species anatomy. Ocean, ropes and folded sails behind. No text, watermark, borders, collage or modern objects.",
+      "target": "images/crew-pet-events/papillon_women.webp"
+    },
+    {
+      "id": "siamese",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-6d9d2852-a343-477e-bce2-b241a75d971e.png",
+      "prompt": "Create ONE dedicated FEMALE-ONLY crew pet recovery game event illustration for 샴고양이. Single wide 2.25:1 image. Three clearly adult WOMEN sailors only, no men anywhere, on a 16th-century wooden sailing ship deck, practical modest linen shirts, working vests and trousers, tied-back hair, distinct natural faces. Main subject: a cream Siamese kitten with dark face ears feet and blue eyes, batting at a loose cord offered by a smiling sailor. Crucial emotional storytelling: the women's faces and gentle hands prominently visible, unmistakable delighted affection for an adorable pet, warm crinkled eyes, wide spontaneous smiles, one woman leaning her cheek close to the animal, another gently stroking or supporting it with anatomically correct hands. Natural tender handling, eye contact with the pet. Medium-close intimate composition showing faces AND the whole animal clearly, not distant generic crew portraits. Warm amber natural light, richly textured historical oil-painting realism like a tender visual-novel date scene, expressive realistic faces and correct species anatomy. Ocean, ropes and folded sails behind. No text, watermark, borders, collage or modern objects.",
+      "target": "images/crew-pet-events/siamese_women.webp"
+    },
+    {
+      "id": "russianblue",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-b589fa8f-3f5b-42a1-8322-a4f336f92e6a.png",
+      "prompt": "One wide cinematic 2.25:1 game event painting for 러시안 블루. Exclusively THREE clearly adult FEMALE sailors, no men, relaxing on a wooden 16th-century sailing ship. They are affectionately playing with a silver-blue short-haired Russian Blue kitten with green eyes, nestling against a sailor's hand on a folded sail. Show women's faces and gentle handling vividly: joyful adoring smiles, soft sparkling eyes looking at the pet, one leaning close as if cooing over it, one gently scratching the chin or petting its fur, careful supportive hands, candid laughter and tender affection. Animal fully visible in foreground and recognizable species/breed. Medium-close intimate framing with faces and hands clear, varied female faces and tied-back hair, modest practical linen shirts and work vests/trousers. Warm amber sunlight, tactile ropes, canvas and wood, calm sea. High quality historical oil-painting realism, intimate visual-novel date scene mood. Correct anatomy of humans and animals. No men or male-looking people, no modern clothes, text, borders, watermark, collage.",
+      "target": "images/crew-pet-events/russianblue_women.webp"
+    },
+    {
+      "id": "persian",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-b6664e85-8df2-48e3-8b75-5710a0f19ae2.png",
+      "prompt": "One wide cinematic 2.25:1 game event painting for 페르시안 고양이. Exclusively THREE clearly adult FEMALE sailors, no men, relaxing on a wooden 16th-century sailing ship. They are affectionately playing with a fluffy cream Persian kitten with round flat face, being cuddled gently by a weathered sailor. Show women's faces and gentle handling vividly: joyful adoring smiles, soft sparkling eyes looking at the pet, one leaning close as if cooing over it, one gently scratching the chin or petting its fur, careful supportive hands, candid laughter and tender affection. Animal fully visible in foreground and recognizable species/breed. Medium-close intimate framing with faces and hands clear, varied female faces and tied-back hair, modest practical linen shirts and work vests/trousers. Warm amber sunlight, tactile ropes, canvas and wood, calm sea. High quality historical oil-painting realism, intimate visual-novel date scene mood. Correct anatomy of humans and animals. No men or male-looking people, no modern clothes, text, borders, watermark, collage.",
+      "target": "images/crew-pet-events/persian_women.webp"
+    },
+    {
+      "id": "angora",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-ed91ccb0-55d9-4c16-99fb-087e6b4c69eb.png",
+      "prompt": "One wide cinematic 2.25:1 game event painting for 터키시 앙고라. Exclusively THREE clearly adult FEMALE sailors, no men, relaxing on a wooden 16th-century sailing ship. They are affectionately playing with a white long-haired Turkish Angora kitten with one blue eye and one amber eye, stretching to tap a feather held by a sailor. Show women's faces and gentle handling vividly: joyful adoring smiles, soft sparkling eyes looking at the pet, one leaning close as if cooing over it, one gently scratching the chin or petting its fur, careful supportive hands, candid laughter and tender affection. Animal fully visible in foreground and recognizable species/breed. Medium-close intimate framing with faces and hands clear, varied female faces and tied-back hair, modest practical linen shirts and work vests/trousers. Warm amber sunlight, tactile ropes, canvas and wood, calm sea. High quality historical oil-painting realism, intimate visual-novel date scene mood. Correct anatomy of humans and animals. No men or male-looking people, no modern clothes, text, borders, watermark, collage.",
+      "target": "images/crew-pet-events/angora_women.webp"
+    },
+    {
+      "id": "koreancat",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-248b9315-ee27-4e1b-a84e-170bd4ec8433.png",
+      "prompt": "One wide cinematic 2.25:1 game event painting for 코리안 숏헤어. Exclusively THREE clearly adult FEMALE sailors, no men, relaxing on a wooden 16th-century sailing ship. They are affectionately playing with a brown striped Korean short-haired tabby kitten, rolling playfully on folded canvas beside smiling sailors. Show women's faces and gentle handling vividly: joyful adoring smiles, soft sparkling eyes looking at the pet, one leaning close as if cooing over it, one gently scratching the chin or petting its fur, careful supportive hands, candid laughter and tender affection. Animal fully visible in foreground and recognizable species/breed. Medium-close intimate framing with faces and hands clear, varied female faces and tied-back hair, modest practical linen shirts and work vests/trousers. Warm amber sunlight, tactile ropes, canvas and wood, calm sea. High quality historical oil-painting realism, intimate visual-novel date scene mood. Correct anatomy of humans and animals. No men or male-looking people, no modern clothes, text, borders, watermark, collage.",
+      "target": "images/crew-pet-events/koreancat_women.webp"
+    },
+    {
+      "id": "vancat",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-3fffaa1c-eaf6-4a3c-b9c0-22b503362a56.png",
+      "prompt": "One wide cinematic 2.25:1 game event painting for 반 고양이. Exclusively THREE clearly adult FEMALE sailors, no men, relaxing on a wooden 16th-century sailing ship. They are affectionately playing with a mostly white Turkish Van kitten with auburn head patches and auburn tail, pawing playfully at water in a shallow wooden bowl with sailors. Show women's faces and gentle handling vividly: joyful adoring smiles, soft sparkling eyes looking at the pet, one leaning close as if cooing over it, one gently scratching the chin or petting its fur, careful supportive hands, candid laughter and tender affection. Animal fully visible in foreground and recognizable species/breed. Medium-close intimate framing with faces and hands clear, varied female faces and tied-back hair, modest practical linen shirts and work vests/trousers. Warm amber sunlight, tactile ropes, canvas and wood, calm sea. High quality historical oil-painting realism, intimate visual-novel date scene mood. Correct anatomy of humans and animals. No men or male-looking people, no modern clothes, text, borders, watermark, collage.",
+      "target": "images/crew-pet-events/vancat_women.webp"
+    },
+    {
+      "id": "manul",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-bd9d6824-193d-42a8-b404-3e1b2be8c79c.png",
+      "prompt": "One wide cinematic 2.25:1 game event painting for 마눌들고양이. Exclusively THREE clearly adult FEMALE sailors, no men, relaxing on a wooden 16th-century sailing ship. They are affectionately playing with a fluffy gray Pallas's cat kitten with broad flat face and small rounded ears, cautiously playing with a rag ball near seated smiling sailors. Show women's faces and gentle handling vividly: joyful adoring smiles, soft sparkling eyes looking at the pet, one leaning close as if cooing over it, one gently scratching the chin or petting its fur, careful supportive hands, candid laughter and tender affection. Animal fully visible in foreground and recognizable species/breed. Medium-close intimate framing with faces and hands clear, varied female faces and tied-back hair, modest practical linen shirts and work vests/trousers. Warm amber sunlight, tactile ropes, canvas and wood, calm sea. High quality historical oil-painting realism, intimate visual-novel date scene mood. Correct anatomy of humans and animals. No men or male-looking people, no modern clothes, text, borders, watermark, collage.",
+      "target": "images/crew-pet-events/manul_women.webp"
+    },
+    {
+      "id": "parrot",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-e1ea4ed0-30b2-4d73-9b28-c7ffe531ec7d.png",
+      "prompt": "Create a dedicated FEMALE-ONLY 앵무새 animal companionship recovery illustration, one wide 2.25:1 image. On a 16th-century wooden ship deck THREE adult WOMEN sailors with distinct warm faces and tied-back hair, practical modest linen shirts and working waistcoats/trousers, NO MEN anywhere. With them a tame scarlet macaw with red yellow and blue feathers, perching on a sailor's forearm and playfully mimicking his open-mouthed laugh. Emphasize expressive delighted affection: women's eyes meeting the animal's eyes, glowing joyful smiles and crinkled eyes, gentle careful fingers handling or stroking the animal, one woman leaning her face close with a spontaneous adoring grin while another smiles warmly. Species-appropriate gentle interaction, animal realistic size and natural anatomy; human hands anatomically correct. Medium-close framing to show faces and handling clearly while the complete animal stays visible. Cozy amber sunlight, maritime rigging, rope coils, calm sea, detailed warm historical oil-painting realism with tender visual-novel date-scene atmosphere. No text, watermark, borders, collage, modern objects or men.",
+      "target": "images/crew-pet-events/parrot_women.webp"
+    },
+    {
+      "id": "budgie",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-3ed10ac0-e41c-4a85-9306-3f3d804530ac.png",
+      "prompt": "Create a dedicated FEMALE-ONLY 사랑앵무 animal companionship recovery illustration, one wide 2.25:1 image. On a 16th-century wooden ship deck THREE adult WOMEN sailors with distinct warm faces and tied-back hair, practical modest linen shirts and working waistcoats/trousers, NO MEN anywhere. With them a tiny green and yellow budgerigar, hopping onto a sailor's fingertip while two sailors smile fondly. Emphasize expressive delighted affection: women's eyes meeting the animal's eyes, glowing joyful smiles and crinkled eyes, gentle careful fingers handling or stroking the animal, one woman leaning her face close with a spontaneous adoring grin while another smiles warmly. Species-appropriate gentle interaction, animal realistic size and natural anatomy; human hands anatomically correct. Medium-close framing to show faces and handling clearly while the complete animal stays visible. Cozy amber sunlight, maritime rigging, rope coils, calm sea, detailed warm historical oil-painting realism with tender visual-novel date-scene atmosphere. No text, watermark, borders, collage, modern objects or men.",
+      "target": "images/crew-pet-events/budgie_women.webp"
+    },
+    {
+      "id": "lemur",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-2f5b46f0-023b-4533-839c-aa4561d459d0.png",
+      "prompt": "Create a dedicated FEMALE-ONLY 알락꼬리여우원숭이 animal companionship recovery illustration, one wide 2.25:1 image. On a 16th-century wooden ship deck THREE adult WOMEN sailors with distinct warm faces and tied-back hair, practical modest linen shirts and working waistcoats/trousers, NO MEN anywhere. With them a small ring-tailed lemur with gray fur and black-and-white ringed tail, playing with a cloth ball beside seated smiling sailors. Emphasize expressive delighted affection: women's eyes meeting the animal's eyes, glowing joyful smiles and crinkled eyes, gentle careful fingers handling or stroking the animal, one woman leaning her face close with a spontaneous adoring grin while another smiles warmly. Species-appropriate gentle interaction, animal realistic size and natural anatomy; human hands anatomically correct. Medium-close framing to show faces and handling clearly while the complete animal stays visible. Cozy amber sunlight, maritime rigging, rope coils, calm sea, detailed warm historical oil-painting realism with tender visual-novel date-scene atmosphere. No text, watermark, borders, collage, modern objects or men.",
+      "target": "images/crew-pet-events/lemur_women.webp"
+    },
+    {
+      "id": "gibbon",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-98ef7acb-ae71-44c7-9c77-563697c3602b.png",
+      "prompt": "Create a dedicated FEMALE-ONLY 흰손긴팔원숭이 animal companionship recovery illustration, one wide 2.25:1 image. On a 16th-century wooden ship deck THREE adult WOMEN sailors with distinct warm faces and tied-back hair, practical modest linen shirts and working waistcoats/trousers, NO MEN anywhere. With them a small young white-handed gibbon with dark fur pale face ring white hands long arms and NO tail, gently holding a sailor's hands while seated and playfully leaning backwards. Emphasize expressive delighted affection: women's eyes meeting the animal's eyes, glowing joyful smiles and crinkled eyes, gentle careful fingers handling or stroking the animal, one woman leaning her face close with a spontaneous adoring grin while another smiles warmly. Species-appropriate gentle interaction, animal realistic size and natural anatomy; human hands anatomically correct. Medium-close framing to show faces and handling clearly while the complete animal stays visible. Cozy amber sunlight, maritime rigging, rope coils, calm sea, detailed warm historical oil-painting realism with tender visual-novel date-scene atmosphere. No text, watermark, borders, collage, modern objects or men.",
+      "target": "images/crew-pet-events/gibbon_women.webp"
+    },
+    {
+      "id": "tarsier",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-fc986fef-19ca-40c5-b712-fcb04a11b669.png",
+      "prompt": "Create a dedicated FEMALE-ONLY 필리핀안경원숭이 animal companionship recovery illustration, one wide 2.25:1 image. On a 16th-century wooden ship deck THREE adult WOMEN sailors with distinct warm faces and tied-back hair, practical modest linen shirts and working waistcoats/trousers, NO MEN anywhere. With them a tiny Philippine tarsier with enormous amber eyes delicate fingers and a slender tail, clinging gently to a sailor's offered finger while sailors watch with affectionate smiles. Emphasize expressive delighted affection: women's eyes meeting the animal's eyes, glowing joyful smiles and crinkled eyes, gentle careful fingers handling or stroking the animal, one woman leaning her face close with a spontaneous adoring grin while another smiles warmly. Species-appropriate gentle interaction, animal realistic size and natural anatomy; human hands anatomically correct. Medium-close framing to show faces and handling clearly while the complete animal stays visible. Cozy amber sunlight, maritime rigging, rope coils, calm sea, detailed warm historical oil-painting realism with tender visual-novel date-scene atmosphere. No text, watermark, borders, collage, modern objects or men.",
+      "target": "images/crew-pet-events/tarsier_women.webp"
+    },
+    {
+      "id": "snowmonkey",
+      "type": "women-event",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-bcc70db8-7564-4863-8dc2-9d2ba237bbcb.png",
+      "prompt": "Create a dedicated FEMALE-ONLY 일본원숭이 animal companionship recovery illustration, one wide 2.25:1 image. On a 16th-century wooden ship deck THREE adult WOMEN sailors with distinct warm faces and tied-back hair, practical modest linen shirts and working waistcoats/trousers, NO MEN anywhere. With them a small young Japanese macaque with gray-brown fur pink face and short tail, playfully tugging a folded rag with a sailor while the other sailors laugh. Emphasize expressive delighted affection: women's eyes meeting the animal's eyes, glowing joyful smiles and crinkled eyes, gentle careful fingers handling or stroking the animal, one woman leaning her face close with a spontaneous adoring grin while another smiles warmly. Species-appropriate gentle interaction, animal realistic size and natural anatomy; human hands anatomically correct. Medium-close framing to show faces and handling clearly while the complete animal stays visible. Cozy amber sunlight, maritime rigging, rope coils, calm sea, detailed warm historical oil-painting realism with tender visual-novel date-scene atmosphere. No text, watermark, borders, collage, modern objects or men.",
+      "target": "images/crew-pet-events/snowmonkey_women.webp"
+    }
+  ]
+}

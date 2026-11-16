@@ -59,7 +59,7 @@
     { id: 'astrolabe', name: '천문판', kind: 'tool', price: 1500, reg: [0, 2, 4], desc: '별로 위도를 잰다. 위도만 표시된다.' },
     { id: 'telescope', name: '망원경', kind: 'tool', price: 3800, reg: [1, 2], from: 1500, desc: '멀리 있는 함대를 먼저 발견하고, 망루와 정찰대가 수평선 너머의 발견물을 더 멀리서 알아챈다.' },
     { id: 'turban', name: '터번', kind: 'tool', price: 400, reg: [2, 3, 4, 5, 7, 8], desc: '이슬람 상인처럼 변장한다. 이슬람 도시에 잠입할 때 크게, 중국 항구(회회 상인이 오가던 광주·천주 등)에서는 조금 도움이 된다. 쓴다고 없어지지 않지만 들키면 불태워진다 — 여러 개 있으면 다음에 또 쓴다.' },
-    { id: 'lime', name: '라임 절임', kind: 'tool', price: 600, reg: [0, 2, 3, 4, 5], consumable: 1, desc: '장기 항해의 괴혈병을 한동안(60일) 막아 준다. 이베리아·지중해·동아프리카·중근동·인도의 시장에서 판다.' },
+    { id: 'lime', name: '라임 절임', kind: 'tool', price: 600, reg: [0, 2, 3, 4, 5], consumable: 1, desc: '괴혈병이 시작될 때 자동으로 한 통을 배급해 60일 동안 예방한다. 이미 앓고 있으면 다음 항해일에 치료한다. 이베리아·지중해·동아프리카·중근동·인도의 시장에서 판다.' },
     { id: 'cat', name: '배 고양이', kind: 'tool', price: 300, reg: [0, 1, 2], desc: '배에 사는 쥐를 잡아 식량을 지킨다.' },
     { id: 'charm', name: '행운의 부적', kind: 'tool', price: 1200, reg: [4, 3], desc: '이집트의 앵크. 작은 행운을 부른다.' },
     // gifts for ladies
@@ -291,8 +291,85 @@
     { id: 'sistrum', name: '시스트럼', kind: 'instrument', price: 1100, reg: [3], tradition: '아프리카 · 이집트 · 소형 타악기', shape: 'sistrum', desc: '고리 모양 금속 틀 안에 가로대와 작은 금속판을 끼운 손 타악기. 손잡이를 흔들면 가로대와 금속판이 부딪쳐 소리를 낸다.' },
     { id: 'manjira', name: '만지라', kind: 'instrument', price: 650, reg: [5], tradition: '인도 · 소형 타악기', aliases: ['만지라 심벌'], shape: 'manjira', desc: '가운데가 볼록한 작은 놋쇠 심벌 한 쌍을 끈으로 이은 악기. 양손으로 가장자리를 맞부딪쳐 노래와 춤의 박자를 맞춘다.' }
   ];
+  // 지역별 실존 장신구 44종·전승 장신구 6종, 회복약 20종. 조사: docs/market-regional-20261116.md
+  G.ITEMS = G.ITEMS.concat([
+    {"id": "regional_jewel_0_0", "name": "이베리아 금세공 십자가", "kind": "gift", "price": 3600, "gv": 20, "reg": [0], "marketCollection": "jewels_20261116", "desc": "중세 이베리아에서 신앙의 표지로 걸던 금 십자가."},
+    {"id": "regional_jewel_0_1", "name": "그라나다 은제 귀걸이", "kind": "gift", "price": 6400, "gv": 25, "reg": [0], "marketCollection": "jewels_20261116", "desc": "나스르 왕조의 섬세한 은 세공을 본뜬 고리 귀걸이."},
+    {"id": "regional_jewel_0_2", "name": "이베리아 금 토르크", "kind": "gift", "price": 9800, "gv": 30, "reg": [0], "marketCollection": "jewels_20261116", "desc": "고대 이베리아 귀족이 목에 두르던 굵은 금 목고리."},
+    {"id": "regional_jewel_0_3", "name": "성 야고보 조개 브로치", "kind": "gift", "price": 14000, "gv": 35, "reg": [0], "marketCollection": "jewels_20261116", "desc": "산티아고 순례자의 조개 표지를 은으로 만든 브로치."},
+    {"id": "regional_jewel_1_0", "name": "발트 호박 목걸이", "kind": "gift", "price": 3600, "gv": 20, "reg": [1], "marketCollection": "jewels_20261116", "desc": "고대부터 북방 교역로를 따라 팔린 호박 구슬 목걸이."},
+    {"id": "regional_jewel_1_1", "name": "켈트 금 토르크", "kind": "gift", "price": 6400, "gv": 25, "reg": [1], "marketCollection": "jewels_20261116", "desc": "철기시대 켈트인의 꼬임 무늬 금 목고리."},
+    {"id": "regional_jewel_1_2", "name": "바이킹 은 팔찌", "kind": "gift", "price": 9800, "gv": 30, "reg": [1], "marketCollection": "jewels_20261116", "desc": "바이킹이 장신구와 교환 수단으로 쓰던 은 팔고리."},
+    {"id": "regional_jewel_1_3", "name": "토르의 망치 펜던트", "kind": "gift", "price": 14000, "gv": 35, "reg": [1], "marketCollection": "jewels_20261116", "desc": "북유럽에서 수호의 뜻으로 걸던 묠니르 모양 목걸이."},
+    {"id": "regional_jewel_2_0", "name": "에트루리아 금 귀걸이", "kind": "gift", "price": 3600, "gv": 20, "reg": [2], "marketCollection": "jewels_20261116", "desc": "고대 에트루리아의 미세한 금 알갱이 세공 귀걸이."},
+    {"id": "regional_jewel_2_1", "name": "로마 홍옥 인장 반지", "kind": "gift", "price": 6400, "gv": 25, "reg": [2], "marketCollection": "jewels_20261116", "desc": "고대 로마에서 인장을 새겨 쓰던 홍옥수 반지."},
+    {"id": "regional_jewel_2_2", "name": "비잔틴 진주 귀걸이", "kind": "gift", "price": 9800, "gv": 30, "reg": [2], "marketCollection": "jewels_20261116", "desc": "동로마의 금 세공에 진주를 매단 귀걸이."},
+    {"id": "regional_jewel_2_3", "name": "르네상스 카메오 펜던트", "kind": "gift", "price": 14000, "gv": 35, "reg": [2], "marketCollection": "jewels_20261116", "desc": "16세기 유럽에서 사랑받은 옆얼굴 부조 보석 목걸이."},
+    {"id": "regional_jewel_3_0", "name": "이집트 스카라베 반지", "kind": "gift", "price": 3600, "gv": 20, "reg": [3], "marketCollection": "jewels_20261116", "desc": "고대 이집트에서 재생을 상징하던 쇠똥구리 모양 인장 반지."},
+    {"id": "regional_jewel_3_1", "name": "누비아 금 목걸이", "kind": "gift", "price": 6400, "gv": 25, "reg": [3], "marketCollection": "jewels_20261116", "desc": "고대 나일강 상류 금 세공 전통의 구슬 목걸이."},
+    {"id": "regional_jewel_3_2", "name": "카르타고 금 펜던트", "kind": "gift", "price": 9800, "gv": 30, "reg": [3], "marketCollection": "jewels_20261116", "desc": "고대 북아프리카에서 부적처럼 지니던 금 장식."},
+    {"id": "regional_jewel_3_3", "name": "서아프리카 홍옥수 구슬", "kind": "gift", "price": 14000, "gv": 35, "reg": [3], "marketCollection": "jewels_20261116", "desc": "사하라 교역을 통해 유통된 붉은 홍옥수 구슬 장신구."},
+    {"id": "regional_jewel_4_0", "name": "수메르 청금석 목걸이", "kind": "gift", "price": 3600, "gv": 20, "reg": [4], "marketCollection": "jewels_20261116", "desc": "고대 메소포타미아에서 금과 청금석을 번갈아 꿴 목걸이."},
+    {"id": "regional_jewel_4_1", "name": "페르시아 터키석 반지", "kind": "gift", "price": 6400, "gv": 25, "reg": [4], "marketCollection": "jewels_20261116", "desc": "푸른 터키석을 박은 페르시아의 인장 반지."},
+    {"id": "regional_jewel_4_2", "name": "아라비아 은 팔찌", "kind": "gift", "price": 9800, "gv": 30, "reg": [4], "marketCollection": "jewels_20261116", "desc": "아라비아 장인이 무늬를 새긴 두꺼운 은 팔찌."},
+    {"id": "regional_jewel_4_3", "name": "사산 왕조 금 귀걸이", "kind": "gift", "price": 14000, "gv": 35, "reg": [4], "marketCollection": "jewels_20261116", "desc": "고대 이란 금 세공 전통의 늘어뜨린 귀걸이."},
+    {"id": "regional_jewel_5_0", "name": "인도 루비 목걸이", "kind": "gift", "price": 3600, "gv": 20, "reg": [5], "marketCollection": "jewels_20261116", "desc": "오래된 인도 보석 교역에서 귀하게 여긴 붉은 강옥 목걸이."},
+    {"id": "regional_jewel_5_1", "name": "인도 나바라트나 펜던트", "kind": "gift", "price": 6400, "gv": 25, "reg": [5], "marketCollection": "jewels_20261116", "desc": "아홉 보석에 천체의 뜻을 담은 인도의 장식."},
+    {"id": "regional_jewel_5_2", "name": "인도 금 코걸이", "kind": "gift", "price": 9800, "gv": 30, "reg": [5], "marketCollection": "jewels_20261116", "desc": "인도에서 장식과 의례에 쓰던 금 코걸이."},
+    {"id": "regional_jewel_5_3", "name": "실론 사파이어 반지", "kind": "gift", "price": 14000, "gv": 35, "reg": [5], "marketCollection": "jewels_20261116", "desc": "인도양 보석 산지 실론의 푸른 사파이어 반지."},
+    {"id": "regional_jewel_6_0", "name": "중국 옥벽 펜던트", "kind": "gift", "price": 3600, "gv": 20, "reg": [6], "marketCollection": "jewels_20261116", "desc": "고대 중국의 둥근 구멍 뚫린 옥 장식을 작게 깎은 패옥."},
+    {"id": "regional_jewel_6_1", "name": "중국 점취 금비녀", "kind": "gift", "price": 6400, "gv": 25, "reg": [6], "marketCollection": "jewels_20261116", "desc": "금속 바탕에 물총새 깃털을 붙이는 전통의 머리 장식."},
+    {"id": "regional_jewel_6_2", "name": "신라 곡옥 목걸이", "kind": "gift", "price": 9800, "gv": 30, "reg": [6], "marketCollection": "jewels_20261116", "desc": "삼국시대 신라의 굽은 옥과 금 구슬을 꿴 목걸이."},
+    {"id": "regional_jewel_6_3", "name": "고려 은제 향낭", "kind": "gift", "price": 14000, "gv": 35, "reg": [6], "marketCollection": "jewels_20261116", "desc": "향을 담아 몸에 차던 고려의 작은 은 향 주머니."},
+    {"id": "regional_jewel_7_0", "name": "박트리아 금 펜던트", "kind": "gift", "price": 3600, "gv": 20, "reg": [7], "marketCollection": "jewels_20261116", "desc": "고대 박트리아의 교역 문화가 담긴 금 장식."},
+    {"id": "regional_jewel_7_1", "name": "소그드 홍옥수 반지", "kind": "gift", "price": 6400, "gv": 25, "reg": [7], "marketCollection": "jewels_20261116", "desc": "실크로드 상인이 아끼던 홍옥수 인장 반지."},
+    {"id": "regional_jewel_7_2", "name": "스키타이 사슴 금패", "kind": "gift", "price": 9800, "gv": 30, "reg": [7], "marketCollection": "jewels_20261116", "desc": "유라시아 초원 유목민의 사슴 무늬 금 장식판."},
+    {"id": "regional_jewel_7_3", "name": "티베트 터키석 목걸이", "kind": "gift", "price": 14000, "gv": 35, "reg": [7], "marketCollection": "jewels_20261116", "desc": "히말라야 교역로의 푸른 터키석 구슬 목걸이."},
+    {"id": "regional_jewel_8_0", "name": "참파 금 귀걸이", "kind": "gift", "price": 3600, "gv": 20, "reg": [8], "marketCollection": "jewels_20261116", "desc": "중세 참파 왕국 금 세공 전통의 귀걸이."},
+    {"id": "regional_jewel_8_1", "name": "자바 금 팔찌", "kind": "gift", "price": 6400, "gv": 25, "reg": [8], "marketCollection": "jewels_20261116", "desc": "고대·중세 자바의 힌두 불교 문화권 금 팔찌."},
+    {"id": "regional_jewel_8_2", "name": "크메르 금 목걸이", "kind": "gift", "price": 9800, "gv": 30, "reg": [8], "marketCollection": "jewels_20261116", "desc": "앙코르 시대 조각에서 볼 수 있는 금 목걸이 양식."},
+    {"id": "regional_jewel_8_3", "name": "필리핀 링링오", "kind": "gift", "price": 14000, "gv": 35, "reg": [8], "marketCollection": "jewels_20261116", "desc": "고대 필리핀과 주변 해역에서 교역된 틈 있는 옥 귀장식."},
+    {"id": "regional_jewel_9_0", "name": "일본 곡옥 목걸이", "kind": "gift", "price": 3600, "gv": 20, "reg": [9], "marketCollection": "jewels_20261116", "desc": "고대 일본에서 의례와 장식에 쓰던 마가타마 목걸이."},
+    {"id": "regional_jewel_9_1", "name": "일본 금 귀고리", "kind": "gift", "price": 6400, "gv": 25, "reg": [9], "marketCollection": "jewels_20261116", "desc": "고분시대에 쓰던 금빛 고리 귀장식."},
+    {"id": "regional_jewel_9_2", "name": "일본 수정 염주", "kind": "gift", "price": 9800, "gv": 30, "reg": [9], "marketCollection": "jewels_20261116", "desc": "중세 일본에서 지니던 수정 구슬 불교 염주."},
+    {"id": "regional_jewel_9_3", "name": "일본 은제 비녀", "kind": "gift", "price": 14000, "gv": 35, "reg": [9], "marketCollection": "jewels_20261116", "desc": "머리를 고정하고 꾸미는 은제 간자시."},
+    {"id": "regional_jewel_10_0", "name": "마야 옥 귀장식", "kind": "gift", "price": 3600, "gv": 20, "reg": [10], "marketCollection": "jewels_20261116", "desc": "고대 마야 지배층이 귓불에 끼우던 큰 옥 장식."},
+    {"id": "regional_jewel_10_1", "name": "아즈텍 터키석 모자이크", "kind": "gift", "price": 6400, "gv": 25, "reg": [10], "marketCollection": "jewels_20261116", "desc": "멕시코의 작은 터키석 조각을 맞춘 장식."},
+    {"id": "regional_jewel_10_2", "name": "무이스카 툼바가 펜던트", "kind": "gift", "price": 9800, "gv": 30, "reg": [10], "marketCollection": "jewels_20261116", "desc": "콜롬비아 고대 금속공예의 금·구리 합금 목걸이."},
+    {"id": "regional_jewel_10_3", "name": "모체 금 코장식", "kind": "gift", "price": 14000, "gv": 35, "reg": [10], "marketCollection": "jewels_20261116", "desc": "고대 페루 모체 문화의 얇은 금판 코 장식."},
+    {"id": "regional_legend_0", "name": "라 페레그리나 진주", "kind": "gift", "price": 300000, "gv": 50, "reg": [0], "legendary": true, "marketCollection": "jewels_20261116", "desc": "16세기 신대륙에서 유럽 왕실로 건너간 이름난 배 모양 진주. 전설적인 명성의 실존 보석을 소재로 한 시장 상품.", "from": 1560},
+    {"id": "regional_legend_1", "name": "브리싱가멘", "kind": "gift", "price": 380000, "gv": 50, "reg": [1], "legendary": true, "marketCollection": "jewels_20261116", "desc": "여신 프레이야가 지녔다고 전하는 북유럽 신화의 목걸이."},
+    {"id": "regional_legend_2", "name": "하르모니아의 목걸이", "kind": "gift", "price": 460000, "gv": 50, "reg": [2], "legendary": true, "marketCollection": "jewels_20261116", "desc": "그리스 신화에서 아름다움과 파멸을 함께 가져왔다는 목걸이."},
+    {"id": "regional_legend_3", "name": "솔로몬의 인장 반지", "kind": "gift", "price": 540000, "gv": 50, "reg": [4], "legendary": true, "marketCollection": "jewels_20261116", "desc": "정령을 다스렸다고 전하는 솔로몬 왕의 전설 속 반지."},
+    {"id": "regional_legend_4", "name": "샤만타카 보석", "kind": "gift", "price": 620000, "gv": 50, "reg": [5], "legendary": true, "marketCollection": "jewels_20261116", "desc": "인도 신화에서 태양신의 빛과 황금을 품었다는 보석."},
+    {"id": "regional_legend_5", "name": "야사카니의 곡옥", "kind": "gift", "price": 700000, "gv": 50, "reg": [9], "legendary": true, "marketCollection": "jewels_20261116", "desc": "일본 왕권의 세 보물 가운데 하나로 전하는 곡옥. 시장의 물건이 진품인지는 알 수 없다."},
+    {"id": "regional_medicine_0", "name": "얄보칠", "kind": "medicine", "price": 1575, "reg": [6], "heal": 35, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "시대를 넘어 들어온 특별한 외용약. 실제 용법과 별개인 게임 속 회복 아이템. 사용하면 일기토·질병으로 줄어든 건강을 즉시 35 회복한다(최대 100)."},
+    {"id": "regional_medicine_1", "name": "호랑이연고", "kind": "medicine", "price": 1350, "reg": [8], "heal": 30, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "시대를 넘어 들어온 특별한 향유 연고. 근대의 호랑이연고를 소재로 한 게임 상품. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100)."},
+    {"id": "regional_medicine_2", "name": "총명탕", "kind": "medicine", "price": 1800, "reg": [6], "heal": 40, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "동아시아의 전통 처방을 소재로 한 탕약. 사용하면 일기토·질병으로 줄어든 건강을 즉시 40 회복한다(최대 100)."},
+    {"id": "regional_medicine_3", "name": "산삼", "kind": "medicine", "price": 4500, "reg": [6], "heal": 100, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "깊은 산에서 귀하게 얻은 야생 인삼. 사용하면 일기토·질병으로 줄어든 건강을 즉시 100 회복한다(최대 100)."},
+    {"id": "regional_medicine_4", "name": "로즈메리 향유", "kind": "medicine", "price": 900, "reg": [0], "heal": 20, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "이베리아의 향기로운 로즈메리를 담은 향유. 사용하면 일기토·질병으로 줄어든 건강을 즉시 20 회복한다(최대 100)."},
+    {"id": "regional_medicine_5", "name": "꿀 밀랍 연고", "kind": "medicine", "price": 1125, "reg": [0], "heal": 25, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "꿀과 밀랍을 소재로 한 전통 연고. 사용하면 일기토·질병으로 줄어든 건강을 즉시 25 회복한다(최대 100)."},
+    {"id": "regional_medicine_6", "name": "버드나무 껍질", "kind": "medicine", "price": 1125, "reg": [1], "heal": 25, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "북방에서 모은 버드나무 껍질 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 25 회복한다(최대 100)."},
+    {"id": "regional_medicine_7", "name": "서양톱풀 약포", "kind": "medicine", "price": 1350, "reg": [1], "heal": 30, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "유럽의 전통 약초 서양톱풀을 묶은 약포. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100)."},
+    {"id": "regional_medicine_8", "name": "테리아카", "kind": "medicine", "price": 2475, "reg": [2], "heal": 55, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "고대에서 중세·근세까지 유명했던 복합 약제. 사용하면 일기토·질병으로 줄어든 건강을 즉시 55 회복한다(최대 100)."},
+    {"id": "regional_medicine_9", "name": "히포크라테스 약초즙", "kind": "medicine", "price": 1350, "reg": [2], "heal": 30, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "고대 지중해 의술에서 착안한 게임 속 혼합 약초즙. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100)."},
+    {"id": "regional_medicine_10", "name": "알로에 연고", "kind": "medicine", "price": 1350, "reg": [3], "heal": 30, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "아프리카의 알로에를 소재로 만든 연고. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100)."},
+    {"id": "regional_medicine_11", "name": "몰약 향유", "kind": "medicine", "price": 1575, "reg": [3], "heal": 35, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "홍해 교역의 귀한 몰약을 담은 향유. 사용하면 일기토·질병으로 줄어든 건강을 즉시 35 회복한다(최대 100)."},
+    {"id": "regional_medicine_12", "name": "장미수 약병", "kind": "medicine", "price": 1125, "reg": [4], "heal": 25, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "중근동의 장미 증류 전통에서 착안한 약병. 사용하면 일기토·질병으로 줄어든 건강을 즉시 25 회복한다(최대 100)."},
+    {"id": "regional_medicine_13", "name": "감초 약포", "kind": "medicine", "price": 1350, "reg": [4, 7], "heal": 30, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "교역로를 따라 유통된 달콤한 감초 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100)."},
+    {"id": "regional_medicine_14", "name": "트리팔라", "kind": "medicine", "price": 1800, "reg": [5], "heal": 40, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "인도 전통 의술의 세 가지 열매 배합. 사용하면 일기토·질병으로 줄어든 건강을 즉시 40 회복한다(최대 100)."},
+    {"id": "regional_medicine_15", "name": "아슈와간다 약재", "kind": "medicine", "price": 2025, "reg": [5], "heal": 45, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "인도의 전통 약초를 말려 묶은 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 45 회복한다(최대 100)."},
+    {"id": "regional_medicine_16", "name": "히말라야 약환", "kind": "medicine", "price": 2250, "reg": [7], "heal": 50, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "산악 교역로의 복합 약재를 소재로 한 게임 속 환약. 사용하면 일기토·질병으로 줄어든 건강을 즉시 50 회복한다(최대 100)."},
+    {"id": "regional_medicine_17", "name": "강황 약포", "kind": "medicine", "price": 1575, "reg": [8], "heal": 35, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "동남아시아의 황금빛 강황 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 35 회복한다(최대 100)."},
+    {"id": "regional_medicine_18", "name": "진피 약포", "kind": "medicine", "price": 1350, "reg": [9], "heal": 30, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "일본에서 말린 감귤 껍질을 담은 약포. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100)."},
+    {"id": "regional_medicine_19", "name": "코파이바 수지", "kind": "medicine", "price": 1800, "reg": [10], "heal": 40, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "남아메리카의 나무에서 얻은 전통 수지 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 40 회복한다(최대 100)."}
+  ]);
+  G.ITEMS.forEach(function (it) {
+    if (['regional_jewel_6_0', 'regional_jewel_6_1'].indexOf(it.id) >= 0) it.subRegion = '중국';
+    if (['regional_jewel_6_2', 'regional_jewel_6_3', 'regional_medicine_0', 'regional_medicine_2', 'regional_medicine_3'].indexOf(it.id) >= 0) it.subRegion = '조선';
+  });
   G.ITEM = {}; G.ITEMS.forEach(function (it) { G.ITEM[it.id] = it; });
   // 이미 팔던 군악 악기는 새 품목을 중복해서 만들지 않고 용도 표시만 보탠다.
   ['flute', 'piccolo', 'oboe', 'clarinet', 'bassclarinet', 'eflatclarinet', 'bassoon', 'saxophone', 'frenchhorn', 'trumpet', 'cornet', 'trombone', 'basstrombone', 'tuba', 'snaredrum', 'tenordrum', 'bassdrum', 'cymbals', 'glockenspiel', 'bagpipes', 'taepyeongso', 'janggu', 'zurna', 'davul', 'naqqara', 'nafir', 'karna', 'nakers', 'medievaltrumpet'].forEach(function (id) { G.ITEM[id].military = '군악 합주·행진'; });
-  G.ITEM_KIND = { weapon: '무기', armor: '방어구', tool: '항해도구', gift: '장신구', mgift: '남자 선물', instrument: '악기', special: '특수', treasure: '보물', evidence: '증거품' };
+  G.ITEM_KIND = { weapon: '무기', armor: '방어구', tool: '항해도구', gift: '장신구', mgift: '남자 선물', instrument: '악기', medicine: '약', special: '특수', treasure: '보물', evidence: '증거품' };
 })(window.G = window.G || {});

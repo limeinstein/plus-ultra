@@ -13,6 +13,17 @@
   };
 
   function keeper() { return C.npc('trader', '교역소 주인'); }
+  // 팔거나 새로 살 교역품에 기대지 않고, 실제 실어 둔 식량·물을 먼저 살핀다.
+  T.checkSupply = async function (c) {
+    var f = S().fleet, H = C.B.harbor;
+    if (!c.port || !f.ships.length || !f.crew || !H || !H.supply) return;
+    var use = R.dailyUse(), food = Math.floor(f.food / use + 1e-6), water = Math.floor(f.water / use + 1e-6);
+    var limit = G.BALANCE.tradeSupplyDays;
+    if (Math.min(food, water) > limit) return;
+    var go = await C.mateAsk('제독, 실어 둔 식량은 ' + food + '일분, 물은 ' + water + '일분입니다. 보급이 ' + limit + '일분 이하라 교역품부터 채우면 보급할 자리가 모자랄 수 있습니다. 먼저 보급하시겠습니까?',
+      [{ label: '먼저 보급한다', value: true }, { label: '교역을 계속한다', value: false }], R.purser() ? 'purser' : 'first');
+    if (go) await H.supply(c);
+  };
   async function blocked(c, id, side) {
     var why = G.Sakoku && G.Sakoku.tradeBlock(c, id, side);
     if (!why) return false;
@@ -26,6 +37,7 @@
     cur.haggle = same ? mk0.hag.h : null;
     cur.hagN = same ? (mk0.hag.n || (mk0.hag.h ? 99 : 0)) : 0;   // 이번에 이 교역소에서 흥정한 횟수 (회계 단계만큼 할 수 있다 — 일괄 거래 흥정과 나눠 쓴다)
     if (G.Ledger) G.Ledger.record(c);
+    await T.checkSupply(c);
     var lv = C.langLv(c);
     await C.say(keeper(), lv === 0 ? '어서 오게. 무엇을 찾나?' : C.hail(c, 'trade', ['어서 오게. 좋은 물건이 들어와 있다네.', '어서 오게! 오늘은 무엇을 사겠나?', '팔 물건이 있으면 보여 주게.']));
     if (G.Escort) { try { await G.Escort.atTrade(c); } catch (e) { console.error(e); } }   // 가끔 상인이 다가와 호위를 청한다
@@ -38,6 +50,7 @@
     return [
       { label: '구입', icon: 'coin', onClick: function () { return T.buy(c); } },
       { label: '매각', icon: 'sack', sub: R.cargoQty() ? R.cargoQty() + '통' : '', onClick: function () { return T.sell(c); } },
+      c.port ? { label: '보급', icon: 'bread', sub: '식량·물을 먼저 싣는다', onClick: function () { return C.B.harbor.supply(c); } } : null,
       { label: '투자', icon: 'seal', sub: lv ? '출자 ' + lv + '등급' + (div >= 1 ? ' · 배당 ' + U.num(div) + '닢' : '') : '', onClick: function () { return T.invest(c); } },
       G.VoyagePlans ? { label: '탐험·교역 계획', icon: 'map', sub: '거래처 정보·역사적 교역 기회', onClick: function () { return G.VoyagePlans.open(); } } : null,
       { label: '회화', icon: 'people', onClick: function () { return T.talk(c); } },

@@ -1,0 +1,29 @@
+{
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "id": "dog_cat_chase",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-f9c2215d-05b8-46de-a254-8cebba6bd0c0.png",
+      "prompt": "Create ONE new MALE-ONLY wide 2.25:1 cinematic pet interaction game event painting. On a 16th-century wooden sailing ship deck, THREE adult MALE sailors only, distinct natural faces, practical linen shirts and working vests, no women. A short-legged red-and-white WELSH CORGI puppy chasing a cream SIAMESE kitten with dark face, ears and paws and blue eyes around a coil of rope. The kitten springs onto a low wooden barrel and looks back. Three adult male sailors laugh and reach gently to keep the racing pets out of trouble. The animals deliberately use different breeds/species from prior female scenes. Clearly recognizable specified animal identity, both complete animals visible, anatomically correct hands and animals, expressive warm amused faces, affectionate handling. Rich detailed warm historical oil-painting realism with amber light, rope coils, barrels, rigging and calm blue sea. Single readable candid comedic scene, no montage. No text, watermark, borders, modern objects, injuries or gore.",
+      "target": "images/crew-pet-events/dog_cat_chase_men.webp"
+    },
+    {
+      "id": "parrot_cat_chase",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-5ef4f5c4-98b3-4b29-835c-d1a9d49556df.png",
+      "prompt": "Create ONE new MALE-ONLY wide 2.25:1 cinematic pet interaction game event painting. On a 16th-century wooden sailing ship deck, THREE adult MALE sailors only, distinct natural faces, practical linen shirts and working vests, no women. A tiny GREEN-AND-YELLOW BUDGERIGAR playfully swooping above a fluffy cream PERSIAN kitten that springs up with one paw raised. They are chasing one another around the deck. Three adult male sailors crouch nearby, laughing in surprised delight and gently reaching out. The budgie is realistically small, not a macaw. The animals deliberately use different breeds/species from prior female scenes. Clearly recognizable specified animal identity, both complete animals visible, anatomically correct hands and animals, expressive warm amused faces, affectionate handling. Rich detailed warm historical oil-painting realism with amber light, rope coils, barrels, rigging and calm blue sea. Single readable candid comedic scene, no montage. No text, watermark, borders, modern objects, injuries or gore.",
+      "target": "images/crew-pet-events/parrot_cat_chase_men.webp"
+    },
+    {
+      "id": "monkey_dog_spat",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-d253c68b-0889-4f8e-8d13-a14f9659bf6f.png",
+      "prompt": "Create ONE new MALE-ONLY wide 2.25:1 cinematic pet interaction game event painting. On a 16th-century wooden sailing ship deck, THREE adult MALE sailors only, distinct natural faces, practical linen shirts and working vests, no women. A small young JAPANESE MACAQUE with gray-brown fur, pink face and SHORT TAIL and a fawn PUG puppy with black muzzle and curled tail stubbornly tugging opposite ends of a knotted cloth toy. Three adult male sailors kneel to gently separate the harmless comical squabble, one offering a second toy. No lemurs, no large apes. The animals deliberately use different breeds/species from prior female scenes. Clearly recognizable specified animal identity, both complete animals visible, anatomically correct hands and animals, expressive warm amused faces, affectionate handling. Rich detailed warm historical oil-painting realism with amber light, rope coils, barrels, rigging and calm blue sea. Single readable candid comedic scene, no montage. No text, watermark, borders, modern objects, injuries or gore.",
+      "target": "images/crew-pet-events/monkey_dog_spat_men.webp"
+    },
+    {
+      "id": "parrot_teases_monkey",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-eb17cd74-b2e4-489f-a631-ee172fcd405c.png",
+      "prompt": "Create ONE new MALE-ONLY wide 2.25:1 cinematic pet interaction game event painting. On a 16th-century wooden sailing ship deck, THREE adult MALE sailors only, distinct natural faces, practical linen shirts and working vests, no women. A tiny GREEN-AND-YELLOW BUDGERIGAR perched on a low wooden yard mimicking and teasing a small WHITE-HANDED GIBBON with dark fur, pale face ring, white hands, long arms and NO TAIL. The surprised gibbon below raises its hands indignantly while the cheeky budgie chirps. Three adult male sailors laugh warmly at the funny exchange. Bird realistically small, not a macaw; gibbon not a lemur. The animals deliberately use different breeds/species from prior female scenes. Clearly recognizable specified animal identity, both complete animals visible, anatomically correct hands and animals, expressive warm amused faces, affectionate handling. Rich detailed warm historical oil-painting realism with amber light, rope coils, barrels, rigging and calm blue sea. Single readable candid comedic scene, no montage. No text, watermark, borders, modern objects, injuries or gore.",
+      "target": "images/crew-pet-events/parrot_teases_monkey_men.webp"
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "generator": "built-in image_gen",
+  "style": "Warm intimate historical oil-painting realism, cinematic visual-novel date-scene atmosphere, 2.25:1 wide. Three ordinary 16th-century sailors playing affectionately with a clearly visible animal on a wooden sailing ship; no text, borders, watermark or modern objects.",
+  "assets": [
+    {
+      "id": "shiba",
+      "name": "시바견",
+      "subject": "a red Shiba Inu puppy with upright ears and curled tail",
+      "action": "chasing a little knotted rope held by a laughing sailor",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-d91a58ce-ac52-45ed-a491-d0f20f0643da.png"
+    },
+    {
+      "id": "pug",
+      "name": "퍼그",
+      "subject": "a small fawn pug puppy with black muzzle and curled tail",
+      "action": "offering its paw to a seated sailor while others laugh",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-9fdddbff-fd34-466e-a9f9-c12a7733985a.png"
+    },
+    {
+      "id": "corgi",
+      "name": "웰시코기",
+      "subject": "a red-and-white Welsh corgi puppy with short legs and large ears",
+      "action": "trotting after a cloth ball between sailors",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-ba776b34-80b1-403a-8eee-d87b761e1f5d.png"
+    },
+    {
+      "id": "shihtzu",
+      "name": "시츄",
+      "subject": "a small long-haired white and brown Shih Tzu puppy",
+      "action": "being gently brushed on a sailor's lap",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-280ada7a-826a-4638-ac36-c95e1b792a03.png"
+    },
+    {
+      "id": "dachshund",
+      "name": "닥스훈트",
+      "subject": "a smooth-haired chestnut dachshund puppy with long body and short legs",
+      "action": "playing tug with a short rag and a seated sailor",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-ab2d5fb0-c86b-49d6-93a4-0de8f8ca7909.png"
+    },
+    {
+      "id": "papillon",
+      "name": "파피용",
+      "subject": "a white-and-chestnut papillon puppy with butterfly ears",
+      "action": "jumping lightly toward a sailor's open hands",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-fa08a605-a5f9-452e-9fe0-123e8f58699d.png"
+    },
+    {
+      "id": "siamese",
+      "name": "샴고양이",
+      "subject": "a cream Siamese kitten with dark face ears feet and blue eyes",
+      "action": "batting at a loose cord offered by a smiling sailor",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-6e2212d4-9c10-460f-a239-e3c6ee0983d9.png"
+    },
+    {
+      "id": "russianblue",
+      "name": "러시안 블루",
+      "subject": "a silver-blue short-haired Russian Blue kitten with green eyes",
+      "action": "nestling against a sailor's hand on a folded sail",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-c88d3a92-114c-4fc7-9e65-b8328c92142b.png"
+    },
+    {
+      "id": "persian",
+      "name": "페르시안 고양이",
+      "subject": "a fluffy cream Persian kitten with round flat face",
+      "action": "being cuddled gently by a weathered sailor",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-59fe5b2b-6c90-4a41-9a7d-dfea7c2db90b.png"
+    },
+    {
+      "id": "angora",
+      "name": "터키시 앙고라",
+      "subject": "a white long-haired Turkish Angora kitten with one blue eye and one amber eye",
+      "action": "stretching to tap a feather held by a sailor",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-a0cd78be-b266-441e-ab57-56c75e4114cb.png"
+    },
+    {
+      "id": "koreancat",
+      "name": "코리안 숏헤어",
+      "subject": "a brown striped Korean short-haired tabby kitten",
+      "action": "rolling playfully on folded canvas beside smiling sailors",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-b3f55599-84b9-4e8b-8f9d-579b73b5a56b.png"
+    },
+    {
+      "id": "vancat",
+      "name": "반 고양이",
+      "subject": "a mostly white Turkish Van kitten with auburn head patches and auburn tail",
+      "action": "pawing playfully at water in a shallow wooden bowl with sailors",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-e6505893-1122-4252-abc9-cc3b74c0cbb1.png"
+    },
+    {
+      "id": "manul",
+      "name": "마눌들고양이",
+      "subject": "a fluffy gray Pallas's cat kitten with broad flat face and small rounded ears",
+      "action": "cautiously playing with a rag ball near seated smiling sailors",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-8d9425dc-3858-40c8-81bb-f6060c4dec9e.png"
+    },
+    {
+      "id": "parrot",
+      "name": "앵무새",
+      "subject": "a tame scarlet macaw with red yellow and blue feathers",
+      "action": "perching on a sailor's forearm and playfully mimicking his open-mouthed laugh",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-54b7f9de-1e41-4e41-80a4-1a9975bb90d3.png"
+    },
+    {
+      "id": "budgie",
+      "name": "사랑앵무",
+      "subject": "a tiny green and yellow budgerigar",
+      "action": "hopping onto a sailor's fingertip while two sailors smile fondly",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-61ee4184-1fd2-4c65-b32d-d4ec5df53b93.png"
+    },
+    {
+      "id": "lemur",
+      "name": "알락꼬리여우원숭이",
+      "subject": "a small ring-tailed lemur with gray fur and black-and-white ringed tail",
+      "action": "playing with a cloth ball beside seated smiling sailors",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-e5c8bf7f-aec8-4cd8-a9b1-bfba5e585626.png"
+    },
+    {
+      "id": "gibbon",
+      "name": "흰손긴팔원숭이",
+      "subject": "a small young white-handed gibbon with dark fur pale face ring white hands long arms and NO tail",
+      "action": "gently holding a sailor's hands while seated and playfully leaning backwards",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-2a7d812a-6a3f-4899-adaf-70de327e05af.png"
+    },
+    {
+      "id": "tarsier",
+      "name": "필리핀안경원숭이",
+      "subject": "a tiny Philippine tarsier with enormous amber eyes delicate fingers and a slender tail",
+      "action": "clinging gently to a sailor's offered finger while sailors watch with affectionate smiles",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-bae7a7fe-3ca4-4a0b-b825-1b53fe14549d.png"
+    },
+    {
+      "id": "snowmonkey",
+      "name": "일본원숭이",
+      "subject": "a small young Japanese macaque with gray-brown fur pink face and short tail",
+      "action": "playfully tugging a folded rag with a sailor while the other sailors laugh",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-9d026af5-ae97-4a5a-8c7e-c18ad3b9af12.png"
+    }
+  ]
+}

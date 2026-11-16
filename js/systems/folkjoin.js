@@ -55,7 +55,7 @@
     s.wander.seq = (s.wander.seq || 0) + 1;
     var id = 'fj_' + d.id + '_' + s.date.y + '_' + s.wander.seq;
     var def = {
-      id: id, name: name, g: g, wd: true, folk: d.id, nat: 'folk', natName: who, type: tk, typeName: T.nm, st: stv, sk: sk, lg: lg, fame: 0, wage: wage,
+      id: id, name: name, g: g, wd: true, folk: d.id, nat: 'folk', natName: who, blackAfrican: !!P.blackAfrican, type: tk, typeName: T.nm, st: stv, sk: sk, lg: lg, fame: 0, wage: wage,
       y: [s.date.y, 9999], reg: [d.reg], style: P.style, role: g === 'f' ? 'maid' : (T.role[0] || 'sailor'),
       desc: who + ' ' + (g === 'f' ? '여자' : '남자') + '. ' + d.name + U.j(d.name, '을/를').slice(d.name.length) + ' 찾았을 때 배에 태워 달라며 따라나섰다. 솜씨는 ' + T.nm + '.',
       story: who + '의 마을에서 나고 자랐다. 바다 건너에서 온 배를 처음 보고, 수평선 너머를 보고 싶어 제독을 따라나섰다.',

@@ -8,7 +8,7 @@
   function E(){return G.UNINVITED_APOSTLE_EVENTS;}
   function member(id){return (S().mates||[]).some(function(m){return m.id===id;});}
   function ever(id){return !!((S().crewEver||{})[id] || member(id));}
-  function speaker(id){var m=G.MATE[id];return m?{name:m.name,portrait:G.Art.mateSpec(id),half:G.Img.chain.mateHalf(id),lang:4}:{};}
+  function speaker(id){if(id==='P'){var p=S().player;return {name:p.name,portrait:p.portrait,rigId:'player'};}var m=G.MATE[id];return m?{name:m.name,portrait:G.Art.mateSpec(id),half:G.Img.chain.mateHalf(id),lang:4}:{};}   // 'P' 제독 (2026-11-16)
   A.state=function(){
     var s=S(), b=s.uninvitedApostles || (s.uninvitedApostles={stage:0});
     b.won=b.won||{};b.attempts=b.attempts||{};b.earned=b.earned||{};b.claimed=b.claimed||{};

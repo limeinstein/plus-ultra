@@ -1,0 +1,33 @@
+{
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "id": "dog_cat_chase",
+      "title": "갑판의 술래잡기",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-0aa183ca-a7b0-4d7f-b6dc-d460688b04b2.png",
+      "prompt": "Create ONE wide 2.25:1 cinematic game event illustration: \"갑판의 술래잡기\". A 16th-century wooden sailing ship deck, practical modest linen shirts and work vests on THREE adult FEMALE sailors only, no men. A small red dog joyfully chasing a nimble brown tabby kitten around a coil of rope; kitten looking back and leaping onto a low barrel. Three adult female sailors amused and surprised, one reaching to catch the runaway rope, another laughing with warm crinkled eyes. Clearly readable lively chase with both complete animals visible. Rich warm historical oil-painting realism, amber natural light, tactile wood grain and folded sails, calm blue sea and rigging. Emphasize women's natural affectionate expressions and clear gentle handling, correct hand anatomy, realistic species-correct animal anatomy. This is a lighthearted rare pet interaction event. Distinct layout and action, no montage or motion ghosting. No text, watermark, borders, modern objects, injuries or gore.",
+      "target": "images/crew-pet-events/dog_cat_chase.webp"
+    },
+    {
+      "id": "parrot_cat_chase",
+      "title": "이번에는 누가 술래?",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-0f4fc7da-5c24-466f-b4c6-1789fe5b6196.png",
+      "prompt": "Create ONE wide 2.25:1 cinematic game event illustration: \"이번에는 누가 술래?\". A 16th-century wooden sailing ship deck, practical modest linen shirts and work vests on THREE adult FEMALE sailors only, no men. A scarlet red-yellow-blue macaw playfully swooping just above a brown tabby kitten leaping after it, and turning around to follow the cat, a lively harmless chase. Three adult female sailors reacting with delighted wide eyes, smiles and hands reaching gently to protect the cat. Both whole animals clearly visible, wings spread, dynamic readable composition. Rich warm historical oil-painting realism, amber natural light, tactile wood grain and folded sails, calm blue sea and rigging. Emphasize women's natural affectionate expressions and clear gentle handling, correct hand anatomy, realistic species-correct animal anatomy. This is a lighthearted rare pet interaction event. Distinct layout and action, no montage or motion ghosting. No text, watermark, borders, modern objects, injuries or gore.",
+      "target": "images/crew-pet-events/parrot_cat_chase.webp"
+    },
+    {
+      "id": "monkey_dog_spat",
+      "title": "장난감의 주인은 누구?",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-be91a323-c657-4562-899c-614b1926cee7.png",
+      "prompt": "Create ONE wide 2.25:1 cinematic game event illustration: \"장난감의 주인은 누구?\". A 16th-century wooden sailing ship deck, practical modest linen shirts and work vests on THREE adult FEMALE sailors only, no men. A small ring-tailed lemur and a small red dog having a harmless comical squabble over a knotted cloth toy, tugging opposite ends, stubborn funny expressions, no wounds or blood. Three adult female sailors kneeling close to gently separate them, amused exasperated expressions, one offering a second toy. Complete animals clearly visible. Rich warm historical oil-painting realism, amber natural light, tactile wood grain and folded sails, calm blue sea and rigging. Emphasize women's natural affectionate expressions and clear gentle handling, correct hand anatomy, realistic species-correct animal anatomy. This is a lighthearted rare pet interaction event. Distinct layout and action, no montage or motion ghosting. No text, watermark, borders, modern objects, injuries or gore.",
+      "target": "images/crew-pet-events/monkey_dog_spat.webp"
+    },
+    {
+      "id": "parrot_teases_monkey",
+      "title": "그 목소리는 앵무새였다",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e3fc-5adb-7ff0-9c66-842d4f50fab8\\exec-0482429d-e15e-47f1-8541-49bdd984b02a.png",
+      "prompt": "Create ONE wide 2.25:1 cinematic game event illustration: \"그 목소리는 앵무새였다\". A 16th-century wooden sailing ship deck, practical modest linen shirts and work vests on THREE adult FEMALE sailors only, no men. A scarlet red-yellow-blue macaw perched on a low yard imitating a little ring-tailed lemur's face and call, beak open cheekily, the surprised lemur below holding its little hands up and looking at the parrot indignantly. Three adult female sailors laughing warmly with expressive joyful faces and playful gestures. Both whole animals prominent, a readable affectionate comedic moment. Rich warm historical oil-painting realism, amber natural light, tactile wood grain and folded sails, calm blue sea and rigging. Emphasize women's natural affectionate expressions and clear gentle handling, correct hand anatomy, realistic species-correct animal anatomy. This is a lighthearted rare pet interaction event. Distinct layout and action, no montage or motion ghosting. No text, watermark, borders, modern objects, injuries or gore.",
+      "target": "images/crew-pet-events/parrot_teases_monkey.webp"
+    }
+  ]
+}

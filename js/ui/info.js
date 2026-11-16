@@ -163,7 +163,7 @@
       box('적재', R.used() + ' / ' + R.fleetCap() + '통', '교역품 ' + R.cargoQty() + '통 · ' + Object.keys(f.cargo).length + '/' + R.maxKinds() + '종' + (G.Cargo ? ' · 무게 ' + G.Cargo.wtText() : '')) +
       box('피로', Math.round(f.fatigue) + '%', UI.bar(f.fatigue, 100, 'red')) +
       box('규율', Math.round(f.discipline) + '%', UI.bar(f.discipline, 100, 'green')) +
-      box('항해', (f.daysOut || 0) + '일째', f.scurvy > 0 ? '<span class="warn-text">괴혈병 ' + Math.round(f.scurvy) + '</span>' : '건강') + '</div>' + strainHtml +
+      box('항해', (f.daysOut || 0) + '일째', (f.scurvy > 0 ? '<span class="warn-text">괴혈병 ' + Math.round(f.scurvy) + '</span>' : '건강') + (s.flags.limeActive > 0 ? ' · 라임 예방 ' + s.flags.limeActive + '일' : '') + (R.ratGuard() ? ' · 고양이가 쥐 피해 예방' : '')) + '</div>' + strainHtml +
       '<table class="tbl"><tr><th></th><th>선명</th><th>선종</th><th>선장</th><th>목재</th><th class="num">내구력</th><th class="num">적재량</th><th>대포</th><th>돛</th><th>선수상</th></tr>' +
       f.ships.map(function (sh, i) {
         var w = G.Ships.wood(sh);
@@ -291,6 +291,7 @@
           var d = G.ITEM[it.id] || {}, kind = d.kind || it.kind, rl = G.RELIC && G.RELIC[it.id];
           var eq = (kind === 'weapon' && p.equip.weapon === it.id) || (kind === 'armor' && p.equip.armor === it.id);
           var act = kind === 'weapon' || kind === 'armor' ? (eq ? '<span class="tag">장비 중</span>' : '<button class="btn small" data-eq="' + i + '">장비</button>') : '';
+          if (kind === 'medicine') act += ' <button class="btn small green" data-med="' + i + '"' + (p.hp >= 100 ? ' disabled' : '') + '>사용 · 건강 +' + d.heal + '</button>';
           if (it.id === 'photo' && G.Story && G.Story.showPhoto) act += ' <button class="btn small" data-story-photo="' + i + '">사진을 본다</button>';
           if (rl && (rl.kind === 'book' || rl.lead)) act += ' <button class="btn small" data-read="' + i + '">' + (it.read ? '다시 본다' : '읽는다') + '</button>';
           var detail = I.itemInfo(it);
@@ -311,6 +312,7 @@
           cv.className = 'relic-ic'; td.appendChild(cv);
         }
       });
+      U.$$('[data-med]', el).forEach(function (b) { b.onclick = function () { var it = p.items[+b.dataset.med]; if (it) { var n = R.useMedicine(it.id); if (n) UI.toast('건강을 ' + n + ' 회복했다.', 'heart'); render(); } }; });
       U.$$('[data-eq]', el).forEach(function (b) { b.onclick = function () { var it = p.items[+b.dataset.eq], d = G.ITEM[it.id]; p.equip[d.kind === 'weapon' ? 'weapon' : 'armor'] = it.id; if (G.Audio) G.Audio.sfx(d.kind === 'weapon' ? 'draw' : 'equip'); render(); }; });
       U.$$('[data-story-photo]', el).forEach(function (b) { b.onclick = function () { G.Story.showPhoto(); }; });
       U.$$('[data-read]', el).forEach(function (b) { b.onclick = async function () { await G.Disc.readRelic(p.items[+b.dataset.read]); render(); }; });

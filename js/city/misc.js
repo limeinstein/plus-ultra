@@ -161,7 +161,20 @@
     var always = s.player && s.player.home === c.id ? ((G.BALANCE && G.BALANCE.homeTools) || []) : [];
     var eligible = G.ITEMS.filter(function (it) { return it.price > 0 && !it.rare && (always.indexOf(it.id) >= 0 || (it.reg.indexOf(c.region) >= 0 && (!it.subRegion || G.subRegion(c) === it.subRegion) && (!it.marketRel || c.rel === it.marketRel) && (!it.from || s.date.y >= it.from))); });
     // 다른 물건의 45일 추첨 순서는 유지한다. 악기만 별도의 주간 입고 목록으로 고른다.
-    var stock = eligible.filter(function (it) { var picked = rng() < 0.7 || it.id === 'lime' || always.indexOf(it.id) >= 0; return picked && it.kind !== 'instrument'; });
+    var stock = eligible.filter(function (it) { var picked = rng() < 0.7 || it.id === 'lime' || always.indexOf(it.id) >= 0; return picked && it.kind !== 'instrument' && it.kind !== 'medicine' && !it.legendary; });
+    // 희소품은 주간 입고. 재입장·저장 복원으로 재추첨하거나 재구입하지 못한다.
+    var period = Math.floor(s.day / G.BALANCE.marketMedicineDays);
+    var rareRng = U.makeRng(c.id * 17011 + period), bought = s.marketRareBought && s.marketRareBought[c.id];
+    var meds = eligible.filter(function (it) { return it.kind === 'medicine'; });
+    var jewels = eligible.filter(function (it) { return it.legendary; });
+    if (rareRng() < G.BALANCE.marketMedicineChance && meds.length) {
+      var med = meds[Math.floor(rareRng() * meds.length)];
+      if (!bought || bought.period !== period || !bought.ids[med.id]) stock.push(med);
+    }
+    if (rareRng() < G.BALANCE.marketLegendChance && jewels.length) {
+      var jewel = jewels[Math.floor(rareRng() * jewels.length)];
+      if (!bought || bought.period !== period || !bought.ids[jewel.id]) stock.push(jewel);
+    }
     // 전설의 갑옷: 그 고장 시장에 딱 한 벌 (js/data/items.js legendCity) — 누가 사 가면 다시 나오지 않는다
     stock = MK.legends(c).concat(stock);
     var pool = eligible.filter(function (it) { return it.kind === 'instrument'; });
@@ -189,6 +202,7 @@
   /** 물건의 능력치 한 줄 (구입·매각 목록과 확인 창) */
   function itemStat(it) {
     var d = G.ITEM[it.id] || {}, k = d.kind || it.kind;
+    if (k === 'medicine') return '건강 +' + d.heal + ' · 재고 1개';
     var ist = R.itemStatText ? R.itemStatText(it.id) : '', base = k === 'weapon' ? '공격 ' + d.atk : k === 'armor' ? '방어 ' + d.def : k === 'gift' && d.gv ? '호감 ' + d.gv : k === 'mgift' && d.gv ? '남자 선물 ' + d.gv : k === 'instrument' ? '악기' + (d.military ? ' · 군악' : '') : (G.ITEM_KIND[k] || '');
     if (G.Ward && G.Ward.text(it.id)) ist = (ist ? ist + ' · ' : '') + G.Ward.text(it.id);   // 수호 유물: 막는 공격 (js/data/relics.js ward)
     return ist ? (base ? base + ' · ' : '') + ist : base;   // 책 → 지력, 악기·장신구·놀이 도구 → 매력
@@ -198,7 +212,7 @@
   function mkThumb(it) {
     if (!it || !G.Img) return null;
     var rl = G.RELIC && G.RELIC[it.id], key = G.Img.pick(rl ? G.Img.chain.relic(rl) : G.Img.chain.item(it));
-    return key ? G.Img.src(key) : it.kind === 'instrument' && G.Art && G.Art.relicArt ? G.Art.relicArt(it, 128, 128, { transparent: true }).toDataURL() : null;
+    return key ? G.Img.src(key) : (it.kind === 'instrument' || it.kind === 'medicine' || it.marketCollection) && G.Art && G.Art.relicArt ? G.Art.relicArt(it, 128, 128, { transparent: true }).toDataURL() : null;
   }
   MK.price = mkBuy;
   /** 값이 보통보다 5% 넘게 비싸면 ▲, 싸면 ▼ */
@@ -206,7 +220,7 @@
   MK.enter = async function (c) { var cur = C.current(); if (cur) { cur.mk = null; cur.mkBuyDeals = 0; } await C.say(vendor(), C.hail(c, 'market', ['자네, 보는 눈이 있군. 좋은 물건이 많다네.', '구경하고 가게! 먼 나라에서 온 물건도 있다네.', '팔고 싶은 물건이 있으면 어디 보여주게!']));
     var lt = MK.legendTalk ? MK.legendTalk(c) : null; if (lt) await C.say(vendor(), lt);   // 전설의 갑옷 자랑·소문
   };
-  MK.sub = function () { return '무기·도구·장신구 · 악기 최대 ' + G.BALANCE.marketInstrumentMax + '종(' + G.BALANCE.marketInstrumentDays + '일마다 교체)'; };
+  MK.sub = function () { return '무기·도구·장신구 · 약 0~1개(' + G.BALANCE.marketMedicineDays + '일마다 입고) · 악기 최대 ' + G.BALANCE.marketInstrumentMax + '종(' + G.BALANCE.marketInstrumentDays + '일마다 교체)'; };
   MK.menu = function (c) {
     return [
       { label: '구입', icon: 'coin', onClick: function () { return MK.buy(c); } },
@@ -223,7 +237,7 @@
     var s = S(), pr = price == null ? mkBuy(it) : price;
     var own = R.itemCount(it.id), hasStack = own > 0;
     if (!hasStack && R.slotsUsed() >= R.ITEM_MAX) return 0;
-    var cap = it.legendCity != null ? 1 : 99 - own;   // 전설의 갑옷은 한 벌뿐
+    var cap = it.legendCity != null || it.kind === 'medicine' || it.legendary ? Math.min(1, 99 - own) : 99 - own;   // 전설의 갑옷은 한 벌뿐
     return Math.max(0, Math.min(cap, pr > 0 ? Math.floor(s.player.gold / pr) : 99));
   };
   /** 후려치기 성공 뒤 결제 직전의 추가 협상. 회계 단계마다 한 번씩 시도하고, 실패해도 먼저 정한 가격은 지킨다. */
@@ -260,7 +274,7 @@
       if (!st.length) { await C.say(vendor(), '미안하네, 지금 물건이 떨어지고 없네.'); return; }
       var v = await UI.choose('구입 아이템 선택 — 소지금 ' + U.num(s.player.gold) + '닢', st.map(function (it) {
         var ex = itemStat(it);
-        return { label: it.name + (it.legendCity != null ? ' <span class="tag ev-up" title="이 세상에 한 벌 — 누가 사 가면 다시 나오지 않는다">전설</span>' : '') + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) < mkBase(it) ? ' <s class="muted">' + U.num(mkBase(it)) + '</s>' : '') + mkTrend(it), value: it.id, cat: it.kind, desc: it.desc, thumb: mkThumb(it), icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : it.kind === 'instrument' ? 'note' : 'compass', disabled: mkBuy(it) > s.player.gold };
+        return { label: it.name + (it.legendCity != null || it.legendary ? ' <span class="tag ev-up" title="희귀한 전설의 물건">전설</span>' : '') + ' <small class="muted">' + ex + '</small>', right: U.num(mkBuy(it)) + '닢' + (mkBuy(it) < mkBase(it) ? ' <s class="muted">' + U.num(mkBase(it)) + '</s>' : '') + mkTrend(it), value: it.id, cat: it.kind, desc: it.desc, thumb: mkThumb(it), icon: it.kind === 'weapon' ? 'sword' : it.kind === 'armor' ? 'shield' : it.kind === 'gift' ? 'heart' : it.kind === 'instrument' ? 'note' : 'compass', disabled: mkBuy(it) > s.player.gold };
       }), { width: 700, catName: function (k) { return G.ITEM_KIND[k] || k; }, catOrder: G.ItemCat && G.ItemCat.ORDER });
       if (!v) return;
       var it = G.ITEM[v];
@@ -268,7 +282,8 @@
       var mx = MK.buyMax(it, pr);
       if (mx <= 0) { await C.mate(R.slotsUsed() >= R.ITEM_MAX ? '이 이상 가질 수 없습니다! (자택 보관함에 맡길 수 있습니다)' : '소지금이 모자랍니다.'); return; }
       var own = R.itemCount(it.id);
-      var q = await UI.number({ title: it.name + ' 구입', text: '한 개에 금화 ' + U.num(pr) + '닢. 몇 개 사겠습니까?<br><span class="muted">같은 아이템은 한 칸에 묶이며, 한 종류를 최대 99개까지 가질 수 있습니다.</span>', min: 1, max: mx, value: 1, unit: '개',
+      var scarce = it.kind === 'medicine' || it.legendary || it.legendCity != null;
+      var q = await UI.number({ title: it.name + ' 구입', text: '한 개에 금화 ' + U.num(pr) + '닢. 몇 개 사겠습니까?<br><span class="muted">' + (scarce ? '이번 입고에는 1개만 살 수 있습니다.' : '같은 아이템은 한 칸에 묶이며, 한 종류를 최대 99개까지 가질 수 있습니다.') + '</span>', min: 1, max: mx, value: 1, unit: '개',
         quick: [{ label: '1개', value: 1 }, { label: '10개', value: Math.min(10, mx) }, { label: '최대 ' + mx + '개', value: mx }],
         info: function (n) { return '<b>' + U.num(n * pr) + '</b>닢 · 구입 뒤 ' + it.name + ' ' + (own + n) + '/99개'; } });
       if (q == null) continue;
@@ -276,13 +291,22 @@
       if (deal.cancel) continue;
       var pic = mkThumb(it), ask = it.name + ' <b>' + q + '개</b><br><span class="muted">' + it.desc + '</span><br>금화 ' + U.num(deal.total) + '닢에 사겠습니까?' + (deal.ok ? '<br><span class="good-text">회계 추가 협상 할인 적용</span>' : '');
       if (!(await UI.confirm(pic ? '<div class="item-show"><img src="' + pic + '" alt=""><div>' + ask + '</div></div>' : ask, '산다', '그만둔다'))) continue;
+      if ((it.kind === 'medicine' || it.legendary) && !MK.stock(c).some(function (x) { return x.id === v; })) continue;
       s.player.gold -= deal.total;
+      if (it.kind === 'medicine' || it.legendary) {
+        var period = Math.floor(s.day / G.BALANCE.marketMedicineDays);
+        s.marketRareBought = s.marketRareBought || {};
+        var b = s.marketRareBought[c.id];
+        if (!b || b.period !== period) b = s.marketRareBought[c.id] = { period: period, ids: {} };
+        b.ids[it.id] = true;
+      }
       R.addMarketItems(v, q, c.id, Math.round(deal.total / q)); MK.boughtTotal = (MK.boughtTotal || 0) + q;
       if (it.legendCity != null) { (s.legendSold = s.legendSold || {})[it.id] = U.dateNum(s.date); G.State.log(c.name + ' 시장에서 전설의 갑옷 「' + it.name + '」' + U.jx(it.name, '을/를') + ' 손에 넣었다.'); }
       if ((it.kind === 'weapon' && (!s.player.equip.weapon || G.ITEM[s.player.equip.weapon].atk < it.atk)) || (it.kind === 'armor' && (!s.player.equip.armor || G.ITEM[s.player.equip.armor].def < it.def))) {
         if (await UI.confirm(it.name + U.j(it.name, '을/를').slice(it.name.length) + ' 바로 장비하겠습니까?')) s.player.equip[it.kind] = v;
       }
       await C.say(vendor(), q > 1 ? it.name + ' ' + q + '개, 잘 챙겨 가게. 고맙네!' : '고맙네!');
+      if (G.Achieve && G.Achieve.playPending) await G.Achieve.playPending();
     }
   };
   MK.sell = async function (c) {

@@ -68,7 +68,7 @@
     if (G.Audio) G.Audio.music('sea');
     st.lastMini = -99;
   };
-  SEA.exit = function (next) { if (G.Ship3D && next !== 'battle') G.Ship3D.dispose(); if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; st.shipWater = {}; st.fx = G.SeaFX ? G.SeaFX.create() : null; if (st.unkey) st.unkey(); } };
+  SEA.exit = function (next) { if (G.Ship3D && next !== 'battle') G.Ship3D.dispose(); if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; delete st.crewPetFlight; st.shipWater = {}; st.fx = G.SeaFX ? G.SeaFX.create() : null; if (st.unkey) st.unkey(); } };
   function newRuntime() {
     return { cam: null, path: null, target: null, paused: false, speed: 1, dayAcc: 0, busy: 0, keys: {}, npcs: [], wake: [], storm: 0, stormDays: 0, calm: 0, t: 0, mouse: null, lastMini: -99, dayCount: 0, toastQ: [],
       vel: [0, 0], fx: G.SeaFX ? G.SeaFX.create() : null, pose: { roll: 0, pitch: 0, heave: 0 }, turnRate: 0, accel: 0 };
@@ -1085,6 +1085,7 @@
     if (frozen || st.paused) st.turnRate *= Math.exp(-dt * 3);
     updatePose(dt);
     if (G.VoyageFX) G.VoyageFX.step(st, dt, { speed: shipSpeed(), frozen: frozen });   // 가속 물보라·배웅
+    if (G.CrewPets) G.CrewPets.step(st, dt, frozen);
     if (G.Errand) G.Errand.onSea(l.lon, l.lat);
     if (!st.busy && !UI.busy()) checkPortPrompt();
     // 돛: 멈추면 활대에 말아 올리고, 나아가면 편다 (약 1초)
@@ -1568,6 +1569,16 @@
       // scurvy
       // 괴혈병: 의술·과학이 있으면 늦게, 느리게 번진다 (G.BALANCE.scurvy*)
       var med = R.medSkill(), sci = R.skill('sci'), onset = scurvyOnset();
+      // 발병·사망 판정보다 먼저 예방한다. 옛 저장에서 이미 앓고 있어도 바로 배급한다.
+      if (s.flags.limeActive > 0) s.flags.limeActive--;
+      if (!(s.flags.limeActive > 0)) {
+        delete s.flags.limeActive;
+        if ((f.daysOut > onset || f.scurvy > 0) && R.useCharge('lime')) {
+          s.flags.limeActive = BAL.limeDays;
+          msgs.push({ icon: 'drop', text: '라임 절임을 선원들에게 나누어 주었다. 괴혈병을 ' + BAL.limeDays + '일 동안 예방한다.' });
+        }
+      }
+      if (s.flags.limeActive > 0) { f.scurvy = 0; st.scurvyWarned = false; }
       if (f.daysOut > onset && !s.flags.limeActive) {
         f.scurvy = (f.scurvy || 0) + U.clamp((0.8 + (f.daysOut - onset) * (BAL.scurvyGrow || 0.04)) * Math.max(0.35, 1 - med * 0.18 - sci * 0.08) * Math.max(0.4, 1 - (CBN ? CBN.fx('sick', 'sick') : 0)), 0.05, 4);
         if (f.scurvy > 18 && U.chance(0.5)) {
@@ -1576,12 +1587,15 @@
           f.crew = Math.max(0, f.crew - sd);
           if (!st.scurvyWarned) { msgs.push({ icon: 'skull', text: '괴혈병이 번지고 있다! 선원이 하나둘 쓰러진다...' }); st.scurvyWarned = true; }
         }
-        if (f.scurvy > 12 && R.hasItem('lime') && R.useCharge('lime')) { s.flags.limeActive = 60; f.scurvy = 0; msgs.push({ icon: 'drop', text: '라임 절임을 선원들에게 나누어 주었다. 괴혈병이 가라앉았다.' }); }
       }
-      if (s.flags.limeActive) { s.flags.limeActive--; if (s.flags.limeActive <= 0) delete s.flags.limeActive; }
       // rats
       var ratL = BAL.ratLoss || [0.1, 0.25];
-      if (!R.hasItem('cat') && f.food > 10 && U.chance(BAL.rat != null ? BAL.rat : 0.015)) { var lost = Math.round(f.food * U.rf(ratL[0], ratL[1])); f.food -= lost; st.warnedFor = null; msgs.push({ icon: 'sack', text: '쥐가 식량 ' + lost + '통을 먹어 치웠다! (배 고양이가 있으면 막을 수 있다)' }); }
+      if (f.food > 10 && U.chance(BAL.rat != null ? BAL.rat : 0.015)) {
+        var guard = R.ratGuard();
+        if (guard) {
+          if (!st.ratGuardWarned) { st.ratGuardWarned = true; msgs.push({ icon: 'sack', text: R.itemName(guard) + U.jx(R.itemName(guard), '이/가') + ' 쥐를 잡아 식량을 지켰다.' }); }
+        } else { var lost = Math.round(f.food * U.rf(ratL[0], ratL[1])); f.food -= lost; st.warnedFor = null; msgs.push({ icon: 'sack', text: '쥐가 식량 ' + lost + '통을 먹어 치웠다! (배 고양이가 있으면 막을 수 있다)' }); }
+      }
       // cargo spoilage
       for (var gid in f.cargo) {
         var g = G.GOOD[gid], cg = f.cargo[gid];
@@ -1692,6 +1706,8 @@
       var lefts = G.Disc.leftHere('sea', l.lon, l.lat);
       for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
       if (G.Disc.foundByMe('circum') === false && s.circ && s.circ.done && !s.circ.told) { s.circ.told = true; UI.toast('지구를 한 바퀴 돌았다! 모항에 돌아가면 세계일주가 완성된다.', 'globe', 5000); }
+      // 선원들의 휴식 사건은 위기 판정 전에 처리한다. 이미 회복했다면 피로 위기를 일으키지 않는다.
+      if (G.CrewPets) { await G.CrewPets.daily(); await G.CrewPets.interactionDaily(); }
       // crises
       await crises(msgs);
       if (st.dayCount % 3 === 0) drawMini();
@@ -2218,6 +2234,7 @@
     drawCities(ctx);
     if (G.Disaster && G.Disaster.drawSea) G.Disaster.drawSea(ctx, toScreen, st.cam.zoom, st.t, fontFam());   // 알려진 재해의 움직이는 그림 (해일·화산 …)
     if (G.VoyageFX) G.VoyageFX.drawSky(st, ctx, pp, l.heading, SP, toScreen);      // 모항 배웅 갈매기
+    if (G.CrewPets) G.CrewPets.drawFlight(st, ctx, pp, SP);   // 동물 사건이 모두 끝난 뒤 기함 위를 돌고 돌아오는 앵무새
     if (G.Rain) G.Rain.draw(ctx, st.t, st.windVis ? st.windVis.dir : 0, st.storm > 0, function (x, y) { var w = toWorld(x, y); return !G.Geo.isLand(w[0], w[1]); });   // 비: 빗줄기·수면에만 생기는 빗방울 고리·번개
     // hover tooltip
     if (st.mouse && !UI.busy()) {

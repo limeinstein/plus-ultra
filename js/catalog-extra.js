@@ -64,10 +64,12 @@
     (G.ACHIEVEMENTS || []).forEach(a => {
       const e = (G.ACHV_EVENTS || {})[a.id] || {}, chain = [e.pic || 'achievement-events/' + a.id];
       (a.ids || []).forEach(id => chain.push('discoveries/' + id));
+      const fameName = ({ex:'탐험',tr:'교역',bt:'전투',so:'사교'})[a.fameCat || 'ex'] || '탐험';
       scene(ach, { group: a.group, name: a.name, sub: a.group, text: a.desc, chain: chain, achId: a.id,
         ar: a.id === 'happily' ? '9 / 4' : undefined,   // 네 공주의 얼굴을 가로 원화 그대로 보여 준다.
-        meta: '탐험 명성 +' + num(a.fame || 0) + ' · 금화 ' + num(a.gold || 0) + '닢',
-        facts: [['달성 조건', a.desc], ['탐험 명성', '+' + num(a.fame || 0)], ['금화 보상', num(a.gold || 0) + '닢'],
+        meta: fameName + ' 명성 +' + num(a.fame || 0) + ' · 금화 ' + num(a.gold || 0) + '닢' + (a.notoriety ? ' · 악명 ' + (a.notoriety > 0 ? '+' : '') + num(a.notoriety) : ''),
+        facts: [['달성 조건', a.desc], [fameName + ' 명성', '+' + num(a.fame || 0)], ['금화 보상', num(a.gold || 0) + '닢'],
+          a.notoriety ? ['악명', (a.notoriety > 0 ? '+' : '') + num(a.notoriety)] : null,
           a.title ? ['칭호', a.title] : null, a.ids ? ['관련 발견물', a.ids.map(id => (G.DISC[id] || {}).name || id).join(' · ')] : null,
           a.crew ? ['관련 동료', a.crew.map(id => (G.MATE[id] || {}).name || id).join(' · ')] : null,
           e.n ? ['달성 장면', prose([].concat(e.n).join(' '))] : null] });

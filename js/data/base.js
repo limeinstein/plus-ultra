@@ -323,6 +323,8 @@
     // 명성 업적은 일회성 금화·칭호만 준다. 명성/능력 배수는 없어 연쇄 보상과 힘의 격차를 막는다.
     // 재산 업적 (사용자 요청 2026-11-01): 소지금 + 금고 예금이 문턱에 이르면. 보상은 교역 명성과 칭호 — 금화를 주면 다음 문턱을 밀어 주므로 주지 않는다
     wealthAchievements: { steps: [1000000, 10000000, 100000000, 10000000000], fame: [300, 800, 2000, 5000] },
+    // 해방자: 현재 동료가 한 명 이상이고 전원 아프리카 흑인 항해사일 때. 제독·일반 선원 수는 판정하지 않는다.
+    liberatorAchievement: { minCrew: 1, fame: 2000, notoriety: -20 },
     tradeDeals: { min: 1000000, fame: 600, kingFame: 3000, kingGold: 200000 },   // 대단한 거래(대륙마다 한 번의 매각 이익 min 이상)·교역왕 — js/systems/tradeking.js
     fameAchievements: {
       totalGold: [300, 600, 1200, 2000, 3000, 4000, 6000, 8000, 10000],
@@ -382,6 +384,18 @@
       }
     },
     homeTools: ['compass', 'sextant'],   // 처음 떠나는 도시(제독의 고향) 시장에 늘 있는 항해 도구 — 연도(from)·지역·그날 물량과 상관없이 (js/city/misc.js MK.stock)
+    marketCollections: {
+      "collect_jewel10": {"type": "jewels", "need": 10, "fame": 150, "gold": 5000},
+      "collect_jewel25": {"type": "jewels", "need": 25, "fame": 350, "gold": 15000},
+      "collect_jewel50": {"type": "jewels", "need": 50, "fame": 1000, "gold": 80000},
+      "collect_jewel_regions": {"type": "regions", "need": 11, "fame": 600, "gold": 30000},
+      "collect_legend_jewels": {"type": "legend", "need": 6, "fame": 1200, "gold": 100000},
+      "collect_medicine5": {"type": "medicine", "need": 5, "fame": 150, "gold": 3000},
+      "collect_medicine10": {"type": "medicine", "need": 10, "fame": 350, "gold": 10000},
+      "collect_medicine20": {"type": "medicine", "need": 20, "fame": 800, "gold": 40000},
+      "collect_market70": {"type": "all", "need": 70, "fame": 1800, "gold": 150000}
+    }, // 시장 수집 업적: 종류 수·명성·금화는 이 표에서 조정
+    marketMedicineDays: 7, marketMedicineChance: 0.55, marketLegendChance: 0.035, // 약은 시장 전체에 0~1개, 전설 장신구는 드물게 한 점 입고
     marketInstrumentMax: 3, marketInstrumentDays: 7, // 악기는 시장마다 최대 세 종류만 진열하고, 게임 속 일주일마다 무작위로 교체한다.
     // 선수상: 함대에서 가장 센 덕 + 나머지 배의 덕 × figRest (R.fleetBonus). 폭풍 빈도는 stormFloor 아래로 줄지 않는다 (sea.js)
     figRest: 0.25, stormFloor: 0.35, stormDmgCut: 0.3,
@@ -420,6 +434,31 @@
     scurvyOnset: 40, scurvyMed: 8, scurvySci: 4,
     // 괴혈병이 번지는 가속(하루마다 더해지는 양)과, 괴혈 18을 넘었을 때 하루에 쓰러지는 선원 비율(× 괴혈/18, 이틀에 한 번)
     scurvyGrow: 0.03, scurvyDeath: 0.007,
+    limeDays: 60,   // 자동 배급한 라임의 예방 기간 (배급 당일 포함)
+    crewPetAntics: { chance: 0.02 },   // 두 동물의 장난: 해당 조합을 데리고 있으면 하루 한 번 2%
+    crewPetRecovery: { fatigue: 80, chance: 0.10, recoverFatigue: 20, lowDiscipline: 30, recoverDiscipline: 80,
+      pets: [
+        { id: 'shiba', item: 'r_shiba_baby', name: '시바견', group: 'dog' },
+        { id: 'pug', item: 'r_pug_baby', name: '퍼그', group: 'dog' },
+        { id: 'corgi', item: 'r_corgi_baby', name: '웰시코기', group: 'dog' },
+        { id: 'shihtzu', item: 'r_shihtzu_baby', name: '시츄', group: 'dog' },
+        { id: 'dachshund', item: 'r_dachshund_baby', name: '닥스훈트', group: 'dog' },
+        { id: 'papillon', item: 'r_papillon_baby', name: '파피용', group: 'dog' },
+        { id: 'siamese', item: 'r_siamese_baby', name: '샴고양이', group: 'cat' },
+        { id: 'russianblue', item: 'r_russianblue_baby', name: '러시안 블루', group: 'cat' },
+        { id: 'persian', item: 'r_persian_baby', name: '페르시안 고양이', group: 'cat' },
+        { id: 'angora', item: 'r_angora_baby', name: '터키시 앙고라', group: 'cat' },
+        { id: 'koreancat', item: 'r_koreancat_baby', name: '코리안 숏헤어', group: 'cat' },
+        { id: 'vancat', item: 'r_vancat_baby', name: '반 고양이', group: 'cat' },
+        { id: 'manul', item: 'r_manul_baby', name: '마눌들고양이', group: 'cat' },
+        { id: 'parrot', item: 'r_parrot_baby', name: '앵무새', group: 'bird' },
+        { id: 'budgie', item: 'r_budgie_baby', name: '사랑앵무', group: 'bird' },
+        { id: 'lemur', item: 'r_lemur_baby', name: '알락꼬리여우원숭이', group: 'monkey' },
+        { id: 'gibbon', item: 'r_gibbon_baby', name: '흰손긴팔원숭이', group: 'monkey' },
+        { id: 'tarsier', item: 'r_tarsier_baby', name: '필리핀안경원숭이', group: 'monkey' },
+        { id: 'snowmonkey', item: 'r_snowmonkey_baby', name: '일본원숭이', group: 'monkey' },
+      ] },
+    ratGuards: ['cat', 'r_siamese_baby', 'r_russianblue_baby', 'r_persian_baby', 'r_angora_baby', 'r_koreancat_baby', 'r_vancat_baby'],
     // 열병·바다 괴물·유령선이 한 번에 앗아 가는 선원은 선원 수의 eventDeath 이하 (explore.js)
     eventDeath: 0.15,
     // 쥐: 하루 확률과 먹어 치우는 비율 (sea.js)
@@ -747,6 +786,7 @@
     matPerHp: 0.4, matStart: 10, seaRepairShare: 1,
     // 보급에서 식량·물·자재를 줄이면(교역품 자리를 내려고) 이 항구 보급값 × supplyRefund 로 되판다
     supplyRefund: 0.5,
+    tradeSupplyDays: 10,   // 교역 전에 보급을 권하는 남은 일수 (교역품 대체분 제외)
     // 테스트용 캐릭터(만들기 화면에서 이름 「이강희」 + 엔터): 능력치·행운(최대 99), 소지금, 첫 함대(배 ID — 앞의 것이 기함)
     // 모조품(js/systems/fakes.js): 값 = 발견물 가치 × priceK, 둘 다 바치면 사례금 × bothK·신뢰 +bothTrust, 들키면 벌금 = 사례금 × fineK 또는 옥살이 jailBase+세력×12+0~25일
     //   상인은 달마다 day일에만, 도시 등급(G.CityIcon.tier: 1 소도시·2 중도시·3 대도시·4 수도) minTier 이상에만 나오고, 한 번 나올 때 stock개만 판다

@@ -163,6 +163,7 @@
     // 출항 준비에 난이도의 1·3·10일 (R.portDays — 입항 때가 아니라 출항 때. 2026-11-11 피드백)
     var pdays = R.portDays();
     if (pdays > 0) {
+      // 아직 항구에 머무는 준비 기간: 날짜만 넘긴다. 바다의 runDay(식량·물 소비)는 호출하지 않는다.
       var dmsg = G.Game.passDays(pdays); G.Game.refreshHud();
       UI.toast('출항 준비에 ' + pdays + '일이 걸렸다.', 'calendar', 2600);
       dmsg.forEach(function (m) { if (m && m.text) UI.toast(m.text, m.icon || 'calendar', m.history ? 5200 : 3400); });

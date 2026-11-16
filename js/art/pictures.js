@@ -365,7 +365,14 @@
     function line(col, wd) { x.strokeStyle = col; x.lineWidth = wd / S * m * 0.01; }
     var has = function (k) { return nm.indexOf(k) >= 0; };
     var K = r.kind;
-    if (K === 'instrument') {
+    if (K === 'medicine') {
+      x.fillStyle = '#9c6334'; x.fillRect(-0.3, -0.85, 0.6, 0.25);
+      var bottle = x.createLinearGradient(-0.6, 0, 0.6, 0);
+      bottle.addColorStop(0, '#244f41'); bottle.addColorStop(0.45, '#78aa80'); bottle.addColorStop(1, '#183e35');
+      x.fillStyle = bottle; x.beginPath(); x.moveTo(-0.28, -0.6); x.lineTo(0.28, -0.6); x.lineTo(0.58, -0.2); x.lineTo(0.58, 0.8); x.quadraticCurveTo(0, 1, -0.58, 0.8); x.lineTo(-0.58, -0.2); x.closePath(); x.fill();
+      x.fillStyle = '#ead9a5'; x.fillRect(-0.43, -0.05, 0.86, 0.6);
+      x.strokeStyle = '#486139'; x.lineWidth = 0.045; x.beginPath(); x.moveTo(0, 0.45); x.lineTo(0, 0.02); x.moveTo(0, 0.3); x.lineTo(-0.23, 0.12); x.moveTo(0, 0.25); x.lineTo(0.23, 0.05); x.stroke();
+    } else if (K === 'instrument') {
       instrumentArt(r, x);
     } else if (K === 'weapon') {
       x.rotate(-0.75);

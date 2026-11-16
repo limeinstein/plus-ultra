@@ -104,6 +104,7 @@
     G.State.log(d.name + ' 해고' + (returns ? ' — ' + c.name + '에서 철새로 다시 만날 수 있다. 재등용 월급 ' + G.R.mateWage(m.id) + '닢.' : '.'));
     UI.toast(wife ? d.name + ' — 집으로 돌아갔다.' : d.name + ' — 배에서 내렸다.' + (returns ? ' ' + c.name + ' 술집에서 다시 만날 수 있다.' : ''), 'boot', 5000);
     if (G.Game.refreshHud) G.Game.refreshHud();
+    if (G.Achieve && G.Achieve.onCrewComposition && G.Achieve.onCrewComposition().length) await G.Achieve.playPending();
     return true;
   };
 })(window.G = window.G || {});
