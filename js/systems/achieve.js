@@ -43,6 +43,47 @@
   }
   AC.wedEver = wedEver;
 
+  // wedEver는 옛 저장의 현재 배우자를 오늘 날짜로 보충하므로 기한 판정에 쓰지 않는다.
+  // 실제 혼인 직후의 날짜만 제독에게 저장한다. 제독 승계 시 이 자료도 새로 시작한다.
+  function marriageDate(n) {
+    if (typeof n !== 'number' || !isFinite(n) || n !== Math.floor(n)) return null;
+    var d = { y: Math.floor(n / 10000), m: Math.floor(n / 100) % 100, d: n % 100 };
+    return d.y > 0 && d.m >= 1 && d.m <= 12 && d.d >= 1 && d.d <= U.daysInMonth(d.y, d.m) ? d : null;
+  }
+  AC.recordMarriage = function (id) {
+    var s = S(), p = s && s.player;
+    if (!p || !id || !(p.wife === id || (p.wives2 || []).some(function (w) { return w && w.id === id; }))) return;
+    (p.marriageDates || (p.marriageDates = {}))[id] = U.dateNum(s.date);
+  };
+  AC.marriageProgress = function (kind) {
+    var s = S(), p = s.player, k = G.BALANCE.marriageAchievements, ids = [], dates = [], eligible = 0;
+    function add(id, w) {
+      if (!id || ids.indexOf(id) >= 0) return;
+      ids.push(id);
+      var d = marriageDate((p.marriageDates || {})[id]);
+      // 둘째 부인의 옛 wed는 게임 경과일이다. 실제로 남은 날짜만 복구하고 누락일은 추측하지 않는다.
+      if (!d && w && typeof w.wed === 'number' && isFinite(w.wed) && Math.floor(w.wed) === w.wed && w.wed >= 0 && w.wed <= s.day) d = U.addDays(s.date, w.wed - s.day);
+      if (!d || U.dateNum(d) > U.dateNum(s.date) || !p.born) return;
+      dates.push(d);
+      var age = d.y - p.born.y - ((d.m < p.born.m || (d.m === p.born.m && d.d < p.born.d)) ? 1 : 0);
+      var def = (G.MATE || {})[id] || (G.MAID || {})[id];
+      if ((!def || def.g !== 'm') && (kind === 'young' ? age >= k.youngMin && age <= k.youngMax : age >= k.elderMin)) eligible++;
+    }
+    add(p.wife); (p.wives2 || []).forEach(function (w) { if (w) add(w.id, w); });
+    var cap = G.Wives ? G.Wives.maxSpouses() : G.BALANCE.wives.maxSpouses, n = Math.max(cap, ids.length), inTime = false;
+    if (ids.length >= cap && dates.length === ids.length) {
+      dates.sort(function (a, b) { return U.dateNum(a) - U.dateNum(b); });
+      var first = dates[0], last = dates[dates.length - 1], y = first.y + k.years;
+      inTime = U.dateNum(last) <= U.dateNum({ y: y, m: first.m, d: Math.min(first.d, U.daysInMonth(y, first.m)) });
+    }
+    return [
+      { label: '남성 제독', count: p.g !== 'f' && !(p.heir && p.heir.sex === 'f') ? 1 : 0, n: 1 },
+      { label: '현재 아내 (본처 포함)', count: ids.length, n: n },
+      { label: '혼인 당시 ' + (kind === 'young' ? '만 ' + k.youngMin + '~' + k.youngMax + '세' : '만 ' + k.elderMin + '세 이상') + ' · 날짜 확인', count: eligible, n: n },
+      { label: '첫 혼인일부터 ' + k.years + '년 이내', count: inTime ? 1 : 0, n: 1 }
+    ];
+  };
+
   /** 시장 수집 기록. 옛 저장은 소지품·자택 보관함에 남은 물건으로 보충한다. */
   function collectionItem(id) { var d = G.ITEM && G.ITEM[id]; return !!(d && (d.marketCollection === 'jewels_20261116' || d.marketCollection === 'medicine_20261116')); }
   AC.itemEver = function () {
@@ -123,6 +164,7 @@
       rows.push({ label: '현재 동료 중 아프리카 흑인 항해사', count: eligible.length, n: Math.max(G.BALANCE.liberatorAchievement.minCrew, current.length) });
     }
     if (a.wed) { var we = wedEver(), wd = a.wed.filter(function (id) { return !!we[id]; }); rows.push({ crew: true, wed: true, ids: a.wed, got: wd, count: wd.length, n: a.n || a.wed.length }); }
+    if (a.marriageRule) rows = rows.concat(AC.marriageProgress(a.marriageRule));
     if (a.chains) rows.push({ label: '끝까지 푼 사슬', count: AC.chainsDone().length, n: a.chains });
     if (a.custom) rows = rows.concat(AC.rules[a.custom] ? AC.rules[a.custom]() : [{ label: a.desc, count: 0, n: 1 }]);   // 다른 파일이 셈을 맡는 업적 (해적왕 — pirate_lair.js · Dream Come True — fairy_home.js)
     if (a.everyReg) (G.REGIONS || []).forEach(function (rn, r) {
@@ -171,7 +213,7 @@
       UI.toast('명성 업적 달성 · ' + a.name + ' (금화 ' + U.num(a.gold) + '닢)', 'crown', 4800);
     });
   };
-  function rewardText(a) { return (a.gold || !a.fame ? '금화 ' + U.num(a.gold || 0) + '닢 · ' : '') + (a.fameCat && G.Fame && G.Fame.NAME && G.Fame.NAME[a.fameCat] ? G.Fame.NAME[a.fameCat] + ' ' : '') + '명성 +' + U.num(a.fame || 0) + (a.notoriety ? ' · 악명 ' + (a.notoriety > 0 ? '+' : '') + U.num(a.notoriety) : '') + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
+  function rewardText(a) { if (!a.gold && !a.fame && !a.notoriety) return a.title ? '칭호 「' + a.title + '」' : '업적 기록'; return (a.gold || !a.fame ? '금화 ' + U.num(a.gold || 0) + '닢 · ' : '') + (a.fameCat && G.Fame && G.Fame.NAME && G.Fame.NAME[a.fameCat] ? G.Fame.NAME[a.fameCat] + ' ' : '') + '명성 +' + U.num(a.fame || 0) + (a.notoriety ? ' · 악명 ' + (a.notoriety > 0 ? '+' : '') + U.num(a.notoriety) : '') + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
   /** 재산 업적: 문턱을 넘었으면 곧바로 기록·보상하고 알린다. 장면은 대기열(achvPend)로 → 거리로 나오거나 다음 항구에서 */
   AC.onWealth = function () {
     var s = S(), st = store(), got = [];
@@ -327,6 +369,7 @@
   /** 사건 뒤에 업적을 살피고 장면을 띄운다 (해적의 소굴을 손에 넣었을 때 등) */
   AC.afterEvent = async function () { var got = AC.check(); await announce(got); return got; };
   AC.afterWed = async function (id) {
+    AC.recordMarriage(id);
     var ev = wedEver();
     if (id && !ev[id]) ev[id] = U.dateNum(S().date);
     var got = AC.check();
@@ -349,7 +392,7 @@
     var st = store(), first = !st._init; st._init = 1;
     AC.check().forEach(function (a) {
       out.push({ icon: 'crown', text: '업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다 — ' + rewardText(a) + (first ? '' : ' (다음 항구에서)') });
-      if (!first || a.crewComposition) (s.achvPend = s.achvPend || []).push(a.id);
+      if (!first || a.crewComposition || a.marriageRule) (s.achvPend = s.achvPend || []).push(a.id);
     });
     return out;
   };

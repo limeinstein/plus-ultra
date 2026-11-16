@@ -941,6 +941,7 @@
         if (G.Growth) G.Growth.once('wed', 'cha', 1, '혼인 — 한 집안의 가장이 되었다');   // 첫 혼인: 매력 +1 (js/systems/growth.js)
         G.State.log(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다.');
         if (G.FamEv) { try { await G.FamEv.wedding({ id: m.id, city: c.id }); } catch (e) { console.error(e); } }   // 술집의 혼례 잔치
+        if (G.Achieve && G.Achieve.afterWed) { try { await G.Achieve.afterWed(m.id); } catch (e2) { console.error(e2); } }
         // 부인은 더 이상 술집에서 일하지 않는다 — 새 여급(코덱스가 그린 새 얼굴부터, 없으면 기본 여급)이 선다 (js/systems/maidswap.js)
         var wn0 = ''; if (G.MaidSwap && G.MaidSwap.wed) { try { G.MaidSwap.wed(m.id, c.id); wn0 = G.MaidSwap.wedNote(c.id); } catch (e) { console.error(e); } }
         await UI.alert(m.name + U.j(m.name, '과/와').slice(m.name.length) + ' 결혼했다! 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리고 있을 것이다.' + (wn0 ? '<br><small>' + wn0 + '</small>' : ''), '결혼');

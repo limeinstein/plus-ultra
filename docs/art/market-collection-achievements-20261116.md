@@ -46,3 +46,14 @@
 - [약재 업적 도감](../../artifacts/market-collection-achievements-20261116/medicine-collection-catalog.png)
 
 최종 확인: 새 수집 규칙·구입 직후 재생·업적샷 9장·수첩 카드·도감 시험을 통과했고 콘솔 오류는 0건이다. `node tests/regional_market_medicine_smoke.cjs`로 기존 70종 시장 재고·구매·회복·저장 복원을 재검사했고, `node tests/trade_achievement_shots_20261110_smoke.cjs`로 기존 교역 업적샷 6종의 달성 연출도 통과했다. 전체 업적 118종의 그림 연결 누락은 0개다.
+
+## 장신구 실물 크기 보정 (2026-11-16)
+
+사용자가 지적한 「항구의 감정가」·「세상의 장신구」와 같은 문제가 있던 「열한 바다의 보석함」·「전설을 꿰는 자」·「작은 보물의 대항해」, 총 5장에 내장 ImageGen 편집을 적용했다. 인물·손·배경·조명·시점은 유지하고 손가락 반지·목걸이·손에 든 펜던트·큰 보석을 실제 착용 크기로 줄였다. 반지는 약 2.2cm 지름, 반지 보석은 6~12mm, 목걸이 폭은 15~18cm, 펜던트는 대체로 2~4cm를 기준으로 사람과 원근에 맞췄다. 비어 난 진열대는 벨벳과 나무결로 이어 그렸다.
+
+- [사용자 첨부와 같은 두 장의 전후 비교](../../artifacts/market-collection-achievements-20261116/scale-fix-20261116/comparison.jpg)
+- [수정 전 원본·실제 편집 입력](../../artifacts/market-collection-achievements-20261116/scale-fix-20261116/before/)
+- [수정 전 프롬프트·경로](../../artifacts/market-collection-achievements-20261116/scale-fix-20261116/plan-before.json)
+- [변경한 5장·나머지 108장 보존 검사](../../artifacts/market-collection-achievements-20261116/scale-fix-20261116/checks.json)
+
+최종 프롬프트 파일의 `original_prompt`·`scale_revision`·`prompt`에 최초 생성과 실제 크기 수정 요청을 함께 보존했다. 게임 그림 키와 규격은 같은 1881×836이며, 수정 전 PNG도 `revisions`에 따로 보존한다.

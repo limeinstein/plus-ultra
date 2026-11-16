@@ -13,7 +13,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage({ viewport: { width: 960, height: 540 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|ERR_NAME|Failed to load/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   // 느린 swiftshader에서 그림 칠하기(rAF)가 시험을 굶기지 않게, 칠하기는 시험이 박자를 정한다
   await page.addInitScript(() => {
     const TT = window.TT = { raf: [], auto: true, n: 0 };
@@ -29,6 +29,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       await G.Game.ensureGeo(); TT.auto = false;
       const said = [], asks = []; let answer = {};
       const keep = { say: UI.say, ask: UI.ask, alert: UI.alert, confirm: UI.confirm, toast: UI.toast };
+      // 왕실 혼인도 공통 업적 검사를 거친다. 이 시나리오는 서사 창만 기록하고 실제 조건·지급은 그대로 검사한다.
+      G.Achieve.scene = async a => { said.push('[업적] ' + a.id); };
       UI.say = async (t, w) => { said.push((w && w.name ? w.name + ': ' : '') + String(t)); };
       UI.ask = async (t, o) => { asks.push(String(t)); for (const k in answer) if (String(t).indexOf(k) >= 0) return answer[k]; return o[0].value; };
       UI.alert = async t => { said.push('[창] ' + String(t).replace(/<[^>]+>/g, ' ')); }; UI.confirm = async () => true; UI.toast = () => {};
@@ -157,6 +159,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.wedSaid = said.some(t => /이분 말고 다른 사람에게는 시집가지 않겠어요/.test(t)) && said.some(t => /부마/.test(t));
       out.after = P.palaceItems(G.SPONSOR.es_crown).length + ':' + P.html() + ':' + P.daily().length;
       const back = G.State.deserialize(G.State.serialize()); out.save = back.princess.wed > 0 && back.player.wife === 'm_princess';
+      out.marriageDate = back.player.marriageDates.m_princess === G.U.dateNum(s.date);
       // ---- 같은 귀환을 에스파냐 제독이면: 제 나라 작위 한 칸
       G.Game.state = s = G.State.deserialize(snap3); s.player.nation = 'ES'; G.Court.state().titles.ES = 3;
       await P.onEnter(G.SPONSOR.es_crown); out.esUp = CT.title(G.COURT.realms.ES).ko + ':' + CT.rank(G.COURT.realms.ES);
@@ -183,6 +186,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(/왕녀를 모셨다/.test(r.palace) && /국왕께 모셔 간다/.test(r.palace), '왕녀를 모시면 세빌리아 왕궁·할 일 판에 「모셔 간다」');
     ok(r.enter && /^m_princess:1:산티아고 기사단 기사:\d+:\d+:done$/.test(r.wed) && r.wedSaid, '귀환: 왕녀가 청혼 → 혼인 · 한 계급 특진(' + r.wed + ')');
     ok(/^부마\|부마 · 산티아고 기사단 기사\|부마/.test(r.title) && /^블랑카 왕녀:블랑카 왕녀:true$/.test(r.wife) && r.save, '칭호 「부마」(직위 칸 ' + r.title.split('|')[1] + ') · 아내는 블랑카 왕녀(술집에는 나오지 않음) · 저장');
+    ok(r.marriageDate, '왕실 혼인 날짜가 실제 혼인일로 저장됨');
     ok(r.after === '0::0', '끝난 직후에는 메뉴·수첩·소식이 사라진다');
     ok(r.esUp === '자작:4', '에스파냐 제독이면 제 나라 작위로 한 칸 (남작 → ' + r.esUp + ')');
     ok(/^75000:3:부마$/.test(r.maxed) && /^true:30000::done$/.test(r.decline) && /^m_lis:30000:0::false$/.test(r.marriedEnd), '이미 가장 높으면 특진 대신 금화 · 사양하면 하사금만 · 그사이 결혼했으면 청혼 없이 하사금만: ' + JSON.stringify({maxed:r.maxed,decline:r.decline,marriedEnd:r.marriedEnd}));

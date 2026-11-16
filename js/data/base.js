@@ -325,6 +325,9 @@
     wealthAchievements: { steps: [1000000, 10000000, 100000000, 10000000000], fame: [300, 800, 2000, 5000] },
     // 해방자: 현재 동료가 한 명 이상이고 전원 아프리카 흑인 항해사일 때. 제독·일반 선원 수는 판정하지 않는다.
     liberatorAchievement: { minCrew: 1, fame: 2000, notoriety: -20 },
+    // 혼인 정원 업적: 현재 아내 모두의 실제 혼인일을 살핀다. 정원은 wives.maxSpouses를 공유한다.
+    discVoice: { w: [0.3, 0.4, 0.3] },   // 발견·독서에서 말하는 동료 1·2·3명의 선택 가중치
+    marriageAchievements: { years: 3, youngMin: 20, youngMax: 29, elderMin: 70 },
     tradeDeals: { min: 1000000, fame: 600, kingFame: 3000, kingGold: 200000 },   // 대단한 거래(대륙마다 한 번의 매각 이익 min 이상)·교역왕 — js/systems/tradeking.js
     fameAchievements: {
       totalGold: [300, 600, 1200, 2000, 3000, 4000, 6000, 8000, 10000],

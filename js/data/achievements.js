@@ -238,6 +238,11 @@
     { ids: ['hubble', 'iss', 'amundsen', 'kupe'], n: 3 }, 500, 40000, '별을 보는 제독');
 
   // ------------------------------------------------------------------ 동료
+  var MK = G.BALANCE.marriageAchievements, wifeCap = G.BALANCE.wives.maxSpouses;
+  a('동료', 'casanova', '카사노바', '남성 제독이 만 ' + MK.youngMin + '~' + MK.youngMax + '세에 현재 아내 전원과 혼인하고, 첫 혼인일부터 ' + MK.years + '년 이내에 본처 포함 아내 정원 ' + wifeCap + '명을 채웠다.',
+    { marriageRule: 'young' }, 0, 0, '카사노바');
+  a('동료', 'uijawang', '의자왕', '남성 제독이 만 ' + MK.elderMin + '세 이후에 현재 아내 전원과 혼인하고, 첫 혼인일부터 ' + MK.years + '년 이내에 본처 포함 아내 정원 ' + wifeCap + '명을 채웠다.',
+    { marriageRule: 'elder' }, 0, 0, '의자왕');
   var LK = G.BALANCE.liberatorAchievement;
   a('동료', 'liberator', '해방자', '현재 동료 항해사가 한 명 이상이며 모두 아프리카 흑인 항해사다. 제독과 일반 선원 수는 제외한다.',
     { crewComposition: 'blackAfrican', notoriety: LK.notoriety }, LK.fame, 0);

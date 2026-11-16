@@ -159,7 +159,7 @@
     // 라임 절임은 파는 고장이면 늘 있다 (긴 항해의 목숨줄)
     // 처음 떠나는 도시(고향)에는 나침반·육분의가 늘 있다 (G.BALANCE.homeTools)
     var always = s.player && s.player.home === c.id ? ((G.BALANCE && G.BALANCE.homeTools) || []) : [];
-    var eligible = G.ITEMS.filter(function (it) { return it.price > 0 && !it.rare && (always.indexOf(it.id) >= 0 || (it.reg.indexOf(c.region) >= 0 && (!it.subRegion || G.subRegion(c) === it.subRegion) && (!it.marketRel || c.rel === it.marketRel) && (!it.from || s.date.y >= it.from))); });
+    var eligible = G.ITEMS.filter(function (it) { return it.price > 0 && !it.rare && (always.indexOf(it.id) >= 0 || (it.reg.indexOf(c.region) >= 0 && (!it.subRegion || G.subRegion(c) === it.subRegion) && (!it.marketRel || c.rel === it.marketRel) && (it.marketMinLat == null || c.lat >= it.marketMinLat) && (!it.from || s.date.y >= it.from))); });
     // 다른 물건의 45일 추첨 순서는 유지한다. 악기만 별도의 주간 입고 목록으로 고른다.
     var stock = eligible.filter(function (it) { var picked = rng() < 0.7 || it.id === 'lime' || always.indexOf(it.id) >= 0; return picked && it.kind !== 'instrument' && it.kind !== 'medicine' && !it.legendary; });
     // 희소품은 주간 입고. 재입장·저장 복원으로 재추첨하거나 재구입하지 못한다.

@@ -364,6 +364,24 @@
     {"id": "regional_medicine_18", "name": "진피 약포", "kind": "medicine", "price": 1350, "reg": [9], "heal": 30, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "일본에서 말린 감귤 껍질을 담은 약포. 사용하면 일기토·질병으로 줄어든 건강을 즉시 30 회복한다(최대 100)."},
     {"id": "regional_medicine_19", "name": "코파이바 수지", "kind": "medicine", "price": 1800, "reg": [10], "heal": 40, "consumable": 1, "marketCollection": "medicine_20261116", "desc": "남아메리카의 나무에서 얻은 전통 수지 약재. 사용하면 일기토·질병으로 줄어든 건강을 즉시 40 회복한다(최대 100)."}
   ]);
+  // 아프리카 동물 문양 장신구 10종·북방 모피 코트 5종. 기존 70종 수집 목록의 ID와 조건은 유지한다.
+  G.ITEMS = G.ITEMS.concat([
+    {"id": "african_leopard_ring", "name": "표범 문양 금반지", "kind": "gift", "price": 12000, "gv": 30, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "표범의 날렵한 몸을 작은 금반지로 말아 만들고 검은 칠로 장미무늬 반점을 넣었다. 아프리카 동물 문양에서 착안한 장신구."},
+    {"id": "african_leopard_bracelet", "name": "표범 꼬리 금팔찌", "kind": "gift", "price": 18000, "gv": 35, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "표범의 머리와 꼬리가 손목을 감싸는 금팔찌. 작은 녹색 보석 눈과 검은 장미무늬 반점이 빛난다."},
+    {"id": "african_leopard_brooch", "name": "표범 도약 브로치", "kind": "gift", "price": 9500, "gv": 27, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "도약하는 표범의 긴 꼬리와 굽힌 다리를 금으로 세공한 작은 브로치."},
+    {"id": "african_cheetah_earrings", "name": "치타 눈물무늬 귀걸이", "kind": "gift", "price": 11000, "gv": 29, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "치타 얼굴의 검은 눈물줄과 점무늬를 섬세하게 넣은 금 귀걸이 한 쌍."},
+    {"id": "african_cheetah_pendant", "name": "달리는 치타 펜던트", "kind": "gift", "price": 14500, "gv": 32, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "긴 꼬리로 균형을 잡으며 달리는 치타를 본뜬 작은 금 펜던트. 호박 한 알을 곁들였다."},
+    {"id": "african_cheetah_cuff", "name": "치타 발자국 은팔찌", "kind": "gift", "price": 8500, "gv": 26, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "작은 치타 발자국과 달리는 옆모습을 새긴 은팔찌. 가는 금테를 둘렀다."},
+    {"id": "african_lion_ring", "name": "사자 왕 금반지", "kind": "gift", "price": 16000, "gv": 33, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "손톱만 한 반지 윗면에 수사자의 얼굴과 갈기를 돋을새김한 금 인장 반지."},
+    {"id": "african_lion_necklace", "name": "사자 갈기 금목걸이", "kind": "gift", "price": 20000, "gv": 37, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "가느다란 금사슬에 갈기가 둥글게 퍼진 작은 사자 메달을 달았다. 붉은 홍옥수 한 알이 턱 아래에서 빛난다."},
+    {"id": "african_lioness_pendant", "name": "암사자 홍옥 펜던트", "kind": "gift", "price": 13000, "gv": 31, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "붉은 홍옥수에 암사자의 옆모습을 새기고 작은 금 알갱이 테를 두른 펜던트."},
+    {"id": "african_twin_lion_torc", "name": "쌍사자 금목걸이", "kind": "gift", "price": 24000, "gv": 40, "reg": [3], "marketCollection": "africa_animals_20261116", "desc": "가느다란 금 목고리의 양 끝에서 작은 사자 두 마리가 마주 본다. 누비아와 아프리카 동물 장식에서 착안한 세공품."},
+    {"id": "furcoat_sable", "name": "담비 코트", "kind": "armor", "price": 9000, "reg": [1, 7, 10], "marketMinLat": 55, "marketCollection": "northern_furs_20261116", "desc": "짙은 갈색 담비 털을 촘촘히 이어 댄 무릎 길이 외투. 북방 모피 상인이 귀하게 다루는 부드러운 옷. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.", "def": 4},
+    {"id": "furcoat_tiger", "name": "호피 코트", "kind": "armor", "price": 18000, "reg": [1, 7, 10], "marketMinLat": 55, "marketCollection": "northern_furs_20261116", "desc": "호랑이 줄무늬가 선명한 두꺼운 모피 외투. 추운 북쪽 시장에서 먼 산지의 진품이라며 내놓았다. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.", "def": 7},
+    {"id": "furcoat_silverfox", "name": "은여우 모피 코트", "kind": "armor", "price": 12000, "reg": [1, 7, 10], "marketMinLat": 55, "marketCollection": "northern_furs_20261116", "desc": "검은 속털 위로 은빛 털끝이 빛나는 긴 외투. 넓은 깃과 소매 끝이 풍성하다. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.", "def": 5},
+    {"id": "furcoat_reindeer", "name": "순록 모피 코트", "kind": "armor", "price": 5500, "reg": [1, 7, 10], "marketMinLat": 55, "marketCollection": "northern_furs_20261116", "desc": "순록 가죽과 빽빽한 털을 손으로 꿰맨 실용적인 북방 외투. 가죽 끈과 작은 직조 무늬로 여몄다. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.", "def": 6},
+    {"id": "furcoat_polarbear", "name": "북극곰 모피 코트", "kind": "armor", "price": 24000, "reg": [1, 7, 10], "marketMinLat": 55, "marketCollection": "northern_furs_20261116", "desc": "두툼한 크림빛 흰 모피에 넓은 깃과 긴 소매를 댄 북극권 외투. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.", "def": 8}
+  ]);
   G.ITEMS.forEach(function (it) {
     if (['regional_jewel_6_0', 'regional_jewel_6_1'].indexOf(it.id) >= 0) it.subRegion = '중국';
     if (['regional_jewel_6_2', 'regional_jewel_6_3', 'regional_medicine_0', 'regional_medicine_2', 'regional_medicine_3'].indexOf(it.id) >= 0) it.subRegion = '조선';

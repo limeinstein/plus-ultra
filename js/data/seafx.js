@@ -5,6 +5,7 @@
 (function (G) {
   'use strict';
   G.FX = {
+    revealTalk: { head: 2, quote: 70 }, // 발견 때 첫마디 문장 수와 인용 한 문장의 최대 글자 수.
     olympianApostles: { meetDelay: 750, shotPosition: '50% 0%' }, // 성문 밖 등장 지연·세로 여백을 줄여도 관과 얼굴을 보존하는 그림 기준점.
     // 합성 효과음 크기 (js/systems/audio.js). 거리의 짐승 소리는 다른 효과음보다 작게 들린다.
     audio: { pet: { cat: 0.042, dog: 0.05 } },

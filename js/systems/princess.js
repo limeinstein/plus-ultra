@@ -328,6 +328,7 @@
     var p = P.st(), s = S(), b = K(), CT = G.Court, rl = realm(), D = lady();
     await say(D.clue ? '두 사람의 혼인을 허락하네. {name}, 오늘부터 그대도 우리 왕실의 가족일세.' : L.wedYes, who);
     s.player.wife = D.id;
+    if (G.Achieve && G.Achieve.recordMarriage) G.Achieve.recordMarriage(D.id);
     if (G.Growth) G.Growth.once('wed', 'cha', 1, '혼인 — 한 집안의 가장이 되었다');   // 첫 혼인: 매력 +1 (js/systems/growth.js)
     s.maids = s.maids || {}; s.maids[D.id] = { aff: 100 };
     p.wed = U.dateNum(s.date);
@@ -348,6 +349,7 @@
       D.name + U.jx(D.name, '과/와') + ' 혼인했다! 고향 ' + G.CITY_DATA[s.player.home].name + '의 자택에서 기다리고 있을 것이다.<br>' +
       '지참금 금화 <b>' + U.num(b.dowry) + '</b>닢 · 사교 명성 +' + G.Fame.mul('so', b.fameSo + b.fameWed) + ' · 전투 명성 +' + G.Fame.mul('bt', b.fameBt), '혼인');
     UI.toast('부마가 되었다!' + (up ? ' — ' + up.ko : ''), 'crown', 6500);
+    if (G.Achieve && G.Achieve.afterWed) { try { await G.Achieve.afterWed(D.id); } catch (e) { console.error(e); } }
     G.Game.refreshHud();
     if (s.settings.autosave !== false && G.State.save) G.State.save(0);
   }

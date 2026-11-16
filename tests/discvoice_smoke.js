@@ -16,9 +16,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load|net::/.test(m.text())) errors.push('console: ' + m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href), { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.DiscVoice && G.Pitch && G.Voice, null, { timeout: 90000 });
     const r = await page.evaluate(async () => {
       await G.Game.ensureGeo();
@@ -52,10 +52,11 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.mateRegs = s.mates.map(m => V.reg(G.MATE[m.id]) + '/' + V.typeOf(G.MATE[m.id]));
       const said = [], oldSay = G.UI.say, oldTitle = G.FX.reveal.titleMs;
       G.FX.reveal.titleMs = 1; G.UI.say = async (t, who) => { said.push({ t: String(t), who: who && who.name }); };
+      const oc = DV.count; DV.count = () => 2;   // 입을 여는 부하는 1~3명 무작위 — 시험에서는 둘로 고정 (2026-11-16)
       const p = G.Scenes.discoveryReveal(d, 10);
-      while (!document.querySelector('#ui .reveal')) await new Promise(r2 => setTimeout(r2, 10));
-      document.querySelector('#ui .reveal').click();
-      await p;
+      for (let w = 0; w < 1000 && !document.querySelector('#ui .reveal'); w++) await new Promise(r2 => setTimeout(r2, 10));
+      const rv = document.querySelector('#ui .reveal'); if (rv) rv.click();
+      await p; DV.count = oc;
       const body = f => (f[1].split(/(?<=[.!?])\s+/)[0] || '').slice(0, 10);
       out.reveal = said.map(x => x.who + ': ' + x.t);
       out.revealHits = F.filter(f => said.some(x => x.t.indexOf(body(f)) >= 0)).length;

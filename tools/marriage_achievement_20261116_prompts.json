@@ -1,0 +1,39 @@
+{
+  "mode": "builtin",
+  "size": [
+    1881,
+    836
+  ],
+  "images": [
+    {
+      "id": "casanova",
+      "name": "카사노바",
+      "key": "achievement-events/casanova",
+      "prompt": "Use case: stylized-concept. Asset type: finished panoramic achievement event illustration for PLUS ULTRA / Loop of Good Hope, a historical sailing adventure RPG. Create a single 1881 by 836 pixel wide painting. Scene: a joyful wedding celebration on the terrace of a Mediterranean harbor villa during the age of sail, with distant masts, tiled roofs, warm sunset, a small table of flowers and wedding rings. Subject: one charismatic male admiral clearly aged about 25, athletic, windswept dark hair, modest ivory shirt and dark teal sailor waistcoat, smiling warmly, surrounded by exactly TWELVE distinct fully adult wives aged 25 to 45, all with mature adult features and elegant varied late-medieval maritime-world dresses. The central bride and admiral hold hands; the other women interact naturally in a graceful semi-circle, toasting, laughing, placing flowers and exchanging knowing affectionate smiles. Distinct faces, hairstyles, garments and gestures; each person is clearly individual. Equal and mutual affection in a warm celebratory group portrait. Style: richly painted Korean/Japanese historical RPG event art, refined expressive illustrated faces, controlled painterly skin and fabric shading, coherent fine brushwork throughout faces, hands and clothing, visibly hand-painted rather than photographic or live action. Composition: thirteen people total, central male and twelve women, all heads fully in frame with generous top margin, waist-up to knee-up, organized in two gently staggered rows so everyone has a readable face; no one cropped across a face; wide cinematic scene, faces sufficiently large for a game event panel, atmospheric harbor background subordinate. Warm amber and sea teal palette, lovely natural gestures. No text, no lettering, no numerals, no logo, no watermark, no border or interface, no modern clothing, no nudity, no sexual activity, no minors, no photorealism. Do not make a contact sheet.",
+      "source": "C:/Users/User/.codex/generated_images/01a1de5e-8bd8-74e3-a11e-af1b258cec18/exec-5ec5ffe9-016e-4eb3-a682-91a6c3f725b7.png",
+      "initial_source": "C:/Users/User/.codex/generated_images/01a1de5e-8bd8-74e3-a11e-af1b258cec18/exec-8487553a-f864-4705-bd87-73cbc0d06b48.png",
+      "edit_prompt": "Edit this achievement painting with ONE targeted change: remove the bespectacled dark-haired woman in the back row at about 80% across the image (between the standing blonde woman and the far-right laughing dark-haired woman). Remove that single woman completely, including her dark dress and book; extend the harbor water, masts and low terrace wall naturally in the small gap. The final group must contain exactly ONE young male admiral and TWELVE adult women, thirteen people total. Preserve every other person, every other face, pose, hairstyle, garment, the central couple holding hands, lighting, painterly game style, flowers, table, rings, sunset, panorama size and composition unchanged. Add no new people or text.",
+      "workspace_source": "artifacts/marriage-achievements-20261116/sources/casanova.png",
+      "file": "images/achievement-events/casanova.webp",
+      "original_size": [
+        1881,
+        836
+      ],
+      "sha256": "8bebb8323957b5a84cc55f8d970e75aafabbcf03c0c883afc965d97cb2cfb440"
+    },
+    {
+      "id": "uijawang",
+      "name": "의자왕",
+      "key": "achievement-events/uijawang",
+      "prompt": "Use case: stylized-concept. Asset type: finished panoramic achievement event illustration for PLUS ULTRA / Loop of Good Hope, a historical sailing adventure RPG. Create a single 1881 by 836 pixel wide painting. Scene: an intimate celebratory feast in an elegant maritime villa courtyard overlooking an age-of-sail harbor at blue hour, lanterns and plum blossoms, carved timber gallery, distant anchored sailing ship. Subject: ONE proud yet warm elderly male admiral unmistakably over 70, about 75, handsome weathered face with pronounced age lines, silver swept-back hair, a neatly kept white beard, upright dignified posture, simple deep indigo formal coat with muted gold edging. He sits centrally at a low banquet table, raises a small cup, and smiles toward exactly TWELVE distinct fully adult wives aged 30 to 65, all mature adults in varied elegant gowns and robes reflecting the sailing game's broad historical world, several with East Asian-inspired formal dress and others with Mediterranean gowns. One wife leans beside him holding his hand; others converse, smile, bring flowers and raise cups, each distinct expression and pose. The women are active affectionate partners in a joyful mutually chosen marriage celebration, not servants. Group composition must be clearly different from a standing wedding portrait: seated central admiral, asymmetrical flowing group on both sides with seated and standing adult women. Exactly thirteen people, one elderly man and twelve adult women; all faces visible and complete, no crowds or background people, generous head margin, waist-up to knee-up, expressive faces large enough for event panel. Style: richly painted Korean/Japanese historical RPG illustration, beautifully illustrated expressive faces and refined anatomy, controlled painterly skin, hands and cloth shading, consistent brushwork across everything, unmistakably game event artwork rather than photograph or live action. Jewel indigo, coral, lantern gold, pale silk, atmospheric harbor blue. No text, no lettering, no logo, no watermark, no border, no interface, no modern objects, no nudity or sexual activity, no minors, no photorealism, no contact sheet.",
+      "source": "C:/Users/User/.codex/generated_images/01a1de5e-8bd8-74e3-a11e-af1b258cec18/exec-6cc3740d-4b1e-49ca-89d8-53eb569fc9a7.png",
+      "workspace_source": "artifacts/marriage-achievements-20261116/sources/uijawang.png",
+      "file": "images/achievement-events/uijawang.webp",
+      "original_size": [
+        1880,
+        836
+      ],
+      "sha256": "07307c286c1c38b93b6a1604d6dce9005f00c73f813927cab94bbf51c35e41a6"
+    }
+  ]
+}

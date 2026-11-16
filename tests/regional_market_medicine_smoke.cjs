@@ -9,7 +9,7 @@ const {chromium} = require('../tools/procedural_art/node_modules/playwright-core
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
  await page.route('https://fonts.googleapis.com/**',r=>r.fulfill({status:200,contentType:'text/css',body:''}));
  try{
- await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.resolve(__dirname,'../index.html')).href));
+ await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.resolve(__dirname,'../index.html')).href),{waitUntil:'domcontentloaded',timeout:120000});
  await page.waitForFunction(()=>window.G&&G.Game&&G.Game.sceneName==='title',null,{timeout:120000});
  const result=await page.evaluate(async()=>{
   await G.Game.ensureGeo(); G.State.newGame({name:'시장시험',nation:'PT',job:'explorer',age:24,birth:{m:1,d:1},st:{str:60,int:60,mar:60,cha:60},sk:{},lg:[],diff:'normal'});
@@ -26,7 +26,7 @@ const {chromium} = require('../tools/procedural_art/node_modules/playwright-core
    s.day=week*G.BALANCE.marketMedicineDays;
    for(const c of G.CITY_DATA){if(!c)continue;const st=M.stock(c),ms=st.filter(x=>x.kind==='medicine');
     check(ms.length<=1,'약 시장 전체 1개 이하');ms.length?full++:empty++;
-    for(const it of st){if(it.marketCollection){seen.add(it.id);check(it.reg.includes(c.region),'지역 제한');if(it.subRegion)check(G.subRegion(c)===it.subRegion,'세부 지역 제한');}if(it.legendary)legendSeen++;}
+    for(const it of st){if(it.marketCollection==='jewels_20261116'||it.marketCollection==='medicine_20261116'){seen.add(it.id);check(it.reg.includes(c.region),'지역 제한');if(it.subRegion)check(G.subRegion(c)===it.subRegion,'세부 지역 제한');}if(it.legendary)legendSeen++;}
     if(ms.length&&!target)target={city:c.id,day:s.day,id:ms[0].id};
    }
   }

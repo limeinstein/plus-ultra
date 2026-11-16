@@ -20,10 +20,11 @@
   function split(t) { return String(t).split(/(?<=[.!?])\s+/); }
   function eachEnd(t, fn) { return split(t).map(function (x) { return fn(x); }).join(' '); }
   /** 하십시오체 한 문장 → 하오체(hao) · 하게체(hage) */
-  function fromSp(x, reg) {
+  function fromSp(x, reg, yo) {
     var m;
     if ((m = x.match(/^(.*?)(.)입니(다|까)([.!?]?)$/))) {
-      // 「바다입니다」(이다)와 「보입니다」(보이다)를 가를 수 없으니 늘 「이오·이네」 — 둘 다 맞는 말이 된다
+      // 「바다입니다」(이다)와 「보입니다」(보이다)는 짝이 되는 해요체 문장으로 가른다: 「바다예요」 → 바다요 · 바다네 (2026-11-16), 그 밖에는 「이오·이네」
+      if (m[3] === '다' && yo && /[^이]예요[.!?]?$/.test(yo) && jong(m[2]) === 0) return m[1] + m[2] + (reg === 'hao' ? '요' : '네') + m[4];
       if (m[3] === '까') return m[1] + m[2] + (reg === 'hao' ? '이오?' : '인가?');
       return m[1] + m[2] + (reg === 'hao' ? '이오' : '이네') + m[4];
     }
@@ -57,7 +58,7 @@
     if (reg === 'sp') return sp;
     if (reg === 'yo') return yo;
     if (reg === 'ban') return eachEnd(yo, toBan);
-    if (reg === 'hao' || reg === 'hage') return eachEnd(sp, function (x) { return fromSp(x, reg); });
+    if (reg === 'hao' || reg === 'hage') { var ys = split(yo), ss = split(sp), same = ys.length === ss.length; return ss.map(function (x, i) { return fromSp(x, reg, same ? ys[i] : null); }).join(' '); }
     return reg === 'yo' ? yo : sp;
   };
   DV._fromSp = fromSp; DV._toBan = toBan;
@@ -129,28 +130,50 @@
     if (opt.pitch) pre = F.pitchPre && U.chance(0.6) ? U.pickFresh(key + ':pp', F.pitchPre) : '';
     else if (lv <= 1 && U.chance(0.7)) pre = U.pickFresh(key + ':l1', LV1);
     else if (U.chance(0.55)) pre = U.pickFresh(key + ':pre', F.pre);
+    // 덧말은 첫마디가 없고 관찰이 짧을 때만 — 한 사람의 말이 세 문장을 넘어 늘어지지 않게 (2026-11-16)
+    var roomy = !pre && body.length < 60;
     if (opt.close) post = DV.conv(U.pickFresh('dv:close:' + opt.angle, opt.close), reg);
-    else if (lv >= 3 && U.chance(0.35)) post = DV.conv(U.pickFresh(key + ':l3', LV3), reg);
-    else if (U.chance(0.4)) post = DV.conv(U.pickFresh(key + ':post', F.post), reg);
+    else if (roomy && lv >= 3 && U.chance(0.35)) post = DV.conv(U.pickFresh(key + ':l3', LV3), reg);
+    else if (roomy && U.chance(0.4)) post = DV.conv(U.pickFresh(key + ':post', F.post), reg);
     var ko = !G.I18N || G.I18N.isKo();
     if (!ko && pre) { pre = G.I18N.tx(pre); if (/,$/.test(pre.trim())) body = lowerHead(body); }   // 「Look, they say…」 — 쉼표 뒤 첫 낱말은 작게 (흔한 낱말만)
     var t = (pre ? pre + ' ' : '') + body + (post ? ' ' + post : '');
     if (opt.d) t = t.replace(/\{d\}/g, ko ? '「' + opt.d + '」' : '"' + G.N(opt.d) + '"');
     return t;
   };
-  /** 발견하는 순간: 특기가 맞는 부하들이 그 발견물의 관찰을 말한다 — [{m, d(부하 자료), sk, lv, text}] (서로 다른 사람, 최대 n) */
+  /** 이번 발견에 입을 여는 부하 수: 1~3명 가운데 무작위 (G.BALANCE.discVoice.w = [1명, 2명, 3명]의 무게) — 늘 같은 수가 말하지 않게 2026-11-16 */
+  DV.count = function () {
+    var w = (G.BALANCE.discVoice && G.BALANCE.discVoice.w) || [1, 1, 1], tot = 0, i;
+    for (i = 0; i < w.length; i++) tot += w[i];
+    var r = Math.random() * tot;
+    for (i = 0; i < w.length; i++) { r -= w[i]; if (r < 0) return i + 1; }
+    return w.length;
+  };
+  /** 발견하는 순간: 특기가 맞는 부하들이 그 발견물의 관찰을 말한다 — [{m, d(부하 자료), sk, lv, text}] (서로 다른 사람, 최대 n · n을 안 주면 DV.count()) */
   DV.reveal = function (d, n) {
-    var F = DV.facts(d); if (!F) return [];
-    var used = {}, out = [];
+    var F = DV.facts(d) || [];
+    n = n || DV.count();
+    var used = {}, out = [], kin = DV.kin(d);
+    // 그 발견물과 인연이 있는 사람이 타고 있으면 먼저 한마디 (js/data/disckin.js — 말투 그대로)
+    if (kin) { used[kin.m.id] = 1; out.push({ m: kin.m, d: kin.d, sk: 'kin', lv: 3, kin: true, text: kin.text }); }
     U.shuffle(F.slice()).forEach(function (f) {
-      if (out.length >= (n || 2)) return;
+      if (out.length >= n) return;
       var b = bestMate(f[0], used); if (!b) return;
       used[b.m.id] = 1;
       out.push({ m: b.m, d: b.d, sk: f[0], lv: b.lv, text: DV.render(b.d, [f[1], f[2]], b.lv, { d: d.name }) });
     });
     // 발견 순서는 관찰 표의 순서대로 (역사 → 측량 … 처럼 이야기가 이어지게)
-    out.sort(function (a, b) { return F.map(function (x) { return x[0]; }).indexOf(a.sk) - F.map(function (x) { return x[0]; }).indexOf(b.sk); });
+    out.sort(function (a, b) { if (a.kin || b.kin) return a.kin ? -1 : 1; return F.map(function (x) { return x[0]; }).indexOf(a.sk) - F.map(function (x) { return x[0]; }).indexOf(b.sk); });
     return out;
+  };
+  /** 그 발견물과 몸소 얽힌 부하(G.DISC_KIN) 가운데 배에 탄 한 사람의 말 — {m, d, text} 또는 null (숨은 부하 빼고) */
+  DV.kin = function (d) {
+    var L = d && G.DISC_KIN && G.DISC_KIN[d.id], s = S(); if (!L || !s) return null;
+    var on = L.filter(function (r) { var m = (s.mates || []).find(function (x) { return x.id === r[0]; }); return m && G.MATE[r[0]] && !(R.mateHidden && R.mateHidden(m)); });
+    if (!on.length) return null;
+    var r = U.pickFresh('dv:kin:' + d.id, on), m = s.mates.find(function (x) { return x.id === r[0]; });
+    var ko = !G.I18N || G.I18N.isKo();
+    return { m: m, d: G.MATE[r[0]], text: ko ? r[1] : G.I18N.tx(r[1]) };
   };
   /** 발견 직후 부하 한 사람의 바람 (d.wish → G.DISC_WISH[d.wish] — 아메리카 대학의 신기루 「나 같은 사람들도 배울 수 있는 학교라니…」, js/data/amer1630.js)
       배운 것이 가장 적은 부하(역사학·과학·신학이 낮은 사람)가 말한다 — {m, d, text} 또는 null */

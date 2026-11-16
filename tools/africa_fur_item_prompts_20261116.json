@@ -1,0 +1,365 @@
+{
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "id": "african_leopard_ring",
+      "name": "표범 문양 금반지",
+      "kind": "gift",
+      "price": 12000,
+      "gv": 30,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "표범의 날렵한 몸을 작은 금반지로 말아 만들고 검은 칠로 장미무늬 반점을 넣었다. 아프리카 동물 문양에서 착안한 장신구.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: A single slim wearable gold finger ring, the band formed by a graceful curled African leopard, tiny emerald eyes, delicately inlaid black enamel rosette spots, tail smoothly wrapping as the ring band. Fine proportions: ring fits one finger, animal head is a small relief about the size of a fingernail, not a gigantic gemstone.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-d60e33ee-59d8-4033-8a92-adebdc7523e5.png",
+      "file": "images/items/african_leopard_ring.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_leopard_ring.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "44c05f27d11fe3353573a60971aba4850e356dfa2c986b7893ff5f55f60cec29",
+      "bytes": 23464,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "african_leopard_bracelet",
+      "name": "표범 꼬리 금팔찌",
+      "kind": "gift",
+      "price": 18000,
+      "gv": 35,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "표범의 머리와 꼬리가 손목을 감싸는 금팔찌. 작은 녹색 보석 눈과 검은 장미무늬 반점이 빛난다.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One wearable gold open cuff bracelet shaped as a slender curled African leopard, small sculpted leopard head at one terminal and tapered tail at the other, black enamel rosette spots and tiny green stone eyes, exquisite ancient-inspired African goldsmith work.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-7d9975f4-58d9-4d2b-871b-c013bcd7bdf1.png",
+      "file": "images/items/african_leopard_bracelet.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_leopard_bracelet.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "965d752105f24eeb0954e44ab19462e39f92da9e93a20d868f10f0d94a6516b8",
+      "bytes": 17558,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "african_leopard_brooch",
+      "name": "표범 도약 브로치",
+      "kind": "gift",
+      "price": 9500,
+      "gv": 27,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "도약하는 표범의 긴 꼬리와 굽힌 다리를 금으로 세공한 작은 브로치.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One small antique gold brooch of a leaping African leopard in side profile, graceful elongated body, four coherent legs and long curved tail, tiny black enamel rosette spots, one tiny red eye stone. A delicate lapel-sized ornament, no background props.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-8baa44ad-d6a5-42f3-99ec-343a6d89e980.png",
+      "file": "images/items/african_leopard_brooch.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_leopard_brooch.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "9eca38abada8e9caf8b6aa1437f6fa87da5ea4dd52bf27f119908c498708e8d1",
+      "bytes": 17420,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "african_cheetah_earrings",
+      "name": "치타 눈물무늬 귀걸이",
+      "kind": "gift",
+      "price": 11000,
+      "gv": 29,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "치타 얼굴의 검은 눈물줄과 점무늬를 섬세하게 넣은 금 귀걸이 한 쌍.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One matching PAIR of delicate gold drop earrings. Each tiny cheetah head has characteristic black tear lines from inner eyes to mouth and small solid black spots, slim feline faces, warm golden fur modeled in gold, small green eyes, fine gold ear hooks. Elegant rather than bulky, no necklace or ring.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-7f7266d7-bd9a-4b9b-ac00-d118ce46ba3b.png",
+      "file": "images/items/african_cheetah_earrings.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_cheetah_earrings.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "dfee312666f3230fe444c3a373f965a6bcf4cf8e0c2c32c649e362644c97437b",
+      "bytes": 28624,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "african_cheetah_pendant",
+      "name": "달리는 치타 펜던트",
+      "kind": "gift",
+      "price": 14500,
+      "gv": 32,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "긴 꼬리로 균형을 잡으며 달리는 치타를 본뜬 작은 금 펜던트. 호박 한 알을 곁들였다.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One small wearable gold pendant in the silhouette of a running cheetah, slender limbs and long balancing tail, subtle tiny black enamel spots, a small warm amber accent and top hanging bail with a short fine gold chain loop. Cheetah is recognizable, no extra ornaments.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-0406399c-5c9a-452a-8495-e4a607db86b0.png",
+      "file": "images/items/african_cheetah_pendant.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_cheetah_pendant.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "722b4ca428b3c755eda20ce4a735022c3fe9fa1d8e1a09fa5383dafca47c5b8b",
+      "bytes": 19474,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "african_cheetah_cuff",
+      "name": "치타 발자국 은팔찌",
+      "kind": "gift",
+      "price": 8500,
+      "gv": 26,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "작은 치타 발자국과 달리는 옆모습을 새긴 은팔찌. 가는 금테를 둘렀다.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One antique silver cuff bracelet with a narrow gold edge, a row of delicately incised African cheetah paw prints around the band, a small low relief running cheetah motif at center, patinated dark recesses, finely handcrafted slim wearable bracelet.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-5ee34fcd-c4c1-4707-81f0-1516aac9b41c.png",
+      "file": "images/items/african_cheetah_cuff.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_cheetah_cuff.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "e0fb340e898a32567ecf174f831689332f834b75baf52a232ff3970674940bad",
+      "bytes": 14202,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "african_lion_ring",
+      "name": "사자 왕 금반지",
+      "kind": "gift",
+      "price": 16000,
+      "gv": 33,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "손톱만 한 반지 윗면에 수사자의 얼굴과 갈기를 돋을새김한 금 인장 반지.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One wearable antique gold signet finger ring with a SMALL round relief male African lion face and detailed mane on its bezel, tiny black stone eyes, warm rubbed gold, engraved geometric shoulders. Bezel only fingernail-sized relative to the slender finger ring band, not a giant trophy ring.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-3d535d1e-771e-45c5-a588-0cd6f16db760.png",
+      "file": "images/items/african_lion_ring.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_lion_ring.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "7505ea48751aabbc7294a161787d3ebb22165cfa925c677212ac004f282bb36c",
+      "bytes": 20992,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "african_lion_necklace",
+      "name": "사자 갈기 금목걸이",
+      "kind": "gift",
+      "price": 20000,
+      "gv": 37,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "가느다란 금사슬에 갈기가 둥글게 퍼진 작은 사자 메달을 달았다. 붉은 홍옥수 한 알이 턱 아래에서 빛난다.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One complete oval fine gold necklace with a small round male African lion face pendant and radiating textured gold mane. Subtle small carnelian accent under the chin. Adult wearable proportions: delicate chain, central medallion about 3 cm wide, not huge. No earrings.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-d0776490-f279-4be5-b6cf-a8d885b41eee.png",
+      "file": "images/items/african_lion_necklace.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_lion_necklace.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "060f57d6bae953b8bfad70a699173a3d50f2a56ab00bb9a0a2c2f0aac6d44e2d",
+      "bytes": 14208,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "african_lioness_pendant",
+      "name": "암사자 홍옥 펜던트",
+      "kind": "gift",
+      "price": 13000,
+      "gv": 31,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "붉은 홍옥수에 암사자의 옆모습을 새기고 작은 금 알갱이 테를 두른 펜던트.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One small oval red carnelian pendant carved in intaglio with an African lioness side profile, no mane, enclosed in a delicate antique gold beaded frame with a small gold top bail, a few miniature gold granules. Wearable 3 cm jewel, no extra necklace or earrings.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-74ff860a-1bef-4606-8570-ccfa6316d8aa.png",
+      "file": "images/items/african_lioness_pendant.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_lioness_pendant.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "17e8eefe2ae5604afd86eb833b36f7a888605757738553254e870fabbef4ef74",
+      "bytes": 21762,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "african_twin_lion_torc",
+      "name": "쌍사자 금목걸이",
+      "kind": "gift",
+      "price": 24000,
+      "gv": 40,
+      "reg": [
+        3
+      ],
+      "marketCollection": "africa_animals_20261116",
+      "desc": "가느다란 금 목고리의 양 끝에서 작은 사자 두 마리가 마주 본다. 누비아와 아프리카 동물 장식에서 착안한 세공품.",
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One ancient-inspired African gold neck torc, open oval adult neck ring with two small finely sculpted lion heads facing one another at the open terminals, braided gold metalwork along the slender band, tiny black stone eyes, subtle Nubian-inspired geometric details. No other jewelry.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-788f5919-f1a9-40e8-8f87-3b09403a0cd0.png",
+      "file": "images/items/african_twin_lion_torc.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/african_twin_lion_torc.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "e60641635a23b8165373cad0f7cccae123499013c78aa9254354765284755b4f",
+      "bytes": 18258,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "furcoat_sable",
+      "name": "담비 코트",
+      "kind": "armor",
+      "price": 9000,
+      "reg": [
+        1,
+        7,
+        10
+      ],
+      "marketMinLat": 55,
+      "marketCollection": "northern_furs_20261116",
+      "desc": "짙은 갈색 담비 털을 촘촘히 이어 댄 무릎 길이 외투. 북방 모피 상인이 귀하게 다루는 부드러운 옷. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.",
+      "def": 4,
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One complete historical northern sable fur coat, deep chocolate brown fine plush sable fur, thick soft shawl collar, long sleeves, knee-length hem, front open slightly to reveal muted burgundy wool lining and simple period metal clasps. Three-quarter frontal laid-out garment pose, no human body, no mannequin, no hanger. Natural luxurious fur fibers, medieval Russian northern trade clothing, no animal head or paws.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-a771b606-f192-46df-8d40-a994328b018b.png",
+      "file": "images/items/furcoat_sable.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/furcoat_sable.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "e1831816bb4264af4b362cf613f1cda0591a9da91093f69becd03311cde787b7",
+      "bytes": 20174,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "furcoat_tiger",
+      "name": "호피 코트",
+      "kind": "armor",
+      "price": 18000,
+      "reg": [
+        1,
+        7,
+        10
+      ],
+      "marketMinLat": 55,
+      "marketCollection": "northern_furs_20261116",
+      "desc": "호랑이 줄무늬가 선명한 두꺼운 모피 외투. 추운 북쪽 시장에서 먼 산지의 진품이라며 내놓았다. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.",
+      "def": 7,
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One complete historical northern Siberian tiger-pattern fur coat, warm amber orange pelt with anatomically natural black tiger stripes and pale cream belly fur at collar and front edge, long sleeves, knee-length hem, simple dark leather ties, subdued warm lining. Wearable historical winter coat, no modern fashion branding, no animal head, no paws. Garment only, no person, mannequin or hanger.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-da2296be-0c05-4c66-9a43-b594a1ce743c.png",
+      "file": "images/items/furcoat_tiger.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/furcoat_tiger.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "f9c9eb3a0e6a5f91010fde7aba587d74d0eec65e8a6f9c3bd8efaebcdd2493a9",
+      "bytes": 25640,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "furcoat_silverfox",
+      "name": "은여우 모피 코트",
+      "kind": "armor",
+      "price": 12000,
+      "reg": [
+        1,
+        7,
+        10
+      ],
+      "marketMinLat": 55,
+      "marketCollection": "northern_furs_20261116",
+      "desc": "검은 속털 위로 은빛 털끝이 빛나는 긴 외투. 넓은 깃과 소매 끝이 풍성하다. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.",
+      "def": 5,
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One complete historical northern silver fox fur coat, long dense silver-gray guard hairs over charcoal black underfur, generous warm collar, long sleeves, knee-length hem and simple antique silver toggles, dark wool lining visible in slight front opening. Garment only in natural three-quarter frontal presentation, no person, mannequin, hanger, fox head or paws.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-0d431d79-b574-4340-8649-afc15cb4f0b3.png",
+      "file": "images/items/furcoat_silverfox.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/furcoat_silverfox.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "d18eb653b9c77465eff8894feb387223ed5b126b84b2f14a1d291d3314f869ac",
+      "bytes": 22210,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "furcoat_reindeer",
+      "name": "순록 모피 코트",
+      "kind": "armor",
+      "price": 5500,
+      "reg": [
+        1,
+        7,
+        10
+      ],
+      "marketMinLat": 55,
+      "marketCollection": "northern_furs_20261116",
+      "desc": "순록 가죽과 빽빽한 털을 손으로 꿰맨 실용적인 북방 외투. 가죽 끈과 작은 직조 무늬로 여몄다. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.",
+      "def": 6,
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One complete traditional northern reindeer hide winter coat, warm taupe brown and cream dense short reindeer fur, broad ivory fur collar and cuff trim, long sleeves and thigh-length hem, simple rawhide ties and understated red woven edging inspired by northern Eurasian winter clothing. Practical hand-sewn warm garment, not modern parka, no human, mannequin, hanger, animal head or paws.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-3e57800f-97e2-47fd-8314-398562f57775.png",
+      "file": "images/items/furcoat_reindeer.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/furcoat_reindeer.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "0203bbd66cbf471caca6961d57163dcb006446349db8d7fa665b11315d8c23bc",
+      "bytes": 26258,
+      "tool": "built-in image_gen"
+    },
+    {
+      "id": "furcoat_polarbear",
+      "name": "북극곰 모피 코트",
+      "kind": "armor",
+      "price": 24000,
+      "reg": [
+        1,
+        7,
+        10
+      ],
+      "marketMinLat": 55,
+      "marketCollection": "northern_furs_20261116",
+      "desc": "두툼한 크림빛 흰 모피에 넓은 깃과 긴 소매를 댄 북극권 외투. 북위 55도 이상 북방 시장에서 판다. 방어구로 착용할 수 있다.",
+      "def": 8,
+      "prompt": "Use case: stylized-concept. Asset type: ONE unique inventory icon for a historical Age of Sail exploration RPG. Rich hand-painted realistic object matching classic game item art, finely detailed natural materials, warm soft light upper left, crisp readable silhouette, restrained polished craftsmanship. Complete object centered in a square, all parts within frame, 12 percent genuinely transparent margin on every side. Actual transparent alpha background, absolutely no opaque backdrop, ground, gray haze, cast shadow, pedestal or scene. No text, letters, numerals, labels, watermark, borders, hands or people. Draw ONLY the item in Subject: do not add matching jewelry or spare props. Jewelry must have realistic wearable proportions; finger rings fit one finger and have small stones relative to the band. Subject: One complete historical Arctic heavy polar bear fur winter coat, thick creamy ivory-white fur with realistic slightly warm shaded fibers, broad hood folded back forming a generous collar, long sleeves, knee-length hem, simple dark leather closures and muted hide lining. A large warm garment, no actual bear, no animal head, claws or paws; no person, mannequin or hanger.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1e42b-29bb-7812-b081-e33f840a248c\\exec-46f4824c-7651-47cb-9d97-4002003be4cb.png",
+      "file": "images/items/furcoat_polarbear.webp",
+      "workspace_source": "artifacts/africa-fur-items-20261116/raw/furcoat_polarbear.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "704a92aac8529e7bca61af3b0bdbeda8714d0a449a652a0ca860ae1a93fd887b",
+      "bytes": 24514,
+      "tool": "built-in image_gen"
+    }
+  ]
+}

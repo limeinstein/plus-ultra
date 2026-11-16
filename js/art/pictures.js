@@ -389,10 +389,10 @@
       }
     } else if (K === 'armor') {
       if (has('방패')) { x.fillStyle = '#2e7a4a'; x.beginPath(); x.arc(0, 0, 0.85, 0, 7); x.fill(); for (var f = 0; f < 18; f++) { x.fillStyle = ['#2fa86a', '#e8c040', '#c83a2a'][f % 3]; x.beginPath(); x.ellipse(Math.cos(f / 18 * 6.283) * 0.62, Math.sin(f / 18 * 6.283) * 0.62, 0.16, 0.06, f / 18 * 6.283, 0, 7); x.fill(); } line('#e8c040', 3); x.beginPath(); x.arc(0, 0, 0.85, 0, 7); x.stroke(); }
-      else if (has('망토') || has('외투') || has('갑옷')) {
-        var fur = has('호랑이') ? '#d8902a' : has('흰곰') || has('북극곰') ? '#eeeae0' : has('악어') || has('괴수') ? '#5a6a3a' : '#a07a4a';
+      else if (has('망토') || has('외투') || has('갑옷') || has('코트')) {
+        var fur = (has('호랑이') || has('호피')) ? '#d8902a' : has('은여우') ? '#a2a5a8' : has('흰곰') || has('북극곰') ? '#eeeae0' : has('악어') || has('괴수') ? '#5a6a3a' : '#a07a4a';
         x.fillStyle = fur; x.beginPath(); x.moveTo(-0.35, -0.85); x.lineTo(0.35, -0.85); x.quadraticCurveTo(0.6, 0, 0.85, 0.85); x.lineTo(-0.85, 0.85); x.quadraticCurveTo(-0.6, 0, -0.35, -0.85); x.fill();
-        x.fillStyle = 'rgba(0,0,0,.25)'; for (var st = 0; st < 7; st++) { if (has('호랑이')) { x.fillRect(-0.6 + st * 0.18, -0.3 + (st % 2) * 0.2, 0.06, 0.6); } else if (has('악어') || has('괴수')) { x.fillRect(-0.55 + st * 0.16, -0.1, 0.12, 0.12); x.fillRect(-0.5 + st * 0.16, 0.2, 0.12, 0.12); } }
+        x.fillStyle = 'rgba(0,0,0,.25)'; for (var st = 0; st < 7; st++) { if (has('호랑이') || has('호피')) { x.fillRect(-0.6 + st * 0.18, -0.3 + (st % 2) * 0.2, 0.06, 0.6); } else if (has('악어') || has('괴수')) { x.fillRect(-0.55 + st * 0.16, -0.1, 0.12, 0.12); x.fillRect(-0.5 + st * 0.16, 0.2, 0.12, 0.12); } }
         line('rgba(0,0,0,.35)', 2); x.beginPath(); x.moveTo(0, -0.85); x.lineTo(0, 0.85); x.stroke();
       } else { // 투구
         x.fillStyle = gold('#fff0b0', '#6a4410'); x.beginPath(); x.arc(0, 0.1, 0.62, Math.PI, 0); x.lineTo(0.62, 0.6); x.lineTo(0.3, 0.6); x.lineTo(0.3, 0.2); x.lineTo(-0.3, 0.2); x.lineTo(-0.3, 0.6); x.lineTo(-0.62, 0.6); x.closePath(); x.fill();

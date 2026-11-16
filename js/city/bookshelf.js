@@ -93,13 +93,16 @@
     if (lg >= 3) out.push({ k: 'lang', sc: 8 });
     return out.filter(function (r) { return r.sc >= 8; }).sort(function (a, c) { return c.sc - a.sc; });
   }
-  /** 이야기에 낄 부하 (최대 3명, 되도록 서로 다른 까닭으로) */
+  /** 이야기에 낄 부하 (1~3명, 되도록 서로 다른 까닭으로) */
   LB.speakers = function (b) {
     var tp = topics(b), cand = [];
     S().mates.forEach(function (m) { if (!G.MATE[m.id]) return; var rs = reasons(m, b, tp); if (rs.length) cand.push({ m: m, rs: rs }); });
     cand.sort(function (a, c) { return c.rs[0].sc - a.rs[0].sc; });
+    // 이번에 입을 여는 사람은 1~3명 무작위 (G.DiscVoice.count) — 책과 인연이 있는 부하(BOOK_REL)는 빠지지 않는다 (2026-11-16)
+    var nRel = cand.filter(function (x) { return x.rs[0].k === 'rel'; }).length;
+    var cap = Math.min(3, Math.max(nRel, G.DiscVoice && G.DiscVoice.count ? G.DiscVoice.count() : 3));
     var out = [], usedK = {};
-    while (out.length < 3 && cand.length) {
+    while (out.length < cap && cand.length) {
       var best = null, bi = -1, br = null;
       cand.forEach(function (x, i) {
         x.rs.forEach(function (r) { var sc = r.sc - (usedK[r.k] ? 7 : 0); if (!best || sc > best) { best = sc; bi = i; br = r; } });

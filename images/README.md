@@ -1,5 +1,10 @@
 # images — 그림 교체 폴더
 
+「해방자」 업적샷(2026-11-16)은 `achievement-events/liberator.webp`의 1881×836 게임 회화풍 장면을 쓴다. 아프리카 흑인 항해사들이 갑판에서 함께 항로를 정하고 환호하는 전용 원화이며, 업적 달성과 도감에 연결했다. [원본·제작 프롬프트·검증](../docs/art/liberator-achievement-20261116.md).
+
+아프리카 동물 장신구·북방 코트 15종(2026-11-16)은 `items/african_*.webp` 10장·`items/furcoat_*.webp` 5장의 256×256 투명 그림을 쓴다. 기존 업적샷 5장도 사람과 손에 맞는 장신구 크기로 수정했다. [새 품목·원화·프롬프트·검증](../docs/art/africa-fur-items-20261116.md) · [업적샷 전후 비교](../artifacts/market-collection-achievements-20261116/scale-fix-20261116/comparison.jpg).
+
+
 보석·장신구·약재 수집 업적샷 9종(2026-11-16)은 `achievement-events/collect_{jewel10,jewel25,jewel50,jewel_regions,legend_jewels,medicine5,medicine10,medicine20,market70}.webp`의 1881×836 장면을 쓴다. [전체 그림·원본·프롬프트·검증](../docs/art/market-collection-achievements-20261116.md).
 
 

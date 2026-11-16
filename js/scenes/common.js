@@ -163,7 +163,7 @@
   SC.hasReveal = function (d) { return !!revealKeys(d); };
   /** 장면 그림(GIF·장면 판)이 아직 없는 발견물: 발견 카드 뒤에 부하들의 관찰과 바람만 들려준다 (js/systems/discvoice.js) — 2026-10-28 */
   SC.discoveryVoices = async function (d) {
-    var dvl = G.DiscVoice ? G.DiscVoice.reveal(d, 2) : [], used = {};
+    var dvl = G.DiscVoice ? G.DiscVoice.reveal(d) : [], used = {};   // 1~3명 무작위 (DV.count)
     for (var i = 0; i < dvl.length; i++) { used[dvl[i].m.id] = 1; await UI.say(dvl[i].text, { name: dvl[i].d.name, portrait: SC.mateSpec(dvl[i].m.id), lang: 3 }); }
     var w = G.DiscVoice && G.DiscVoice.wish ? G.DiscVoice.wish(d) : null;
     if (w) await UI.say(w.text, { name: w.d.name, portrait: SC.mateSpec(w.m.id), lang: 3 });
@@ -195,7 +195,20 @@
     (H.lore || []).forEach(function (l) { split(l).forEach(function (t) { if (ok(t) && out.indexOf(t) < 0) out.push(t); }); });
     return out;
   }
-  function lineFor(kind, lv, d) {
+  /** 발견 순간의 말은 짧게 (2026-11-16): 첫마디는 두 문장까지, 설명을 옮겨 읽는 「…」 인용은 한 문장(70자 안)만 — 책을 읽어 주듯 늘어지지 않게 */
+  var TRIM = G.FX.revealTalk;
+  function sentencesOf(t) { return String(t || '').split(/(?<=[.。!?…])\s+/).map(function (x) { return x.trim(); }).filter(Boolean); }
+  function trimLine(t) {
+    var parts = String(t || '').split('\f'), head = sentencesOf(parts[0]).slice(0, TRIM.head).join(' '), quote = '';
+    for (var i = 1; i < parts.length && !quote; i++) {
+      var m = /「([^」]*)」/.exec(parts[i]); if (!m) continue;
+      var first = sentencesOf(m[1])[0] || '';
+      if (first && first.length <= TRIM.quote) quote = '「' + first + '」';
+    }
+    return head + (quote ? '\f' + quote : '');
+  }
+  function lineFor(kind, lv, d) { return trimLine(lineFor0(kind, lv, d)); }
+  function lineFor0(kind, lv, d) {
     var sent = periodSentences(d);
     if (kind === 'cook') {      // 교역품 × 요리
       if (lv >= 3) return '맛을 보니 알겠습니다. 이것 하나면 궁정의 식탁도 시장의 좌판도 사로잡을 수 있습니다. 어떻게 다루고 무엇과 곁들이는지까지 적어 두면, 들여올 값어치가 훨씬 높게 매겨질 겁니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');
@@ -363,16 +376,19 @@
     var art = bestHand('art'), science = animal ? bestHand('sci') : { lv: 0 }, craft = (natural || animal || d.cat === 'geo') ? { lv: 0 } : bestHand('craft'), rec = G.Disc.recordParts ? G.Disc.recordParts(d) : { k: 1 };
     var cook = d.cat === 'trade' && (!RT || !RT.edible || RT.edible(d)) ? bestHand('cook') : { lv: 0 }, music = d.cat === 'people' ? bestHand('music') : { lv: 0 };
     // 그 발견물만의 관찰을 특기가 맞는 부하들이 저마다의 말투로 (js/systems/discvoice.js · js/data/discfacts_1~8.js) — 관찰이 나온 특기는 예전 갈래 말을 건너뛴다
-    var said = {}, dvl = G.DiscVoice ? G.DiscVoice.reveal(d, 2) : [];
+    // 입을 여는 부하는 이번에 1~3명 (DV.count) — 관찰 말이 모자라면 남은 자리만큼 예전 갈래 말(그림·과학·세공·요리·음악)이 채운다
+    var talkN = G.DiscVoice && G.DiscVoice.count ? G.DiscVoice.count() : 2;
+    var said = {}, dvl = G.DiscVoice ? G.DiscVoice.reveal(d, talkN) : [], room = Math.max(0, talkN - dvl.length);
+    function take() { if (room <= 0) return false; room--; return true; }
     for (var dvi = 0; dvi < dvl.length; dvi++) { var dv = dvl[dvi]; said[dv.sk] = 1; await UI.say(dv.text, { name: dv.d.name, portrait: SC.mateSpec(dv.m.id), lang: 3 }); }
     // 그 발견물을 본 부하의 바람 (아메리카 대학의 신기루 — 「나 같은 사람들도 배울 수 있는 학교라니…」 js/data/amer1630.js)
     var wsh = G.DiscVoice && G.DiscVoice.wish ? G.DiscVoice.wish(d) : null;
     if (wsh) await UI.say(wsh.text, { name: wsh.d.name, portrait: SC.mateSpec(wsh.m.id), lang: 3 });
-    if (science.lv && !said.sci) await UI.say(lineFor('sci', science.lv, d), science.speaker);
-    if (art.lv && (!said.art || art.lv >= 2 && !dvl.length)) await UI.say(lineFor('art', art.lv, d), art.speaker);
-    if (craft.lv && !said.craft && !dvl.length) await UI.say(lineFor('craft', craft.lv, d), craft.speaker);
-    if (cook.lv && !said.cook && !dvl.length) await UI.say(lineFor('cook', cook.lv, d), cook.speaker);
-    if (music.lv && !said.music && !dvl.length) await UI.say(lineFor('music', music.lv, d), music.speaker);
+    if (science.lv && !said.sci && take()) await UI.say(lineFor('sci', science.lv, d), science.speaker);
+    if (art.lv && (!said.art || art.lv >= 2 && !dvl.length) && take()) await UI.say(lineFor('art', art.lv, d), art.speaker);
+    if (craft.lv && !said.craft && !dvl.length && take()) await UI.say(lineFor('craft', craft.lv, d), craft.speaker);
+    if (cook.lv && !said.cook && !dvl.length && take()) await UI.say(lineFor('cook', cook.lv, d), cook.speaker);
+    if (music.lv && !said.music && !dvl.length && take()) await UI.say(lineFor('music', music.lv, d), music.speaker);
     if (!art.lv && !science.lv && !craft.lv && !cook.lv && !music.lv && !dvl.length) { var ns = RT ? RT.noSkill(d) : null; if (ns) await UI.say(ns, lead); }
     // 배에 함께 탄 아내·자식도 저마다 5% 확률로 한마디 — 아내는 사랑 이야기, 아이는 나이에 맞게 (js/systems/famvoice.js · js/data/discfam_1~8.js)
     var fam = G.FamVoice ? G.FamVoice.reveal(d) : [];

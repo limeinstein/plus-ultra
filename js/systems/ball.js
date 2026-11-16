@@ -418,6 +418,7 @@
       ctx.out.push(son.name + U.jx(son.name, '과/와') + ' ' + l.name + '의 혼약 — 뒤를 이으면 아내가 된다');
     } else if (!p.wife) {
       p.wife = l.id;
+      if (G.Achieve && G.Achieve.recordMarriage) G.Achieve.recordMarriage(l.id);
       s.maids = s.maids || {}; s.maids[l.id] = { aff: 100 };
       if (G.Growth) G.Growth.once('wed', 'cha', 1, '혼인 — 한 집안의 가장이 되었다');
       r.wed = 'p';
@@ -443,6 +444,7 @@
       await say(Ln.rivalWed, {}, { name: rv.short });
       trust(rv.realm, k.trust.rivalWed, ctx.out);
     }
+    if (!son && G.Achieve && G.Achieve.afterWed) { try { await G.Achieve.afterWed(l.id); } catch (e) { console.error(e); } }
     if (G.Audio) G.Audio.sfx('discover');
     if (G.Game.cityHud) G.Game.cityHud();
   }

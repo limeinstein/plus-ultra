@@ -1,7 +1,7 @@
 /* 새 발견물의 사료 책 (2026-10-18) — js/data/cluebooks.js · js/city/bookshelf.js G.BookSeq
    · 새 책: 모두 1800년까지 나온 책, 단서는 1~2곳(3곳 이상 없음), 발견물·도서관이 모두 있다, 책 id가 겹치지 않는다
    · 새 책에 실린 발견물은 사료 갈래(book) — 도서관에서 단서를 얻는다
-   · 책 안의 차례: 앞 대목의 곳을 찾아야(또는 경쟁자가 먼저 찾아야) 다음 대목이 읽힌다
+   · 책 안의 차례: 앞 대목의 곳을 직접 찾아야 다음 대목이 읽힌다(경쟁자 발표만으로는 열리지 않음)
    · 연작의 차례: 앞 책에 적힌 곳을 다 찾아야 다음 책이 서가에서 열린다(빨강 → 노랑)
    · 서가에서 읽으면 보이는 대목만 단서가 된다 · 콘솔 오류 0
    node tests/clue_books_smoke.js */
@@ -16,7 +16,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_|net::/.test(m.text())) errors.push(m.text()); if (m.type() === 'warning' && /단서가 .*넘어/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); if (m.type() === 'warning' && /단서가 .*넘어/.test(m.text())) errors.push(m.text()); });
   try {
     await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
@@ -64,7 +64,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       s.disc.sacredibis = { found: true, me: true };
       out.s1 = ['b_abdallatif', 'b_kircher'].map(id => st(id).kind + ':' + (st(id).why || ''));
       s.disc.sphinx = { found: true, me: true };
-      s.disc.ankh = { found: true, rival: 'x', me: false };   // 경쟁자가 먼저 찾아도 다음으로 넘어간다
+      s.disc.ankh = { found: true, rival: 'x', me: false };
+      out.rivalLock = st('b_norden').kind === 'lock' && !SQ.done('ankh');
+      s.disc.ankh.me = true;   // 기존 규칙: 경쟁자의 발표 뒤에도 직접 재발견해야 다음 책이 열린다.
       out.s2 = st('b_norden').kind;
       // 책 안의 차례
       const r0 = LB.readable(B('b_norden'));
@@ -79,7 +81,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(b.s0[0].startsWith('open') && b.s0.slice(1).every(x => x === 'lock:seq'), '연작 「나일강의 옛 글」: 첫 책만 열리고 나머지는 빨강 (' + b.s0.join(', ') + ')');
     ok(/앞선 책/.test(b.lockText), '잠긴 까닭: ' + b.lockText);
     ok(b.s1[0].startsWith('open') && b.s1[1] === 'lock:seq', '따오기를 찾으면 다음 책(압드 알라티프)이 열리고 그다음은 아직 잠김');
-    ok(b.s2 === 'open', '경쟁자가 먼저 찾은 곳은 지나간 것으로 친다 → 노르덴이 열린다');
+    ok(b.rivalLock && b.s2 === 'open', '경쟁자의 발표만으로는 잠금 유지 → 직접 재발견하면 노르덴이 열린다');
     ok(b.vis0.join() === 'luxor' && b.hid0 === 1, '노르덴: 처음에는 룩소르 대목만 읽힌다 (가려진 대목 ' + b.hid0 + ')');
     ok(b.vis1.join() === 'luxor,philae' && b.hid1 === 0, '룩소르를 찾으면 필레 대목도 읽힌다');
 
