@@ -137,6 +137,7 @@
     if (m.windsaltRotation && !G.WindsaltCrew.active(m.id, y, S().seed)) return false;
     if (m.monsoonRotation && !G.MonsoonCrew.active(m.id, y, S().seed)) return false;
     if (m.africanRotation && !G.AfricanCrew.active(m.id, y, S().seed)) return false;
+    if (m.steppeRotation && !G.SteppeCrew.active(m.id, y, S().seed)) return false;
     if (G.SeaFolk && G.SeaFolk.rivalBusy && G.SeaFolk.rivalBusy(m.name)) return false;          // 아직 발견을 다투는 경쟁자 (js/data/rivals.js) — 다 끝나면 고용할 수 있다
     return !m.after || m.after.every(F.known);
   };

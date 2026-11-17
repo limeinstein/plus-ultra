@@ -221,6 +221,8 @@
 
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
+    animalTracking: { landRadius: 0.65, seaRadius: 0.9 }, // 흔적 끝의 동물에게 다가가야 발견한다.
+
     mateSeekSearch: { min: 3, limit: 3 }, // 여급의 항해사 수색: 이름 일부로 후보를 보여 준다.
     // 물건이 주는 능력치 (2026-11-02 베타 피드백 — rules.js R.itemStatOf). 제독은 소지품, 동료는 그 동료가 지닌 물건. 같은 능력치는 가장 높은 하나만 오른다(겹치지 않음), 능력치는 cap을 넘지 않는다.
     // 책 → 지력: bookBase에서 값(금화)이 bookSteps 단계를 하나 넘을 때마다 +1 · 값이 없는 기념품 책은 bookNoPrice · greatBooks(역사에 남은 귀한 책)는 +greatBonus · 최대 bookMax
@@ -875,6 +877,17 @@
     windsaltCrew: { start: 1487, years: 10, count: 10, cycle: 40 },  // 유럽 남성 30명: 세 차례 배정·10년 휴식 뒤 재추첨, 고용한 동료는 제외한다.
     monsoonCrew: { gate: 'indiaroute', label: '인도항로', years: 5, count: 3, cycle: 40 }, // 발견일부터 8차례·최대 24명, 고용·혼인 중 제외.
     africanCrew: { gate: 'capegood', label: '희망봉', years: 5, count: 3, cycle: 40 },    // 인도양 명부와 별도로 추첨한다.
+    // 각 지역을 직접 발견한 날부터 독립 순환. 작은 명부도 5년마다 최대 3명을 배정하고 40년마다 다시 섞는다.
+    steppeCrew: { years: 5, count: 3, cycle: 40, ownOnly: true, repeatWithinCycle: true, groups: {
+      UG: { label: '위구르 지역 발견물', cities: [137, 138, 311],
+        gates: ['tianchi', 'huoyan', 'bezeklik', 'qocho', 'karez', 'idkah', 'folk_uyghur', 'hamimelon', 'populus', 'loulan', 'xiaohetomb'] },
+      MN: { label: '몽골 지역 발견물', cities: [143, 144, 295, 296, 310],
+        gates: ['genghis', 'erdenezuu', 'gobi', 'karakorumturtle', 'orkhon', 'xanadu', 'deerstone', 'dazhao', 'karabalgasun', 'khovsgol', 'bayanzag', 'snowleopard', 'eagle', 'bactrian', 'przewalski', 'argali', 'kulan', 'manul', 'seabuckthorn', 'kharakhoto', 'noinula', 'elsentasarkhai', 'khongoryn', 'orkhonfalls', 'folk_mongol', 'otgontenger', 'deluunboldog', 'avraga', 'sulde'] },
+      TB: { label: '티베트 지역 발견물', cities: [139],
+        gates: ['potala', 'kailash', 'manasarovar', 'guge', 'kalachakra', 'shambhala', 'jokhang', 'samye', 'tashilhunpo', 'ganden', 'sera', 'drepung', 'sakya', 'kumbum', 'gyantsekumbum', 'yarlung', 'namtso', 'yak', 'chiru', 'bncrane', 'himalwolf', 'shihtzu', 'folk_tibet', 'everest', 'qinghaihu'] },
+      MJ: { label: '만주 지역 발견물', cities: [189, 312, 313, 314, 315],
+        gates: ['folk_manchu', 'blackdragon', 'amurleopard', 'amurtiger', 'sikachi', 'niuheliang', 'janggunchong'] }
+    } },
     // 철새(떠돌이 항해사, wanderers.js): 새 게임에 startN명, 해마다 perYear명이 새로 나타난다.
     // cycle년마다(epoch부터 센다: 1510·1540·1570…) 세대가 바뀐다 — 고용하지 않은 철새는 떠나고, 그 가운데 rebornMax명의 「다음 세대」가 나타난다.
     // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).

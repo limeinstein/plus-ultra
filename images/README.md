@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+위구르·몽골·티베트·만주 남성 항해사 30쌍(2026-11-17)은 `portraits/mates/steppe-windsalt/<ug01~08|mo01~10|tb01~06|mj01~06>.webp`의 512×512 얼굴상과 `_half.webp`의 1024×1536 투명 무릎상을 쓴다. 전통복·기마병·장군·상의 탈의를 섞고 얼굴과 옷을 같은 게임 회화풍으로 맞췄다. 서로 다른 작업 동작과 강한 표정·미소·웃음을 표현했다. 30명 모두 지역별 첫 직접 발견일부터 5년/3명·40년 재추첨 영입 자료에 연결했다. [전체 미리보기·원본·생성 기록](../docs/art/steppe-windsalt-20261117.md) · [등장 규칙·검증](../docs/steppe-crew-20261117.md).
+
 인도양 여성 항해사 30쌍(2026-11-17)은 `portraits/mates/indian-ocean-windsalt/io01~30.webp`의 512×512 얼굴상과 `_half.webp`의 1024×1536 투명 무릎상을 쓴다. 내장 ImageGen으로 얼굴과 옷을 같은 게임 회화풍으로 그렸으며 웃음·미소·머리·복식·항해 동작을 나눴다. 각 인물은 인도항로 발견 뒤 순환 영입 자료에 연결했고 기존 `african-windsalt/af01~30`도 희망봉 발견 뒤 영입 후보로 등록했다. [전체 미리보기·원본·프롬프트·검증](../docs/art/indian-ocean-windsalt-20261116.md) · [두 집단 등장 규칙](../docs/discovery-crew-20261117.md).
 
 혼인·가족 항해 업적 5종(2026-11-16)은 `achievement-events/{casanova,uijawang,family_cruise,love_impossible,around_world_80}.webp`의 1881×836 전용 장면을 쓴다. 젊은 제독의 혼례, 노년의 연회, 가족 항해, 다국적·다인종 성인 아내들의 선상, 빠른 세계일주 귀환을 게임 회화풍으로 제작했다. [전체 그림·원본·프롬프트·검증](../docs/art/family-voyage-achievements-20261116.md).

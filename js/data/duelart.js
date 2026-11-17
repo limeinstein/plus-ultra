@@ -44,7 +44,185 @@
     f[2].forEach(function (n) { byName[n] = f[0]; });
   });
 
+  // 해적 전용 시트는 실제 인물의 ID·이름과 연결한다.
+  var pirateFighters = [
+    [
+      "pr_hayreddin",
+      "하이레딘 바르바로사"
+    ],
+    [
+      "pr_turgut",
+      "투르구트 레이스"
+    ],
+    [
+      "pr_oruc",
+      "오루츠 레이스"
+    ],
+    [
+      "pr_hurra",
+      "사이이다 알후라"
+    ],
+    [
+      "pr_caterina",
+      "붉은 손톱 카테리나"
+    ],
+    [
+      "pr_fatima",
+      "열쇠 지기 파티마"
+    ],
+    [
+      "pr_coullon",
+      "기욤 쿨롱"
+    ],
+    [
+      "pr_fleury",
+      "장 플뢰리"
+    ],
+    [
+      "pr_roberts",
+      "바솔로뮤 로버츠"
+    ],
+    [
+      "pr_ines",
+      "가라앉은 종소리 이네스"
+    ],
+    [
+      "pr_beatriz",
+      "라팔마의 마녀 베아트리스"
+    ],
+    [
+      "pr_moira",
+      "안개섬 모이라"
+    ],
+    [
+      "pr_compaen",
+      "클라스 콤판"
+    ],
+    [
+      "pr_nutt",
+      "존 너트"
+    ],
+    [
+      "pr_janjacobsen",
+      "얀 야콥선"
+    ],
+    [
+      "pr_omalley",
+      "그레이스 오말리"
+    ],
+    [
+      "pr_ingeborg",
+      "여덟 팔 잉에보르그"
+    ],
+    [
+      "pr_eilidh",
+      "물범 가죽의 에일리드"
+    ],
+    [
+      "pr_teach",
+      "에드워드 티치"
+    ],
+    [
+      "pr_morgan",
+      "헨리 모건"
+    ],
+    [
+      "pr_rackham",
+      "잭 래컴"
+    ],
+    [
+      "pr_bonny",
+      "앤 보니"
+    ],
+    [
+      "pr_read",
+      "메리 리드"
+    ],
+    [
+      "pr_catalina",
+      "황금 가면 카탈리나"
+    ],
+    [
+      "pr_every",
+      "헨리 에브리"
+    ],
+    [
+      "pr_kidd",
+      "윌리엄 키드"
+    ],
+    [
+      "pr_angre",
+      "칸호지 앙그레"
+    ],
+    [
+      "pr_amina",
+      "향유고래 아미나"
+    ],
+    [
+      "pr_rahima",
+      "바다 야자 라히마"
+    ],
+    [
+      "pr_yangyandi",
+      "양언적"
+    ],
+    [
+      "pr_chenshang",
+      "진상천"
+    ],
+    [
+      "pr_galesong",
+      "카라엥 갈레송"
+    ],
+    [
+      "pr_dewi",
+      "금빛 날개 데위"
+    ],
+    [
+      "pr_praphai",
+      "뱀 비늘 쁘라파이"
+    ],
+    [
+      "chief_sea_2",
+      "파랑새 깃발의 라야 알리"
+    ],
+    [
+      "pr_wangzhi",
+      "왕직"
+    ],
+    [
+      "pr_limahong",
+      "임봉"
+    ],
+    [
+      "pr_murakami",
+      "무라카미 다케요시"
+    ],
+    [
+      "pr_chingshih",
+      "정일수"
+    ],
+    [
+      "pr_hongryeon",
+      "아홉 꼬리 홍련"
+    ],
+    [
+      "pr_xiaojiao",
+      "진주 눈물 소교"
+    ]
+  ];
+  var pirateFiles = {};
+  pirateFighters.forEach(function (f) {
+    byId[f[0]] = f[0]; byName[f[1]] = f[0];
+    pirateFiles[f[0]] = "pirate-duel-42-20261117/" + f[0];
+  });
+  // 동료·역사 사건에서 쓰는 별칭도 같은 인물이다.
+  var pirateAliases = {omalley:"pr_omalley", rv_grace:"pr_omalley", bonny:"pr_bonny", rv_bonny:"pr_bonny", mread:"pr_read", rv_read:"pr_read", blackbeard:"pr_teach", rv_teach:"pr_teach"};
+  Object.keys(pirateAliases).forEach(function (id) { byId[id] = pirateAliases[id]; });
+
   G.DUEL_ART = {
+    fighterFiles: pirateFiles,
+    pirateFighters: pirateFighters,
     material: {
       leather: ['main_admiral', 'first_mate', 'caribbean_pirate', 'african_warrior', 'native_chief', 'barbary_corsair', 'sea_dog'],
       armor: ['cortes', 'spanish_soldier', 'samurai', 'guan_yu', 'zhang_fei', 'armored_navigator', 'battle_vanguard'],
@@ -206,6 +384,7 @@
   G.DUEL_ART.pick = function (f, ctx) {
     if (!f) return null;
     if (f.sprite) return f.sprite;
+    if (byId[f.id] || byId[f.hist]) return byId[f.id] || byId[f.hist];
     if (f.m && byId[f.m.id]) return byId[f.m.id];
     if (byName[f.name] && !GENERIC[f.name]) return byName[f.name];   // 콜럼버스·코르테스처럼 이름이 정해진 사람
     var sp = f.portrait && typeof f.portrait === 'object' ? f.portrait : {};

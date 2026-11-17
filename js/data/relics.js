@@ -166,6 +166,8 @@
   if (G.WONDERS) G.WONDERS.relics.forEach(function (a) { add.apply(null, a); });
   // 동물의 새끼 · 전설 생물의 물건 · 종교 발견물의 성물 (js/data/discrelics.js — 2026-11-07). 유물 id 를 표에 적어 둔다
   if (G.DISC_RELICS) G.DISC_RELICS.forEach(function (a) { var ex = { rid: a[1] }; if (a[6]) for (var k in a[6]) ex[k] = a[6][k]; add(a[0], a[2], a[3], a[4], a[5], ex); });
+  // 괴물과 거대한 짐승의 새끼·알·유물 (js/data/creatures.js — 2026-11-17)
+  if (G.CREATURE_RELICS) G.CREATURE_RELICS.forEach(function (a) { var ex = { rid: a[1] }; if (a[6]) for (var k in a[6]) ex[k] = a[6][k]; add(a[0], a[2], a[3], a[4], a[5], ex); });
 
   // ------------------------------------------------------------------ 등록
   G.RELICS = {};      // 발견 id → [유물]

@@ -275,7 +275,7 @@
   }
   function cityAt(x, y) { var best = null, bd = Infinity; knownInland().forEach(function (c) { var p = toScreen(c.lon, c.lat), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y), hit = Math.max(24, G.CityIcon.metrics(c, 1.15).radius + 5); if (d <= hit * hit && d < bd) { bd = d; best = c; } }); return best; }
   function landmarkAt(x, y) { return G.DiscoveryIcon ? G.DiscoveryIcon.at(G.DiscoveryIcon.visible(), toScreen, x, y, 1.15) : null; }
-  function cityNear() { var s = S(), l = s.loc, best = null, bd = 0.3; G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c)) return; var d = G.Geo.dist(l.lon, l.lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } }); return best; }
+  function cityNear() { var s = S(), l = s.loc, best = null, bd = 0.3; G.CITY_DATA.forEach(function (c) { if (Math.abs(c.lat - l.lat) >= bd || !R.cityExists(c)) return; var d = G.Geo.dist(l.lon, l.lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } }); return best; }
   function atBase() { var s = S(), l = s.loc, b = l.base; return G.Geo.dist(l.lon, l.lat, b.lon, b.lat) < (b.type === 'ship' ? 0.45 : 0.3); }
   function promptWait() { return ((((G.BALANCE || {}).cityEntryPrompt || {}).cooldownMs) || 5000); }
   function promptClock() { return Date.now(); }
@@ -369,6 +369,13 @@
       else st.cam.zoom *= Math.pow(zr, 1 - Math.exp(-dt * ((G.FX.ship && G.FX.ship.zoomEase) || 12)));
     }
     if (!st.busy && !UI.busy()) checkCityPrompt();
+    // 새끼를 되찾으러 쫓아오는 「?」 — 멈춰 서 있어도 다가온다 (js/systems/creatures.js G.Guardian)
+    if (G.Guardian && !st.busy && !UI.busy() && G.Guardian.step(dt * st.speed / DAY_SEC, l)) {
+      st.busy++; st.path = null; st.dir = null; st.paused = true; refreshBar();
+      var gst = st;
+      G.Guardian.encounter({ battle: function (nm, n, o) { return landBattle(nm, n, true, o); } })
+        .catch(function (e) { console.error(e); }).finally(function () { gst.busy = Math.max(0, gst.busy - 1); if (gst.alive) refreshHud(); });
+    }
     // 화면 속 바다의 배들 (경쟁자의 탐험 함대·상선·함대·해적 — 그림만, js/systems/landsea.js)
     if (G.LandSea) { try { G.LandSea.step({ lon: st.cam.lon, lat: st.cam.lat, zoom: st.cam.zoom }, daysMoved, dt, st.dayAcc, [l.lon, l.lat]); } catch (e) { console.error(e); } }
     st.rframe = (st.rframe || 0) + 1;
@@ -481,6 +488,8 @@
         apostleDaySt.busy=Math.max(0,apostleDaySt.busy-1); return;
       }
       if (G.Legend) await G.Legend.onLand(l.lon, l.lat);
+      // 세계수의 엘프: 북방의 숲에서 우연히 마주치고, 이긴 엘프는 30일 뒤 따라가겠다며 다시 나타난다 (js/systems/creatures.js G.Elves)
+      if (G.Elves) await G.Elves.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });
       if (G.Tale) await G.Tale.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 옛이야기의 아가씨들: 프랑스 숲의 신데렐라·백설공주 (js/systems/fairytales.js)
       if (G.TreasureHunt) await G.TreasureHunt.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 조합의 보물 지도: X 자리에 서면 판다 (js/systems/treasurehunt.js)
       if (G.LittlePrince) await G.LittlePrince.onLand(l.lon, l.lat, { stop: function () { st.path = null; st.dir = null; st.paused = true; refreshBar(); } });   // 별에서 온 소년의 지도: 사막 속 숨은 우물 (js/systems/littleprince.js)
@@ -659,12 +668,12 @@
     var kind = o.kind || (beasts ? 'beast' : /원주민/.test(enemyName) ? 'native' : 'bandit');
     var terr = l.lon != null ? G.Geo.terrain(l.lon, l.lat) : 'grass';
     if (terr === 'sea') terr = 'grass';
-    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n, leader: o.leader, beast: o.beast, leaderLook: o.leaderLook, noSpecial: o.noSpecial }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), hold: o.hold, flee: o.flee, halt: o.halt, conquest: o.conquest });   // conquest: 점령전은 지휘관 저격만으로 끝나지 않는다
+    var r = await G.Games.landWar({ enemy: { name: enemyName, kind: kind, n: n, leader: o.leader, beast: o.beast, leaderLook: o.leaderLook, noSpecial: o.noSpecial, giant: o.giant }, party: l.party, terr: terr, guns: o.guns != null ? o.guns : packGuns(), hold: o.hold, flee: o.flee, halt: o.halt, conquest: o.conquest });   // conquest: 점령전은 지휘관 저격만으로 끝나지 않는다
     var lost = l.party - r.left; l.party = Math.max(0, r.left); s.fleet.crew = Math.max(0, s.fleet.crew - lost);
     var res = r.res;
     if (res === 'win') {
       G.Fame.add('bt', kind === 'beast' ? 2 : 5 + (r.leaderDown ? 3 : 0));
-      if (kind === 'beast') {
+      if (kind === 'beast' && !o.giant) {
         var meat = Math.round(R.dailyUse() * U.rf(1.5, 3) * Math.min(3, n / 8)); s.fleet.food += meat;
         // 사냥 전리품: 호랑이 → 호피 · 곰·사자·재규어 → 모피 · 멧돼지·하이에나 → 피혁 — 짐칸에 실어 교역소에서 판다 (js/systems/hunt.js)
         var hide = G.Hunt ? G.Hunt.give(G.Hunt.loot(n, l.lon, l.lat)) : null, ht = G.Hunt ? G.Hunt.text(hide) : '';
@@ -672,6 +681,7 @@
         if (hide && hide.got.length) G.State.log('뭍에서 ' + G.Hunt.label(l.lon, l.lat) + ' 떼를 물리치고 ' + hide.got.map(function (x) { return G.GOOD[x.id].name + ' ' + x.q + '통'; }).join(' · ') + U.jx(hide.got.map(function (x) { return G.GOOD[x.id].name + ' ' + x.q + '통'; }).join(' · '), '을/를') + ' 얻었다.');
       }
       else if (o.winText) UI.toast(o.winText, 'sword');
+      else if (o.giant) { /* 거대한 짐승: 전리품은 G.Guardian 이 건넨다 */ }
       else if (kind === 'native') UI.toast('원주민 전사들을 물리쳤다.', 'sword');
       else { var loot = r.spoils && r.spoils.gold != null ? r.spoils.gold : n * U.ri(8, 15); s.player.gold += loot; UI.toast('승리했다! (금화 ' + U.num(loot) + '닢)', 'sword'); }
       // 노획한 말: 걷거나 말을 탄 탐험대면 말이 는다 (다른 탈것이면 팔아 금화로)
@@ -1095,6 +1105,7 @@
     var bp = toScreen(l.base.lon, l.base.lat);
     if (G.LandSea) G.LandSea.draw(ctx, toScreen, st.cam.zoom, st.t, ff);   // 바다를 오가는 배들 (내 배보다 아래)
     if (l.base.type === 'ship') { var bsh = S().fleet.ships[0], blk = bsh ? A.shipLook(bsh.type, { sails: bsh.sails, flag: '#1d3f7a' }) : { sails: ['sq', 'lat'], hull: '#5a3a22', cross: true }; blk.furl = 1; A.shipTop(ctx, bp[0], bp[1], 0.5, G.Scenes.sea.shipPx ? G.Scenes.sea.shipPx() * 0.85 : 80, blk, st.t); }
+    if (G.AnimalTracking) G.AnimalTracking.draw(ctx, toScreen, 'land', l.lon, l.lat, st.t);
     // 직접 발견한 도시 밖 유적·자연 경관은 소도시 정도 크기의 투명 모형으로 표시한다.
     if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
       var p = toScreen(d.lon, d.lat); if (p[0] < -60 || p[0] > 1660 || p[1] < -60 || p[1] > 960) return;
@@ -1124,6 +1135,7 @@
       if (mp[0] < -300 || mp[0] > 1900 || mp[1] < -300 || mp[1] > 1200) return;
       G.Explore.drawMarker(ctx, m, mp, m.r * st.cam.zoom, st.t, ff);
     });
+    if (G.Guardian) G.Guardian.draw(ctx, toScreen, st.cam.zoom, st.t, ff);   // 쫓아오는 「?」 · 가까워지면 거대한 짐승의 모습
     // 지나온 길도 발자국과 같이 사라진다. 편대가 따라갈 경로 기록은 지우지 않는다.
     ctx.lineWidth = 2; ctx.setLineDash([3, 6]);
     var lastP = null;
@@ -1158,9 +1170,11 @@
       var tN = G.Geo.terrain(l.lon, l.lat), tK = tN === 'sea' ? 'grass' : tN, M = G.Mounts, mt2 = MT();
       var su2 = M.suit(mt2.id, tK), how = mt2.id === 'walk' ? '도보' : M.get(mt2.id).name + ' ' + mt2.n + (mt2.id === 'porter' ? '패' : mt2.id === 'wagon' || mt2.id === 'reindeer' ? '대' : '필');
       var effTxt = mt2.id === 'walk' ? '' : ' — 걸음 ×' + M.speed(mt2, tK, l.party).toFixed(1) + ' · 피로 ×' + M.fatigue(mt2, tK, l.party).toFixed(2) + (M.cover(mt2, l.party) < 1 ? ' (짐승이 모자라 효과가 ' + Math.round(M.cover(mt2, l.party) * 100) + '%)' : '') + ' · 이 땅 <span class="suit ' + su2.cls + '">' + su2.mark + '</span>';
-      el.status.innerHTML = (st.paused ? '<b>⏸ 정지</b> · ' : '') + (st.dir ? U.dirName(Math.atan2(st.dir[1], st.dir[0])) + '쪽으로 걷는 중' + (st.pointerWalk ? ' (마우스를 따라감)' : '') + ' · Space 정지' : st.path ? '클릭한 곳으로 이동 중 — 도착하면 정지' : followOn() ? '마우스 따라가기 켬 — 가려는 쪽 땅을 누르면 따라 걷습니다' : '땅을 누르면 그곳까지 걷습니다 · 방향키로도 걷습니다') + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
+      var statusHtml = (st.paused ? '<b>⏸ 정지</b> · ' : '') + (st.dir ? U.dirName(Math.atan2(st.dir[1], st.dir[0])) + '쪽으로 걷는 중' + (st.pointerWalk ? ' (마우스를 따라감)' : '') + ' · Space 정지' : st.path ? '클릭한 곳으로 이동 중 — 도착하면 정지' : followOn() ? '마우스 따라가기 켬 — 가려는 쪽 땅을 누르면 따라 걷습니다' : '땅을 누르면 그곳까지 걷습니다 · 방향키로도 걷습니다') + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
       el.city.classList.toggle('disabled', !near);
-      el.back.innerHTML = G.icon('anchor') + (atBase() ? (l.base.type === 'ship' ? '배에 오른다' : '도시로 돌아간다') : '출발지로 돌아간다');
+      if (el.status._landHtml !== statusHtml) { el.status._landHtml = statusHtml; el.status.innerHTML = statusHtml; }
+      var backHtml = G.icon('anchor') + (atBase() ? (l.base.type === 'ship' ? '배에 오른다' : '도시로 돌아간다') : '출발지로 돌아간다');
+      if (el.back._landHtml !== backHtml) { el.back._landHtml = backHtml; el.back.innerHTML = backHtml; }
     }
   }
 })(window.G = window.G || {});

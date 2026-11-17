@@ -253,6 +253,7 @@
      배를 세우고 주변을 탐색할수록 잘 찾는다. 단서가 한 겹이라도 있으면 예전처럼 반경에 들면 찾는다. 조정값 G.BALANCE.noClueFind */
   function NCF() { return (G.BALANCE && G.BALANCE.noClueFind) || { on: true, sea: 0.15, land: 0.18, skill: 0.04, mark: 0.12, center: 0.15, search: 0.25, max: 0.6 }; }
   D.noClueChance = function (d, mode, dist, r, search) {
+    if (G.AnimalTracking && G.AnimalTracking.is(d)) return 1; // 흔적 끝의 동물을 직접 마주쳤으면 놓치지 않는다.
     var K = NCF(); if (K.on === false || !d || S().hints[d.id]) return 1;
     var lv = mode === 'sea' ? R.skill('survey') : R.skill('hist') + (d.cat === 'creature' || d.cat === 'nature' ? R.skill('sci') * 0.5 : 0);
     var p = (mode === 'sea' ? K.sea : K.land) + lv * K.skill + (S().marks && S().marks[d.id] ? K.mark : 0)
@@ -314,11 +315,19 @@
       tomb = await G.TombDuel.meet(d, how);
       if (!tomb.go) return false;
     }
+    // 괴물이 앞을 막는다: 리치·흡혈귀·늑대인간·해골 기사·트롤·미노타우로스·예티·엘프와의 일기토 (js/systems/creatures.js)
+    if (G.Monsters && how !== 'special' && how !== 'trade' && G.Monsters.pending(d)) {
+      var mon = await G.Monsters.meet(d, how);
+      if (!mon.go) return false;
+      tomb.fameK = (tomb.fameK || 1) * (mon.fameK || 1);
+      if (mon.noRelic) tomb.stolen = true;   // 해골 기사에게 거짓말을 했다 — 탑의 은잔은 그대로 둔다
+    }
     var mir = D.mirageNow(d);                                  // 미래의 건물: 신기루로 본 발견
     // 경쟁자가 먼저 연 항로의 철새 주기는 뒤늦은 직접 발견으로 다시 시작하지 않는다.
     if (d.id === G.BALANCE.monsoonCrew.gate && G.MonsoonCrew) G.MonsoonCrew.rememberDiscovery();
     if (d.id === G.BALANCE.africanCrew.gate && G.AfricanCrew) G.AfricanCrew.rememberDiscovery();
     st.found = U.dateNum(s.date); st.me = true; st.evidence = true;
+    if (G.SteppeCrew) G.SteppeCrew.rememberDiscovery(d.id); // 해당 지역의 첫 직접 발견일을 즉시 보존한다.
     if (d.clue && d.clue !== d.name) setTimeout(function () { UI.toast('단서 「' + d.clue + '」의 정체 — ' + d.name, 'scroll', 5200); }, 400);   // 이제부터는 발견물 이름으로 (js/data/cluenames.js)
     if (mir) st.mirage = 1;
     s.stats.found++;
@@ -791,10 +800,12 @@
   D.checkSea = function (lon, lat, opt) {
     var s = S(), hits = [], findK = D.findK(), search = !!(opt && opt.search);
     G.DISCOVERIES.forEach(function (d) {
-      if (d.how !== 'sea' || D.foundByMe(d.id) || !D.needMet(d) || !D.opened(d)) return;   // 경쟁자가 발표했어도 찾을 수 있다 · 아직 드러나지 않은 수수께끼(openY 전)는 없다
+      if ((d.how !== 'sea' && !(d.how === 'special' && G.AnimalTracking && G.AnimalTracking.is(d))) || D.foundByMe(d.id) || !D.needMet(d) || !D.opened(d)) return;   // 동물은 물결 흔적 끝에서도 발견한다.
       if (G.SeaMonsters && G.SeaMonsters.is(d.id)) return;  // 괴물은 저장된 실제 출몰 자리에서 마주쳐 발견한다.
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
+      if (G.Monsters && G.Monsters.blocked(d)) return;          // 괴물에게 밀려났다 — 날이 지나야 다시
       var dist = G.Geo.dist(lon, lat, d.lon, d.lat), r = d.r * D.clueK(d.id, 'find') * findK;
+      if (G.AnimalTracking) r = G.AnimalTracking.radius(d, r);
       if (dist >= r) return;   // 단서가 겹칠수록 넓게, 여파로 수치가 바닥나면 좁게
       if (!D.built(d)) { if (G.Mirage) G.Mirage.see(d); return; }   // 아직 세워지지 않았다 — 1600년부터는 신기루로 보인다
       if (!D.noClueRoll(d, 'sea', dist, r, search)) return;     // 단서가 없으면 그날 못 보고 지나칠 수 있다
@@ -806,8 +817,8 @@
     if (lon > -86 && lon < -60 && lat > 10 && lat < 27 && s.flags.fromEurope) sp('westroute');
     if (lon > 72 && lon < 78 && lat > 8 && lat < 20 && s.flags.viaCape) sp('indiaroute');
     if (lat < -62) { sp('antarctic'); if (lon > -75 && lon < -45) sp('antpeople'); }
-    if (lat < -40 && lon > -20 && lon < 110 && U.chance(0.02)) sp('albatross');
-    if (G.Geo.dist(lon, lat, 43.3, -11.7) < 1.5 && U.chance(0.05)) sp('coelacanth');
+    if (!G.AnimalTracking && lat < -40 && lon > -20 && lon < 110 && U.chance(0.02)) sp('albatross');
+    if (!G.AnimalTracking && G.Geo.dist(lon, lat, 43.3, -11.7) < 1.5 && U.chance(0.05)) sp('coelacanth');
     var winter = s.date.m >= 10 || s.date.m <= 3;
     if (lat > 62 && winter && U.chance(0.03)) sp('aurora');
     if (G.Geo.dist(lon, lat, -170, -5) < 2.5 && s.hints.mu) sp('mu');
@@ -819,8 +830,11 @@
     G.DISCOVERIES.forEach(function (d) {
       if (d.how !== 'land' || D.foundByMe(d.id) || !D.needMet(d) || !D.opened(d)) return;   // 아직 드러나지 않은 수수께끼(openY 전)는 없다
       if (G.TombDuel && G.TombDuel.blocked(d)) return;          // 무덤지기에게 밀려났다 — 날이 지나야 다시
-      var dist = G.Geo.dist(lon, lat, d.lon, d.lat);
+      if (G.Monsters && G.Monsters.blocked(d)) return;          // 괴물에게 밀려났다 — 날이 지나야 다시
+      var animalPos = G.AnimalTracking && G.AnimalTracking.is(d) ? G.AnimalTracking.position(d) : d;
+      var dist = G.Geo.dist(lon, lat, animalPos.lon, animalPos.lat);
       var r = d.r * (1 + R.skill('hist') * 0.25) * (d.cat === 'creature' || d.cat === 'nature' ? 1 + R.skill('sci') * 0.2 : 1) * D.clueK(d.id, 'find') * findK;
+      if (G.AnimalTracking) r = G.AnimalTracking.radius(d, r);
       if (!D.built(d)) { if (dist < r && G.Mirage) G.Mirage.see(d); return; }   // 신기루
       if (dist < r && D.noClueRoll(d, 'land', dist, r, search)) hits.push(d);   // 단서가 없으면 그날 못 찾고 지나칠 수 있다
       else if (dist < nearD) { nearD = dist; near = d; }

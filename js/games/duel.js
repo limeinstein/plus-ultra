@@ -114,7 +114,7 @@
     return { name: d ? d.name : '부관', portrait: G.Scenes.mateSpec(m.id), maxHp: Math.round(60 + st[0] * 0.6), atk: 3 + Math.round(st[2] / 10) + gear.atk, def: 1 + Math.floor(st[0] / 30) + gear.def,
       armorId: gear.armor && gear.armor.id, atkB: gear.atk, defB: gear.def, weapon: gear.weapon ? gear.weapon.name : null,
       skill: R.mateSkill(m, 'sword'), sword: R.mateSkill(m, 'sword'), might: st[2], int: st[1], cha: st[3], speech: R.mateSkill(m, 'speech') || 0, shoot: R.mateSkill(m, 'shoot') || 0,
-      mar: st[2], style: 'slash', m: m, look: 'mate' };
+      mar: st[2], style: 'slash', m: m, look: 'mate', sprite: (d && d.duelSprite) || null };   // duelSprite: 엘프 동료 (js/data/creaturelines.js)
   };
   /** 대신 싸울 부관 (기함의 부관이 있고 다치지 않았으면) */
   G.Games.proxy = function () {
@@ -156,7 +156,7 @@
     var look = enemy.look || (/해적|두목/.test(enemy.name) ? 'pirate' : /함장|수비|장교/.test(enemy.name) ? 'captain' : /사내|주정/.test(enemy.name) ? 'brawler' : 'rival');
     var style = enemy.style;
     if (!Object.prototype.hasOwnProperty.call(MOVE, style)) style = look === 'pirate' ? 'slash' : look === 'captain' ? 'thrust' : U.pick(Object.keys(MOVE));
-    var en = { name: enemy.name, portrait: enemy.portrait, maxHp: Math.round(60 + (enemy.str || 60) * 0.6), atk: enemy.atk || 8, def: enemy.def || 2, sword: enemy.skill || 0, might: enemy.mar || 55 + (enemy.skill || 0) * 5,
+    var en = { id: enemy.id, hist: enemy.hist, name: enemy.name, portrait: enemy.portrait, maxHp: Math.round(60 + (enemy.str || 60) * 0.6), atk: enemy.atk || 8, def: enemy.def || 2, sword: enemy.skill || 0, might: enemy.mar || 55 + (enemy.skill || 0) * 5,
       int: enemy.int || 45, cha: enemy.cha || 40, speech: 0, shoot: 0, style: style, look: look, sprite: enemy.sprite || null };
     en.hp = en.maxHp;
     [me, en].forEach(function (f) { f.spirit = 20; f.x = 0; f.pose = 'idle'; f.pt = 0; f.stun = 0; f.dizzy = 0; f.flash = 0; f.used = {}; });
@@ -191,7 +191,7 @@
         var id = art.pick ? art.pick(f, { style: hereStyle }) : (f.sprite || (art.byName && art.byName[f.name]) || (f.admiral ? 'main_admiral' : f.m ? 'first_mate' : art.byLook && art.byLook[f.look]));
         if (!id || !I) return;
         f.spriteId = id;
-        var key = 'duel/fighters/' + id;
+        var key = (art.fighterFiles && art.fighterFiles[id]) || ('duel/fighters/' + id);
         f.spriteKey = key;
         f.spriteImg = I.get(key);
         I.load(key).then(function (im) { if (f.spriteId === id && im) f.spriteImg = im; });
@@ -435,8 +435,12 @@
           sourceCtx.drawImage(img, sx, sy, L.cw, L.ch, 0, 0, width, height);
         }
         armCache = { img: img, sx: sx, sy: sy, dy: dy, reach: reach };
-        if (armCell.width !== width || armCell.height !== height) { armCell.width = width; armCell.height = height; }
-        armCtx.clearRect(0, 0, width, height);
+        // 칼을 올리고 내릴 때 옮겨 간 픽셀도 담는다. 원래 칸 높이로 자르면 칼끝·팔이 잘린다.
+        var pad = Math.ceil(Math.abs(dy) + 2 * L.f);
+        if (armCell.width !== width || armCell.height !== height + pad * 2) { armCell.width = width; armCell.height = height + pad * 2; }
+        armCell.duelPad = pad;
+        armCtx.resetTransform(); armCtx.clearRect(0, 0, width, armCell.height);
+        armCtx.translate(0, pad);
         var foot = Math.round(L.py), hip = Math.round(foot - 68 * L.f), start = L.px + 12 * L.f;
         var span = Math.max(32 * L.f, reach / k * 0.58);
         var left = Math.max(0, Math.floor(start)), right = Math.min(width, Math.ceil(start + span));
@@ -447,12 +451,13 @@
           var shift = dy * smooth((x - start) / span), endShift = dy * smooth((x + w - start) / span);
           var slope = (endShift - shift) / w, mid = (shift + endShift) * 0.5;
           armCtx.drawImage(armSource, x, hip-2, w, foot-hip+2, x, hip+mid-2, w, Math.max(1, foot-hip-mid+2));
-          armCtx.setTransform(1, slope, 0, 1, x, shift);
+          armCtx.setTransform(1, slope, 0, 1, x, pad + shift);
           armCtx.drawImage(armSource, x, 0, w, hip, 0, 0, w, hip);
-          armCtx.resetTransform();
+          armCtx.setTransform(1, 0, 0, 1, 0, pad);
           x += w;
         }
         armCtx.drawImage(armSource, left, foot, width-left, height-foot, left, foot, width-left, height-foot);
+        armCtx.resetTransform();
         return armCell;
       }
       function drawSpriteFighter(f, bx, by, face, t) {
@@ -480,7 +485,7 @@
         if (f.pose === 'kneel') ctx.translate(0, q * 12);
         if (attackColumns[f.pose] != null && Math.abs(f.armLift || 0) > 1) {
           var aimed = aimedCell(img, sx, sy, L, k, f.armLift, weaponTip(f,3).x);
-          ctx.drawImage(aimed, -L.px*k, -L.py*k, w, h);
+          ctx.drawImage(aimed, -L.px*k, (-L.py-aimed.duelPad)*k, w, aimed.height*k);
         } else ctx.drawImage(img, sx, sy, L.cw, L.ch, -L.px*k, -L.py*k, w, h);
         if (f.flash > 0) {
           resetMask(L.cw, L.ch);

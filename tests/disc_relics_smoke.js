@@ -18,9 +18,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_|Failed to load/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, {waitUntil:'domcontentloaded'});
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href), {waitUntil:'domcontentloaded'});
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const a = await page.evaluate(() => {
       const T = G.DISC_RELICS, ids = T.map(r => r[1]), out = { n: T.length, groups: {} };
@@ -31,12 +31,13 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
       out.old = ['r_tiger', 'r_tiger2', 'r_mermaid', 'r_dragon', 'r_dragon2', 'r_notredame', 'r_grail'].map(id => id + ':' + (G.RELIC[id] ? G.RELIC[id].name : '없음'));
       T.forEach(r => { const g = /_baby$/.test(r[1]) ? 'baby' : /_legend$/.test(r[1]) ? 'legend' : 'faith'; out.groups[g] = (out.groups[g] || 0) + 1; });
       const myth = G.DISCOVERIES.filter(d => d.cat === 'creature' && !d.plant && G.INTERESTS.myth.has(d) && d.id !== 'bullocho');
-      out.mythBaby = myth.filter(d => G.RELIC['r_' + d.id + '_baby']).map(d => d.id);
+      out.mythBaby = myth.filter(d => G.RELIC['r_' + d.id + '_baby'] && !(G.GUARDIANS || {})[d.id]).map(d => d.id);   // 새끼를 지키는 거대한 괴물(js/data/creatures.js)의 새끼·알은 예외 (2026-11-17)
       out.mythNoLegend = myth.filter(d => !G.RELIC['r_' + d.id + '_legend']).map(d => d.id);
       const animals = G.DISCOVERIES.filter(d => d.cat === 'creature' && !d.plant && !G.INTERESTS.myth.has(d) && !d.legendBeast && !G.Disc.isFuture(d));   // 1700년 뒤에 생긴 품종(신기루로만 보임)은 새끼가 없다
       out.animalNoBaby = animals.filter(d => !G.RELIC['r_' + d.id + '_baby'] && !G.RELIC['r_' + d.id + '_legend']).map(d => d.id);
       const faith = G.DISCOVERIES.filter(d => G.INTERESTS.faith.has(d) && !(d.mirageFrom || d.alwaysMirage || (d.built && d.built >= 1700)));
-      out.faithNoHoly = faith.filter(d => !G.RELIC['r_' + d.id + '_holy']).map(d => d.id);
+      // 올림포스 성소는 전용 선수상·무기·방어구를 성물 대신 주는 설계다 (olympiandisc.js).
+      out.faithNoHoly = faith.filter(d => { const special = G.RELIC['r_' + d.id]; return !G.RELIC['r_' + d.id + '_holy'] && !((G.OLYMPIAN_DISCOVERIES || []).includes(d.id) && special && special.olympian && special.relic === d.id && G.ITEM[special.id]); }).map(d => d.id);
       out.babyKinds = [...new Set(T.filter(r => /_baby$/.test(r[1])).map(r => r[3]))];
       out.samples = ['r_tiger_baby', 'r_shiba_baby', 'r_shire_baby', 'r_morpho_baby', 'r_f_bluefin_baby', 'r_trex_legend', 'r_mermaid_legend', 'r_dragon_legend', 'r_notredame_holy', 'r_kaaba_holy', 'r_bulguksa_holy', 'r_tripitaka_holy'].map(id => id + '=' + (G.RELIC[id] ? G.RELIC[id].name + '/' + G.RELIC[id].kind + '/' + G.RELIC[id].price : '없음'));
       // 코드 그림
@@ -46,7 +47,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
       return out;
     });
     console.log('   ' + a.samples.join('\n   '));
-    ok(a.n === 411 && a.unique && !a.missingDisc.length && !a.notReg.length, '표 ' + a.n + '줄 모두 G.RELIC·G.ITEM 에 등록, id 겹침 없음 — ' + JSON.stringify(a.groups));
+    ok(a.n === 413 && a.unique && !a.missingDisc.length && !a.notReg.length, '표 ' + a.n + '줄 모두 G.RELIC·G.ITEM 에 등록, id 겹침 없음 — ' + JSON.stringify(a.groups));
     ok(!a.dupName.length, '새 유물 이름이 서로·예전 유물과 겹치지 않는다' + (a.dupName.length ? ' — ' + a.dupName.join(',') : ''));
     ok(a.old.every(x => !/없음/.test(x)), '예전 유물 id 그대로: ' + a.old.join(' · '));
     ok(!a.mythBaby.length && !a.mythNoLegend.length, '전설 생물에는 새끼 대신 전설의 물건' + (a.mythNoLegend.length ? ' — 빠짐 ' + a.mythNoLegend : ''));

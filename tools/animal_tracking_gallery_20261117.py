@@ -1,0 +1,20 @@
+"""게임과 같은 색면·발자국 렌더러로 전체 동물을 살펴보는 미리보기."""
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+rows = json.loads((ROOT / 'artifacts/animal-tracking-20261117/roster.json').read_text('utf-8'))
+names = {d['id']: d['name'] for d in rows}
+html = '''<!doctype html><html lang="ko"><meta charset="utf-8"><title>동물 발견물 261종 · 이동 흔적</title>
+<style>body{margin:0;background:#d7c8a5;color:#342d23;font:16px system-ui}header{position:sticky;top:0;z-index:2;background:#e9ddbd;padding:20px 28px;border-bottom:1px solid #aa946b}h1{font-size:24px;margin:0 0 10px}input,button{font:inherit;padding:9px 12px;border:1px solid #ad9974;background:#fbf0d5;border-radius:7px}main{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;padding:22px}.card{background:#eee2bd;padding:16px;border-radius:9px}.card h2{font-size:16px;margin:0}.art{display:block;width:128px;height:128px;margin:auto;animation:pulse 3.6s ease-in-out infinite}.track{display:block;width:210px;height:46px;margin:auto}.meta{font-size:12px;color:#716147}.swatch{display:inline-block;width:13px;height:13px;margin:0 2px;border-radius:50%;border:1px solid #8e8068}.paused .art{animation:none}@keyframes pulse{0%,100%{opacity:.16}50%{opacity:.58}}</style>
+<header><h1>동물 발견물 261종 · 종별 2~4색과 이동 흔적</h1><input id="search" placeholder="동물 이름으로 찾기"><button id="pulse">점멸 멈추기</button> <span id="count"></span><div class="meta">2족 교대 · 4족 앞뒷발 · 도약 · 기어간 자국 · 물결 · 작은 곤충 흔적</div></header><main id="grid"></main>
+<script src="../../js/data/animaltracking.js"></script><script src="../../js/data/animaltracking_bounds.js"></script>
+<script>G.FX={animalTracking:{spritePixels:96,footSize:12,trackWidth:4.2,frontGap:4.8,hopGap:5.5,waveWidth:6,traceWidth:1.3,trackAlpha:.62}};const images={};G.Img={get:k=>images[k],want:()=>{}};</script>
+<script src="../../js/art/animal_tracking.js"></script><script>
+const names=__NAMES__,keys=['animal-tracking/footprints',...Array.from({length:17},(_,i)=>'animal-tracking/animals-'+(i+1))];
+Promise.all(keys.map(k=>new Promise((resolve,reject)=>{const im=new Image;im.onload=()=>{images[k]=im;resolve()};im.onerror=reject;im.src='../../images/'+k+'.png'}))).then(()=>{
+for(const [id,name] of Object.entries(names)){const d={id},p=G.AnimalTracking.profile(d),card=document.createElement('article');card.className='card';card.dataset.search=(id+' '+name).toLowerCase();const title=document.createElement('h2');title.textContent=name;card.appendChild(title);const cv=document.createElement('canvas');cv.className='art';cv.width=cv.height=128;cv.style.animationDelay=-(Object.keys(names).indexOf(id)%36)/10+'s';cv.getContext('2d').drawImage(G.AnimalTracking.sprite(d,false),0,0,128,128);card.appendChild(cv);const track=document.createElement('canvas');track.width=210;track.height=46;track.className='track';G.AnimalTracking.drawTrail(track.getContext('2d'),d,Array.from({length:7},(_,i)=>({lon:i,lat:0,ground:true})),(lon,lat)=>[18+lon*29,23-lat*29],0);card.appendChild(track);const meta=document.createElement('div');meta.className='meta';meta.textContent=id+' · '+p.kind+' ';p.palette.forEach(color=>{const dot=document.createElement('span');dot.className='swatch';dot.style.background=color;meta.appendChild(dot)});card.appendChild(meta);document.getElementById('grid').appendChild(card)}document.getElementById('count').textContent=Object.keys(names).length+'종';
+});document.getElementById('search').oninput=e=>{let n=0;document.querySelectorAll('.card').forEach(c=>{const show=c.dataset.search.includes(e.target.value.toLowerCase());c.hidden=!show;if(show)n++});document.getElementById('count').textContent=n+'종'};document.getElementById('pulse').onclick=e=>{const paused=document.body.classList.toggle('paused');e.target.textContent=paused?'점멸 켜기':'점멸 멈추기'};
+</script></html>'''.replace('__NAMES__', json.dumps(names, ensure_ascii=False))
+(ROOT / 'artifacts/animal-tracking-20261117/gallery.html').write_text(html, encoding='utf-8', newline='\n')
+print('전체 261종 게임 렌더러 미리보기 생성 완료')

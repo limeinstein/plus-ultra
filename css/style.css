@@ -2172,3 +2172,25 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .proof-peek img { width: 128px; height: 128px; flex: 0 0 128px; object-fit: contain; border-radius: 6px; background: radial-gradient(circle, #fbf3df, #c9a874); }
 .proof-peek small { color: #7a5c33; }
 .proof-peek .pf { margin-top: 4px; font-size: 14px; color: #6a3a1a; }
+
+/* 바다 위를 날아오는 종이 — 이동·뒤집힘 뒤 접힌 양옆이 펼쳐진다. */
+.wanted-wind{position:fixed;inset:0;z-index:12000;overflow:hidden;perspective:1100px;background:transparent;isolation:isolate}
+.wanted-flight{position:absolute;left:50%;top:48%;width:min(310px,52vw,48vh);aspect-ratio:2/3;margin-left:calc(min(310px,52vw,48vh) / -2);margin-top:calc(min(310px,52vw,48vh) * -.75);transform-style:preserve-3d;animation:wanted-arrive var(--wanted-flight) both cubic-bezier(.25,.6,.35,1)}
+.wanted-paper{position:absolute;inset:0;transform-style:preserve-3d;filter:drop-shadow(8px 18px 12px #0007);animation:wanted-settle 3s ease-in-out calc(var(--wanted-flight) + var(--wanted-unfold)) infinite}
+.wanted-fold{position:absolute;top:0;bottom:0;width:33.3334%;overflow:hidden;backface-visibility:visible;background:#c6bca5;transform-style:preserve-3d}
+.wanted-fold:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#211b1238,transparent 18%,#fff2 80%,#211b1228);animation:wanted-crease var(--wanted-unfold) var(--wanted-flight) both}
+.wanted-fold-0{left:0;transform-origin:right center;animation:wanted-left var(--wanted-unfold) var(--wanted-flight) both}
+.wanted-fold-1{left:33.3333%}
+.wanted-fold-2{left:66.6666%;transform-origin:left center;animation:wanted-right var(--wanted-unfold) var(--wanted-flight) both}
+.wanted-paper-face{position:absolute;top:0;width:300%;height:100%}.wanted-paper-face .wp-sheet{height:100%;width:100%}
+.wanted-dismiss{position:absolute;left:calc(50% + min(310px,52vw,48vh) / 2 + 8px);top:calc(48% - min(310px,52vw,48vh) * .75);border:1px solid #e2d2a6;border-radius:50%;width:36px;height:36px;padding:0;background:#201b16c9;color:#fff1cc;font:28px serif;opacity:0;pointer-events:none;transition:opacity .35s}
+.wanted-ready .wanted-dismiss{opacity:1;pointer-events:auto}
+.wanted-gust{position:absolute;inset:0;pointer-events:none;animation:wanted-gust var(--wanted-flight) both}
+.wanted-gust i{position:absolute;width:65vw;height:15vh;border-top:2px solid #fff8;border-radius:50%;left:25%;top:32%;transform:rotate(-18deg);filter:blur(.5px)}
+.wanted-gust i:nth-child(2){left:42%;top:50%;width:50vw;transform:rotate(-25deg)}.wanted-gust i:nth-child(3){left:5%;top:60%;width:42vw;transform:rotate(14deg)}
+@keyframes wanted-arrive{0%{transform:translate(75vw,-38vh) rotateZ(-65deg) rotateY(75deg) rotateX(35deg) scale(.12);opacity:0}12%{opacity:1}30%{transform:translate(19vw,9vh) rotateZ(28deg) rotateY(-60deg) rotateX(-25deg) scale(.42)}52%{transform:translate(-26vw,-15vh) rotateZ(-30deg) rotateY(100deg) rotateX(20deg) scale(.65)}73%{transform:translate(10vw,7vh) rotateZ(14deg) rotateY(-36deg) rotateX(-12deg) scale(.83)}90%{transform:translate(-3vw,-2vh) rotateZ(-7deg) rotateY(12deg) scale(.96)}100%{transform:translate(0,0) rotateZ(0) rotateY(0) scale(1);opacity:1}}
+@keyframes wanted-left{0%{transform:rotateY(145deg)}42%{transform:rotateY(78deg)}78%{transform:rotateY(-14deg)}100%{transform:rotateY(0)}}
+@keyframes wanted-right{0%{transform:rotateY(-150deg)}30%{transform:rotateY(-115deg)}72%{transform:rotateY(18deg)}100%{transform:rotateY(0)}}
+@keyframes wanted-crease{0%{opacity:1;background-color:#33271b66}100%{opacity:.25;background-color:transparent}}
+@keyframes wanted-settle{0%,100%{transform:rotateZ(-1deg) rotateX(2deg) translateY(0)}50%{transform:rotateZ(1deg) rotateX(-2deg) translateY(-5px)}}
+@keyframes wanted-gust{0%,100%{opacity:0;transform:translateX(20vw)}20%,65%{opacity:.65}80%{opacity:0;transform:translateX(-25vw)}}

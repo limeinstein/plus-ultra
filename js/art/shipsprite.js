@@ -2,7 +2,7 @@
    그림을 아직 못 읽었거나 빠졌으면 기존 A.shipTop(코드 그림)으로 자동 복귀한다.
 
    늦게 나오거나 끊기지 않게 하는 장치
-   - 시트는 읽자마자 ImageBitmap으로 미리 풀어 둔다(createImageBitmap — 풀기는 따로 도는 일꾼이 한다).
+   - 큰 배는 ImageBitmap으로 준비한다. 작은 배는 이미 읽은 그림을 축소 캔버스로 보관해 다시 해독하지 않는다.
      <img>를 그대로 그리면 처음 그릴 때 그 자리에서 1792×3584를 풀어 한 장면이 멈칫하고,
      브라우저가 메모리를 아끼려고 풀어 둔 것을 버리면 다시 멈칫한다.
    - 작게 그릴 때(다른 배·먼 배)는 반으로 줄인 사본을 쓴다 — 계단 현상이 줄고 GPU가 읽는 양도 준다.
@@ -33,26 +33,42 @@
       return p.catch(function () { return null; });
     } catch (e) { return Promise.resolve(null); }
   }
-  function prepare(key) {
+  function fullSize(sh) {
+    if(sh.full || sh.fullPending) return;
+    sh.fullPending = bitmap(sh.img).then(function(full) {
+      if(sheets[sh.key] !== sh) { if(full && full.close) full.close(); return; }
+      sh.full = full; sh.fullPending = null; sh.fullTried = true;
+    });
+  }
+  function smallCanvas(img, w, h) {
+    // 이미 decode가 끝난 그림을 GPU에서 축소해 보관한다. 대형 시트를
+    // createImageBitmap의 고품질 리사이저로 다시 풀며 주 스레드를 막지 않는다.
+    var cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(w / 2)); cv.height = Math.max(1, Math.round(h / 2));
+    var ctx = cv.getContext('2d'); if (!ctx) return img; ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, 0, 0, cv.width, cv.height); return cv;
+  }
+  function prepare(key, small) {
     var sh = sheets[key];
     if (sh) return sh.p;
-    sh = sheets[key] = { st: 'loading', used: nowS() };
+    sh = sheets[key] = { key: key, st: 'loading', used: nowS() };
     sh.p = I.load(key).then(function (img) {
-      if (sheets[key] !== sh) return sh;                       // 그 사이 자리에서 밀려났다
-      if (!img) { delete sheets[key]; return sh; }             // 못 받았다 — I.has 가 다시 받아 보라고 할 때 새로 준비한다
+      if (sheets[key] !== sh) return sh;
+      if (!img) { delete sheets[key]; return sh; }
       sh.img = img;
       var w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
-      // 원본 크기 풀기가 먼저 끝나면 곧바로 그리기 시작한다. 반 크기 사본은 뒤따라 채운다.
-      return bitmap(img).then(function (full) {
-        if (sheets[key] !== sh) { if (full && full.close) full.close(); return sh; }
-        sh.full = full; sh.w = w; sh.h = h; sh.st = 'ok';
+      sh.w = w; sh.h = h;
+      var halfOnly = small && CF().halfBelow > 0;
+      // 작은 배는 기존 축소본만 준비한다. 큰 화면에서 필요해질 때 원본을 푼다.
+      return (halfOnly ? Promise.resolve(smallCanvas(img, w, h)) : bitmap(img)).then(function (image) {
+        if (sheets[key] !== sh) { if (image && image.close) image.close(); return sh; }
+        if(halfOnly) sh.half = image; else { sh.full = image; sh.fullTried = true; }
+        sh.st = 'ok';
         var hk = CF().halfBelow == null ? 0.55 : CF().halfBelow;
-        if (hk > 0) bitmap(img, Math.max(1, Math.round(w / 2)), Math.max(1, Math.round(h / 2))).then(function (half) {
+        if (!halfOnly && hk > 0) bitmap(img, Math.max(1, Math.round(w / 2)), Math.max(1, Math.round(h / 2))).then(function (half) {
           if (sheets[key] !== sh) { if (half && half.close) half.close(); return; }
           sh.half = half;
         });
-        trim();
-        return sh;
+        trim(); return sh;
       });
     });
     return sh.p;
@@ -76,10 +92,10 @@
   S.loaded = function () { return Object.keys(sheets).filter(function (k) { return sheets[k].st === 'ok'; }).length; };
   /** 그릴 수 있는 시트. 아직 받는 중이면 WAIT(코드 그림을 내보이지 않고 기다림), 그림이 없거나 못 받았으면 null */
   var WAIT = {};
-  function ready(meta) {
+  function ready(meta, small) {
     if (!meta || !I || !I.has(meta.key)) return null;
     var sh = sheets[meta.key];
-    if (!sh) { prepare(meta.key); sh = sheets[meta.key]; }
+    if (!sh) { prepare(meta.key, small); sh = sheets[meta.key]; }
     if (!sh) return null;
     sh.used = nowS();
     if (sh.st === 'ok') return sh;
@@ -105,13 +121,13 @@
     return ms ? Promise.race([all, new Promise(function (r) { setTimeout(r, ms); })]) : all;
   };
   /** 곧 그릴 배(화면 밖에서 다가오는 배 등): 기다리지 않고 읽기만 시작한다. 매 장면 불러도 가볍다 */
-  S.want = function (ids, prefer3d) {
+  S.want = function (ids, prefer3d, small) {
     if (!ids) return;
     for (var i = 0; i < ids.length; i++) {
       var meta = G.SHIP_ART && G.SHIP_ART[ids[i]];
       if (!meta || !I || uses3D(ids[i], prefer3d)) continue;
       var sh = sheets[meta.key];
-      if (sh) sh.used = nowS(); else if (I.has(meta.key)) prepare(meta.key);
+      if (sh) sh.used = nowS(); else if (I.has(meta.key)) prepare(meta.key, small);
     }
   };
   /** 제독 함대의 배 종류 */
@@ -142,6 +158,8 @@
     // 화면(장치 픽셀) 기준 배율이 halfBelow보다 작으면 반 크기 사본
     var hk = CF().halfBelow == null ? 0.55 : CF().halfBelow;
     if (sh.half && drawScale < hk) return { src: sh.half, k: sh.half.width / (meta.cols * meta.cell) };
+    if (!sh.full && !sh.fullTried) fullSize(sh);
+    if (!sh.full && sh.half) return { src: sh.half, k: sh.half.width / (meta.cols * meta.cell) };
     var src = sh.full || sh.img;
     return { src: src, k: (sh.w || src.width) / (meta.cols * meta.cell) };
   }
@@ -202,7 +220,9 @@
   /** 같은 인수의 A.shipTop 대체 그림. 그렸으면 true (spec.sid = 배마다 다른 이름이면 방위 칸이 덜 깜박인다) */
   S.draw = function (ctx, x, y, ang, len, spec, t) {
     spec = spec || {};
-    var meta = G.SHIP_ART && G.SHIP_ART[spec.type], sh = ready(meta);
+    var meta = G.SHIP_ART && G.SHIP_ART[spec.type];
+    var transform = ctx.getTransform ? ctx.getTransform() : null, device = transform ? Math.hypot(transform.a, transform.b) : 1;
+    var sh = ready(meta, !!meta && len / meta.baseLen * device < CF().halfBelow);
     if (meta && meta.layout !== 'motion-v2') return false;
     if (!sh) return false;
     if (sh === WAIT) {       // 시트를 받는 중: 각진 코드 그림 대신 물 위 그림자만 두고 기다린다

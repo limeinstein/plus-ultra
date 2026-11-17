@@ -159,6 +159,11 @@
     s.maidTips = L.filter(function (t) { return t.met == null && s.day <= t.to + 30; });   // 만났거나 오래된 소식은 치운다
     var tip = MT.active(npcs || []).filter(function (t) { return G.Geo.dist(l.lon, l.lat, t.lon, t.lat) <= k.near; })[0];
     if (!tip) return null;
+    if (tip.cap && (npcs || []).some(function (n) { return n.cap && n.cap.id === tip.cap; })) {
+      var existing = npcs.filter(function (n) { return n.cap && n.cap.id === tip.cap; })[0];
+      existing.tip = tip.id; existing.wantedRumor = true; existing.roamLon = tip.lon; existing.roamLat = tip.lat;
+      tip.spawned = s.day; return null;
+    }
     tip.spawned = s.day;
     var zone = G.Ships.zone(tip.lon, tip.lat), y = s.date.y;
     var K0 = tip.kind === 'pirate' || tip.kind === 'named' ? (G.Scenes.sea.pirateK ? G.Scenes.sea.pirateK() : 1) : Math.min(1, s.player.fame / ((G.BALANCE && G.BALANCE.pirateFame) || 4000));
@@ -176,6 +181,7 @@
     if (G.SeaFolk) G.SeaFolk.decorate(npc, npcs || []);
     if (tip.cap && G.Captains && G.Captains.forceNamed && !G.Captains.forceNamed(npc, tip.cap)) { tip.met = s.day; return null; }   // 그새 사로잡혔거나 은퇴한 해적 — 소문은 헛걸음
     if (tip.cap && G.Corsair && G.Corsair.named) { try { G.Corsair.named(npc); if (G.SeaFolk.label) npc.label = G.SeaFolk.label(npc); if (G.Wanted && G.Wanted.empower) G.Wanted.empower(npc); } catch (e) { console.error(e); } }   // 이름난 해적다운 함대·전술 (corsairs.js)
+    if (tip.kind === 'named') { npc.wantedRumor = true; npc.roamLon = lon; npc.roamLat = lat; }
     fitCount(npc, tip.n, Kx, y);   // 알려 준 척수 그대로
     if (tip.nation && tip.kind !== 'pirate') { npc.nation = tip.nation; if (G.SeaFolk.label) npc.label = G.SeaFolk.label(npc); }
     var mn = tip.who || (G.MAID && G.MAID[tip.by] ? G.MAID[tip.by].name : '여급');

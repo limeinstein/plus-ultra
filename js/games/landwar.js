@@ -113,6 +113,8 @@
     return true;
   }
   function formFoe(e, regKey) {
+    // 새끼를 지키는 거대한 짐승 (js/systems/creatures.js G.Guardian): 혼자 나서는 우두머리 하나 — 힘(pow)이 크고 머릿수(n)가 체력이다
+    if (e.giant) return [{ side: 'en', name: e.giant.name || e.leader || e.name, cls: 'beast', pow: e.giant.pow || 6, look: 'beast', n: Math.max(4, e.n), n0: Math.max(4, e.n), leader: true, giant: e.giant }];
     var F = FOES[e.kind] || FOES.bandit, n = Math.max(3, e.n), lead = Math.max(3, Math.round(n * 0.15)), rest = Math.max(2, n - lead);
     var k = U.clamp(Math.round(rest / 10), 2, 5), out = [];
     for (var i = 0; i < k; i++) {
@@ -167,6 +169,7 @@
       ['cavalry_horse', 'cavalry_camel', 'cavalry_elephant'].forEach(function (id) { if (foes.some(function (u) { return u.cls === 'cav' || u.cls === 'elephant' || u.cls === 'horsearcher'; })) need.push(id); });
       if (SPR.meta('regional_mounts') && foes.some(function (u) { return u.special && (u.cls === 'cav' || u.cls === 'elephant' || u.cls === 'horsearcher'); })) need.push('regional_mounts');
       if (LA.cav[mi.name] && need.indexOf(LA.cav[mi.name]) < 0) need.push(LA.cav[mi.name]);
+      if (e.giant && e.giant.sheet) need.push(e.giant.sheet);
       SPR.preload(need);
       foes.forEach(function (u) { if (u.special && u.special.party) SPR.partyReady(u.special.party); });
     }
@@ -309,6 +312,7 @@
         else if (u.special && u.cls === 'elephant') r = SPR.meta('regional_mounts') ? { id: 'regional_mounts', row: regKey === 'india' ? 1 : 2, mounted: '코끼리' } : { id: 'cavalry_elephant', row: Math.max(2, enemyTier), mounted: '코끼리' };
         else if (u.special && u.cls === 'cav') r = regKey === 'sahel' && SPR.meta('regional_mounts') ? { id: 'regional_mounts', row: 0, mounted: '말' } : { id: 'west_europe', row: SPR.row('west_europe', 'stradiot'), mounted: '말' };
         else if (u.special && u.cls === 'horsearcher' && regKey === 'persia' && SPR.meta('regional_mounts')) r = { id: 'regional_mounts', row: 3, mounted: '말' };
+        else if (u.giant && u.giant.sheet && SPR.meta(u.giant.sheet)) r = { id: u.giant.sheet, row: 0, beast: 1, giant: u.giant.k || 2 };   // 거대한 짐승 (js/data/creatures.js cb_ 시트)
         else if (u.look === 'beast') {
           // e.beast: 이야기 사건의 짐승 이름들. 전용 시트가 없으면 그 고장 짐승을 쓴다.
           var names = [].concat(e.beast || []), bn = null;
@@ -350,7 +354,7 @@
       }
       function sprLayout(u, sp, x, y, face) {
         var big = weaponOf(u) === 'cannon' || sp.mounted, mountN = sp.mounted && (SFX.mountN || {})[sp.mounted];
-        var nf = U.clamp(Math.ceil(u.n / 4), 1, sp.mounted ? (mountN || 2) : big ? 2 : sp.beast ? 3 : 6);
+        var nf = sp.giant ? 1 : U.clamp(Math.ceil(u.n / 4), 1, sp.mounted ? (mountN || 2) : big ? 2 : sp.beast ? 3 : 6);
         var gap = sp.mounted ? (((SFX.mountGap || {})[sp.mounted]) || 58) : big ? LFX.artilleryGap : sp.beast ? LFX.beastGap : LFX.infantryGap, out = [];
         for (var i = 0; i < nf; i++) { var col = i % 3, back = i >= 3, inRow = back ? nf - 3 : Math.min(nf, 3); out.push([x + (col - (inRow - 1) / 2) * gap * face - (back ? 10 * face : 0), y - (back ? 14 : 0) + (col === 1 ? 5 : 0)]); }
         return out;
@@ -375,7 +379,7 @@
         var id = sp.id, row = sp.row;
         if (!SPR.ready(id)) return SPR.pending(id);
         var mountH = sp.mounted && (SFX.mountH || {})[sp.mounted];
-        var k = ((mountH || (sp.beast ? SFX.beastH : SFX.unitH)) || 46) / SPR.bodyH(id, row) * k0 * ((SFX.sheetK || {})[id] || 1);
+        var k = ((mountH || (sp.beast ? SFX.beastH : SFX.unitH)) || 46) / SPR.bodyH(id, row) * k0 * ((SFX.sheetK || {})[id] || 1) * (sp.giant || 1);
         var layout = sprLayout(u, sp, x, y, face), m = SPR.meta(id);
         for (var i = 0; i < layout.length; i++) {
           var fx0 = layout[i][0], fy0 = layout[i][1], at = Math.max(0, (u.actT || 0) - (u.attackStart || 0) - i * LFX.volleyGap);

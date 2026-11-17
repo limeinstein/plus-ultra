@@ -272,6 +272,9 @@
   M.drawSea = function (ctx, project, zoom, time) {
     var s = S(), near = M.near(s.loc.lon, s.loc.lat, K().sight);
     near.forEach(function (e) {
+      if (G.AnimalTracking && G.AnimalTracking.is(G.DISC[e.id]) && !G.Disc.foundByMe(e.id)) {
+        G.AnimalTracking.drawOne(ctx, project, G.DISC[e.id], s.loc.lon, s.loc.lat, time); return;
+      }
       var p = project(e.lon, e.lat), size = zoom * K().mapLen;
       if (e.id === 'ghost-ship') {
         var key = e.id + ':' + e.cycle, start = ghostSight[key];

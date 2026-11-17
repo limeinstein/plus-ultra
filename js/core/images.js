@@ -430,7 +430,7 @@
     // 오스만이 다스리는 발칸·레반트
     72: 'ottoman', 73: 'ottoman', 76: 'ottoman', 112: 'ottoman', 113: 'ottoman', 114: 'ottoman',
     115: 'ottoman', 116: 'ottoman', 117: 'ottoman', 118: 'ottoman', 119: 'ottoman', 120: 'ottoman',
-    121: 'ottoman', 
+    121: 'ottoman',
     // 베네치아가 쥔 섬
     74: 'italy', 75: 'italy',
     // 섬 동남아시아·열대 아메리카는 대나무 고상가옥
@@ -464,6 +464,7 @@
       .concat(f ? ['figureheads/' + it.id] : [])
       .concat(r && r.relic ? ['discovery-ends/' + r.relic, 'discoveries/' + r.relic] : [])
       .concat(lf && lf.src ? ['discovery-ends/' + lf.src, 'discoveries/' + lf.src, 'sea-monsters/' + lf.src] : [])
+      .concat(it.trophy ? ['discovery-ends/' + it.trophy, 'discoveries/' + it.trophy] : [])   // 거대한 짐승의 전리품: 그 짐승의 발견 그림 (js/data/creatures.js)
       .concat(['item-kinds/' + it.kind, 'relic-kinds/' + it.kind]);
   };
   /** 발견 유물: 전용 유물, 선수상 조각, 같은 이름의 일반 물건, 발견 장면, 종류 공통 그림 순 */

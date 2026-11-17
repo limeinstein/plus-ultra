@@ -42,7 +42,7 @@
       try { ships = G.Ships.enemyTypes(kind, zone, nation, n, 0.3, s.date.y); } catch (e) { ships = null; }
       var o = { id: 'ls' + Math.random().toString(36).slice(2, 8), kind: kind, lon: lon, lat: lat, heading: U.rf(0, 6.283), spd: U.rf(0.8, 1.3), n: n, ships: ships, zone: zone, nation: nation,
         life: U.rf(cf.life[0], cf.life[1]), age: 0, a: 0 };
-      if (G.ShipSprite && ships) G.ShipSprite.want(ships);
+      if (G.ShipSprite && ships) G.ShipSprite.want(ships, false, true);
       list.push(o);
       return o;
     }
@@ -53,18 +53,21 @@
   function syncExp(b, dayNow) {
     var SF = G.SeaFolk; if (!SF || !SF.voyages || !SF.posAt) return;
     var near = C().near;
-    SF.voyages().forEach(function (ex) {
+    var voyages = SF.voyages(), liveIds = {}, byId = {};
+    list.forEach(function (n) { if (n.exp) byId[n.exp.id] = n; });
+    voyages.forEach(function (ex) {
+      liveIds[ex.id] = true;
       var p = SF.posAt(ex, dayNow); if (!p) return;
-      var have = list.filter(function (x) { return x.exp && x.exp.id === ex.id; })[0];
+      var have = byId[ex.id];
       var close = G.Geo.dist(b.lon, b.lat, p.lon, p.lat) < near;
       if (!have && close) {
         var o = { id: 'ex_' + ex.id, kind: 'navy', exp: ex, nation: ex.nation, lon: p.lon, lat: p.lat, heading: p.heading || 0, spd: 1, n: ex.ships.length, ships: ex.ships.slice(), zone: G.Ships ? G.Ships.zone(p.lon, p.lat) : null, age: 0, a: 0, life: 1e9 };
         o.label = SF.label ? SF.label(o) : ex.who + '의 탐험 함대';
-        if (G.ShipSprite) G.ShipSprite.want(o.ships);
+        if (G.ShipSprite) G.ShipSprite.want(o.ships, false, true);
         list.push(o);
       } else if (have && !close) have.leave = true;
     });
-    list.forEach(function (x) { if (x.exp && !SF.voyages().some(function (e) { return e.id === x.exp.id; })) x.leave = true; });
+    list.forEach(function (x) { if (x.exp && !liveIds[x.exp.id]) x.leave = true; });
   }
 
   /** 한 장면: view = {lon, lat, zoom}, days = 이번 장면에 흐른 게임 날, dt = 실제 초, frac = 오늘의 지난 몫(0..1), party = [lon, lat] */
@@ -99,7 +102,7 @@
       // 나타나고 사라질 때는 천천히 (물안개 속에서 보이듯)
       var ta = n.leave ? 0 : 1;
       n.a += (ta - n.a) * Math.min(1, dt * 1.5);
-      if (n.leave && n.a < 0.02) list.splice(j, 1);
+      if (n.leave && n.a < 0.02) { delete side[n.id]; list.splice(j, 1); }
     }
   };
 

@@ -69,7 +69,7 @@
     if (G.Audio) G.Audio.music('sea');
     st.lastMini = -99;
   };
-  SEA.exit = function (next) { if (G.Ship3D && next !== 'battle') G.Ship3D.dispose(); if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; delete st.crewPetFlight; st.shipWater = {}; st.fx = G.SeaFX ? G.SeaFX.create() : null; if (st.unkey) st.unkey(); } };
+  SEA.exit = function (next) { if (G.Wanted && G.Wanted.cancelReveal) G.Wanted.cancelReveal(); if (G.Ship3D && next !== 'battle') G.Ship3D.dispose(); if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; delete st.crewPetFlight; st.shipWater = {}; st.fx = G.SeaFX ? G.SeaFX.create() : null; if (st.unkey) st.unkey(); } };
   function newRuntime() {
     return { cam: null, path: null, target: null, paused: false, speed: 1, dayAcc: 0, busy: 0, keys: {}, npcs: [], wake: [], storm: 0, stormDays: 0, calm: 0, t: 0, mouse: null, lastMini: -99, dayCount: 0, toastQ: [],
       vel: [0, 0], fx: G.SeaFX ? G.SeaFX.create() : null, pose: { roll: 0, pitch: 0, heave: 0 }, turnRate: 0, accel: 0 };
@@ -605,6 +605,7 @@
     knownCities().forEach(function (c) {
       if (!c.port) return;
       var d = c.dock || [c.lat, c.lon];
+      if (Math.abs(s.loc.lat - d[0]) >= bd) return;
       var dd = G.Geo.dist(s.loc.lon, s.loc.lat, d[1], d[0]);
       if (dd < bd) { bd = dd; best = c; }
     });
@@ -790,6 +791,7 @@
   SEA.canPlead = canPlead;
   function spawnNpcs() {
     var s = S(), l = s.loc;
+    if (G.MaidTip) { var mtN = G.MaidTip.spawn(st.npcs); if (mtN) { st.npcs.push(mtN); if (G.ShipSprite) G.ShipSprite.want(mtN.ships, true); return; } }
     // 탐험가의 함대(항로 위)·적대국의 추격 함대 (js/systems/seafolk.js)
     if (G.Fakes) { var chN = G.Fakes.spawnChaser(st.npcs); if (chN) { st.npcs.push(chN); if (G.ShipSprite) G.ShipSprite.want(chN.ships, true); return; } }   // 이중 계약에 화난 후원자의 추격자
     if (G.SeaFolk) { var sfN = G.SeaFolk.spawn(st.npcs); if (sfN) { st.npcs.push(sfN); if (G.ShipSprite) G.ShipSprite.want(sfN.ships, true); return; } }
@@ -802,7 +804,7 @@
     // 여급의 귀띔: 그 앞바다에 들어서면 일러 준 상선대·군함대·해적이 나타난다 (js/systems/maidtip.js)
     // 특허 회사의 임무: 밀수선·경쟁사 무장 상선 · 귀환 선단을 노리는 습격대 · 경쟁사의 큰 화물선 (js/systems/company.js)
     if (G.Company) { var coN = G.Company.spawn(st.npcs); if (coN) { st.npcs.push(coN); if (G.ShipSprite) G.ShipSprite.want(coN.ships, true); return; } }
-    if (G.MaidTip) { var mtN = G.MaidTip.spawn(st.npcs); if (mtN) { st.npcs.push(mtN); if (G.ShipSprite) G.ShipSprite.want(mtN.ships, true); return; } }
+
     if (st.npcs.length >= 4) return;
     var ports = knownCities().filter(function (c) { return c.port && G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 12; }).length;
     var pr = pirateChance(l.lon, l.lat);
@@ -860,7 +862,9 @@
       var n = st.npcs[i];
       var d = G.Geo.dist(l.lon, l.lat, n.lon, n.lat);
       if (n.exp && G.SeaFolk && G.SeaFolk.place(n, st.dayAcc)) { if (n.gone || d > 9) st.npcs.splice(i, 1); continue; }   // 탐험 함대는 날짜대로 항로를 간다
-      if (n.hostile && d < (n.hunt || n.chaser ? 8 : 4.5) && !n.fled) n.heading = Math.atan2(l.lat - n.lat, G.Geo.wrapLon(l.lon - n.lon));
+      if (n.wantedRumor && !n.wantedSeen) {
+        if (G.Geo.dist(n.lon, n.lat, n.roamLon, n.roamLat) > G.FX.wantedReveal.roam) n.heading = Math.atan2(n.roamLat - n.lat, G.Geo.wrapLon(n.roamLon - n.lon));
+      } else if (n.hostile && d < (n.hunt || n.chaser ? 8 : 4.5) && !n.fled) n.heading = Math.atan2(l.lat - n.lat, G.Geo.wrapLon(l.lon - n.lon));
       else if ((n.kind === 'merchant' || n.awed) && d < 1.2) { n.heading = Math.atan2(n.lat - l.lat, G.Geo.wrapLon(n.lon - l.lon)); if (n.awed && !n.awedTold) { n.awedTold = true; UI.toast(G.Ships.pirateLabel(n.zone) + '의 배가 ' + s.fleet.ships[0].name + '호의 거대한 모습을 보고 달아난다.', 'ship', 3600); } }
       var sp = (isQuarry(n) ? Math.min(n.spd, quarryV()) : n.spd) * days;
       var nl = n.lon + Math.cos(n.heading) * sp, nt = n.lat + Math.sin(n.heading) * sp;
@@ -870,6 +874,12 @@
   }
   async function checkEncounters() {
     if (st.busy || UI.busy() || !st.alive) return;
+    var target = st.npcs.filter(function (n) { return n.wantedRumor && !n.wantedSeen && n.cap && G.Geo.dist(S().loc.lon, S().loc.lat, n.lon, n.lat) <= G.FX.wantedReveal.near; })[0];
+    if (target && G.Wanted) {
+      var here = st; here.busy++;
+      try { await G.Wanted.reveal(target); } finally { here.busy = Math.max(0, here.busy - 1); }
+      return;
+    }
     if (G.SeaMonsters) { var monster = G.SeaMonsters.contact(); if (monster) { if (!G.SeaMonsters.repel(monster)) await encounterMonster(monster); return; } }
     var s = S(), l = s.loc;
     for (var i = 0; i < st.npcs.length; i++) {
@@ -918,6 +928,8 @@
     st.wasSailing = false;
     st.busy++;
     st.paused = true; refreshBar();
+    if (n.wantedRumor && !n.wantedSeen && G.Wanted) await G.Wanted.reveal(n);
+    if (!st.alive || G.Game.scene !== SEA) return;
     var k = NPC_KIND[n.kind];
     if (n.chaser && G.Fakes) G.Fakes.chaserMet(n);          // 추격자는 한 번뿐
     if (n.tip && G.MaidTip) G.MaidTip.met(n.tip);            // 여급이 알려 준 배도 한 번뿐 — 싸우든 도망치든 다시 솟아나지 않는다 (베타 피드백 2026-10-31: 발렌시아 앞바다에서 해적이 8번)
@@ -1023,6 +1035,13 @@
     var cameraFromLon = l.lon, cameraFromLat = l.lat;
     st.t += dt;
     var frozen = st.busy > 0 || UI.busy();
+    if (!frozen && (st.tipScan == null || st.t >= st.tipScan)) {
+      st.tipScan = st.t + G.FX.wantedReveal.scanSeconds;
+      var rumorShip = G.MaidTip && G.MaidTip.spawn(st.npcs);
+      if (rumorShip) { st.npcs.push(rumorShip); if (G.ShipSprite) G.ShipSprite.want(rumorShip.ships, true); }
+      checkEncounters();
+      frozen = st.busy > 0 || UI.busy();
+    }
     // 도시를 직접 골라(누르기·해도·자동항해) 닿았으면 묻지 않고 곧장 입항한다 (QA 2026-10-16 — 예전에는 닿은 뒤 「입항하시겠습니까?」를 또 물었다)
     if (st.pendingPort && !frozen) { var pc = st.pendingPort; st.pendingPort = null; if (st.paused && !st.path) tryEnterPort(pc); }
     // 멈춘 채 ←→: 배는 나아가지 않고 뱃머리만 돌린다 (닻을 내린 채 방향을 잡는 것) — 시간은 아래에서 ×waitSpeed로 흐른다
@@ -1042,7 +1061,7 @@
         nsub = Math.max(nsub, Math.ceil(daysDt * maxSpeed / FXS().pathStep));
         subD = daysDt / nsub; subT = dt / nsub;
       }
-      var dayDue = false;
+      var dayDue = false, surveyRadius = chartR();
       for (var k = 0; k < nsub && !st.busy && !st.paused; k++) {
         var h0 = l.heading;
         var chartLon = l.lon, chartLat = l.lat;
@@ -1050,7 +1069,7 @@
         if (st.paused) break;   // 마지막 길목에서 입항을 예약했으면 이전 관성으로 한 걸음 더 가지 않는다
         st.turnRate = st.turnRate * 0.7 + (U.angDiff(h0, l.heading) / Math.max(subD, 1e-4)) * 0.3;   // 선회율 (rad/일)
         move(subD, subT);
-        if (l.lon !== chartLon || l.lat !== chartLat) G.State.surveyChart(l.lon, l.lat, chartR());
+        if (l.lon !== chartLon || l.lat !== chartLat) G.State.surveyChart(l.lon, l.lat, surveyRadius);
         updateNpcs(subD);
         if (st.chase) { chaseStep(); if (st.busy) break; }
         st.dayAcc += subD;
@@ -2163,6 +2182,7 @@
     var tsu = G.Quake && G.Quake.active('tsunami');
     if (tsu) G.Quake.drawSea(ctx, [toScreen(l.lon, l.lat)], { qo: st.qo, key: Math.round(st.cam.lon * st.cam.zoom / 3) + ',' + Math.round(st.cam.lat * st.cam.zoom / 3) + ',' + Math.round(st.cam.zoom),   // 뭍 판은 카메라가 3px 넘게 움직일 때만 새로
       land: function (x, y) { return G.Geo.isLand(st.cam.lon + (x - 800) / st.cam.zoom, st.cam.lat - (y - 450) / st.cam.zoom); } });
+    if (G.AnimalTracking) G.AnimalTracking.draw(ctx, toScreen, 'sea', l.lon, l.lat, st.t);
     if (G.SeaMonsters) G.SeaMonsters.drawSea(ctx, toScreen, z, st.t);
     // npcs
     st.npcs.forEach(function (n) {

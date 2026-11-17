@@ -134,6 +134,28 @@
         oars.push({x:x,y:y,z:side*(ship.h.half(u,y)+(ship.apost||0)+.3),side:side,len:s.W*reach+(y-.5)*.6,phase:k*.42+(side>0?0:.28)});
       });
     }
+    // 돛의 UV와 무관하게 바뀌지 않는 곡면 값은 모형 생성 때 한 번만 계산한다.
+    // 시간·바람·접힘에 따른 식과 꼭짓점 수는 그대로 유지한다.
+    sails.forEach(function(a,index){
+      if(a.kind!=='square'&&a.kind!=='triangle')return;
+      var uv=a.mesh.geometry.attributes.uv,data=a.shape=new Float64Array(uv.count*12),c=cfg;
+      for(var i=0;i<uv.count;i++){
+        var u=uv.getX(i),v=uv.getY(i),o=i*12;data[o]=u;data[o+1]=v;
+        if(a.kind==='square'){
+          u=u*2-1;data[o]=u;var boom=a.mesh.userData.squareBoom,sn=Math.sin(PI*v);
+          data[o+2]=Math.pow(Math.abs(u),3);data[o+3]=Math.pow(Math.max(0,1-u*u),.85)*(Math.pow(sn,.9)*.82+(boom?0:v*.22));
+          data[o+4]=Math.sin(v*PI*8)*c.foldDepth;
+          data[o+5]=(boom?0:(a.mesh.userData.sailFoot||c.sailFoot))*(1-u*u)*v*v;
+          data[o+6]=Math.sin(u*PI*12+v*1.6)*c.sailCrease*u*u*sn;
+          data[o+7]=Math.sin(u*PI*7+v*10+index)*c.sailWrinkle*Math.pow(Math.abs(u),1.5)*sn;
+          data[o+8]=mix(a.spT,a.spB,v);data[o+9]=(a.mesh.userData.sailLeech||c.sailLeech)*sn;
+          data[o+10]=boom?1-v:1;
+        }else{
+          data[o+2]=mix(a.A[0],a.B[0],u);data[o+3]=mix(a.A[1],a.B[1],u);
+          data[o+4]=Math.pow(Math.sin(PI*v),.85)*(.35+.65*Math.sin(PI*u))*(1-.6*v*v);
+        }
+      }
+    });
     function update(spec,t){
       var c=cfg,wind=spec.rig||{},furl=clamp(spec.furl||0,0,1),deploy=mix(c.foldHeight,1,1-furl);
       var fill=clamp(wind.fill==null?.9:wind.fill,.05,1.25),brace=clamp(wind.brace||0,-c.maxBrace,c.maxBrace),luff=clamp(wind.luff||0,0,1);
@@ -142,19 +164,18 @@
       sails.forEach(function(a,index){
         var p=a.mesh.geometry.attributes.position,uv=a.mesh.geometry.attributes.uv;
         if(a.group)a.group.rotation.y=(a.baseYaw||0)-brace*(a.turn==null?(a.kind==='batten'?1.2:1.5):a.turn);else a.mesh.rotation.y=brace*a.brace;
+        var shape=a.shape;
         for(var i=0;i<p.count;i++){
-          var u=uv.getX(i),v=uv.getY(i);
+          var o=i*12,u=shape?shape[o]:uv.getX(i),v=shape?shape[o+1]:uv.getY(i);
           if(a.kind==='square'){
-            u=u*2-1;var boom=a.mesh.userData.squareBoom,edge=Math.pow(Math.abs(u),3),belly=a.bill*fill*pulse*(1-furl)*Math.pow(Math.max(0,1-u*u),.85)*(Math.pow(Math.sin(PI*v),.9)*.82+(boom?0:v*.22));
-            var flap=Math.sin(v*7+t*c.flutterRate+u*2+index)*edge*v*c.flutter*(.12+luff)*(1-furl)*(boom?1-v:1),fold=furl*Math.sin(v*PI*8)*c.foldDepth;
-            var foot=(boom?0:(a.mesh.userData.sailFoot||c.sailFoot))*(1-u*u)*v*v*(1-furl),crease=Math.sin(u*PI*12+v*1.6)*c.sailCrease*u*u*Math.sin(v*PI)*(1-furl);
-            var wrinkle=Math.sin(u*PI*7+v*10+index)*c.sailWrinkle*Math.pow(Math.abs(u),1.5)*Math.sin(PI*v)*(1-furl);
-            p.setXYZ(i,(a.mesh.userData.sailOffset||0)+belly+flap+fold+crease+wrinkle,a.yT+(a.yB-a.yT)*v*deploy+foot,u*mix(a.spT,a.spB,v)*(1-(a.mesh.userData.sailLeech||c.sailLeech)*Math.sin(PI*v)*(1-furl)));
+            var belly=a.bill*fill*pulse*(1-furl)*shape[o+3];
+            var flap=Math.sin(v*7+t*c.flutterRate+u*2+index)*shape[o+2]*v*c.flutter*(.12+luff)*(1-furl)*shape[o+10],fold=furl*shape[o+4];
+            var foot=shape[o+5]*(1-furl),crease=shape[o+6]*(1-furl),wrinkle=shape[o+7]*(1-furl);
+            p.setXYZ(i,(a.mesh.userData.sailOffset||0)+belly+flap+fold+crease+wrinkle,a.yT+(a.yB-a.yT)*v*deploy+foot,u*shape[o+8]*(1-shape[o+9]*(1-furl)));
           }else if(a.kind==='triangle'){
-            var lx=mix(a.A[0],a.B[0],u),ly=mix(a.A[1],a.B[1],u);
-            var b=fill*pulse*(1-furl)*a.bill*Math.pow(Math.sin(PI*v),.85)*(.35+.65*Math.sin(PI*u))*(1-.6*v*v);
+            var b=fill*pulse*(1-furl)*a.bill*shape[o+4];
             var flap=Math.sin(u*8+t*c.flutterRate+index)*v*v*c.flutter*(.12+luff)*(1-furl);
-            p.setXYZ(i,mix(lx,a.C[0],v*deploy)-b*a.xBelly,mix(ly,a.C[1],v*deploy),.9+(b+flap)*lee);
+            p.setXYZ(i,mix(shape[o+2],a.C[0],v*deploy)-b*a.xBelly,mix(shape[o+3],a.C[1],v*deploy),.9+(b+flap)*lee);
           }else{var pt=quadPoint(a,u,v,furl,fill,pulse);p.setXYZ(i,pt[0],pt[1],pt[2]*lee);}
         }
         p.needsUpdate=true;a.mesh.geometry.computeVertexNormals();

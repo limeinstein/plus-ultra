@@ -16,7 +16,7 @@
     return got;
   }
   function pend(key) { var I = G.Img; return !!(I && I.pending && I.has(key) && I.pending(key)); }
-  function keyOf(id) { var m = meta(id); return 'sprites/' + (m && m.image || id); }
+  function keyOf(id) { var m = meta(id); return m && m.key ? m.key : 'sprites/' + (m && m.image || id); }   // key: sprites/ 밖의 시트 (괴물·거대한 짐승 — js/data/creatures.js)
   SP.img = function (id) { return sheet(keyOf(id)); };
   SP.ready = function (id) { return !!(meta(id) && SP.img(id)); };
   /** 시트를 받는 중인가 — 그동안은 코드 그림을 내보이지 않고 비워 둔다 */

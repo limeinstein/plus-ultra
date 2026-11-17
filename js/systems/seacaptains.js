@@ -135,6 +135,7 @@
     if (!d) return null;
     if (d.monsoonRotation) return d.nat === 'OM' ? 'OM' : d.nat === 'ID' ? 'MK' : 'GJ';
     if (d.africanRotation) return 'SH';
+    if (d.steppeRotation) return d.steppeRegion === 'MJ' ? 'CN' : null;
     if (d.wd || d.windsaltRotation) return WD_GROUP[d.nat] || null;
     var t = (d.desc || '') + ' ' + (d.story || '');
     for (var i = 0; i < KEYWORD.length; i++) if (KEYWORD[i][0].test(t)) return KEYWORD[i][1];
@@ -170,6 +171,7 @@
       if (d.windsaltRotation && !G.WindsaltCrew.active(d.id, y, s.seed)) { delete r.seen[d.id]; return; }
       if (d.monsoonRotation && !G.MonsoonCrew.active(d.id, y, s.seed)) { delete r.seen[d.id]; return; }
       if (d.africanRotation && !G.AfricanCrew.active(d.id, y, s.seed)) { delete r.seen[d.id]; return; }
+      if (d.steppeRotation && !G.SteppeCrew.active(d.id, y, s.seed)) { delete r.seen[d.id]; return; }
       if (!available(d, y)) { return; }
       if (r.seen[d.id] == null) { r.seen[d.id] = y; return; }
       if (y - r.seen[d.id] < b.promoteYears || nProm >= b.promoteMax || !U.chance(b.promoteP)) return;

@@ -225,6 +225,43 @@
       } });
     await win.result;
   };
+  /** 설명창 없이 바다 위로 날아든 종이가 접힌 날개를 펼친다. */
+  W.cancelReveal = null;
+  W.reveal = function (n) {
+    var p = n && n.cap && W.pirate(n.cap.id); if (!p || n.wantedSeen) return Promise.resolve();
+    if (W.cancelReveal) W.cancelReveal();
+    n.wantedSeen = true;
+    return new Promise(function (resolve) {
+      var root = document.createElement('div'), cfg = G.FX.wantedReveal;
+      root.className = 'wanted-wind'; root.setAttribute('role', 'dialog');
+      root.setAttribute('aria-label', p.name + ' 현상수배서'); root.setAttribute('aria-modal', 'true');
+      root.style.setProperty('--wanted-flight', cfg.flyMs + 'ms');
+      root.style.setProperty('--wanted-unfold', cfg.unfoldMs + 'ms');
+      var panels = '';
+      for (var i = 0; i < 3; i++) panels += '<div class="wanted-fold wanted-fold-' + i + '"><div class="wanted-paper-face" style="left:-' + (i * 100) + '%">' + warrantSheet(p, 'wind' + i) + '</div></div>';
+      root.innerHTML = '<div class="wanted-gust"><i></i><i></i><i></i></div><div class="wanted-flight"><div class="wanted-paper">' + panels + '</div></div><button type="button" class="wanted-dismiss" aria-label="수배서 접기" disabled>×</button>';
+      var oldFocus = document.activeElement, button = root.querySelector('button'), done = false;
+      function close() {
+        if (done) return; done = true;
+        clearTimeout(timer); document.removeEventListener('keydown', key, true); root.remove();
+        if (W.cancelReveal === close) W.cancelReveal = null;
+        if (oldFocus && oldFocus.isConnected && oldFocus.focus) oldFocus.focus();
+        resolve();
+      }
+      function key(e) {
+        e.stopImmediatePropagation();
+        if (e.key === 'Tab') { e.preventDefault(); if (!button.disabled) button.focus(); }
+        if (!button.disabled && (e.key === 'Escape' || e.key === 'Enter' || e.code === 'Space')) { e.preventDefault(); close(); }
+      }
+      button.onclick = close;
+      root.onclick = function (e) { if (!button.disabled && (e.target === root || e.target.closest('.wanted-paper'))) close(); };
+      document.addEventListener('keydown', key, true); document.body.appendChild(root);
+      for (var j = 0; j < 3; j++) drawWarrant(root, p, 'wind' + j);
+      W.cancelReveal = close;
+      var timer = setTimeout(function () { root.classList.add('wanted-ready'); button.disabled = false; button.focus(); }, cfg.flyMs + cfg.unfoldMs);
+      G.State.log('수배서를 확인했다 — ' + p.name + ', 현상금 ' + U.num(W.bounty(p)) + '닢.');
+    });
+  };
   W.claim = async function (c) {
     var w = st(), s = S(), ids = Object.keys(w.due); if (!ids.length) return;
     var sum = 0, names = [];
