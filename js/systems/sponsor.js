@@ -959,6 +959,7 @@
   /** returning home after sailing around the world */
   SP.circumReturn = async function (c) {
     var s = S();
+    if (G.Achieve && G.Achieve.onCircumReturn) G.Achieve.onCircumReturn(c);
     s.circ.reported = true;
     if (!G.Disc.foundByMe('circum')) await G.Disc.find(G.DISC.circum, 'special');
     if (G.Fest && c) await G.Fest.begin(c.id, G.DISC.circum);      // 고향 부두의 귀환 잔치

@@ -264,7 +264,7 @@
   /** 지금 항구를 떠도는 철새·마녀 (함대에 없고, 떠나지 않았고, 이 해에 나타날 수 있는 사람) */
   function wanderers() {
     var s = S(), y = s.date.y;
-    return G.MATES.filter(function (m) { return G.MateDismiss && G.MateDismiss.returning(m.id) || ((m.wd || m.witch || m.windsaltRotation) && !m.sib && !hired(m.id) && !s.flags['gone_' + m.id] && (G.Frontier ? G.Frontier.mateReady(m, y) : true)); });
+    return G.MATES.filter(function (m) { return G.MateDismiss && G.MateDismiss.returning(m.id) || ((m.wd || m.witch || m.windsaltRotation || m.monsoonRotation || m.africanRotation) && !m.sib && !hired(m.id) && !s.flags['gone_' + m.id] && (G.Frontier ? G.Frontier.mateReady(m, y) : true)); });
   }
   MK.wanderers = wanderers;
   /** 날마다: 처음 닿은 대륙이 있으면 그 대륙 철새 소식이 열렸다고 알린다 (처음 부를 때는 알리지 않고 지금 닿은 대륙만 적는다) */
@@ -291,13 +291,15 @@
     var s = S(), R = G.R, A = G.Art, k = K(), reached = MK.reached();
     var all = wanderers(), list = all.filter(function (m) { return MK.shown(m, reached); });
     var hid = {}; all.forEach(function (m) { if (!MK.shown(m, reached)) { var c = MK.mateCont(m); hid[c] = (hid[c] || 0) + 1; } });
-    var others = MK.list().filter(function (d) { return !d.wd && !d.witch && !d.windsaltRotation && !(G.MateDismiss && G.MateDismiss.returning(d.id)); });   // 철새가 아닌 항해사 — 소식을 들은 사람만
+    var others = MK.list().filter(function (d) { return !d.wd && !d.witch && !d.windsaltRotation && !d.monsoonRotation && !d.africanRotation && !(G.MateDismiss && G.MateDismiss.returning(d.id)); });   // 철새가 아닌 항해사 — 소식을 들은 사람만
     var c0 = G.BALANCE.wander || {};
     var hidTxt = Object.keys(hid).map(function (c) { return MK.contName(c) + ' ' + hid[c] + '명'; }).join(' · ');
     el.innerHTML = '<div class="muted" style="margin-bottom:10px;font-size:16px">철새는 역사책에 이름이 없는 떠돌이 항해사입니다. 해마다 ' + (c0.perYear || 5) + '명씩 새로 항구에 나타나고, ' + (c0.cycle || 30) + '년마다 세대가 바뀝니다. ' +
       '제독이 <b>닿은 대륙</b>(' + CONT.filter(function (c) { return reached[c.id]; }).map(function (c) { return c.name; }).join('·') + ')을 고향으로 둔 철새와, 이미 만났거나 소식을 들은 철새가 적힙니다. ' +
       '행방을 들은 철새와 여급이 찾아 준 사람은 한동안 그 항구에 머뭅니다.' +
-      (G.WindsaltCrew ? ' 유럽의 바람과 소금 항해사: ' + U.esc(G.WindsaltCrew.periodText()) + '.' : '') + '</div>' +
+      (G.WindsaltCrew ? ' 유럽의 바람과 소금 항해사: ' + U.esc(G.WindsaltCrew.periodText()) + '.' : '') +
+      (G.MonsoonCrew ? ' 인도양의 계절풍 여성 항해사: ' + U.esc(G.MonsoonCrew.periodText()) + '.' : '') +
+      (G.AfricanCrew ? ' 아프리카의 바람과 소금 남성 항해사: ' + U.esc(G.AfricanCrew.periodText()) + '.' : '') + '</div>' +
       (hidTxt ? '<div class="muted" style="margin-bottom:10px;font-size:15px">🔒 아직 닿지 못한 대륙의 철새 — ' + U.esc(hidTxt) + ' <small>(그 대륙의 항구에 처음 들어서면 열립니다)</small></div>' : '') +
       '<table class="tbl"><tr><th></th><th>이름</th><th>국적·갈래</th><th>능력치</th><th>특기</th><th>명성</th><th>월급</th><th>머무는 곳</th></tr></table>';
     var tb = el.querySelector('table');

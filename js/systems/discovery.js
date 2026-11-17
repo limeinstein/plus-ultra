@@ -315,6 +315,9 @@
       if (!tomb.go) return false;
     }
     var mir = D.mirageNow(d);                                  // 미래의 건물: 신기루로 본 발견
+    // 경쟁자가 먼저 연 항로의 철새 주기는 뒤늦은 직접 발견으로 다시 시작하지 않는다.
+    if (d.id === G.BALANCE.monsoonCrew.gate && G.MonsoonCrew) G.MonsoonCrew.rememberDiscovery();
+    if (d.id === G.BALANCE.africanCrew.gate && G.AfricanCrew) G.AfricanCrew.rememberDiscovery();
     st.found = U.dateNum(s.date); st.me = true; st.evidence = true;
     if (d.clue && d.clue !== d.name) setTimeout(function () { UI.toast('단서 「' + d.clue + '」의 정체 — ' + d.name, 'scroll', 5200); }, 400);   // 이제부터는 발견물 이름으로 (js/data/cluenames.js)
     if (mir) st.mirage = 1;

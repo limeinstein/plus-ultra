@@ -83,9 +83,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const apostleShots = ['olympian_pilgrim', 'olympian_companions'];
     const badSize = result.rows.filter(r => apostleShots.includes(r[0]) ? r[3] !== 1672 || r[4] !== 941 || r[8] !== '50% 0%' : r[6] ? r[3] < 1800 || r[4] < 700 || r[3] / r[4] < 2.1 || r[3] / r[4] > 2.5 :
       r[5] || r[7] ? Math.abs(r[3] - 1881) > 2 || Math.abs(r[4] - 836) > 2 : r[3] !== 1881 || r[4] !== 836);
-    ok(result.total === 121 && apostleShots.every(id => result.rows.some(r => r[0] === id)), '기존 업적 109개와 시장 수집 9개·해방자 업적를 모두 검사한다');
-    ok(!missing.length, '업적 121개 모두 manifest 사건 그림이 있다: ' + missing.map(r => r[0]).join(', '));
-    ok(!badSize.length, '업적 사건 그림 121개가 모두 고해상도 가로 장면 규격이다: ' + badSize.map(r => r[0] + ' ' + r[3] + '×' + r[4]).join(', '));
+    ok(result.total === 124 && apostleShots.every(id => result.rows.some(r => r[0] === id)), '기존 업적 109개와 시장 수집 9개·해방자 업적를 모두 검사한다');
+    ok(!missing.length, '업적 124개 모두 manifest 사건 그림이 있다: ' + missing.map(r => r[0]).join(', '));
+    ok(!badSize.length, '업적 사건 그림 124개가 모두 고해상도 가로 장면 규격이다: ' + badSize.map(r => r[0] + ' ' + r[3] + '×' + r[4]).join(', '));
     ok(result.once && result.pop, '일반 업적 「Once Upon a Time」 달성과 팝업이 정상 동작한다');
     ok(result.shown[0][0] === 'achievement-events/onceupon' && result.shown[0][1] === 'Once Upon a Time' && result.shown.some(x => x[0] === 'stop'), '일반 업적도 전용 사건 그림을 열고 팝업 뒤 닫는다');
     ok(result.fameScenes.length === 22 && result.fameScenes.every(Boolean), '명성 업적 22개가 각각 전용 그림·제목·팝업을 표시하고 그림을 닫는다');
@@ -107,7 +107,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(await gallery.locator('img').evaluateAll(ims => ims.length === 22 && ims.every(im => im.complete && im.naturalWidth > 0)), '미리보기에도 새 그림 22개가 모두 보인다');
     await gallery.screenshot({ path: path.join(out, 'fame-achievement-contact-sheet.png'), fullPage: true });
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));
-    console.log('\n통과 — 업적 사건 그림 121개');
+    console.log('\n통과 — 업적 사건 그림 124개');
   } catch (e) {
     console.error('✗', e.message); console.error(errors.join('\n')); process.exitCode = 1;
   } finally { await browser.close(); }

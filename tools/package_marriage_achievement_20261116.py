@@ -3,12 +3,13 @@ import hashlib
 import json
 import re
 import shutil
+import sys
 from pathlib import Path
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-PLAN = ROOT / 'tools/marriage_achievement_20261116_prompts.json'
-OUT = ROOT / 'artifacts/marriage-achievements-20261116'
+PLAN = ROOT / (sys.argv[1] if len(sys.argv) > 1 else 'tools/marriage_achievement_20261116_prompts.json')
+OUT = ROOT / (sys.argv[2] if len(sys.argv) > 2 else 'artifacts/marriage-achievements-20261116')
 plan = json.loads(PLAN.read_text(encoding='utf-8'))
 (OUT / 'sources').mkdir(parents=True, exist_ok=True)
 checks = []
@@ -41,4 +42,4 @@ for row in plan['images']:
 manifest.write_text(text[:match.start()] + 'G.IMAGE_FILES = ' + json.dumps(dict(sorted(files.items())), ensure_ascii=False, indent=2) + ';' + text[match.end():], encoding='utf-8', newline='\n')
 PLAN.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 (OUT / 'asset-checks.json').write_text(json.dumps(checks, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-print('카사노바·의자왕 업적샷 두 장 등록 완료')
+print('업적샷 등록 완료: ' + str(len(checks)) + '장')

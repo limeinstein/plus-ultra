@@ -15,7 +15,7 @@
 
 ## 파일과 등록
 
-`images/portraits/mates/african-windsalt/af01~af30.webp`는 얼굴상 512×512, 같은 이름의 `_half.webp`는 무릎상 1024×1536 투명 WebP다. 전용 이미지 열쇠와 대화 리그의 얼굴 자리 60개를 등록했다. 이번 묶음은 초상 미술 자료이며, 인물별 능력치·등장 추첨 자료는 별도다.
+`images/portraits/mates/african-windsalt/af01~af30.webp`는 얼굴상 512×512, 같은 이름의 `_half.webp`는 무릎상 1024×1536 투명 WebP다. 전용 이미지 열쇠와 대화 리그의 얼굴 자리 60개를 등록했다. 2026-11-17에는 `afcrew_af01~30`의 능력치·특기·언어·고향·영입 자료를 연결했다. 희망봉 발견일부터 5년마다 최대 3명·40년마다 재추첨하며 현재 동료는 제외한다. [발견 기준 등장·지역·저장 규칙과 검증](../discovery-crew-20261117.md).
 
 - [인물·그림 대응 기록](../../tools/african_windsalt_20261116_assets.json)
 - [등록 도구](../../tools/register_african_windsalt_20261116.py)

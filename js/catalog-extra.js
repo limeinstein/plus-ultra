@@ -67,8 +67,8 @@
       const fameName = ({ex:'탐험',tr:'교역',bt:'전투',so:'사교'})[a.fameCat || 'ex'] || '탐험';
       scene(ach, { group: a.group, name: a.name, sub: a.group, text: a.desc, chain: chain, achId: a.id,
         ar: a.id === 'happily' ? '9 / 4' : undefined,   // 네 공주의 얼굴을 가로 원화 그대로 보여 준다.
-        meta: a.marriageRule ? '칭호 「' + a.title + '」' : fameName + ' 명성 +' + num(a.fame || 0) + ' · 금화 ' + num(a.gold || 0) + '닢' + (a.notoriety ? ' · 악명 ' + (a.notoriety > 0 ? '+' : '') + num(a.notoriety) : ''),
-        facts: [['달성 조건', a.desc], a.marriageRule ? null : [fameName + ' 명성', '+' + num(a.fame || 0)], a.marriageRule ? null : ['금화 보상', num(a.gold || 0) + '닢'],
+        meta: (a.marriageRule || a.voyageRule) ? '칭호 「' + a.title + '」' : fameName + ' 명성 +' + num(a.fame || 0) + ' · 금화 ' + num(a.gold || 0) + '닢' + (a.notoriety ? ' · 악명 ' + (a.notoriety > 0 ? '+' : '') + num(a.notoriety) : ''),
+        facts: [['달성 조건', a.desc], (a.marriageRule || a.voyageRule) ? null : [fameName + ' 명성', '+' + num(a.fame || 0)], (a.marriageRule || a.voyageRule) ? null : ['금화 보상', num(a.gold || 0) + '닢'],
           a.notoriety ? ['악명', (a.notoriety > 0 ? '+' : '') + num(a.notoriety)] : null,
           a.title ? ['칭호', a.title] : null, a.ids ? ['관련 발견물', a.ids.map(id => (G.DISC[id] || {}).name || id).join(' · ')] : null,
           a.crew ? ['관련 동료', a.crew.map(id => (G.MATE[id] || {}).name || id).join(' · ')] : null,

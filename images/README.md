@@ -1,5 +1,9 @@
 # images — 그림 교체 폴더
 
+인도양 여성 항해사 30쌍(2026-11-17)은 `portraits/mates/indian-ocean-windsalt/io01~30.webp`의 512×512 얼굴상과 `_half.webp`의 1024×1536 투명 무릎상을 쓴다. 내장 ImageGen으로 얼굴과 옷을 같은 게임 회화풍으로 그렸으며 웃음·미소·머리·복식·항해 동작을 나눴다. 각 인물은 인도항로 발견 뒤 순환 영입 자료에 연결했고 기존 `african-windsalt/af01~30`도 희망봉 발견 뒤 영입 후보로 등록했다. [전체 미리보기·원본·프롬프트·검증](../docs/art/indian-ocean-windsalt-20261116.md) · [두 집단 등장 규칙](../docs/discovery-crew-20261117.md).
+
+혼인·가족 항해 업적 5종(2026-11-16)은 `achievement-events/{casanova,uijawang,family_cruise,love_impossible,around_world_80}.webp`의 1881×836 전용 장면을 쓴다. 젊은 제독의 혼례, 노년의 연회, 가족 항해, 다국적·다인종 성인 아내들의 선상, 빠른 세계일주 귀환을 게임 회화풍으로 제작했다. [전체 그림·원본·프롬프트·검증](../docs/art/family-voyage-achievements-20261116.md).
+
 「해방자」 업적샷(2026-11-16)은 `achievement-events/liberator.webp`의 1881×836 게임 회화풍 장면을 쓴다. 아프리카 흑인 항해사들이 갑판에서 함께 항로를 정하고 환호하는 전용 원화이며, 업적 달성과 도감에 연결했다. [원본·제작 프롬프트·검증](../docs/art/liberator-achievement-20261116.md).
 
 아프리카 동물 장신구·북방 코트 15종(2026-11-16)은 `items/african_*.webp` 10장·`items/furcoat_*.webp` 5장의 256×256 투명 그림을 쓴다. 기존 업적샷 5장도 사람과 손에 맞는 장신구 크기로 수정했다. [새 품목·원화·프롬프트·검증](../docs/art/africa-fur-items-20261116.md) · [업적샷 전후 비교](../artifacts/market-collection-achievements-20261116/scale-fix-20261116/comparison.jpg).

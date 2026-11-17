@@ -42,6 +42,7 @@
       G.State.revealChart(s.loc.lon, s.loc.lat, chartR());
       UI.toast(c.name + '에서 출항했다.', 'sail');
       if (G.Audio) G.Audio.sfx('depart');
+      if (G.Achieve && G.Achieve.onVoyageStart) G.Achieve.onVoyageStart(c.id);
       // 모항 출항 배웅 (지난번 모항 출항에서 3개월이 지났으면 갈매기 떼) — js/scenes/voyagefx.js
       var gullSendoff = G.VoyageFX && G.VoyageFX.onDepart(st, c);
       if (gullSendoff && G.Audio) G.Audio.sfx('gull');

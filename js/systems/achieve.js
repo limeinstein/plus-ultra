@@ -84,6 +84,72 @@
     ];
   };
 
+  function voyageRecord() { var p = S().player; return p.voyageAchievements || (p.voyageAchievements = { familyDays: 0, familyBest: 0 }); }
+  /** 제독·이름 없는 일반 선원을 제외한 실제 동료와 동승자. 집에 있는 가족은 넣지 않는다. */
+  AC.sailingParty = function () {
+    var s = S(), p = s.player, wives = {}, kin = {}, rows = [], used = {};
+    if (p.wife) wives[p.wife] = true;
+    (p.wives2 || []).forEach(function (w) { if (w && w.id) wives[w.id] = true; });
+    (p.kids || []).concat(p.siblings || []).forEach(function (k) { if (k && k.mateId) kin[k.mateId] = true; });
+    function isWife(id) { var d = (G.MATE || {})[id] || (G.MAID || {})[id]; return !!wives[id] && (!d || d.g !== 'm'); }
+    function add(id, family, wife) { if (!used[id]) { used[id] = true; rows.push({ id: id, family: !!family, wife: !!wife }); } }
+    (s.mates || []).forEach(function (m) {
+      if (!m || !m.id) { add('missing:' + rows.length, false, false); return; }
+      var d = (G.MATE || {})[m.id];
+      add(m.id, wives[m.id] || kin[m.id] || !!(d && (d.kin === 'cousin' || d.kin === 'uncle')), isWife(m.id));
+    });
+    if (p.wife && p.wifeAboard) add(p.wife, true, isWife(p.wife));
+    (p.wives2 || []).forEach(function (w) {
+      if (w && w.aboard && (w.kind !== 'mate' || (s.mates || []).some(function (m) { return m && m.id === w.id; }))) add(w.id, true, isWife(w.id));
+    });
+    (p.kids || []).forEach(function (k, i) { if (k && k.aboard && !k.lost && !used[k.mateId]) add('child:' + i, true, false); });
+    return rows;
+  };
+  function partyAll(rows, kind) { return rows.length >= G.BALANCE.voyageAchievements.minCompanions && rows.every(function (r) { return r[kind]; }); }
+  /** 출항 시각은 항구의 출항 준비가 끝나 실제 바다에 나선 날이다. */
+  AC.onVoyageStart = function (cityId) {
+    var s = S(); if (!s || s.loc.mode !== 'sea') return [];
+    var v = voyageRecord(), rows = AC.sailingParty();
+    if (cityId === s.player.home) s.circ = { cum: 0, from: cityId, started: s.day };
+    v.lastDay = s.day;
+    if (!partyAll(rows, 'family')) v.familyDays = 0;
+    if (partyAll(rows, 'wife')) v.wivesOnly = true;
+    return AC.onVoyageAwards();
+  };
+  AC.trackVoyageDay = function () {
+    var s = S(), v = voyageRecord(), rows = AC.sailingParty(), sea = s.loc && s.loc.mode === 'sea';
+    if (v.lastDay === s.day) return;
+    if (sea && !partyAll(rows, 'family')) v.familyDays = 0;
+    else if (sea) {
+      // 옛 저장의 지나간 날짜·새 제독·누락된 검사일을 항해한 것으로 소급하지 않는다.
+      v.familyDays = v.lastDay === s.day - 1 ? (v.familyDays || 0) + 1 : 0;
+      v.familyBest = Math.max(v.familyBest || 0, v.familyDays);
+    }
+    if (sea && partyAll(rows, 'wife')) v.wivesOnly = true;
+    v.lastDay = s.day;
+  };
+  AC.onCircumReturn = function (c) {
+    var s = S(), circ = s.circ, k = G.BALANCE.voyageAchievements;
+    if (!c || c.id !== s.player.home || !circ || circ.from !== c.id || !circ.done || typeof circ.cum !== 'number' || !isFinite(circ.cum) || Math.abs(circ.cum) < 360 ||
+      typeof circ.started !== 'number' || !isFinite(circ.started) || circ.started < 0 || Math.floor(circ.started) !== circ.started) return [];
+    var days = s.day - circ.started;
+    if (days > 0 && days <= k.circDays) {
+      var v = voyageRecord(); v.circDays = v.circDays == null ? days : Math.min(v.circDays, days);
+      return AC.onVoyageAwards();
+    }
+    return [];
+  };
+  AC.onVoyageAwards = function () {
+    var s = S(), got = [];
+    AC.list().forEach(function (a) {
+      if (!a.voyageRule || AC.done(a.id) || !AC.progress(a, []).done) return;
+      grant(a); got.push(a);
+      var pend = s.achvPend || (s.achvPend = []); if (pend.indexOf(a.id) < 0) pend.push(a.id);
+      UI.toast('항해 업적 달성 · ' + a.name, 'crown', 4800);
+    });
+    return got;
+  };
+
   /** 시장 수집 기록. 옛 저장은 소지품·자택 보관함에 남은 물건으로 보충한다. */
   function collectionItem(id) { var d = G.ITEM && G.ITEM[id]; return !!(d && (d.marketCollection === 'jewels_20261116' || d.marketCollection === 'medicine_20261116')); }
   AC.itemEver = function () {
@@ -165,6 +231,12 @@
     }
     if (a.wed) { var we = wedEver(), wd = a.wed.filter(function (id) { return !!we[id]; }); rows.push({ crew: true, wed: true, ids: a.wed, got: wd, count: wd.length, n: a.n || a.wed.length }); }
     if (a.marriageRule) rows = rows.concat(AC.marriageProgress(a.marriageRule));
+    if (a.voyageRule) {
+      var v = voyageRecord(), vk = G.BALANCE.voyageAchievements;
+      if (a.voyageRule === 'family') rows.push({ label: '가족만 탄 편성의 연속 항해일 (기항일 제외)', count: v.familyBest || 0, n: vk.familyDays });
+      else if (a.voyageRule === 'wives') rows.push({ label: '현재 아내만 동승한 배로 실제 출항·항해', count: v.wivesOnly ? 1 : 0, n: 1 });
+      else if (a.voyageRule === 'circ') rows.push({ label: '출항일이 기록된 ' + vk.circDays + '일 이내 세계일주·모항 귀환', count: v.circDays > 0 && v.circDays <= vk.circDays ? 1 : 0, n: 1 });
+    }
     if (a.chains) rows.push({ label: '끝까지 푼 사슬', count: AC.chainsDone().length, n: a.chains });
     if (a.custom) rows = rows.concat(AC.rules[a.custom] ? AC.rules[a.custom]() : [{ label: a.desc, count: 0, n: 1 }]);   // 다른 파일이 셈을 맡는 업적 (해적왕 — pirate_lair.js · Dream Come True — fairy_home.js)
     if (a.everyReg) (G.REGIONS || []).forEach(function (rn, r) {
@@ -380,6 +452,7 @@
   /** 하루마다: 옛 저장의 업적·이미 열린 사슬의 단서 → 소식 */
   AC.daily = function () {
     var s = S(), out = [];
+    AC.trackVoyageDay();
     if (!G.Disc || !G.DISC_CHAIN) return out;
     for (var id in G.DISC_CHAIN) {
       var d = G.DISC[id];
@@ -392,7 +465,7 @@
     var st = store(), first = !st._init; st._init = 1;
     AC.check().forEach(function (a) {
       out.push({ icon: 'crown', text: '업적 「' + a.name + '」' + U.jx(a.name, '을/를') + ' 이루었다 — ' + rewardText(a) + (first ? '' : ' (다음 항구에서)') });
-      if (!first || a.crewComposition || a.marriageRule) (s.achvPend = s.achvPend || []).push(a.id);
+      if (!first || a.crewComposition || a.marriageRule || a.voyageRule) (s.achvPend = s.achvPend || []).push(a.id);
     });
     return out;
   };

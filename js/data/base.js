@@ -328,6 +328,7 @@
     // 혼인 정원 업적: 현재 아내 모두의 실제 혼인일을 살핀다. 정원은 wives.maxSpouses를 공유한다.
     discVoice: { w: [0.3, 0.4, 0.3] },   // 발견·독서에서 말하는 동료 1·2·3명의 선택 가중치
     marriageAchievements: { years: 3, youngMin: 20, youngMax: 29, elderMin: 70 },
+    voyageAchievements: { familyDays: 90, circDays: 80, minCompanions: 1 },   // 가족만 탄 실제 항해 3개월(90일) · 세계일주 귀환 80일 이내
     tradeDeals: { min: 1000000, fame: 600, kingFame: 3000, kingGold: 200000 },   // 대단한 거래(대륙마다 한 번의 매각 이익 min 이상)·교역왕 — js/systems/tradeking.js
     fameAchievements: {
       totalGold: [300, 600, 1200, 2000, 3000, 4000, 6000, 8000, 10000],
@@ -872,6 +873,8 @@
     japanCrew: { start: 1550, years: 5, count: 2 },  // 일본 여성 항해사 10명을 두 명씩 배정하고 25년마다 새 순서로 섞는다.
     koreaCrew: { start: 1480, years: 3, count: 1 },  // 조선 여성 20명을 한 명씩 배정하고 60년마다 새 순서로 섞는다.
     windsaltCrew: { start: 1487, years: 10, count: 10, cycle: 40 },  // 유럽 남성 30명: 세 차례 배정·10년 휴식 뒤 재추첨, 고용한 동료는 제외한다.
+    monsoonCrew: { gate: 'indiaroute', label: '인도항로', years: 5, count: 3, cycle: 40 }, // 발견일부터 8차례·최대 24명, 고용·혼인 중 제외.
+    africanCrew: { gate: 'capegood', label: '희망봉', years: 5, count: 3, cycle: 40 },    // 인도양 명부와 별도로 추첨한다.
     // 철새(떠돌이 항해사, wanderers.js): 새 게임에 startN명, 해마다 perYear명이 새로 나타난다.
     // cycle년마다(epoch부터 센다: 1510·1540·1570…) 세대가 바뀐다 — 고용하지 않은 철새는 떠나고, 그 가운데 rebornMax명의 「다음 세대」가 나타난다.
     // 다음 세대는 이름이 늘 새로 붙고, 국적은 keepNation, 성별은 keepGender 확률로 그대로다 (얼굴·솜씨 갈래는 이어받는다).

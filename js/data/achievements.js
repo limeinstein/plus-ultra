@@ -238,6 +238,13 @@
     { ids: ['hubble', 'iss', 'amundsen', 'kupe'], n: 3 }, 500, 40000, '별을 보는 제독');
 
   // ------------------------------------------------------------------ 동료
+  var VK = G.BALANCE.voyageAchievements;
+  a('동료', 'family_cruise', '가족 유람단', '동승 가족이 한 명 이상이고 동료·동승자가 모두 가족인 편성으로 ' + VK.familyDays + '일(3개월) 항해했다. 항구 체류일은 제외하며, 가족 외 동료와 항해하면 연속 기록이 초기화된다.',
+    { voyageRule: 'family' }, 0, 0, '가족 유람단');
+  a('동료', 'love_impossible', '사랑은 불가능의 영역', '제독 외 동료·동승자가 한 명 이상이며 모두 현재 아내인 배로 출항하거나 항해했다. 집에 남은 아내는 제외한다.',
+    { voyageRule: 'wives' }, 0, 0, '사랑은 불가능의 영역');
+  a('조합', 'around_world_80', '80일간의 세계일주', '모항에서 출항해 지구를 한 바퀴 돌고 ' + VK.circDays + '일 이내에 같은 모항으로 귀환했다. 중간 기항일도 소요 일수에 포함한다.',
+    { voyageRule: 'circ' }, 0, 0, '80일간의 세계일주');
   var MK = G.BALANCE.marriageAchievements, wifeCap = G.BALANCE.wives.maxSpouses;
   a('동료', 'casanova', '카사노바', '남성 제독이 만 ' + MK.youngMin + '~' + MK.youngMax + '세에 현재 아내 전원과 혼인하고, 첫 혼인일부터 ' + MK.years + '년 이내에 본처 포함 아내 정원 ' + wifeCap + '명을 채웠다.',
     { marriageRule: 'young' }, 0, 0, '카사노바');

@@ -1,0 +1,51 @@
+{
+  "mode": "builtin",
+  "size": [
+    1881,
+    836
+  ],
+  "images": [
+    {
+      "id": "love_impossible",
+      "name": "사랑은 불가능의 영역",
+      "key": "achievement-events/love_impossible",
+      "prompt": "Use case: stylized-concept. Asset type: panoramic achievement event painting for PLUS ULTRA / Loop of Good Hope historical sailing RPG, 1881 by 836 pixels. A sunlit wooden sailing-ship deck at sea with billowing ivory sails, sparkling turquoise ocean and seagulls. One handsome adult male admiral with a plain ivory shirt, long navy waistcoat and windswept brown hair stands at the center with his TWELVE beautiful adult wives, all unmistakably mature adults aged 25 to 45. This is a multinational multiracial family crew: distinct women of West African, East African, North African, South Asian, East Asian, Southeast Asian, European, Indigenous American and Pacific Islander backgrounds, with a broad natural range of skin tones, facial features, hair textures and cultural seafaring clothes. Elegant flattering but practical age-of-sail blouses, skirts, wrap cloths and robes, restrained jewelry, authentic individual hairstyles, every face beautiful, distinct and expressive. Equal partners actively sailing: a confident Black wife holds the helm, an East Asian wife and a South Asian wife read the chart together, another adjusts a sail rope, a Pacific Islander wife points to the horizon, others share affectionate smiles with their admiral and each other. Warm romantic joy and adventurous teamwork. All twelve women are his wives, no other crew or background people. Richly painted Korean/Japanese historical RPG event artwork, refined illustrated facial anatomy, consistently painterly faces, bodies, fabric, wooden deck and ocean, detailed but clearly non-photographic. Wide waist-up to knee-up group in two staggered rows, all heads completely in frame, readable large faces, central loving interactions and multiple distinct poses. Avoid static lineup. No text, no numerals, no logos, no watermarks, no borders, no interface, no modern items, no minors, no nudity or sexual activity, no photorealism. Single finished scene, not a contact sheet.",
+      "source": "C:/Users/User/.codex/generated_images/01a1de5e-8bd8-74e3-a11e-af1b258cec18/exec-395d5964-6634-40ea-8d09-d2f2e0555877.png",
+      "workspace_source": "artifacts/voyage-achievements-20261116/sources/love_impossible.png",
+      "file": "images/achievement-events/love_impossible.webp",
+      "original_size": [
+        1881,
+        836
+      ],
+      "sha256": "e419adffed3168258288e0bc4f52eebb92cc8084ed8ca5d04d9d69f455ab8921"
+    },
+    {
+      "id": "family_cruise",
+      "name": "가족 유람단",
+      "key": "achievement-events/family_cruise",
+      "prompt": "Use case: stylized-concept. Asset type: panoramic achievement event illustration for PLUS ULTRA / Loop of Good Hope age-of-sail adventure RPG. Single finished 1881 by 836 pixel painting, visibly hand-painted historical RPG art with refined illustrated faces, clear brushwork, expressive eyes, warm natural shading rather than photography. Scene: a wooden family sailing ship gliding across a calm sunny blue sea, full ivory sails, distant green coastline and harbor. An adult admiral and adult wife operate the helm together, an adult son handles a rope, an adult daughter reads a nautical chart beside an adult aunt, an elderly uncle points at the coastline. Two fully clothed children observe seabirds safely behind the deck railing near their mother, smiling. Everyone is a member of one affectionate extended family; no unrelated sailors or servants. The family has spent many months happily sailing together. Varied active natural gestures, intimate joyful eye contact, the wife laughing as the captain helps a child spot a dolphin. Beautiful tasteful plain historical maritime clothing, teal, cream and ocher, sun-warmed wood and breezy cloth. Wide cinematic waist-up to knee-up composition with all heads intact and faces clearly readable, ship details and sea subordinate to family characters. No written text, no logos, no watermarks, no border, no interface, no modern objects, no photorealism, no nudity, no romance involving children. Do not make a contact sheet.",
+      "source": "C:/Users/User/.codex/generated_images/01a1de5e-8bd8-74e3-a11e-af1b258cec18/exec-6dbfaff3-36f6-4fe1-811a-2ca2faca526f.png",
+      "workspace_source": "artifacts/voyage-achievements-20261116/sources/family_cruise.png",
+      "file": "images/achievement-events/family_cruise.webp",
+      "original_size": [
+        1880,
+        836
+      ],
+      "sha256": "2349584e42ae583a95139d76674307f629c8092c2bc2a8797eb2cb8c7d1fd9b8"
+    },
+    {
+      "id": "around_world_80",
+      "name": "80일간의 세계일주",
+      "key": "achievement-events/around_world_80",
+      "prompt": "Use case: stylized-concept. Asset type: panoramic achievement event painting for PLUS ULTRA / Loop of Good Hope historical sailing adventure RPG. Create a single 1881 by 836 pixel finished wide illustration. A triumphant age-of-sail ship is returning to its original Mediterranean home harbor after an extraordinarily fast circumnavigation. In the foreground on the ship's quarterdeck, an adult male admiral and three adult navigator companions compare a large richly drawn world chart, a brass globe, dividers, an hourglass and a travel log with indistinct unreadable marks. One navigator points to the closed route circling the globe, another raises his hat in jubilation and an adult woman navigator smiles while checking the hourglass. White sails and the bustling home harbor frame them; townspeople on the distant quay celebrate, warm sunrise lights the familiar lighthouse. Show a bold sense of completed worldwide adventure and swift passage of time using wind-filled sails, rolling wake, travel-worn chart and joyful homecoming, without printed numbers or text. Beautiful refined painted Korean/Japanese historical RPG event illustration, expressive illustrated faces and anatomy, rich consistent brushwork on characters, cloth, sea and wood, detailed but distinctly nonphotographic. Warm gold, ocean blue and ivory palette; foreground faces large and fully in frame, panoramic cinematic composition, distinct dynamic gestures. No text, no numeral 80, no logos, no watermark, no border, no interface, no modern aircraft, no steamship, no photograph. Not a collage or contact sheet.",
+      "source": "C:/Users/User/.codex/generated_images/01a1de5e-8bd8-74e3-a11e-af1b258cec18/exec-049a9617-842d-411f-aca9-63d48500afb2.png",
+      "workspace_source": "artifacts/voyage-achievements-20261116/sources/around_world_80.png",
+      "file": "images/achievement-events/around_world_80.webp",
+      "original_size": [
+        1881,
+        836
+      ],
+      "sha256": "d9bf8bf4d9047d055e7a1ad6e7b5766a34705b1d6723afa33e36d264d02e4fa4"
+    }
+  ]
+}
