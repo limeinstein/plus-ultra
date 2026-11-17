@@ -4,6 +4,7 @@
   G.ANIMAL_TRACKING = {
   "tarantula": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#29271f",
       "#564d35",
@@ -15,6 +16,7 @@
   },
   "llama": {
     "kind": "camel",
+    "habitat": "land",
     "palette": [
       "#463123",
       "#94714c",
@@ -26,6 +28,7 @@
   },
   "prairiedog": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -37,6 +40,7 @@
   },
   "moose": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -48,6 +52,7 @@
   },
   "frigatebird": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -59,6 +64,7 @@
   },
   "tortoise": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#27362c",
       "#536b46",
@@ -70,6 +76,7 @@
   },
   "albatross": {
     "kind": "bird",
+    "habitat": "special",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -81,6 +88,7 @@
   },
   "kangaroo": {
     "kind": "hop",
+    "habitat": "land",
     "palette": [
       "#423026",
       "#93603e",
@@ -92,6 +100,7 @@
   },
   "paradise": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#233e45",
       "#3b9272",
@@ -103,6 +112,7 @@
   },
   "sable": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -114,6 +124,7 @@
   },
   "tiger": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292525",
       "#d78631",
@@ -125,6 +136,7 @@
   },
   "panda": {
     "kind": "bear",
+    "habitat": "land",
     "palette": [
       "#20262c",
       "#fbf4df"
@@ -134,6 +146,7 @@
   },
   "porcupine": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -145,6 +158,7 @@
   },
   "coelacanth": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -156,6 +170,7 @@
   },
   "warthog": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -167,6 +182,7 @@
   },
   "komodo": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#27362c",
       "#536b46",
@@ -178,6 +194,7 @@
   },
   "penguin": {
     "kind": "web",
+    "habitat": "land",
     "palette": [
       "#20262c",
       "#fbf4df"
@@ -187,6 +204,7 @@
   },
   "mandrill": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -198,6 +216,7 @@
   },
   "ostrich": {
     "kind": "ostrich",
+    "habitat": "land",
     "palette": [
       "#252427",
       "#736664",
@@ -209,6 +228,7 @@
   },
   "flamingo": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#34303a",
       "#d35c7c",
@@ -220,6 +240,7 @@
   },
   "hippo": {
     "kind": "hippo",
+    "habitat": "land",
     "palette": [
       "#343634",
       "#6b746b",
@@ -231,6 +252,7 @@
   },
   "crocodile": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#27362c",
       "#536b46",
@@ -242,6 +264,7 @@
   },
   "polarbear": {
     "kind": "bear",
+    "habitat": "land",
     "palette": [
       "#39424d",
       "#b7c4c5",
@@ -252,6 +275,7 @@
   },
   "yeti": {
     "kind": "biped",
+    "habitat": "land",
     "palette": [
       "#302c34",
       "#625b72",
@@ -263,6 +287,7 @@
   },
   "roc": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -274,6 +299,7 @@
   },
   "mokele": {
     "kind": "elephant",
+    "habitat": "land",
     "palette": [
       "#33353a",
       "#777b82",
@@ -285,6 +311,7 @@
   },
   "minotaur": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -296,6 +323,7 @@
   },
   "troll": {
     "kind": "biped",
+    "habitat": "land",
     "palette": [
       "#302c34",
       "#625b72",
@@ -307,6 +335,7 @@
   },
   "nessie": {
     "kind": "water",
+    "habitat": "land",
     "palette": [
       "#203c51",
       "#437d98",
@@ -318,6 +347,7 @@
   },
   "narwhal": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -329,6 +359,7 @@
   },
   "manatee": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -340,6 +371,7 @@
   },
   "humpback": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -351,6 +383,7 @@
   },
   "f_bluefin": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -362,6 +395,7 @@
   },
   "f_swordfish": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -373,6 +407,7 @@
   },
   "f_sturgeon": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -384,6 +419,7 @@
   },
   "f_flying": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -395,6 +431,7 @@
   },
   "f_sunfish": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -406,6 +443,7 @@
   },
   "f_marlin": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -417,6 +455,7 @@
   },
   "f_puffer": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -428,6 +467,7 @@
   },
   "f_oarfish": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -439,6 +479,7 @@
   },
   "f_giantsquid": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -450,6 +491,7 @@
   },
   "f_seadragon": {
     "kind": "water",
+    "habitat": "special",
     "palette": [
       "#203c51",
       "#437d98",
@@ -461,6 +503,7 @@
   },
   "shiba": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -472,6 +515,7 @@
   },
   "pomeranian": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -483,6 +527,7 @@
   },
   "pug": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -494,6 +539,7 @@
   },
   "corgi": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -505,6 +551,7 @@
   },
   "yorkie": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#30383e",
       "#676e73",
@@ -516,6 +563,7 @@
   },
   "shihtzu": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -527,6 +575,7 @@
   },
   "golden": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -538,6 +587,7 @@
   },
   "bostonterrier": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#25272b",
       "#777b7e",
@@ -548,6 +598,7 @@
   },
   "dachshund": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -559,6 +610,7 @@
   },
   "papillon": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -570,6 +622,7 @@
   },
   "siamese": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#382c29",
       "#81664c",
@@ -581,6 +634,7 @@
   },
   "russianblue": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#30383f",
       "#687984",
@@ -592,6 +646,7 @@
   },
   "persian": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292323",
       "#aa7141",
@@ -603,6 +658,7 @@
   },
   "angora": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#8d9095",
       "#c1c7c4",
@@ -613,6 +669,7 @@
   },
   "koreancat": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292323",
       "#aa7141",
@@ -624,6 +681,7 @@
   },
   "shire": {
     "kind": "hoof",
+    "habitat": "land",
     "palette": [
       "#282321",
       "#72503b",
@@ -635,6 +693,7 @@
   },
   "friesian": {
     "kind": "hoof",
+    "habitat": "land",
     "palette": [
       "#282321",
       "#72503b",
@@ -646,6 +705,7 @@
   },
   "buffalo": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -657,6 +717,7 @@
   },
   "redhare": {
     "kind": "hoof",
+    "habitat": "land",
     "palette": [
       "#282321",
       "#72503b",
@@ -668,6 +729,7 @@
   },
   "lion": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292323",
       "#aa7141",
@@ -679,6 +741,7 @@
   },
   "hyena": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -690,6 +753,7 @@
   },
   "giraffe": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#65402b",
       "#bd8544",
@@ -701,6 +765,7 @@
   },
   "elephant": {
     "kind": "elephant",
+    "habitat": "land",
     "palette": [
       "#33353a",
       "#777b82",
@@ -712,6 +777,7 @@
   },
   "zebra": {
     "kind": "hoof",
+    "habitat": "land",
     "palette": [
       "#272a2c",
       "#eee6d3"
@@ -721,6 +787,7 @@
   },
   "rhino": {
     "kind": "rhino",
+    "habitat": "land",
     "palette": [
       "#343634",
       "#6b746b",
@@ -732,6 +799,7 @@
   },
   "chimp": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -743,6 +811,7 @@
   },
   "gorilla": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -754,6 +823,7 @@
   },
   "meerkat": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -765,6 +835,7 @@
   },
   "cheetah": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#25262b",
       "#ac834c",
@@ -776,6 +847,7 @@
   },
   "antelope": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -787,6 +859,7 @@
   },
   "fennec": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -798,6 +871,7 @@
   },
   "lemur": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -809,6 +883,7 @@
   },
   "chameleon": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#27362c",
       "#536b46",
@@ -820,6 +895,7 @@
   },
   "ploverbird": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -831,6 +907,7 @@
   },
   "whitetiger": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#25262b",
       "#777d81",
@@ -842,6 +919,7 @@
   },
   "peacock": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#233e45",
       "#3b9272",
@@ -853,6 +931,7 @@
   },
   "redpanda": {
     "kind": "bear",
+    "habitat": "land",
     "palette": [
       "#352b29",
       "#ba5c35",
@@ -864,6 +943,7 @@
   },
   "cloudleopard": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292323",
       "#aa7141",
@@ -875,6 +955,7 @@
   },
   "moonbear": {
     "kind": "bear",
+    "habitat": "land",
     "palette": [
       "#241f1b",
       "#624831",
@@ -886,6 +967,7 @@
   },
   "squirrel": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -897,6 +979,7 @@
   },
   "vinousbird": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -908,6 +991,7 @@
   },
   "crane": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#242c32",
       "#c95142",
@@ -918,6 +1002,7 @@
   },
   "shiri": {
     "kind": "water",
+    "habitat": "land",
     "palette": [
       "#203c51",
       "#437d98",
@@ -929,6 +1014,7 @@
   },
   "eagle": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -940,6 +1026,7 @@
   },
   "falcon": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -951,6 +1038,7 @@
   },
   "mallard": {
     "kind": "web",
+    "habitat": "land",
     "palette": [
       "#20282e",
       "#496875",
@@ -962,6 +1050,7 @@
   },
   "stork": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#242c32",
       "#c95142",
@@ -972,6 +1061,7 @@
   },
   "anteater": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -983,6 +1073,7 @@
   },
   "armadillo": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -994,6 +1085,7 @@
   },
   "boa": {
     "kind": "snake",
+    "habitat": "land",
     "palette": [
       "#203b2c",
       "#417448",
@@ -1005,6 +1097,7 @@
   },
   "parrot": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#233e45",
       "#3b9272",
@@ -1016,6 +1109,7 @@
   },
   "iguana": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#27362c",
       "#536b46",
@@ -1027,6 +1121,7 @@
   },
   "hermitcrab": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#4b302a",
       "#a34d34",
@@ -1038,6 +1133,7 @@
   },
   "turkey": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -1049,6 +1145,7 @@
   },
   "roadrunner": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -1060,6 +1157,7 @@
   },
   "skunk": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#25272b",
       "#777b7e",
@@ -1070,6 +1168,7 @@
   },
   "coyote": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -1081,6 +1180,7 @@
   },
   "sealion": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1092,6 +1192,7 @@
   },
   "floridawolf": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -1103,6 +1204,7 @@
   },
   "hudsonwolf": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -1114,6 +1216,7 @@
   },
   "arcticwolf": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#39424d",
       "#b7c4c5",
@@ -1124,6 +1227,7 @@
   },
   "graywolf": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -1135,6 +1239,7 @@
   },
   "otter": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -1146,6 +1251,7 @@
   },
   "whale": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1157,6 +1263,7 @@
   },
   "lobster": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#4b302a",
       "#a34d34",
@@ -1168,6 +1275,7 @@
   },
   "dolphin": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1179,6 +1287,7 @@
   },
   "mammoth": {
     "kind": "elephant",
+    "habitat": "land",
     "palette": [
       "#30271f",
       "#79523a",
@@ -1190,6 +1299,7 @@
   },
   "elf": {
     "kind": "biped",
+    "habitat": "land",
     "palette": [
       "#333b22",
       "#55743a",
@@ -1201,6 +1311,7 @@
   },
   "kraken": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#412d55",
       "#7c4b91",
@@ -1212,6 +1323,7 @@
   },
   "reddragon": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#8f302c",
       "#c84b2d",
@@ -1223,6 +1335,7 @@
   },
   "unicorn": {
     "kind": "hoof",
+    "habitat": "land",
     "palette": [
       "#887550",
       "#c7af72",
@@ -1234,6 +1347,7 @@
   },
   "mermaid": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#21595e",
       "#3f9c98",
@@ -1245,6 +1359,7 @@
   },
   "dragon": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1256,6 +1371,7 @@
   },
   "phoenix": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#8f302c",
       "#c84b2d",
@@ -1267,6 +1383,7 @@
   },
   "koala": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -1278,6 +1395,7 @@
   },
   "platypus": {
     "kind": "web",
+    "habitat": "land",
     "palette": [
       "#20282e",
       "#496875",
@@ -1289,6 +1407,7 @@
   },
   "dingo": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -1300,6 +1419,7 @@
   },
   "budgie": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#233e45",
       "#3b9272",
@@ -1311,6 +1431,7 @@
   },
   "kiwi": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -1322,6 +1443,7 @@
   },
   "sailfish": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1333,6 +1455,7 @@
   },
   "pufferfish": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1344,6 +1467,7 @@
   },
   "jellyfish": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#65568e",
       "#9a9dca",
@@ -1355,6 +1479,7 @@
   },
   "manta": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1366,6 +1491,7 @@
   },
   "lionfish": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#292525",
       "#d78631",
@@ -1377,6 +1503,7 @@
   },
   "angelfish": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203550",
       "#387eaa",
@@ -1388,6 +1515,7 @@
   },
   "clownfish": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#25282c",
       "#d36b27",
@@ -1399,6 +1527,7 @@
   },
   "bluetang": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#1b2b40",
       "#225aab",
@@ -1410,6 +1539,7 @@
   },
   "himalwolf": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#302721",
       "#875436",
@@ -1421,6 +1551,7 @@
   },
   "smilodon": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292323",
       "#aa7141",
@@ -1432,6 +1563,7 @@
   },
   "brachio": {
     "kind": "elephant",
+    "habitat": "land",
     "palette": [
       "#33353a",
       "#777b82",
@@ -1443,6 +1575,7 @@
   },
   "trex": {
     "kind": "raptor",
+    "habitat": "land",
     "palette": [
       "#303829",
       "#677646",
@@ -1454,6 +1587,7 @@
   },
   "trike": {
     "kind": "rhino",
+    "habitat": "land",
     "palette": [
       "#343634",
       "#6b746b",
@@ -1465,6 +1599,7 @@
   },
   "stego": {
     "kind": "rhino",
+    "habitat": "land",
     "palette": [
       "#623b2b",
       "#a55d3d",
@@ -1476,6 +1611,7 @@
   },
   "phoenixw": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#8f302c",
       "#c84b2d",
@@ -1487,6 +1623,7 @@
   },
   "blackdragon": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#242a30",
       "#495867",
@@ -1498,6 +1635,7 @@
   },
   "chimera": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#27362c",
       "#536b46",
@@ -1509,6 +1647,7 @@
   },
   "cyclops": {
     "kind": "biped",
+    "habitat": "land",
     "palette": [
       "#302c34",
       "#625b72",
@@ -1520,6 +1659,7 @@
   },
   "titan": {
     "kind": "biped",
+    "habitat": "land",
     "palette": [
       "#302c34",
       "#625b72",
@@ -1531,6 +1671,7 @@
   },
   "oni": {
     "kind": "biped",
+    "habitat": "land",
     "palette": [
       "#392f32",
       "#8d3436",
@@ -1542,6 +1683,7 @@
   },
   "dokkaebi": {
     "kind": "biped",
+    "habitat": "land",
     "palette": [
       "#2d3b30",
       "#497c5b",
@@ -1553,6 +1695,7 @@
   },
   "gumiho": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#633e2f",
       "#b96e45",
@@ -1564,6 +1707,7 @@
   },
   "gwisin": {
     "kind": "ghost",
+    "habitat": "land",
     "palette": [
       "#34394e",
       "#70879e",
@@ -1575,6 +1719,7 @@
   },
   "hyeonmu": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#252e31",
       "#326762",
@@ -1586,6 +1731,7 @@
   },
   "isonade": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1597,6 +1743,7 @@
   },
   "bakunawa": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#243e52",
       "#286c79",
@@ -1608,6 +1755,7 @@
   },
   "xiangliu": {
     "kind": "snake",
+    "habitat": "land",
     "palette": [
       "#203b2c",
       "#417448",
@@ -1619,6 +1767,7 @@
   },
   "zaratan": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1630,6 +1779,7 @@
   },
   "leviathan": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#243e52",
       "#286c79",
@@ -1641,6 +1791,7 @@
   },
   "apophis": {
     "kind": "snake",
+    "habitat": "land",
     "palette": [
       "#203b2c",
       "#417448",
@@ -1652,6 +1803,7 @@
   },
   "jormungandr": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#284c38",
       "#507a48",
@@ -1663,6 +1815,7 @@
   },
   "fenrir": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#30343a",
       "#727c82",
@@ -1674,6 +1827,7 @@
   },
   "yakumama": {
     "kind": "snake",
+    "habitat": "land",
     "palette": [
       "#203b2c",
       "#417448",
@@ -1685,6 +1839,7 @@
   },
   "cipactli": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1696,6 +1851,7 @@
   },
   "giant-octopus": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1707,6 +1863,7 @@
   },
   "sea-serpent": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1718,6 +1875,7 @@
   },
   "sea-dragon": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#243e52",
       "#286c79",
@@ -1729,6 +1887,7 @@
   },
   "man-eating-shark": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1740,6 +1899,7 @@
   },
   "ghost-ship": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1751,6 +1911,7 @@
   },
   "yelbegen": {
     "kind": "lizard",
+    "habitat": "land",
     "palette": [
       "#27362c",
       "#536b46",
@@ -1762,6 +1923,7 @@
   },
   "sunbear": {
     "kind": "bear",
+    "habitat": "land",
     "palette": [
       "#241f1b",
       "#624831",
@@ -1773,6 +1935,7 @@
   },
   "tapir": {
     "kind": "hippo",
+    "habitat": "land",
     "palette": [
       "#343634",
       "#6b746b",
@@ -1784,6 +1947,7 @@
   },
   "gibbon": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -1795,6 +1959,7 @@
   },
   "proboscis": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -1806,6 +1971,7 @@
   },
   "tarsier": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -1817,6 +1983,7 @@
   },
   "flyingfox": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#252736",
       "#3567a4",
@@ -1828,6 +1995,7 @@
   },
   "dugong": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1839,6 +2007,7 @@
   },
   "hornbill": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#233e45",
       "#3b9272",
@@ -1850,6 +2019,7 @@
   },
   "babirusa": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -1861,6 +2031,7 @@
   },
   "kingcobra": {
     "kind": "snake",
+    "habitat": "land",
     "palette": [
       "#203b2c",
       "#417448",
@@ -1872,6 +2043,7 @@
   },
   "amurtiger": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292525",
       "#d78631",
@@ -1883,6 +2055,7 @@
   },
   "snowleopard": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#25262b",
       "#ac834c",
@@ -1894,6 +2067,7 @@
   },
   "yak": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -1905,6 +2079,7 @@
   },
   "bactrian": {
     "kind": "camel",
+    "habitat": "land",
     "palette": [
       "#463123",
       "#94714c",
@@ -1916,6 +2091,7 @@
   },
   "przewalski": {
     "kind": "hoof",
+    "habitat": "land",
     "palette": [
       "#282321",
       "#72503b",
@@ -1927,6 +2103,7 @@
   },
   "saiga": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -1938,6 +2115,7 @@
   },
   "reindeer": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -1949,6 +2127,7 @@
   },
   "baikalseal": {
     "kind": "water",
+    "habitat": "land",
     "palette": [
       "#203c51",
       "#437d98",
@@ -1960,6 +2139,7 @@
   },
   "argali": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -1971,6 +2151,7 @@
   },
   "chiru": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -1982,6 +2163,7 @@
   },
   "kulan": {
     "kind": "hoof",
+    "habitat": "land",
     "palette": [
       "#282321",
       "#72503b",
@@ -1993,6 +2175,7 @@
   },
   "snowyowl": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#39424d",
       "#b7c4c5",
@@ -2003,6 +2186,7 @@
   },
   "muskdeer": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -2014,6 +2198,7 @@
   },
   "manul": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292323",
       "#aa7141",
@@ -2025,6 +2210,7 @@
   },
   "bncrane": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#242c32",
       "#c95142",
@@ -2035,6 +2221,7 @@
   },
   "oryx": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -2046,6 +2233,7 @@
   },
   "dromedary": {
     "kind": "camel",
+    "habitat": "land",
     "palette": [
       "#463123",
       "#94714c",
@@ -2057,6 +2245,7 @@
   },
   "nubianibex": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -2068,6 +2257,7 @@
   },
   "sacredibis": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#242c32",
       "#c95142",
@@ -2078,6 +2268,7 @@
   },
   "vancat": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292323",
       "#aa7141",
@@ -2089,6 +2280,7 @@
   },
   "leopard": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#25262b",
       "#ac834c",
@@ -2100,6 +2292,7 @@
   },
   "baboon": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -2111,6 +2304,7 @@
   },
   "wildebeest": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -2122,6 +2316,7 @@
   },
   "okapi": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -2133,6 +2328,7 @@
   },
   "asianelephant": {
     "kind": "elephant",
+    "habitat": "land",
     "palette": [
       "#33353a",
       "#777b82",
@@ -2144,6 +2340,7 @@
   },
   "snowmonkey": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -2155,6 +2352,7 @@
   },
   "bison": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -2166,6 +2364,7 @@
   },
   "beaver": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -2177,6 +2376,7 @@
   },
   "baldeagle": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#242c32",
       "#c95142",
@@ -2187,6 +2387,7 @@
   },
   "jaguar": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#25262b",
       "#ac834c",
@@ -2198,6 +2399,7 @@
   },
   "sloth": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -2209,6 +2411,7 @@
   },
   "toucan": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -2220,6 +2423,7 @@
   },
   "capybara": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -2231,6 +2435,7 @@
   },
   "brownbear": {
     "kind": "bear",
+    "habitat": "land",
     "palette": [
       "#241f1b",
       "#624831",
@@ -2242,6 +2447,7 @@
   },
   "redfox": {
     "kind": "dog",
+    "habitat": "land",
     "palette": [
       "#352b29",
       "#ba5c35",
@@ -2253,6 +2459,7 @@
   },
   "lynx": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292323",
       "#aa7141",
@@ -2264,6 +2471,7 @@
   },
   "wombat": {
     "kind": "small",
+    "habitat": "land",
     "palette": [
       "#322920",
       "#786047",
@@ -2275,6 +2483,7 @@
   },
   "emu": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -2286,6 +2495,7 @@
   },
   "emperorpenguin": {
     "kind": "web",
+    "habitat": "sea",
     "palette": [
       "#20262c",
       "#fbf4df"
@@ -2295,6 +2505,7 @@
   },
   "walrus": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -2306,6 +2517,7 @@
   },
   "condor": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -2317,6 +2529,7 @@
   },
   "hummingbird": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#282c2e",
       "#756a42",
@@ -2328,6 +2541,7 @@
   },
   "anaconda": {
     "kind": "snake",
+    "habitat": "land",
     "palette": [
       "#203b2c",
       "#417448",
@@ -2339,6 +2553,7 @@
   },
   "piranha": {
     "kind": "water",
+    "habitat": "land",
     "palette": [
       "#203c51",
       "#437d98",
@@ -2350,6 +2565,7 @@
   },
   "boto": {
     "kind": "water",
+    "habitat": "land",
     "palette": [
       "#203c51",
       "#437d98",
@@ -2361,6 +2577,7 @@
   },
   "vicuna": {
     "kind": "camel",
+    "habitat": "land",
     "palette": [
       "#463123",
       "#94714c",
@@ -2372,6 +2589,7 @@
   },
   "grizzly": {
     "kind": "bear",
+    "habitat": "land",
     "palette": [
       "#241f1b",
       "#624831",
@@ -2383,6 +2601,7 @@
   },
   "raccoon": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#2b2e31",
       "#6d7373",
@@ -2394,6 +2613,7 @@
   },
   "opossum": {
     "kind": "hand",
+    "habitat": "land",
     "palette": [
       "#29241f",
       "#736044",
@@ -2405,6 +2625,7 @@
   },
   "puma": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#292323",
       "#aa7141",
@@ -2416,6 +2637,7 @@
   },
   "marineiguana": {
     "kind": "lizard",
+    "habitat": "sea",
     "palette": [
       "#27362c",
       "#536b46",
@@ -2427,6 +2649,7 @@
   },
   "magellanpenguin": {
     "kind": "web",
+    "habitat": "sea",
     "palette": [
       "#20262c",
       "#fbf4df"
@@ -2436,6 +2659,7 @@
   },
   "muskox": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -2447,6 +2671,7 @@
   },
   "bighorn": {
     "kind": "split",
+    "habitat": "land",
     "palette": [
       "#302b25",
       "#856346",
@@ -2458,6 +2683,7 @@
   },
   "dartfrog": {
     "kind": "frog",
+    "habitat": "land",
     "palette": [
       "#252b30",
       "#2c88c7",
@@ -2469,6 +2695,7 @@
   },
   "electriceel": {
     "kind": "snake",
+    "habitat": "land",
     "palette": [
       "#203b2c",
       "#417448",
@@ -2480,6 +2707,7 @@
   },
   "seaotter": {
     "kind": "water",
+    "habitat": "sea",
     "palette": [
       "#203c51",
       "#437d98",
@@ -2491,6 +2719,7 @@
   },
   "morpho": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#25253b",
       "#245fc0",
@@ -2502,6 +2731,7 @@
   },
   "glasswing": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#25253b",
       "#245fc0",
@@ -2513,6 +2743,7 @@
   },
   "hercules": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2524,6 +2755,7 @@
   },
   "titanus": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2535,6 +2767,7 @@
   },
   "monarchwinter": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#28262a",
       "#d77b32",
@@ -2546,6 +2779,7 @@
   },
   "silverscarab": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2557,6 +2791,7 @@
   },
   "lanternfly": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2568,6 +2803,7 @@
   },
   "lunamoth": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#385c43",
       "#7ebc83",
@@ -2579,6 +2815,7 @@
   },
   "periodical": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2590,6 +2827,7 @@
   },
   "eightyeight": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#28262a",
       "#d77b32",
@@ -2601,6 +2839,7 @@
   },
   "swallowtail": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#28262a",
       "#d77b32",
@@ -2612,6 +2851,7 @@
   },
   "emeraldswallow": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#233330",
       "#377750",
@@ -2623,6 +2863,7 @@
   },
   "birdwing": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#233330",
       "#377750",
@@ -2634,6 +2875,7 @@
   },
   "sasakia": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#252736",
       "#3567a4",
@@ -2645,6 +2887,7 @@
   },
   "atlasmoth": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#4c382f",
       "#946a49",
@@ -2656,6 +2899,7 @@
   },
   "deadleaf": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#4c382f",
       "#946a49",
@@ -2667,6 +2911,7 @@
   },
   "bhutanglory": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#252736",
       "#3567a4",
@@ -2678,6 +2923,7 @@
   },
   "chalcosoma": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2689,6 +2935,7 @@
   },
   "giraffestag": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2700,6 +2947,7 @@
   },
   "tamamushi": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2711,6 +2959,7 @@
   },
   "fireflyriver": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#252736",
       "#3567a4",
@@ -2722,6 +2971,7 @@
   },
   "orchidmantis": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2733,6 +2983,7 @@
   },
   "rainbowstag": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2744,6 +2995,7 @@
   },
   "sunsetmoth": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#302d3f",
       "#6c4e8b",
@@ -2755,6 +3007,7 @@
   },
   "cometmoth": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#4c382f",
       "#946a49",
@@ -2766,6 +3019,7 @@
   },
   "giantswallow": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#252736",
       "#3567a4",
@@ -2777,6 +3031,7 @@
   },
   "goliath": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2788,6 +3043,7 @@
   },
   "sacredscarab": {
     "kind": "insect",
+    "habitat": "land",
     "palette": [
       "#242d26",
       "#496544",
@@ -2799,6 +3055,7 @@
   },
   "motherpearl": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#28262a",
       "#d77b32",
@@ -2810,6 +3067,7 @@
   },
   "peacockbf": {
     "kind": "flutter",
+    "habitat": "land",
     "palette": [
       "#252736",
       "#3567a4",
@@ -2821,6 +3079,7 @@
   },
   "siberiancrane": {
     "kind": "bird",
+    "habitat": "land",
     "palette": [
       "#242c32",
       "#c95142",
@@ -2831,6 +3090,7 @@
   },
   "wolverine": {
     "kind": "bear",
+    "habitat": "land",
     "palette": [
       "#241f1b",
       "#624831",
@@ -2842,6 +3102,7 @@
   },
   "amurleopard": {
     "kind": "cat",
+    "habitat": "land",
     "palette": [
       "#25262b",
       "#ac834c",

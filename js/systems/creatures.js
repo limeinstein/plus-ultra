@@ -3,7 +3,7 @@
      리치·흡혈귀·늑대인간·해골 기사·트롤·미노타우로스·예티 (이야기: js/data/creaturelines.js G.MONSTER_TALES) · 엘프·세계수 (G.ELVES 가운데 하나)
      겨룬다 / 부관에게 맡긴다 / 물러선다 → 이기면 「어떻게 끝낼까」 선택 (애증의 갈림길) · 지거나 물러서면 retryDays 뒤에 다시
      저장: s.disc[id].mon = {done, res} · s.disc[id].monBlock = 다시 다가갈 수 있는 날
-   ■ G.Elves — 북방의 숲(elf.zone)에서 엘프가 우연히 길을 막는다. 세계수(발견물) 가까이일수록 자주. 엘프마다 말이 다르다.
+   ■ G.Elves — 북방의 숲(elf.zone)에서 엘프 자매 20명(js/data/elfsisters.js) 가운데 하나가 우연히 길을 막는다. 세계수 가까이일수록 자주. 엘프마다 말이 다르고, 자매가 얽히면(먼저 진 자매·배에 탄 자매) 대사가 더 붙는다.
      이긴 엘프는 back 확률로 elf.backDays(30)일 뒤 다시 나타나 「그때와는 달리 너를 따라가고 싶다」며 한 번 더 겨루고 → 이기면 동료
      저장: s.elves = {met, beat, back: {id: 날}, joined, declined, last}
    ■ G.Guardian — 힘센 짐승의 새끼·알(r_<발견>_baby, G.GUARDIANS)을 지니고 뭍에 있으면, 그 짐승이 사는 곳에서 range° 안이면
@@ -59,67 +59,108 @@
     return { res: res === 'win' ? 'win' : 'lose', mate: fm };
   }
 
-  // ================================================================ 엘프
+  // ================================================================ 엘프 — 엘프 자매 20명 가운데 (js/data/elfsisters.js · 대사 js/data/creaturelines.js G.ELVES)
   var E = G.Elves = {};
   function ES() { var s = S(); return s.elves || (s.elves = { met: {}, beat: {}, back: {}, joined: {}, declined: {}, last: -999 }); }
-  E.get = function (id) { return (G.ELVES || []).filter(function (e) { return e.id === id; })[0] || null; };
+  E.get = function (id) { return (G.ELVES || []).concat(G.LEGACY_ELVES || []).filter(function (e) { return e.id === id && G.MATE[id]; })[0] || null; };
+  function md(e) { return G.MATE[e.id] || {}; }
+  E.nameOf = function (e) { return String(md(e).name || e.id).replace(/\s*\(.*\)\s*$/, ''); };
+  E.rank = function (e) { return md(e).sisterRank === '언니' ? '언니' : '여동생'; };
+  E.sister = function (e) { var sid = md(e).sisterId; return sid && G.MATE[sid] ? sid : null; };
+  function aboard(id) { return S().mates.some(function (m) { return m.id === id; }); }
   E.speaker = function (e) {
-    var A = G.Art, sp = A && A.npcSpec ? A.npcSpec('elf:' + e.id, e.old ? 'priest' : 'soldier', 'ne', e.g) : null;
-    if (sp) { sp.noRole = true; A.withImg(sp, ['portraits/creatures/' + e.id, 'portraits/creatures/elf']); }
-    return { name: e.name + ' (엘프)', portrait: sp, lang: 3 };
+    var sp = G.Art && G.Art.mateSpec ? G.Art.mateSpec(e.id) : null;
+    return { name: E.nameOf(e) + ' (엘프)', portrait: sp, lang: 3 };
   };
-  /** 아직 만나지 않은 엘프 하나 (없으면 null) */
+  function common(kind, e) { if (e[kind]) return e[kind]; var C = (G.ELF_COMMON || {})[kind] || {}, L = C[E.rank(e)] || C['언니'] || ['…']; return U.pick(L); }
+  function sisLine(kind, e) {
+    var T = (G.ELF_SISTER_TALK || {})[kind], sid = E.sister(e); if (!T || !sid) return null;
+    var t = T[E.rank(e)]; return t ? t.replace(/\{sis\}/g, E.nameOf({ id: sid })).replace(/\{me\}/g, E.nameOf(e)) : null;
+  }
+  /** 아직 만나지 않았고 배에도 없는 엘프 하나 (없으면 null) — 술집에서 이미 맞은 엘프는 빠진다 */
   E.fresh = function () {
-    var es = ES(), L = (G.ELVES || []).filter(function (e) { return !es.met[e.id] && !es.joined[e.id]; });
+    var es = ES(), L = (G.ELVES || []).filter(function (e) { return G.MATE[e.id] && es.met[e.id] == null && es.joined[e.id] == null && !aboard(e.id); });
     return L.length ? U.pick(L) : null;
   };
   E.inZone = function (lon, lat) { var z = K().elf.zone; return lon >= z[0] && lon <= z[1] && lat >= z[2] && lat <= z[3]; };
   function treeNear(lon, lat) { var d = G.DISC && G.DISC.worldtree; return d ? G.Geo.dist(lon, lat, d.lon, d.lat) : 999; }
-  /** 엘프와 겨룬다 — mode: 'random'(숲에서 우연히) | 'disc'(세계수·엘프 발견물 앞) → 'win' | 'lose' | 'back' */
+  function duelSpec(e) {
+    var st = md(e).st || [70, 70, 80, 80];
+    return { str: st[0], atk: 10 + Math.round(st[2] / 30), def: 2, skill: (md(e).sk || {}).sword || 2, mar: st[2], int: st[1], cha: st[3], style: e.style || 'slash' };
+  }
+  function joinElf(e, quiet) {
+    var es = ES(), s = S();
+    es.joined[e.id] = s.day; delete es.back[e.id];
+    if (!aboard(e.id)) {
+      if (G.Legend && G.Legend.join) G.Legend.join(e.id);
+      else { s.mates.push({ id: e.id, role: 'none', joined: U.dateNum(s.date), loyal: 85 }); UI.toast(E.nameOf(e) + ' 동료가 되었다.', 'people', 3600); }
+    }
+    var nm = s.mates.filter(function (m) { return m.id === e.id; })[0]; if (nm) nm.loyal = Math.max(nm.loyal || 0, 88);
+    if (!quiet) G.State.log('세계수의 엘프 ' + E.nameOf(e) + U.jx(E.nameOf(e), '이/가') + ' 「그때와는 달리, 너를 따라가고 싶다」며 동료가 되었다.');
+  }
+  /** 엘프와 겨룬다 — mode: 'random'(숲에서 우연히) | 'disc'(세계수·엘프 바위 앞) → 'win' | 'lose' | 'back' | 'sister'(자매가 설득했다) */
   E.duel = async function (e, mode, place) {
-    var es = ES(), s = S(), who = E.speaker(e);
+    var es = ES(), s = S(), who = E.speaker(e), nm = E.nameOf(e), sid = E.sister(e);
     es.met[e.id] = s.day; es.last = s.day;
-    await UI.say(U.pick(['숲 사이로 은빛이 번뜩이더니, 귀 끝이 뾰족한 이가 나무 그늘에서 걸어 나와 길을 막는다.', '바람도 없는데 나뭇잎이 일제히 뒤집힌다. 잿빛 머리의 엘프가 칼을 비스듬히 든 채 앞을 막아선다.']), {});
-    UI.toast('엘프 — ' + e.name + ' · ' + e.title, 'leaf', 5200);
-    for (var i = 0; i < e.meet.length; i++) await UI.say(e.meet[i], who);
+    await UI.say(U.pick(['숲 사이로 은빛이 번뜩이더니, 귀 끝이 뾰족한 이가 나무 그늘에서 걸어 나와 길을 막는다.', '바람도 없는데 나뭇잎이 일제히 뒤집힌다. 엘프 하나가 칼을 비스듬히 든 채 앞을 막아선다.']), {});
+    UI.toast('엘프 — ' + nm + (sid ? ' (' + E.nameOf({ id: sid }) + '의 ' + E.rank(e) + ')' : ''), 'leaf', 5200);
+    await UI.say(e.meet[0], who);
+    // 자매가 이미 우리 배에 있다 — 끼어들어 말린다
+    if (sid && aboard(sid)) {
+      var sw = { name: E.nameOf({ id: sid }), portrait: G.Art.mateSpec(sid) };
+      await UI.say(sisLine('stop', { id: sid }) || '칼 내려!', sw);
+      await UI.say(sisLine('reply', e) || '…', who);
+      var v0 = await UI.ask(nm + U.jx(nm, '이/가') + ' 망설인다. 어떻게 할까?', [{ label: E.nameOf({ id: sid }) + '에게 설득을 맡긴다', value: 'talk' }, { label: '그래도 겨룬다 (일기토)', value: 'duel' }], first());
+      if (v0 === 'talk') {
+        await UI.say(sisLine('persuade', e) || '…좋아.', who);
+        es.beat[e.id] = s.day; joinElf(e);
+        G.State.log('엘프 ' + nm + U.jx(nm, '이/가') + ' 자매 ' + E.nameOf({ id: sid }) + '의 설득으로 동료가 되었다.');
+        return mode === 'disc' ? 'win' : 'sister';
+      }
+    } else {
+      await UI.say(e.meet[1], who);
+      if (sid && es.beat[sid]) await UI.say(sisLine('beaten', e), who);
+    }
     if (mode === 'random') await UI.say(U.pick(['제독, 세계수를 지킨다는 엘프입니다. …말은 저래도 정말로 우리가 나무를 해칠까 봐 겁내는 것 같습니다.', '북방 사람들이 말하던 숲의 사람들입니다. 싸우지 않고 돌아설 수도 있습니다, 제독.']), first());
-    var c = await challenge(fighter(e.name, e.duel, 'elf'), e.name + U.jx(e.name, '이/가') + ' 칼을 들고 길을 막는다. 어떻게 할까?', place || 'explore', mode === 'random' ? '물러선다 (돌아서 간다)' : '물러선다 (' + K().retryDays + '일 뒤에 다시)', function () { return UI.say(e.dare, who); });
-    if (c.res === 'back') { await UI.say(e.lose, who); return 'back'; }
+    var c = await challenge(fighter(nm, duelSpec(e), 'elf'), nm + U.jx(nm, '이/가') + ' 칼을 들고 길을 막는다. 어떻게 할까?', place || 'explore',
+      mode === 'random' ? '물러선다 (돌아서 간다)' : '물러선다 (' + K().retryDays + '일 뒤에 다시)', function () { return UI.say(common('dare', e), who); });
+    if (c.res === 'back') { await UI.say(common('lose', e), who); return 'back'; }
     if (c.res === 'win') {
       await UI.say(e.win, who);
       es.beat[e.id] = s.day;
       G.Fame.add('bt', K().winFame);
-      G.State.log('세계수를 지키는 엘프 ' + e.name + U.jx(e.name, '와/과') + ' 겨루어 이겼다.');
+      G.State.log('세계수를 지키는 엘프 ' + nm + U.jx(nm, '와/과') + ' 겨루어 이겼다.');
       if (U.chance(e.back == null ? 0.7 : e.back)) es.back[e.id] = s.day + K().elf.backDays;
       if (mode === 'random' && U.chance(K().elf.gift)) giveItem('cr_elf_arrowhead');
       return 'win';
     }
-    await UI.say(e.lose, who);
+    await UI.say(common('lose', e), who);
     if (s.fleet) s.fleet.fatigue = Math.min(100, (s.fleet.fatigue || 0) + 8);
     return 'lose';
   };
   /** 이긴 엘프가 돌아왔는가 */
-  E.due = function () { var es = S() && ES(), s = S(); if (!es) return null; for (var id in es.back) if (s.day >= es.back[id] && !es.joined[id] && E.get(id)) return id; return null; };
+  E.due = function () { var s = S(); if (!s) return null; var es = ES(); for (var id in es.back) if (s.day >= es.back[id] && es.joined[id] == null && !aboard(id) && E.get(id)) return id; return null; };
   E.pending = function () { return !!(S() && E.due()); };
   /** 30일 뒤: 「그때와는 달리 너를 따라가고 싶다」 — 한 번 더 겨루고, 이기면 동료가 된다 */
   E.comeBack = async function (id, place) {
-    var e = E.get(id), es = ES(), s = S(), who = E.speaker(e); if (!e) return;
+    var e = E.get(id), es = ES(), s = S(); if (!e) return;
+    var who = E.speaker(e), nm = E.nameOf(e), sid = E.sister(e);
     delete es.back[id];
-    await UI.say(U.pick(['어디선가 낯익은 은빛이 번뜩인다. 그때 길을 막았던 엘프가 이번에는 칼을 내린 채 걸어 나온다.', '어느새 일행 곁에 잿빛 머리의 엘프가 서 있다. 한 달 전, 숲에서 칼을 겨눴던 바로 그 얼굴이다.']), {});
+    await UI.say(U.pick(['어디선가 낯익은 은빛이 번뜩인다. 그때 길을 막았던 엘프가 이번에는 칼을 내린 채 걸어 나온다.', '어느새 일행 곁에 엘프 하나가 서 있다. 한 달 전, 숲에서 칼을 겨눴던 바로 그 얼굴이다.']), {});
     for (var i = 0; i < e.backTalk.length; i++) await UI.say(e.backTalk[i], who);
-    var v = await UI.ask(e.name + U.jx(e.name, '이/가') + ' 따라가고 싶다고 한다. 어떻게 할까?', [{ label: '받아들인다 (한 번 더 겨룬다)', value: 'yes' }, { label: '거절한다', value: 'no' }], first());
-    if (v !== 'yes') { await UI.say(e.decline, who); es.declined[id] = s.day; return; }
-    await UI.say(e.again, who);
-    var res = await G.Games.duel(fighter(e.name, e.duel, 'elf'), { place: place || 'explore' });
+    var v = await UI.ask(nm + U.jx(nm, '이/가') + ' 따라가고 싶다고 한다. 어떻게 할까?', [{ label: '받아들인다 (한 번 더 겨룬다)', value: 'yes' }, { label: '거절한다', value: 'no' }], first());
+    if (v !== 'yes') { await UI.say(common('decline', e), who); es.declined[id] = s.day; return; }
+    await UI.say(common('again', e), who);
+    var res = await G.Games.duel(fighter(nm, duelSpec(e), 'elf'), { place: place || 'explore' });
     if (res === 'win') {
       await UI.say(e.join, who);
-      es.joined[id] = s.day;
-      if (G.Legend && G.Legend.join) G.Legend.join(id);
-      else { s.mates.push({ id: id, role: 'none', joined: U.dateNum(s.date), loyal: 85 }); UI.toast(e.name + ' 동료가 되었다.', 'people', 3600); }
-      var nm = s.mates.filter(function (m) { return m.id === id; })[0]; if (nm) nm.loyal = Math.max(nm.loyal || 0, 88);
-      G.State.log('세계수의 엘프 ' + e.name + U.jx(e.name, '이/가') + ' 「그때와는 달리, 너를 따라가고 싶다」며 동료가 되었다.');
+      joinElf(e);
+      if (sid && aboard(sid)) {   // 자매가 먼저 배에 있었다
+        await UI.say(sisLine('reunion', e), who);
+        await UI.say(sisLine('sisReply', { id: sid }) || '어서 와.', { name: E.nameOf({ id: sid }), portrait: G.Art.mateSpec(sid) });
+      }
     } else {
-      await UI.say(e.fail, who);
+      await UI.say(common('fail', e), who);
       es.back[id] = s.day + K().elf.backDays;
     }
   };
@@ -257,11 +298,7 @@
     ctx.globalAlpha = 1;
     if (seen) {
       var fr = SP.at(g.sheet, 0, 'walk', t, 8), face = G.Geo.wrapLon(l.lon - C.lon) < 0, kk = Math.min(0.42, 26 * (g.k || 2) / 150);
-      SP.draw(ctx, g.sheet, 0, fr, p[0], p[1] + 8, kk, face);
-      ctx.font = '700 15px ' + ff; ctx.textAlign = 'center';
-      var tw = ctx.measureText(g.name).width;
-      ctx.fillStyle = 'rgba(60,10,6,.72)'; ctx.fillRect(p[0] - tw / 2 - 6, p[1] - 92, tw + 12, 21);
-      ctx.fillStyle = '#ffd9c8'; ctx.fillText(g.name, p[0], p[1] - 76);
+      SP.draw(ctx, g.sheet, 0, fr, p[0], p[1] + 8, kk, face);   // 지도에는 글자를 쓰지 않는다 — 이름은 알림으로만
     } else {
       var pulse = 1 + Math.sin(t * 6) * 0.12, bob = Math.sin(t * 9) * 2;
       ctx.fillStyle = 'rgba(90,14,8,.6)'; ctx.beginPath(); ctx.arc(p[0], p[1] + bob, 17 * pulse, 0, 7); ctx.fill();

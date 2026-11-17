@@ -221,7 +221,9 @@
 
   // 밸런스 조정값 (2026-09-27 밸런스 패치) — 쓰는 곳은 괄호 안
   G.BALANCE = {
-    animalTracking: { landRadius: 0.65, seaRadius: 0.9 }, // 흔적 끝의 동물에게 다가가야 발견한다.
+    animalTracking: { landRadius: 0.65, seaRadius: 0.9, // 흔적 끝의 동물에게 다가가야 발견한다.
+      // 발자국 따라가기 (js/art/animal_tracking.js A.follow): 앞으로 보이는 자국 수 · 밟았다고 치는 거리(뭍/바다) · 놀라 달아나는 때(진행)·가능성·측량 1당 줄어듦·달아나는 거리 · 끝까지 따라왔을 때 명성 +
+      follow: { lookAhead: 5, stepR: 0.32, stepRSea: 0.55, boltAt: 0.8, bolt: 0.35, boltSurvey: 0.09, boltDist: 1.1, fame: 0.4 } },
 
     mateSeekSearch: { min: 3, limit: 3 }, // 여급의 항해사 수색: 이름 일부로 후보를 보여 준다.
     // 물건이 주는 능력치 (2026-11-02 베타 피드백 — rules.js R.itemStatOf). 제독은 소지품, 동료는 그 동료가 지닌 물건. 같은 능력치는 가장 높은 하나만 오른다(겹치지 않음), 능력치는 cap을 넘지 않는다.

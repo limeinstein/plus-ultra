@@ -334,7 +334,8 @@
     D.collectionReward(s.stats.found);
     if (G.Encyc) { try { G.Encyc.onFind(d); } catch (e) { console.error(e); } }   // 발견물 백과사전: 한 갈래를 다 채우면 포상 (js/systems/encyclopedia.js)
     delete s.hints[d.id];
-    var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus(d) * (tomb.fameK || 1));
+    var fame = Math.round(D.fameFor(d) * (st.rival ? 0.45 : 0.75) * D.artBonus(d) * (tomb.fameK || 1) * (G.AnimalTracking && G.AnimalTracking.fameK ? G.AnimalTracking.fameK(d) : 1));   // 발자국을 끝까지 따라와 찾았다 (js/art/animal_tracking.js)
+    if (G.AnimalTracking && G.AnimalTracking.is(d) && G.AnimalTracking.progress(d) >= 0.6) setTimeout(function () { UI.toast('발자국을 끝까지 따라와 찾아냈다 — 명성이 더 오른다.', 'paw', 4800); }, 900);
     if (G.Career) fame += G.Career.discoveryFame(d, fame);
     var foundFame = G.Fame.add('ex', fame);
     if (G.Birds) G.Birds.record(d, foundFame);

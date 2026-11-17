@@ -13,7 +13,8 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
-    await page.goto(((process.env.WEB_BASE && new URL('index.html', process.env.WEB_BASE).href) || (process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href)), { waitUntil: 'domcontentloaded', timeout: 120000 });
+    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+    await page.goto(((process.env.WEB_BASE && new URL('index.html', process.env.WEB_BASE).href) || pathToFileURL(path.join(ROOT, 'index.html')).href), { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     const r = await page.evaluate(async () => {
       const out = { bad: [] }, said = [];
@@ -21,7 +22,7 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       ['lich', 'werewolf', 'deadknight', 'worldtree'].forEach(id => { if (!G.DISC[id]) out.bad.push('발견물 없음 ' + id); if (!(G.DISC_FACTS[id] || []).length) out.bad.push('관찰 없음 ' + id); });
       Object.keys(G.MONSTER_TALES).forEach(id => { const t = G.MONSTER_TALES[id]; if (!G.DISC[id]) out.bad.push('이야기의 발견물 없음 ' + id); if (!G.CREATURE_ART.duel[t.sprite]) out.bad.push('일기토 그림 없음 ' + id); (t.choice ? t.choice.opts : []).forEach(o => { if (o.give && !G.ITEM[o.give]) out.bad.push('물건 없음 ' + o.give); }); });
       Object.keys(G.GUARDIANS).forEach(id => { if (!G.DISC[id]) out.bad.push('짐승 발견물 없음 ' + id); if (!G.RELIC['r_' + id + '_baby']) out.bad.push('새끼 없음 ' + id); if (!G.ITEM['tr_' + id]) out.bad.push('전리품 없음 ' + id); if (!G.SPRITE_SHEETS['cb_' + G.GUARDIANS[id][0]]) out.bad.push('시트 없음 ' + id); });
-      G.ELVES.forEach(e => { if (!G.MATE[e.id]) out.bad.push('엘프 동료 없음 ' + e.id); });
+      G.ELVES.forEach(e => { if (!G.MATE[e.id]) out.bad.push('엘프 동료 없음 ' + e.id); if (G.MATE[e.id] && G.MATE[e.id].duelSprite !== 'elf') out.bad.push('엘프 그림 없음 ' + e.id); }); if (G.ELVES.length !== 20) out.bad.push('엘프 ' + G.ELVES.length + '명');
       // 판
       const s0 = {}; G.SKILLS.forEach(x => { s0[x.id] = 0; }); s0.sword = 2; s0.ops = 2;
       G.State.newGame({ name: '주앙', nation: 'PT', job: 'explorer', age: 30, birth: { m: 1, d: 1 }, st: { str: 70, int: 60, mar: 70, cha: 60 }, sk: s0, lg: G.LANGS.map(() => 3), diff: 'normal' });
@@ -68,6 +69,11 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       G.U.chance = uc; answers = ['duel']; s.player.items = [];   // 짐칸이 가득 차면 유물을 버릴지 묻는 창이 뜬다
       await G.Disc.find(tree, 'land');
       out.treeFound = G.Disc.foundByMe('worldtree'); out.metN = Object.keys(es.met).length;
+      // 자매가 배에 있으면 끼어들어 설득한다 (엘프 자매 — js/data/elfsisters.js)
+      const sisOf = G.MATE[elfId].sisterId; s.elves.last = -999;
+      const said0 = said.length; answers = ['talk'];
+      const sisRes = await G.Elves.duel(G.Elves.get(sisOf), 'random', 'explore');
+      out.sister = { res: sisRes, joined: s.mates.some(m => m.id === sisOf), lines: said.slice(said0).filter(t => /언니|동생|칼 내려|잠깐/.test(t)).length };
       // 5) 거대한 짐승: 호랑이 새끼를 안고 뭍에 → 「?」가 나타나 쫓아온다
       const tg = G.DISC.tiger; G.R.addItem('r_tiger_baby');
       s.loc = { mode: 'land', lon: tg.lon + 0.5, lat: tg.lat, party: 60, base: { type: 'city', lon: tg.lon, lat: tg.lat } }; s.fleet.crew = 60;
@@ -101,6 +107,7 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
     ok(r.elf.met && r.elf.beat && r.elf.back === 30 && !r.elfAgain, '엘프: 숲에서 겨루어 이기면 30일 뒤에 돌아온다 (' + r.elf.elfId + ')');
     ok(r.elfPending && r.elfJoined && r.elfSprite === 'elf', '엘프: 돌아와 한 번 더 겨루고 동료가 된다 · 일기토 그림도 엘프');
     ok(r.treeFound && r.metN === 2, '세계수: 다른 엘프가 막아서고, 이기면 발견');
+    ok(r.sister.res === 'sister' && r.sister.joined && r.sister.lines >= 1, '자매가 배에 있으면 끼어들어 설득하고 함께 온다 (' + r.sister.lines + '줄)');
     ok(r.chase.caught && r.chase.d0 > 2 && r.chase.days > 2 && r.chase.days < 6 && r.chase.near, '새끼를 안고 있으면 「?」가 멀리서 나타나 며칠 안에 따라잡는다 (' + r.chase.days + '일)');
     ok(r.release === 'freed' && !r.releaseBaby, '놓아주면 새끼를 돌려준다');
     ok(r.fight === 'won' && r.battle && r.battle.giant.sheet === 'cb_trex' && r.battle.giant.pow >= 8 && r.fossil, '공룡과 싸워 이기면 거대한 머리 화석 (' + r.fossilName + ')');

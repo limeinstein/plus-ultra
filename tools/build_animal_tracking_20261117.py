@@ -99,7 +99,7 @@ palette('raccoon', '#2b2e31 #6d7373 #b5b5a5 #eee2c5')
 for row in rows:
     did = row['id']
     assert did in kind, f'이동 방식 누락: {did}'
-    p = {'kind': kind[did], 'palette': overrides.get(did, palettes[kind[did]])}
+    p = {'kind': kind[did], 'habitat': row['how'], 'palette': overrides.get(did, palettes[kind[did]])}
     if did in atlas:
         p['slot'] = atlas.index(did) % 16
         p['sheet'] = atlas.index(did) // 16 + 1
@@ -108,5 +108,5 @@ for row in rows:
         p['key'] = row['icon'].rsplit('.', 1)[0]
     profiles[did] = p
 out = ROOT / 'js/data/animaltracking.js'
-out.write_text('/* 전체 동물 발견물의 종별 원화·이동 방식. 제작: tools/build_animal_tracking_20261117.py */\n(function(G){\n  \'use strict\';\n  G.ANIMAL_TRACKING = ' + json.dumps(profiles, ensure_ascii=False, indent=2) + ';\n})(window.G=window.G||{});\n', 'utf-8')
+out.write_text('/* 전체 동물 발견물의 종별 원화·이동 방식. 제작: tools/build_animal_tracking_20261117.py */\n(function(G){\n  \'use strict\';\n  G.ANIMAL_TRACKING = ' + json.dumps(profiles, ensure_ascii=False, indent=2) + ';\n})(window.G=window.G||{});\n', encoding='utf-8', newline='\n')
 print(f'{len(profiles)}종 연결 완료')

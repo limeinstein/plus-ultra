@@ -61,7 +61,7 @@ const root=path.resolve(__dirname,'..'),out=(process.env.OUT || path.join(root,'
     x.font='bold 16px sans-serif';x.fillStyle='#362c22';x.fillText(d.realName||d.name,ox+26,oy+28);
     const im=A.sprite(d,false);x.globalAlpha=1;x.drawImage(im,ox+174,oy+40,106,106);
     const pts=Array.from({length:7},(_,n)=>({lon:n,lat:0,ground:true}));
-    A.drawTrail(x,d,pts,(lon,lat)=>[ox+35+lon*26,oy+157-lat*26],0);
+    A.drawTrail(x,d,pts,(lon,lat)=>[ox+35+lon*26,oy+157-lat*26],1.4);
     x.fillStyle='#514936';x.font='13px sans-serif';x.fillText(p.kind+' · '+p.palette.length+'색',ox+26,oy+188);
    });
    return{count:rows.length,assets:keys.length,pandaColors:[...colors]};

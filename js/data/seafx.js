@@ -9,7 +9,11 @@
       trailLength: 3.4, steps: 22, curve: 0.22, maxNearby: 8, shoreSearch: 1.5,
       pulseSeconds: 3.6, alphaMin: 0.16, alphaMax: 0.58, trackAlpha: 0.62,
       animalSize: 64, footSize: 12, trackWidth: 4.2, frontGap: 4.8, hopGap: 5.5,
-      waveWidth: 6, traceWidth: 1.3 }, // 종별 2~4색 그림과 움직임이 보이는 이동 흔적.
+      waveWidth: 6, traceWidth: 1.3,
+      airborne: { size: 19, cycle: 4.4, height: 24, sway: 9, turn: 0.75 },
+      aquatic: { size: 15, cycle: 2.8, spread: 1.8, rise: 12,
+        dark: '#417e92', mid: '#85c6d6', light: '#f0fbef' }
+    }, // 새는 떨어지는 깃털, 물속 동물은 거품·물결·물보라로 추적한다.
 
     revealTalk: { head: 2, quote: 70 }, // 발견 때 첫마디 문장 수와 인용 한 문장의 최대 글자 수.
     olympianApostles: { meetDelay: 750, shotPosition: '50% 0%' }, // 성문 밖 등장 지연·세로 여백을 줄여도 관과 얼굴을 보존하는 그림 기준점.

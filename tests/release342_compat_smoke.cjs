@@ -1,0 +1,21 @@
+/* 이전 엘프 저장·귀환과 첫날 기록, 동물 추적 저장을 실제 게임에서 검사한다. */
+'use strict';
+const fs=require('fs'),path=require('path'),assert=require('assert/strict'),{pathToFileURL}=require('url');
+const {chromium}=require('../tools/procedural_art/node_modules/playwright-core');
+const root=path.resolve(__dirname,'..'),out=process.env.OUT||path.join(root,'artifacts/release342-compat');
+(async()=>{fs.mkdirSync(out,{recursive:true});const b=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files']});
+try{const p=await b.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});await p.route(/fonts\.(googleapis|gstatic)\.com/,r=>r.fulfill({body:'',contentType:'text/css'}));await p.addInitScript(()=>requestAnimationFrame=()=>0);
+await p.goto(process.env.WEB_BASE?new URL('index.html',process.env.WEB_BASE).href:pathToFileURL(path.join(root,'index.html')).href);await p.waitForFunction(()=>window.G?.Game?.sceneName==='title');
+const legacy=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/legacy-elves-0.341.json'),'utf8'));
+const result=await p.evaluate(async legacy=>{const checks=[],ok=(v,m)=>{if(!v)throw Error(m);checks.push(m);};
+ok(G.ELVES.length===20&&G.LEGACY_ELVES.length===6,'새 조우 20명·옛 동료 6명 별도 유지');
+legacy.forEach(([id,name])=>ok(G.MATE[id]?.name===name&&G.Elves.get(id)?.id===id&&G.MATE[id].eventOnly,'옛 인물 ID·이름·귀환 자료 '+id));
+G.State.newGame({name:'저장 호환',nation:'PT',job:'explorer',age:30,birth:{m:1,d:1},st:{str:60,int:60,mar:60,cha:60},sk:{},lg:[],diff:'normal'});let s=G.Game.state;s.settings.sound=0;s.settings.music=0;
+const id=legacy[0][0],pending=legacy[1][0];s.mates.push({id,role:'surveyor',loyal:91,joined:14800101});s.elves={met:{[id]:0,[pending]:0},beat:{[pending]:0},back:{[pending]:30},joined:{[id]:0},declined:{},last:0};s.day=30;
+G.Game.state=G.State.deserialize(G.State.serialize());s=G.Game.state;ok(s.mates.some(m=>m.id===id&&m.role==='surveyor'&&m.loyal===91),'옛 동료 저장·직책·충성 보존');ok(!!G.Art.mateSpec(id),'옛 동료 초상 연결');ok(G.Elves.due()===pending,'이전 귀환 약속 보존');
+G.UI.say=async()=>{};G.UI.ask=async()=> 'yes';G.UI.toast=()=>{};G.Games.duel=async()=> 'win';await G.Elves.comeBack(pending,'city');ok(s.mates.filter(m=>m.id===pending).length===1,'옛 엘프 귀환 후 실제 합류');await G.Elves.comeBack(pending,'city');ok(s.mates.filter(m=>m.id===pending).length===1,'귀환 중복 동료 차단');
+const current=G.ELVES[0].id;s.elves={met:{},beat:{},back:{},joined:{},declined:{},last:0};G.ELVES.forEach(e=>s.elves.met[e.id]=0);ok(G.Elves.fresh()===null,'첫날 조우 기록 0도 이미 만남으로 처리');s.elves.back[current]=0;s.elves.joined[current]=0;ok(G.Elves.due()===null,'첫날 영입 기록 0도 재귀환 차단');
+delete s.track;const d=G.DISC.tiger,A=G.AnimalTracking;ok(A.progress(d)===0,'추적 자료 없는 옛 저장 기본값');s.track[d.id]={hit:9,said:{25:1},bolt:1,shift:[.8,.4]};const pos=A.position(d),fame=A.fameK(d);G.Game.state=G.State.deserialize(G.State.serialize());s=G.Game.state;ok(JSON.stringify(s.track[d.id])===JSON.stringify({hit:9,said:{25:1},bolt:1,shift:[.8,.4]}),'추적·안내·도주 위치 저장 보존');ok(JSON.stringify(A.position(d))===JSON.stringify(pos)&&A.fameK(d)===fame,'복원 후 위치·명성 배율 유지');
+return{checks,legacy:legacy.length,elves:G.ELVES.length};},legacy);
+assert.deepEqual(errors,[]);fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({...result,errors},null,2));console.log(JSON.stringify({...result,errors}));
+}finally{await b.close();}})().catch(e=>{console.error(e);process.exitCode=1;});
