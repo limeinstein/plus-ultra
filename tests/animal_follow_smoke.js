@@ -30,7 +30,7 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       const prog = [];
       const rnd = Math.random; Math.random = () => 0;   // 거의 다 와서 놀라 달아나게
       for (let i = 0; i < 400; i++) {
-        const P = A.trail(d), st = s.track[d.id] || { hit: -1 }, nx = P[Math.min(P.length - 1, st.hit + 1)];
+        const P = A.trail(d), st = s.track[d.id] || { hit: -1 }; let j = st.hit + 1; while (j < P.length - 1 && !G.Geo.isLand(P[j].lon, P[j].lat)) j++; const nx = P[Math.min(P.length - 1, j)];   // 물 위 자국은 건너뛴다
         if (st.hit >= P.length - 1) break;
         A.follow(d, nx.lon, nx.lat, 'land'); prog.push(+A.progress(d).toFixed(2));
       }
@@ -47,9 +47,16 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
       out.found = chk.hits.some(x => x.id === d.id);
       const chk0 = G.Disc.checkLand(pos0.lon, pos0.lat);
       out.foundOld = chk0.hits.some(x => x.id === d.id);
+      // 바다: 돌고래의 물결·물보라 자국 — 뭍 위 자국은 건너뛰고 따라간다
+      const dl = G.DISC.dolphin; s.track[dl.id] = { hit: -1, said: {} };
+      out.dTrace = A.traceKind(dl, 'sea'); out.fTrace = A.traceKind(G.DISC.flamingo, 'land');
+      for (let i = 0; i < 300; i++) { const P = A.trail(dl), st = s.track[dl.id]; if (st.hit >= P.length - 1) break; let j = st.hit + 1; while (j < P.length - 1 && G.Geo.isLand(P[j].lon, P[j].lat)) j++; A.follow(dl, P[j].lon, P[j].lat, 'sea'); }
+      out.dProg = +A.progress(dl).toFixed(2); out.dBolt = !!s.track[dl.id].shift;
+      out.waterClue = toasts.some(t => /거품|물결|물보라|수면/.test(t));
       return out;
     });
     console.log(JSON.stringify(r).slice(0, 900));
+    ok(r.dTrace === 'water' && r.fTrace === 'feather' && r.dProg === 1 && !r.dBolt && r.waterClue, '바다에서는 물결·물보라를 끝까지 따라간다 (뭍 위 자국은 건너뜀 · 바다에서는 달아나지 않음 · 새는 깃털)');
     ok(r.skip === -1, '앞의 자국을 건너뛰면 읽지 못한다');
     ok(r.prog[0] > 0 && r.prog[2] === 1 && r.monotone, '한 자국씩 밟을수록 따라간 정도가 오른다 (' + r.prog.join(' → ') + ')');
     ok(r.bolt && r.moved > 0.8 && r.len2 > r.n, '거의 다 오면 놀라 달아나고 새 자국이 이어진다 (' + r.moved + '° · 자국 ' + r.n + '→' + r.len2 + ')');

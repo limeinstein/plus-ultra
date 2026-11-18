@@ -2148,8 +2148,12 @@
     if (ct && at && ct.how !== 'trade' && !(at.lat === 0 && at.lon === 0) && G.Disc.hasHint(ct.id) && !G.Disc.foundByMe(ct.id)) {
       var rng = U.makeRng(U.strHash(ct.id)), zk = G.Disc.clueK(ct.id, 'zone'), zr = 3.2 * zk;   // 단서가 겹칠수록 원이 좁아지고 실제 자리로 모인다
       var zc = toScreen(at.lon + (rng() - 0.5) * 3 * zk, at.lat + (rng() - 0.5) * 3 * zk);
-      ctx.strokeStyle = 'rgba(200,40,30,.55)'; ctx.lineWidth = 2; ctx.setLineDash([8, 8]);
-      ctx.beginPath(); ctx.arc(zc[0], zc[1], zr * z, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      if (G.Disc.isPlant(ct)) {
+        if (!s.marks || !s.marks[ct.id]) G.PlantSwirl.draw(ctx, ct, zc, zr * z, st.t, s.date, G.FX.plantSwirl.contractAlpha);
+      } else {
+        ctx.strokeStyle = 'rgba(200,40,30,.55)'; ctx.lineWidth = 2; ctx.setLineDash([8, 8]);
+        ctx.beginPath(); ctx.arc(zc[0], zc[1], zr * z, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      }
       var lvz = G.Disc.hintLv(ct.id);
       ctx.fillStyle = 'rgba(200,40,30,.8)'; ctx.font = '600 15px ' + fontFam(); ctx.textAlign = 'center'; ctx.fillText('계약 목적지 부근' + (lvz > 1 ? ' (단서 ' + lvz + '겹)' : ''), zc[0], zc[1] - zr * z - 6);
     }

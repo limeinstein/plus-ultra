@@ -4,7 +4,7 @@ import base64, hashlib, json, mimetypes, os, re
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(TOOLS)
 FONT_HOSTS = ('https://fonts.googleapis.com', 'https://fonts.gstatic.com')
-MIME = {'.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.avif': 'image/avif', '.svg': 'image/svg+xml'}
+MIME = {'.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif', '.avif': 'image/avif', '.svg': 'image/svg+xml', '.woff2': 'font/woff2'}
 
 
 def read(rel):
@@ -32,6 +32,16 @@ def data_uri(path):
     ext = os.path.splitext(path)[1].lower()
     with open(path, 'rb') as f:
         return 'data:%s;base64,%s' % (MIME.get(ext, 'application/octet-stream'), base64.b64encode(f.read()).decode('ascii'))
+
+
+def bundle_css(files):
+    """CSS를 옮겨도 자체 글꼴을 쓸 수 있도록 로컬 WOFF2를 함께 담는다."""
+    def read_sheet(rel):
+        def embed_font(match):
+            path = os.path.join(ROOT, os.path.dirname(rel), match[1])
+            return 'url("' + data_uri(path) + '")'
+        return re.sub(r'url\("(fonts/[\w.-]+\.woff2)"\)', embed_font, read(rel))
+    return '\n'.join(read_sheet(rel) for rel in files)
 
 
 def manifest_js(found, embed, base=None):

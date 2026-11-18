@@ -137,10 +137,10 @@
   // 글자는 게임에서 얹는다. 흡수·토벌 뒤의 현상금과 도장이 현재 장부를 따른다.
   function warrantSheet(p, slot) {
     var w = st(), band = W.band(p);
-    return '<span class="wp-sheet" style="--wp-name-length:' + p.name.length + '"><span class="wp-face" data-face="' + slot + '"></span>' +
+    return '<span class="wp-sheet" style="--wp-name-length:' + Array.from(p.name).length + '"><span class="wp-face" data-face="' + slot + '" aria-hidden="true"></span>' +
       '<span class="wp-head">현상수배</span><span class="wp-caption"><strong class="wp-name">' + U.esc(p.name) + '</strong>' +
       '<span class="wp-band">' + U.esc(band ? band.name : '해적단') + '</span>' +
-      '<strong class="wp-pay">현상금 ' + U.num(W.bounty(p)) + '닢</strong></span>' +
+      '<strong class="wp-pay">현상금 <span class="wp-amount">' + U.num(W.bounty(p)) + '</span>닢</strong></span>' +
       (w.paid[p.id] != null || w.due[p.id] ? '<span class="wp-stamp">무찌름</span>' : '') + '</span>';
   }
   function drawWarrant(el, p, slot) {
@@ -225,7 +225,7 @@
       } });
     await win.result;
   };
-  /** 설명창 없이 바다 위로 날아든 종이가 접힌 날개를 펼친다. */
+  /** 바다 위로 날아든 수배서를 누르면 다시 바람에 휩쓸린다. */
   W.cancelReveal = null;
   W.reveal = function (n) {
     var p = n && n.cap && W.pirate(n.cap.id); if (!p || n.wantedSeen) return Promise.resolve();
@@ -233,32 +233,55 @@
     n.wantedSeen = true;
     return new Promise(function (resolve) {
       var root = document.createElement('div'), cfg = G.FX.wantedReveal;
-      root.className = 'wanted-wind'; root.setAttribute('role', 'dialog');
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      root.className = 'wanted-wind'; root.tabIndex = -1; root.setAttribute('role', 'dialog');
       root.setAttribute('aria-label', p.name + ' 현상수배서'); root.setAttribute('aria-modal', 'true');
       root.style.setProperty('--wanted-flight', cfg.flyMs + 'ms');
-      root.style.setProperty('--wanted-unfold', cfg.unfoldMs + 'ms');
-      var panels = '';
-      for (var i = 0; i < 3; i++) panels += '<div class="wanted-fold wanted-fold-' + i + '"><div class="wanted-paper-face" style="left:-' + (i * 100) + '%">' + warrantSheet(p, 'wind' + i) + '</div></div>';
-      root.innerHTML = '<div class="wanted-gust"><i></i><i></i><i></i></div><div class="wanted-flight"><div class="wanted-paper">' + panels + '</div></div><button type="button" class="wanted-dismiss" aria-label="수배서 접기" disabled>×</button>';
-      var oldFocus = document.activeElement, button = root.querySelector('button'), done = false;
+      root.style.setProperty('--wanted-ink', cfg.inkMs + 'ms');
+      root.style.setProperty('--wanted-hover', cfg.hoverMs + 'ms');
+      root.style.setProperty('--wanted-leave', cfg.leaveMs + 'ms');
+      root.innerHTML = '<div class="wanted-gust" aria-hidden="true"><i></i><i></i><i></i></div>' +
+        '<div class="wanted-stage"><div class="wanted-flight"><button type="button" class="wanted-paper" aria-label="수배서 닫기" aria-describedby="wanted-paper-caption">' +
+        warrantSheet(p, 'wind') + '</button></div></div>';
+      var oldFocus = document.activeElement, paper = root.querySelector('.wanted-paper'), flight = root.querySelector('.wanted-flight');
+      paper.querySelector('.wp-caption').id = 'wanted-paper-caption';
+      var timer, closing = false;
       function close() {
-        if (done) return; done = true;
+        if (!root.isConnected) return;
         clearTimeout(timer); document.removeEventListener('keydown', key, true); root.remove();
         if (W.cancelReveal === close) W.cancelReveal = null;
         if (oldFocus && oldFocus.isConnected && oldFocus.focus) oldFocus.focus();
         resolve();
       }
+      function ready() {
+        if (closing || !root.isConnected) return;
+        clearTimeout(timer);
+        root.classList.add('wanted-ready');
+      }
+      function dismiss() {
+        if (closing) return;
+        if (!root.classList.contains('wanted-ready') || reduceMotion.matches) { close(); return; }
+        closing = true; paper.disabled = true; root.focus();
+        root.classList.add('wanted-leaving');
+        timer = setTimeout(close, cfg.leaveMs * 2);
+      }
       function key(e) {
         e.stopImmediatePropagation();
-        if (e.key === 'Tab') { e.preventDefault(); if (!button.disabled) button.focus(); }
-        if (!button.disabled && (e.key === 'Escape' || e.key === 'Enter' || e.code === 'Space')) { e.preventDefault(); close(); }
+        if (e.key === 'Tab') { e.preventDefault(); (closing ? root : paper).focus(); }
+        if (e.key === 'Escape' || (e.target === root && (e.key === 'Enter' || e.code === 'Space'))) { e.preventDefault(); dismiss(); }
       }
-      button.onclick = close;
-      root.onclick = function (e) { if (!button.disabled && (e.target === root || e.target.closest('.wanted-paper'))) close(); };
-      document.addEventListener('keydown', key, true); document.body.appendChild(root);
-      for (var j = 0; j < 3; j++) drawWarrant(root, p, 'wind' + j);
+      paper.onclick = dismiss;
+      flight.onanimationend = function (e) {
+        if (e.target !== flight) return;
+        if (e.animationName === 'wanted-depart') close();
+        if (e.animationName === 'wanted-arrive') ready();
+      };
+      root.onclick = function (e) { if (e.target === root) dismiss(); };
+      drawWarrant(root, p, 'wind');
+      document.addEventListener('keydown', key, true); document.body.appendChild(root); root.focus();
       W.cancelReveal = close;
-      var timer = setTimeout(function () { root.classList.add('wanted-ready'); button.disabled = false; button.focus(); }, cfg.flyMs + cfg.unfoldMs);
+      if (reduceMotion.matches) ready();
+      else timer = setTimeout(ready, cfg.flyMs * 2);
       G.State.log('수배서를 확인했다 — ' + p.name + ', 현상금 ' + U.num(W.bounty(p)) + '닢.');
     });
   };

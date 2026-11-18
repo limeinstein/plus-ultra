@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+새 발견 유물·괴물 전리품 54종(2026-11-18)은 `creature-items-20261118/<ID>.webp`의 256×256 RGBA 무손실 전용 원화를 쓴다. 머리 박제 20종은 무광 질감과 쓸쓸한 표정으로, 화석 6종·부채 2종·새끼와 알 16종·유물 10종은 각각의 물건 형태로 제작했다. 기존 원화와 논리 키를 보존하며 `tools/creature_item_art_20261118/asset-overrides.json`으로 우선 연결한다. [전체 그림·원본·지시문](../artifacts/creature-item-art-20261118/index.html) · [제작·검증](../docs/art/creature-item-art-20261118.md).
+
 위구르·몽골·티베트·만주 남성 항해사 30쌍(2026-11-17)은 `portraits/mates/steppe-windsalt/<ug01~08|mo01~10|tb01~06|mj01~06>.webp`의 512×512 얼굴상과 `_half.webp`의 1024×1536 투명 무릎상을 쓴다. 전통복·기마병·장군·상의 탈의를 섞고 얼굴과 옷을 같은 게임 회화풍으로 맞췄다. 서로 다른 작업 동작과 강한 표정·미소·웃음을 표현했다. 30명 모두 지역별 첫 직접 발견일부터 5년/3명·40년 재추첨 영입 자료에 연결했다. [전체 미리보기·원본·생성 기록](../docs/art/steppe-windsalt-20261117.md) · [등장 규칙·검증](../docs/steppe-crew-20261117.md).
 
 인도양 여성 항해사 30쌍(2026-11-17)은 `portraits/mates/indian-ocean-windsalt/io01~30.webp`의 512×512 얼굴상과 `_half.webp`의 1024×1536 투명 무릎상을 쓴다. 내장 ImageGen으로 얼굴과 옷을 같은 게임 회화풍으로 그렸으며 웃음·미소·머리·복식·항해 동작을 나눴다. 각 인물은 인도항로 발견 뒤 순환 영입 자료에 연결했고 기존 `african-windsalt/af01~30`도 희망봉 발견 뒤 영입 후보로 등록했다. [전체 미리보기·원본·프롬프트·검증](../docs/art/indian-ocean-windsalt-20261116.md) · [두 집단 등장 규칙](../docs/discovery-crew-20261117.md).

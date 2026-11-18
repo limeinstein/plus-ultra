@@ -5,6 +5,8 @@
 (function (G) {
   'use strict';
   G.FX = {
+    plantSwirl: { cell: 128, columns: 8, rows: 4, seconds: 3.2, cache: 10,
+      leaves: 21, radiusMin: 34, radiusMax: 160, coast: 2.2, contractAlpha: 0.8 },
     animalTracking: { enabled: true, spritePixels: 96, senseRadius: 4.8, silhouetteRadius: 2.2,
       trailLength: 3.4, steps: 22, curve: 0.22, maxNearby: 8, shoreSearch: 1.5,
       pulseSeconds: 3.6, alphaMin: 0.16, alphaMax: 0.58, trackAlpha: 0.62,
@@ -77,7 +79,7 @@
       loadWaitMs: 2500    // 장면 판·GIF를 기다리는 가장 긴 시간 (보통은 가까워질 때 미리 받아 둔다 — G.Reel.prefetch)
     },
     // 화면 갱신 (js/main.js) — 한 장면이 오래 걸려도 배가 순간 이동하지 않게. 화질은 설정값 그대로 유지한다
-    wantedReveal: { near: 1.4, scanSeconds: 0.5, flyMs: 2600, unfoldMs: 1100, roam: 1.8 },
+    wantedReveal: { near: 1.4, scanSeconds: 0.5, flyMs: 1080, inkMs: 1460, hoverMs: 2200, leaveMs: 560, roam: 1.8 },
     loop: {
       maxDt: 0.1,         // 한 장면에서 흐르는 가장 긴 시간(초). 이보다 오래 멈췄으면 그만큼만 움직인다
       maxFps: 60         // 고주사율 화면에서도 초당 최대 60번 갱신. 해상도·날짜·음악의 빠르기는 그대로

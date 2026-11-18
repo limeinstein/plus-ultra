@@ -1124,7 +1124,11 @@
     var ct = s.contract && G.DISC[s.contract.disc];
     if (ct && ct.how === 'land' && G.Disc.hasHint(ct.id) && !G.Disc.foundByMe(ct.id)) {
       var rng = U.makeRng(U.strHash(ct.id)), zk = G.Disc.clueK(ct.id, 'zone'); var zc = toScreen(ct.lon + (rng() - 0.5) * 1.2 * zk, ct.lat + (rng() - 0.5) * 1.2 * zk);
-      ctx.strokeStyle = 'rgba(200,40,30,.6)'; ctx.setLineDash([8, 8]); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(zc[0], zc[1], 1.3 * zk * st.cam.zoom, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      if (G.Disc.isPlant(ct)) {
+        if (!s.marks || !s.marks[ct.id]) G.PlantSwirl.draw(ctx, ct, zc, 1.3 * zk * st.cam.zoom, st.t, s.date, G.FX.plantSwirl.contractAlpha);
+      } else {
+        ctx.strokeStyle = 'rgba(200,40,30,.6)'; ctx.setLineDash([8, 8]); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(zc[0], zc[1], 1.3 * zk * st.cam.zoom, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+      }
     }
     // 자연재해의 자취 (알려진 것만)
     if (G.Disaster) G.Disaster.drawLand(ctx, toScreen, st.cam.zoom, st.t, ff);

@@ -94,6 +94,10 @@
       추정 범위를 선으로 두르지 않고, 발견물 갈래의 빛깔을 머금은 옅은 먼지가
       낮게 들썩이게 한다. 범위가 아주 커도 화면을 덮지 않도록 퍼짐과 농도를 제한한다. */
   X.drawMarker = function (ctx, m, p, rpx, t, ff) {
+    if (G.PlantSwirl && G.Disc.isPlant(m.d)) {
+      G.PlantSwirl.draw(ctx, m.d, p, rpx, t, S().date);
+      return;
+    }
     var spread = U.clamp(rpx, 24, 170), seed = U.strHash('dust:' + m.d.id), TAU = Math.PI * 2;
     ctx.save();
     ctx.translate(p[0], p[1]);

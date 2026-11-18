@@ -95,7 +95,7 @@ def head(title, desc, css_rel, fonts, extra=''):
 
 def build_page(page, name, out_html, title, desc, esbuild, manifest_rel):
     p = pages.parse(page)
-    css = '\n'.join(pages.read(c) for c in p['css'])
+    css = pages.bundle_css(p['css'])
     css_rel = asset(name, 'css', minify(css, 'css', esbuild))
     js = ';\n'.join('/* %s */\n%s' % (s, pages.read(s)) for s in p['scripts'] if s != 'images/manifest.js')
     js_rel = asset(name, 'js', minify(js, 'js', esbuild))

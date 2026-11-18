@@ -2144,17 +2144,24 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .yships .ysub .yx { font-size: 14px; color: #6a5236; margin-left: 8px; }
 
 /* 식당 현상수배 벽보. 낡은 종이와 초상은 한 장의 무채색 그림이며 글은 현재 현상금을 따른다. */
+@font-face {
+  font-family:"Noto Serif KR Wanted";
+  src:url("fonts/noto-serif-kr-wanted.woff2") format("woff2");
+  font-weight:700 900;
+  font-display:swap;
+}
 .wp-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
 .wp-card { appearance:none; display:flex; flex-direction:column; padding:0; margin:0; min-width:0; border:0; border-radius:0; background:#252624; color:#eee; cursor:pointer; font:inherit; box-shadow:1px 3px 5px #0005; }
 .wp-card:hover, .wp-card:focus-visible { outline:2px solid #e4d4a9; outline-offset:2px; }
-.wp-sheet { container-type:inline-size; isolation:isolate; position:relative; display:block; width:100%; aspect-ratio:2/3; overflow:hidden; color:#242424; background:#dbdbd8; text-align:center; font-family:Batang,"바탕",serif; text-shadow:none; }
+.wp-sheet { container-type:inline-size; isolation:isolate; position:relative; display:block; width:100%; aspect-ratio:2/3; overflow:hidden; color:#242424; background:#dbdbd8; text-align:center; font-family:"Noto Serif KR Wanted","Nanum Myeongjo",Batang,"바탕",serif; text-shadow:none; }
 .wp-face { position:absolute; inset:0; z-index:-1; }
 .wp-face canvas { width:100%; height:100%; display:block; }
-.wp-head { position:absolute; top:4%; left:10%; right:10%; font-size:12cqw; font-weight:900; line-height:1.18; letter-spacing:.13em; text-indent:.13em; border-bottom:1px solid #333a; padding-bottom:2%; }
+.wp-head { position:absolute; top:3.5%; left:8%; right:8%; font-size:13cqw; font-weight:900; line-height:1.15; letter-spacing:.14em; text-indent:.14em; border-bottom:3px double currentColor; padding-bottom:1.7%; }
 .wp-caption { position:absolute; left:0; right:0; bottom:0; padding:4% 6%; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:1cqw; line-height:1.18; background:linear-gradient(to bottom,transparent,#dcdcdcbd 22%,#dcdcdc70 90%,transparent); }
-.wp-name { font-size:min(8.1cqw,calc(86cqw / var(--wp-name-length))); white-space:nowrap; }
-.wp-band { font-size:6.4cqw; }
-.wp-pay { width:88%; margin-top:1%; padding-top:2%; border-top:1px solid #333a; font-size:8.4cqw; white-space:nowrap; }
+.wp-name { font-size:min(9.5cqw,calc(86cqw / var(--wp-name-length))); font-weight:900; white-space:nowrap; }
+.wp-band { font-size:5.5cqw; font-weight:700; }
+.wp-pay { width:92%; margin-top:1%; padding-top:1%; border-top:1px solid #333a; font-size:7.2cqw; font-weight:900; white-space:nowrap; }
+.wp-amount { font-size:1.28em; font-variant-numeric:lining-nums tabular-nums; }
 .wp-stamp { position:absolute; left:50%; top:58%; transform:translateX(-50%) rotate(-12deg); font-weight:bold; font-size:11cqw; letter-spacing:.08em; border:3px double #343434; color:#333; background:#eee9; padding:0 .2em; }
 .wp-meta { flex:1; display:flex; width:100%; box-sizing:border-box; gap:5px; align-items:center; justify-content:center; padding:3px 5px; font-size:13px; line-height:1.2; }
 .wp-meta canvas { display:block; width:26px; height:26px; }
@@ -2173,24 +2180,134 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .proof-peek small { color: #7a5c33; }
 .proof-peek .pf { margin-top: 4px; font-size: 14px; color: #6a3a1a; }
 
-/* 바다 위를 날아오는 종이 — 이동·뒤집힘 뒤 접힌 양옆이 펼쳐진다. */
-.wanted-wind{position:fixed;inset:0;z-index:12000;overflow:hidden;perspective:1100px;background:transparent;isolation:isolate}
-.wanted-flight{position:absolute;left:50%;top:48%;width:min(310px,52vw,48vh);aspect-ratio:2/3;margin-left:calc(min(310px,52vw,48vh) / -2);margin-top:calc(min(310px,52vw,48vh) * -.75);transform-style:preserve-3d;animation:wanted-arrive var(--wanted-flight) both cubic-bezier(.25,.6,.35,1)}
-.wanted-paper{position:absolute;inset:0;transform-style:preserve-3d;filter:drop-shadow(8px 18px 12px #0007);animation:wanted-settle 3s ease-in-out calc(var(--wanted-flight) + var(--wanted-unfold)) infinite}
-.wanted-fold{position:absolute;top:0;bottom:0;width:33.3334%;overflow:hidden;backface-visibility:visible;background:#c6bca5;transform-style:preserve-3d}
-.wanted-fold:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#211b1238,transparent 18%,#fff2 80%,#211b1228);animation:wanted-crease var(--wanted-unfold) var(--wanted-flight) both}
-.wanted-fold-0{left:0;transform-origin:right center;animation:wanted-left var(--wanted-unfold) var(--wanted-flight) both}
-.wanted-fold-1{left:33.3333%}
-.wanted-fold-2{left:66.6666%;transform-origin:left center;animation:wanted-right var(--wanted-unfold) var(--wanted-flight) both}
-.wanted-paper-face{position:absolute;top:0;width:300%;height:100%}.wanted-paper-face .wp-sheet{height:100%;width:100%}
-.wanted-dismiss{position:absolute;left:calc(50% + min(310px,52vw,48vh) / 2 + 8px);top:calc(48% - min(310px,52vw,48vh) * .75);border:1px solid #e2d2a6;border-radius:50%;width:36px;height:36px;padding:0;background:#201b16c9;color:#fff1cc;font:28px serif;opacity:0;pointer-events:none;transition:opacity .35s}
-.wanted-ready .wanted-dismiss{opacity:1;pointer-events:auto}
-.wanted-gust{position:absolute;inset:0;pointer-events:none;animation:wanted-gust var(--wanted-flight) both}
-.wanted-gust i{position:absolute;width:65vw;height:15vh;border-top:2px solid #fff8;border-radius:50%;left:25%;top:32%;transform:rotate(-18deg);filter:blur(.5px)}
-.wanted-gust i:nth-child(2){left:42%;top:50%;width:50vw;transform:rotate(-25deg)}.wanted-gust i:nth-child(3){left:5%;top:60%;width:42vw;transform:rotate(14deg)}
-@keyframes wanted-arrive{0%{transform:translate(75vw,-38vh) rotateZ(-65deg) rotateY(75deg) rotateX(35deg) scale(.12);opacity:0}12%{opacity:1}30%{transform:translate(19vw,9vh) rotateZ(28deg) rotateY(-60deg) rotateX(-25deg) scale(.42)}52%{transform:translate(-26vw,-15vh) rotateZ(-30deg) rotateY(100deg) rotateX(20deg) scale(.65)}73%{transform:translate(10vw,7vh) rotateZ(14deg) rotateY(-36deg) rotateX(-12deg) scale(.83)}90%{transform:translate(-3vw,-2vh) rotateZ(-7deg) rotateY(12deg) scale(.96)}100%{transform:translate(0,0) rotateZ(0) rotateY(0) scale(1);opacity:1}}
-@keyframes wanted-left{0%{transform:rotateY(145deg)}42%{transform:rotateY(78deg)}78%{transform:rotateY(-14deg)}100%{transform:rotateY(0)}}
-@keyframes wanted-right{0%{transform:rotateY(-150deg)}30%{transform:rotateY(-115deg)}72%{transform:rotateY(18deg)}100%{transform:rotateY(0)}}
-@keyframes wanted-crease{0%{opacity:1;background-color:#33271b66}100%{opacity:.25;background-color:transparent}}
-@keyframes wanted-settle{0%,100%{transform:rotateZ(-1deg) rotateX(2deg) translateY(0)}50%{transform:rotateZ(1deg) rotateX(-2deg) translateY(-5px)}}
-@keyframes wanted-gust{0%,100%{opacity:0;transform:translateX(20vw)}20%,65%{opacity:.65}80%{opacity:0;transform:translateX(-25vw)}}
+/* 바다 위를 가로지른 종이가 바람에 펄럭인다. 종이를 누르면 반대쪽으로 날아간다. */
+.wanted-wind {
+  position:fixed; inset:0; z-index:12000; overflow:hidden; isolation:isolate;
+  display:grid; place-items:center; outline:none;
+}
+.wanted-wind::before {
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse at 50% 47%,#17292e35 18%,#0914199e 100%);
+  animation:wanted-dim var(--wanted-flight) ease both;
+}
+.wanted-stage {
+  position:relative; width:min(410px,75vw,calc(60dvh - 24px));
+  aspect-ratio:2/3; perspective:1050px;
+}
+.wanted-flight, .wanted-paper { position:absolute; inset:0; transform-style:preserve-3d; }
+.wanted-flight { animation:wanted-arrive var(--wanted-flight) cubic-bezier(.2,.68,.32,1) both; }
+.wanted-paper {
+  appearance:none; margin:0; padding:0; border:0; background:transparent; cursor:pointer;
+  animation:wanted-flutter var(--wanted-flight) ease-in-out both;
+}
+.wanted-paper:focus-visible { outline:2px solid #fff0cd; outline-offset:4px; }
+.wanted-paper:disabled { pointer-events:none; }
+.wanted-paper .wp-sheet, .wanted-paper::before {
+  position:absolute; inset:0; backface-visibility:hidden;
+  border-radius:2% 1% 2.5% 1.5% / 1% 2% 1% 2%;
+  box-shadow:4px 10px 12px #130e0b55, 14px 27px 44px #0a080877;
+  animation:wanted-corners var(--wanted-flight) ease-in-out both;
+}
+.wanted-paper::before {
+  content:""; transform:rotateY(180deg);
+  background:repeating-linear-gradient(93deg,#52260b08 0 1px,transparent 1px 4px),
+    radial-gradient(ellipse at 68% 29%,#f2d4a0,transparent 70%), linear-gradient(116deg,#93613d,#cfab75 45%,#aa754b);
+}
+.wanted-paper .wp-sheet { color:#2b1b13; background:#e6cc9b; }
+.wanted-paper .wp-face { mix-blend-mode:multiply; }
+.wanted-paper .wp-face canvas { filter:contrast(1.07); }
+.wanted-paper .wp-caption { background:linear-gradient(transparent,#edcf9fbe 27%,#dfbb8580 84%,transparent); }
+.wanted-paper .wp-pay { color:#5a2719; border-color:#6b3d2980; }
+.wanted-paper .wp-amount { display:inline-block; margin-inline:.08em; animation:wanted-ink var(--wanted-ink) linear both; }
+.wanted-paper .wp-sheet::after {
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(109deg,transparent 29%,#fbe0b577 46%,#ffedc155 50%,#361d1345 67%,transparent 76%);
+  background-size:220% 100%; animation:wanted-light var(--wanted-flight) ease both;
+}
+.wanted-ready .wanted-paper { animation:wanted-hover var(--wanted-hover) ease-in-out infinite; }
+.wanted-ready .wanted-paper .wp-sheet::after {
+  --wanted-reflection:.24;
+  animation:wanted-light var(--wanted-hover) ease-in-out infinite;
+}
+.wanted-gust { position:absolute; inset:0; pointer-events:none; animation:wanted-gust var(--wanted-flight) ease-out both; }
+.wanted-gust i {
+  position:absolute; width:66vw; height:10vh; left:35%; top:28%; transform:rotate(-12deg);
+  border-radius:50%; border-top:1px solid #fff4d08c; filter:blur(.35px);
+}
+.wanted-gust i:nth-child(2) { left:43%; top:45%; width:50vw; transform:rotate(-15deg); }
+.wanted-gust i:nth-child(3) { left:27%; top:61%; width:47vw; transform:rotate(-10deg); }
+.wanted-leaving::before { animation:wanted-clear var(--wanted-leave) ease-out both; }
+.wanted-leaving .wanted-flight { animation:wanted-depart var(--wanted-leave) cubic-bezier(.45,.05,.73,.55) both; }
+.wanted-leaving .wanted-paper .wp-sheet, .wanted-leaving .wanted-paper::before {
+  animation:wanted-curl-away var(--wanted-leave) ease-in-out both;
+}
+.wanted-leaving .wanted-gust { animation:wanted-gust-out var(--wanted-leave) ease-out both; }
+@keyframes wanted-arrive {
+  0% { transform:translate(66vw,-33vh) rotateZ(31deg) rotateY(-140deg) rotateX(22deg) scale(.35); opacity:0; }
+  10% { opacity:1; }
+  31% { transform:translate(28vw,-10vh) rotateZ(13deg) rotateY(-132deg) rotateX(-21deg) scale(.68); }
+  55% { transform:translate(-1.8vw,.5vh) rotateZ(-5deg) rotateY(8deg) rotateX(6deg) scale(1.045); }
+  68% { transform:translate(.7vw,-.3vh) rotateZ(2.2deg) rotateY(-5deg) rotateX(-3deg) scale(.987); }
+  82% { transform:translate(-.25vw,0) rotateZ(-1.8deg) rotateY(2deg) rotateX(1deg) scale(1.007); }
+  100% { transform:translate(0,0) rotateZ(-1deg) rotateY(0) rotateX(0) scale(1); opacity:1; }
+}
+@keyframes wanted-depart {
+  0% { transform:translate(0,0) rotateZ(-1deg) rotateY(0) rotateX(0) scale(1); opacity:1; }
+  19% { transform:translate(1vw,1.2vh) rotateZ(5deg) rotateY(-26deg) rotateX(20deg) scale(.99); }
+  46% { transform:translate(-13vw,-4vh) rotateZ(-10deg) rotateY(43deg) rotateX(-21deg) scale(.87); }
+  69% { transform:translate(-38vw,-13vh) rotateZ(-28deg) rotateY(102deg) rotateX(27deg) scale(.65); opacity:1; }
+  100% { transform:translate(-76vw,-35vh) rotateZ(-66deg) rotateY(223deg) rotateX(-29deg) scale(.34); opacity:0; }
+}
+@keyframes wanted-flutter {
+  0%,100% { transform:none; }
+  18% { transform:translateY(1.6%) rotateX(-21deg) rotateY(-8deg) skewX(-6deg); }
+  36% { transform:translateY(-2%) rotateX(24deg) rotateY(12deg) skewX(7deg); }
+  53% { transform:translateY(1.4%) rotateX(-16deg) rotateY(-8deg) skewX(-5deg); }
+  72% { transform:translateY(-1%) rotateX(10deg) rotateY(5deg) skewX(3deg); }
+  89% { transform:rotateX(-5deg) rotateY(-3deg) skewX(-1deg); }
+}
+@keyframes wanted-corners {
+  18% { border-top-right-radius:9% 7%; border-bottom-left-radius:7% 4%; }
+  36% { border-top-left-radius:8% 6%; border-bottom-right-radius:10% 7%; }
+  53% { border-top-right-radius:6% 5%; border-bottom-left-radius:6% 4%; }
+  72% { border-top-left-radius:5% 4%; border-bottom-right-radius:7% 5%; }
+}
+@keyframes wanted-curl-away {
+  19% { border-top-right-radius:13% 8%; border-bottom-left-radius:9% 5%; }
+  46% { border-top-left-radius:10% 7%; border-bottom-right-radius:14% 9%; }
+  69% { border-top-right-radius:10% 7%; border-bottom-left-radius:8% 5%; }
+}
+@keyframes wanted-hover {
+  0%,100% { transform:none; }
+  23% { transform:translateY(-.9%) rotateX(5deg) rotateY(3deg) skewX(1.4deg); }
+  43% { transform:translateY(.5%) rotateX(-4deg) rotateY(-3deg) skewX(-1.25deg); }
+  66% { transform:translateY(-.6%) rotateX(3deg) rotateY(2deg) skewX(.9deg); }
+  83% { transform:translateY(.25%) rotateX(-2deg) rotateY(-1.3deg) skewX(-.65deg); }
+}
+@keyframes wanted-light {
+  0% { opacity:0; background-position:100% 50%; }
+  44% { opacity:var(--wanted-reflection,.78); }
+  66%, 100% { opacity:0; background-position:0 50%; }
+}
+@keyframes wanted-ink {
+  0%, 39%, 100% { color:inherit; text-shadow:none; transform:scale(1); }
+  49% { color:#fff5ce; text-shadow:0 0 .13em #ffe3a0,0 0 .32em #f99523,0 0 .54em #c85d14; transform:scale(1.13); }
+  66% { color:#ffdb87; text-shadow:0 0 .12em #ffa93c,0 0 .33em #db671c; transform:scale(1.05); }
+}
+@keyframes wanted-dim { 0%,25% { opacity:0; } 61%,100% { opacity:1; } }
+@keyframes wanted-clear { from { opacity:1; } to { opacity:0; } }
+@keyframes wanted-gust {
+  0% { opacity:0; transform:translate(50vw,-12vh); }
+  33% { opacity:.59; }
+  78%,100% { opacity:0; transform:translate(-40vw,7vh); }
+}
+@keyframes wanted-gust-out {
+  0% { opacity:0; transform:translate(9vw,9vh); }
+  33% { opacity:.5; }
+  100% { opacity:0; transform:translate(-54vw,-13vh); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .wanted-wind::before, .wanted-wind .wanted-flight, .wanted-wind .wanted-paper, .wanted-wind .wanted-paper::before,
+  .wanted-wind .wanted-paper .wp-sheet, .wanted-paper .wp-amount { animation:none; }
+  .wanted-gust, .wanted-paper .wp-sheet::after { display:none; }
+}

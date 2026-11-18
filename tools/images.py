@@ -100,6 +100,13 @@ for folk_art_name in ('asset-overrides.json', 'sherwood-tell-overrides.json', 'r
             PREFERRED_FILES.update(json.load(folk_art_file))
 
 
+# 새 발견 유물·괴물 전리품(2026-11-18): 기존 기본 그림을 남기고 전용 원화를 우선한다.
+creature_item_overrides = os.path.join(TOOLS, 'creature_item_art_20261118', 'asset-overrides.json')
+if os.path.isfile(creature_item_overrides):
+    with open(creature_item_overrides, encoding='utf-8') as creature_item_file:
+        PREFERRED_FILES.update(json.load(creature_item_file))
+
+
 def read(rel):
     with open(os.path.join(ROOT, rel), encoding='utf-8') as f:
         return f.read()

@@ -248,7 +248,7 @@ def asset_script(urls):
 
 def inline(page, found, artifact, title=None, extra_css='', base=None, packs=None, files=None, assets=None):
     p = pages.parse(page)
-    css = '\n'.join(pages.read(c) for c in p['css']) + extra_css
+    css = pages.bundle_css(p['css']) + extra_css
     parts = []
     for s in p['scripts']:
         if s == 'images/manifest.js' and packs is not None:

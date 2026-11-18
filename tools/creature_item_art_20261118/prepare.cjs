@@ -1,0 +1,54 @@
+const fs=require('fs'),path=require('path'),vm=require('vm');
+const repo=path.resolve(__dirname,'../..'),out=path.join(repo,'artifacts/creature-item-art-20261118');
+fs.mkdirSync(out,{recursive:true});fs.mkdirSync(path.join(out,'originals'),{recursive:true});
+const G={ITEMS:[],ITEM:{}};vm.runInNewContext(fs.readFileSync(path.join(repo,'js/data/creatures.js'),'utf8'),{window:{G}});
+const animals={tiger:'Bengal tiger',whitetiger:'white tiger with black stripes',lion:'black-maned African lion',hyena:'spotted hyena',cheetah:'cheetah with small spots and black tear lines',cloudleopard:'clouded leopard with large cloud rosettes',moonbear:'Asiatic black bear with a pale crescent at the lower neck',polarbear:'polar bear',komodo:'Komodo dragon with a heavy low scaly head',crocodile:'Nile crocodile with a broad elongated snout',boa:'boa constrictor with a broad snake head and a short thick curved neck, no limbs',gorilla:'silverback gorilla with natural animal anatomy, no human face',elephant:'African elephant with natural broad ears, two tusks and a relaxed downward curling trunk fully visible',rhino:'African rhinoceros with two horns and thick matte skin',hippo:'hippopotamus with massive broad muzzle and small ears',warthog:'warthog with curved tusks and cheek warts',unicorn:'white unicorn with one slender ivory horn and soft pale mane',reddragon:'red Welsh dragon with two horns and weathered dark-red scales',mokele:'Mokele-mbembe long-necked African lake reptile, small blunt sauropod head and curved thick neck',nessie:'Nessie, a dark blue-grey plesiosaur-like lake creature with a slender long curved neck and small broad head',smilodon:'Smilodon sabre-toothed cat skull, two very long curved upper canine teeth',mammoth:'woolly mammoth skull, two long curved tusks and a high domed cranium, no trunk or flesh',trex:'Tyrannosaurus rex skull with large deep jaws and robust conical teeth',trike:'Triceratops skull with two long brow horns, one short nose horn and a broad bony frill',stego:'Stegosaurus skull, small low narrow head with tiny leaf-shaped teeth, no horns, no back plates attached to skull',brachio:'Brachiosaurus skull, tall arched nasal opening and long blunt muzzle with peg-like teeth'};
+const common='Use case: stylized-concept. ONE original game inventory item, square 1024x1024, genuine transparent background. Hand-painted realistic museum illustration for a Renaissance maritime adventure game, subtle brush texture, subdued earthy colors, broad soft diffuse light. Centered, fully visible with 10% transparent margin, clear silhouette readable at 96px. No text, letters, labels, logo, watermark, UI, room, wall, ground plane, cast background shadow, sparkles, glow aura, glossy plastic, blood or gore.';
+const mount='Animal head-and-neck taxidermy mounted seamlessly on an aged dark walnut shield plaque with restrained hand-carved foliage, front three-quarter view. Quietly lowered gaze, relaxed closed mouth. Wistful, lonely, dignified and somber, a mother that died protecting her young; never snarling or triumphant. Soft dry matte fur/skin/scales and weathered unvarnished wood. No shiny varnish, wet nose highlights, gleaming glass eyes, bright specular highlights or exposed cut tissue. Plaque and whole head, ears, horns, trunk or neck all within canvas. Reference images are composition and painted surface references only; make an original species-specific design.';
+const jobs=[];
+for(const [id,g] of Object.entries(G.GUARDIANS)){
+ const kind=g[2],name=g[1]+' '+G.CREATURE_TROPHY[kind][0];
+ let specific=kind==='mount'?`Subject: ${animals[id]}. ${mount}`:kind==='fossil'?`Subject: a complete large mineralized ${animals[id]}, intact anatomically recognizable fossil head, three-quarter museum specimen view, aged dark-grey and sandy limestone, matte porous stone and mineral veins, gently worn, solemn ancient relic. NO mounted fur head, living animal, taxidermy plaque or pedestal. All bones and tusks visible, jaw assembled naturally.`:id==='phoenix'?'Subject: ONE handheld folding feather fan made from layered phoenix feathers, five subtle colors: rust red, muted jade, old gold, deep blue and cream, dark wooden carved handle, silk binding. A period artisan object with fine soft feather texture, no fire or neon magic. Whole fan and handle visible.':'Subject: ONE handheld broad feather fan made from the enormous tawny and ivory flight feathers of the legendary roc, three large articulated feathers with dark tips, small dark carved wooden handle and simple cord binding. Whole fan and handle visible; weathered natural matte feather texture, no modern decoration.';
+ jobs.push({id:'tr_'+id,key:'items/tr_'+id,name,type:kind,prompt:common+' '+specific,reference:kind==='mount'});
+}
+const baby={
+ r_whitetiger_baby:'a living white tiger cub with black stripes, lying quietly on a small simple linen travel blanket, no cage',
+ r_smilodon_baby:'a living fluffy tawny sabre-toothed kitten, very small emerging upper canine teeth, sitting on a little worn linen blanket',
+ r_mammoth_baby:'a living fluffy brown woolly mammoth calf, small ears, short curved trunk and tiny tusk buds, full body sitting with tucked legs',
+ r_trex_baby:'one large Tyrannosaurus egg, elongated oval with a coarsely pebbled warm beige shell, tiny natural hairline crack, resting in a minimal straw ring',
+ r_trike_baby:'one Triceratops egg, round oval with speckled grey-green leathery shell, a few dried grasses beneath it',
+ r_stego_baby:'one Stegosaurus egg, elongated oval with matte tan shell and dark mineral mottling, minimal dried fern fibers beneath',
+ r_brachio_baby:'one massive round Brachiosaurus egg, chalky cream limestone-colored shell, shallow irregular pores, minimal bed of dried fern',
+ r_reddragon_baby:'one dark-red dragon egg, subtle overlapping scale pattern, warm ember-colored seams but NO glow or flames, entirely opaque matte shell',
+ r_unicorn_baby:'a living little white unicorn foal, whole body lying with tucked legs, soft cream mane and only a tiny silver horn bud on forehead',
+ r_phoenix_baby:'a living little phoenix chick, fluffy soft cream down with emerging rust red, gold, green and blue feathers, seated on a tiny dark twig nest, no flames',
+ r_roc_baby:'one enormous ivory roc egg, subtle natural weathering and tiny brown flecks, a simple rope sling around the bottom to carry it, no bird',
+ r_mokele_baby:'a living small Mokele-mbembe hatchling, long neck, four stout reptilian legs and long tail, muted olive skin, curled on a small linen travel mat, no adult creature',
+ r_nessie_baby:'a living dark blue-grey plesiosaur hatchling, small head on long curved neck, four broad flippers and short tail, whole body curled in a low simple wooden travel tub with a little still water, matte skin and restrained reflections',
+ r_siberiancrane_baby:'a living Siberian crane chick with soft warm tan down, long thin legs gently folded, slender straight bill, seated on a small linen travel mat, not an adult white crane',
+ r_wolverine_baby:'a living fluffy wolverine kit, dark chocolate fur, subtle pale flank band and rounded little ears, sturdy small paws, sitting on a small worn linen travel mat',
+ r_amurleopard_baby:'a living fluffy Amur leopard cub with pale creamy fur and distinct black rosettes, short sturdy legs, sitting quietly on a small linen travel mat, not a tiger or cheetah'
+};
+for(const [id,subject] of Object.entries(baby)){
+ const row=G.CREATURE_RELICS.find(r=>r[1]===id);
+ jobs.push({id,key:'relics/'+id,name:row?row[2]:({r_siberiancrane_baby:'시베리아흰두루미 새끼',r_wolverine_baby:'울버린 새끼',r_amurleopard_baby:'아무르표범 새끼'}[id]),type:'baby',prompt:common+' Subject: '+subject+'. Gentle vulnerable natural posture, correct species anatomy, full body/egg and any small supporting cloth wholly visible. No mounted head or trophy plaque, no human, no adult animal, no bars or glass dome. This is a living rescued young animal or intact egg.'});
+}
+const objects={
+ r_lich_legend:'a broken black wooden wizard staff, two broken sections diagonally arranged as one item, a cracked dull blue stone held at the top in old iron prongs, bone-dry texture, no neon glow',
+ r_werewolf_legend:'one large aged ivory wolf canine tooth, as long as a human finger, gently curved with a natural root and worn tip, no blood, simple object close-up',
+ r_deadknight_legend:'a modest medieval silver goblet, lightly tarnished brushed silver, eight-pointed Knights Hospitaller cross engraved on inner cup wall and visible in the three-quarter view, no gem encrustation, restrained soft metal reflection',
+ r_worldtree_legend:'one fresh dark-green ash-tree compound leaf with a slender central stem and nine serrated leaflets, subtle pale veins, intact botanical specimen, no glow or sparkle, graceful slight curl',
+ cr_lich_heart:'one palm-sized irregular dark blue heart-stone with fine cracks, subtle warm ochre vein within the stone, an ancient talisman, opaque rough mineral with softened edges, no anatomical organ, no neon or aura',
+ cr_ilona_locket:'one small oval silver locket open on a delicate old chain, softly tarnished brushed matte silver, inside is a tiny softly painted portrait of a smiling adult medieval European woman, no legible inscription, no extra jewelry',
+ cr_hell_barley:'a small aged linen pouch opened to reveal golden barley seeds and three modest barley ears tucked into the cord, humble agrarian relic, matte husks and coarse cloth',
+ cr_knight_sword:'one complete medieval European longsword with straight crossguard, worn dark leather grip and a lightly rusted steel blade whose cutting edges remain clear, slight diagonal composition, whole pommel and tip visible, no shield or hands',
+ cr_minotaur_horn:'one large curved black bull horn with small natural white specks resembling stars, rough matte keratin, pale worn base sealed cleanly, no blood or head, no sparkles',
+ cr_elf_arrowhead:'one slender finely forged silver arrowhead with elegant leaf-shaped blade, delicate simple grooves and small socket, softly tarnished brushed metal, no entire arrow or bow, no luminous aura'
+};
+for(const [id,subject] of Object.entries(objects)){
+ const row=G.CREATURE_RELICS.find(r=>r[1]===id),it=G.ITEM[id];
+ jobs.push({id,key:(row?'relics/':'items/')+id,name:row?row[2]:it.name,type:'relic',prompt:common+' Subject: '+subject+'. One isolated artifact with historically grounded craftsmanship and believable proportions. No animal head or wooden trophy plaque.'});
+}
+if(jobs.length!==54)throw Error('expected54 '+jobs.length);
+fs.writeFileSync(path.join(out,'prompts.json'),JSON.stringify({date:'2026-11-18',mode:'built-in image_gen',reference:'첨부 사슴 박제는 구도 참고이며 원화를 새로 제작. 광택을 낮추고 쓸쓸한 분위기.',jobs},null,2));
+console.log(JSON.stringify({out,count:jobs.length,types:jobs.reduce((a,j)=>(a[j.type]=(a[j.type]||0)+1,a),{})}));

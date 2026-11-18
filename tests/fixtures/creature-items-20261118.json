@@ -1,0 +1,739 @@
+[
+  {
+    "id": "tr_tiger",
+    "name": "호랑이 머리 박제",
+    "key": "items/tr_tiger",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_tiger.webp",
+    "sha256": "c5bf375037ae82e0aafdc8da6d37d66b7d647f798b1787cc6a7da8d5d2c32523",
+    "rules": {
+      "kind": "treasure",
+      "price": 8400,
+      "trophy": "tiger",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_whitetiger",
+    "name": "백호 머리 박제",
+    "key": "items/tr_whitetiger",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_whitetiger.webp",
+    "sha256": "52fb526f81ba1fdfae149afd394635ea101dbb424d6fc8c2be22e1bec0cf72fa",
+    "rules": {
+      "kind": "treasure",
+      "price": 16800,
+      "trophy": "whitetiger",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_lion",
+    "name": "사자 머리 박제",
+    "key": "items/tr_lion",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_lion.webp",
+    "sha256": "45f28de1de8769a434b88ef7cb0a87e1b58335dd10bb6f1923a0e485b60aa6e0",
+    "rules": {
+      "kind": "treasure",
+      "price": 8000,
+      "trophy": "lion",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_hyena",
+    "name": "하이에나 머리 박제",
+    "key": "items/tr_hyena",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_hyena.webp",
+    "sha256": "d0a18c6453968f6f4c13e17fe2fa7fc4f702a0b0249bfd1d058fcd0880a8c16f",
+    "rules": {
+      "kind": "treasure",
+      "price": 6700,
+      "trophy": "hyena",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_cheetah",
+    "name": "치타 머리 박제",
+    "key": "items/tr_cheetah",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_cheetah.webp",
+    "sha256": "9a302d366d9b1451ebb984882e13a0bbe3edc103941b9467acb88528d0d12922",
+    "rules": {
+      "kind": "treasure",
+      "price": 8200,
+      "trophy": "cheetah",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_cloudleopard",
+    "name": "구름표범 머리 박제",
+    "key": "items/tr_cloudleopard",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_cloudleopard.webp",
+    "sha256": "f826fc044799938f20dcc5eedc8c974170bdc75fad4a89745e77c804496ccc5d",
+    "rules": {
+      "kind": "treasure",
+      "price": 11550,
+      "trophy": "cloudleopard",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_moonbear",
+    "name": "반달곰 머리 박제",
+    "key": "items/tr_moonbear",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_moonbear.webp",
+    "sha256": "9edb45f72f6c3785e1a4b6661733fc318273dc84415b9831b3894a3bae014799",
+    "rules": {
+      "kind": "treasure",
+      "price": 5900,
+      "trophy": "moonbear",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_polarbear",
+    "name": "북극곰 머리 박제",
+    "key": "items/tr_polarbear",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_polarbear.webp",
+    "sha256": "bcdb58dbf983669e8069bab86f84a3bba54591064f9900494c58337fc4057c29",
+    "rules": {
+      "kind": "treasure",
+      "price": 9450,
+      "trophy": "polarbear",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_komodo",
+    "name": "코모도왕도마뱀 머리 박제",
+    "key": "items/tr_komodo",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_komodo.webp",
+    "sha256": "f24be923a8005a7de499438fe5c3e930b46ad0351340799cc73e93d62b1ef2a8",
+    "rules": {
+      "kind": "treasure",
+      "price": 12600,
+      "trophy": "komodo",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_crocodile",
+    "name": "악어 머리 박제",
+    "key": "items/tr_crocodile",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_crocodile.webp",
+    "sha256": "1082fb2ff4a179b327030fa3eb3f94c7917fbef89d67a54b9f48e07854aaf1b6",
+    "rules": {
+      "kind": "treasure",
+      "price": 9850,
+      "trophy": "crocodile",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_boa",
+    "name": "보아뱀 머리 박제",
+    "key": "items/tr_boa",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_boa.webp",
+    "sha256": "367717cede9ef9a2b3d434cfada9bf0ddc4e12b34bdec1da5b8fbf30901dbc09",
+    "rules": {
+      "kind": "treasure",
+      "price": 8400,
+      "trophy": "boa",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_gorilla",
+    "name": "고릴라 머리 박제",
+    "key": "items/tr_gorilla",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_gorilla.webp",
+    "sha256": "308f91e4223a29532d98fbede92708a61cc5a72bffa10724a945833f217a0c3c",
+    "rules": {
+      "kind": "treasure",
+      "price": 12600,
+      "trophy": "gorilla",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_elephant",
+    "name": "아프리카코끼리 머리 박제",
+    "key": "items/tr_elephant",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_elephant.webp",
+    "sha256": "9a64add7751584221709d15ecd5dea03757adaf087d4147a99dbe2ce6ce58353",
+    "rules": {
+      "kind": "treasure",
+      "price": 8400,
+      "trophy": "elephant",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_rhino",
+    "name": "코뿔소 머리 박제",
+    "key": "items/tr_rhino",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_rhino.webp",
+    "sha256": "2e393ad476dfd876269de7b528941a98e07a4a4fad620acd4417b1fa60e4caad",
+    "rules": {
+      "kind": "treasure",
+      "price": 8800,
+      "trophy": "rhino",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_hippo",
+    "name": "하마 머리 박제",
+    "key": "items/tr_hippo",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_hippo.webp",
+    "sha256": "a5f4bff04fe61165694ea5f0abd90e0eee7911d5d9cf25972c585e5fa8734ab6",
+    "rules": {
+      "kind": "treasure",
+      "price": 8000,
+      "trophy": "hippo",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_warthog",
+    "name": "혹멧돼지 머리 박제",
+    "key": "items/tr_warthog",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_warthog.webp",
+    "sha256": "777c4bfb16bf7bdb0be757af74dca519165ba1887540bd8583bd82dc83c27eff",
+    "rules": {
+      "kind": "treasure",
+      "price": 6950,
+      "trophy": "warthog",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_unicorn",
+    "name": "유니콘 머리 박제",
+    "key": "items/tr_unicorn",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_unicorn.webp",
+    "sha256": "8c8d704d484593b2cdba2fba383280211437c6f307f3bf33350902891158f8d5",
+    "rules": {
+      "kind": "treasure",
+      "price": 18900,
+      "trophy": "unicorn",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_reddragon",
+    "name": "레드드래곤 머리 박제",
+    "key": "items/tr_reddragon",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_reddragon.webp",
+    "sha256": "aa1eb3518caad08806c99c14ad4df178b4aec771a0ee93fbcf3ebb345a96322a",
+    "rules": {
+      "kind": "treasure",
+      "price": 16800,
+      "trophy": "reddragon",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_mokele",
+    "name": "모켈레음벰베 머리 박제",
+    "key": "items/tr_mokele",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_mokele.webp",
+    "sha256": "2d9c49ab5216561c83c12ef0e6f6614bd84778f5edd39b7402491662a468c72a",
+    "rules": {
+      "kind": "treasure",
+      "price": 13650,
+      "trophy": "mokele",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_nessie",
+    "name": "네스 호의 괴수 머리 박제",
+    "key": "items/tr_nessie",
+    "type": "mount",
+    "file": "creature-items-20261118/tr_nessie.webp",
+    "sha256": "00ae3248db6e2b120a2364b860b7f357143230c3c28d280bef575f543387d818",
+    "rules": {
+      "kind": "treasure",
+      "price": 7550,
+      "trophy": "nessie",
+      "trophyKind": "mount"
+    }
+  },
+  {
+    "id": "tr_smilodon",
+    "name": "거대한 검치호 머리 화석",
+    "key": "items/tr_smilodon",
+    "type": "fossil",
+    "file": "creature-items-20261118/tr_smilodon.webp",
+    "sha256": "ef2affbd3d8e1299991474fa6da507fe59e6842bd28bedc71cee30217a8046f7",
+    "rules": {
+      "kind": "treasure",
+      "price": 18900,
+      "trophy": "smilodon",
+      "trophyKind": "fossil"
+    }
+  },
+  {
+    "id": "tr_mammoth",
+    "name": "거대한 매머드 머리 화석",
+    "key": "items/tr_mammoth",
+    "type": "fossil",
+    "file": "creature-items-20261118/tr_mammoth.webp",
+    "sha256": "bca0cd356fc0e194e1676fbf7021d9793f9d84c95654864fa5bcd4e8edcc7868",
+    "rules": {
+      "kind": "treasure",
+      "price": 21000,
+      "trophy": "mammoth",
+      "trophyKind": "fossil"
+    }
+  },
+  {
+    "id": "tr_trex",
+    "name": "거대한 티라노사우루스 머리 화석",
+    "key": "items/tr_trex",
+    "type": "fossil",
+    "file": "creature-items-20261118/tr_trex.webp",
+    "sha256": "709533262a04182fed1014de4da2af43bd013a455a1bd7eeb618387600f90f8f",
+    "rules": {
+      "kind": "treasure",
+      "price": 25200,
+      "trophy": "trex",
+      "trophyKind": "fossil"
+    }
+  },
+  {
+    "id": "tr_trike",
+    "name": "거대한 트리케라톱스 머리 화석",
+    "key": "items/tr_trike",
+    "type": "fossil",
+    "file": "creature-items-20261118/tr_trike.webp",
+    "sha256": "f90dd9f8b71d1f87cbe4cbc9f2205a66c72746820ebd9f0ab2f9a2107a6a44b1",
+    "rules": {
+      "kind": "treasure",
+      "price": 21000,
+      "trophy": "trike",
+      "trophyKind": "fossil"
+    }
+  },
+  {
+    "id": "tr_stego",
+    "name": "거대한 스테고사우루스 머리 화석",
+    "key": "items/tr_stego",
+    "type": "fossil",
+    "file": "creature-items-20261118/tr_stego.webp",
+    "sha256": "967fef814df6084fdc76d3c1b4ef23892ee2e12d2d3af769890543fdc8b73b2d",
+    "rules": {
+      "kind": "treasure",
+      "price": 21000,
+      "trophy": "stego",
+      "trophyKind": "fossil"
+    }
+  },
+  {
+    "id": "tr_brachio",
+    "name": "거대한 브라키오사우루스 머리 화석",
+    "key": "items/tr_brachio",
+    "type": "fossil",
+    "file": "creature-items-20261118/tr_brachio.webp",
+    "sha256": "8a617bea8895b2d0d0d07b260d4574e5d34195b88d04e2696710d33b251e2233",
+    "rules": {
+      "kind": "treasure",
+      "price": 23100,
+      "trophy": "brachio",
+      "trophyKind": "fossil"
+    }
+  },
+  {
+    "id": "tr_phoenix",
+    "name": "봉황 깃털 부채",
+    "key": "items/tr_phoenix",
+    "type": "fan",
+    "file": "creature-items-20261118/tr_phoenix.webp",
+    "sha256": "14fda9379668f9301fdedcea67f7483e44ff31e57b3c644b150f9b995f5c893f",
+    "rules": {
+      "kind": "gift",
+      "price": 17500,
+      "gv": 30,
+      "trophy": "phoenix",
+      "trophyKind": "fan"
+    }
+  },
+  {
+    "id": "tr_roc",
+    "name": "로크 깃털 부채",
+    "key": "items/tr_roc",
+    "type": "fan",
+    "file": "creature-items-20261118/tr_roc.webp",
+    "sha256": "3ee2946beba13b0b1029f92777fe137802ca6441308d10f8a478704e905f0724",
+    "rules": {
+      "kind": "gift",
+      "price": 10500,
+      "gv": 30,
+      "trophy": "roc",
+      "trophyKind": "fan"
+    }
+  },
+  {
+    "id": "r_whitetiger_baby",
+    "name": "백호 새끼",
+    "key": "relics/r_whitetiger_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_whitetiger_baby.webp",
+    "sha256": "c99d45a8391721a4c0714e2671e067091f3329bb34e192c3aeb47d8d165900c1",
+    "rules": {
+      "kind": "animal",
+      "price": 5600,
+      "relic": "whitetiger"
+    }
+  },
+  {
+    "id": "r_smilodon_baby",
+    "name": "검치호 새끼",
+    "key": "relics/r_smilodon_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_smilodon_baby.webp",
+    "sha256": "0509a3cc553bfdc2d616e61a8b4e5b6c5d1f342d1728ab12b743ccc992845b53",
+    "rules": {
+      "kind": "animal",
+      "price": 6300,
+      "relic": "smilodon",
+      "mirageOk": true
+    }
+  },
+  {
+    "id": "r_mammoth_baby",
+    "name": "새끼 매머드",
+    "key": "relics/r_mammoth_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_mammoth_baby.webp",
+    "sha256": "4b22eac755429ff60f706ed3506c861fc043e32a6e51e532ec7c1e7f269aecdc",
+    "rules": {
+      "kind": "animal",
+      "price": 7000,
+      "relic": "mammoth",
+      "mirageOk": true
+    }
+  },
+  {
+    "id": "r_trex_baby",
+    "name": "티라노사우루스 알",
+    "key": "relics/r_trex_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_trex_baby.webp",
+    "sha256": "f7e39b80aa06fa4a351dc67042b36659d598274a7e020cfb888757591633cdc2",
+    "rules": {
+      "kind": "animal",
+      "price": 8400,
+      "relic": "trex",
+      "mirageOk": true
+    }
+  },
+  {
+    "id": "r_trike_baby",
+    "name": "트리케라톱스 알",
+    "key": "relics/r_trike_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_trike_baby.webp",
+    "sha256": "e0ce5d9445db3e14378ab42f1deaa9b497c92fcc8c47a40681e4888297b2c565",
+    "rules": {
+      "kind": "animal",
+      "price": 7000,
+      "relic": "trike",
+      "mirageOk": true
+    }
+  },
+  {
+    "id": "r_stego_baby",
+    "name": "스테고사우루스 알",
+    "key": "relics/r_stego_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_stego_baby.webp",
+    "sha256": "2395bdd7ee4bf7a7c49a406f2f80d4935b7265f1d4413343d749627fd129b8b9",
+    "rules": {
+      "kind": "animal",
+      "price": 7000,
+      "relic": "stego",
+      "mirageOk": true
+    }
+  },
+  {
+    "id": "r_brachio_baby",
+    "name": "브라키오사우루스 알",
+    "key": "relics/r_brachio_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_brachio_baby.webp",
+    "sha256": "410d7fc7b4720b6b5012f0e23d90122c2914cd94f922d534eadaad7459c545f8",
+    "rules": {
+      "kind": "animal",
+      "price": 7700,
+      "relic": "brachio",
+      "mirageOk": true
+    }
+  },
+  {
+    "id": "r_reddragon_baby",
+    "name": "붉은 용의 알",
+    "key": "relics/r_reddragon_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_reddragon_baby.webp",
+    "sha256": "4992649690fc32bbaf0d10383a3c8fc3ca66ba877fb246e23ec32f557cfcb01e",
+    "rules": {
+      "kind": "animal",
+      "price": 7000,
+      "relic": "reddragon"
+    }
+  },
+  {
+    "id": "r_unicorn_baby",
+    "name": "유니콘 망아지",
+    "key": "relics/r_unicorn_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_unicorn_baby.webp",
+    "sha256": "b3df8eae185026e1ca14204ce5956f76567192cc59444a7bac176c5a0178b55f",
+    "rules": {
+      "kind": "animal",
+      "price": 7900,
+      "relic": "unicorn"
+    }
+  },
+  {
+    "id": "r_phoenix_baby",
+    "name": "봉황 새끼",
+    "key": "relics/r_phoenix_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_phoenix_baby.webp",
+    "sha256": "e2a35fb1bee10d5ba6531f1de7b2e06427c7796d4a9aff06cf04d6accba2aa4e",
+    "rules": {
+      "kind": "animal",
+      "price": 8750,
+      "relic": "phoenix"
+    }
+  },
+  {
+    "id": "r_roc_baby",
+    "name": "로크의 알",
+    "key": "relics/r_roc_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_roc_baby.webp",
+    "sha256": "6743ae35fc2f41fb805791aec2735807f3bd0dee329b88690f0d1d80b349a2a2",
+    "rules": {
+      "kind": "animal",
+      "price": 5250,
+      "relic": "roc"
+    }
+  },
+  {
+    "id": "r_mokele_baby",
+    "name": "수룡의 새끼",
+    "key": "relics/r_mokele_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_mokele_baby.webp",
+    "sha256": "315aea8f63fcfe93e151d4b53ecdb1c1d457a856cce9098952b7881f3bbadcad",
+    "rules": {
+      "kind": "animal",
+      "price": 5700,
+      "relic": "mokele"
+    }
+  },
+  {
+    "id": "r_nessie_baby",
+    "name": "네스 호 괴수의 새끼",
+    "key": "relics/r_nessie_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_nessie_baby.webp",
+    "sha256": "99bd8535e0eaf24f5d640d911e84d686c0667a8821522031d9864a7a1b8ad132",
+    "rules": {
+      "kind": "animal",
+      "price": 3150,
+      "relic": "nessie"
+    }
+  },
+  {
+    "id": "r_siberiancrane_baby",
+    "name": "시베리아흰두루미 새끼",
+    "key": "relics/r_siberiancrane_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_siberiancrane_baby.webp",
+    "sha256": "048437baae11524cb9c17ef5888cd9bd3ad21c8711968c2441cb4c98b0446f9d",
+    "rules": {
+      "kind": "animal",
+      "price": 4200,
+      "relic": "siberiancrane"
+    }
+  },
+  {
+    "id": "r_wolverine_baby",
+    "name": "울버린 새끼",
+    "key": "relics/r_wolverine_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_wolverine_baby.webp",
+    "sha256": "5ad60f9c3a5d36bd4c5efa7ddcd2458715cbe55f3f6412ebac2c4dc1d9e5551a",
+    "rules": {
+      "kind": "animal",
+      "price": 3500,
+      "relic": "wolverine"
+    }
+  },
+  {
+    "id": "r_amurleopard_baby",
+    "name": "아무르표범 새끼",
+    "key": "relics/r_amurleopard_baby",
+    "type": "baby",
+    "file": "creature-items-20261118/r_amurleopard_baby.webp",
+    "sha256": "9f65748ea5fc63d55650330290cfa2e89a89cf264a6c567d20a24cc4ac7e9ed5",
+    "rules": {
+      "kind": "animal",
+      "price": 4200,
+      "relic": "amurleopard"
+    }
+  },
+  {
+    "id": "r_lich_legend",
+    "name": "리치의 부러진 지팡이",
+    "key": "relics/r_lich_legend",
+    "type": "relic",
+    "file": "creature-items-20261118/r_lich_legend.webp",
+    "sha256": "5d4faf16aa34b9de87a65f32972424f531fffce6700399ba1e70d45246ed6239",
+    "rules": {
+      "kind": "treasure",
+      "price": 7900,
+      "relic": "lich"
+    }
+  },
+  {
+    "id": "r_werewolf_legend",
+    "name": "신의 사냥개의 송곳니",
+    "key": "relics/r_werewolf_legend",
+    "type": "relic",
+    "file": "creature-items-20261118/r_werewolf_legend.webp",
+    "sha256": "0dce70e2bf4b3de456f33c1d077191c4fd4ecbc49e73a883e93e13cd5faa4af3",
+    "rules": {
+      "kind": "treasure",
+      "price": 5800,
+      "relic": "werewolf"
+    }
+  },
+  {
+    "id": "r_deadknight_legend",
+    "name": "기사단 탑의 은잔",
+    "key": "relics/r_deadknight_legend",
+    "type": "relic",
+    "file": "creature-items-20261118/r_deadknight_legend.webp",
+    "sha256": "546f011ea551f92d45951be65b614400eacee5449023b0cdfc963bcbdd086d65",
+    "rules": {
+      "kind": "treasure",
+      "price": 8600,
+      "relic": "deadknight"
+    }
+  },
+  {
+    "id": "r_worldtree_legend",
+    "name": "세계수의 겨울 잎",
+    "key": "relics/r_worldtree_legend",
+    "type": "relic",
+    "file": "creature-items-20261118/r_worldtree_legend.webp",
+    "sha256": "006fdbbd22fbea321d807e0bfe3e79bfdbe19f59f481466ce7d704e5bbdd63bc",
+    "rules": {
+      "kind": "gift",
+      "price": 11550,
+      "gv": 30,
+      "relic": "worldtree"
+    }
+  },
+  {
+    "id": "cr_lich_heart",
+    "name": "리치의 심장석",
+    "key": "items/cr_lich_heart",
+    "type": "relic",
+    "file": "creature-items-20261118/cr_lich_heart.webp",
+    "sha256": "7b9f79c8ba7795c19a62bf56502c4c7801ff9485d12015454535965e86f5ec15",
+    "rules": {
+      "kind": "treasure",
+      "price": 24000,
+      "ward": "deathblow"
+    }
+  },
+  {
+    "id": "cr_ilona_locket",
+    "name": "일로나의 은 로켓",
+    "key": "items/cr_ilona_locket",
+    "type": "relic",
+    "file": "creature-items-20261118/cr_ilona_locket.webp",
+    "sha256": "491399af21433502623f3dec26a7452b2a3e5fbb009a5bb9e02e4aad92f5b873",
+    "rules": {
+      "kind": "gift",
+      "price": 6000,
+      "gv": 28
+    }
+  },
+  {
+    "id": "cr_hell_barley",
+    "name": "지옥에서 되찾은 보리 씨앗",
+    "key": "items/cr_hell_barley",
+    "type": "relic",
+    "file": "creature-items-20261118/cr_hell_barley.webp",
+    "sha256": "7ed431deac20cf043c2d7fa8f0851e779badfab79a6ebdfd5d153a2f5c01f31d",
+    "rules": {
+      "kind": "treasure",
+      "price": 5000
+    }
+  },
+  {
+    "id": "cr_knight_sword",
+    "name": "기사 르노의 장검",
+    "key": "items/cr_knight_sword",
+    "type": "relic",
+    "file": "creature-items-20261118/cr_knight_sword.webp",
+    "sha256": "2dece270839a9db53ed37949c414409754c2869a0cc2ae358c69fcdc622b9c0f",
+    "rules": {
+      "kind": "weapon",
+      "price": 9000,
+      "atk": 18
+    }
+  },
+  {
+    "id": "cr_minotaur_horn",
+    "name": "아스테리온의 뿔",
+    "key": "items/cr_minotaur_horn",
+    "type": "relic",
+    "file": "creature-items-20261118/cr_minotaur_horn.webp",
+    "sha256": "546092749e0a4910558c473618c16514bf89f70f77d9b36ed14a7d6b7745b4bb",
+    "rules": {
+      "kind": "treasure",
+      "price": 8000
+    }
+  },
+  {
+    "id": "cr_elf_arrowhead",
+    "name": "엘프의 은 화살촉",
+    "key": "items/cr_elf_arrowhead",
+    "type": "relic",
+    "file": "creature-items-20261118/cr_elf_arrowhead.webp",
+    "sha256": "e0a1ca0f32f096283a3fd38d37b97a510f31daa118390c4bfd490d2263655b7f",
+    "rules": {
+      "kind": "gift",
+      "price": 2400,
+      "gv": 18
+    }
+  }
+]

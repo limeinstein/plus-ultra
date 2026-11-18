@@ -111,6 +111,12 @@
     fossil: ['거대한 머리 화석', 'treasure', '쓰러지자마자 살이 모래처럼 흩어지고 돌이 된 머리만 남았다. 신기루에서 걸어 나온 옛 짐승의 마지막 모습이다.'],
     fan: ['깃털 부채', 'gift', '쓰러진 거대한 새의 깃털로 엮은 부채. 부칠 때마다 깃 끝에서 빛이 일렁인다. 귀부인들이 무엇보다 탐내는 선물이다.'] };
   G.CREATURE_TROPHY = TROPHY;
+  // 전리품 그림 (Codex, images/creature-items-20261118/tr_<짐승>.webp) — 있는 것만 items/ 열쇠로 잇는다. 없으면 그 짐승의 발견 그림 (js/core/images.js K.item)
+  var TR_ART = ['boa', 'cheetah', 'cloudleopard', 'crocodile', 'elephant', 'gorilla', 'hippo', 'hyena', 'komodo', 'lion', 'mokele', 'moonbear', 'nessie', 'polarbear', 'reddragon', 'rhino', 'tiger', 'trike', 'unicorn', 'warthog', 'whitetiger'];
+  Object.keys(G.GUARDIANS).forEach(function (id) {
+    var k = 'creature-items-20261118/tr_' + id;   // 목록에 없어도 그림 목록(images/manifest.js)에 올라 있으면 쓴다
+    if (!F['items/tr_' + id] && (TR_ART.indexOf(id) >= 0 || F[k])) F['items/tr_' + id] = F[k] || k + '.webp';
+  });
   if (G.ITEMS && G.ITEM) {
     IT.forEach(function (x) { x.rare = true; x.reg = []; if (!G.ITEM[x.id]) { G.ITEMS.push(x); G.ITEM[x.id] = x; } });
     Object.keys(G.GUARDIANS).forEach(function (id) {

@@ -124,8 +124,13 @@
   /** 탐험대가 발자국을 밟았는지 — 앞 lookAhead 개 안에서 가장 먼 자국까지 읽는다 */
   A.follow=function(d,lon,lat,mode){
     var s=G.Game.state;if(!s||G.Disc.foundByMe(d.id))return;
-    var st=TS(d.id),pts=A.trail(d),F=TC(),r=mode==='land'?F.stepR:F.stepRSea,hi=st.hit,top=Math.min(pts.length-1,st.hit+F.lookAhead);
-    for(var i=Math.max(0,st.hit+1);i<=top;i++)if(G.Geo.dist(lon,lat,pts[i].lon,pts[i].lat)<r)hi=i;
+    var st=TS(d.id),pts=A.trail(d),F=TC(),r=mode==='land'?F.stepR:F.stepRSea,hi=st.hit,seen=0;
+    // 갈 수 없는 자국(뭍길의 물 위 깃털 · 뱃길의 뭍 위 물결)은 세지 않고 건너뛴다 — 그 너머의 자국을 밟으면 함께 읽힌다
+    for(var i=Math.max(0,st.hit+1);i<pts.length&&seen<F.lookAhead;i++){
+      var land=G.Geo.isLand?G.Geo.isLand(pts[i].lon,pts[i].lat):true,reach=mode==='land'?land:!land;
+      if(!reach)continue;seen++;
+      if(G.Geo.dist(lon,lat,pts[i].lon,pts[i].lat)<r)hi=i;
+    }
     if(hi===st.hit)return;
     var first=st.hit<0;st.hit=hi;var p=(hi+1)/pts.length;
     if(first){var trace=A.traceKind(d,mode);G.UI.toast(trace==='feather'?'깃털이 흩날린다 — 떨어지는 깃털을 따라가 보자.':trace==='water'?'수면에 거품이 인다 — 물결과 물보라를 따라가 보자.':'발자국을 찾았다 — 자국을 따라가 보자.',trace==='water'?'anchor':trace==='feather'?'feather':'paw',4200);}
@@ -152,6 +157,8 @@
   /** 깃털은 종별 두 색의 깃판과 깃대로 그려 흔들리며 내려오게 한다. */
   function feather(ctx,p,i,t){
     var f=cfg().airborne,phase=((t||0)/f.cycle+i*0.271)%1,fade=Math.sin(Math.PI*phase);
+    // 내려앉을 자리의 옅은 그림자 — 숲처럼 어두운 땅에서도 깃털 길이 보이게 (내려올수록 짙어진다)
+    ctx.save();ctx.globalAlpha*=0.18+0.3*phase;ctx.fillStyle='#fff6dc';ctx.beginPath();ctx.ellipse(0,2,f.size*0.55,f.size*0.22,0,0,Math.PI*2);ctx.fill();ctx.restore();
     ctx.globalAlpha*=0.3+0.7*fade;ctx.translate(Math.sin(phase*Math.PI*2+i)*f.sway,-(1-phase)*f.height);
     ctx.rotate(Math.sin(phase*Math.PI*2+i)*f.turn+i*0.37);ctx.scale(f.size/20,f.size/20);
     ctx.fillStyle=p.palette[p.palette.length-1];ctx.beginPath();ctx.moveTo(0,10);ctx.bezierCurveTo(-11,3,-9,-8,1,-11);ctx.bezierCurveTo(8,-6,8,3,0,10);ctx.fill();
@@ -235,6 +242,9 @@
     var mix=Math.max(0,Math.min(1,p*1.15-0.05)),wave=0.5-0.5*Math.cos((t/(c.pulseSeconds||3.6)+((G.U.strHash(d.id)>>>0)%1000)/1000)*Math.PI*2);
     var pulse=(0.3+0.4*Math.min(1,p+(distance<=c.silhouetteRadius?0.25:0)))*(0.55+0.45*wave),vis=1,size=(c.followAnimal||84)*(0.85+0.35*p);
     ctx.save();ctx.imageSmoothingEnabled=true;
+    // 투명한 그림이 바다·숲 빛깔에 묻히지 않게 뒤에 옅은 빛무리를 깐다 (함께 점멸)
+    var halo=ctx.createRadialGradient(q[0],q[1],size*0.1,q[0],q[1],size*0.62);halo.addColorStop(0,'rgba(255,248,226,'+((mode==='sea'?0.75:0.5)*pulse).toFixed(3)+')');halo.addColorStop(0.55,'rgba(255,248,226,'+((mode==='sea'?0.3:0.18)*pulse).toFixed(3)+')');halo.addColorStop(1,'rgba(255,248,226,0)');
+    ctx.globalAlpha=1;ctx.fillStyle=halo;ctx.beginPath();ctx.arc(q[0],q[1],size*0.62,0,Math.PI*2);ctx.fill();
     if(gray&&mix<1){ctx.globalAlpha=pulse*vis*(1-mix);ctx.drawImage(gray,q[0]-size/2,q[1]-size/2,size,size);}
     if(mix>0){ctx.globalAlpha=pulse*vis*mix;ctx.drawImage(col,q[0]-size/2,q[1]-size/2,size,size);}
     // 지도 위에는 글자를 쓰지 않는다 (2026-11-17 사용자 요청) — 무엇인지는 부하의 말(25·50·75%)로만 짐작한다
