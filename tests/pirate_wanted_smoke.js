@@ -99,7 +99,8 @@ function ok(v, msg) { console.log((v ? '  ✓ ' : '  ✗ ') + msg); if (!v) fail
         const base = mk(); G.Captains.forceNamed(base, y1); if (G.Corsair) G.Corsair.named(base);
         const strong = mk(); G.Captains.forceNamed(strong, y1); if (G.Corsair) G.Corsair.named(strong); W.empower(strong);
         out.power = { before: base.ships.length, after: strong.ships.length, crew: [base.crewK, strong.crewK], label: strong.label, note: strong.tacticNote };
-        out.bountyUp = W.bounty(W.pirate(y1)) > (W.pirate(y1).hist ? 2 : 1) * G.BALANCE.wanted.base;
+        // 흡수 없이 셈한 현상금보다 크다 (토벌 보상 5만~10만 — G.BALANCE.wanted.reward, 2026-11-19)
+        { const rw = G.BALANCE.wanted.reward, py = W.pirate(y1), plain = Math.min(rw.max, rw.min * (py.hist ? rw.hist : 1) * (1 + rw.zone * Math.max(0, py.zones.length - 1))); out.bountyUp = W.bounty(py) > plain || plain >= rw.max; }
         // 흡수한 해적을 무찌르면 그도 흡수되고, 거느린 잔당은 흩어진다
         fight(y1); out.bigGone = !!s.wanted.gone[y1] && !s.wanted.abs[y1];
         // 여러 번 토벌해도 한 해적은 둘까지만 흡수

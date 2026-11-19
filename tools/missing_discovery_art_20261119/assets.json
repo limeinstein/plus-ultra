@@ -1,0 +1,558 @@
+[
+  {
+    "id": "lich",
+    "name": "세들레츠 납골당의 리치",
+    "kind": "scene",
+    "disc": "lich",
+    "raw": "artifacts/missing-catalog-art-20261119/raw/lich.png",
+    "originalSize": [
+      1881,
+      836
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/lich.gif",
+        "bytes": 3634731,
+        "sha256": "5e823493c86e4edae9baa59b31ddeb2013e8bef6ff356167f7392301c7f1e2d4"
+      },
+      {
+        "file": "images/discovery-ends/lich.jpg",
+        "bytes": 77103,
+        "sha256": "8d9c3b3121044985bc2f064b9eaa4930299e8f4c452c521b015f6d1fb058baf2"
+      },
+      {
+        "file": "images/discovery-sheets/lich.webp",
+        "bytes": 1423328,
+        "sha256": "90e833de5afce74d52e14a5690084f66529adf29c8766c13b28c897d50ee50fa"
+      }
+    ],
+    "frames": 24,
+    "durationMs": 9600,
+    "size": [
+      576,
+      256
+    ]
+  },
+  {
+    "id": "werewolf",
+    "name": "리보니아의 늑대인간",
+    "kind": "scene",
+    "disc": "werewolf",
+    "raw": "artifacts/missing-catalog-art-20261119/raw/werewolf.png",
+    "originalSize": [
+      1881,
+      836
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/werewolf.gif",
+        "bytes": 3567274,
+        "sha256": "842ec65adc990ed5a954aaacc34ce4cd8da0cb45c7b16ac2118db2f5da707e73"
+      },
+      {
+        "file": "images/discovery-ends/werewolf.jpg",
+        "bytes": 76824,
+        "sha256": "6201c16fa26a6e1297fcb6abb5ba7854bad7601f691f7ae42715c5433f39df34"
+      },
+      {
+        "file": "images/discovery-sheets/werewolf.webp",
+        "bytes": 1427646,
+        "sha256": "4eeeffcd50c98c6acfbeec572ad2b8863b262b2226d30ff0908fecad1e6e9724"
+      }
+    ],
+    "frames": 24,
+    "durationMs": 9600,
+    "size": [
+      576,
+      256
+    ]
+  },
+  {
+    "id": "deadknight",
+    "name": "크라크 데 슈발리에의 해골 기사",
+    "kind": "scene",
+    "disc": "deadknight",
+    "raw": "artifacts/missing-catalog-art-20261119/raw/deadknight.png",
+    "originalSize": [
+      1881,
+      836
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/deadknight.gif",
+        "bytes": 3262592,
+        "sha256": "073d3103e223d90b9de39ea77998660f20a4e5dd96eb267b1dc9a6969c3eb60c"
+      },
+      {
+        "file": "images/discovery-ends/deadknight.jpg",
+        "bytes": 70726,
+        "sha256": "05e94e11948d5df1d820f4edf3a6d03c2969dec8d1c38cef5dfdccd3381d9550"
+      },
+      {
+        "file": "images/discovery-sheets/deadknight.webp",
+        "bytes": 1259422,
+        "sha256": "729b554ae622b1ff746d3f01bb2dc4b90491cc003e6069be164bf3610077b9bf"
+      }
+    ],
+    "frames": 24,
+    "durationMs": 9600,
+    "size": [
+      576,
+      256
+    ]
+  },
+  {
+    "id": "worldtree",
+    "name": "세계수 이그드라실",
+    "kind": "scene",
+    "disc": "worldtree",
+    "raw": "artifacts/missing-catalog-art-20261119/raw/worldtree.png",
+    "originalSize": [
+      1881,
+      836
+    ],
+    "files": [
+      {
+        "file": "images/discoveries/worldtree.gif",
+        "bytes": 3283601,
+        "sha256": "ccb0a03227c5e585fdbe8fda8a8bf6272f68eb2b581893a69a12ae2c13187c5b"
+      },
+      {
+        "file": "images/discovery-ends/worldtree.jpg",
+        "bytes": 91521,
+        "sha256": "d5aef012a8f54b13015ad4602b3dc81773ef3aabca69023eb2883623b24f617f"
+      },
+      {
+        "file": "images/discovery-sheets/worldtree.webp",
+        "bytes": 1702910,
+        "sha256": "77d855e3c8a3b209f6b2b43c968cd3c103db6af6576703d2918a4ce9aab7ccd8"
+      }
+    ],
+    "frames": 24,
+    "durationMs": 9600,
+    "size": [
+      576,
+      256
+    ]
+  },
+  {
+    "id": "pl_doubloons",
+    "name": "에스파냐 금화 궤짝",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/pl_doubloons.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/pl_doubloons.webp",
+        "bytes": 27566,
+        "sha256": "0b2a0acf4494947434472a8b8c10721027affc31fc3d3a0bf5aed76d15f7db20"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      20,
+      25,
+      238,
+      235
+    ]
+  },
+  {
+    "id": "pl_reales",
+    "name": "8레알 은화 자루",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/pl_reales.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/pl_reales.webp",
+        "bytes": 25270,
+        "sha256": "b7632519a4fa3bf04c74fb59a3b93e4e5afd98c8a9d93fff73ae5bde53f94acc"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      14,
+      22,
+      239,
+      242
+    ]
+  },
+  {
+    "id": "pl_emerald_cross",
+    "name": "에메랄드 십자가",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/pl_emerald_cross.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/pl_emerald_cross.webp",
+        "bytes": 16300,
+        "sha256": "6876467242623937b447e3617938dbae57650ee0568779191d52e64c86fc1ef4"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      18,
+      14,
+      237,
+      236
+    ]
+  },
+  {
+    "id": "pl_ruby_cup",
+    "name": "루비 박힌 금잔",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/pl_ruby_cup.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/pl_ruby_cup.webp",
+        "bytes": 18012,
+        "sha256": "63cf6077408358a1d55d453993015a85e7ff99735e007aac321287653ff796c9"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      57,
+      26,
+      205,
+      228
+    ]
+  },
+  {
+    "id": "pl_pearls",
+    "name": "굵은 진주 목걸이",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/pl_pearls.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/pl_pearls.webp",
+        "bytes": 30788,
+        "sha256": "da2346517655be93f425ff411d438f95ec4e4dc23c22c1bcdf2b243ceeb420ef"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      20,
+      23,
+      234,
+      235
+    ]
+  },
+  {
+    "id": "pl_jade_seal",
+    "name": "비취 인장",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/pl_jade_seal.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/pl_jade_seal.webp",
+        "bytes": 21262,
+        "sha256": "2c22dc8edea04fd0ea29af3812cffe9a420045fe0241261cdde625d8be741da2"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      14,
+      18,
+      235,
+      233
+    ]
+  },
+  {
+    "id": "pl_amber",
+    "name": "호박 목걸이 상자",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/pl_amber.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/pl_amber.webp",
+        "bytes": 25408,
+        "sha256": "56530f5d1bb8a0f2109ab7caca523b15566a0e81636d93eb27dc3559d85a0a7e"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      28,
+      15,
+      231,
+      231
+    ]
+  },
+  {
+    "id": "pl_silver_bars",
+    "name": "은괴 꾸러미",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/pl_silver_bars.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/pl_silver_bars.webp",
+        "bytes": 21790,
+        "sha256": "04c6309ae421fb1754e7ab2423d8327e0f24550c825069068b426fd3c917bd00"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      14,
+      24,
+      235,
+      238
+    ]
+  },
+  {
+    "id": "ps_cutlass",
+    "name": "해적왕의 커틀러스",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/ps_cutlass.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/ps_cutlass.webp",
+        "bytes": 15540,
+        "sha256": "62fae7af72853d1eab722458ab2f186b53c53fb3e71adbbca87ca5984c317998"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      26,
+      21,
+      236,
+      232
+    ]
+  },
+  {
+    "id": "ps_toledo",
+    "name": "톨레도 강철 레이피어",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/ps_toledo.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/ps_toledo.webp",
+        "bytes": 11182,
+        "sha256": "785416e93fec1a5b8f55d1098f5b170bdf9f8eece2c5df85462f1250c9b095ab"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      20,
+      16,
+      239,
+      236
+    ]
+  },
+  {
+    "id": "ps_kilij",
+    "name": "다마스쿠스 킬리지",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/ps_kilij.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/ps_kilij.webp",
+        "bytes": 10412,
+        "sha256": "2b09832b73c2bc2c3063178f5490388f784db02f0daed1f9abf99cbd4fa958b1"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      20,
+      20,
+      240,
+      231
+    ]
+  },
+  {
+    "id": "ps_shamshir",
+    "name": "산호 자루 샴시르",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/ps_shamshir.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/ps_shamshir.webp",
+        "bytes": 9826,
+        "sha256": "d751fdd88c933738035c4a31b8705758d114a3a079642a2cbf0d9864d5971bc3"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      21,
+      22,
+      242,
+      239
+    ]
+  },
+  {
+    "id": "ps_kris",
+    "name": "일곱 굽이 크리스",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/ps_kris.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/ps_kris.webp",
+        "bytes": 9912,
+        "sha256": "8f52543ec508842fb43810c24ff6eed6d8ab4e206b05ff70f201bef100b65cb9"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      25,
+      20,
+      238,
+      236
+    ]
+  },
+  {
+    "id": "ps_nodachi",
+    "name": "왜구의 노다치",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/ps_nodachi.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/ps_nodachi.webp",
+        "bytes": 8896,
+        "sha256": "2de4295b02e6d5513fa4d65a04442b7a43fa5f0052d48a483011a8c46cea30e5"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      21,
+      16,
+      242,
+      240
+    ]
+  },
+  {
+    "id": "ps_frost",
+    "name": "서리 무늬 장검",
+    "kind": "item",
+    "disc": null,
+    "raw": "artifacts/missing-catalog-art-20261119/raw/ps_frost.png",
+    "originalSize": [
+      1254,
+      1254
+    ],
+    "files": [
+      {
+        "file": "images/items/ps_frost.webp",
+        "bytes": 10434,
+        "sha256": "8faab56f4b80dc58d8922f5f7e2359937c5edd919f8c22da9f7dfc8e5444f657"
+      }
+    ],
+    "size": [
+      256,
+      256
+    ],
+    "alphaBounds": [
+      15,
+      14,
+      240,
+      241
+    ]
+  }
+]

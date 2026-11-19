@@ -220,6 +220,8 @@
   /** 같은 인수의 A.shipTop 대체 그림. 그렸으면 true (spec.sid = 배마다 다른 이름이면 방위 칸이 덜 깜박인다) */
   S.draw = function (ctx, x, y, ang, len, spec, t) {
     spec = spec || {};
+    // 촬영된 시트에는 원래 돛 색이 박혀 있다. 해적 도색은 같은 돛 색의 코드 그림으로 복귀한다.
+    if (spec.pirateLivery) return false;
     var meta = G.SHIP_ART && G.SHIP_ART[spec.type];
     var transform = ctx.getTransform ? ctx.getTransform() : null, device = transform ? Math.hypot(transform.a, transform.b) : 1;
     var sh = ready(meta, !!meta && len / meta.baseLen * device < CF().halfBelow);

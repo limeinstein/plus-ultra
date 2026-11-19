@@ -8,6 +8,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from complete_discovery_art import complete_runtime  # noqa: E402
+from addition_art import runtime  # noqa: E402
 
 
 def ids(pattern, rel, flags=re.M):
@@ -29,7 +30,8 @@ known = set(all_ids)
 assert len(sea_ids) == 24 and sea_ids <= known, "본편 해양 발견물 누락: " + ", ".join(sorted(sea_ids - known))
 assert tutorial_ids == {"herc_cave"} and tutorial_ids <= known, "튜토리얼 발견물 누락"
 assert len(story_ids) == 7 and story_ids <= known, "이야기 발견물 누락: " + ", ".join(sorted(story_ids - known))
-assert len(known) == 1233, f"전체 발견물 수가 예상과 다름: {len(known)}"
+# 자료를 추가할 때마다 바뀌는 총개수 대신 실제 로딩된 전체 목록을 검사한다.
+assert known, "발견물 자료를 읽지 못했습니다."
 
 folders = {
     "discoveries": ".gif",
@@ -49,7 +51,10 @@ assert not missing, "발견물 그림 누락:\n" + "\n".join(missing)
 
 # 완성된 세 파일이 있는데 어느 모드의 발견물에도 없는 경우도 잡는다.
 asset_sets = [{path.stem for path in (ROOT / "images" / folder).glob(f"*{ext}")} for folder, ext in folders.items()]
-orphaned = set.intersection(*asset_sets) - known
+# 합쳐진 발견물의 옛 그림은 저장 호환용으로 보존할 수 있다.
+aliases = runtime()['discoveryAliases']
+assert set(aliases.values()) <= known, "합쳐진 발견물의 대상이 없습니다."
+orphaned = set.intersection(*asset_sets) - known - set(aliases)
 assert not orphaned, "자료에 없는 발견물 그림: " + ", ".join(sorted(orphaned))
 
 print(

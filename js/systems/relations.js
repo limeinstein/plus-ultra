@@ -197,7 +197,7 @@
     if (s.date.d === 1) {
       var seaLog = r.seaLog || (r.seaLog = {});
       ps.forEach(function (a, i) { ps.slice(i + 1).forEach(function (b) {
-        if (!RL.atWar(a, b) || !U.chance(B().seaWarMonth) || a === 'HU' || b === 'HU' || a === 'PL' || b === 'PL' || a === 'RU' || b === 'RU') return;
+        if (!RL.atWar(a, b) || !RL.seaWarOK(a, b) || !U.chance(B().seaWarMonth)) return;
         var sk = key(a, b), once = seaLog[sk] !== s.date.y;
         if (once) seaLog[sk] = s.date.y;
         out.push({ icon: 'cannon', minor: true, nolog: !once, text: U.pick(['{a} 함대와 {b} 함대가 {sea}에서 맞붙었다는 소식이 들려온다.', '{sea}에서 {a}의 군함이 {b}의 배를 쫓아 포를 쏘았다고 한다.', '{a}{과} {b}의 싸움이 바다로 번졌다 — {sea}에 화약 연기가 자욱하다고 한다.'])
@@ -212,7 +212,23 @@
     return kind === 'war' ? ' 이제 ' + RL.name(o) + '의 교역소는 우리와 거래하지 않고, 그 나라 군함이 덤빈다.' : ' ' + RL.name(o) + '의 교역소가 다시 문을 연다.';
   }
   var SEAS = { OT: '에게해', VE: '아드리아해', GE: '리구리아해', EN: '도버 해협', FR: '비스케이만', ES: '서지중해', PT: '대서양', DK: '외레순 해협', SW: '발트해', HAN: '발트해', NL: '북해', SC: '북해', PA: '티레니아해' };
-  function seaOf(a, b) { return SEAS[b] || SEAS[a] || '먼바다'; }
+  // 지중해 바다 이름 — 지중해에만 함대를 둔 나라(교황령 등)는 이 바다에서만 싸운다
+  var MED = { '에게해': 1, '아드리아해': 1, '리구리아해': 1, '서지중해': 1, '티레니아해': 1 };
+  function seaRule() { var w = B().seaWar || {}; return { no: w.noNavy || ['HU', 'PL', 'RU'], med: w.medOnly || [], medSea: w.medSea || [] }; }
+  /** 두 나라가 바다에서 맞붙을 수 있나 — 해군이 없는 나라는 빠지고, 지중해 함대뿐인 나라는 지중해의 나라하고만 싸운다 */
+  RL.seaWarOK = function (a, b) {
+    var w = seaRule();
+    if (w.no.indexOf(a) >= 0 || w.no.indexOf(b) >= 0) return false;
+    if ((w.med.indexOf(a) >= 0 || w.med.indexOf(b) >= 0) && (w.medSea.indexOf(a) < 0 || w.medSea.indexOf(b) < 0)) return false;
+    return true;
+  };
+  function seaOf(a, b) {
+    var w = seaRule(), sea = SEAS[b] || SEAS[a] || '먼바다';
+    if (w.med.indexOf(a) >= 0 || w.med.indexOf(b) >= 0) {   // 교황령과 프랑스: 비스케이만이 아니라 지중해에서
+      if (!MED[sea]) sea = [SEAS[a], SEAS[b]].filter(function (x) { return x && MED[x]; })[0] || '티레니아해';
+    }
+    return sea;
+  }
 
   // ================================================================ 사절·큰 해전 (사건 중 제독에게 오는 것)
   function metNeed(e) {

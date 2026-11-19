@@ -43,13 +43,14 @@
     else { S().player.items.push({ id: id }); UI.toast('짐이 가득하지만 「' + G.ITEM[id].name + '」만은 품에 넣어 왔다.', 'chest', 4200); }
   }
   /** 겨룰지 묻고 일기토 — 'win' | 'lose' | 'back' (+ 대신 싸운 부하) */
-  async function challenge(f, q, place, backLabel, dare) {
+  async function challenge(f, q, place, backLabel, dare, before) {
     var px = G.Games.proxy ? G.Games.proxy() : null, pd = px && G.MATE[px.id];
     var opts = [{ label: '정정당당히 겨룬다 (일기토)', value: 'duel' }];
     if (pd) opts.push({ label: '부관 ' + pd.name + '에게 맡긴다', value: 'proxy' });
     opts.push({ label: backLabel || '물러선다', value: 'back' });
     var v = await UI.ask(q, opts, first());
     if (v === 'back') return { res: 'back' };
+    if (before) await before(v === 'proxy' ? px : null);
     if (v === 'proxy') await UI.say(U.pick(['제독께서 나서실 것까지 없습니다. 제가 상대하지요.', '이 상대는 제게 맡겨 주십시오.']), first());
     if (dare) await dare();   // 겨루기 직전의 한마디
     var res = await G.Games.duel(f, v === 'proxy' ? { mate: px, place: place } : { place: place });
@@ -98,15 +99,36 @@
     var nm = s.mates.filter(function (m) { return m.id === e.id; })[0]; if (nm) nm.loyal = Math.max(nm.loyal || 0, 88);
     if (!quiet) G.State.log('세계수의 엘프 ' + E.nameOf(e) + U.jx(E.nameOf(e), '이/가') + ' 「그때와는 달리, 너를 따라가고 싶다」며 동료가 되었다.');
   }
+  /** 대화 중에만 사건샷을 띄운다. 결투·거절·오류로 끝나도 걷고, 발견 등 바깥 사건의 그림은 복구한다. */
+  async function elfShots(run) {
+    var pic = null, saved = null;
+    var shots = {
+      stop: async function () { var p = pic; pic = null; if (p && p.stop) await p.stop(); },
+      show: async function (kind, e, mate) {
+        await shots.stop();
+        var a = (G.ELF_EVENT_SHOTS || {})[kind], fe = G.FamEv;
+        if (!a || !fe || !fe.showPic || !G.Img || !G.Img.file(a.img)) return;
+        if (!saved && fe.suspendPic) saved = fe.suspendPic();
+        var title = a.title.replace(/\{elf\}/g, E.nameOf(e)).replace(/\{mate\}/g, (G.MATE[mate] || {}).name || '동료');
+        pic = fe.showPic({ img: a.img, title: title, noStand: true });
+        if (pic && pic.ready) await pic.ready;
+      }
+    };
+    try { return await run(shots); }
+    finally { await shots.stop(); if (saved) saved.restore(); }
+  }
   /** 엘프와 겨룬다 — mode: 'random'(숲에서 우연히) | 'disc'(세계수·엘프 바위 앞) → 'win' | 'lose' | 'back' | 'sister'(자매가 설득했다) */
   E.duel = async function (e, mode, place) {
+    return elfShots(async function (shots) {
     var es = ES(), s = S(), who = E.speaker(e), nm = E.nameOf(e), sid = E.sister(e);
     es.met[e.id] = s.day; es.last = s.day;
+    await shots.show('duel', e);
     await UI.say(U.pick(['숲 사이로 은빛이 번뜩이더니, 귀 끝이 뾰족한 이가 나무 그늘에서 걸어 나와 길을 막는다.', '바람도 없는데 나뭇잎이 일제히 뒤집힌다. 엘프 하나가 칼을 비스듬히 든 채 앞을 막아선다.']), {});
     UI.toast('엘프 — ' + nm + (sid ? ' (' + E.nameOf({ id: sid }) + '의 ' + E.rank(e) + ')' : ''), 'leaf', 5200);
     await UI.say(e.meet[0], who);
     // 자매가 이미 우리 배에 있다 — 끼어들어 말린다
     if (sid && aboard(sid)) {
+      await shots.show('sisters', e, sid);
       var sw = { name: E.nameOf({ id: sid }), portrait: G.Art.mateSpec(sid) };
       await UI.say(sisLine('stop', { id: sid }) || '칼 내려!', sw);
       await UI.say(sisLine('reply', e) || '…', who);
@@ -123,7 +145,10 @@
     }
     if (mode === 'random') await UI.say(U.pick(['제독, 세계수를 지킨다는 엘프입니다. …말은 저래도 정말로 우리가 나무를 해칠까 봐 겁내는 것 같습니다.', '북방 사람들이 말하던 숲의 사람들입니다. 싸우지 않고 돌아설 수도 있습니다, 제독.']), first());
     var c = await challenge(fighter(nm, duelSpec(e), 'elf'), nm + U.jx(nm, '이/가') + ' 칼을 들고 길을 막는다. 어떻게 할까?', place || 'explore',
-      mode === 'random' ? '물러선다 (돌아서 간다)' : '물러선다 (' + K().retryDays + '일 뒤에 다시)', function () { return UI.say(common('dare', e), who); });
+      mode === 'random' ? '물러선다 (돌아서 간다)' : '물러선다 (' + K().retryDays + '일 뒤에 다시)', async function () {
+        await UI.say(common('dare', e), who);
+        await shots.stop();
+      }, function (proxy) { return shots.show(proxy ? 'support' : 'duel', e, proxy && proxy.id); });
     if (c.res === 'back') { await UI.say(common('lose', e), who); return 'back'; }
     if (c.res === 'win') {
       await UI.say(e.win, who);
@@ -137,6 +162,7 @@
     await UI.say(common('lose', e), who);
     if (s.fleet) s.fleet.fatigue = Math.min(100, (s.fleet.fatigue || 0) + 8);
     return 'lose';
+    });
   };
   /** 이긴 엘프가 돌아왔는가 */
   E.due = function () { var s = S(); if (!s) return null; var es = ES(); for (var id in es.back) if (s.day >= es.back[id] && es.joined[id] == null && !aboard(id) && E.get(id)) return id; return null; };
@@ -144,18 +170,23 @@
   /** 30일 뒤: 「그때와는 달리 너를 따라가고 싶다」 — 한 번 더 겨루고, 이기면 동료가 된다 */
   E.comeBack = async function (id, place) {
     var e = E.get(id), es = ES(), s = S(); if (!e) return;
+    return elfShots(async function (shots) {
     var who = E.speaker(e), nm = E.nameOf(e), sid = E.sister(e);
     delete es.back[id];
+    await shots.show('join', e);
     await UI.say(U.pick(['어디선가 낯익은 은빛이 번뜩인다. 그때 길을 막았던 엘프가 이번에는 칼을 내린 채 걸어 나온다.', '어느새 일행 곁에 엘프 하나가 서 있다. 한 달 전, 숲에서 칼을 겨눴던 바로 그 얼굴이다.']), {});
     for (var i = 0; i < e.backTalk.length; i++) await UI.say(e.backTalk[i], who);
     var v = await UI.ask(nm + U.jx(nm, '이/가') + ' 따라가고 싶다고 한다. 어떻게 할까?', [{ label: '받아들인다 (한 번 더 겨룬다)', value: 'yes' }, { label: '거절한다', value: 'no' }], first());
     if (v !== 'yes') { await UI.say(common('decline', e), who); es.declined[id] = s.day; return; }
     await UI.say(common('again', e), who);
+    await shots.stop();
     var res = await G.Games.duel(fighter(nm, duelSpec(e), 'elf'), { place: place || 'explore' });
     if (res === 'win') {
+      await shots.show('join', e);
       await UI.say(e.join, who);
       joinElf(e);
       if (sid && aboard(sid)) {   // 자매가 먼저 배에 있었다
+        await shots.show('sisters', e, sid);
         await UI.say(sisLine('reunion', e), who);
         await UI.say(sisLine('sisReply', { id: sid }) || '어서 와.', { name: E.nameOf({ id: sid }), portrait: G.Art.mateSpec(sid) });
       }
@@ -163,6 +194,7 @@
       await UI.say(common('fail', e), who);
       es.back[id] = s.day + K().elf.backDays;
     }
+    });
   };
   E.check = async function () { var id = E.due(); if (id) await E.comeBack(id, 'city'); };
   /** 뭍의 하루 (js/scenes/land.js runDay) */
@@ -179,6 +211,24 @@
     await E.duel(e, 'random', 'explore');
     return true;
   };
+
+  /** 괴물 대화의 사건샷. 발견 액자는 잠시 숨겼다가 사건 뒤에 복구한다. */
+  async function monsterShots(id, run) {
+    var pic = null, saved = null;
+    var shots = {
+      stop: async function () { var p = pic; pic = null; if (p && p.stop) await p.stop(); },
+      show: async function (kind) {
+        await shots.stop();
+        var a = ((G.MONSTER_EVENT_SHOTS || {})[id] || {})[kind], fe = G.FamEv;
+        if (!a || !fe || !fe.showPic || !G.Img || !G.Img.file(a.img)) return;
+        if (!saved && fe.suspendPic) saved = fe.suspendPic();
+        pic = fe.showPic({ img: a.img, title: a.title, noStand: true });
+        if (pic && pic.ready) await pic.ready;
+      }
+    };
+    try { return await run(shots); }
+    finally { await shots.stop(); if (saved) saved.restore(); }
+  }
 
   // ================================================================ 사람 모양 괴물 (발견물 앞)
   var M = G.Monsters = {};
@@ -205,10 +255,12 @@
       UI.toast(d.name + U.jx(d.name, '은/는') + ' ' + k.retryDays + '일 뒤에야 다시 다가갈 수 있다.', 'leaf', 4800);
       return { go: false };
     }
+    return monsterShots(d.id, async function (shots) {
     var t = M.tale(d), mon = { name: t.name, lang: 3 };
+    await shots.show('meet');
     UI.toast(t.title + ' — ' + t.name, t.icon || 'skull', 5200);
     await play(t.meet, mon);
-    var c = await challenge(fighter(t.name, t.duel, t.sprite), t.name + U.jx(t.name, '이/가') + ' 앞을 막는다. 어떻게 할까?', place, '물러선다 (' + k.retryDays + '일 뒤에 다시)', function () { return play(t.dare, mon); });
+    var c = await challenge(fighter(t.name, t.duel, t.sprite), t.name + U.jx(t.name, '이/가') + ' 앞을 막는다. 어떻게 할까?', place, '물러선다 (' + k.retryDays + '일 뒤에 다시)', async function () { await play(t.dare, mon); await shots.stop(); });
     if (c.res === 'win') {
       await play(t.win, mon);
       G.Fame.add('bt', k.winFame);
@@ -216,6 +268,7 @@
       if (ch) {
         var v = await UI.ask(ch.q, ch.opts.map(function (o) { return { label: o.label, value: o.value }; }), first());
         var o = ch.opts.filter(function (x) { return x.value === v; })[0] || ch.opts[0];
+        await shots.show(o.value);
         await play(o.lines, mon);
         if (o.give) giveItem(o.give);
         if (o.gold) { s.player.gold += o.gold; UI.toast('금화 ' + U.num(o.gold) + '닢을 얻었다.', 'coin', 4200); }
@@ -234,6 +287,7 @@
     st.monBlock = s.day + k.retryDays;
     UI.toast(d.name + U.jx(d.name, '은/는') + ' ' + k.retryDays + '일 뒤에야 다시 다가갈 수 있다.', 'shield', 4800);
     return { go: false };
+    });
   };
 
   // ================================================================ 새끼를 되찾으러 오는 거대한 짐승

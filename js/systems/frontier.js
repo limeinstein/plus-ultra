@@ -210,6 +210,34 @@
     else next = '모든 단서를 들을 수 있습니다.';
     return { id: fid, name: f.name, road: f.road, lv: o.lv, t2: o.t2, t3: o.t3, label: label, found: o.found, total: f.n, next: next };
   };
+  // ---------------------------------------------------------------- 상인이 아는 세상 (2026-11-19 사용자 요청)
+  /* 교역소·술집·거리 상인이 「어디에 가져가면 잘 팔린다」, 「어디에 무엇이 모자란다」고 말할 수 있는 곳.
+     희망봉·인도 항로도 알려지기 전에 리스본 상인이 일본·중국·인도·아메리카 이야기를 하지 않게 한다.
+     · 그 땅으로 가는 항로(도시 점령과 같은 표 — G.BALANCE.conquest.regionRoutes·routeAreas)가 알려졌으면(내가 찾았거나 경쟁자가 발표) 누구나 안다.
+     · 항로가 필요 없는 옛 세상(이베리아·북유럽·지중해·중근동·북/서아프리카)은 옛 세상 상인이 처음부터 안다.
+     · 먼 땅의 상인은 제 바다의 오랜 교역권(G.BALANCE.merchantKnows)을 안다 — 캘리컷 상인은 말라카·명을, 나가사키 상인은 명을.
+       그 땅의 항로가 알려진 뒤에는 유럽 배가 드나드니 옛 세상 이야기도 한다. */
+  function routeOf(t) {
+    if (typeof t === 'number') return ((G.BALANCE.conquest || {}).regionRoutes || {})[t] || null;
+    return G.Conquest && G.Conquest.route ? G.Conquest.route(t) : (((G.BALANCE.conquest || {}).regionRoutes || {})[t.region] || null);
+  }
+  F.routeOf = routeOf;
+  /** 도시 c의 상인이 t(도시 또는 문화권 번호 G.REGIONS)를 장사 이야기로 입에 올릴 수 있는가 */
+  F.heard = function (c, t) {
+    if (!c || t == null) return false;
+    var tr = typeof t === 'number' ? t : t.region;
+    if (typeof t !== 'number' && t.id === c.id) return true;
+    var rt = routeOf(t), rc = routeOf(c);
+    if (rt && F.known(rt)) return true;                                          // 그 땅으로 가는 항로가 알려졌다
+    var far = !!rc || c.region === 4;                                            // 먼 땅(항로가 있어야 닿는 곳)·중근동의 상인은 제 교역권을 안다
+    var nat = (G.BALANCE.merchantKnows || {})[c.region] || [];
+    if (far && (tr === c.region || nat.indexOf(tr) >= 0)) return true;
+    if (!rt) return !rc || F.known(rc);                                          // 옛 세상: 옛 세상 상인, 또는 항로가 열린 먼 땅의 상인
+    return false;
+  };
+  /** 문화권 번호 목록 중 c의 상인이 아는 것만 */
+  F.heardRegions = function (c, list) { return list.filter(function (x) { return F.heard(c, typeof x === 'number' ? x : x.r); }); };
+
   /** 각 길에서 지금 노릴 만한 다음 목표 (맨 앞의 아직 열리지 않은 단계) */
   F.goals = function () {
     var out = [];

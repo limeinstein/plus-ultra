@@ -1,11 +1,11 @@
-/* 개척 도시 (js/systems/colony.js): 명성 200,000 → 국왕의 부름 → 세울 곳 고르기 → 개척지 입항 · 이름 짓기 → 물자 3번 → 총독 → 가족 → 명성 400,000 두 번째
+/* 개척 도시 (js/systems/colony.js): 명성 200,000 → 국왕의 부름 → 세울 곳 고르기 → 육로로 도착 · 이름 짓기 → 물자 3번(육로·해로) → 총독 → 가족 → 명성 400,000 두 번째
    그림(스크린샷)은 OUT 폴더에. node tests/colony_smoke.js  (BROWSER_EXE=크로미움 경로 · PAGE=다른 html · OUT=스크린샷 폴더) */
 'use strict';
 const path = require('path'), fs = require('fs');
 const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
-const PAGE = process.env.PAGE ? (/^http/.test(process.env.PAGE) ? process.env.PAGE : pathToFileURL(path.resolve(process.env.PAGE)).href) : pathToFileURL(path.join(ROOT, 'index.html')).href;
+const PAGE = process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : process.env.PAGE ? (/^http/.test(process.env.PAGE) ? process.env.PAGE : pathToFileURL(path.resolve(process.env.PAGE)).href) : (process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href);
 const OUT = process.env.OUT || path.join(ROOT, 'tmp', 'colony_shots');
 fs.mkdirSync(OUT, { recursive: true });
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
@@ -14,10 +14,10 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
 (async function () {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
-  if (process.env.FONTS !== 'keep') await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+  if (process.env.FONTS !== 'keep') await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({ contentType: 'text/css', body: '' }));
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|ERR_FAILED|_blob/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   // 열린 말·물음을 넘긴다 (fn이 있으면 물음마다 고를 값을 정한다)
   async function drain(max, pickFn, stopFn) {
     for (let i = 0; i < (max || 40); i++) {
@@ -37,8 +37,8 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 180000 });
     await page.evaluate(async () => {
       await G.Game.ensureGeo();
-      G.State.newGame({ name: '디오구 페헤이라', nation: 'PT', job: 'explorer', age: 30, birth: { m: 4, d: 12 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: [], diff: 'normal' });
-      const s = G.Game.state; s.prologueDone = true; s.date = { y: 1525, m: 3, d: 1 }; s.player.gold = 100000;
+      G.State.newGame({ name: '디오구 페헤이라', nation: 'PT', job: 'explorer', age: 30, birth: { m: 4, d: 12 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: G.LANGS.map(() => 3), diff: 'normal' });
+      const s = G.Game.state; s.prologueDone = true; s.date = { y: 1525, m: 3, d: 1 }; s.player.gold = 100000; s.settings.res = 0.35;
       s.visited = s.visited || {}; [150, 154, 172, 100].forEach(id => { s.visited[id] = 1; if (s.known.indexOf(id) < 0) s.known.push(id); });   // 고아·코친·암보이나·르완다에 들렀다
       if (G.SEA_RISK) { G.SEA_RISK.pirate = 0; G.SEA_RISK.storm = 0; }
     });
@@ -73,9 +73,15 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
     const far = await page.evaluate(() => G.Colony.reach({ key: 'x', lon: -30, lat: -45 }));
     ok(picked && picked.some(t => /봄베이/.test(t) && !/\[X\]/.test(t)) && !!far, '후보 ' + picked.length + '곳 (막힌 곳 ' + picked.filter(t => /\[X\]/.test(t)).length + ') · 아무도 닿지 않은 바다는 고를 수 없다: 「' + far + '」');
     await waitCity();
-    // ---- ③ 개척지에 입항 → 이름 짓기 → 도시가 선다
+    // ---- ③ 리스본에 배를 두고 개척지에 육로로 도착 → 이름 짓기 → 도시가 선다
     const cid = plant.e.id;
-    await page.evaluate(id => { const s = G.Game.state, c = G.CITY_DATA[id]; s.loc = { mode: 'sea', lon: c.dock[1], lat: c.dock[0], heading: 0 }; G.Game.go('city', { cityId: id, arrive: true }); }, cid);
+    await page.evaluate(id => {
+      const c = G.CITY_DATA[id];
+      G.Game.go('land', { from: 0 });
+      // 긴 이동을 생략하고, 개척지 곁까지 걸어온 탐험대로 실제 입장 단추를 누른다.
+      Object.assign(G.Game.state.loc, { lon: c.lon, lat: c.lat });
+    }, cid);
+    await page.getByRole('button', { name: '도시에 들어간다', exact: true }).click();
     let named = false, bannerShot = false;
     await drain(60, async st => {
       if (st.win && /이름을 지어/.test(st.text) && !named) {
@@ -97,14 +103,39 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
     ok(f1.blds.join(',') === '항구,교역소,술집,식당,여관,성문', '1단계 건물: ' + f1.blds.join(' · '));   // 식당은 개척 도시 1단계에도 선다 (js/systems/colony.js CO.buildings · QA 2026-10-23)
     ok(f1.mans.length >= 2 && f1.mans.length <= 3, '도시를 세우면 본국에서 건너온 후원자의 저택 ' + f1.mans.length + '채: ' + f1.mans.join(' · '));   // 식민지의 후원자 (js/systems/colonysponsor.js · 2026-11-05)
     ok(f1.need && /wheat|timber/.test(f1.need.good) && f1.need.qty === 40, '첫 물자의 청: ' + JSON.stringify(f1.need));
-    // ---- ④ 물자 3번 → 2·3·4단계
+    // ---- ④ 물자 3번 → 2·3·4단계. 첫 납품은 육로로 들어온 저장을 열어서, 나머지는 해로로.
+    await page.evaluate(() => { G.Game.state = G.State.deserialize(G.State.serialize()); G.Game.resume(); });
+    ok(await waitCity(), '육로로 들어온 개척 도시에서 이어하기');
     for (let k = 1; k <= 3; k++) {
+      if (k === 2) {
+        await page.evaluate(id => {
+          const s = G.Game.state, c = G.CITY_DATA[id];
+          delete s.landReturn;
+          s.loc = { mode: 'sea', lon: c.dock[1], lat: c.dock[0], heading: 0 };
+          G.Game.go('city', { cityId: id, arrive: true });
+        }, cid);
+        ok(await waitCity(), '해로로 개척 도시에 다시 입항');
+      }
       const need = await page.evaluate(() => { const s = G.Game.state, e = s.colony.list[0]; if (!e.need) { s.day = e.nextDay; G.Colony.daily(); } return e.need; });
       await page.evaluate(n => { const s = G.Game.state; s.fleet.ships.forEach(sh => { sh.cap = 400; }); s.fleet.cargo[n.good] = { q: n.qty + 5, cost: 10 }; }, need);
-      await page.evaluate(() => { G.Scenes.city.visit('harbor'); });
+      if (k === 1) await page.locator('.todo .tr').filter({ hasText: '개척 물자' }).click();
+      else await page.evaluate(() => { G.Scenes.city.visit('harbor'); });
       await drain(10);
       for (let i = 0; i < 30 && !(await page.evaluate(() => !!document.querySelector('.cmdmenu .cmd.exit'))); i++) { await drain(2); await page.waitForTimeout(200); }
-      await page.evaluate(() => { const it = [...document.querySelectorAll('.cmdmenu .cmd')].find(x => /개척 물자/.test(x.innerText)); it.click(); });
+      const commands = await page.locator('.cmdmenu .cmd').allTextContents();
+      const fleetCommands = /출항|함대편성|도크|보급/;
+      ok(commands.some(t => /개척 물자를 넘긴다/.test(t)) && commands.some(t => fleetCommands.test(t)) === (k !== 1), '개척 물자 메뉴 · ' + (k === 1 ? '육로에서는 함대 명령 없음' : '입항하면 함대 명령 사용 가능'));
+      const deliver = page.locator('.cmdmenu .cmd').filter({ hasText: '개척 물자를 넘긴다' });
+      if (k === 1) {
+        await deliver.click();
+        await page.getByRole('button', { name: '그만둔다', exact: true }).click();
+        const canceled = await page.evaluate(g => {
+          const s = G.Game.state;
+          return { via: s.loc.via, base: s.landReturn.base.city, cargo: s.fleet.cargo[g].q, stage: s.colony.list[0].stage };
+        }, need.good);
+        ok(canceled.via === 'land' && canceled.base === 0 && canceled.cargo === need.qty + 5 && canceled.stage === 1, '육로 납품을 취소하면 리스본에 둔 함대·재고·개척 단계 유지');
+      }
+      await deliver.click();
       let bs = false;
       for (let i = 0; i < 60; i++) {
         const b = await page.evaluate(() => !!document.querySelector('.colony-banner'));
@@ -116,8 +147,12 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
       }
       await drain(20); await waitCity(); await page.waitForTimeout(600);
       await shot(page, 'colony_stage' + (k + 1));
-      const r = await page.evaluate(id => { const s = G.Game.state, e = s.colony.list[0]; return { stage: e.stage, blds: G.Scenes.city.buildings(G.CITY_DATA[id]).map(b => b.name), cargo: s.fleet.cargo[Object.keys(s.fleet.cargo)[0]], nextDay: e.nextDay, size: G.CITY_DATA[id].size }; }, cid);
-      ok(r.stage === k + 1 && bs, '물자 ' + k + '번째 (' + need.qty + '통 ' + need.good + ') → ' + (k + 1) + '단계: ' + r.blds.join(' · '));
+      const r = await page.evaluate(g => {
+        const s = G.Game.state, e = s.colony.list[0];
+        return { stage: e.stage, blds: G.Scenes.city.buildings(G.CITY_DATA[e.id]).map(b => b.name), cargo: s.fleet.cargo[g].q, via: s.loc.via, base: s.landReturn && s.landReturn.base.city };
+      }, need.good);
+      ok(r.stage === k + 1 && r.cargo === 5 && bs, '물자 ' + k + '번째 (' + need.qty + '통 ' + need.good + ') → ' + (k + 1) + '단계: ' + r.blds.join(' · '));
+      if (k === 1) ok(r.via === 'land' && r.base === 0, '납품 뒤에도 육상 탐험을 계속할 수 있다');
     }
     // ---- ⑤ 총독부 → 총독 · 가족을 관저로
     await page.evaluate(() => { const p = G.Game.state.player; p.wife = 'm_ines'; p.kids = [{ name: '주앙', sex: 'm', born: { y: 1515, m: 3, d: 3 }, sk: {}, lg: {}, st: { str: 50, int: 50, mar: 50, cha: 50 }, edu: {} }]; });
@@ -154,7 +189,7 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
     const sv = await page.evaluate(async id => {
       const raw = G.State.serialize(); G.Colony.apply.call(null); // 그대로
       // 새 게임을 하면 개척 도시는 사라진다
-      G.State.newGame({ name: '시험', nation: 'ES', job: 'explorer', age: 30, birth: { m: 1, d: 1 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: [], diff: 'normal' });
+      G.State.newGame({ name: '시험', nation: 'ES', job: 'explorer', age: 30, birth: { m: 1, d: 1 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: G.LANGS.map(() => 3), diff: 'normal' });
       const gone = !G.CITY_DATA[id];
       G.Game.state = G.State.deserialize(raw); G.Game.resume();
       await new Promise(r => setTimeout(r, 3000));

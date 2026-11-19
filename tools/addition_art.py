@@ -103,7 +103,7 @@ def runtime():
     code = r'''const fs=require('fs'),vm=require('vm');global.window=global;global.document={};global.G={};
 for(const m of fs.readFileSync('index.html','utf8').matchAll(/<script src="([^"]+)"/g))
 if(m[1]==='js/core/util.js'||m[1].startsWith('js/data/'))vm.runInThisContext(fs.readFileSync(m[1],'utf8'),{filename:m[1]});
-console.log(JSON.stringify({discoveries:G.DISCOVERIES,items:G.ITEMS,relics:Object.values(G.RELIC)}));'''
+console.log(JSON.stringify({discoveries:G.DISCOVERIES,items:G.ITEMS,relics:Object.values(G.RELIC),discoveryAliases:G.DISC_ALIAS||{}}));'''
     return json.loads(subprocess.check_output(['node', '-e', code], cwd=ROOT, encoding='utf-8'))
 
 

@@ -2761,7 +2761,7 @@
         G.SeaMonsters.draw(ctx, b, p[0], p[1], st.t);
       } else {
       var spec = A.shipLook(b.type, { sails: b.sails, flag: b.side === 'me' ? '#1d3f7a' : st.npc.kind === 'pirate' ? '#111' : '#8a1e1e' });
-      if (b.side === 'en') { spec.cross = false; if (st.npc.kind === 'pirate') { spec.hull = '#2a2420'; if (spec.hullType === 'west' || spec.hullType === 'galley' || spec.hullType === 'dhow') spec.sail = '#4a4440'; } }
+      if (b.side === 'en') { spec.cross = false; A.pirateLook(spec, st.npc); }
       // 선체의 흔들림(선회 때 바깥으로 기울고, 물결에 오르내림)과 선체에 붙은 물(선수 파도·선측 물줄기)
       var sr = Math.min(1.4, Math.max(0, b.spd || 0) / (BFX.ref / BFX.day)), slp = Math.min(1.2, Math.abs(b.lat || 0) / (BFX.ref / BFX.day) * 2.2), ph0 = (b.x + b.y) * 0.01;
       var RDb = G.FX.ride;
@@ -2770,7 +2770,6 @@
       spec.noWake = true; spec.sid = b.side + (b.no || 0); spec.motionSpeed = sr; spec.motionRate = 0.82 + sr * 0.3;
       if (b.alive && b.fx) G.SeaFX.drawHull(b.fx, ctx, p[0], p[1], -b.heading, b.len, sr, slp, (b.lat || 0) <= 0 ? 1 : -1, st.t);
       spec.light = bw;
-      if (b.side === 'en' && st.npc.kind === 'pirate') spec.sailTint = G.FX.ship3d.pirateSailTint;
       var ghost = b.side === 'en' && st.npc.ghost;   // 유령선(정화의 보선 js/systems/zhenghe.js): 푸른 빛으로 물들어 반쯤 비친다 (drawGhostShip)
       if (ghost) { spec.sailTint = G.FX.battle.ghost.sail; spec.flag = G.FX.battle.ghost.flag; }
       if (ghost) drawGhostShip(ctx, p, -b.heading + (b.sunk ? b.sink * 0.6 : 0), b.len * (b.sunk ? 1 - b.sink * 0.3 : 1), spec, b);

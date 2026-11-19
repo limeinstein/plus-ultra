@@ -19,6 +19,35 @@
     return Object.assign(k, over || {});
   };
 
+  // 이름난 해적·현상수배범·소굴 두목 모두 같은 경로로 도색한다.
+  // 두목 ID를 먼저 쓰므로 재등장·해전 전환·옛 저장 복원에도 돛 색이 같다.
+  A.pirateLook = function (look, npc) {
+    var c = G.FX && G.FX.pirateShips;
+    if (!npc || npc.kind !== 'pirate' || !c || !c.styles.length) return look;
+    var cap = npc.cap || {}, key = String(cap.id || cap.name || npc.id || npc.zone || 'pirate'), hash = 0;
+    for (var i = 0; i < key.length; i++) hash = (Math.imul(hash, 31) + key.charCodeAt(i)) | 0;
+    var style = c.styles[(hash >>> 0) % c.styles.length];
+    return Object.assign(look, c[style], { pirateLivery: style });
+  };
+
+  // 3D 대체 그림에서도 장식 테두리와 선측의 벗겨진 칠을 구분한다.
+  A.shipHullFinish = function (ctx, path, L, W, spec) {
+    if (!spec || !spec.pirateLivery) return;
+    var f = G.FX.pirateShips.fallback;
+    ctx.save(); path(1); ctx.clip();
+    if (spec.weathered) {
+      ctx.globalAlpha *= f.scratchAlpha; ctx.strokeStyle = spec.finish.exposed; ctx.lineWidth = Math.max(.5, L / 200);
+      for (var i = 0; i < f.scratches; i++) {
+        var x = (Math.sin(i * 17.3) * .43) * L, y = (i % 2 ? 1 : -1) * W * (.38 + .08 * Math.sin(i * 7.1));
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + L * (.025 + .025 * Math.abs(Math.cos(i))), y + W * .012); ctx.stroke();
+      }
+    }
+    ctx.restore(); ctx.save(); ctx.strokeStyle = spec.trim; ctx.lineWidth = Math.max(.7, L * f.trimWidth);
+    path(.95); ctx.stroke();
+    if (!spec.weathered) { ctx.lineWidth *= .4; path(.87); ctx.stroke(); }
+    ctx.restore();
+  };
+
   function grad(ctx, x0, y0, x1, y1, c, a, b) { var g = ctx.createLinearGradient(x0, y0, x1, y1); g.addColorStop(0, A.rgba(A.shade(c, a))); g.addColorStop(1, A.rgba(A.shade(c, b))); return g; }
 
   // ================================================================ 돛 (옆모습)
@@ -316,18 +345,19 @@
     if (!ps.noWake) { ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.beginPath(); ctx.moveTo(-L * 0.5, 0); ctx.lineTo(-L * 1.05, -W * 0.9); ctx.lineTo(-L * 1.05, W * 0.9); ctx.closePath(); ctx.fill(); }
     ctx.fillStyle = 'rgba(0,12,28,0.30)'; ctx.beginPath(); ctx.ellipse(L * 0.04, W * (0.35 - (ps.roll || 0) * 0.6), L * 0.54, W * 0.62, 0, 0, Math.PI * 2); ctx.fill();
   }
-  function fillHull(ctx, path, hull, W, L) {
+  function fillHull(ctx, path, hull, W, L, spec) {
     var g = ctx.createLinearGradient(0, -W * 0.55, 0, W * 0.55);
     g.addColorStop(0, A.rgba(A.shade(hull, 1.35))); g.addColorStop(0.5, A.rgba(hull)); g.addColorStop(1, A.rgba(A.shade(hull, 0.55)));
     path(1); ctx.fillStyle = g; ctx.fill(); ctx.strokeStyle = 'rgba(15,8,4,.8)'; ctx.lineWidth = Math.max(1, L / 60); ctx.stroke();
     var dark = hull[0] + hull[1] + hull[2] < 150;          // 검게 칠한 배(해적·일본 배)는 갑판도 어둡게
-    path(0.84); ctx.fillStyle = A.rgba(A.mix('#b08a5a', hull, dark ? 0.6 : 0.25)); ctx.fill();
+    path(0.84); ctx.fillStyle = spec.deck || A.rgba(A.mix('#b08a5a', hull, dark ? 0.6 : 0.25)); ctx.fill();
+    A.shipHullFinish(ctx, path, L, W, spec);
   }
   TOP.galley = function (ctx, L, W, spec, t) {
     W = L * 0.2; shadow(ctx, L, W);
     oarsTop(ctx, L, W, spec.big ? 12 : 9, t, 1.3);
     var hull = A.hex(spec.hull);
-    fillHull(ctx, function (k) { ctx.beginPath(); ctx.moveTo(L * 0.52 * k, 0); ctx.quadraticCurveTo(L * 0.3, -W * 0.55 * k, -L * 0.3, -W * 0.5 * k); ctx.lineTo(-L * 0.48 * k, -W * 0.3 * k); ctx.lineTo(-L * 0.48 * k, W * 0.3 * k); ctx.lineTo(-L * 0.3, W * 0.5 * k); ctx.quadraticCurveTo(L * 0.3, W * 0.55 * k, L * 0.52 * k, 0); ctx.closePath(); }, hull, W, L);
+    fillHull(ctx, function (k) { ctx.beginPath(); ctx.moveTo(L * 0.52 * k, 0); ctx.quadraticCurveTo(L * 0.3, -W * 0.55 * k, -L * 0.3, -W * 0.5 * k); ctx.lineTo(-L * 0.48 * k, -W * 0.3 * k); ctx.lineTo(-L * 0.48 * k, W * 0.3 * k); ctx.lineTo(-L * 0.3, W * 0.5 * k); ctx.quadraticCurveTo(L * 0.3, W * 0.55 * k, L * 0.52 * k, 0); ctx.closePath(); }, hull, W, L, spec);
     ctx.strokeStyle = '#3a2616'; ctx.lineWidth = Math.max(1.2, L / 60); ctx.beginPath(); ctx.moveTo(L * 0.5, 0); ctx.lineTo(L * 0.68, 0); ctx.stroke();   // 충각
     ctx.fillStyle = spec.cross ? '#8a2a1e' : '#2f5a3a'; ctx.fillRect(-L * 0.46, -W * 0.3, L * 0.14, W * 0.6);
     sailsTop(ctx, L, W * 1.3, spec.sails, spec, t);
@@ -338,7 +368,7 @@
     for (var k = 0; k < 4; k++) { var bx = -L * 0.25 + k * L * 0.17; ctx.beginPath(); ctx.moveTo(bx, -W * 2.2); ctx.lineTo(bx, W * 2.2); ctx.stroke(); }
     ctx.fillStyle = '#4a3020'; ctx.fillRect(-L * 0.32, -W * 2.4, L * 0.64, W * 0.4); ctx.fillRect(-L * 0.32, W * 2.0, L * 0.64, W * 0.4);
     oarsTop(ctx, L, W, 10, t, 1.1);
-    fillHull(ctx, function (k) { ctx.beginPath(); ctx.moveTo(L * 0.55 * k, 0); ctx.quadraticCurveTo(0, -W * 0.7 * k, -L * 0.55 * k, 0); ctx.quadraticCurveTo(0, W * 0.7 * k, L * 0.55 * k, 0); ctx.closePath(); }, A.hex(spec.hull), W, L);
+    fillHull(ctx, function (k) { ctx.beginPath(); ctx.moveTo(L * 0.55 * k, 0); ctx.quadraticCurveTo(0, -W * 0.7 * k, -L * 0.55 * k, 0); ctx.quadraticCurveTo(0, W * 0.7 * k, L * 0.55 * k, 0); ctx.closePath(); }, A.hex(spec.hull), W, L, spec);
     ctx.fillStyle = '#b09050'; ctx.fillRect(-L * 0.12, -W * 0.5, L * 0.24, W);
     sailsTop(ctx, L, W * 2, spec.sails, spec, t);
   };
@@ -353,7 +383,7 @@
   TOP.junk = function (ctx, L, W, spec, t) {
     W = L * 0.4; shadow(ctx, L, W);
     var hull = A.hex(spec.hull);
-    fillHull(ctx, boxPath(ctx, L, W, L * 0.04), hull, W, L);
+    fillHull(ctx, boxPath(ctx, L, W, L * 0.04), hull, W, L, spec);
     ctx.fillStyle = A.rgba(A.shade(hull, 0.85)); ctx.fillRect(-L * 0.47, -W * 0.36, L * 0.2, W * 0.72);
     ctx.fillStyle = '#7a2a1a'; ctx.fillRect(-L * 0.45, -W * 0.3, L * 0.16, W * 0.6);
     sailsTop(ctx, L, W, spec.sails, spec, t, 1.3);
@@ -361,14 +391,14 @@
   TOP.kr = function (ctx, L, W, spec, t) {
     W = L * 0.4; shadow(ctx, L, W);
     oarsTop(ctx, L, W, 6, t, 0.6);
-    fillHull(ctx, boxPath(ctx, L, W, L * 0.02), A.hex(spec.hull), W, L);
+    fillHull(ctx, boxPath(ctx, L, W, L * 0.02), A.hex(spec.hull), W, L, spec);
     sailsTop(ctx, L, W, spec.sails, spec, t, 1.3);
   };
   TOP.panok = function (ctx, L, W, spec, t) {
     W = L * 0.42; shadow(ctx, L, W);
     oarsTop(ctx, L, W, 8, t, 0.6);
     var hull = A.hex(spec.hull);
-    fillHull(ctx, boxPath(ctx, L, W, L * 0.02), hull, W, L);
+    fillHull(ctx, boxPath(ctx, L, W, L * 0.02), hull, W, L, spec);
     ctx.fillStyle = A.rgba(A.mix('#c0a070', hull, 0.3)); ctx.fillRect(-L * 0.42, -W * 0.4, L * 0.82, W * 0.8);
     ctx.strokeStyle = A.rgba(A.shade(hull, 0.7)); ctx.lineWidth = Math.max(1, L / 50); ctx.strokeRect(-L * 0.42, -W * 0.4, L * 0.82, W * 0.8);
     ctx.fillStyle = '#5a1a14'; ctx.fillRect(-L * 0.08, -W * 0.14, L * 0.16, W * 0.28);
@@ -377,7 +407,7 @@
   TOP.turtle = function (ctx, L, W, spec, t) {
     W = L * 0.4; shadow(ctx, L, W);
     oarsTop(ctx, L, W, 8, t, 0.6);
-    fillHull(ctx, boxPath(ctx, L, W, L * 0.02), A.hex(spec.hull), W, L);
+    fillHull(ctx, boxPath(ctx, L, W, L * 0.02), A.hex(spec.hull), W, L, spec);
     ctx.save(); ctx.beginPath(); ctx.ellipse(-L * 0.02, 0, L * 0.44, W * 0.44, 0, 0, 7); ctx.fillStyle = '#4a4636'; ctx.fill(); ctx.clip();
     ctx.strokeStyle = 'rgba(210,190,130,.5)'; ctx.lineWidth = Math.max(0.6, L / 140);
     var hr = L * 0.06;
@@ -394,7 +424,7 @@
     W = L * 0.34; shadow(ctx, L, W);
     oarsTop(ctx, L, W, spec.big ? 9 : 6, t, 0.7);
     var hull = A.hex(spec.hull);
-    fillHull(ctx, function (k) { ctx.beginPath(); ctx.moveTo(L * 0.58 * k, 0); ctx.lineTo(L * 0.3, -W * 0.5 * k); ctx.lineTo(-L * 0.48 * k, -W * 0.46 * k); ctx.lineTo(-L * 0.48 * k, W * 0.46 * k); ctx.lineTo(L * 0.3, W * 0.5 * k); ctx.closePath(); }, hull, W, L);
+    fillHull(ctx, function (k) { ctx.beginPath(); ctx.moveTo(L * 0.58 * k, 0); ctx.lineTo(L * 0.3, -W * 0.5 * k); ctx.lineTo(-L * 0.48 * k, -W * 0.46 * k); ctx.lineTo(-L * 0.48 * k, W * 0.46 * k); ctx.lineTo(L * 0.3, W * 0.5 * k); ctx.closePath(); }, hull, W, L, spec);
     ctx.strokeStyle = A.rgba(A.mix('#6a5040', hull, 0.4)); ctx.lineWidth = Math.max(1.4, L / 34); ctx.strokeRect(-L * 0.42, -W * 0.4, L * 0.7, W * 0.8);
     sailsTop(ctx, L, W, spec.sails, spec, t, 1.6);
   };
@@ -402,7 +432,7 @@
     W = L * 0.4; shadow(ctx, L, W);
     oarsTop(ctx, L, W, 10, t, 0.6);
     var hull = A.hex(spec.hull);
-    fillHull(ctx, function (k) { ctx.beginPath(); ctx.moveTo(L * 0.56 * k, 0); ctx.lineTo(L * 0.34, -W * 0.5 * k); ctx.lineTo(-L * 0.48 * k, -W * 0.48 * k); ctx.lineTo(-L * 0.48 * k, W * 0.48 * k); ctx.lineTo(L * 0.34, W * 0.5 * k); ctx.closePath(); }, hull, W, L);
+    fillHull(ctx, function (k) { ctx.beginPath(); ctx.moveTo(L * 0.56 * k, 0); ctx.lineTo(L * 0.34, -W * 0.5 * k); ctx.lineTo(-L * 0.48 * k, -W * 0.48 * k); ctx.lineTo(-L * 0.48 * k, W * 0.48 * k); ctx.lineTo(L * 0.34, W * 0.5 * k); ctx.closePath(); }, hull, W, L, spec);
     ctx.fillStyle = A.rgba(A.mix('#6a5040', hull, 0.3)); ctx.fillRect(-L * 0.44, -W * 0.44, L * 0.8, W * 0.88);
     ctx.fillStyle = '#2a2420'; ctx.fillRect(-L * 0.24, -W * 0.3, L * 0.3, W * 0.6); ctx.fillStyle = '#e8e0d0'; ctx.fillRect(-L * 0.18, -W * 0.16, L * 0.18, W * 0.32);
     sailsTop(ctx, L, W, spec.sails, spec, t, 1.6);

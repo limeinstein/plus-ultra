@@ -1,0 +1,185 @@
+{
+  "date": "2026-11-19",
+  "generator": "built-in image_gen",
+  "assets": [
+    {
+      "id": "lich",
+      "prompt": "Use case: historical-scene. Asset type: ONE wide landscape discovery illustration for a historical sailing exploration game. Wide cinematic 2.25:1 composition (ideally 2304x1024), full bleed opaque painting. Detailed hand-painted oil/gouache game art, natural stone, cloth and wood textures, restrained earthy palette, atmospheric light, realistic proportions, clear focal silhouette readable at 576x256. Keep principal subject within central 75 percent safe crop. A complete single scene, NO grid, NO storyboard, NO panels, NO text, NO labels, NO border, NO interface, NO watermark. Fantasy legends depicted within a late-medieval historical setting, no modern elements. Subject: the lich of Sedlec ossuary in Bohemia. Inside a small medieval Gothic stone crypt, a gaunt skeletal immortal scholar in faded dark burgundy robes stands beside an old reading desk, holding a black wooden staff tipped by a cracked softly glowing blue stone. Human bones carefully arranged around an altar and overhead chandelier frame the crypt, old books and candles; wistful and quietly haunting rather than violent. Soft blue magic highlights his bony face and fingers; warm candlelight against cool vaulted shadows. Three-quarter wide view showing the scholar and the ossuary, grounded dark historical fantasy. No blood, no gore, no combat UI.",
+      "name": "세들레츠 납골당의 리치",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-d9b75632-c228-4596-8cb1-0917f5556185.png",
+      "kind": "scene",
+      "disc": "lich",
+      "output": "images/discoveries/lich.gif",
+      "end": "images/discovery-ends/lich.jpg",
+      "sheet": "images/discovery-sheets/lich.webp"
+    },
+    {
+      "id": "werewolf",
+      "prompt": "Use case: historical-scene. Asset type: ONE wide landscape discovery illustration for a historical sailing exploration game. Wide cinematic 2.25:1 composition (ideally 2304x1024), full bleed opaque painting. Detailed hand-painted oil/gouache game art, natural stone, cloth and wood textures, restrained earthy palette, atmospheric light, realistic proportions, clear focal silhouette readable at 576x256. Keep principal subject within central 75 percent safe crop. A complete single scene, NO grid, NO storyboard, NO panels, NO text, NO labels, NO border, NO interface, NO watermark. Fantasy legends depicted within a late-medieval historical setting, no modern elements. Subject: the werewolf of Livonia. A tall grey-brown anthropomorphic wolf with a believable lupine head, powerful fur-covered body and digitigrade legs stands alert in a moonlit Baltic birch forest near a rough rural footpath. A small remnant of a peasant's linen tunic and leather belt hints at his human origin. Full figure framed by pale birch trunks, damp moss, roots, a thin layer of ground mist and a distant timber farm under a full moon. His expression is tired and watchful, a guardian who fights witches, not a snarling monster attacking the viewer. Cool silver moonlight and a faint warm cottage window; no blood, no corpses.",
+      "name": "리보니아의 늑대인간",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-2a5e4d89-d93b-42a0-9524-1e48b3fefedf.png",
+      "kind": "scene",
+      "disc": "werewolf",
+      "output": "images/discoveries/werewolf.gif",
+      "end": "images/discovery-ends/werewolf.jpg",
+      "sheet": "images/discovery-sheets/werewolf.webp"
+    },
+    {
+      "id": "deadknight",
+      "prompt": "Use case: historical-scene. Asset type: ONE wide landscape discovery illustration for a historical sailing exploration game. Wide cinematic 2.25:1 composition (ideally 2304x1024), full bleed opaque painting. Detailed hand-painted oil/gouache game art, natural stone, cloth and wood textures, restrained earthy palette, atmospheric light, realistic proportions, clear focal silhouette readable at 576x256. Keep principal subject within central 75 percent safe crop. A complete single scene, NO grid, NO storyboard, NO panels, NO text, NO labels, NO border, NO interface, NO watermark. Fantasy legends depicted within a late-medieval historical setting, no modern elements. Subject: the skeletal knight in the innermost tower of Krak des Chevaliers, medieval Syria. A lone skeleton wearing weathered chainmail and rusted medieval Hospitaller plate pieces, a torn black surcoat bearing a small plain white eight-pointed cross, stands with an old sword lowered point-down and a battered shield at his side. Under a high stone arch inside the castle, he watches through an open doorway toward the distant sunlit limestone ramparts and Syrian mountain landscape, still awaiting reinforcements. The knight's whole silhouette and recognizable skull are visible, melancholic noble mood, warm dusty sunset streaming through the vaulted room. No battle, no gore, no additional characters.",
+      "name": "크라크 데 슈발리에의 해골 기사",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-aa3f3934-102e-4e19-bcaf-b3b715c988bd.png",
+      "kind": "scene",
+      "disc": "deadknight",
+      "output": "images/discoveries/deadknight.gif",
+      "end": "images/discovery-ends/deadknight.jpg",
+      "sheet": "images/discovery-sheets/deadknight.webp"
+    },
+    {
+      "id": "worldtree",
+      "prompt": "Use case: historical-scene. Asset type: ONE wide landscape discovery illustration for a historical sailing exploration game. Wide cinematic 2.25:1 composition (ideally 2304x1024), full bleed opaque painting. Detailed hand-painted oil/gouache game art, natural stone, cloth and wood textures, restrained earthy palette, atmospheric light, realistic proportions, clear focal silhouette readable at 576x256. Keep principal subject within central 75 percent safe crop. A complete single scene, NO grid, NO storyboard, NO panels, NO text, NO labels, NO border, NO interface, NO watermark. Fantasy legends depicted within a late-medieval historical setting, no modern elements. Subject: Yggdrasil, a living colossal ash tree hidden in a Scandinavian winter forest, roots believed to sustain nine worlds. Extremely broad ancient ridged trunk with immense winding roots crossing a rocky stream; a vast full crown of fresh green ash leaves despite surrounding snow, softly luminous green-gold leaf veins. A few very small slender adult elf guardians in practical muted green cloaks stand beneath the roots for scale, tiny compared with the enormous tree. Snowy pines, dark granite, pale northern dawn, subtle aurora-like light high behind the branches, no buildings or cities. The whole majestic tree and full crown fit clearly inside the composition with generous breathing room, mystical yet natural hand-painted landscape.",
+      "name": "세계수 이그드라실",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-099415f1-2c78-401c-9f76-0a0991bd43dd.png",
+      "kind": "scene",
+      "disc": "worldtree",
+      "output": "images/discoveries/worldtree.gif",
+      "end": "images/discovery-ends/worldtree.jpg",
+      "sheet": "images/discovery-sheets/worldtree.webp"
+    },
+    {
+      "id": "pl_doubloons",
+      "name": "에스파냐 금화 궤짝",
+      "kind": "item",
+      "output": "images/items/pl_doubloons.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: A small open aged dark oak treasure chest bound with worn iron straps, filled with stacks of weathered Spanish golden doubloon coins. A few gold coins spilling immediately beside the chest. Readable chest lid and gold texture, not cartoon.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-c6b3e791-20c0-44bd-8545-fa4815b290bd.png"
+    },
+    {
+      "id": "pl_reales",
+      "name": "8레알 은화 자루",
+      "kind": "item",
+      "output": "images/items/pl_reales.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: A squat dark brown leather money sack, open mouth tied loosely with a leather thong, heavy with irregular hand-struck Spanish silver pieces of eight. Several silver coins visible at the mouth and a few immediately next to the sack, subtle irregular relief on coins, no readable letters.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-f11ca753-c7b5-4edc-afab-b347b7d9e21e.png"
+    },
+    {
+      "id": "pl_emerald_cross",
+      "name": "에메랄드 십자가",
+      "kind": "item",
+      "output": "images/items/pl_emerald_cross.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: One Renaissance solid gold Latin cross pendant set with vivid deep green Colombian emeralds, a large square emerald at the crossing and smaller green stones on the four arms, fine old gold filigree and a small hanging loop. No chain.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-1c53a6ec-d8dc-477e-b685-e74d14a77c16.png"
+    },
+    {
+      "id": "pl_ruby_cup",
+      "name": "루비 박힌 금잔",
+      "kind": "item",
+      "output": "images/items/pl_ruby_cup.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: One exquisite Renaissance golden goblet with a wide round bowl, an elegant stem and a stable foot. A ring of deep crimson rubies evenly set around the upper bowl in worn gold settings, restrained engraved gold ornament, believable metal highlights.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-9b9b55d0-4c9d-4f32-be19-7ac1a4c43862.png"
+    },
+    {
+      "id": "pl_pearls",
+      "name": "굵은 진주 목걸이",
+      "kind": "item",
+      "output": "images/items/pl_pearls.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE luxurious necklace made of three nested graduated strands of exceptionally large ivory white natural pearls, each pearl slightly irregular and luminous, joined at the back by one small aged gold clasp. Display the three strands laid in distinct curved loops, no jewellery box.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-35d62bea-ed87-4ef5-b44f-a6ee42fdf243.png"
+    },
+    {
+      "id": "pl_jade_seal",
+      "name": "비취 인장",
+      "kind": "item",
+      "output": "images/items/pl_jade_seal.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE Chinese Ming era translucent blue-green jade seal: a square solid jade block supporting a delicately carved coiled dragon handle, compact collectible, three-quarter view with dragon head and curled body clearly visible. No lettering or stamped paper.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-c29e753f-e109-4bb8-82ba-266aaa5cf3c1.png"
+    },
+    {
+      "id": "pl_amber",
+      "name": "호박 목걸이 상자",
+      "kind": "item",
+      "output": "images/items/pl_amber.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE small open Hanseatic Baltic dark oak jewellery box holding several neatly coiled strings of polished translucent honey amber beads, russet and golden amber tones glowing softly in natural light, simple aged iron hinge, fine wood grain.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-b0f3d036-ae03-4986-abca-2385a0e25462.png"
+    },
+    {
+      "id": "pl_silver_bars",
+      "name": "은괴 꾸러미",
+      "kind": "item",
+      "output": "images/items/pl_silver_bars.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE compact bundle of exactly six old hand-cast rectangular silver bullion bars in a tidy two-by-three arrangement, wrapped underneath and partly around the sides in worn ivory sailcloth. All six silver bar tops visible, softly tarnished grey metal, folded sailcloth and one simple hemp tie.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-5f0c3de2-a259-4289-80b0-71dfda1835ae.png"
+    },
+    {
+      "id": "ps_cutlass",
+      "name": "해적왕의 커틀러스",
+      "kind": "item",
+      "output": "images/items/ps_cutlass.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE full-length Caribbean pirate king's cutlass, short broad curved steel blade and ornate worn gilded basket guard completely enclosing the grip. Dark leather grip. Lay the entire single sword diagonally from lower left to upper right, blade tip and pommel inside frame. No scabbard.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-4ceac475-63b1-40bd-a342-969fbbadda3d.png"
+    },
+    {
+      "id": "ps_toledo",
+      "name": "톨레도 강철 레이피어",
+      "kind": "item",
+      "output": "images/items/ps_toledo.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE full-length elegant early modern Spanish Toledo rapier, very long straight slender steel thrusting blade, intricate swept steel hilt and narrow dark leather grip. Diagonal from lower left to upper right with entire blade tip and pommel visible. No scabbard, no extra blades.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-0e728b88-b704-416c-b0ee-c4d71104e536.png"
+    },
+    {
+      "id": "ps_kilij",
+      "name": "다마스쿠스 킬리지",
+      "kind": "item",
+      "output": "images/items/ps_kilij.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE full-length Ottoman kilij sabre of patterned Damascus steel, strongly curved blade with distinctive widened yelman section near the tip, short golden crossguard and dark horn pistol-shaped grip. Fine flowing watered steel pattern. Diagonal lower left to upper right, entire sword visible. No scabbard.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-0a377f11-66c4-41c3-86ed-1bf9710a39c1.png"
+    },
+    {
+      "id": "ps_shamshir",
+      "name": "산호 자루 샴시르",
+      "kind": "item",
+      "output": "images/items/ps_shamshir.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE full-length Persian shamshir with a deeply curved slender crescent steel blade, small old gold crossguard and distinctive red coral handle scales with a downturned pommel. Diagonal lower left to upper right, complete blade tip and grip inside frame. No scabbard.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-0ee3966d-c018-43dc-8627-8e19b4c85014.png"
+    },
+    {
+      "id": "ps_kris",
+      "name": "일곱 굽이 크리스",
+      "kind": "item",
+      "output": "images/items/ps_kris.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE full-length Malay kris dagger, steel blade with exactly seven smooth serpentine waves and delicate watered pamor pattern, a short carved dark tropical hardwood pistol grip and a small worn gold collar. Diagonal lower left to upper right, entire blade and grip visible. No scabbard.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-91739f24-f335-4465-973e-aa48c5872e21.png"
+    },
+    {
+      "id": "ps_nodachi",
+      "name": "왜구의 노다치",
+      "kind": "item",
+      "output": "images/items/ps_nodachi.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE full-length very long Japanese nodachi sword: gently curved long polished single-edged steel blade, very long two-handed grip wrapped in worn dark indigo cord, small round iron tsuba. Human-height sword proportions, blade roughly three times grip length. Diagonal lower left to upper right, entire sword tip and pommel inside frame. No scabbard.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-c4b01b68-4b2c-4400-96a1-be294473f4a4.png"
+    },
+    {
+      "id": "ps_frost",
+      "name": "서리 무늬 장검",
+      "kind": "item",
+      "output": "images/items/ps_frost.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE inventory item icon for a historical sailing adventure game. Detailed realistic hand-painted game illustration with visible metal, wood, fabric and gemstone texture; muted warm highlights, crisp readable silhouette. One centered complete object on a square 1024x1024 canvas with genuinely transparent RGBA background, at least 10 percent transparent margin on all four sides, no cropping. Three-quarter object view. No ground plane, no backdrop, no border, no text, no lettering, no caption, no logo, no artist signature, no watermark, no interface. No hands or characters. Subject: ONE full-length heavy northern European medieval longsword: wide straight double-edged steel blade with subtle frost-like pale etched crystalline pattern in the steel, simple thick iron crossguard, dark blue-grey two-handed leather grip and a steel wheel pommel. The frost pattern is etched metal, no glowing magic, no ice shards. Diagonal lower left to upper right, entire sword visible. No scabbard.",
+      "disc": null,
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1ef53-5915-73e1-a531-4edff263a1db\\exec-2a47b84a-faec-4cc1-ab1d-16e13cf175e2.png"
+    }
+  ]
+}

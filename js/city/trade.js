@@ -93,14 +93,16 @@
   /** 살아 있는 경제의 꼬리표 (js/systems/economy.js · js/data/econ.js): 세상의 시장 사건 ▲▼ */
   function evTag(c, id) { return (G.Econ ? G.Econ.tag(c, id) : '') + (G.TradeFleet ? G.TradeFleet.tag(c, id) : ''); }   // + 교역 항로의 상선대 ▼▲ (js/systems/tradefleets.js)
   /** 이 물건이 가장 비싸게 팔리는 지역들 (산지에서 먼 곳): [{r, m}] 큰 순 */
-  function farRegions(id) {
-    return G.REGIONS.map(function (n, r) { return { r: r, m: R.regionalMult(id, r) }; }).sort(function (a, b) { return b.m - a.m; });
+  function farRegions(id, c) {
+    var L = G.REGIONS.map(function (n, r) { return { r: r, m: R.regionalMult(id, r) }; });
+    if (c && G.Frontier && G.Frontier.heard) { var H = L.filter(function (x) { return x.r !== c.region && G.Frontier.heard(c, x.r); }); L = H.length ? H : L.filter(function (x) { return x.r === c.region; }); }   // 이 도시 상인이 아는 곳만 (제 고장 문화권은 빼고, 항로가 알려지기 전의 일본·명·인도·아메리카는 말하지 않는다)
+    return L.sort(function (a, b) { return b.m - a.m; });
   }
   T.farRegions = farRegions;
   /** 구입 창: 이 고장 특산물이면 「특산」 — 멀리 가면 몇 배에 팔리는지 */
   function specTag(c, id) {
     if (!R.sells(c, id) || R.isRelay(c, id)) return '';
-    var fr = farRegions(id), x = fr[0].m / 0.62;
+    var fr = farRegions(id, c), x = fr[0].m / 0.62;
     if (x < 1.5) return ' <span class="tag spec" title="이 고장에서 나는 물건이라 싸고 재고가 넉넉하다. 어디서나 흔한 물건이라 멀리 가져가도 크게 남지는 않는다.">특산</span>';
     return ' <span class="tag spec" title="' + U.esc('이 고장에서 나는 물건이라 싸고 재고가 넉넉하다. 산지에서 먼 ' + fr.slice(0, 2).map(function (x) { return G.REGIONS[x.r]; }).join('·') + '에서는 산지 값의 약 ' + x.toFixed(1) + '배에 팔린다 (시세·사건에 따라 다름).') + '">특산 ×' + x.toFixed(1) + '</span>';
   }
@@ -391,6 +393,7 @@
     c.goods.forEach(function (id) {
       s.known.forEach(function (cid) {
         var t = G.CITY_DATA[cid]; if (!t.port || t.id === c.id || !R.cityExists(t)) return;
+        if (G.Frontier && G.Frontier.heard && !G.Frontier.heard(c, t)) return;   // 항로가 알려지지 않은 먼 땅은 이 상인도 모른다
         var gain = R.sellPrice(t, id) / Math.max(1, R.buyPrice(c, id));
         if (!best || gain > best.gain) best = { id: id, city: t, gain: gain };
       });
@@ -400,9 +403,10 @@
     var fame = s.player.fame, maxD = fame < 300 ? 1 : fame < 1500 ? 2 : fame < 3500 ? 3 : 5;
     var cand = G.DISCOVERIES.filter(function (d) {
       if ((d.how !== 'trade' && d.cat !== 'treasure') || G.Disc.foundByMe(d.id) || !G.Disc.rumourW(d, 'trade:' + c.id) || !G.Disc.available(d) || !G.Disc.clueOk(d, 'trade')) return false;   // 아는 이야기는 다른 교역소에서 들으면 겹친다
-      if (G.Frontier && G.Frontier.hot(d)) return true;
-      if (d.how === 'trade') return d.regions.some(function (r) { return G.REGION_DIST[c.region][r] <= 2; });
-      return G.Disc.built(d) && G.REGION_DIST[c.region][d.reg] <= Math.max(1, maxD - 1);   // 보물은 가까운 데 것부터, 이름이 나면 먼 데 것도
+      if (G.Frontier && G.Frontier.hot(d)) return true;   // 맛보기: 새 항로 소문을 여는 이야기라 먼 땅이어도 한다
+      var hd = function (r) { return !G.Frontier || !G.Frontier.heard || G.Frontier.heard(c, r); };   // 이 상인이 아는 땅의 이야기만 (항로가 알려지기 전의 명·일본·인도·아메리카는 빼고)
+      if (d.how === 'trade') return d.regions.some(function (r) { return G.REGION_DIST[c.region][r] <= 2; }) && d.regions.every(hd);
+      return G.Disc.built(d) && G.REGION_DIST[c.region][d.reg] <= Math.max(1, maxD - 1) && hd(d.reg);   // 보물은 가까운 데 것부터, 이름이 나면 먼 데 것도
     });
     if (cand.length && U.chance(0.7)) {
       // 맛보기(유럽까지 흘러든 향료)를 먼저 이야기한다, 그다음은 교역품 6 : 보물 4
@@ -537,7 +541,7 @@
   function econNote(c) {
     var out = '';
     if (G.Econ) G.Econ.activeAt(c.id).forEach(function (e) { G.Econ.learn(e); out += '<div class="plan-note" style="margin-bottom:6px"><b>' + U.esc(G.Econ.title(e)) + '</b> — ' + U.esc(G.Econ.say(e, c)) + '</div>'; });
-    var sp = c.goods.filter(function (id) { return G.GOOD[id] && !R.isRelay(c, id); }).map(function (id) { var fr = farRegions(id); return { id: id, fr: fr, x: fr[0].m / 0.62 }; })
+    var sp = c.goods.filter(function (id) { return G.GOOD[id] && !R.isRelay(c, id); }).map(function (id) { var fr = farRegions(id, c); return { id: id, fr: fr, x: fr[0].m / 0.62 }; })
       .filter(function (o) { return o.x >= 1.5; }).sort(function (a, b) { return b.x - a.x; }).slice(0, 4);
     if (sp.length) out += '<div style="font-size:15px;margin-bottom:6px"><b>이 고장 산물이 비싸게 팔리는 곳</b> ' + sp.map(function (o) { return '<span class="chip">' + G.goodDot(o.id) + G.GOOD[o.id].name + ' → ' + o.fr.slice(0, 2).map(function (x) { return G.REGIONS[x.r]; }).join('·') + ' <small>×' + o.x.toFixed(1) + '</small></span>'; }).join(' ') + '</div>';
     return out;

@@ -293,6 +293,9 @@
     sakoku: { restrict: 16350101, portuguese: 16390801, dejima: 16410501, silverBan: 16680101, nagasaki: 191, stock: 0.6, routeK: 0.35, transitionK: 0.2 },
     imjinEnd: 15990101, // 노량은 1598년. 1599년부터 새 전쟁 사건·봉쇄를 끝낸다.
     // 도시 점령은 성문 돌파와 별개. 첫 수비대와 두 차례 증원군을 모두 격퇴해야 한다.
+    // 상인이 아는 세상 (G.Frontier.heard — 2026-11-19): 먼 땅 상인이 유럽의 항로 발견과 상관없이 아는 오랜 교역권 (문화권 번호 G.REGIONS)
+    //   3 동·남아프리카(스와힐리 해안) · 4 중근동 · 5 인도 · 6 동아시아 · 7 중앙아시아 · 8 동남아시아 · 9 일본 · 10 아메리카. 옛 세상(이베리아·북유럽·지중해·북/서아프리카)은 항로 표로 정한다
+    merchantKnows: { 3: [4, 5], 4: [7], 5: [3, 4, 6, 7, 8], 6: [5, 7, 8, 9], 7: [4, 5, 6], 8: [5, 6, 9], 9: [6, 8], 10: [] },
     conquest: {
       from: 15101125, joseonFrom: 15920523, notoriety: 15,
       // 점령에 성공하면 (2026-11-10 사용자 요청 — 「점령해도 명성 변화가 없어 아쉽다」 피드백): 전투 명성 small/medium/large 이상, 악명 +notorietyWin (시도할 때의 +notoriety와 따로)
@@ -538,6 +541,7 @@
     tradeFameDiv: 800,   // 교역 이익 이만큼에 교역 명성 1 (예전 2,500 — 교역만으로는 궁정·작위가 막히던 것)
     crewWage: { per: 2, unpaidDiscipline: 15, unpaidFatigue: 8 },   // 선원 한 사람 한 달 급료(닢 — 0.306의 6닢을 0.310에서 2닢으로 되돌림) · 못 치르면 규율 −15 · 피로 +8 (QA 2026-10-23)
     duelArmor: { k: 60, cap: 0.4 },   // 일기토 방어: 피해 × (1 − 방어/(방어+k)), 최대 cap까지만 줄인다 (예전: 방어×0.5를 빼서 방어 30이면 피해가 절반 넘게 줄던 것)
+    sailingSpeedK: 1.4,   // 바다에서 돛과 노로 나아가는 속력 배수
     oarK: 0.8,   // 노 젓는 속력 배수 (코라코라·소조 같은 노배가 돛배보다 빠르던 것 — QA 2026-10-23)
     taleWage: { from: 11, base: 20, per: 11, max: 250 },   // 이야기 부하: 특기 합이 from 이상이면 품삯 = base + per×특기 합 (최대 max, 5닢 단위)
     // 식량·물이 떨어진 날 쓰러지는 선원의 비율 [최소, 최대]
@@ -684,7 +688,15 @@
     //   식당 소문: 들르는 동안 한 번, chance로 이름난 해적의 행방을 듣는다 (기한 days일, 앞바다 near°). 여급의 「이름난 해적의 소문」 사례금 기본값 maid.
     //   absorb: 무찌른 이름난 해적의 남은 무리를 같은 바다의 다른 해적이 흡수 — 한 해적이 max명까지. 한 명마다 배 +ships척 · 선원 +crew · 포술 +gun · 일기토 힘 +boss, 현상금 +흡수한 해적 현상금×bounty
     wanted: { base: 2000, hist: 2, multi: 0.2, round: 100, posters: 8, chance: 0.75, days: 12, maid: 650,
-      absorb: { max: 2, ships: 1, crew: 0.08, gun: 0.1, boss: 4, bounty: 0.5 } },
+      absorb: { max: 2, ships: 1, crew: 0.08, gun: 0.1, boss: 4, bounty: 0.5 },
+      // 토벌 보상 (2026-11-19 사용자 요청 「5만에서 10만 골드」): 현상금 = min × (역사 인물 hist) × (바다 하나 더할 때마다 +zone) + 흡수한 해적 한 명마다 min × abs, 많아야 max.
+      //   예전의 base·hist·multi는 이 값이 없을 때(옛 조정값)만 쓴다. 이미 무찔러 장부에 적힌 현상금은 그대로 받는다.
+      reward: { min: 50000, max: 100000, hist: 1.5, zone: 0.1, abs: 0.25 },
+      // 보물: 무찌르면 chance(역사 인물 +hist, 흡수 한 명마다 +abs, 많아야 max)로 그 해적의 궤짝에서 보물 하나 — 강한 해적이면 two 확률로 하나 더. 한 해적에 한 번 (js/data/pirate_loot.js)
+      treasure: { chance: 0.35, hist: 0.25, abs: 0.15, max: 0.9, two: 0.3 },
+      // 명검(공격 40~44): 강함(역사 인물 2 + 흡수한 수 + 더 다니는 바다 수)이 strong 이상인 해적 가운데 chance만큼이 찬다 — 해적마다 정해져 있다(id로 굴림).
+      //   일기토에서 그 검으로 덤비고(두목 공격 = 검의 공격, 무력 str), 무찌르면 손에 넣는다. 한 해적에 한 번
+      sword: { strong: 2, chance: 0.45, str: 88, skill: 2 } },
     voyagePlans: { noticeDays: 730, subscriptionDays: 730, deferDays: 30, investigationDays: 730,
       investigationGold: 600, investigationFame: 15, maxTasks: 3, firstGold: 1000, firstFame: 30,
       tradeQty: 8, tradeValue: 300, contactDays: 14, contactLevels: [1, 3, 6], archiveFame: 5,

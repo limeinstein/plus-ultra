@@ -361,11 +361,12 @@
     hullPath(1); ctx.fillStyle = g; ctx.fill();
     ctx.strokeStyle = 'rgba(15,8,4,.8)'; ctx.lineWidth = Math.max(1, L / 60); ctx.stroke();
     // deck
-    hullPath(0.84); ctx.fillStyle = A.rgba(A.mix('#b08a5a', hull, hull[0] + hull[1] + hull[2] < 150 ? 0.6 : 0.25)); ctx.fill();
+    hullPath(0.84); ctx.fillStyle = spec.deck || A.rgba(A.mix('#b08a5a', hull, hull[0] + hull[1] + hull[2] < 150 ? 0.6 : 0.25)); ctx.fill();
     ctx.save(); hullPath(0.84); ctx.clip();
     ctx.strokeStyle = 'rgba(60,35,15,.35)'; ctx.lineWidth = Math.max(0.5, L / 160);
     for (var pl = -3; pl <= 3; pl++) { ctx.beginPath(); ctx.moveTo(-L * 0.5, pl * W * 0.11); ctx.lineTo(L * 0.5, pl * W * 0.11); ctx.stroke(); }
     ctx.restore();
+    if (A.shipHullFinish) A.shipHullFinish(ctx, hullPath, L, W, spec);
     // stern castle & forecastle
     ctx.fillStyle = A.rgba(A.shade(hull, 0.85)); ctx.fillRect(-L * 0.46, -W * 0.34, L * 0.2, W * 0.68);
     ctx.fillStyle = A.rgba(A.mix('#c09a6a', hull, 0.2)); ctx.fillRect(-L * 0.43, -W * 0.27, L * 0.15, W * 0.54);

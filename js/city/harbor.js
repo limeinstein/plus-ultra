@@ -14,31 +14,41 @@
     var s = S();
     if (s.loc.via === 'land') {
       // 이 항구에 남겨 둔 배가 있으면 거기에 오를 수 있다 (js/systems/strandfleet.js · 제보 2026-11-06)
-      if (G.Strand && G.Strand.hereByLand(c).length) { if (!(await G.Strand.offerByLand(c))) return false; G.Game.cityHud(); }
-      else { await UI.say('우리 함대는 이 항구에 없습니다. 탐험대로 돌아가 배가 있는 곳까지 가야 합니다.', sp); return false; }
+      var leftHere = G.Strand && G.Strand.hereByLand(c).length;
+      if (leftHere && await G.Strand.offerByLand(c)) G.Game.cityHud();
+      else {
+        if (G.Colony && G.Colony.isColony(c)) return;
+        if (!leftHere) await UI.say('우리 함대는 이 항구에 없습니다. 탐험대로 돌아가 배가 있는 곳까지 가야 합니다.', sp);
+        return false;
+      }
     }
     var line = c.id === s.player.home ? U.pick(['제독, 역시 모항이 좋군요.', '모항에 돌아오면 안심되는군요.', '출항할 때에는 말해 주십시오. 곧 준비하겠습니다.']) : U.pick(['출항할 때에는 말해 주십시오. 곧 준비하겠습니다.', '제독, 이 마을에서 잠깐 쉽시다.', '배는 잘 정박해 두었습니다.']);
     UI.toast(sp.name + ': ' + line, 'anchor', 2600);
     if (G.SeaMonsters) await G.SeaMonsters.tell(c, sp, false);
   };
-  H.sub = function () { return '부관이 출항 준비를 돕습니다'; };
+  H.sub = function () { return S().loc.via === 'land' ? '함대는 다른 곳에 있습니다' : '부관이 출항 준비를 돕습니다'; };
   H.menu = function (c) {
     var s = S(), unrep = G.Disc.unreported().length;
+    var colonyItems = G.Colony ? G.Colony.harborItems(c) : [];
+    var monsoon = G.Monsoon && G.Monsoon.rim(c) ? { label: '계절풍 형편', icon: 'wind', sub: G.Monsoon.NAME[G.Monsoon.portNote(c).phase], onClick: function () { return H.monsoon(c); } } : null;
+    var town = { label: '마을정보', icon: 'map', onClick: function () { return H.townInfo(c); } };
+    var announce = { label: '발표', icon: 'flag', sub: unrep ? unrep + '건' : '', dim: !unrep, onClick: function () { return H.announce(c); } };
+    if (s.loc.via === 'land') return colonyItems.concat([town, monsoon, announce]);
     return [
       { label: '출항 준비', icon: 'check', sub: H.prepNote(c), onClick: function () { return H.prep(c); } },
       { label: '출항', icon: 'sail', onClick: function () { return H.depart(c); } },
       { label: '선원을 모은다', icon: 'people', sub: C.B.tavern.crewSub(), onClick: function () { return H.crew(c); } },
-      (G.Monsoon && G.Monsoon.rim(c)) ? { label: '계절풍 형편', icon: 'wind', sub: G.Monsoon.NAME[G.Monsoon.portNote(c).phase], onClick: function () { return H.monsoon(c); } } : null,
+      monsoon,
       { label: '보급', icon: 'bread', sub: R.daysOfFood() >= 999 ? '' : R.daysOfFood() + '·' + R.daysOfWater() + '일 · 자재 ' + Math.floor(S().fleet.mat || 0), onClick: function () { return H.supply(c); } },
       { label: '함대편성', icon: 'ship', sub: s.fleet.ships.length + '척' + (moored(c).length ? ' +' + moored(c).length : ''), onClick: function () { return H.fleet(c); } },
       { label: '도크', icon: 'anchor', sub: G.Dock.note(c) + (G.Dock.isHome(c) ? ' · 모항' : ''), onClick: function () { return H.dock(c); } },   // 모항 10척 · 다른 항구 3척(2년 뒤 폐기) — js/systems/dock.js
       G.VoyagePlans ? { label: '탐험·교역 계획', icon: 'map', sub: '사건 예고·기한·재조사', onClick: function () { return G.VoyagePlans.open(); } } : null,
-      { label: '마을정보', icon: 'map', onClick: function () { return H.townInfo(c); } },
+      town,
       G.SeaMonsters ? { label: '해상 괴물 소식', icon: 'skull', sub: G.SeaMonsters.news(c).length + '건', onClick: function () { return G.SeaMonsters.tell(c, G.Scenes.mateSpeaker('first'), true); } } : null,
-      { label: '발표', icon: 'flag', sub: unrep ? unrep + '건' : '', dim: !unrep, onClick: function () { return H.announce(c); } }
-    ].concat(G.Colony ? G.Colony.harborItems(c) : []);   // 개척 도시: 개척 물자를 넘긴다
+      announce
+    ].concat(colonyItems);
   };
-  H.panel = function () { return G.Info.fleetPanel(); };
+  H.panel = function () { if (S().loc.via !== 'land') return G.Info.fleetPanel(); };
 
   function moored(c) { return G.Dock.list(c); }   // 도크에 맡긴 배 (예전 이름 「계류」 — 저장 자리 s.moored는 그대로)
   H.moored = moored;

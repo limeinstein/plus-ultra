@@ -26,6 +26,7 @@
     carved.color.copy(color('#6f6a60'));carved.map=woodTex;carved.bumpMap=woodTex;carved.bumpScale=.035;
     var relief=carved.clone();relief.color.copy(color('#867d70'));
     var frame=mat('#4d3526'),panel=M.inner,roofMat;
+    carved.userData.shipArtRole='trim';relief.userData.shipArtRole='trim';edge.userData.shipArtRole='wales';frame.userData.shipArtRole='mast';
     function mesh(g,geo,m,p,role){var o=new T.Mesh(geo,m);if(p)o.position.fromArray(p);o.castShadow=o.receiveShadow=true;if(role)o.userData.turtleRole=role;g.add(o);return o;}
     function box(g,p,size,m,role){return mesh(g,new T.BoxGeometry(size[0],size[1],size[2]),m,p,role);}
     function ball(g,p,size,m,role){var o=mesh(g,new T.SphereGeometry(1,14,10),m,p,role);o.scale.fromArray(size);return o;}
@@ -54,6 +55,7 @@
     }
     var tx=new T.CanvasTexture(cv);tx.encoding=T.sRGBEncoding;tx.anisotropy=8;
     roofMat=new T.MeshStandardMaterial({map:tx,bumpMap:tx,bumpScale:.14,roughness:.9,side:T.DoubleSide});
+    roofMat.userData.shipArtRole='armor';
     function dragon(parent){
       var g=new T.Group();g.userData.turtleRole='dragon';parent.add(g);
       var front=roof(ship,c,1,0),baseY=front[1]-h.H*.36;

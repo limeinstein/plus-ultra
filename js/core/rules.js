@@ -532,7 +532,7 @@
       if (env.off < G.Ships.NEAR && tr.indexOf('shallow') >= 0) v *= 1.08;    // 얕은 배는 뭍 가까이에서 빠르다
       if (env.mon && tr.indexOf('monsoon') >= 0) v *= 1.12;                   // 계절풍 항해
     }
-    return Math.max(0.12, v);
+    return Math.max(0.12, v) * G.BALANCE.sailingSpeedK;
   };
   // ---------------------------------------------------------------- 선장: 배마다 지휘하는 사람
   /** 이 배의 선장: 기함은 제독('admiral'), 다른 배는 선장으로 임명한 동료(상태 객체), 없으면 null(갑판장이 몬다) */

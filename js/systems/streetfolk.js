@@ -352,7 +352,7 @@
     adventurer: function (c) { return hintFor(c, ['geo', 'nature', 'ruin'], 'adv'); },
     merchant: function (c) {
       var TR = C().B.trade; if (!TR || !TR.farRegions) return null;
-      var sp = c.goods.filter(function (id) { return G.GOOD[id] && !R.isRelay(c, id); }).map(function (id) { var fr = TR.farRegions(id); return { id: id, r: fr[0].r, x: fr[0].m / 0.62 }; }).sort(function (a, b) { return b.x - a.x; })[0];
+      var sp = c.goods.filter(function (id) { return G.GOOD[id] && !R.isRelay(c, id); }).map(function (id) { var fr = TR.farRegions(id, c); return { id: id, r: fr[0].r, x: fr[0].m / 0.62 }; }).sort(function (a, b) { return b.x - a.x; })[0];
       if (!sp || sp.x < 1.5) return INFO.man(c);
       return { text: '여기서 흔한 ' + U.eul(G.GOOD[sp.id].name) + ' ' + G.REGIONS[sp.r] + '까지 실어 가면 여기 값의 ' + sp.x.toFixed(1) + '배는 받는다오. 먼 길이 곧 돈이지.' };
     },

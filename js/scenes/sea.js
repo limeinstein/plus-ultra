@@ -2196,7 +2196,7 @@
       var kk = NPC_KIND[n.kind];
       for (var j = 0; j < Math.min(3, n.n); j++) {
         var nty = n.ships && n.ships[j], nlook = nty ? A.shipLook(nty, { flag: kk.flag, cross: false }) : { sails: ['sq', 'sq', 'lat'], hull: kk.hull, sail: kk.sail, flag: kk.flag };
-        if (n.kind === 'pirate') { nlook.hull = kk.hull; if (nlook.hullType === 'west' || nlook.hullType === 'galley' || nlook.hullType === 'dhow') nlook.sail = kk.sail; }
+        A.pirateLook(nlook, n);
         var nk = NP / 30;
         var NR = n.rideShips && n.rideShips[j], NRD = G.FX.ride;
         if (NR && NRD && NRD.on !== false) nlook.pose = { roll: U.clamp(NR.roll, -NRD.maxRoll, NRD.maxRoll), pitch: U.clamp(NR.pitch, -NRD.maxPitch, NRD.maxPitch), heave: U.clamp(NR.heave, -NRD.maxHeave, NRD.maxHeave) };
@@ -2211,7 +2211,6 @@
         var nqf = tsu ? G.Quake.shipFx(nx0, ny0, n.heading) : null;      // 해일: 다른 배도 물결에 들리고 밀린다 (그림만)
         if (nqf) { nx0 += nqf.dx; ny0 += nqf.dy; nlook.pose = { roll: (nlook.pose ? nlook.pose.roll : 0) + nqf.roll, pitch: (nlook.pose ? nlook.pose.pitch : 0) + nqf.pitch, heave: (nlook.pose ? nlook.pose.heave : 0) + nqf.heave }; }
         nlook.light = weatherParams();
-        if (n.kind === 'pirate' && (nlook.hullType === 'west' || nlook.hullType === 'galley' || nlook.hullType === 'dhow')) nlook.sailTint = G.FX.ship3d.pirateSailTint;
         if (!(G.Ship3D && G.Ship3D.draw(ctx, nx0, ny0, nsv.ang, NP, nlook, st.t + j))) A.shipTop(ctx, nx0, ny0, nsv.ang, NP, nlook, st.t + j);
       }
       if ((n.kind === 'pirate' && !n.awed) || n.hostile || n.exp) { ctx.font = '700 14px ' + fontFam(); ctx.textAlign = 'center'; var lbN = n.kind === 'pirate' ? G.Ships.pirateLabel(n.zone) : n.label || n.nation + ' 함대', lwN = ctx.measureText(lbN).width; ctx.fillStyle = 'rgba(20,10,6,.55)'; ctx.fillRect(p[0] - lwN / 2 - 5, p[1] - NP * 0.72 - 15, lwN + 10, 19); ctx.fillStyle = n.exp && !n.hostile ? '#ffe08a' : '#ff9a8a'; ctx.fillText(lbN, p[0], p[1] - NP * 0.72); ctx.textAlign = 'left'; }

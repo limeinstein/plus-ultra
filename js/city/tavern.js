@@ -137,7 +137,7 @@
     var list = G.Econ.rumors(c, K.rumorN || 2);
     if (!list.length) {
       // 사건이 없으면: 이 고장 특산물이 어디서 금값인지
-      var sp = c.goods.filter(function (id) { return G.GOOD[id] && !R.isRelay(c, id); }).map(function (id) { var fr = C.B.trade.farRegions(id); return { id: id, r: fr[0].r, x: fr[0].m / 0.62 }; }).sort(function (a, b) { return b.x - a.x; })[0];
+      var sp = c.goods.filter(function (id) { return G.GOOD[id] && !R.isRelay(c, id); }).map(function (id) { var fr = C.B.trade.farRegions(id, c); return { id: id, r: fr[0].r, x: fr[0].m / 0.62 }; }).sort(function (a, b) { return b.x - a.x; })[0];
       await C.say(m, '요즘은 바다도 장터도 조용하네.' + (sp && sp.x >= 1.5 ? '\f그래도 장사꾼이라면 알아 두게. 여기서 흔한 ' + U.eul(G.GOOD[sp.id].name) + ' ' + G.REGIONS[sp.r] + '에 가져가면 여기 값의 ' + sp.x.toFixed(1) + '배는 받는다더군.' : ''));
       G.Game.refreshHud(); return;
     }

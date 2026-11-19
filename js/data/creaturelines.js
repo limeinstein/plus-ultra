@@ -290,6 +290,114 @@
     fail: { '언니': ['아직 모자라군, 내가. …다시 오겠다.'], '여동생': ['힝… 더 세져서 올게요!'] },
     decline: { '언니': ['…그런가. 숲은 넓다. 잘 가라.'], '여동생': ['치. 그럼 다음에 또 물어볼 거예요!'] }
   };
+  // 공용 사건 원화. 실제 이름·자매·부관의 얼굴은 대화창에서 현재 인물 자료로 표시한다.
+  // 인간형 괴물 7종: 만남과 실제 선택지 두 갈래의 전용 사건 원화.
+  G.MONSTER_EVENT_SHOTS = {
+    "lich": {
+      "meet": {
+        "img": "monster-events/lich_meet_20261119",
+        "title": "리치 — 납골당의 부탁"
+      },
+      "free": {
+        "img": "monster-events/lich_free_20261119",
+        "title": "리치 — 심장석을 깨뜨리다"
+      },
+      "take": {
+        "img": "monster-events/lich_take_20261119",
+        "title": "리치 — 끝나지 못한 기다림"
+      }
+    },
+    "vampire": {
+      "meet": {
+        "img": "monster-events/vampire_meet_20261119",
+        "title": "흡혈귀 — 일로나의 초상 앞에서"
+      },
+      "dawn": {
+        "img": "monster-events/vampire_dawn_20261119",
+        "title": "흡혈귀 — 아내가 좋아하던 아침"
+      },
+      "live": {
+        "img": "monster-events/vampire_live_20261119",
+        "title": "흡혈귀 — 닫힌 창과 남은 죗값"
+      }
+    },
+    "werewolf": {
+      "meet": {
+        "img": "monster-events/werewolf_meet_20261119",
+        "title": "늑대인간 — 보름달의 신의 사냥개"
+      },
+      "church": {
+        "img": "monster-events/werewolf_church_20261119",
+        "title": "늑대인간 — 교구에 넘겨진 야니스"
+      },
+      "free": {
+        "img": "monster-events/werewolf_free_20261119",
+        "title": "늑대인간 — 지옥에서 되찾은 씨앗"
+      }
+    },
+    "deadknight": {
+      "meet": {
+        "img": "monster-events/deadknight_meet_20261119",
+        "title": "해골 기사 — 오지 않는 원군"
+      },
+      "truth": {
+        "img": "monster-events/deadknight_truth_20261119",
+        "title": "해골 기사 — 이백 년의 맹세가 끝나다"
+      },
+      "lie": {
+        "img": "monster-events/deadknight_lie_20261119",
+        "title": "해골 기사 — 조금 더 서 있겠다"
+      }
+    },
+    "troll": {
+      "meet": {
+        "img": "monster-events/troll_meet_20261119",
+        "title": "트롤 — 삼백 년 된 빨간 리본"
+      },
+      "hide": {
+        "img": "monster-events/troll_hide_20261119",
+        "title": "트롤 — 새벽빛에서 숨겨 주다"
+      },
+      "stone": {
+        "img": "monster-events/troll_stone_20261119",
+        "title": "트롤 — 리본을 쥔 바위"
+      }
+    },
+    "minotaur": {
+      "meet": {
+        "img": "monster-events/minotaur_meet_20261119",
+        "title": "미노타우로스 — 별이라는 이름의 괴물"
+      },
+      "end": {
+        "img": "monster-events/minotaur_end_20261119",
+        "title": "미노타우로스 — 별무늬 천장 아래 마지막 잠"
+      },
+      "open": {
+        "img": "monster-events/minotaur_open_20261119",
+        "title": "미노타우로스 — 열린 문을 두고 떠나다"
+      }
+    },
+    "yeti": {
+      "meet": {
+        "img": "monster-events/yeti_meet_20261119",
+        "title": "예티 — 바위틈을 지키는 어미"
+      },
+      "pass": {
+        "img": "monster-events/yeti_pass_20261119",
+        "title": "예티 — 길을 돌아 지나가다"
+      },
+      "fur": {
+        "img": "monster-events/yeti_fur_20261119",
+        "title": "예티 — 눈밭에 남은 흰 털"
+      }
+    }
+  };
+  G.ELF_EVENT_SHOTS = {
+    duel: { img: 'elf-events/duel_20261119', title: '세계수의 수호자 · {elf}의 일기토' },
+    support: { img: 'elf-events/support_20261119', title: '{mate}의 지원 · 제독을 대신한 결투' },
+    sisters: { img: 'elf-events/sisters_20261119', title: '{mate}의 설득 · 자매가 내린 칼' },
+    join: { img: 'elf-events/join_20261119', title: '{elf} · 함께할 새 항해' }
+  };
   // 엘프 자매에게 일기토 그림을 단다 (동료가 된 뒤 대신 싸울 때도 엘프 그림)
   if (G.MATE) G.ELVES.forEach(function (e) { var m = G.MATE[e.id]; if (m) { m.duelSprite = 'elf'; m.worldTreeElf = true; } });
 

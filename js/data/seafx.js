@@ -711,8 +711,20 @@
     bufferShrinkFrames: 8, bufferShrinkRatio: .72, // 축소 뒤 전체 함대가 작은 버퍼에 들어가는 상태가 8프레임 이어지면 한 번만 축소
     reuseMs: 33, reuseTurn: 0.02, // 항해: 같은 배는 이 ms 동안(뱃머리가 이 rad 넘게 돌지 않으면) 먼저 그린 3D 그림을 다시 쓴다 — 0이면 매 프레임 새로 (항해 버벅임 2026-11-01)
     reuseBudget: 2, reuseMax: 120, // 한 프레임에 새로 그리는 배는 기함 말고 이만큼까지, 나머지는 이 ms까지 먼저 그린 그림으로 (차례로 돌아가며 그린다)
-    pirateSailTint: '#766c62' // 주변 해적선의 어두운 돛. 같은 선종의 아군 돛에는 적용하지 않는다.
+    pirateSailTint: '#444b59' // 옛 선박 감상 화면의 호환값. 실제 해적선은 아래 두 도색을 쓴다.
   });
+  // 해적 두목마다 고정되는 돛 도색. 3D는 기존 돛천의 솔기·명암을 살려 물들인다.
+  G.FX.pirateShips = {
+    styles: ['black', 'wine'],
+    black: { sail: '#30343f', sailTint: '#444b59', hull: '#20262d', deck: '#716454', trim: '#9ba3a5', weathered: true, flag: '#11141b', cross: false,
+      finish: { wear: .72, exposed: '#766b5b', roughness: .94, shine: 12, specular: '#737b83', emissive: 0,
+        colors: { hull: '#20262d', deck: '#716454', inner: '#424744', wales: '#151b20', paint: '#55616b', trim: '#9ba3a5', mast: '#51473a', roof: '#363c40', armor: '#424d53', iron: '#53483c' } } },
+    wine: { sail: '#76283e', sailTint: '#92374f', hull: '#501c2b', deck: '#a87943', trim: '#e9b84d', weathered: false, flag: '#531c30', cross: false,
+      finish: { wear: .025, exposed: '#9a683f', roughness: .38, shine: 85, specular: '#ffe6ad', emissive: .7,
+        colors: { hull: '#501c2b', deck: '#a87943', inner: '#6c352b', wales: '#182a38', paint: '#164650', trim: '#e9b84d', mast: '#542e20', roof: '#462b3c', armor: '#6b422b', iron: '#252b34' } } },
+    wearPattern: { scale: [.22, 1.15], threshold: [.56, .82], grain: 2.4, baseLight: .4, scratchScale: 18 },
+    fallback: { scratches: 32, scratchAlpha: .55, trimWidth: .012 }
+  };
   // 거북선: 첨부 복원선 사진을 기준으로 한 미술 배치. 게임의 배 성능과 무관하다.
   G.FX.turtle3d = {
     mastX: [.20, -.18], sailHeight: [58, 52], sailWidth: [.76, .67],

@@ -1180,7 +1180,9 @@
       var done0 = done; done = function (v) { if (stopAuto) { stopAuto(); stopAuto = null; } done0(v); };
       list.forEach(function (o, i) {
         var b = U.el('button', 'btn small' + (i === 0 ? ' navy' : '') + (o.dis ? ' disabled' : '') + (prev != null && prev === o.label ? ' prevpick' : ''), (o.thumb ? '<img class="ask-thumb" src="' + o.thumb + '" alt="">' : o.icon ? G.icon(o.icon) : '') + o.label + (prev != null && prev === o.label ? '<span class="prevtag">지난번</span>' : ''));
-        b.onclick = function (e) { e.stopPropagation(); rememberPick(pk, o.label); done(o.value); };
+        // 고를 수 없는 것(o.dis)은 CSS로 마우스만 막혀 있어 스크립트·보조 기기의 click()으로는 눌렸다 → 값이 넘어가 사건이 깨졌다 (100년 QA 2026-11-18, romeojuliet.js 티볼트 치료)
+        if (o.dis) { b.disabled = true; b.setAttribute('aria-disabled', 'true'); }
+        b.onclick = function (e) { e.stopPropagation(); if (o.dis) return; rememberPick(pk, o.label); done(o.value); };
         row.appendChild(b);
       });
       selected = row.querySelector('button:not(.disabled)'); if (selected) selected.classList.add('kbd-focus');
@@ -1324,7 +1326,8 @@
       var lead = o.thumb ? '<img class="choice-thumb" src="' + o.thumb + '" alt="">' : (o.icon ? G.icon(o.icon) : '');
       var d = U.el('div', 'choice' + (o.disabled ? ' dis' : '') + (o.cls ? ' ' + o.cls : ''), o.html != null ? o.html : lead + '<span>' + o.label + '</span>' + (o.right != null ? '<span class="r">' + o.right + '</span>' : ''));
       if (o.desc) d.title = o.desc;
-      d.onclick = function () { win.close(o.value); };
+      if (o.disabled) d.setAttribute('aria-disabled', 'true');
+      d.onclick = function () { if (o.disabled) return; win.close(o.value); };   // 흐린 줄(.dis)은 눌러도 고르지 않는다 (UI.ask와 같이)
       ch.appendChild(d);
     });
     // 갈래 단추 (2026-10-29): 고를 것에 cat 이 있고 갈래가 둘 이상이면 [전체 · 지리 3 · 보물 2 …] — cat 이 없는 줄(일괄 보고 등)은 늘 보인다

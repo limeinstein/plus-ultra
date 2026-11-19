@@ -60,13 +60,59 @@
     idle.sort(function(a,b){return r.models[b].seen-r.models[a].seen;});
     if(idle.length>keep){idle.slice(keep).forEach(function(id){dropModel(r,id);});r.renderer.renderLists.dispose();}
   }
+  // 기존 목재 지도·요철을 유지한 채 도장과 벗겨진 칠을 입힌다. 새 지도나 모형은 만들지 않는다.
+  function surfaceMaterials(body,T){
+    var out=[],seen=new Set();
+    body.traverse(function(o){var m=o.material,role=m&&m.userData.shipArtRole;if(!role||seen.has(m))return;seen.add(m);
+      var u={shipCoat:{value:0},shipWear:{value:0},shipColor:{value:new T.Color()},shipExposed:{value:new T.Color()},
+        shipPattern:{value:new T.Vector4()},shipGrain:{value:new T.Vector3()}},entry={m:m,role:role,u:u,active:null,
+        roughness:m.roughness,shininess:m.shininess,emissive:m.emissive&&m.emissive.clone(),specular:m.specular&&m.specular.clone()};
+      m.onBeforeCompile=function(shader){
+        Object.keys(u).forEach(function(k){shader.uniforms[k]=u[k];});
+        shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vShipArtPosition;')
+          .replace('#include <begin_vertex>','#include <begin_vertex>\nvShipArtPosition=transformed;');
+        var code=[
+          'varying vec3 vShipArtPosition; uniform float shipCoat,shipWear; uniform vec3 shipColor,shipExposed,shipGrain; uniform vec4 shipPattern;',
+          'float shipHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+          'float shipNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(shipHash(i),shipHash(i+vec2(1,0)),f.x),mix(shipHash(i+vec2(0,1)),shipHash(i+vec2(1,1)),f.x),f.y);}'
+        ].join('\n');
+        shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\n'+code)
+          .replace('#include <map_fragment>','#include <map_fragment>\n'+[
+            'if(shipCoat>0.5){',
+            'vec2 sp=vShipArtPosition.xy*shipPattern.xy;',
+            'float shipPatch=smoothstep(shipPattern.z,shipPattern.w,shipNoise(sp));',
+            'float scratch=(1.0-smoothstep(.03,.12,abs(sin(sp.y*shipGrain.z+shipNoise(vec2(sp.x*.2,floor(sp.y)))*3.0))))*smoothstep(.5,.8,shipNoise(sp*vec2(.9,2.0)));',
+            'float wear=clamp(max(shipPatch,scratch)*shipWear,0.0,1.0);',
+            'float grain=clamp(dot(diffuseColor.rgb,vec3(.299,.587,.114))*shipGrain.x+shipGrain.y,.25,1.45);',
+            'diffuseColor.rgb=mix(shipColor,shipExposed,wear)*grain;}'
+          ].join('\n'));
+      };
+      m.customProgramCacheKey=function(){return 'ship-surface-v1';};out.push(entry);
+    });return out;
+  }
+  function finishSurfaces(r,spec){
+    var style=spec.pirateLivery||null,all=G.FX.pirateShips,finish=style&&all[style]&&all[style].finish,pattern=all.wearPattern;
+    r.surfaces.forEach(function(e){if(e.active===style)return;var m=e.m,u=e.u,col=finish&&finish.colors[e.role];e.active=style;
+      u.shipCoat.value=col?1:0;
+      if(col){
+        u.shipColor.value.set(col).convertSRGBToLinear();
+        u.shipExposed.value.set(e.role==='trim'?finish.colors.iron:finish.exposed).convertSRGBToLinear();
+        u.shipWear.value=finish.wear;u.shipPattern.value.set(pattern.scale[0],pattern.scale[1],pattern.threshold[0],pattern.threshold[1]);
+        u.shipGrain.value.set(pattern.grain,pattern.baseLight,pattern.scratchScale);
+      }
+      if(e.roughness!=null)m.roughness=col?finish.roughness:e.roughness;
+      if(e.shininess!=null)m.shininess=col?finish.shine:e.shininess;
+      if(e.emissive)m.emissive.copy(e.emissive).multiplyScalar(col?finish.emissive:1);
+      if(e.specular){m.specular.copy(e.specular);if(col)m.specular.set(finish.specular).convertSRGBToLinear();}
+    });
+  }
   function select(r,id){
     if(r.type===id){r.models[id].seen=r.frame;return true;}if(failedTypes[id])return false;
     var T=G.Three,c=cfg();
     r.yaw.remove(r.body);r.type=null;r.ship=r.rig=r.flag=null;
     var cached=r.models[id];
     if(cached){
-      r.body=cached.body;r.yaw.add(r.body);r.ship=cached.ship;r.rig=cached.rig;r.flag=cached.flag;r.span=cached.span;r.anchor=cached.anchor;r.buildMs=cached.buildMs;r.type=id;r.switches++;cached.seen=r.frame;
+      r.body=cached.body;r.yaw.add(r.body);r.ship=cached.ship;r.rig=cached.rig;r.flag=cached.flag;r.surfaces=cached.surfaces;r.span=cached.span;r.anchor=cached.anchor;r.buildMs=cached.buildMs;r.type=id;r.switches++;cached.seen=r.frame;
       Object.assign(r.camera,{left:-r.span/2,right:r.span/2,top:r.anchor,bottom:r.anchor-r.span});r.camera.updateProjectionMatrix();
       if(!r.inFrame)trimModels(r,0);return true;
     }
@@ -85,13 +131,14 @@
       var anchor=Math.max(c.anchorY,bb.max.y*Math.sqrt(1-c.elevation*c.elevation)+rad*c.elevation+c.boundsPadding);
       r.span=Math.max(c.span,rad*2+c.boundsPadding*2,anchor+rad*c.elevation+c.boundsPadding);r.anchor=anchor;
       Object.assign(r.camera,{left:-r.span/2,right:r.span/2,top:r.anchor,bottom:r.anchor-r.span});r.camera.updateProjectionMatrix();
-      r.ship=ship;r.rig=rig;r.flag=flag;r.type=id;r.switches++;r.builds++;r.buildMs=performance.now()-started;
-      r.models[id]={body:r.body,ship:ship,rig:rig,flag:flag,span:r.span,anchor:r.anchor,buildMs:r.buildMs,seen:r.frame};
+      r.ship=ship;r.rig=rig;r.flag=flag;r.surfaces=surfaceMaterials(r.body,T);r.type=id;r.switches++;r.builds++;r.buildMs=performance.now()-started;
+      r.models[id]={body:r.body,ship:ship,rig:rig,flag:flag,surfaces:r.surfaces,span:r.span,anchor:r.anchor,buildMs:r.buildMs,seen:r.frame};
       if(!r.inFrame)trimModels(r,0);return true;
     }catch(e){failedTypes[id]=e.message;release(r.body);r.body.clear();r.ship=r.rig=r.flag=null;return false;}
   }
   function animate(r,spec,t){
     var c=cfg(),rig=spec.rig||{};r.rig.update(spec,t);
+    finishSurfaces(r,spec);
     var fp=r.flag.geometry.attributes.position,uv=r.flag.geometry.attributes.uv,strength=clamp(rig.aws==null?.6:rig.aws,.05,2);
     var flagScale=clamp(r.ship.s.L/156,.65,1.15);r.flag.rotation.y=-(rig.wind||0);
     for(var i=0;i<fp.count;i++){var a=uv.getX(i),b=uv.getY(i);fp.setXYZ(i,a*c.flagLength*flagScale,((b-1)*c.flagHeight-a/(1+strength)*1.5)*flagScale,Math.sin(a*8-t*c.flagRate)*a*c.flagWave*strength);}
@@ -142,7 +189,7 @@
      다음 프레임에 차례가 온다. 선종·크기·깃발·돛 빛깔이 바뀌거나 뱃머리가 돌면 바로 새로 그린다. sid가 없는 그림(해전·감상)은 예전처럼 매번 그린다. */
   var reuse={};
   function reusable(k,spec,angle,len,pixels,c,now,r){
-    if(!k||k.type!==spec.type||k.pixels!==pixels||Math.abs(len-k.len)>len*.01||(spec.flag||null)!==k.flag||(spec.sailTint||null)!==k.tint)return false;
+    if(!k||k.type!==spec.type||k.pixels!==pixels||Math.abs(len-k.len)>len*.01||(spec.flag||null)!==k.flag||(spec.sailTint||null)!==k.tint||(spec.pirateLivery||null)!==k.livery)return false;
     var da=Math.abs(angle-k.angle)%PI2;if(da>Math.PI)da=PI2-da;
     var age=now-k.at,fu=Math.abs((spec.furl||0)-k.furl);
     if(age<c.reuseMs&&da<(c.reuseTurn||.02)&&fu<.04)return true;                       // 방금 그린 그림
@@ -180,7 +227,7 @@
         if(Object.keys(reuse).length>24)Object.keys(reuse).forEach(function(id){if(start-(reuse[id].seen||0)>5000)delete reuse[id];});}   // 오래 안 보인 배의 그림은 버린다
       if(k.cv.width!==pixels){k.cv.width=pixels;k.cv.height=pixels;}
       var kc=k.cv.getContext('2d');kc.clearRect(0,0,pixels,pixels);kc.drawImage(r.renderer.domElement,0,r.buffer-pixels,pixels,pixels,0,0,pixels,pixels);
-      k.type=spec.type;k.pixels=pixels;k.at=k.seen=start;k.angle=angle;k.len=len;k.furl=spec.furl||0;k.flag=spec.flag||null;k.tint=spec.sailTint||null;
+      k.type=spec.type;k.pixels=pixels;k.at=k.seen=start;k.angle=angle;k.len=len;k.furl=spec.furl||0;k.flag=spec.flag||null;k.tint=spec.sailTint||null;k.livery=spec.pirateLivery||null;
       k.L=r.ship.s.L;k.W=r.ship.s.W;k.span=r.span;k.anchor=r.anchor;
       ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(k.cv,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();
     }else{ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(r.renderer.domElement,0,r.buffer-pixels,pixels,pixels,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();}

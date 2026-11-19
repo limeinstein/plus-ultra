@@ -416,6 +416,7 @@
     var cand = T.ev.filter(function (e) {
       if (d >= e.end || (d < e.start && !e.pre)) return false;
       var c0 = city(e.at); if (!c0) return false;
+      if (e.cities.indexOf(c.id) < 0 && G.Frontier && G.Frontier.heard && !G.Frontier.heard(c, c0)) return false;   // 항로가 알려지지 않은 먼 땅의 일은 소문으로도 오지 않는다
       return e.cities.indexOf(c.id) >= 0 || G.Geo.dist(c.lon, c.lat, c0.lon, c0.lat) <= maxD || G.REGION_DIST[c.region][c0.region] <= 1;
     });
     var out = [];

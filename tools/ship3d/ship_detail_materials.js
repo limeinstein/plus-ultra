@@ -24,6 +24,12 @@
     C.rope.color.copy(color(look.rope));
     C.boltRope = material(look.boltRope, .94);
     C.glass.color.copy(color('#243e43')); C.glass.specular.setHex(0xb4d8df);
+    // 역할은 재질에 붙인다. 선종·기하의 크기와 무관하게 해적 도색을 적용한다.
+    function role(m, name) { m.userData.shipArtRole = name; }
+    ['hull','deck','inner','dark','mid','deckc'].forEach(function(k){role(M[k],{dark:'wales',mid:'hull',deckc:'deck'}[k]||k);});
+    role(paint,'paint');
+    var roles={brass:'trim',brassHi:'trim',iron:'iron',mast:'mast',spar:'mast',oar:'mast',bamboo:'hull',log:'hull',batten:'mast',red:'paint',white:'inner',roof:'roof',thatch:'roof',plates:'armor',wallJ:'inner',wallK:'inner'};
+    Object.keys(roles).forEach(function(k){if(C[k])role(C[k],roles[k]);});
 
     // 각 폭의 색 차이, 겹솔기, 리프 밴드, 모서리 보강천을 하나의 지도에 그린다.
     var clothCache = {};

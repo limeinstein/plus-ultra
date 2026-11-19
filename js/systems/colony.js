@@ -2,7 +2,7 @@
    ■ 언제: 통합 명성이 G.BALANCE.colony.fame[n](200,000 · 400,000)을 넘을 때마다 제독의 나라 국왕이 부른다 (소식 · 왕궁 메뉴 「새 도시 개척」).
    ■ 흐름 (도시마다 state.colony.list[i].stage)
      부름 → 왕궁에서 세울 곳을 고른다 (나라가 진출한 바다: 에스파냐 = 아메리카, 포르투갈 = 아프리카·인도·동남아시아) → stage 0 「○○ 개척지」(항구만)
-     0 → 개척지에 입항하면 제독이 이름을 지어 도시를 세운다 → 1 항구·술집·교역소·여관(+성문)
+     0 → 개척지에 도착하면 제독이 이름을 지어 도시를 세운다 → 1 항구·술집·교역소·여관(+성문)
      1·2·3 → 개척민이 곡물(밀)이나 목재를 청한다 — 항구 메뉴 「개척 물자를 넘긴다」 → 2 시장·교회 / 3 조합·감찰관 저택 / 4 총독부
      4 → 총독부에서 총독에 오른다(칭호 「○○ 총독」) · 아내와 아이들을 총독 관저로 모실 수 있다(state.player.seat = 그 도시)
    ■ 개척 도시는 자료(G.CITY_DATA)에 없는 도시라, 일지를 열 때·새로 시작할 때 G.Colony.apply()가 1000번부터 끼워 넣는다 (옛 저장·자료와 번호가 겹치지 않게).
@@ -255,7 +255,7 @@
     return nearNat || seen ? '' : '아직 닿지 않은 바다';
   };
 
-  // ================================================================ 도시를 세운다 (개척지에 입항)
+  // ================================================================ 도시를 세운다 (개척지에 도착)
   CO.arrival = async function (c) {
     var e = CO.of(c); if (!e) return;
     if (e.stage === 0) { await CO.found(c, e); return; }
@@ -304,7 +304,7 @@
     CO.list().forEach(function (e) {
       if (!e.need) return;
       var have = haveQty(e.need.good), here = c.id === e.id;
-      if (here) out.push({ kind: 'harbor', icon: 'seal', hot: have >= e.need.qty, text: '개척 물자 — ' + goodName(e.need.good) + ' ' + e.need.qty + '통 (실은 것 ' + have + '통)' + (have >= e.need.qty ? ' — 항구에서 넘긴다' : '') });
+      if (here) out.push({ kind: 'harbor', icon: 'seal', hot: have >= e.need.qty, text: '개척 물자 — ' + goodName(e.need.good) + ' ' + e.need.qty + '통 (가져온 것 ' + have + '통)' + (have >= e.need.qty ? ' — 항구에서 넘긴다' : '') });
       else if (c.goods && c.goods.indexOf(e.need.good) >= 0 && R.facilities(c).trade) out.push({ kind: 'trade', icon: 'seal', text: e.name + '에 보낼 ' + goodName(e.need.good) + '을 여기 교역소에서 살 수 있다 (' + have + '/' + e.need.qty + '통)' });
     });
     var cl = CO.st();
@@ -314,7 +314,7 @@
   CO.deliver = async function (c) {
     var s = S(), e = CO.of(c), C = G.Scenes.city; if (!e || !e.need) return;
     var g = e.need.good, q = e.need.qty, have = haveQty(g), who = settler(c);
-    if (have < q) { await say('제독님, ' + goodName(g) + ' ' + q + '통이 있어야 합니다. 지금 배에는 ' + have + '통뿐입니다.', who); return; }
+    if (have < q) { await say('제독님, ' + goodName(g) + ' ' + q + '통이 있어야 합니다. 가져오신 것은 ' + have + '통뿐입니다.', who); return; }
     var price = Math.max(1, (G.GOOD[g] && G.GOOD[g].p) || 10), pay = Math.round(price * q * (K().pay || 1.6));
     if (!(await UI.confirm(goodName(g) + ' ' + q + '통을 개척민에게 넘깁니까?<br><small>국왕의 금고에서 금화 ' + U.num(pay) + '닢을 치러 줍니다.</small>', '넘긴다', '그만둔다', '개척 물자'))) return;
     var cg = s.fleet.cargo[g]; cg.q -= q; if (cg.q <= 0) delete s.fleet.cargo[g];
@@ -416,7 +416,7 @@
     if (cl.call) { var sp = G.SPONSOR[cl.call.sp]; h += '<div class="hint-item"><div class="tx">' + U.esc(sp ? kingName(sp) : '국왕') + '께서 새 도시를 세울 사람으로 부르신다 — ' + U.esc(sp ? G.CITY_DATA[sp.city].name : '') + ' 왕궁</div></div>'; }
     cl.list.forEach(function (e) {
       var site = CO.site(e.key) || {}, st = STAGES[e.stage] || {};
-      var next = e.stage === 0 ? '개척지에 입항하면 도시를 세운다' : e.need ? '개척 물자: ' + goodName(e.need.good) + ' ' + e.need.qty + '통 (실은 것 ' + haveQty(e.need.good) + '통) — 항구에서 넘긴다'
+      var next = e.stage === 0 ? '개척지에 육로 또는 해로로 도착하면 도시를 세운다' : e.need ? '개척 물자: ' + goodName(e.need.good) + ' ' + e.need.qty + '통 (가져온 것 ' + haveQty(e.need.good) + '통) — 항구에서 넘긴다'
         : e.stage < 4 ? '개척민이 다음 물자를 헤아리는 중 (약 ' + Math.max(0, (e.nextDay || 0) - S().day) + '일)' : e.gov ? '총독 ' + S().player.name + (S().player.seat === e.id ? ' · 가족이 총독 관저에 산다' : '') : '총독부가 섰다 — 총독에 오를 수 있다';
       h += '<div class="kv colony-kv"><div>' + U.esc(G.CITY_DATA[e.id] ? G.CITY_DATA[e.id].name : e.name) + '</div><div>' + U.esc(site.name || '') + ' · <b>' + U.esc(st.name || '') + '</b> (' + e.stage + '/4)<br><small class="muted">' + U.esc(next) + '</small></div></div>';
     });

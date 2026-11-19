@@ -300,7 +300,7 @@
     if (G.Kongo) { try { await G.Kongo.arrival(c); } catch (e) { console.error(e); } }   // 포르투갈과 콩고: 리스본(국왕의 명·보고) · 르완다(돌려보내기·세례)
     if (G.Teppo) { try { await G.Teppo.arrival(c); } catch (e) { console.error(e); } }   // 철포 삼백 자루: 일본 항구에서 도키치로의 부탁 → 사카이에서 노부나가에게 전한다
     if (G.Gyeonwoo) { try { await G.Gyeonwoo.arrival(c); } catch (e) { console.error(e); } }   // 견우와 직녀: 거북선으로 조선 도시 → 항주 → 사카이 → 한산도
-    if (G.Colony && c.colony != null) { try { await G.Colony.arrival(c); } catch (e) { console.error(e); } }   // 개척지에 닻을 내리면 도시를 세운다 · 개척 물자   // 사라진 왕녀: 에스파냐 땅에서 전령이 부름을 전한다
+    if (G.Colony && c.colony != null) { try { await G.Colony.arrival(c); } catch (e) { console.error(e); } }   // 육로·해로로 개척지에 도착하면 도시를 세운다 · 개척 물자
     if (G.Disaster) { try { await G.Disaster.arrival(c); } catch (e) { console.error(e); } }   // 재해가 덮친 도시의 모습 · 구호금   // 수도에 들어서면 왕실 전령이 국왕의 부름을 전한다
     var lefts = G.Disc.leftHere('city', 0, 0, c.id);
     for (var li = 0; li < lefts.length; li++) await G.Disc.pickupLeft(lefts[li]);
@@ -432,7 +432,7 @@
         }
       }
       // 출항 준비
-      if (f.harbor && s.fleet.ships.length) {
+      if (f.harbor && s.loc.via !== 'land' && s.fleet.ships.length) {
         var note = C.B.harbor.prepNote(c);
         if (note !== '준비됨') out.push({ kind: 'harbor', icon: 'anchor', text: '항구에서 출항 준비 — ' + note });
       }

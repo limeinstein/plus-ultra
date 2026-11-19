@@ -16,9 +16,12 @@
      · 해적단마다 깃발 하나. 그 해적단의 이름난 해적을 처음 무찌르면 그 해적단의 깃발을 손에 넣는다. 소굴을 손에 넣으면 소굴 해적단의 깃발.
        소지품이 가득하면 자택 보관함으로 간다. 수첩 「해적의 소굴」 아래에 모은 깃발 수.
      · 그림: images/items/flag_<해적단>.webp (코덱스 — docs/codex/09_pirate_roster_flags.md). 그림이 없으면 아래 flagArt가 대강 그린다.
+   ■ 토벌 보상 (2026-11-19 사용자 요청): 현상금 5만~10만 (G.BALANCE.wanted.reward) · 무찌르면 그 해적의 궤짝에서 보물이 나오기도 하고,
+     강한 해적이 찬 명검(공격 40~44)은 일기토에서 그 검으로 덤비다가 무찌르면 손에 넣는다 (아래 W.loot · W.swordOf · W.arm, 자료 js/data/pirate_loot.js)
    ■ 흡수: 무찌른 이름난 해적의 남은 무리는 같은 바다의 다른 이름난 해적에게 흘러든다 — 한 해적이 둘까지. 흡수한 해적은 강해진다 (아래 W.absorb).
    저장: s.wanted = {due: {해적 id: 현상금}, paid: {해적 id: 받은 날}, flags: {해적단: 얻은 날}, rest: {도시: [날, 입항 번호]},
-                    abs: {흡수한 해적: [흡수된 해적…]}, gone: {흡수된 해적: 흡수한 해적}}
+                    abs: {흡수한 해적: [흡수된 해적…]}, gone: {흡수된 해적: 흡수한 해적},
+                    loot: {해적 id: 궤짝을 연 날}, swords: {해적 id: 명검을 빼앗은 날}} — 둘 다 없으면 처음 쓸 때 만든다(옛 저장)
    조정값: G.BALANCE.wanted (js/data/base.js) */
 (function (G) {
   'use strict';
@@ -35,12 +38,73 @@
   W.band = function (c) { var p = c && (c.band ? c : W.pirate(c.id)); return p && p.band && G.PIRATE_BANDS ? G.PIRATE_BANDS[p.band] || null : null; };
   /** 현상금 (금화) */
   W.bounty = function (c) {
-    var p = W.pirate(c.id) || c, k = K();
+    var p = W.pirate(c.id) || c, k = K(), rw = k.reward;
+    if (rw) {   // 토벌 보상 5만~10만 (2026-11-19 사용자 요청): 강할수록 많이 — 역사 인물·여러 바다·흡수한 해적
+      var g = rw.min * (p.hist ? rw.hist : 1) * (1 + rw.zone * Math.max(0, ((p.zones || []).length || 1) - 1)) + rw.min * rw.abs * W.absorbed(p.id).length;
+      return Math.round(Math.min(rw.max, Math.max(rw.min, g)) / k.round) * k.round;
+    }
     var v = k.base * (p.hist ? k.hist : 1) * (1 + k.multi * Math.max(0, ((p.zones || []).length || 1) - 1));
     var ab = W.absorbed(p.id), A2 = AB();   // 흡수한 해적의 현상금 일부가 얹힌다
     ab.forEach(function (id) { var q = W.pirate(id); if (q) v += A2.bounty * k.base * (q.hist ? k.hist : 1); });
     return Math.round(v / k.round) * k.round;
   };
+  // ---------------------------------------------------------------- 보물과 명검 (2026-11-19 사용자 요청 — 자료 js/data/pirate_loot.js)
+  //   「보물을 받기도 해. 강한 해적은 40 이상의 공격력을 가진 검을 가지고 있기도 한다.」
+  function TK() { return K().treasure || { chance: 0.35, hist: 0.25, abs: 0.15, max: 0.9, two: 0.3 }; }
+  function SK() { return K().sword || { strong: 2, chance: 0.45, str: 88, skill: 2 }; }
+  /** 해적마다 늘 같은 0~1 값 (id와 갈래로 굴린다 — 저장하지 않아도 벽보·바다·싸움이 같은 답을 낸다) */
+  function roll(id, salt) { var h = 2166136261; String(id + ':' + salt).split('').forEach(function (ch) { h = Math.imul(h ^ ch.charCodeAt(0), 16777619); }); return ((h >>> 0) % 100000) / 100000; }
+  /** 강함: 역사 인물 2 + 흡수한 해적 수 + 더 다니는 바다 수 */
+  W.strength = function (p) { p = W.pirate(p.id) || p; return (p.hist ? 2 : 0) + W.absorbed(p.id).length + Math.max(0, ((p.zones || []).length || 1) - 1); };
+  /** 이 해적이 찬 명검 (없으면 null) — 강한 해적 가운데 chance만큼. 이미 빼앗았으면 없다 */
+  W.swordOf = function (p) {
+    p = W.pirate(p && p.id) || p; var w = st(), k = SK(), ids = G.PIRATE_SWORDS || [];
+    if (!p || !w || !ids.length || (w.swords && w.swords[p.id] != null) || W.strength(p) < k.strong || roll(p.id, 'sword') >= k.chance) return null;
+    var zs = p.zones || [], fit = ids.filter(function (id) { var d = G.ITEM[id]; return d && (d.zones || []).some(function (z) { return zs.indexOf(z) >= 0; }); });
+    if (!fit.length) fit = ids;
+    return G.ITEM[fit[Math.floor(roll(p.id, 'which') * fit.length)]] || null;
+  };
+  /** 명검을 찬 해적은 일기토에서 그 검으로 덤빈다 (js/scenes/battle.js — npc.boss의 이름·공격을 쓴다) */
+  W.arm = function (n) {
+    if (!n || n.kind !== 'pirate' || !n.cap || n.armed) return n;
+    var p = W.pirate(n.cap.id), sw = p && W.swordOf(p); n.armed = true;
+    if (!sw) return n;
+    var k = SK(), line = sw.name + U.jx(sw.name, '이/가') + ' 피 맛을 보고 싶어 한다. 덤벼라!';
+    if (n.boss) {   // 바르바리 해적처럼 이미 두목이 직접 나서는 함대(js/systems/corsairs.js)는 그 두목에게 검을 쥐여 준다
+      n.boss.atk = Math.max(n.boss.atk || 0, sw.atk); n.boss.str = Math.max(n.boss.str || 0, k.str); n.boss.skill = Math.max(n.boss.skill || 0, k.skill);
+      n.boss.sword = sw.id; n.boss.line = line;
+    } else n.boss = { name: n.cap.name, atk: sw.atk, def: 6, str: k.str, skill: k.skill, sword: sw.id, line: line };
+    n.tacticNote = (n.tacticNote ? n.tacticNote + ' ' : '') + n.cap.name + U.jx(n.cap.name, '은/는') + ' 허리에 ' + sw.name + '(공격 ' + sw.atk + ')' + U.jx(sw.name, '을/를') + ' 찼다고 한다.';
+    return n;
+  };
+  /** 무찌른 뒤: 궤짝의 보물과 명검을 챙긴다 — 한 해적에 한 번 */
+  function giveItem(id, lines, why) {
+    var d = G.ITEM[id]; if (!d) return false;
+    var ok = R.addItem(id), where = ok ? '' : ' (소지품이 가득해 자택 보관함으로 보냈다)';
+    if (!ok) R.storage().push({ id: id });
+    if (lines) lines.push(why + ' <b>' + U.esc(d.name) + '</b>' + (d.atk ? ' (공격 ' + d.atk + ')' : '') + U.jx(d.name, '을/를') + ' 손에 넣었다!' + where);
+    if (G.State && G.State.log) G.State.log(why.replace(/<[^>]+>/g, '') + ' ' + d.name + U.jx(d.name, '을/를') + ' 손에 넣었다.');
+    return true;
+  }
+  W.loot = function (p, lines) {
+    var w = st(); if (!w || !p) return [];
+    w.loot = w.loot || {}; w.swords = w.swords || {};
+    var got = [], s = S(), name = p.name;
+    var sw = W.swordOf(p);
+    if (sw) { w.swords[p.id] = s.day; if (giveItem(sw.id, lines, U.esc(name) + U.jx(name, '이/가') + ' 차고 있던')) got.push(sw.id); }
+    if (w.loot[p.id] == null) {
+      w.loot[p.id] = s.day;
+      var t = TK(), ch = Math.min(t.max, t.chance + (p.hist ? t.hist : 0) + t.abs * W.absorbed(p.id).length);
+      var n = U.chance(ch) ? 1 + (W.strength(p) >= SK().strong && U.chance(t.two) ? 1 : 0) : 0;
+      var pool = (G.PIRATE_TREASURE || []).filter(function (id) { var d = G.ITEM[id]; return d && (!d.zones || d.zones.some(function (z) { return (p.zones || []).indexOf(z) >= 0; })); });
+      for (var i = 0; i < n && pool.length; i++) {
+        var id = U.pick(pool); pool = pool.filter(function (x) { return x !== id; });
+        if (giveItem(id, lines, U.esc(name) + '의 궤짝에서')) got.push(id);
+      }
+    }
+    return got;
+  };
+
   // ---------------------------------------------------------------- 흡수 (2026-11-10 사용자 요청)
   //   「해적은 토벌당하면 다른 해적에 흡수되고, 2명까지 흡수될 수 있어. 흡수되면 흡수한 해적은 강해져.」
   //   · 이름난 해적의 함대를 무찌르면(이기면) 그 해적의 남은 무리가 같은 바다의 다른 이름난 해적에게 흘러든다.
@@ -70,6 +134,7 @@
   /** 흡수한 해적의 함대를 키운다 — 바다에서 해적 떼를 꾸민 뒤 (SeaFolk.decorate · 여급 소문 MT.spawn) */
   W.empower = function (n) {
     if (!n || n.kind !== 'pirate' || !n.cap || n.empowered) return n;
+    W.arm(n);   // 명검을 찬 해적 (흡수로 강해지면 그 몫도 아래에서 더한다)
     var ab = W.absorbed(n.cap.id); if (!ab.length) return n;
     var a = AB(), k = ab.length, sh = n.ships || (n.ships = []);
     var extra = sh[1] || sh[0]; if (extra) for (var i = 0; i < k * a.ships; i++) sh.push(sh[0] && i === 0 && k >= 2 ? sh[0] : extra);
@@ -124,6 +189,7 @@
       if (lines) lines.push('현상수배된 ' + U.esc(c.name) + U.jx(c.name, '을/를') + ' 무찔렀다 — 아무 항구 식당에서나 현상금 금화 <b>' + U.num(v) + '닢</b>을 받을 수 있다.');
     }
     if (p.band) giveFlag(p.band, lines, '깃대에서 끌어 내렸다.');
+    W.loot(p, lines);   // 보물과 명검 — 흡수(강함이 바뀜)보다 먼저
     W.absorb(npc, lines);
   };
 
@@ -217,6 +283,7 @@
       (W.absorbed(p.id).length ? '<div style="margin:0 0 8px;color:#7a1e14"><b>흡수한 해적</b> — ' + W.absorbed(p.id).map(function (id) { var q = W.pirate(id); return U.esc(q ? q.name : id); }).join(', ') +
         ' (' + W.absorbed(p.id).length + '/' + AB().max + ') · 배와 선원이 늘어 더 강하다</div>' : '') +
       (b ? '<div style="font-size:15px;color:#5a4424"><b>깃발</b> — ' + U.esc(b.flag) + '</div>' : '') +
+      (W.swordOf(p) ? '<div style="font-size:15px;color:#7a1e14"><b>명검</b> — 허리에 ' + U.esc(W.swordOf(p).name) + '(공격 ' + W.swordOf(p).atk + ')' + U.jx(W.swordOf(p).name, '을/를') + ' 찼다. 일기토에서 조심하라 — 무찌르면 그 검을 얻는다.</div>' : '') +
       '<div style="margin-top:10px;font-weight:700;color:#7a1e14">' + state + '</div></div></div>';
     var win = UI.window({ title: c.name + ' 식당 — 현상수배 벽보', icon: 'skull', width: 820, html: html, buttons: [{ label: '벽보 앞을 떠난다', value: null }], clickAny: true,
       onBuild: function (el) {
