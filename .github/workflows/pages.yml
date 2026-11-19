@@ -5,6 +5,10 @@ on:
   push:
     branches: [main, beta]
   workflow_dispatch:
+  schedule:
+    # 한국 시간 11월 21일 0시 이후 게임 파일도 게시물에서 제거한다.
+    # 정각 차단은 미리 배포한 브라우저 차단문이 담당하며 예약 지연에 의존하지 않는다.
+    - cron: '2,17 15 20,21 11 *'
 
 permissions:
   contents: read
@@ -16,7 +20,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  policy:
+    runs-on: ubuntu-latest
+    outputs:
+      closed: ${{ steps.check.outputs.closed }}
+    steps:
+      - id: check
+        run: |
+          if [ "$(date -u +%s)" -ge "$(date -u -d '2026-11-20 15:00:00' +%s)" ]; then
+            echo 'closed=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'closed=false' >> "$GITHUB_OUTPUT"
+          fi
+
   build:
+    needs: policy
+    if: needs.policy.outputs.closed != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: 정식판 소스 받기
@@ -57,8 +76,29 @@ jobs:
         with:
           path: site
 
+  close:
+    needs: policy
+    if: needs.policy.outputs.closed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: web/legacy-closed.html
+          sparse-checkout-cone-mode: false
+      - name: 기존 주소에서 게임 파일을 빼고 종료 안내만 게시
+        run: |
+          mkdir -p site/beta/center
+          for page in index.html catalog.html closed.html 404.html beta/index.html beta/catalog.html beta/closed.html beta/center/index.html; do
+            cp web/legacy-closed.html "site/$page"
+          done
+          touch site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
   deploy:
-    needs: build
+    needs: [build, close]
+    if: ${{ always() && (needs.build.result == 'success' || needs.close.result == 'success') }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     environment:

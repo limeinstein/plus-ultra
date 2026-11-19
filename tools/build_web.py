@@ -98,10 +98,13 @@ def build_page(page, name, out_html, title, desc, esbuild, manifest_rel):
     css = pages.bundle_css(p['css'])
     css_rel = asset(name, 'css', minify(css, 'css', esbuild))
     js = ';\n'.join('/* %s */\n%s' % (s, pages.read(s)) for s in p['scripts'] if s != 'images/manifest.js')
+    # 종료된 기존 주소에서는 도감·게임 묶음을 직접 읽어도 시작하지 않는다.
+    js = '(function(){if(window.PU_WEB_ACCESS&&!window.PU_WEB_ACCESS.allowed())return;\n' + js + '\n})();'
     js_rel = asset(name, 'js', minify(js, 'js', esbuild))
     channel = ('<meta name="pu-channel" content="beta">\n'
                '<script>window.PU_WEB_CHANNEL="beta";window.PU_TELEMETRY_ENDPOINT="' + TELEMETRY_ENDPOINT + '";</script>\n') if CHANNEL == 'beta' else ''
-    html = (head(title, desc, css_rel, p['fonts'], channel) + '<body>\n<noscript><p style="padding:24px;color:#efe5cf;background:#1f150e">이 페이지는 자바스크립트가 필요합니다.</p></noscript>\n' +
+    access = '<script>' + pages.read('web/legacy-access.js') + '</script>\n'
+    html = (head(title, desc, css_rel, p['fonts'], channel + access) + '<body>\n<noscript><p style="padding:24px;color:#efe5cf;background:#1f150e">이 페이지는 자바스크립트가 필요합니다.</p></noscript>\n' +
             p['markup'] + '\n<script src="' + manifest_rel + '"></script>\n<script src="' + js_rel + '"></script>\n</body>\n</html>\n')
     emit(out_html, html)
     return js_rel, css_rel
@@ -234,8 +237,9 @@ def main():
         game = build_page('index.html', 'game', 'index.html', 'Loop of Good Hope — 더 먼 바다로', DESC, esbuild, manifest_rel)
         cat = build_page('catalog.html', 'catalog', 'catalog.html', 'Loop of Good Hope 도감', '인물·이벤트·업적·발견물·음식·악기·무기를 그림과 설명으로 찾아보는 도감.', esbuild, manifest_rel)
         center = build_beta_center() if CHANNEL == 'beta' else []
+        emit('closed.html', pages.read('web/legacy-closed.html'))
         emit('.nojekyll', '')
-        for rel in list(game) + list(cat) + center + ['index.html', 'catalog.html', '.nojekyll']:
+        for rel in list(game) + list(cat) + center + ['index.html', 'catalog.html', 'closed.html', '.nojekyll']:
             keep.add(os.path.normpath(os.path.join(OUT, rel)))
         # 이번 판에 없는 옛 파일(옛 해시 assets, 빠진 그림)은 지운다
         for dirpath, _, files in os.walk(OUT):
