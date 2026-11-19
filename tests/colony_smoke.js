@@ -19,26 +19,32 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   // 열린 말·물음을 넘긴다 (fn이 있으면 물음마다 고를 값을 정한다)
+  const trace=[];
   async function drain(max, pickFn, stopFn) {
     for (let i = 0; i < (max || 40); i++) {
       await page.waitForTimeout(250);
+      if (i === 159) console.log('COLONY_WAIT '+JSON.stringify(await page.evaluate(()=>({busy:G.Scenes.city.isBusy(),uiBusy:G.UI.busy(),scene:G.Game.sceneName,cur:G.Scenes.city.current()?.kind,body:document.body.innerText.slice(-1000)}))));
       if (stopFn && await stopFn()) return;
-      const st = await page.evaluate(() => { const b = [...document.querySelectorAll('.modal-back')].pop(); if (!b) return null; return { ask: !!b.querySelector('.askrow'), win: !!b.querySelector('.win'), text: (b.innerText || '').slice(0, 160), btns: [...b.querySelectorAll('.askrow button')].map(x => x.innerText) }; });
-      if (!st) { const busy = await page.evaluate(() => G.Scenes.city.isBusy && G.Scenes.city.isBusy()); if (!busy) return; continue; }
+      const st = await page.evaluate(() => { const b = [...document.querySelectorAll('.modal-back')].pop(); if (!b) return null; return { ask: !!b.querySelector('.askrow'), win: !!b.querySelector('.win'), site: !!b.querySelector('.cp-item'), text: (b.innerText || '').slice(0, 160), btns: [...b.querySelectorAll('.askrow button')].map(x => x.innerText) }; });
+      if (!st) { const busy = await page.evaluate(() => G.UI.busy() || (G.Scenes.city.isBusy && G.Scenes.city.isBusy())); if (!busy) return; continue; }
+      trace.push(st);
       if (pickFn) { const r = await pickFn(st); if (r === 'handled') continue; }
-      if (st.ask) await page.evaluate(() => { const bs = [...document.querySelectorAll('.modal-back')].pop().querySelectorAll('.askrow button'); bs[0].click(); });
+      if (st.ask) await page.evaluate(() => { const bs = [...document.querySelectorAll('.modal-back')].pop().querySelectorAll('.askrow button'); const enabled = [...bs].find(b => !b.disabled && !b.classList.contains('disabled')); if (enabled) enabled.click(); });
       else if (st.win) await page.evaluate(() => { const b = [...document.querySelectorAll('.modal-back')].pop(); const bt = b.querySelectorAll('.foot button'); if (bt.length) bt[bt.length - 1].click(); else { const x = b.querySelector('.title .x, .x, button'); if (x) x.click(); else b.click(); } });
       else await page.keyboard.press('Enter');
     }
   }
-  async function waitCity() { for (let i = 0; i < 80; i++) { const r = await page.evaluate(() => G.Game.sceneName === 'city' && !G.Scenes.city.isBusy() && !document.querySelector('.modal-back') && !!document.querySelector('.cmdmenu')); if (r) return true; await drain(3); await page.waitForTimeout(200); } return false; }
+  async function waitCity() { for (let i = 0; i < 80; i++) { const r = await page.evaluate(() => G.Game.sceneName === 'city' && !G.Scenes.city.isBusy() && !G.UI.busy() && !document.querySelector('.modal-back') && !!document.querySelector('.cmdmenu')); if (r) return true; await drain(3); await page.waitForTimeout(200); } return false; }
   try {
-    await page.goto(PAGE);
+    await page.goto(PAGE, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 180000 });
     await page.evaluate(async () => {
       await G.Game.ensureGeo();
       G.State.newGame({ name: '디오구 페헤이라', nation: 'PT', job: 'explorer', age: 30, birth: { m: 4, d: 12 }, st: { str: 60, int: 62, mar: 58, cha: 64 }, sk: {}, lg: G.LANGS.map(() => 3), diff: 'normal' });
-      const s = G.Game.state; s.prologueDone = true; s.date = { y: 1525, m: 3, d: 1 }; s.player.gold = 100000; s.settings.res = 0.35;
+      const s = G.Game.state;
+      // 명성이 높은 기존 탐험가: 리스본 발견 연출이 왕궁·개척 선택 검사에 섞이지 않게 한다.
+      G.DISCOVERIES.filter(d => d.city === 0).forEach(d => { s.disc[d.id] = Object.assign(s.disc[d.id] || {}, { found: true, me: true }); });
+      s.prologueDone = true; s.date = { y: 1525, m: 3, d: 1 }; s.player.gold = 100000; s.settings.res = 0.35;
       s.visited = s.visited || {}; [150, 154, 172, 100].forEach(id => { s.visited[id] = 1; if (s.known.indexOf(id) < 0) s.known.push(id); });   // 고아·코친·암보이나·르완다에 들렀다
       if (G.SEA_RISK) { G.SEA_RISK.pirate = 0; G.SEA_RISK.storm = 0; }
     });
@@ -55,10 +61,10 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
     const todo = await page.evaluate(() => [...document.querySelectorAll('.todo .tr')].map(e => e.innerText));
     ok(todo.some(t => /새 도시/.test(t)), '리스본 「이 도시에서 할 일」: ' + todo.find(t => /새 도시/.test(t)));
     await page.evaluate(() => { const sp = G.SPONSOR[G.Game.state.colony.call.sp]; G.Scenes.city.visit('palace', G.R.bldArg(sp)); });
-    let picked = false;
-    await drain(160, async st => {
+    let picked = false; const audienceStart = Date.now();
+    const pickSite = async st => {
       if (st.ask && st.btns.some(b => /세울 곳을 고른다/.test(b))) { await shot(page, 'king_ask'); await page.evaluate(() => { const b = [...[...document.querySelectorAll('.modal-back')].pop().querySelectorAll('.askrow button')].find(x => /세울 곳/.test(x.innerText)); b.click(); }); return 'handled'; }
-      if (st.win && /새 도시를 세울 곳/.test(st.text) && !picked) {
+      if (st.win && st.site && !picked) {
         await page.waitForTimeout(600); await shot(page, 'site_pick');
         picked = await page.evaluate(() => { const it = [...document.querySelectorAll('.cp-item')].find(x => /봄베이/.test(x.innerText)); it.click(); return [...document.querySelectorAll('.cp-item')].map(x => x.innerText.replace(/\s+/g, ' ') + (x.classList.contains('dis') ? ' [X]' : '')); });
         await page.waitForTimeout(300); await shot(page, 'site_pick_bombay');
@@ -66,7 +72,21 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
         return 'handled';
       }
       return null;
-    });
+    };
+    await drain(600, pickSite);
+    // 다른 왕실 사건을 먼저 들었으면 개척의 부름은 왕궁 메뉴에 남는다.
+    if (!picked) {
+      const clicked = await page.evaluate(() => {
+        const cmd = [...document.querySelectorAll('.cmdmenu .cmd')].find(e => /새 도시 개척/.test(e.innerText));
+        if (!cmd || G.UI.busy() || G.Scenes.city.isBusy()) return false;
+        cmd.click(); return true;
+      });
+      ok(clicked, '왕실 사건 뒤 왕궁 메뉴에서 새 도시 개척을 선택한다');
+      await drain(600, pickSite);
+    }
+    if (!picked) console.log('COLONY_DIAGNOSTIC '+JSON.stringify({trace,state:await page.evaluate(()=>({scene:G.Game.sceneName,body:document.body.innerText.slice(-6000),cl:G.Game.state.colony,lang:G.Game.state.player.lg,cur:G.Scenes.city.current()?.kind,busy:G.Scenes.city.isBusy(),uiBusy:G.UI.busy()}))}));
+    console.log('    왕궁 이동·알현 대기: '+Math.round((Date.now()-audienceStart)/1000)+'초');
+    ok(!!picked, '왕궁에서 개척 후보 선택 완료');
     console.log('    후보:', JSON.stringify(picked));
     const plant = await page.evaluate(() => { const s = G.Game.state, e = s.colony.list[0], c = G.CITY_DATA[e.id]; return { e, name: c.name, known: s.known.indexOf(e.id) >= 0, call: s.colony.call, fac: G.R.facilities(c), gold: s.player.gold }; });
     ok(plant.e.key === 'bombay' && plant.e.stage === 0 && plant.known && !plant.call && /개척지/.test(plant.name), '봄베이를 골랐다 → 해도에 「' + plant.name + '」 (항구만) · 개척 자금 → 소지금 ' + plant.gold);

@@ -52,7 +52,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.detail = (document.body.innerText.match(/명검 — [^\n]*/) || [''])[0];
       const btn = [...document.querySelectorAll('button')].find(b => /벽보 앞을 떠난다/.test(b.textContent)); if (btn) btn.click(); await Promise.race([dp, new Promise(r => setTimeout(r, 1500))]); out.closed = !!btn;
       // 무찌른다 → 명검 · 보물 (확률을 1로)
-      const T = G.BALANCE.wanted.treasure, keep = Object.assign({}, T); T.chance = 1; T.two = 1;
+      const T = G.BALANCE.wanted.treasure, keep = Object.assign({}, T); T.chance = 1; T.max = 1; T.two = 1;
       const inv0 = s.player.items.length;
       const L = []; G.Captains.afterBattle(n, 'win', [{ side: 'en', flag: true, sunk: true }], L);
       Object.assign(T, keep);
