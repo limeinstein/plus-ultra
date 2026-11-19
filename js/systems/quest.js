@@ -136,6 +136,9 @@
       q.fame = 4 + Math.round(q.dayNeed / 16);
       q.title = to3.name + '의 ' + q.who + '에게서 빚을 받아 온다';
     }
+    // 물가 (js/data/pricelevel.js): 사례금·받아 올 빚도 의뢰한 항구의 물가를 따른다 — 사 오는 물건값(R.buyPrice)만 오르고 사례금은 그대로면 손해 보는 의뢰가 된다
+    var plk = R.priceLevel ? R.priceLevel(c, 'goods') : 1;
+    q.pay = Math.round(q.pay * plk); if (q.amount) q.amount = Math.round(q.amount * plk);
     // 기한: 초심자 기준(뱃길 날수 × 1.5 + 10일) — 예전 기한보다 짧게 하지는 않는다
     q.limit = Math.max(14, Math.round((q.dayNeed0 || q.dayNeed) * 1.7) + 8, R.questDeadline(q.dayNeed));
     delete q.dayNeed0;

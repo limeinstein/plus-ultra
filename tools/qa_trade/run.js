@@ -1,5 +1,5 @@
 /* 교역 1억 QA 실행기 (2026-11-07) — node tools/qa_trade/run.js
-   환경값: RUNS=판 수(기본 1) · FROM=첫 판 번호 · OUT=결과 폴더 · REALMIN=판마다 실제 분 상한 · PLAN=판 설정 JSON 파일(배열, 판 번호로 고름)
+   환경값: RUNS=판 수(기본 1) · FROM=첫 판 번호 · OUT=결과 폴더 · REALMIN=판마다 실제 분 상한 · PLAN=판 설정 JSON 파일(배열, 판 번호로 고름) · PL=0이면 물가(가격 혁명)를 끈다 · IDS=판 번호 목록(쉼표)
    판마다 페이지를 새로 열어(이전 판의 전역 상태가 남지 않게) 새 게임 1480년에서 시작해 재산(소지금+예금) 1억까지 교역만 한다.
    결과: OUT/runs.jsonl (판 요약) · OUT/legs_<번호>.json (구간 기록) */
 'use strict';
@@ -18,8 +18,10 @@ function optFor(i) {
 }
 (async function () {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--js-flags=--max-old-space-size=4096'] });
-  for (let i = FROM; i < FROM + RUNS; i++) {
+  const IDS = process.env.IDS ? process.env.IDS.split(',').map(Number) : Array.from({ length: RUNS }, (_, k) => FROM + k);   // IDS=0,2,4: 고른 판만
+  for (const i of IDS) {
     const opt = Object.assign({ i }, optFor(i));
+    if (process.env.PL != null) opt.priceLevel = process.env.PL !== '0';   // PL=0: 물가(가격 혁명) 끄고 비교 (2026-11-19)
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
     const errors = {};
     page.on('pageerror', e => { const k = String(e.message).slice(0, 160); errors[k] = (errors[k] || 0) + 1; });
@@ -54,6 +56,7 @@ function optFor(i) {
         G.SKILLS.forEach(x => { sk[x.id] = 0; }); Object.assign(sk, job.skills || {});
         const lg = G.LANGS.map((_, k) => (opt.nation === 'PT' ? k === 1 : k === 0) ? 3 : 0);
         G.State.newGame({ name: '시험', nation: opt.nation, job: opt.job, age: 20, birth: { m: 3, d: 9 }, st: { str: 60, int: 64, mar: 56, cha: 66 }, sk, lg, diff: 'normal' });
+        if (G.BALANCE.priceLevel) G.BALANCE.priceLevel.on = opt.priceLevel !== false;
         const s = G.Game.state; s.flags.prologue = true; s.settings.res = 0.35;
         G.Game.go('city', { cityId: s.player.home }); await QA.settle(60000);
         const r = await TB.run(opt);

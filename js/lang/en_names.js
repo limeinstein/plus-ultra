@@ -1,5 +1,5 @@
 /* English — 고유 이름 (용어집): 도시(번호 → 이름) · 교역품(id → 이름). js/core/i18n.js G.N · G.cityName · G.goodName
-   한국어판의 이름(G.CITY_DATA[번호].name · G.GOOD[id].name)을 영어로 — 역사 속 영어 표기를 따른다 (세빌리아 → Seville, 르완다(루안다) → Luanda) */
+   한국어판의 이름(G.CITY_DATA[번호].name · G.GOOD[id].name)을 영어로 — 역사 속 영어 표기를 따른다 (세빌리아 → Seville, 루안다 → Luanda) */
 (function (G) {
   'use strict';
   G.I18N.add('en', {

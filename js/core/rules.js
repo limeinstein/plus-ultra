@@ -22,7 +22,10 @@
     var base = G.Coven && G.Coven.freeWage(id) ? 0 : (d.wage || 0);
     return G.MateDismiss && s ? G.MateDismiss.wage(id, base) : base;
   };
-  R.mateWage = function (id) { return R.mateBaseWage(id) * ((G.BALANCE.commerce || {}).mateWageK || 1); };
+  R.mateWage = function (id) {
+    var w = R.mateBaseWage(id) * ((G.BALANCE.commerce || {}).mateWageK || 1), S = R.S(), home = S && S.player && G.CITY_DATA[R.seat ? R.seat() : S.player.home];
+    return home && w > 0 ? Math.round(w * R.priceLevel(home, 'wage')) : w;   // 물가: 본거지의 품삯 (js/data/pricelevel.js)
+  };
 
   // ---------------------------------------------------------------- city helpers
   R.city = function (id) { return G.CITY_DATA[id]; };
@@ -443,8 +446,9 @@
     return total;
   };
   R.shipValue = function (s) {
-    var t = G.SHIP[s.type]; var basis = s.paidPrice != null ? Math.min(t.price, s.paidPrice) : (t.basePrice || t.price); var v = basis * 0.55 * (0.4 + 0.6 * s.hp / s.maxHp) * (0.7 + 0.3 * s.maxHp / t.hp);
-    v += s.guns.n * (G.CANNON[s.guns.type] ? G.CANNON[s.guns.type].price : 0) * 0.3;
+    var t = G.SHIP[s.type], S = R.S(), here = S && S.loc && S.loc.city != null ? G.CITY_DATA[S.loc.city] : null, lv = here ? R.priceLevel(here, 'ship') : 1;   // 물가: 지금 항구의 배값
+    var basis = s.paidPrice != null ? Math.min(t.price * lv, s.paidPrice) : (t.basePrice || t.price) * lv; var v = basis * 0.55 * (0.4 + 0.6 * s.hp / s.maxHp) * (0.7 + 0.3 * s.maxHp / t.hp);
+    v += s.guns.n * (G.CANNON[s.guns.type] ? G.CANNON[s.guns.type].price * lv : 0) * 0.3;
     v += (s.rigPaid || 0) * 0.4;                         // 삭구 개량에 들인 돈의 일부
     return Math.floor(v);
   };
@@ -778,6 +782,38 @@
     '노동력부족': { cats: { craft: 1.3, cloth: 1.25 } }
   };
   R.MARKET_EVENTS = EVENTS;
+  // ---------------------------------------------------------------- 물가 (가격 혁명 — js/data/pricelevel.js, 2026-11-19)
+  function PL() { return (G.BALANCE && G.BALANCE.priceLevel) || null; }
+  var plCache = {};
+  /** 지역 물가 배수 (1480년 = 1): 은 무게로 잰 그 지역·그 해의 물가. y를 주지 않으면 지금 날짜 */
+  R.priceLevelRaw = function (region, y) {
+    var a = G.PRICE_LEVEL && G.PRICE_LEVEL[region], K = PL();
+    if (!a || !a.length || !K || K.on === false) return 1;
+    if (y == null) { var S = R.S(); if (!S || !S.date) return 1; y = S.date.y + (S.date.m - 1) / 12 + (S.date.d - 1) / 365; }
+    if (y <= a[0][0]) return a[0][1];
+    for (var i = 1; i < a.length; i++) if (y <= a[i][0]) { var p = a[i - 1], q = a[i]; return p[1] + (q[1] - p[1]) * (y - p[0]) / Math.max(1e-6, q[0] - p[0]); }
+    return a[a.length - 1][1];
+  };
+  /** 도시 c(또는 지역 번호)에서 갈래 kind(goods·food·wage·ship·inn·invest)의 물가 배수: 1 + (L − 1) × 세기 × strength.
+      날짜가 바뀔 때만 다시 센다 (사고팔기 셈에서 자주 부른다) */
+  R.priceLevel = function (c, kind, y) {
+    var K = PL(); if (!K || K.on === false) return 1;
+    var reg = typeof c === 'number' ? c : c && c.region != null ? c.region : null; if (reg == null) return 1;
+    var k = K[kind || 'goods']; k = (k == null ? 1 : k) * (K.strength == null ? 1 : K.strength);
+    if (y != null) return Math.max(0.1, 1 + (R.priceLevelRaw(reg, y) - 1) * k);
+    var S = R.S(), dt = S && S.date ? S.date.y * 10000 + S.date.m * 100 + S.date.d : 0, key = reg + ':' + (kind || 'goods') + ':' + dt + ':' + k, v = plCache[key];
+    if (v == null) {
+      if (Object.keys(plCache).length > 400) plCache = {};
+      v = plCache[key] = Math.max(0.1, 1 + (R.priceLevelRaw(reg) - 1) * k);
+    }
+    return v;
+  };
+  /** 시장 물건(무기·선물…)의 물가 배수 — 이름난 물건·유물은 물가와 상관없다 */
+  R.itemLevel = function (c, item) {
+    var d = item && (G.ITEM[item.id] || item);
+    if (!c || !d || d.rare || (G.RELIC && G.RELIC[item.id])) return 1;
+    return R.priceLevel(c, 'goods');
+  };
   /** 시세의 출렁임 (도시마다 품목 갈래의 값이 천천히 오르내린다): 도시·갈래마다 정해진 주기와 폭의 물결 두 개 */
   R.drift = function (cityId, cat, day) {
     var S = R.S(), B = G.BALANCE || {}, A = B.driftAmp || [0.08, 0.15], P = B.driftPeriod || [70, 200];
@@ -829,6 +865,7 @@
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
     var p = g.p * (R.isRelay(c, goodId) ? R.relayMult(c, goodId, 'buy') : 0.62) * (1 + st.dep * (G.BALANCE && G.BALANCE.market || { stock: [30, 45], dep: [40, 40], depPrice: 0.9, sat: [60, 50], satPrice: 0.55 }).depPrice) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investBuyMult(c.id);
     if (c.region !== 0 && c.region !== 1 && c.region !== 2 && (goodId === 'guns' || goodId === 'cannon')) p *= 1.2;
+    p *= R.priceLevel(c, 'goods');               // 물가: 가격 혁명 (js/data/pricelevel.js)
     if (G.Fad) p *= G.Fad.mult(c, goodId);      // 유행하는 물건은 사는 값도 뛴다 (js/systems/fad.js)
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요: 1480~1700년 유럽 시장이 찾던 물건 (js/systems/era.js)
     if (G.Era && G.Era.source) p *= G.Era.source(c, goodId); // 산지의 생산 확대·독점·공급 단절
@@ -844,7 +881,7 @@
   R.sellPrice = function (c, goodId) {
     var g = G.GOOD[goodId], m = R.market(c.id), st = mg(m, goodId);
     var base = R.isRelay(c, goodId) ? g.p * R.relayMult(c, goodId, 'sell') : R.sells(c, goodId) ? g.p * 0.55 : g.p * R.regionalMult(goodId, c.region);
-    var p = base * R.satFactor(st.sat) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id);
+    var p = base * R.satFactor(st.sat) * eventMult(m, g) * R.drift(c.id, g.cat) * R.investSellMult(c.id) * R.priceLevel(c, 'goods');   // 물가: 파는 도시의 물가
     if (G.Fad) { var fm = G.Fad.mult(c, goodId); p *= fm; if (fm > 1 && G.Cabins && G.Cabins.fadBoost) p *= G.Cabins.fadBoost(c, fm); }   // 유행: 그 나라·지역에서 값이 몇 배 (js/systems/fad.js) · 기함 음악실의 앙상블이 유행을 키운다 (js/systems/cabins.js)
     if (G.Era) p *= G.Era.mult(c, goodId);      // 시대 수요 (js/systems/era.js)
     if (G.Econ) p *= G.Econ.mult(c, goodId, 'sell');   // 세상의 시장 사건 (js/systems/economy.js)
@@ -861,13 +898,13 @@
   R.cityInvestK = function (c) { return 1 + Math.max(0, c.size - 1) * G.BALANCE.commerce.cityStep; };
   R.investLevels = function (cityId) {
     var c = G.CITY_DATA[cityId], cfg = G.BALANCE.commerce, state = R.S();
-    var key = state.date.y + ':' + state.player.nation + ':' + R.cityOwner(c) + ':' + c.goods.join(','), saved = INVEST_LEVEL_CACHE[cityId];
+    var key = state.date.y + ':' + state.player.nation + ':' + R.cityOwner(c) + ':' + c.goods.join(',') + ':' + R.priceLevel(c, 'invest', state.date.y), saved = INVEST_LEVEL_CACHE[cityId];
     if (saved && saved.key === key) return saved.levels.slice();
     var base = R.cityGoods(c, 0), extra = R.cityGoods(c, 4).filter(function (id) { return base.indexOf(id) < 0; });
     var levels = R.INVEST_LV.map(function (n, lv) {
       var opened = lv >= 4 ? extra : lv >= 2 ? extra.slice(0, 1) : [];
       var rare = opened.some(function (id) { var p = cfg.supply.goods[id]; return p && p.cap <= cfg.supply.rareInvestCap; });
-      return Math.round(n * R.cityInvestK(c) * (rare ? cfg.rareInvestK : 1));
+      return Math.round(n * R.cityInvestK(c) * (rare ? cfg.rareInvestK : 1) * R.priceLevel(c, 'invest', state.date.y));
     });
     INVEST_LEVEL_CACHE[cityId] = { key: key, levels: levels }; return levels.slice();
   };
@@ -1009,10 +1046,10 @@
   };
 
   // ---------------------------------------------------------------- misc formulas
-  R.hireCost = function (c) { return Math.round((c.region <= 2 ? 12 : 18) * (1 + c.size * 0.1)); };
+  R.hireCost = function (c) { return Math.round((c.region <= 2 ? 12 : 18) * (1 + c.size * 0.1) * R.priceLevel(c, 'wage')); };
   /** 물·자재 한 통 값 */
-  R.waterCost = function (c) { return Math.max(1, Math.round(R.supplyCost(c) * ((G.BALANCE && G.BALANCE.waterPrice) || 0.5))); };
-  R.matCost = function (c) { return Math.max(2, Math.round(R.supplyCost(c) * ((G.BALANCE && G.BALANCE.matPrice) || 3) * (R.facilities(c).shipyard ? 0.85 : 1) * R.catIndex(c, 'misc'))); };
+  R.waterCost = function (c) { return Math.max(1, Math.round(R.supplyBase(c) * ((G.BALANCE && G.BALANCE.waterPrice) || 0.5) * R.priceLevel(c, 'food'))); };
+  R.matCost = function (c) { return Math.max(2, Math.round(R.supplyBase(c) * ((G.BALANCE && G.BALANCE.matPrice) || 3) * (R.facilities(c).shipyard ? 0.85 : 1) * R.catIndex(c, 'misc') * R.priceLevel(c, 'ship'))); };
   // ---------------------------------------------------------------- 의뢰의 날수·기한·보수 (G.BALANCE.quest — 2026-11-07 베타 피드백 #156)
   R.questK = function () { return (G.BALANCE && G.BALANCE.quest) || { refSpeed: 0.75, slack: 1.5, port: 10, supplyK: 3, refCrew: 40, quarrySea: 0.55, quarryBattle: 0.65 }; };
   var routeCache = {};
@@ -1062,8 +1099,10 @@
   };
   /** 줄여서 내릴 때 한 통에 돌려받는 값 (산 값과 이 항구 값 가운데 싼 쪽 × refund) */
   R.supplyBack = function (c, k, refund) { return Math.min(R.supplyPaid(c, k), R.supplyPrice(c, k)) * refund; };
-  R.supplyCost = function (c) { return Math.max(1, Math.round((c.region <= 2 ? 2 : 3) * (1 - 0.06 * R.investLv(c.id)))); }; // per 통
-  R.innCost = function (c) { return 8 + c.size * 6; };
+  /** 보급품 한 통의 바탕값 (물가 전, 반올림 전) */
+  R.supplyBase = function (c) { return (c.region <= 2 ? 2 : 3) * (1 - 0.06 * R.investLv(c.id)); };
+  R.supplyCost = function (c) { return Math.max(1, Math.round(R.supplyBase(c) * R.priceLevel(c, 'food'))); }; // per 통 — 물가(식량)를 따른다
+  R.innCost = function (c) { return Math.round((8 + c.size * 6) * R.priceLevel(c, 'inn')); };
   R.surveyRange = function () { return [0.9, 1.4, 1.9, 2.6][R.skill('survey')] + (G.Ships && G.Ships.fleetHas('scout') ? 0.4 : 0) + (G.Cabins ? G.Cabins.fx('lookout', 'lookout') : 0); };   // 파수대에 사람을 올리면 더 멀리 본다
   /** 모든 것을 잃고 고향에서 다시 시작할 때의 함대 (몸값을 치르고 풀려났을 때, 선원이 전멸해 뒤를 이었을 때).
       lost: 잃은 기함 종류 — 그보다 좋은 배를 거저 받지는 않는다 (바르카를 잃고 카라벨을 받던 것) */

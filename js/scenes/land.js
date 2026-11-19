@@ -261,8 +261,20 @@
     if (!c && !landmark && !mk && followOn()) { st.path = null; st.goCity = null; st.followArmed = true; st.pointerWalk = false; pointerWalk(p); return; }   // 마우스 따라가기: 누른 쪽으로 걷기 시작
     if (!G.Geo.isLand(w[0], w[1])) { UI.toast('그곳은 물입니다. 육지를 클릭하십시오.', 'land'); return; }
     st.goCity = c || null;                                // 도시를 직접 눌렀으면 닿자마자 묻지 않고 들어간다
-    st.dir = null; disarmFollow(); st.path = w; st.paused = false; refreshBar();
+    st.dir = null; disarmFollow(); routeTo(w); st.paused = false; refreshBar();
   }
+  /** 곧은 길이 물(호수·만·강어귀)을 건너면 뭍으로 둘러 가는 길을 잡는다 (js/world/landnav.js, 2026-11-19 동식물 QA).
+      st.path = 첫 굽이, st.path.next = 나머지 굽이, st.path.goal = 마지막 목표. 뭍으로 이어지지 않으면 예전처럼 곧장 간다 */
+  function routeTo(w, retry) {
+    var l = S().loc, LN = G.LandNav, here = [l.lon, l.lat];
+    if (!LN || LN.clear(here, w)) { st.path = w; st.path.goal = w; return true; }
+    var r = null; try { r = LN.path(l.lon, l.lat, w[0], w[1]); } catch (e) { console.error(e); }
+    if (!r || !r.length) { if (!retry) { st.path = w; st.path.goal = w; } return false; }
+    var first = r[0]; first.next = r.slice(1); first.goal = w; first.rerouted = !!retry; st.path = first;
+    if (r.length > 1) UI.toast(retry ? '물가를 따라 둘러 가는 길을 다시 잡았습니다.' : '곧장 가면 물에 막혀, 뭍으로 둘러 가는 길을 잡았습니다 (굽이 ' + r.length + '번).', 'land', 3500);
+    return true;
+  }
+  L.routeTo = function (lon, lat) { if (!st) return false; st.dir = null; var ok = routeTo([lon, lat]); st.paused = false; refreshBar(); return ok; };   // 시험·자동 탐험에서 그곳까지 걷게 한다
   var kiCache = null, kiKey = '', FF = null, labelW = {};
   function fontFam() { return FF || (FF = getComputedStyle(document.body).fontFamily); }
   function knownInland() {
@@ -323,6 +335,7 @@
   // ---------------------------------------------------------------- loop
   L.update = function (dt) {
     if (!st || !st.alive) return;
+    watchBusy();
     var s = S(), l = s.loc;
     if (!l || l.mode !== 'land' || !l.base) return;   // 장면을 바꾸는 사이(도시로 들어가는 중·불러오기) 한 장면만큼 위치가 뭍이 아닐 수 있다
     st.t += dt;
@@ -342,7 +355,12 @@
         else { st.dir = null; st.paused = true; refreshBar(); UI.toast('물가에 막혀 더 나아갈 수 없습니다.', 'land'); }
       } else {
       var dx = G.Geo.wrapLon(st.path[0] - l.lon), dy = st.path[1] - l.lat, d = Math.hypot(dx, dy);
-      if (d <= stepLen) { l.lon = st.path[0]; l.lat = st.path[1]; st.path = null; st.paused = true; refreshBar(); arrive(); }
+      if (d <= stepLen) {
+        l.lon = st.path[0]; l.lat = st.path[1];
+        var nxt = st.path.next;   // 물을 둘러 가는 길(routeTo)의 다음 굽이
+        if (nxt && nxt.length) { var np = nxt[0]; np.next = nxt.slice(1); np.goal = st.path.goal; np.rerouted = st.path.rerouted; st.path = np; }
+        else { st.path = null; st.paused = true; refreshBar(); arrive(); }
+      }
       else {
         var nx = l.lon + dx / d * stepLen, ny = l.lat + dy / d * stepLen;
         // 목표에 얼마나 다가갔는지 적어 두고, 제자리를 맴돌면 멈춘다
@@ -350,7 +368,9 @@
         if (d < st.bestD - 0.03) { st.bestD = d; st.wander = 0; } else st.wander += stepLen;
         if (G.Geo.isLand(nx, ny)) { l.lon = G.Geo.wrapLon(nx); l.lat = ny; l.heading = Math.atan2(dy, dx); }
         else if (st.wander > Math.max(0.8, Math.min(2.0, st.bestD * 0.6)) || !slideAround(Math.atan2(dy, dx), stepLen)) {
-          st.path = null; st.paused = true; refreshBar(); UI.toast('물가에 막혀 더 나아갈 수 없습니다. 다른 쪽으로 돌아가 보십시오.', 'land');
+          // 막히면 한 번은 뭍길을 다시 찾아 둘러 간다 (js/world/landnav.js)
+          var goal = st.path.goal || st.path, again = !st.path.rerouted && routeTo([goal[0], goal[1]], true);
+          if (!again) { st.path = null; st.paused = true; refreshBar(); UI.toast('물가에 막혀 더 나아갈 수 없습니다. 다른 쪽으로 돌아가 보십시오.', 'land'); }
         }
       }
       }
@@ -521,6 +541,15 @@
     st.busy = Math.max(0, st.busy - 1);
   }
   L.runDay = runDay;   // 시험에서 하루를 바로 돌린다
+  /** 멈춤 감시 (2026-11-19 동식물 QA 100판: 619번 가운데 7번, 창도 없이 하루가 끝나지 않아 탐험대가 멈춰 있었다 — 원인 미확인).
+      st.busy가 남아 있는데 창(UI.busy)도, 그림 기다림(G.Img.busy)도 없이 BUSY_STUCK초가 지나면 풀어 주고 콘솔에 남긴다. 음수가 된 busy도 0으로 */
+  var BUSY_STUCK = 45, busyAt = 0;
+  function watchBusy() {
+    if (st.busy < 0) { console.warn('[육상 탐험] busy가 음수(' + st.busy + ')라 0으로 돌림'); st.busy = 0; }
+    if (!st.busy || UI.busy() || (G.Img && G.Img.busy && G.Img.busy())) { busyAt = 0; return; }
+    var now = Date.now(); if (!busyAt) { busyAt = now; return; }
+    if (now - busyAt > BUSY_STUCK * 1000) { console.warn('[육상 탐험] 창 없이 ' + BUSY_STUCK + '초 넘게 멈춰 있어 풀었다 (busy ' + st.busy + ')'); st.busy = 0; busyAt = 0; refreshBar(); }
+  }
   function landLine(d) {
     if (d.cat === 'nature') return '제독, 저 경치를 보십시오! 이런 곳이 있었다니...';
     var pk = G.Disc.plantKind ? G.Disc.plantKind(d) : null;   // 식물: 「이상한 생물이 있습니다! 조심하십시오!」가 아니라 (2026-10-29)
@@ -1027,7 +1056,7 @@
     var s = S(), l = s.loc, b = l.base;
     if (!atBase()) {
       var v = await UI.ask('출발 지점까지 걸어서 돌아갑니다.', [{ label: '돌아간다', value: 1 }, { label: '그만둔다', value: 0 }], G.Scenes.mateSpeaker('first'));
-      if (v) { st.path = b.type === 'ship' ? (nearestLand(b.lon, b.lat) || [b.lon, b.lat]) : landPoint(b.lon, b.lat); st.paused = false; refreshBar(); }   // 출발한 성문: 도시 자리가 물 위여도(말라카·브레멘) 성문 앞 뭍까지 걷는다
+      if (v) { routeTo(b.type === 'ship' ? (nearestLand(b.lon, b.lat) || [b.lon, b.lat]) : landPoint(b.lon, b.lat)); st.paused = false; refreshBar(); }   // 출발한 성문: 도시 자리가 물 위여도(말라카·브레멘) 성문 앞 뭍까지 걷는다
       return;
     }
     await returnToBase(false);
@@ -1064,7 +1093,9 @@
     return '탐험 ' + (l.days || 0) + '일 · 새 발견 ' + found + '건' + (seen > 0 ? ' · 본 것 ' + seen + '곳' : '') + (lost > 0 ? ' · 잃은 대원 ' + lost + '명' : ' · 모두 무사') + (l.spent ? ' · 경비 금화 ' + U.num(l.spent) + '닢' : '');
   }
   async function returnToBase(wiped) {
-    var s = S(), b = s.loc.base, mt = MT();
+    var s = S(), b = s.loc && s.loc.base, mt = MT();
+    // 그사이 제독이 바뀌었거나(전멸·대물림) 이미 탐험을 마쳤으면 돌아갈 기지가 없다 — 예전엔 b.type에서 TypeError (2026-11-19 동식물 QA)
+    if (!b || !s.loc || s.loc.mode !== 'land') return;
     var sum = summary();
     // 탈것: 도시로 돌아오면 성문 마구간에 맡기고, 배로 돌아가면 싣지 못하니 해안 마을에 넘긴다. 짐꾼은 품삯을 받고 돌아간다
     if (mt.id !== 'walk' && mt.n > 0 && !wiped) {
@@ -1123,7 +1154,8 @@
     // contract zone
     var ct = s.contract && G.DISC[s.contract.disc];
     if (ct && ct.how === 'land' && G.Disc.hasHint(ct.id) && !G.Disc.foundByMe(ct.id)) {
-      var rng = U.makeRng(U.strHash(ct.id)), zk = G.Disc.clueK(ct.id, 'zone'); var zc = toScreen(ct.lon + (rng() - 0.5) * 1.2 * zk, ct.lat + (rng() - 0.5) * 1.2 * zk);
+      var cp = G.BioHide && G.BioHide.fled ? (G.BioHide.fled(ct) || ct) : ct;   // 사나운 짐승을 피해 달아난 동물은 달아난 자리 둘레로 (js/systems/biohide.js)
+      var rng = U.makeRng(U.strHash(ct.id)), zk = G.Disc.clueK(ct.id, 'zone'); var zc = toScreen(cp.lon + (rng() - 0.5) * 1.2 * zk, cp.lat + (rng() - 0.5) * 1.2 * zk);
       if (G.Disc.isPlant(ct)) {
         if (!s.marks || !s.marks[ct.id]) G.PlantSwirl.draw(ctx, ct, zc, 1.3 * zk * st.cam.zoom, st.t, s.date, G.FX.plantSwirl.contractAlpha);
       } else {

@@ -195,10 +195,10 @@
   function hagStat() { return C.B.trade && C.B.trade.haggleStat ? C.B.trade.haggleStat() : { p: 0, d: 0, dealP: 0, dealD: 0 }; }
   function acctLv() { return G.Acct ? G.Acct.lv() : Math.max(0, Math.min(3, R.skill('acct') || 0)); }
   /** 시장 값: 기본값 × 이 도시 시세(무기는 무기 갈래, 선물은 사치품·기호품·공예품 …) × 경리가 흥정한 값 */
-  function mkBase(it) { return Math.max(1, Math.round(it.price * R.itemMult(C.city(), it))); }
+  function mkBase(it) { return Math.max(1, Math.round(it.price * R.itemMult(C.city(), it) * R.itemLevel(C.city(), it))); }   // × 물가 (이름난 물건은 그대로)
   function mkBuy(it) { var d = mkDeal(), b = mkBase(it); return d ? Math.max(1, Math.round(b * Math.min(1, d.buy))) : b; }
   // 이 도시에서 산 물건(it.from)은 치른 값(it.paid)보다 비싸게 되팔 수 없다 — 깎아 사서 그 자리에서 되팔아 남기던 것을 막는다
-  function mkSell(it) { var d = mkDeal(), c0 = C.city(), v = Math.round(itemValue(it) * R.itemMult(c0, it)); v = d ? Math.round(v * Math.max(1, d.sell)) : v; var bp = c0 && R.paidAt ? R.paidAt(it, c0.id) : (c0 && it.from === c0.id ? it.paid : null); if (bp != null) v = Math.min(v, bp); return v; }
+  function mkSell(it) { var d = mkDeal(), c0 = C.city(), v = Math.round(itemValue(it) * R.itemMult(c0, it) * R.itemLevel(c0, it)); v = d ? Math.round(v * Math.max(1, d.sell)) : v; var bp = c0 && R.paidAt ? R.paidAt(it, c0.id) : (c0 && it.from === c0.id ? it.paid : null); if (bp != null) v = Math.min(v, bp); return v; }
   /** 물건의 능력치 한 줄 (구입·매각 목록과 확인 창) */
   function itemStat(it) {
     var d = G.ITEM[it.id] || {}, k = d.kind || it.kind;

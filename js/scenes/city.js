@@ -297,7 +297,7 @@
     if (G.Princess) { try { await G.Princess.arrival(c); } catch (e) { console.error(e); } }
     if (G.Glory) { try { await G.Glory.arrival(c); } catch (e) { console.error(e); } }   // 명예혁명: 암스테르담(오라녜 공) · 런던(제임스 2세·권리 선언) · 프랑스 항구(망명)
     if (G.Sky) { try { await G.Sky.arrival(c); } catch (e) { console.error(e); } }   // 하늘을 재는 사람들: 단치히·뉘른베르크(코페르니쿠스) · 프라하(케플러) · 베니스·피렌체·로마·암스테르담(갈릴레이)
-    if (G.Kongo) { try { await G.Kongo.arrival(c); } catch (e) { console.error(e); } }   // 포르투갈과 콩고: 리스본(국왕의 명·보고) · 르완다(돌려보내기·세례)
+    if (G.Kongo) { try { await G.Kongo.arrival(c); } catch (e) { console.error(e); } }   // 포르투갈과 콩고: 리스본(국왕의 명·보고) · 루안다(돌려보내기·세례)
     if (G.Teppo) { try { await G.Teppo.arrival(c); } catch (e) { console.error(e); } }   // 철포 삼백 자루: 일본 항구에서 도키치로의 부탁 → 사카이에서 노부나가에게 전한다
     if (G.Gyeonwoo) { try { await G.Gyeonwoo.arrival(c); } catch (e) { console.error(e); } }   // 견우와 직녀: 거북선으로 조선 도시 → 항주 → 사카이 → 한산도
     if (G.Colony && c.colony != null) { try { await G.Colony.arrival(c); } catch (e) { console.error(e); } }   // 육로·해로로 개척지에 도착하면 도시를 세운다 · 개척 물자

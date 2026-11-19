@@ -7,7 +7,7 @@
          fig 선수상(선수상 덕: spd storm morale battle hp luck monster) · animal 동식물 */
 (function (G) {
   'use strict';
-  G.RELIC_KIND = { treasure: '보물', gift: '장신구', weapon: '무기', armor: '방어구', book: '서적', fig: '선수상', animal: '동식물' };
+  G.RELIC_KIND = { treasure: '보물', gift: '장신구', weapon: '무기', armor: '방어구', book: '서적', fig: '선수상', animal: '동식물', medicine: '약재' };
   var LIST = [];
   function add(disc, name, kind, v, desc, extra) { LIST.push({ disc: disc, name: name, kind: kind, v: v, desc: desc, extra: extra || {} }); }
 
@@ -166,6 +166,8 @@
   if (G.WONDERS) G.WONDERS.relics.forEach(function (a) { add.apply(null, a); });
   // 동물의 새끼 · 전설 생물의 물건 · 종교 발견물의 성물 (js/data/discrelics.js — 2026-11-07). 유물 id 를 표에 적어 둔다
   if (G.DISC_RELICS) G.DISC_RELICS.forEach(function (a) { var ex = { rid: a[1] }; if (a[6]) for (var k in a[6]) ex[k] = a[6][k]; add(a[0], a[2], a[3], a[4], a[5], ex); });
+  // 식물 발견물의 증거 아이템 — 보석·표본·지팡이·선수상·장신구·약재·화관·종자 (js/data/plantrelics.js — 2026-11-19)
+  if (G.PLANT_RELICS) G.PLANT_RELICS.forEach(function (a) { var ex = { rid: a[1] }; if (a[6]) for (var k in a[6]) ex[k] = a[6][k]; add(a[0], a[2], a[3], a[4], a[5], ex); });
   // 괴물과 거대한 짐승의 새끼·알·유물 (js/data/creatures.js — 2026-11-17)
   if (G.CREATURE_RELICS) G.CREATURE_RELICS.forEach(function (a) { var ex = { rid: a[1] }; if (a[6]) for (var k in a[6]) ex[k] = a[6][k]; add(a[0], a[2], a[3], a[4], a[5], ex); });
 

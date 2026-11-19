@@ -16,7 +16,11 @@ const {chromium} = require('../tools/procedural_art/node_modules/playwright-core
   const s=G.Game.state,R=G.R,M=G.Scenes.city.B.market;
   s.date.y=1600;s.settings.res=0.35;s.player.gold=100000000;
   const check=(v,msg)=>{if(!v)throw Error(msg);};
-  const jewels=G.ITEMS.filter(x=>x.marketCollection==='jewels_20261116'),meds=G.ITEMS.filter(x=>x.kind==='medicine');
+  const jewels=G.ITEMS.filter(x=>x.marketCollection==='jewels_20261116'),meds=G.ITEMS.filter(x=>x.marketCollection==='medicine_20261116');
+  // 발견 증거 약재는 시장의 20종과 별개이며, 소지품에서는 같은 사용 규칙을 따른다.
+  const plantMeds=G.PLANT_RELICS.filter(a=>a[3]==='medicine').map(a=>G.ITEM[a[1]]);
+  check(plantMeds.length===22&&plantMeds.every(x=>x.rare&&x.reg.length===0),'발견 약재 22종은 시장 입고에서 제외');
+  for(const it of plantMeds){s.player.hp=1;R.addItem(it.id);check(R.useMedicine(it.id)===Math.min(99,it.heal)&&R.itemCount(it.id)===0,'발견 약재 회복·소모 '+it.id);}
   check(jewels.length===50&&meds.length===20,'상품 수');
   check(new Set(G.ITEMS.map(x=>x.id)).size===G.ITEMS.length,'중복 ID');
   const distribution=G.REGIONS.map((_,r)=>jewels.filter(x=>x.reg.includes(r)).length);

@@ -2,13 +2,13 @@
    ■ 1편 「강가의 돌기둥」 (state.kongo.ep1) — 1482.8~1484년 리스본에 들어서면 주앙 2세가 부른다 (사양하면 두 달 뒤 다시)
      1 콩고 강 어귀(바다, G.BALANCE.kongo.mouth) 찾기 — 기한 2년. 닿으면 디오구 캉과 돌기둥 · 「넷을 데려가자」 → hostage(볼모) / willing(선물을 남기고 스스로 가겠다는 사람)
      2 은사쿠와 세 젊은이를 리스본으로 (1년) → 국왕이 맞고 하사금 · 마니 콩고에게 보낼 선물
-     3 콩고 왕국의 항구(르완다)로 돌려보낸다 — 「열다섯 달」을 넘기면 늦은 것(보상이 준다), 3년을 넘기면 디오구 캉이 대신(실패)
-     → 'done': 콩고 왕의 사자가 사제·장인을 청한다 = 외교·교역 관계가 생긴다 (르완다의 값 · 포르투갈어)
+     3 콩고 왕국의 항구(루안다)로 돌려보낸다 — 「열다섯 달」을 넘기면 늦은 것(보상이 준다), 3년을 넘기면 디오구 캉이 대신(실패)
+     → 'done': 콩고 왕의 사자가 사제·장인을 청한다 = 외교·교역 관계가 생긴다 (루안다의 값 · 포르투갈어)
    ■ 2편 「주앙 1세의 세례」 (state.kongo.ep2) — 1편을 마친 제독에게만. 1490.10~1491년에 소식 → 리스본에 들어서면 국왕이 맡긴다
-     1 사절 주앙 다 실바·사제·장인을 르완다로 (1년) → 마니 소요(마누엘)·주앙 1세·레오노르·아폰수의 세례 → 임금의 청: march(총병) / church(성당 금화) / trade(교역의 약속)
-     2 왕의 편지·콩고 젊은이들을 리스본으로 (1년) → 'done': 하사금·명성·상아 뿔피리 · 르완다의 값이 더 좋아진다
+     1 사절 주앙 다 실바·사제·장인을 루안다로 (1년) → 마니 소요(마누엘)·주앙 1세·레오노르·아폰수의 세례 → 임금의 청: march(총병) / church(성당 금화) / trade(교역의 약속)
+     2 왕의 편지·콩고 젊은이들을 리스본으로 (1년) → 'done': 하사금·명성·상아 뿔피리 · 루안다의 값이 더 좋아진다
    ■ 역사가 바뀌는 곳: 1491.5.3(또는 제독이 본 세례 날)부터 콩고 왕국의 항구는 가톨릭(교회·신부) — G.CITY_DATA[100].rel 을 날짜·저장으로 셈한다.
-     1편을 마쳤거나 세례 날이 지나면 르완다에서 포르투갈어가 통한다 (G.Treaty.ptLang).
+     1편을 마쳤거나 세례 날이 지나면 루안다에서 포르투갈어가 통한다 (G.Treaty.ptLang).
    ■ 소식: 은사쿠의 리스본 도착(1편) · 세례(2편을 하지 않은 모두 — 역사 소식) · 주앙 1세의 변심 · 아폰수 1세 · 엔히크 주교 · 아폰수의 편지(1526) · 성당의 종(church)
    ■ 끼어드는 곳: 하루(world.js) · 도시에 들어설 때(city.js) · 바다의 하루 끝(sea.js) · 수첩(info.js) · 사고파는 값(rules.js R.buyPrice/sellPrice) · 포르투갈어(treaty.js) · 소문(eventrumors.js)
    ■ 저장: state.kongo = { ep1, ep2, next, due, contact, how, late, met, help, bapt, done1, done2, call2, seen: {} } — 없으면 아직(옛 저장 그대로) */
@@ -82,7 +82,7 @@
   // ---------------------------------------------------------------- 지금의 사이 (값·말·믿음)
   /** 0 없음 · 1 1편을 마침 · 2 2편을 마침 · 3 2편에서 교역의 약속 */
   K.level = function () { var k = K.st(); if (!k) return 0; if (k.ep2 === 'done') return k.help === 'trade' ? 3 : 2; return k.ep1 === 'done' ? 1 : 0; };
-  /** 르완다의 사고파는 값 (js/core/rules.js) */
+  /** 루안다의 사고파는 값 (js/core/rules.js) */
   K.mult = function (c, g, side) {
     if (!c || c.id !== B().kongo || (G.R.cityOwner && G.R.cityOwner(c) !== '콩고 왕국')) return 1;   // 1576년 포르투갈령 루안다가 되면 콩고 왕과의 약속은 끝난다
     var lv = K.level(); if (!lv) return 1;
@@ -90,7 +90,7 @@
   };
   /** 콩고 왕국 사람들이 그리스도교를 받아들였는가 (세례 날이 지났거나 제독이 세례를 보았다 — 2편으로 가는 중이면 아직) */
   K.christian = function () { var s = S(); if (!s || !s.date) return false; var k = s.kongo; if (k && k.bapt) return true; if (k && k.ep2 === 1) return false; return U.dateNum(s.date) >= B().baptism; };   // 제독이 사제들을 싣고 가는 중이면 세례는 제독이 닿는 날
-  /** 르완다에서 포르투갈어가 통하는가 (js/systems/treaty.js T.ptLang) */
+  /** 루안다에서 포르투갈어가 통하는가 (js/systems/treaty.js T.ptLang) */
   K.ptLang = function (c) {
     if (!c || c.id !== B().kongo || !S()) return null;
     if (K.level() >= 1) return '리스본에서 돌아온 콩고 사람들과 왕의 사절 덕에 포르투갈어를 아는 사람이 많다';
@@ -182,7 +182,7 @@
     s.player.gold += b.gold1a; trust(Math.round(b.trust1 / 2));
     k.ep1 = 3; k.due = k.giveUp;
     G.State.log('리스본에서 ' + kingName() + '께 콩고 사람 넷을 모셨다 — 하사금 금화 ' + U.num(b.gold1a) + '닢. 이제 그들을 콩고로 돌려보낸다 (약속 ' + U.fmtDate(numDate(k.promise)) + ').');
-    G.UI.toast('은사쿠 일행을 콩고 왕국의 항구 르완다로 — 「열다섯 달」 ' + U.fmtDate(numDate(k.promise)), 'sail', 6500);
+    G.UI.toast('은사쿠 일행을 콩고 왕국의 항구 루안다로 — 「열다섯 달」 ' + U.fmtDate(numDate(k.promise)), 'sail', 6500);
     save();
   }
   async function return1() {
@@ -204,7 +204,7 @@
     if (G.Audio) G.Audio.sfx('cheer');
     await G.UI.alert('<div class="center" style="font-size:22px;font-weight:700">' + D.title1 + '</div><br>포르투갈과 콩고 왕국이 처음으로 손을 잡았다.' +
       '<br>금화 <b>' + U.num(gold) + '</b>닢 · <b>' + U.esc(got) + '</b><br>탐험 명성 +' + ex + ' · 사교 명성 +' + so +
-      '<br><span class="muted">이제 르완다에서 값을 조금 더 좋게 쳐주고, 포르투갈어가 통한다.</span>', D.title1);
+      '<br><span class="muted">이제 루안다에서 값을 조금 더 좋게 쳐주고, 포르투갈어가 통한다.</span>', D.title1);
     save();
   }
 
@@ -222,7 +222,7 @@
       await lines(D.yesSay2);
     } finally { if (pc) await pc.stop(); }
     G.State.log(kingName() + '의 명 — 사절 주앙 다 실바와 사제·장인을 콩고 왕국으로 실어 간다 (기한 ' + U.fmtDate(numDate(k.due)) + ').');
-    G.UI.toast(D.title2 + ' — 콩고 왕국의 항구 르완다로', 'church', 6000);
+    G.UI.toast(D.title2 + ' — 콩고 왕국의 항구 루안다로', 'church', 6000);
   }
   async function baptism() {
     var D = L(), s = S(), b = B(), k = K.st();
@@ -265,7 +265,7 @@
     var lv = K.level(), pb = Math.round((1 - b.buy[lv - 1]) * 100), ps = Math.round((b.sell[lv - 1] - 1) * 100);
     await G.UI.alert('<div class="center" style="font-size:22px;font-weight:700">' + D.title2 + '</div><br>포르투갈과 콩고 왕국 사이에 외교·종교 교류가 넓어졌다.' +
       '<br>하사금 금화 <b>' + U.num(b.gold2) + '</b>닢 · 사교 명성 +' + so + ' · 탐험 명성 +' + ex +
-      '<br><span class="muted">르완다에서 사는 값 −' + pb + '%' + (ps ? ' · 파는 값 +' + ps + '%' : '') + ' · 콩고 왕국의 항구에 교회가 섰다.</span>', D.title2);
+      '<br><span class="muted">루안다에서 사는 값 −' + pb + '%' + (ps ? ' · 파는 값 +' + ps + '%' : '') + ' · 콩고 왕국의 항구에 교회가 섰다.</span>', D.title2);
     save();
   }
 

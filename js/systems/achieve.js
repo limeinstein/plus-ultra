@@ -285,7 +285,16 @@
       UI.toast('명성 업적 달성 · ' + a.name + ' (금화 ' + U.num(a.gold) + '닢)', 'crown', 4800);
     });
   };
-  function rewardText(a) { if (!a.gold && !a.fame && !a.notoriety) return a.title ? '칭호 「' + a.title + '」' : '업적 기록'; return (a.gold || !a.fame ? '금화 ' + U.num(a.gold || 0) + '닢 · ' : '') + (a.fameCat && G.Fame && G.Fame.NAME && G.Fame.NAME[a.fameCat] ? G.Fame.NAME[a.fameCat] + ' ' : '') + '명성 +' + U.num(a.fame || 0) + (a.notoriety ? ' · 악명 ' + (a.notoriety > 0 ? '+' : '') + U.num(a.notoriety) : '') + (a.title ? ' · 칭호 「' + a.title + '」' : ''); }
+  // 보상 글: 없는 갈래는 적지 않는다 (예전엔 「금화 300닢 · 명성 +0 · 칭호」처럼 0도 보였다 — 2026-11-19 동식물 QA 덤)
+  function rewardText(a) {
+    if (!a.gold && !a.fame && !a.notoriety) return a.title ? '칭호 「' + a.title + '」' : '업적 기록';
+    var parts = [];
+    if (a.gold) parts.push('금화 ' + U.num(a.gold) + '닢');
+    if (a.fame) parts.push((a.fameCat && G.Fame && G.Fame.NAME && G.Fame.NAME[a.fameCat] ? G.Fame.NAME[a.fameCat] + ' ' : '') + '명성 +' + U.num(a.fame));
+    if (a.notoriety) parts.push('악명 ' + (a.notoriety > 0 ? '+' : '') + U.num(a.notoriety));
+    if (a.title) parts.push('칭호 「' + a.title + '」');
+    return parts.join(' · ');
+  }
   /** 재산 업적: 문턱을 넘었으면 곧바로 기록·보상하고 알린다. 장면은 대기열(achvPend)로 → 거리로 나오거나 다음 항구에서 */
   AC.onWealth = function () {
     var s = S(), st = store(), got = [];

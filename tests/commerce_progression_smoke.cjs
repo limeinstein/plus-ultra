@@ -99,7 +99,7 @@ fs.mkdirSync(OUT, {recursive:true});
         ok(cal&&R.farStockK(cal,'pepper')===1.6,'먼 산지(인도) 공급 한도 ×1.6');ok(R.farStockK(cal,'ambergris')===1&&R.farStockK(cal,'musk')===1,'희귀품은 늘리지 않는다');
         ok(arg&&R.farStockK(arg,'gold')===1,'아프리카(가까운 산지)는 그대로');
         // 0.306~0.309에 비싸게 산 배의 차액은 불러올 때 한 번 돌려준다
-        s=fresh();const sh=s.fleet.ships[0],t=G.SHIP[sh.type];sh.paidPrice=t.price+50000;s.moored={0:[Object.assign(R.newShip('carrack'),{paidPrice:G.SHIP.carrack.price+31500})]};
+        s=fresh();delete s.flags.shipRefund0310;/* 옛 저장 흉내 — 새 게임은 2026-11-19부터 이 환급을 건너뛴다(물가로 비싸게 산 배) */const sh=s.fleet.ships[0],t=G.SHIP[sh.type];sh.paidPrice=t.price+50000;s.moored={0:[Object.assign(R.newShip('carrack'),{paidPrice:G.SHIP.carrack.price+31500})]};
         const g0=s.player.gold,loaded=G.State.deserialize(JSON.stringify(s));
         ok(loaded.player.gold===g0+81500&&loaded.fleet.ships[0].paidPrice===t.price&&loaded.flags.shipRefund0310===81500,'비싸게 산 배 2척 차액 81,500닢 환급');
         const again=G.State.deserialize(JSON.stringify(loaded));ok(again.player.gold===loaded.player.gold,'환급은 한 번만');

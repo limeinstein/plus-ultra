@@ -39,7 +39,7 @@
     { key: 'guinea', nat: 'PT', area: 3, name: '서아프리카 — 기니 해안', place: '비사우', lat: 11.881, lon: -15.566, dock: [11.834, -15.631], ref: 91,
       goods: ['ivory', 'pepper', 'rice', 'gold'], desc: '강줄기가 얽힌 낮은 해안. 내륙과 오가는 강배가 모인다.' },
     { key: 'angola', nat: 'PT', area: 3, name: '남서아프리카 — 앙골라 해안', place: '벵겔라', lat: -12.58, lon: 13.41, dock: [-12.491, 13.33], ref: 100,
-      goods: ['ivory', 'copper', 'salt', 'palmoil'], desc: '르완다(루안다)에서 남쪽으로 내려간 마른 해안. 구리와 소금을 캐는 고원으로 길이 난다.' },
+      goods: ['ivory', 'copper', 'salt', 'palmoil'], desc: '루안다에서 남쪽으로 내려간 마른 해안. 구리와 소금을 캐는 고원으로 길이 난다.' },
     { key: 'delagoa', nat: 'PT', area: 3, name: '동아프리카 — 델라고아 만', place: '로렌수마르케스', lat: -25.95, lon: 32.581, dock: [-25.95, 32.661], ref: 102,
       goods: ['ivory', 'gold', 'hides', 'timber'], desc: '희망봉을 돌아 인도로 가는 배가 물을 긷는 넓은 만. 상아와 금이 내륙에서 내려온다.' },
     { key: 'bombay', nat: 'PT', area: 5, name: '인도 서해안 — 봄베이 섬', place: '봄베이', lat: 18.944, lon: 72.826, dock: [18.984, 72.756], ref: 150,

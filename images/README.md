@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+식물 증거·새 원주민 마을 전체 시설(2026-11-19)은 `plant-native-20261119/<ID>.webp`의 261개 전용 원화를 쓴다. 식물 96개는 256×256 투명, 마을 11개와 시설 외부·내부 154개는 1536×864다. `tools/plant_native_art_20261119/asset-overrides.json`으로 논리 키 368개를 우선 연결한다. [전체 갤러리](../artifacts/plant-native-art-20261119/index.html) · [원본·프롬프트·ZIP·검증](../docs/art/plant-native-art-20261119.md).
+
 누락 발견물·전리품 보완(2026-11-19): `lich`·`werewolf`·`deadknight`·`worldtree`의 GIF·끝 장면·24칸 시트 12개와 `items/pl_*.webp` 8개·`items/ps_*.webp` 7개의 투명 전용 그림을 추가했다. [원본·프롬프트·규격·검증](../docs/art/missing-catalog-art-20261119.md) · [전체 미리보기](../artifacts/missing-catalog-art-20261119/report.html).
 
 인간형 괴물 7종의 만남·결말 사건샷(2026-11-19)은 `monster-events/<괴물>_<장면>_20261119.webp`의 1881×836 전용 원화 21장을 쓴다. 실제 이야기의 만남과 두 선택지에 연결하며 원본·생성 지시문·미리보기·ZIP을 보존한다. [전체 그림과 제작·검증](../docs/art/monster-event-shots-20261119.md).

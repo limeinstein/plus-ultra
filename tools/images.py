@@ -107,6 +107,13 @@ if os.path.isfile(creature_item_overrides):
         PREFERRED_FILES.update(json.load(creature_item_file))
 
 
+# 식물 증거·새 원주민 마을(2026-11-19): 기존 원화는 남기고 도시별 그림을 연결한다.
+plant_native_overrides = os.path.join(TOOLS, 'plant_native_art_20261119', 'asset-overrides.json')
+if os.path.isfile(plant_native_overrides):
+    with open(plant_native_overrides, encoding='utf-8') as plant_native_file:
+        PREFERRED_FILES.update(json.load(plant_native_file))
+
+
 def read(rel):
     with open(os.path.join(ROOT, rel), encoding='utf-8') as f:
         return f.read()

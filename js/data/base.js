@@ -347,6 +347,10 @@
     // 지리상의 발견 보상 배수 (2026-11-10 사용자 요청 — 예전보다 명성·돈 1.8배): fame → 발견 명성(G.Disc.fameFor: 찾을 때·보고·발표·확인 의뢰),
     //   gold → 후원자 성공 보수·계약 없는 보고 사례금(sponsor.js offerFor)과 찾을 때 건지는 값어치(discovery.js). 선금·명명권 값은 그대로
     discoveryReward: { fame: 1.8, gold: 1.8 },
+    // 동물·식물(생물) 발견의 명성 차등 (2026-11-19 사용자 요청 「명성을 거리나 희귀도에 따라 차등으로 업그레이드」 — js/systems/discovery.js D.bioK)
+    //   배수 = (1 + 고향에서 떨어진 거리° × dist.per, 많아야 dist.max) × (1 + 난이도 pw[1~5] 몫 + 책으로만 나오는 것 book + 전설의 짐승 legend)
+    //   고향 가까운 흔한 생물은 그대로(×1), 먼 땅의 희귀한 생물일수록 오른다 (예: 리스본 출신이 아마존 pw4 = ×1.5 × 1.3 ≈ ×1.9)
+    bioFame: { dist: { per: 0.01, max: 0.8 }, pw: [0, 0, 0.05, 0.15, 0.3, 0.5], book: 0.2, legend: 0.25 },
     // 맞바람 (js/core/rules.js sailEff·shipSpeed·fleetMotion)
     // sq: 사각돛 효율 꺾은선 [바람과 이루는 각(0 = 뒤바람, 180 = 정면 맞바람), 효율] — 예전에는 110°에서 0.29, 135° 넘으면 0.07이라
     //     비싼 사각돛 대형선(프리깃·대형 갤리온)이 맞바람에서 카라벨의 40%밖에 못 갔다. 순풍 쪽(0~60°)은 그대로.
@@ -853,6 +857,10 @@
     //  strength: 시대 수요 배수의 세기(1 = 자료 그대로) · worldPerYear: 저절로 이는 유행이 한 해에 몇 번 · worldMin: 그 시대 수요가 이만큼 넘는 물건만 · worldMult/worldDays: 그 유행의 값 배수·날
     //  discChance/discGoods/discMult/discDays: 발견이 알려졌을 때 유행이 일 확률·물건 수·배수·날 · spreadDays/spreadChance: 세상의 유행이 이웃 유럽 지역으로 번지는 때·확률
     era: { on: true, strength: 1, worldPerYear: 2.5, worldMin: 1.05, worldMult: 1.7, worldDays: [60, 120], discChance: 0.85, discGoods: 2, discMult: 2, discDays: [90, 150], spreadDays: 30, spreadChance: 0.4 },
+    // 물가 — 가격 혁명 (js/data/pricelevel.js · R.priceLevel, 2026-11-19): 지역 물가 배수 L에서 갈래마다 1 + (L − 1) × 세기 × strength
+    //  goods: 교역품·시장 물건 · food: 식량·물 (곡식이 더 많이 올랐다) · wage: 선원 품삯·동료 월급 (임금은 물가를 못 따라갔다)
+    //  ship: 배값·수리·대포·삭구·자재 · inn: 여관 · invest: 출자 문턱 · on: false면 모두 1
+    priceLevel: { on: true, strength: 1, goods: 1, food: 1.2, wage: 0.6, ship: 0.8, inn: 1, invest: 1 },
     fad: { profit: 0.3, need: 5, window: 90, chance: 0.3, mult: 1.6, days: 60,   // QA 2026-10-23: need 3→5 · chance 0.6→0.3 · mult 3→1.6 (제독이 마음대로 ×3 유행을 일으키던 것)
       cooldown: 180 },
     // 자택에서 아이와 보내는 시간 (js/systems/homelife.js): 능력 상한 statMax · 특기를 익힐 확률 skillChance · 장부를 맡기면 지력×ledgerGold닢

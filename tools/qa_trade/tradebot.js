@@ -272,7 +272,7 @@
   // ---------------------------------------------------------------- 한 구간: 항구에서 할 일 → 항해 → 다음 항구
   TB.cost = { hire: 0, repair: 0, supply: 0, ships: 0, wages: 0 };
   TB.step = async function () {
-    var s = S(), c = G.CITY_DATA[s.loc.city], rec = { from: c.id, y0: s.date.y, d0: s.day, w0: wealth() };
+    var s = S(), c = G.CITY_DATA[s.loc.city], rec = { from: c.id, y0: s.date.y, d0: s.day, w0: wealth(), pl: R.priceLevel ? +R.priceLevel(G.CITY_DATA[s.player.home], 'goods').toFixed(3) : 1 };   // pl: 고향 물가 (1480 = 1)
     if (TB.opt.brain !== 'oracle' && tradeOK(c)) G.Ledger.record(c);
     var tq = performance.now(); rec.sold = sellAll(c); TB.prof.sell += performance.now() - tq;
     repair(c);
@@ -338,7 +338,7 @@
       if (!ok) { out.end = out.end || 'step-fail'; if (TB.legs.length && TB.legs[TB.legs.length - 1].res === 'no-plan') break; if (TB.notes.length > 20) break; }
     }
     var s2 = S();
-    out.final = s2 ? { y: s2.date.y, m: s2.date.m, day: s2.day, wealth: wealth(), gold: Math.round(s2.player.gold), bank: Math.round(s2.player.bank || 0), ships: s2.fleet.ships.map(function (x) { return x.type; }), cap: R.fleetCap(), crew: s2.fleet.crew, gen: s2.player.generation, fame: s2.player.fame, noto: s2.player.notoriety || 0, stats: s2.stats } : null;
+    out.final = s2 ? { y: s2.date.y, m: s2.date.m, day: s2.day, wealth: wealth(), gold: Math.round(s2.player.gold), bank: Math.round(s2.player.bank || 0), ships: s2.fleet.ships.map(function (x) { return x.type; }), cap: R.fleetCap(), crew: s2.fleet.crew, gen: s2.player.generation, fame: s2.player.fame, noto: s2.player.notoriety || 0, pl: R.priceLevel ? +R.priceLevel(G.CITY_DATA[s2.player.home], 'goods').toFixed(3) : 1, plOn: !!(G.BALANCE.priceLevel && G.BALANCE.priceLevel.on), stats: s2.stats } : null;
     out.legs = TB.legs.length; out.cost = TB.cost; out.notes = TB.notes.slice(0, 30); out.realS = Math.round((Date.now() - t0) / 1000);
     return out;
   };

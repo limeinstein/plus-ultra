@@ -178,7 +178,17 @@
   D.valueK = function (d) { return D.valueParts(d).k; };
   D.value = function (d) { return Math.round(d.val * D.valueK(d) * D.mirageK(d)); };
   D.rewardK = function (kind) { var r = G.BALANCE && G.BALANCE.discoveryReward; return (r && r[kind]) || 1; };   // 발견 보상 배수 (G.BALANCE.discoveryReward — 2026-11-10 1.8배)
-  D.fameFor = function (d) { var combo = G.SkillCombos ? G.SkillCombos.bonus('discoveryReward') : 0; return Math.round((D.value(d) / 26 + d.pw * 30 * D.mirageK(d) * (1 + combo)) * D.rewardK('fame')); };   // 숨은 능력의 「발견 명성 +N%」가 pw 몫에도 같이 붙게
+  D.fameFor = function (d) { var combo = G.SkillCombos ? G.SkillCombos.bonus('discoveryReward') : 0; return Math.round((D.value(d) / 26 + d.pw * 30 * D.mirageK(d) * (1 + combo)) * D.rewardK('fame') * D.bioK(d)); };
+  /** 동물·식물(생물) 발견의 명성 배수 — 고향에서 멀고 희귀할수록 (G.BALANCE.bioFame, 2026-11-19). 생물이 아니면 1 */
+  D.bioParts = function (d) {
+    var K = G.BALANCE && G.BALANCE.bioFame, s = S();
+    if (!K || !d || d.cat !== 'creature' || d.how === 'city') return { dist: 0, rare: 0, k: 1 };
+    var hc = s && s.player && G.CITY_DATA[s.player.home], dd = hc && d.lon != null ? G.Geo.dist(hc.lon, hc.lat, d.lon, d.lat) : 0;
+    var dk = Math.min(K.dist.max, dd * K.dist.per);
+    var rk = (K.pw[Math.max(0, Math.min(K.pw.length - 1, d.pw || 0))] || 0) + (d.bookOnly ? K.book : 0) + (d.legendBeast ? K.legend : 0);
+    return { dist: Math.round(dd), distK: dk, rare: rk, k: (1 + dk) * (1 + rk) };
+  };
+  D.bioK = function (d) { return D.bioParts(d).k; };   // 숨은 능력의 「발견 명성 +N%」가 pw 몫에도 같이 붙게
   /** 현장 기록 보너스 — 유적은 그림(정밀한 도판)·세공(짜임·재료 기록)에 밝은 사람이 있으면 명성이 더 오른다.
       값어치(D.value)와 따로, 명성에만 곱한다. 발견 순간·후원자 보고·늦은 보고에 모두 쓴다. d 없이 부르면 1(옛 호출과 호환). */
   D.RECORD_K = { art: 0.05, craft: 0.04 };
@@ -338,6 +348,8 @@
     if (G.AnimalTracking && G.AnimalTracking.is(d) && G.AnimalTracking.progress(d) >= 0.6) setTimeout(function () { UI.toast('발자국을 끝까지 따라와 찾아냈다 — 명성이 더 오른다.', 'paw', 4800); }, 900);
     if (G.Career) fame += G.Career.discoveryFame(d, fame);
     var foundFame = G.Fame.add('ex', fame);
+    var bp = D.bioParts(d);   // 먼 땅의 희귀한 생물일수록 명성이 더 오른다 (G.BALANCE.bioFame)
+    if (bp.k >= 1.15) setTimeout(function () { UI.toast((bp.distK >= 0.15 && bp.rare >= 0.15 ? '고향에서 먼 땅의 희귀한 생물' : bp.distK >= bp.rare ? '고향에서 먼 땅의 생물' : '희귀한 생물') + ' — 명성 ×' + bp.k.toFixed(2), 'star', 4800); }, 1300);
     if (G.Birds) G.Birds.record(d, foundFame);
     // 증거품: 이름 붙은 증거(해도·지도)는 소지품으로 챙긴다 — 보고·발표할 때 건넨다 (잃으면 믿어 주지 않는다)
     if (d.evidence && !s.player.items.some(function (it) { return it.kind === 'evidence' && it.disc === d.id; })) {

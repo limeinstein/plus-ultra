@@ -16,13 +16,13 @@
     china: [286, 287, 288], japan: [297], eafrica: [104, 298, 299, 300, 305, 307], casia: [139],
     wafrica: [301, 308], maghreb: [302, 303, 304, 306],   // 아프리카 부족 마을 (js/data/tribes.js)
     namerica: [248, 257, 260, 264, 265, 266],
-    mexico: [267, 268, 269, 271], antilles: [270, 272, 279], andes: [273, 275, 276, 277], brazil: [274, 278, 280, 281]
+    mexico: [267, 268, 269, 271], antilles: [270, 272, 279], andes: [273, 275, 276, 277], brazil: [274, 278, 280, 281, 325, 326]
   };
   RF.zoneNew = {
     mongol:  { name: '몽골 초원', ids: [143, 144, 295, 296] },
-    siberia: { name: '시베리아', ids: [142, 290, 291, 292, 293, 294] },
-    firstnations: { name: '북아메리카 원주민 땅', ids: [230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245] },
-    oceania: { name: '남쪽 대륙', ids: [282, 283, 284, 285] }
+    siberia: { name: '시베리아', ids: [142, 290, 291, 292, 293, 294, 320, 321] },   // 320·321 원주민 마을 (js/data/natives.js)
+    firstnations: { name: '북아메리카 원주민 땅', ids: [230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 322, 323, 324] },
+    oceania: { name: '남쪽 대륙', ids: [282, 283, 284, 285, 316, 317, 318, 319] }
   };
   if (G.MATE_ZONES) {
     Object.keys(RF.zoneNew).forEach(function (z) { if (!G.MATE_ZONES[z]) G.MATE_ZONES[z] = RF.zoneNew[z]; });

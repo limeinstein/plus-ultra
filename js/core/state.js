@@ -69,7 +69,7 @@
       disc: {}, hints: {},
       known: [], chart: null,
       market: {}, sponsors: {}, maids: {}, owners: {},
-      flags: {}, log: [], history: 0,
+      flags: { shipRefund0310: -1 }, log: [], history: 0,   // 새 게임은 0.306~0.309 배값 차액 환급 대상이 아니다 (산 값이 기본값보다 비싸도 — 남의 조선소·물가)
       stats: { trades: 0, profit: 0, battles: 0, wins: 0, sunk: 0, captured: 0, distance: 0, found: 0 },
       circ: null,
       settings: ST.newSettings(p.diff)
