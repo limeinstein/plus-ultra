@@ -28,7 +28,7 @@
   var U = G.U, UI = G.UI, R = G.R, A = G.Art;
   var W = G.Wanted = {};
   function S() { return G.Game && G.Game.state; }
-  function K() { return (G.BALANCE && G.BALANCE.wanted) || { base: 2000, hist: 2, multi: 0.2, round: 100, posters: 8, chance: 0.75, days: 12, maid: 650 }; }
+  function K() { return (G.BALANCE && G.BALANCE.wanted) || { base: 2000, hist: 2, multi: 0.2, round: 100, posters: 5, chance: 0.75, days: 12, maid: 650 }; }
   function st() { var s = S(); if (!s) return null; var w = s.wanted || (s.wanted = {}); w.due = w.due || {}; w.paid = w.paid || {}; w.flags = w.flags || {}; w.rest = w.rest || {}; w.abs = w.abs || {}; w.gone = w.gone || {}; return w; }
   W.st = st;
   var BY = null;
@@ -203,10 +203,12 @@
   // 글자는 게임에서 얹는다. 흡수·토벌 뒤의 현상금과 도장이 현재 장부를 따른다.
   function warrantSheet(p, slot) {
     var w = st(), band = W.band(p);
-    return '<span class="wp-sheet" style="--wp-name-length:' + Array.from(p.name).length + '"><span class="wp-face" data-face="' + slot + '" aria-hidden="true"></span>' +
-      '<span class="wp-head">현상수배</span><span class="wp-caption"><strong class="wp-name">' + U.esc(p.name) + '</strong>' +
+    return '<span class="wp-sheet" data-pirate="' + U.esc(p.id) + '" style="--wp-name-length:' + Array.from(p.name).length + ';--wp-band-length:' + Array.from(band ? band.name : '해적단').length + '">' +
+      '<span class="wp-art" aria-hidden="true"></span><span class="wp-face" data-face="' + slot + '" aria-hidden="true"></span>' +
+      '<span class="wp-english" lang="en">WANTED</span><span class="wp-head">현상수배</span><span class="wp-caption"><strong class="wp-name">' + U.esc(p.name) + '</strong>' +
       '<span class="wp-band">' + U.esc(band ? band.name : '해적단') + '</span>' +
-      '<strong class="wp-pay">현상금 <span class="wp-amount">' + U.num(W.bounty(p)) + '</span>닢</strong></span>' +
+      '<strong class="wp-pay"><span class="wp-pay-label">현상금</span><span class="wp-amount">' + U.num(W.bounty(p)) + '</span><small>닢</small></strong></span>' +
+      '<span class="wp-issuer">항만 경비대</span>' +
       (w.paid[p.id] != null || w.due[p.id] ? '<span class="wp-stamp">무찌름</span>' : '') + '</span>';
   }
   function drawWarrant(el, p, slot) {
@@ -223,50 +225,60 @@
       }
       return canvas;
     }
-    face.appendChild(G.Img.make([key], 320, 480, oldFace, { fit: 'contain' }));
+    var art = face.closest('.wp-sheet').querySelector('.wp-art');
+    if (art) art.appendChild(G.Img.make(['ui/wanted/parchment'], 640, 960, function () {
+      var cv = A.canvas(640, 960), ctx = cv.getContext('2d');
+      ctx.fillStyle = '#f3e4c5'; ctx.fillRect(0, 0, 640, 960);
+      ctx.strokeStyle = '#bd914c'; ctx.lineWidth = 4; ctx.strokeRect(20, 20, 600, 920);
+      ctx.strokeStyle = '#172841'; ctx.lineWidth = 2; ctx.strokeRect(28, 28, 584, 904);
+      return cv;
+    }, { fit: 'contain' }));
+    face.appendChild(G.Img.make([key], 560, 400, oldFace, { fy: G.FX.wantedBoard.portraitFocus }));
   }
+  /** 같은 틀을 식당·상세·바다·인물별 내보내기에서 함께 쓴다. 이름·금액은 현재 장부의 글자다. */
+  W.paper = function (p, slot) {
+    slot = slot || p.id;
+    var host = document.createElement('span'); host.innerHTML = warrantSheet(p, slot);
+    var sheet = host.firstElementChild; drawWarrant(sheet, p, slot); return sheet;
+  };
   function posterHtml(p, i, zone) {
     var note = (p.g === 'f' ? '여해적 · ' : '') + (p.hist ? '실존 인물' : '소문 속 해적');
     if (lairKills(zone).indexOf(p.id) >= 0) note += ' · 소굴 단서';
     var count = W.absorbed(p.id).length;
     if (count) note += ' · 잔당 흡수 ' + count + '/' + AB().max;
-    return '<button type="button" class="wp-card" data-wp="' + i + '">' + warrantSheet(p, i) +
+    return '<button type="button" class="wp-card" data-wp="' + i + '" aria-label="' + U.esc(p.name) + ' 현상수배서" style="--wp-tilt:' + G.FX.wantedBoard.tilt[i % G.FX.wantedBoard.tilt.length] + 'deg"><span class="wp-number">' + (i + 1) + '</span>' + warrantSheet(p, i) +
       '<span class="wp-meta"><span data-flag="' + i + '"></span>' + note + '</span></button>';
   }
   /** 벽보가 창 아래로 잘리지 않게 (피드백 2026-11-11) — 창 안 높이에 모든 줄이 들어가도록 벽보 폭을 줄인다. 넉넉하면 그대로 */
   function fitPosters(content, n) {
     var grid = content && content.querySelector('.wp-grid'), card = grid && grid.querySelector('.wp-card'), sheet = card && card.querySelector('.wp-sheet');
     if (!sheet || !n || !content.clientHeight) return;
-    var cols = Math.min(n, (getComputedStyle(grid).gridTemplateColumns || '').split(' ').filter(Boolean).length || 4), rows = Math.ceil(n / cols);
-    var gap = parseFloat(getComputedStyle(grid).rowGap) || 12, cr = content.getBoundingClientRect(), k = cr.height / (content.offsetHeight || 1) || 1;
-    var top = (grid.getBoundingClientRect().top - cr.top) / k + content.scrollTop, padB = parseFloat(getComputedStyle(content).paddingBottom) || 0;
-    var avail = content.clientHeight - top - padB - 4, meta = card.offsetHeight - sheet.offsetHeight;
-    var w = Math.floor(((avail - (rows - 1) * gap) / rows - meta) * 2 / 3);
-    // 좁은 창의 두 열로는 네 줄이 생겨 최소 벽보 크기에서도 잘릴 수 있다. 가로 여유가 있으면 열을 늘려 모두 보인다.
-    var maxCols = Math.min(n, Math.max(cols, Math.floor((grid.clientWidth + gap) / (96 + gap))));
-    while (w < 96 && cols < maxCols) {
-      cols++; rows = Math.ceil(n / cols);
-      w = Math.floor(Math.min(((avail - (rows - 1) * gap) / rows - meta) * 2 / 3, (grid.clientWidth - (cols - 1) * gap) / cols));
-    }
-    if (w >= sheet.offsetWidth) return;
-    grid.style.gridTemplateColumns = 'repeat(' + cols + ',' + Math.max(96, w) + 'px)';
-    grid.style.justifyContent = 'center';
+    var cfg = G.FX.wantedBoard, cols = n === 4 ? 2 : Math.min(3, n), rows = Math.ceil(n / cols);
+    var board = grid.closest('.wp-board'), available = content.clientHeight - (content.querySelector('.wp-intro').offsetHeight || 0);
+    var w = Math.floor(Math.min(cfg.paperMax, (content.clientWidth - cfg.frameWidth - cfg.gap * (cols - 1)) / cols, (available - cfg.frameSpace - cfg.gap * (rows - 1)) / (rows * cfg.cardRatio)));
+    board.style.setProperty('--wp-paper-width', Math.max(cfg.paperMin, w) + 'px');
+    board.style.setProperty('--wp-gap', cfg.gap + 'px');
+    board.style.setProperty('--wp-cols', cols);
   }
   W.board = async function (c) {
     var zone = zoneOf(c), list = W.posters(zone);
     if (!list.length) { await G.Scenes.city.say(owner(), '요즘 ' + zoneName(zone) + '에는 이름난 해적 소식이 없습니다. 벽보 자리가 비었지요.'); return; }
     var due = W.due();
-    var html = '<div style="font-size:17px;margin-bottom:10px">' + U.esc(zoneName(zone)) + '에서 활약하는 이름난 해적들의 현상수배 벽보입니다. 벽보를 누르면 자세히 봅니다.' +
-      (due ? ' <b>받을 현상금 ' + U.num(due) + '닢</b>' : '') + '</div><div class="wp-grid">' + list.map(function (p, i) { return posterHtml(p, i, zone); }).join('') + '</div>';
+    var html = '<div class="wp-intro">' + U.esc(zoneName(zone)) + '의 현상수배서 · 전단지를 누르면 자세히 봅니다.' +
+      (due ? ' <b>받을 현상금 ' + U.num(due) + '닢</b>' : '') + '</div><div class="wp-board"><span class="wp-board-art" aria-hidden="true"></span><div class="wp-board-title">현상수배 게시판</div><div class="wp-grid" data-count="' + list.length + '">' + list.map(function (p, i) { return posterHtml(p, i, zone); }).join('') + '</div></div>';
     var pick = null;
-    var win = UI.window({ title: c.name + ' 식당 — 현상수배 벽보', icon: 'skull', width: 920, html: html, buttons: [{ label: '닫는다', value: null }],
+    var observer;
+    var win = UI.window({ title: c.name + ' 식당 — 현상수배 벽보', icon: 'skull', width: 920, height: G.FX.wantedBoard.windowHeight, html: html, buttons: [{ label: '닫는다', value: null }], onClose: function () { if (observer) observer.disconnect(); },
       onBuild: function (el, api) {
+        el.classList.add('wp-board-content');
+        el.querySelector('.wp-board-art').appendChild(G.Img.make(['ui/wanted/board'], 1200, 800, function () { return A.canvas(1200, 800); }));
         list.forEach(function (p, i) {
           drawWarrant(el, p, i);
           var fl = el.querySelector('[data-flag="' + i + '"]'), im = p.band ? flagImg(p.band, 26) : null; if (fl && im) fl.appendChild(im);
           var card = el.querySelector('[data-wp="' + i + '"]'); if (card) card.onclick = function () { pick = p; api.close('pick'); };
         });
         fitPosters(el, list.length);
+        observer = new ResizeObserver(function () { fitPosters(el, list.length); }); observer.observe(el);
       } });
     var v = await win.result;
     if (v === 'pick' && pick) await W.detail(c, pick);

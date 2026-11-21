@@ -19,6 +19,8 @@ DISC_CATS = ['geo', 'nature', 'ruin', 'treasure', 'creature', 'people', 'trade']
 # 기존 원본을 보존하면서 검증된 교체본을 게임의 기존 키로 사용한다.
 # scan() 뒤에 적용해야 manifest 재생성·웹 빌드에서도 연결이 되돌아가지 않는다.
 PREFERRED_FILES = {
+    'ui/wanted/parchment': 'ui/wanted/parchment-20261121.png',
+    'ui/wanted/board': 'ui/wanted/board-20261121.png',
     'portraits/rivals/진주 눈물 소교': 'portraits/rivals/ref39049-39045/진주 눈물 소교.webp',
     'portraits/rivals/진주 눈물 소교_half': 'portraits/rivals/ref39049-39045/진주 눈물 소교_half.webp',
     'portraits/rivals/안개섬 모이라': 'portraits/rivals/ref39049-39045/안개섬 모이라.webp',
@@ -484,6 +486,16 @@ def valid_keys(d):
     for butterfly in ('morpho glasswing monarchwinter lunamoth eightyeight swallowtail emeraldswallow birdwing sasakia atlasmoth deadleaf bhutanglory sunsetmoth cometmoth giantswallow motherpearl peacockbf').split():
         k['effects/butterflies/' + butterfly] = '나비·나방 무리 · 비행 스프라이트 시트'
     k['story/photo'] = '이야기 모드 · 아버지의 사진'
+    for cut in ('prologue', 'qufu', 'longmen', 'todaiji', 'lisbon', 'atlantis', 'malindi', 'hook', 'jina', 'gyeonwoo', 'jiknyeo', 'tarzan', 'rochefort', 'hook_piano'):
+        k['song/cuts/' + cut] = '바닷길 노래 · 사건 원화'
+    for region in ('kr', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'):
+        k['song/concerts/' + region] = '바닷길 노래 · 네 사람의 지역별 공연'
+    for person in ('Y', 'mom', 'clerk', 'keeper_qufu', 'heir_qufu', 'longmen', 'monk_nara', 'broker', 'wako', 'angkor', 'boro', 'ajanta', 'bandit', 'guide', 'lisbon_kid', 'RO', 'hook_mate', 'blacksail', 'child', 'village'):
+        for suffix in ('', '_half'):
+            k['portraits/npc/song_' + person + suffix] = '바닷길 노래 · 조연 초상'
+    for person in ('sy_hook', 'sy_malindi', 'sy_imcheosa_mask'):
+        for suffix in ('', '_half'):
+            k['portraits/mates/' + person + suffix] = '바닷길 노래 · 동료 초상'
     for terrain, label in (('grass', '초원'), ('steppe', '스텝'), ('desert', '사막'), ('forest', '숲'), ('jungle', '밀림'),
                            ('mountain', '산악'), ('snow', '설원'), ('tundra', '툰드라'), ('ice', '빙원')):
         k['landwar/backgrounds/' + terrain] = '육상전 지형 배경 · ' + label

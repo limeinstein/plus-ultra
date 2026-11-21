@@ -4163,6 +4163,7 @@
       "이어하기": "Continuar",
       "새로운 항해": "Nueva travesía",
       "첫 항해 (튜토리얼)": "Primera travesía (tutorial)",
+      "이야기 모드": "Modo historia",
       "이야기 — 아버지의 사진": "Historia: la foto del padre",
       "항해 일지 불러오기": "Cargar bitácora",
       "도감": "Códice",

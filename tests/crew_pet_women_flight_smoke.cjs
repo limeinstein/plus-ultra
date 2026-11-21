@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
 const { chromium } = require('../tools/procedural_art/node_modules/playwright-core');
-const ROOT = path.resolve(__dirname, '..'), OUT=(process.env.OUT || path.join(ROOT, 'artifacts/crew-pet-women-flight-20261116'));
+const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/crew-pet-women-flight-20261116');
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe', args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
   const errors = [];
@@ -15,7 +15,7 @@ const ROOT = path.resolve(__dirname, '..'), OUT=(process.env.OUT || path.join(RO
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     await page.addInitScript(() => { window.requestAnimationFrame = () => 0; });
-    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href));
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.CrewPets, null, { polling: 100, timeout: 120000 });
     const result = await page.evaluate(async () => {
       await G.Game.ensureGeo();

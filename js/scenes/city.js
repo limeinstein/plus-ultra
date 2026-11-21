@@ -155,6 +155,8 @@
     try {
       if (arg.prologue) await C.prologue(c);
       if (arg.story && G.Story) { try { await G.Story.prologue(c); } catch (e) { console.error(e); } }   // 이야기 모드의 프롤로그 (js/systems/story.js)
+      if (G.SongStory && G.SongStory.active()) { try { await G.SongStory.arrive(c, arg); } catch (e) { console.error(e); } }
+      if (G.JHook && G.JHook.active()) { try { await G.JHook.arrive(c, arg); } catch (e) { console.error(e); } }   // 이야기 모드 「해적여제」 (js/systems/jhook.js)   // 이야기 모드 「바닷길 노래」: 프롤로그·도시에서 일어나는 사건 (js/systems/song.js)
       if (arg.arrive) await C.arrival(c, arg);
       if (G.Strand && s.loc.via === 'sea' && !arg.load) { var sfBack = await G.Strand.atCity(c); if (sfBack) { await C.mate(sfBack); G.Game.refreshHud(); } }   // 이 항구에 남겨 둔 배를 되찾는다
       else if (G.Strand && s.loc.via === 'land' && !arg.load && G.Strand.offerByLand) { if (await G.Strand.offerByLand(c)) G.Game.cityHud(); }   // 뭍길로 왔어도 이 항구에 남겨 둔 배에 오를 수 있다 (제보 2026-11-06)
@@ -397,6 +399,8 @@
       if (G.Princess) out = out.concat(G.Princess.todo(c));
       if (G.Medici) out = out.concat(G.Medici.todo(c));   // 메디치 은행의 위기: 빚쟁이 · 잉글랜드 국왕 · 로렌초에게 전한다
       if (G.Story && G.Story.todo) out = G.Story.todo(c).concat(out);   // 이야기 모드: 아버지의 흔적 — 다음 갈 곳 (맨 위에)
+      if (G.SongStory && G.SongStory.active()) out = G.SongStory.todo(c).concat(out);
+      if (G.JHook && G.JHook.active()) out = G.JHook.todo(c).concat(out);   // 「해적여제」: 지금 할 일   // 「바닷길 노래」: 바닷길 공연 · 지금 할 일 (맨 위에)
       if (G.Colony) out = out.concat(G.Colony.todo(c));   // 개척 도시: 물자 · 국왕의 부름   // 사라진 왕녀: 부르심 · 모셔 간다
       // 알리지 않은 발견과 이 도시의 후원자
       var un = G.Disc.unreported().length;

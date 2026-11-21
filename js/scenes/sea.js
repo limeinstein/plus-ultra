@@ -1693,6 +1693,8 @@
       if (G.Sky && G.Sky.seaPending()) await G.Sky.atSea();   // 나침반의 비켜 감을 잰다(케플러) · 망원경으로 목성의 달(갈릴레이) (js/systems/skylore.js)
       if (G.Glory && G.Glory.seaPending()) await G.Glory.atSea();   // 영국 해협: 개신교의 바람 (js/systems/glory.js)
       if (G.OttoEu && G.OttoEu.seaPending()) await G.OttoEu.atSea();   // 프레베자 앞바다: 바르바로사와 신성 동맹 (js/systems/ottomaneurope.js)
+      if (G.SongStory && G.SongStory.seaPending()) await G.SongStory.atSea();
+      if (G.JHook && G.JHook.seaPending()) await G.JHook.atSea();   // 「해적여제」: 바다에서 일어나는 사건 (js/systems/jhook.js)   // 「바닷길 노래」: 바다에서 일어나는 사건 (js/systems/song.js)
       if (G.WangMerch && G.WangMerch.seaPending()) await G.WangMerch.atSea();   // 중국 근해: 마대인과 딸 지나의 금봉호 (js/systems/wangmerchant.js)
       if (G.ColonyCo && G.ColonyCo.seaPending()) await G.ColonyCo.atSea();   // 트랑케바르·퐁디셰리·토바고·다리엔 앞바다 (js/systems/colonyco.js)
       if (G.Rovers && G.Rovers.seaPending()) await G.Rovers.atSea();   // 스페르베르·하멜 · 해적(오말리·보니와 리드·검은 수염) (js/systems/rovers.js)

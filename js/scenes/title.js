@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.345';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.346';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
   var bootPending = false;   // 처음 열 때의 불러오는 그림이 아직 준비 단계를 밟는 중 (타이틀을 떠나면 바로 걷는다 — T.exit)
 
@@ -41,8 +41,8 @@
     // 처음 하는 사람을 위한 튜토리얼 「첫 항해」 (js/systems/tutorial.js) — 저장이 하나도 없으면 이 단추를 강조한다
     var bTut = G.Tutorial && G.Tutorial.begin ? btn('첫 항해 (튜토리얼)', 'compass', function () { if (!bTut.classList.contains('disabled')) G.Tutorial.begin(); }, bCont ? '' : 'navy') : null;
     if (bTut) { bTut.classList.add('disabled'); if (!bCont) bNew.classList.remove('navy'); }
-    // 이야기 모드 「아버지의 사진」 (js/systems/story.js) — 정해진 제독·동료로 시작하는 이야기
-    var bStory = G.Story && G.Story.begin ? btn('이야기 — 아버지의 사진', 'scroll', function () { if (!bStory.classList.contains('disabled')) G.Story.begin(); }) : null;
+    // 이야기 모드 (2026-11-21): 세계 지도에서 주인공을 골라 시작 — 「아버지의 사진」(js/systems/story.js) · 「해적여제」(js/systems/jhook.js) · 「바닷길 노래」(js/systems/song.js, 공개일 뒤)
+    var bStory = G.StorySelect && G.StorySelect.list().length ? btn('이야기 모드', 'scroll', function () { if (!bStory.classList.contains('disabled')) G.StorySelect.open(); }) : null;
     if (bStory) bStory.classList.add('disabled');
     var bLoad = btn('항해 일지 불러오기', 'book', function () { T.loadMenu(); });
     var bCatalog = btn('도감', 'book', function () {

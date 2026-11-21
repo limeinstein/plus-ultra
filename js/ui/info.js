@@ -53,6 +53,8 @@
     // 지난번 탭은 같은 항해(저장)에서만 — 다른 저장을 불러오면, 또는 지금 수첩에 없는 탭(이야기 모드의 「아버지의 사진」 등)이면 제독 탭 (QA 2026-10-23)
     if (lastTabOf !== S()) lastTab = null;
     var tabList = TABS.concat(S().story && G.Story ? [['story', G.Story.photoName ? G.Story.photoName() : '아버지의 사진']] : []);   // 이야기 모드 (js/systems/story.js)
+    if (S().song && G.SongStory) tabList = tabList.concat([['song', '소영의 지도']]);
+    if (S().jhook && G.JHook) tabList = tabList.concat([['jhook', '해적여제']]);   // 「해적여제」 (js/systems/jhook.js)   // 「바닷길 노래」 (js/systems/song.js)
     if (!tab && lastTab && !tabList.some(function (t) { return t[0] === lastTab; })) lastTab = null;
     tab = tab || lastTab || 'admiral';
     var nbKey = G.Keys ? G.Keys.label('notebook') : '없음';
@@ -99,6 +101,8 @@
   };
   var PAGES = {};
   PAGES.story = function (el) { if (G.Story) G.Story.page(el); };
+  PAGES.song = function (el) { if (G.SongStory) G.SongStory.page(el); };
+  PAGES.jhook = function (el) { if (G.JHook) G.JHook.page(el); };
 
   function pips(v, mx) { var h = '<span class="pips">'; for (var i = 1; i <= (mx || 3); i++) h += '<i class="' + (i <= v ? 'on' : '') + '"></i>'; return h + '</span>'; }
   I.pips = pips;
@@ -329,11 +333,11 @@
 
   PAGES.disc = function (el) {
     var s = S();
-    var mine = G.DISCOVERIES.filter(function (d) { return G.Disc.foundByMe(d.id); });
-    var html = '<div class="flex" style="margin-bottom:10px"><b style="font-size:20px">발견물 ' + mine.length + ' / ' + G.DISCOVERIES.length + '</b><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div>' + (G.Carto ? G.Carto.statusHtml() : '');
+    var list = G.Disc.forVoyage(), mine = list.filter(function (d) { return G.Disc.foundByMe(d.id); });
+    var html = '<div class="flex" style="margin-bottom:10px"><b style="font-size:20px">발견물 ' + mine.length + ' / ' + list.length + '</b><span class="right muted">해도 작성 ' + (G.State.chartPercent() * 100).toFixed(1) + '%</span></div>' + (G.Carto ? G.Carto.statusHtml() : '');
     html += frontierBoard();
     Object.keys(G.DISC_CATS).forEach(function (cat) {
-      var all = G.DISCOVERIES.filter(function (d) { return d.cat === cat; });
+      var all = list.filter(function (d) { return d.cat === cat; });
       var got = all.filter(function (d) { return G.Disc.foundByMe(d.id); });
       html += '<h4 style="margin:14px 0 6px">' + G.DISC_CATS[cat] + ' <small class="muted">' + got.length + '/' + all.length + '</small></h4><div class="cardgrid">' +
         all.map(function (d) {

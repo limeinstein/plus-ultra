@@ -1,5 +1,7 @@
 # images — 그림 교체 폴더
 
+현상수배 전단지(2026-11-21): 현상금 대상 156명의 `wanted/<id>.webp` 초상을 `ui/wanted/parchment-20261121.png` 양피지 틀에 얹는다. 게시판 원화는 `ui/wanted/board-20261121.png`이며 두 파일 모두 manifest에 등록했다. 개별 이름·해적단·현재 현상금은 게임에서 표시한다. [156명 전체 미리보기](../artifacts/wanted-style-20261121/index.html) · [제작·검증](../docs/art/wanted-style-20261121.md) · [원화 생성 지시문](ui/wanted/prompts-20261121.json).
+
 식물 증거·새 원주민 마을 전체 시설(2026-11-19)은 `plant-native-20261119/<ID>.webp`의 261개 전용 원화를 쓴다. 식물 96개는 256×256 투명, 마을 11개와 시설 외부·내부 154개는 1536×864다. `tools/plant_native_art_20261119/asset-overrides.json`으로 논리 키 368개를 우선 연결한다. [전체 갤러리](../artifacts/plant-native-art-20261119/index.html) · [원본·프롬프트·ZIP·검증](../docs/art/plant-native-art-20261119.md).
 
 누락 발견물·전리품 보완(2026-11-19): `lich`·`werewolf`·`deadknight`·`worldtree`의 GIF·끝 장면·24칸 시트 12개와 `items/pl_*.webp` 8개·`items/ps_*.webp` 7개의 투명 전용 그림을 추가했다. [원본·프롬프트·규격·검증](../docs/art/missing-catalog-art-20261119.md) · [전체 미리보기](../artifacts/missing-catalog-art-20261119/report.html).
@@ -234,3 +236,11 @@
 - 해질녘·저녁 전용 그림이 없으면 기본 그림에 옅은 노을빛을 입혀 씁니다.
 - 바다 지도, 육상 탐험 지도, 해전 화면은 실시간으로 그리는 화면이라 파일로 바꾸지 않습니다.
 - claude.ai에 올리는 한 파일짜리 판은 16MB까지입니다. 그림을 많이 넣을 때는 JPG(품질 80 안팎)로 저장하세요.
+
+## 「바닷길 노래」 인물·사건 원화 (2026-11-20)
+
+말린디·후크·로슈포르·하회탈의 임처사와 전용 그림이 없던 조연을 포함해 23명의 투명 무릎상·얼굴상 46장, `song/cuts/`의 사건 원화 6장을 연결했다. [인물·참고·전체 미리보기·ZIP·검증 기록](../docs/art/song-art-20261120.md).
+
+## 「바닷길 노래」 인물 이벤트와 지역별 공연 (2026-11-20)
+
+인물 사건 7장과 후크 피아노 특별 장면 1장, 조선·11개 지역의 네 사람 공연 12장을 추가했다. `song/cuts/`와 `song/concerts/`에 게임용 WebP를 두며 네 명이 동승할 때 지역별 공연 원화를 표시한다. 후크 동승 후 「소영의 지도」에서 피아노 특별 원화를 볼 수 있다. [그림·참고·원본·ZIP·게임 연결·검증](../docs/art/song-events-performances-20261120.md).

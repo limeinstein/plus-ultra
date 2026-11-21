@@ -235,12 +235,12 @@
 
   // ================================================================ 시작
   /** 타이틀의 단추 */
-  ST.begin = async function () {
+  ST.begin = async function (skip) {   // skip: 이야기 고르기 지도(js/ui/storyselect.js)에서 이미 골랐다 — 확인 창 없이
     await G.State.ready;
     var html = '<div style="font-size:18px;line-height:1.7"><b>1480년, 리스본.</b> 행방불명된 아버지가 남긴 것은 「있을 수 없는 그림」 한 장 — 붓 자국이 없고, 세상 어디에도 없는 옷과 지붕이 찍힌 사진.<br>' +
       '하얀 남방의 항해사 <b>' + U.esc(D.name) + '</b>는 남작의 아들 <b>자코모 카사노바</b>, 안셀무 신부, 늙은 항해사 에스테방과 함께 아버지의 자취를 찾아 동쪽으로 떠난다.' +
       '<div class="sep"></div><div class="muted" style="font-size:15px">제독·동료·첫 목적지가 정해진 채 시작합니다. 그 뒤로는 보통 항해와 같이 자유롭게 — 아버지의 흔적은 수첩 「아버지의 사진」에서 따라갑니다. 자동 저장은 보통 항해와 같은 칸(자동 저장)을 씁니다.</div></div>';
-    var v = await UI.window({ title: '이야기 — 아버지의 사진', icon: 'scroll', width: 680, html: html,
+    var v = skip ? 'go' : await UI.window({ title: '이야기 — 아버지의 사진', icon: 'scroll', width: 680, html: html,
       buttons: [{ label: '그만둔다', value: null }, { label: '이야기를 시작한다', value: 'go', cls: 'navy' }] }).result;
     if (v !== 'go') return;
     await G.Game.ensureGeo();

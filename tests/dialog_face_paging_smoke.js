@@ -37,7 +37,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
         const face = box.querySelector('.pframe canvas, .pframe img');
         pages.push(body.textContent.replace(/▼/g, '').trim());
         heights.push(box.offsetHeight);
-        faceSizes.push(face ? Math.round(face.getBoundingClientRect().height) : 0);
+        faceSizes.push(face ? face.offsetHeight : 0); // UI 배율 전의 얼굴 크기로 상한을 확인한다
         box.closest('.modal-back').click();
       }
       await promise;
@@ -48,7 +48,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(result.pages.length >= 2, '긴 얼굴 대사는 여러 쪽으로 나뉜다 (' + result.pages.length + '쪽)');
     ok(result.pages.join(' ').includes('첫 문장은') && result.pages.join(' ').includes('여섯째 문장은'), '첫 문장부터 마지막 문장까지 보존된다');
     ok(result.heights.every(h => h <= 170), '각 쪽이 얼굴 칸 높이 안에 들어간다 (' + result.heights.join(', ') + 'px)');
-    ok(result.faceSizes.every(n => n >= 130 && n <= 250), '얼굴은 대화창 높이에 맞되 최대 크기를 넘지 않는다');
+    ok(result.faceSizes.every(n => n >= 130 && n <= 250), '이름표 위의 얼굴이 무대 좌표의 최대 크기를 넘지 않는다');
     ok(result.missingName == null, 'ei_null 같은 내부 ID는 이름표로 표시하지 않는다');
     ok(result.unicodeName === '없는 화자', '실제 비ASCII 화자 이름은 그대로 보존한다');
     ok(errors.length === 0, 'pageerror·console.error 0');

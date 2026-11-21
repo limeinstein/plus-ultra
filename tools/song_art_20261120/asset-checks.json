@@ -1,0 +1,868 @@
+[
+  {
+    "id": "sy_malindi",
+    "name": "말린디",
+    "mode": "knee",
+    "key": "portraits/mates/sy_malindi_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 802448,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_malindi_half.webp",
+    "bytes": 321382
+  },
+  {
+    "id": "sy_malindi",
+    "name": "말린디",
+    "mode": "face",
+    "key": "portraits/mates/sy_malindi",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 572293,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_malindi.webp",
+    "bytes": 609302
+  },
+  {
+    "id": "sy_hook",
+    "name": "후크",
+    "mode": "knee",
+    "key": "portraits/mates/sy_hook_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 546247,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_hook_half.webp",
+    "bytes": 488938
+  },
+  {
+    "id": "sy_hook",
+    "name": "후크",
+    "mode": "face",
+    "key": "portraits/mates/sy_hook",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 346127,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_hook.webp",
+    "bytes": 802640
+  },
+  {
+    "id": "song_RO",
+    "name": "로슈포르",
+    "mode": "knee",
+    "key": "portraits/npc/song_RO_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 461957,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_RO_half.webp",
+    "bytes": 424556
+  },
+  {
+    "id": "song_RO",
+    "name": "로슈포르",
+    "mode": "face",
+    "key": "portraits/npc/song_RO",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 626135,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_RO.webp",
+    "bytes": 548022
+  },
+  {
+    "id": "sy_imcheosa_mask",
+    "name": "하회탈의 임처사",
+    "mode": "knee",
+    "key": "portraits/mates/sy_imcheosa_mask_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 515180,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_imcheosa_mask_half.webp",
+    "bytes": 552000
+  },
+  {
+    "id": "sy_imcheosa_mask",
+    "name": "하회탈의 임처사",
+    "mode": "face",
+    "key": "portraits/mates/sy_imcheosa_mask",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 543415,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_imcheosa_mask.webp",
+    "bytes": 646024
+  },
+  {
+    "id": "song_Y",
+    "name": "어린 소영",
+    "mode": "knee",
+    "key": "portraits/npc/song_Y_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 681291,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_Y_half.webp",
+    "bytes": 402084
+  },
+  {
+    "id": "song_Y",
+    "name": "어린 소영",
+    "mode": "face",
+    "key": "portraits/npc/song_Y",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 658369,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_Y.webp",
+    "bytes": 520804
+  },
+  {
+    "id": "song_mom",
+    "name": "소영의 어머니",
+    "mode": "knee",
+    "key": "portraits/npc/song_mom_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 624473,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_mom_half.webp",
+    "bytes": 441726
+  },
+  {
+    "id": "song_mom",
+    "name": "소영의 어머니",
+    "mode": "face",
+    "key": "portraits/npc/song_mom",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 605706,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_mom.webp",
+    "bytes": 582006
+  },
+  {
+    "id": "song_clerk",
+    "name": "관아 아전",
+    "mode": "knee",
+    "key": "portraits/npc/song_clerk_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 608961,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_clerk_half.webp",
+    "bytes": 405870
+  },
+  {
+    "id": "song_clerk",
+    "name": "관아 아전",
+    "mode": "face",
+    "key": "portraits/npc/song_clerk",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 660297,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_clerk.webp",
+    "bytes": 499028
+  },
+  {
+    "id": "song_keeper_qufu",
+    "name": "공묘 사당지기",
+    "mode": "knee",
+    "key": "portraits/npc/song_keeper_qufu_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 564454,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_keeper_qufu_half.webp",
+    "bytes": 527946
+  },
+  {
+    "id": "song_keeper_qufu",
+    "name": "공묘 사당지기",
+    "mode": "face",
+    "key": "portraits/npc/song_keeper_qufu",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 468645,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_keeper_qufu.webp",
+    "bytes": 742248
+  },
+  {
+    "id": "song_heir_qufu",
+    "name": "공씨 집안 젊은이",
+    "mode": "knee",
+    "key": "portraits/npc/song_heir_qufu_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 473510,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_heir_qufu_half.webp",
+    "bytes": 543676
+  },
+  {
+    "id": "song_heir_qufu",
+    "name": "공씨 집안 젊은이",
+    "mode": "face",
+    "key": "portraits/npc/song_heir_qufu",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 607075,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_heir_qufu.webp",
+    "bytes": 526662
+  },
+  {
+    "id": "song_longmen",
+    "name": "석굴 앞 탁본 장수",
+    "mode": "knee",
+    "key": "portraits/npc/song_longmen_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 530091,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_longmen_half.webp",
+    "bytes": 589330
+  },
+  {
+    "id": "song_longmen",
+    "name": "석굴 앞 탁본 장수",
+    "mode": "face",
+    "key": "portraits/npc/song_longmen",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 493853,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_longmen.webp",
+    "bytes": 698502
+  },
+  {
+    "id": "song_monk_nara",
+    "name": "도다이지의 젊은 스님",
+    "mode": "knee",
+    "key": "portraits/npc/song_monk_nara_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 532256,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_monk_nara_half.webp",
+    "bytes": 499396
+  },
+  {
+    "id": "song_monk_nara",
+    "name": "도다이지의 젊은 스님",
+    "mode": "face",
+    "key": "portraits/npc/song_monk_nara",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 726485,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_monk_nara.webp",
+    "bytes": 392442
+  },
+  {
+    "id": "song_broker",
+    "name": "편지 중개인",
+    "mode": "knee",
+    "key": "portraits/npc/song_broker_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 448333,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_broker_half.webp",
+    "bytes": 568596
+  },
+  {
+    "id": "song_broker",
+    "name": "편지 중개인",
+    "mode": "face",
+    "key": "portraits/npc/song_broker",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 541411,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_broker.webp",
+    "bytes": 621380
+  },
+  {
+    "id": "song_wako",
+    "name": "왜구 두목",
+    "mode": "knee",
+    "key": "portraits/npc/song_wako_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 386848,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_wako_half.webp",
+    "bytes": 657620
+  },
+  {
+    "id": "song_wako",
+    "name": "왜구 두목",
+    "mode": "face",
+    "key": "portraits/npc/song_wako",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 362962,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_wako.webp",
+    "bytes": 812854
+  },
+  {
+    "id": "song_angkor",
+    "name": "사원 마을의 늙은 무희",
+    "mode": "knee",
+    "key": "portraits/npc/song_angkor_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 481208,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_angkor_half.webp",
+    "bytes": 698760
+  },
+  {
+    "id": "song_angkor",
+    "name": "사원 마을의 늙은 무희",
+    "mode": "face",
+    "key": "portraits/npc/song_angkor",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 525611,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_angkor.webp",
+    "bytes": 752674
+  },
+  {
+    "id": "song_boro",
+    "name": "자바의 가믈란 악사",
+    "mode": "knee",
+    "key": "portraits/npc/song_boro_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 647921,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_boro_half.webp",
+    "bytes": 532526
+  },
+  {
+    "id": "song_boro",
+    "name": "자바의 가믈란 악사",
+    "mode": "face",
+    "key": "portraits/npc/song_boro",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 660249,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_boro.webp",
+    "bytes": 538174
+  },
+  {
+    "id": "song_ajanta",
+    "name": "석굴을 지키는 목동",
+    "mode": "knee",
+    "key": "portraits/npc/song_ajanta_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 731127,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_ajanta_half.webp",
+    "bytes": 437240
+  },
+  {
+    "id": "song_ajanta",
+    "name": "석굴을 지키는 목동",
+    "mode": "face",
+    "key": "portraits/npc/song_ajanta",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 656494,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_ajanta.webp",
+    "bytes": 566036
+  },
+  {
+    "id": "song_bandit",
+    "name": "도적 무리의 우두머리",
+    "mode": "knee",
+    "key": "portraits/npc/song_bandit_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 486675,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_bandit_half.webp",
+    "bytes": 635342
+  },
+  {
+    "id": "song_bandit",
+    "name": "도적 무리의 우두머리",
+    "mode": "face",
+    "key": "portraits/npc/song_bandit",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 423282,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_bandit.webp",
+    "bytes": 724174
+  },
+  {
+    "id": "song_guide",
+    "name": "밀렵꾼의 길잡이",
+    "mode": "knee",
+    "key": "portraits/npc/song_guide_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 662945,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_guide_half.webp",
+    "bytes": 558022
+  },
+  {
+    "id": "song_guide",
+    "name": "밀렵꾼의 길잡이",
+    "mode": "face",
+    "key": "portraits/npc/song_guide",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 651134,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_guide.webp",
+    "bytes": 559006
+  },
+  {
+    "id": "song_lisbon_kid",
+    "name": "리스본 부두의 아이",
+    "mode": "knee",
+    "key": "portraits/npc/song_lisbon_kid_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 772321,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_lisbon_kid_half.webp",
+    "bytes": 417958
+  },
+  {
+    "id": "song_lisbon_kid",
+    "name": "리스본 부두의 아이",
+    "mode": "face",
+    "key": "portraits/npc/song_lisbon_kid",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 642584,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_lisbon_kid.webp",
+    "bytes": 616906
+  },
+  {
+    "id": "song_hook_mate",
+    "name": "후크의 갑판장",
+    "mode": "knee",
+    "key": "portraits/npc/song_hook_mate_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 438621,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_hook_mate_half.webp",
+    "bytes": 577898
+  },
+  {
+    "id": "song_hook_mate",
+    "name": "후크의 갑판장",
+    "mode": "face",
+    "key": "portraits/npc/song_hook_mate",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 418838,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_hook_mate.webp",
+    "bytes": 731494
+  },
+  {
+    "id": "song_blacksail",
+    "name": "검은 돛의 두목",
+    "mode": "knee",
+    "key": "portraits/npc/song_blacksail_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 383699,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_blacksail_half.webp",
+    "bytes": 598216
+  },
+  {
+    "id": "song_blacksail",
+    "name": "검은 돛의 두목",
+    "mode": "face",
+    "key": "portraits/npc/song_blacksail",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 393484,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_blacksail.webp",
+    "bytes": 737848
+  },
+  {
+    "id": "song_child",
+    "name": "밀항한 아이",
+    "mode": "knee",
+    "key": "portraits/npc/song_child_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 586581,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_child_half.webp",
+    "bytes": 520834
+  },
+  {
+    "id": "song_child",
+    "name": "밀항한 아이",
+    "mode": "face",
+    "key": "portraits/npc/song_child",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 584763,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_child.webp",
+    "bytes": 597126
+  },
+  {
+    "id": "song_village",
+    "name": "한산도 생선 장수",
+    "mode": "knee",
+    "key": "portraits/npc/song_village_half",
+    "size": [
+      1024,
+      1536
+    ],
+    "alpha": [
+      0,
+      254
+    ],
+    "transparent_pixels": 466131,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_village_half.webp",
+    "bytes": 605666
+  },
+  {
+    "id": "song_village",
+    "name": "한산도 생선 장수",
+    "mode": "face",
+    "key": "portraits/npc/song_village",
+    "size": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ],
+    "transparent_pixels": 485765,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\npc\\song_village.webp",
+    "bytes": 715414
+  },
+  {
+    "id": "prologue",
+    "name": "한산도, 1474년",
+    "mode": "event",
+    "key": "song/cuts/prologue",
+    "size": [
+      1881,
+      836
+    ],
+    "alpha": null,
+    "transparent_pixels": 0,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\cuts\\prologue.webp",
+    "bytes": 682614
+  },
+  {
+    "id": "qufu",
+    "name": "곡부 — 공부자의 사당",
+    "mode": "event",
+    "key": "song/cuts/qufu",
+    "size": [
+      1881,
+      836
+    ],
+    "alpha": null,
+    "transparent_pixels": 0,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\cuts\\qufu.webp",
+    "bytes": 836700
+  },
+  {
+    "id": "longmen",
+    "name": "용문 — 십만 부처의 절벽",
+    "mode": "event",
+    "key": "song/cuts/longmen",
+    "size": [
+      1881,
+      836
+    ],
+    "alpha": null,
+    "transparent_pixels": 0,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\cuts\\longmen.webp",
+    "bytes": 808040
+  },
+  {
+    "id": "todaiji",
+    "name": "나라 — 도다이지",
+    "mode": "event",
+    "key": "song/cuts/todaiji",
+    "size": [
+      1881,
+      836
+    ],
+    "alpha": null,
+    "transparent_pixels": 0,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\cuts\\todaiji.webp",
+    "bytes": 590886
+  },
+  {
+    "id": "lisbon",
+    "name": "리스본 — 삐뚤어진 실밥",
+    "mode": "event",
+    "key": "song/cuts/lisbon",
+    "size": [
+      1881,
+      836
+    ],
+    "alpha": null,
+    "transparent_pixels": 0,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\cuts\\lisbon.webp",
+    "bytes": 746794
+  },
+  {
+    "id": "atlantis",
+    "name": "아틀란티스 — 마지막 소절",
+    "mode": "event",
+    "key": "song/cuts/atlantis",
+    "size": [
+      1881,
+      836
+    ],
+    "alpha": null,
+    "transparent_pixels": 0,
+    "runtime_file": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\cuts\\atlantis.webp",
+    "bytes": 722868
+  }
+]

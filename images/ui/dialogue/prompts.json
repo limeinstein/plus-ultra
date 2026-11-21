@@ -1,0 +1,18 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "reference": "사용자가 선택한 2026-11-21 대화창 시안",
+  "assets": [
+    {
+      "key": "panel",
+      "prompt": "Production game UI asset extraction and reconstruction. Reference is a screenshot of the user's selected design. Recreate ONLY the wide lower DIALOGUE PANEL as a clean reusable UI background on a genuinely transparent alpha background. Preserve its distinctive indigo and antique-gold thin frame, concave/scalloped ends, delicate tiny gold foliate/celestial corner flourishes, long fairly straight horizontal central edges. Preserve the very pale ivory parchment, faded blue-grey small sailing ship at FAR LEFT, fine wave engraving along bottom, coastline map and compass rose at FAR RIGHT. Central 70 percent must remain pale, quiet and readable for dynamically rendered game text. REMOVE ALL PEOPLE, tavern scenery, BOTH NAMEPLATES, ALL LETTERING/TEXT, arrows and ALL CHOICE BUTTONS. Reconstruct the paper underneath removed text and buttons. This is an EMPTY dialogue background asset with nautical art, NOT a full game screenshot. One single panel, no other elements. Very wide horizontal 6:1 panel proportions; use the widest landscape canvas supported, frame completely visible and fills canvas width/height closely with minimal transparent padding. No visible checkerboard, no mockup shadow backdrop, no words anywhere. Edges outside the ornate panel must have real transparency. Match the reference's refined restrained ornament and blue/gold palette."
+    },
+    {
+      "key": "nameplate",
+      "prompt": "Production game UI component. Extract/recreate ONE blank ornate NAMEPLATE cartouche from the supplied screenshot. Exactly the reference's dark indigo enamel/cloth filled narrow horizontal name ribbon with thin antique gold double molding and delicate gold compass/celestial-arc engraved ornaments at both tapering scalloped ends. Elegant concave ends rather than big stars. Use only ONE plaque with no words, no arrow, no people, no paper, no background scene, no additional elements. Leave central 65% clean dark navy for dynamic gold Korean names. Wide 6:1 proportions, largest practical landscape canvas, minimal transparent padding, whole component in frame. Real alpha transparency outside nameplate and subtle edge shadow. Preserve reference palette and polished historical maritime craftsmanship. Do not add lettering or any text."
+    },
+    {
+      "key": "button",
+      "prompt": "Production game UI component. Extract/recreate ONE blank dialogue choice BUTTON from the supplied screenshot: dark navy inset face, compact horizontal ornate bevel rectangle with slightly clipped/sculpted corners, fine antique gold double trim and refined highlight, like the left 'selected' choice button in reference but without lettering, symbols, sparkles or selection glow. One single empty button, central 80% is clean dark navy for dynamic text. Wide 4:1 aspect, minimal transparent padding. Genuine transparent alpha outside the component. No people, no scene, no other UI or text. Delicate aged gold dimensional metal on restrained navy, same style as the screenshot. Fully visible edges."
+    }
+  ]
+}

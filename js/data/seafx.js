@@ -5,6 +5,11 @@
 (function (G) {
   'use strict';
   G.FX = {
+    // 해도 대화창: 무대 안쪽 크기, 이름표 자리, 다음 쪽 오입력 방지. 그림의 투명 여백은 원본을 보존한 채 잘라 보여 준다.
+    dialogPanel: { height: 224, faceHeight: 164, padX: 168, padRight: 192, padY: 36, facePadY: 18, lineHeight: 1.62, contentGap: 14, paperVeil: 0.72, nameWidth: 300, nameHeight: 46, nameLift: 30, nameInset: 24, bustOverlap: 6,
+      choices: { compactAt: 5, padY: 24, maxHeight: 126, fontSize: 17, buttonHeight: 36, padX: 16, gap: 6 }, // 선택지가 많아도 무릎상은 일반 대화와 같은 크기
+      choiceMaxHeight: 160, maxLines: 4, advanceMs: 220,
+      art: { panel: [2172, 724, 0, 157, 2172, 406], nameplate: [2172, 724, 27, 185, 2120, 334], button: [2172, 724, 118, 182, 1937, 358] } },
     plantSwirl: { cell: 128, columns: 8, rows: 4, seconds: 3.2, cache: 10,
       leaves: 21, radiusMin: 34, radiusMax: 160, coast: 2.2, contractAlpha: 0.8 },
     animalTracking: { enabled: true, spritePixels: 96, senseRadius: 4.8, silhouetteRadius: 2.2,
@@ -79,6 +84,7 @@
       loadWaitMs: 2500    // 장면 판·GIF를 기다리는 가장 긴 시간 (보통은 가까워질 때 미리 받아 둔다 — G.Reel.prefetch)
     },
     // 화면 갱신 (js/main.js) — 한 장면이 오래 걸려도 배가 순간 이동하지 않게. 화질은 설정값 그대로 유지한다
+    wantedBoard: { paperMax: 216, paperMin: 78, gap: 10, windowHeight: 740, frameSpace: 150, frameWidth: 120, cardRatio: 1.75, tilt: [-3, 1.5, -2, 2.5, -2.5], portraitFocus: 0.25 },
     wantedReveal: { near: 1.4, scanSeconds: 0.5, flyMs: 1080, inkMs: 1460, hoverMs: 2200, leaveMs: 560, roam: 1.8 },
     loop: {
       maxDt: 0.1,         // 한 장면에서 흐르는 가장 긴 시간(초). 이보다 오래 멈췄으면 그만큼만 움직인다

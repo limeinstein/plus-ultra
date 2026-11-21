@@ -24,6 +24,7 @@
       "이어하기": "Continue",
       "새로운 항해": "New Voyage",
       "첫 항해 (튜토리얼)": "First Voyage (Tutorial)",
+      "이야기 모드": "Story Mode",
       "이야기 — 아버지의 사진": "Story: Father's Photo",
       "항해 일지 불러오기": "Load Logbook",
       "도감": "Codex",

@@ -1219,6 +1219,7 @@
       "이어하기": "Chơi tiếp",
       "새로운 항해": "Chuyến hải hành mới",
       "첫 항해 (튜토리얼)": "Chuyến đi đầu tiên (Hướng dẫn)",
+      "이야기 모드": "Chế độ cốt truyện",
       "이야기 — 아버지의 사진": "Câu chuyện — Ảnh của cha",
       "항해 일지 불러오기": "Mở nhật ký hàng hải",
       "도감": "Đồ giám",

@@ -191,6 +191,11 @@
 
   UI.init = function () {
     root = document.getElementById('ui');
+    var dialogStyle = G.FX && G.FX.dialogPanel;
+    if (dialogStyle) {
+      root.style.setProperty('--dialog-name-width', dialogStyle.nameWidth + 'px'); root.style.setProperty('--dialog-name-height', dialogStyle.nameHeight + 'px'); root.style.setProperty('--dialog-name-lift', dialogStyle.nameLift + 'px');
+      if (G.Img && G.Img.prefetchKeys) G.Img.prefetchKeys(['ui/dialogue/panel', 'ui/dialogue/nameplate', 'ui/dialogue/button']);
+    }
     screenEl = U.el('div', 'layer'); screenEl.id = 'screen'; screenEl.style.pointerEvents = 'none';
     root.appendChild(screenEl);
     hudEl = U.el('div', 'hud wood hidden'); root.appendChild(hudEl);
@@ -703,6 +708,21 @@
   function fitFace(box, opts) {
     var pf = box.querySelector('.pframe'); if (!pf) return;
     var nm = box.querySelector(':scope > .name');
+    // 얼굴만 있는 한 사람 대화도 이름표를 받침으로 삼는다. 본문 안에 얼굴을 끼워 넣지 않는다.
+    if (nm && box.classList.contains('chart-face-name')) {
+      var f = dialogPanelFx(), F = standFx(), width = Math.min(f.nameWidth, box.clientWidth * 0.42);
+      var bottom = f.nameLift - f.bustOverlap, room = stageRect(box).top - bottom - F.top;
+      var size = Math.max(1, Math.min(FACE_MAX, F.bustH, width, room)), face = pf.querySelector('canvas, img');
+      nm.style.left = f.nameInset + 'px'; nm.style.width = width + 'px';
+      pf.style.cssText = 'position:absolute;left:' + f.nameInset + 'px;bottom:calc(100% + ' + bottom + 'px);width:' + width + 'px;height:' + size + 'px;margin:0;padding:0;display:flex;align-items:flex-end;justify-content:center;';
+      if (face) {
+        if (opts && opts.portrait && !(opts.portrait instanceof HTMLCanvasElement) && face.width < size) {
+          try { var large = G.Art.portraitCanvas(opts.portrait, Math.ceil(size)); if (large) { pf.replaceChild(large, face); face = large; } } catch (e) { /* 원래 얼굴을 쓴다 */ }
+        }
+        face.style.width = face.style.height = size + 'px';
+      }
+      return;
+    }
     for (var i = 0; i < 3; i++) {
       var cv = pf.querySelector('canvas, img'), h = box.offsetHeight; if (!cv || !h) return;
       var sz = h > FACE_BOX + 4 ? Math.min(FACE_MAX, h - 16) : 134, cur = parseFloat(cv.style.width) || 134;
@@ -715,6 +735,98 @@
       pf.style.display = 'flex'; pf.style.alignItems = 'center';
       if (nm && opts && opts.portrait) nm.style.left = (sz + 16) + 'px';
     }
+  }
+
+  // ---------------------------------------------------------------- 해도 대화창과 실측 쪽 나누기
+  function dialogPanelFx() { return G.FX && G.FX.dialogPanel || {}; }
+  /** G.Img로 읽어 단일 파일·그림 묶음판에서도 동작한다. 투명 여백은 표시 좌표로만 제외한다. */
+  function dialogArt(host, kind) {
+    var f = dialogPanelFx(), rect = f.art && f.art[kind], key = 'ui/dialogue/' + kind;
+    if (!rect || !G.Img || !G.Img.has(key)) return;
+    var wrap = U.el('span', 'dialog-art dialog-art-' + kind), im = new Image();
+    wrap.setAttribute('aria-hidden', 'true'); im.alt = ''; im.draggable = false;
+    im.style.cssText = 'width:' + (rect[0] / rect[4] * 100) + '%;height:' + (rect[1] / rect[5] * 100) + '%;left:' + (-rect[2] / rect[4] * 100) + '%;top:' + (-rect[3] / rect[5] * 100) + '%;';
+    if (kind === 'panel') im.onload = function () { if (im.naturalWidth > 2) host.classList.add('chart-art-ready'); };
+    im.src = G.Img.src(key); wrap.appendChild(im); host.insertBefore(wrap, host.firstChild);
+  }
+  function chartName(el) {
+    if (!el || el.classList.contains('chart-name') || !dialogPanelFx().height) return;
+    var text = el.textContent; el.textContent = ''; el.classList.add('chart-name');
+    if (!el.title) el.title = text;
+    el.appendChild(U.el('span', 'dialog-name-text', U.esc(text))); dialogArt(el, 'nameplate');
+  }
+  function chartDialog(box) {
+    var f = dialogPanelFx(); if (!f.height) return;
+    box.classList.add('chart-dialog');
+    var face = !!box.querySelector('.pframe'); box.classList.toggle('chart-face', face);
+    box.classList.toggle('chart-face-name', face && !!box.querySelector(':scope > .name'));
+    box.style.setProperty('--dialog-height', (face ? f.faceHeight : f.height) + 'px');
+    box.style.setProperty('--dialog-pad-x', f.padX + 'px'); box.style.setProperty('--dialog-pad-y', (face ? f.facePadY : f.padY) + 'px');
+    box.style.setProperty('--dialog-pad-right', f.padRight + 'px');
+    box.style.setProperty('--dialog-paper-veil', String(f.paperVeil == null ? 0 : f.paperVeil));
+    box.style.setProperty('--dialog-lines', String(f.maxLines));
+    box.style.setProperty('--dialog-line-height', String(f.lineHeight));
+    box.style.setProperty('--dialog-content-gap', f.contentGap + 'px');
+    box.style.setProperty('--dialog-choice-max', f.choiceMaxHeight + 'px');
+    dialogArt(box, 'panel'); chartName(box.querySelector(':scope > .name'));
+  }
+  function chartButton(button) { if (dialogPanelFx().height) { button.classList.add('chart-button'); dialogArt(button, 'button'); } return button; }
+  /** Range로 꾸밈 태그를 양쪽에 닫고 붙임글·긴 URL·이모지의 마지막 글자까지 보존한다. */
+  function dialogRaw(node) {
+    if (node.nodeType === 3) return node.data;
+    if (node.nodeType === 1 && node.tagName === 'BR') return '<br>';
+    var text = ''; for (var c = node.firstChild; c; c = c.nextSibling) text += dialogRaw(c);
+    if (node.nodeType !== 1) return text;
+    var tag = node.tagName.toLowerCase(), cls = node.getAttribute('class');
+    return '<' + tag + (cls ? ' class="' + cls + '"' : '') + '>' + text + '</' + tag + '>';
+  }
+  var dialogSegmenter = window.Intl && Intl.Segmenter ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
+  function splitDialogPage(box, body, text, render) {
+    render(text);
+    if (!box.classList.contains('chart-dialog')) return box.querySelector('.pframe') ? fitFacePage(box, body, text, render) : null;
+    var host = body.querySelector('.dialog-speech');
+    if (!host || !host.clientWidth || !host.clientHeight) return null;
+    function fits() { return host.scrollHeight <= host.clientHeight + 1 && host.scrollWidth <= host.clientWidth + 1; }
+    if (fits()) return null;
+    var tree = document.createElement('div'); tree.innerHTML = richEsc(text);
+    var ends = [];
+    function walk(n) {
+      if (n.nodeType === 3) {
+        var offset = 0, segments = dialogSegmenter ? Array.from(dialogSegmenter.segment(n.data), function (s) { return s.segment; }) : Array.from(n.data);
+        segments.forEach(function (s) { offset += s.length; ends.push({ node: n, offset: offset, char: s }); });
+      } else if (n.nodeType === 1 && n.tagName === 'BR') {
+        ends.push({ node: n.parentNode, offset: Array.prototype.indexOf.call(n.parentNode.childNodes, n) + 1, char: '\n' });
+      } else for (var c = n.firstChild; c; c = c.nextSibling) walk(c);
+    }
+    walk(tree); if (ends.length < 2) return null;
+    function part(count, tail) {
+      var range = document.createRange(), end = ends[count - 1]; range.selectNodeContents(tree);
+      if (tail) range.setStart(end.node, end.offset); else range.setEnd(end.node, end.offset);
+      return dialogRaw(range.cloneContents());
+    }
+    var lo = 1, hi = ends.length - 1, best = 0;
+    while (lo <= hi) { var mid = Math.floor((lo + hi) / 2); render(part(mid)); if (fits()) { best = mid; lo = mid + 1; } else hi = mid - 1; }
+    if (!best) best = 1;
+    for (var k = best; k > Math.floor(best * 0.6); k--) if (/[\s.!?…。！？]/.test(ends[k - 1].char)) { best = k; break; }
+    return [part(best), part(best, true)];
+  }
+  /** 글꼴의 지연 로딩·UI 배율 변경에도 현재 쪽을 다시 맞추고 닫힐 때 감시를 정리한다. */
+  function watchDialog(box, refit) {
+    var closed = false, pending = false, observer = null, last = '';
+    var body = box.querySelector('.body'), probe = U.el('span', 'dialog-font-probe');
+    probe.setAttribute('aria-hidden', 'true'); body.appendChild(probe);
+    function update() {
+      if (closed || pending || !box.isConnected) return;
+      pending = true; requestAnimationFrame(function () { pending = false; if (!closed && box.isConnected) refit(); });
+    }
+    if (window.ResizeObserver) {
+      observer = new ResizeObserver(function () {
+        var size = body.clientWidth + ':' + body.clientHeight + ':' + probe.offsetWidth + ':' + probe.offsetHeight;
+        if (size !== last) { last = size; update(); }
+      }); observer.observe(body); observer.observe(probe);
+    }
+    if (document.fonts) { document.fonts.ready.then(update); if (document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', update); }
+    return function () { closed = true; if (observer) observer.disconnect(); if (document.fonts && document.fonts.removeEventListener) document.fonts.removeEventListener('loadingdone', update); };
   }
 
   // ---------------------------------------------------------------- 대화창 위에 서는 사람들
@@ -849,7 +961,7 @@
     var low = !!(root && !UI.busy() && screenEl && screenEl.querySelector('.cmdmenu, .city-banner'));
     var menuEl = low ? screenEl.querySelector('.cmdmenu') : null;
     // 이야기 모드(「아버지의 사진」)는 사건이다 — 어느 화면(술집·도서관·바다·뭍)에서든 마주 선 무릎상 둘로 (얼굴 ↔ 무릎상으로 바뀌지 않게)
-    var story = !!(root && S && S.player && G.Story && G.Story.active && G.Story.active());
+    var story = !!(root && S && S.player && ((G.Story && G.Story.active && G.Story.active()) || (G.SongStory && G.SongStory.active && G.SongStory.active()) || (G.JHook && G.JHook.active && G.JHook.active())));   // 「바닷길 노래」도 (js/systems/song.js)
     var keep = !story && keepScene();
     // 이야기 모드에서 제독 혼자의 말·물음(진행기 밖의 대사): 이 장면에서 방금 마주했던 사람과 둘이 선다. 사람 없는 내레이션이 오면 장면이 바뀐 것으로 본다
     if (story && !opts.portrait && !opts.name) storyPartner = null;
@@ -886,7 +998,7 @@
       }
       if (opts.portrait) box.querySelector('.pframe').appendChild(portraitNode(opts, 134));
       if (opts.portrait && G.Bio) G.Bio.tag(box.querySelector('.pframe'), opts);
-      back.appendChild(box);
+      chartDialog(box); back.appendChild(box);
       return { box: box, face: !!opts.portrait, layout: function () { if (opts.portrait) fitFace(box, opts); }, destroy: function () {} };
     }
 
@@ -909,6 +1021,7 @@
       layer.appendChild(actor);
       var an = null;
       if (duo && who && who.name) { an = U.el('div', 'actor-name wood ' + (side === speakerSide ? 'speaking' : 'quiet'), U.esc(who.name)); stage.appendChild(an); if (G.Bio) G.Bio.tag(an, who); }   // 지금 말하는 사람의 이름표만 밝게 (UI QA 2026-10-11 #4)
+      chartName(an);
       var A0 = { el: actor, name: an, side: side, tall: tall, scale: who && who.standScale > 0 ? Math.min(1, who.standScale) : 1, aspect: 0,
         fbox: tall && G.PORTRAIT_FACES && G.PORTRAIT_FACES[half.key] ? G.PORTRAIT_FACES[half.key].box : null };   // 얼굴 자리 (그림 안 비율) — 발표 그림이 얼굴을 가리지 않게 (UI.stageInfo)   // standScale: 아이처럼 키가 작은 사람 (어른 = 1)
       actors.push(A0);
@@ -973,13 +1086,13 @@
     box = U.el('div', 'dlg duo' + (duo ? '' : ' solo') + (asking ? ' ask' : '') + ' speaker-' + speakerSide);
     box.innerHTML = '<div class="body parch"></div>';
     if (opts.name) { var nmEl = U.el('div', 'name wood', U.esc(opts.name)); box.appendChild(nmEl); if (G.Bio) G.Bio.tag(nmEl, opts); }
-    stage.appendChild(box); back.appendChild(stage);
+    chartDialog(box); stage.appendChild(box); back.appendChild(stage);
     setTalking(1);
 
     /* 대화창 자리를 재어 사람들을 세운다 (쪽이 바뀌거나 선택지가 붙어 대화창 높이가 바뀌면 다시) */
     function layout() {
       if (!box.isConnected || !root) return;
-      var b = stageRect(box), foot = b.top + F.sink;
+      var b = stageRect(box), foot = b.top + F.sink, panel = dialogPanelFx();
       if (!low) { var L = stageRect(layer); b = { left: b.left - L.left, right: b.right - L.left, top: b.top - L.top, width: b.width }; foot = b.top + F.sink; }
       // 자리가 모자라면(글씨·창 크기를 키워 UI 층이 낮을 때) 키를 줄여 머리가 화면 위로 나가지 않게 — 그래도 240 아래로는 줄이지 않는다
       var room = foot - F.top, h = Math.max(Math.min(F.minH, Math.max(240, room)), Math.min(F.maxH, room)), w = Math.round(h * F.aspect);
@@ -990,20 +1103,32 @@
         var fit = a.tall && refTop != null ? U.clamp((1 - refTop) / (1 - (a.top0 == null ? refTop : a.top0)), 1, F.fitMax || 1.2) : 1;
         a.el.dataset.fit = fit.toFixed(3); a.el.dataset.top0 = a.top0 == null ? '' : a.top0.toFixed(3);
         var aw = a.tall ? Math.round(h * (a.aspect || F.aspect) * a.scale * fit) : F.bustW, ah = a.tall ? Math.round(h * a.scale * fit) : F.bustH, x;
+        var nameWidth = panel.nameWidth ? Math.min(panel.nameWidth, b.width * 0.42) : 0, nameTop = b.top - (panel.nameLift || 20);
+        var inset = panel.nameInset == null ? 24 : panel.nameInset, nameLeft = a.side === 'right' ? b.right - inset - nameWidth : a.side === 'left' ? b.left + inset : b.left + (b.width - nameWidth) / 2;
+        var alignedBust = !a.tall && a.name && nameWidth && box.classList.contains('chart-dialog');
+        var actorBottom = a.tall ? foot : b.top;
+        if (alignedBust) {
+          // 얼굴 칸과 이름표의 폭·중심을 맞추고 얼굴 아랫단을 이름표 윗변에 놓는다.
+          aw = nameWidth; actorBottom = nameTop + panel.bustOverlap;
+          ah = Math.max(1, Math.min(F.bustH, actorBottom - F.top));
+        }
+        a.el.classList.toggle('chart-bust', !!alignedBust);
         if (a.side === 'left') x = b.left;
         else if (a.side === 'right') x = b.right - aw;
         else x = b.left + (b.width - aw) / 2;
+        if (alignedBust) x = nameLeft;
         var st = a.el.style;
         st.left = Math.round(x) + 'px'; st.width = aw + 'px'; st.height = ah + 'px';
-        st.top = Math.round((a.tall ? foot : b.top) - ah) + 'px';
+        st.top = Math.round(actorBottom - ah) + 'px';
         if (a.name) {   // 이름표: 대화창 윗변에 걸친 나무패 — 왼쪽 사람은 왼쪽 끝, 오른쪽 사람은 오른쪽 끝 (대화창 이름패와 같은 자리)
           var ns = a.name.style;
-          ns.top = Math.round(b.top - 20) + 'px';
-          if (a.side === 'right') { ns.left = Math.round(b.right - 24) + 'px'; ns.transform = 'translateX(-100%)'; }
-          else if (a.side === 'left') { ns.left = Math.round(b.left + 24) + 'px'; ns.transform = 'none'; }
+          ns.top = Math.round(nameTop) + 'px';
+          if (nameWidth) { ns.width = nameWidth + 'px'; ns.height = panel.nameHeight + 'px'; }
+          if (a.side === 'right') { ns.left = Math.round(b.right - inset) + 'px'; ns.transform = 'translateX(-100%)'; }
+          else if (a.side === 'left') { ns.left = Math.round(b.left + inset) + 'px'; ns.transform = 'none'; }
           else { ns.left = Math.round(x + aw / 2) + 'px'; ns.transform = 'translateX(-50%)'; }
         }
-        var top = (a.tall ? foot : b.top) - ah;
+        var top = actorBottom - ah;
         cores.push(a.tall ? { left: x + aw * 0.2, right: x + aw * 0.8, top: top + ah * 0.03, bottom: b.top } : { left: x, right: x + aw, top: top, bottom: b.top });
       });
       if (low) hidePanelsUnder(cores);
@@ -1121,29 +1246,31 @@
       var shell = dialogShell(back, opts, false), box = shell.box;
       modalRoot.appendChild(back);
       var body = box.querySelector('.body');
+      body.innerHTML = '<div class="dialog-content"><div class="dialog-speech"></div></div><div class="more" aria-label="다음 대사">▼</div>';
+      var words = body.querySelector('.dialog-speech'), unwatch = null;
       var idx = 0, finished = false;
-      function render(t) { body.innerHTML = speech(box, t, opts) + '<div class="more">▼</div>'; }
-      function show() {
-        // 얼굴 칸이 있으면 얼굴 높이에 들어가는 만큼만 보이고 남은 글은 다음 쪽으로 (2026-11-06)
-        var cut = shell.face ? fitFacePage(box, body, pages[idx], render) : null;
+      function render(t) { words.innerHTML = speech(box, t, opts); }
+      function show(refitting) {
+        // 현재 글꼴·본문 영역에 맞는 분량을 재고 남은 글은 다음 쪽으로 보낸다.
+        var cut = splitDialogPage(box, body, pages[idx], render);
         if (cut) { pages[idx] = cut[0]; pages.splice(idx + 1, 0, cut[1]); }
-        render(pages[idx]); shownAt = Date.now();
+        render(pages[idx]); box.dataset.page = String(idx + 1); if (!refitting) shownAt = Date.now();
         shell.layout();
       }
       var shownAt = 0, arm = null;
       function next() {
-        if (finished || Date.now() - shownAt < 220) return;      // 두 번 눌러(더블클릭) 한 쪽을 건너뛰지 않게
+        if (finished || Date.now() - shownAt < (dialogPanelFx().advanceMs || 220)) return; // 더블클릭으로 한 쪽을 건너뛰지 않게
         idx++;
         if (idx >= pages.length) { done(); } else { show(); if (arm) arm(); }   // 손으로 넘겨도 새 쪽은 5초를 처음부터 센다 (QA 2026-10-23)
       }
       var auto = autoOn(), seen = auto ? seenStore() : null, sk = auto ? sayKey(pages.join('\f'), opts) : null, stopAuto = null;
-      function done() { if (finished) return; finished = true; if (stopAuto) stopAuto(); unkey(); shell.destroy(); if (back.parentNode) back.parentNode.removeChild(back); resolve(); }
+      function done() { if (finished) return; finished = true; if (unwatch) unwatch(); if (stopAuto) stopAuto(); unkey(); shell.destroy(); if (back.parentNode) back.parentNode.removeChild(back); resolve(); }
       var unkey = pushKey(function (e) {
         if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt') || keyIs(e, 'cancel')) { next(); return true; }
         return false;
       });
       back.addEventListener('click', next);       // 대화창이든 바깥이든 누르면 Enter처럼 넘어간다 (대화창 클릭은 여기로 올라온다)
-      show();
+      show(); unwatch = watchDialog(box, function () { show(true); });
       // 항해 중 사건: 전에 본 말이면 5초 뒤 저절로 넘어간다 (쪽마다)
       if (auto && seen) {
         if (seen[sk]) {
@@ -1171,33 +1298,66 @@
       if (G.I18N && !G.I18N.isKo()) { var tq = G.I18N.tr(String(text), true); if (tq != null) text = tq; }   // 다듬기 전에 원문으로 찾는다 (UI.say와 같이)
       var tt = opts.raw ? { text: String(text), notes: [] } : UI.tidySpeech(text);
       var note = tt.notes.length ? '<div class="ask-note">' + tt.notes.map(function (n) { return U.esc(n.replace(/<[^>]+>/g, '').replace(/^—\s*/, '')); }).join(' · ') + '</div>' : '';
-      body.innerHTML = '<div>' + speech(box, tt.text, opts) + '</div>' + note + '<div class="askrow"></div>';
-      var row = body.querySelector('.askrow');
+      var nextLabel = G.I18N && G.I18N.tr ? G.I18N.tr('다음 쪽 ▶', true) || '다음 쪽 ▶' : '다음 쪽 ▶';
+      body.innerHTML = '<div class="dialog-content"><div class="dialog-speech"></div>' + note + '<div class="askrow"></div><button type="button" class="dialog-next btn small navy">' + U.esc(nextLabel) + '</button></div>';
+      var row = body.querySelector('.askrow'), words = body.querySelector('.dialog-speech'), nextButton = body.querySelector('.dialog-next'), noteEl = body.querySelector('.ask-note');
+      var panel = dialogPanelFx(), compact = panel.choices;
+      if (compact && list.length >= compact.compactAt && !box.classList.contains('chart-face')) {
+        box.classList.add('chart-many-choices');
+        box.style.setProperty('--dialog-pad-y', compact.padY + 'px');
+        box.style.setProperty('--dialog-choice-max', compact.maxHeight + 'px');
+        box.style.setProperty('--dialog-choice-font', compact.fontSize + 'px');
+        box.style.setProperty('--dialog-choice-height', compact.buttonHeight + 'px');
+        box.style.setProperty('--dialog-choice-pad-x', compact.padX + 'px');
+        box.style.setProperty('--dialog-choice-gap', compact.gap + 'px');
+      }
+      var questionPages = String(tt.text).split('\f'), questionIndex = 0, atChoices = true, finished = false, unwatch = null, shownAt = 0;
+      chartButton(nextButton);
+      function renderQuestion(t) { words.innerHTML = speech(box, t, opts); }
+      function showQuestion(refitting) {
+        if (finished) return;
+        row.hidden = false; nextButton.hidden = true; if (noteEl) noteEl.hidden = false;
+        // 버튼은 창 안에서 감아 배치한다. 창 높이를 늘려 인물의 무릎상이 작아지지 않게 한다.
+        var cut = splitDialogPage(box, body, questionPages[questionIndex], renderQuestion);
+        if (cut) { questionPages[questionIndex] = cut[0]; questionPages.splice(questionIndex + 1, 0, cut[1]); }
+        atChoices = questionIndex === questionPages.length - 1;
+        if (!atChoices && stopAuto) { stopAuto(); stopAuto = null; }
+        row.hidden = !atChoices; nextButton.hidden = atChoices; if (noteEl) noteEl.hidden = !atChoices;
+        renderQuestion(questionPages[questionIndex]); box.dataset.page = String(questionIndex + 1); if (!refitting) shownAt = Date.now();
+        shell.layout(); if (atChoices) startChoiceAuto();
+      }
+      function nextQuestion() {
+        if (atChoices || Date.now() - shownAt < (dialogPanelFx().advanceMs || 220)) return;
+        questionIndex++; showQuestion();
+      }
+      nextButton.onclick = function (e) { e.stopPropagation(); nextQuestion(); };
+      back.addEventListener('click', function (e) { if (!atChoices && !e.target.closest('button, [data-bio]')) nextQuestion(); });
       var selected = null;
       function pick(step) { selected = selectKeyItem(Array.prototype.slice.call(row.querySelectorAll('button')), selected, step); return selected; }
-      function done(v) { unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
-      var pk = pickKey(text, list, opts), prev = lastPick(pk), stopAuto = null;
+      function done(v) { if (finished) return; finished = true; if (unwatch) unwatch(); unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
+      var pk = pickKey(text, list, opts), prev = lastPick(pk), stopAuto = null, autoHalted = false;
+      function haltChoiceAuto() { autoHalted = true; if (stopAuto) { stopAuto(); stopAuto = null; } }
+      box.addEventListener('pointerdown', haltChoiceAuto, true);
       var done0 = done; done = function (v) { if (stopAuto) { stopAuto(); stopAuto = null; } done0(v); };
       list.forEach(function (o, i) {
         var b = U.el('button', 'btn small' + (i === 0 ? ' navy' : '') + (o.dis ? ' disabled' : '') + (prev != null && prev === o.label ? ' prevpick' : ''), (o.thumb ? '<img class="ask-thumb" src="' + o.thumb + '" alt="">' : o.icon ? G.icon(o.icon) : '') + o.label + (prev != null && prev === o.label ? '<span class="prevtag">지난번</span>' : ''));
         // 고를 수 없는 것(o.dis)은 CSS로 마우스만 막혀 있어 스크립트·보조 기기의 click()으로는 눌렸다 → 값이 넘어가 사건이 깨졌다 (100년 QA 2026-11-18, romeojuliet.js 티볼트 치료)
         if (o.dis) { b.disabled = true; b.setAttribute('aria-disabled', 'true'); }
-        b.onclick = function (e) { e.stopPropagation(); if (o.dis) return; rememberPick(pk, o.label); done(o.value); };
-        row.appendChild(b);
+        b.onclick = function (e) { e.stopPropagation(); if (!atChoices || o.dis) return; rememberPick(pk, o.label); done(o.value); };
+        chartButton(b); row.appendChild(b);
       });
       selected = row.querySelector('button:not(.disabled)'); if (selected) selected.classList.add('kbd-focus');
       // 항해 중 사건: 지난번에 고른 것이 있으면 5초 뒤 그대로 고른다 (누르거나 키를 누르면 멈춘다)
-      if (autoOn() && prev != null) {
+      function startChoiceAuto() { if (!autoHalted && !stopAuto && autoOn() && prev != null) {
         var pv = list.filter(function (o) { return !o.dis && normLabel(o.label) === normLabel(prev); })[0];
         if (pv) {
           stopAuto = autoTimer(box, '지난번처럼 「' + U.esc(normLabel(pv.label).replace(/#/g, '').replace(/\s+/g, ' ').trim()) + '」', function () { stopAuto = null; rememberPick(pk, pv.label); done(pv.value); });
-          var halt = function () { if (stopAuto) { stopAuto(); stopAuto = null; } };
-          box.addEventListener('pointerdown', halt, true);
         }
-      }
+      } }
       var unkey = pushKey(function (e) {
-        if (stopAuto) { stopAuto(); stopAuto = null; }
+        haltChoiceAuto();
         if (keyIs(e, 'cancel') && opts.cancel !== false) { done(opts.cancelValue != null ? opts.cancelValue : null); return true; }
+        if (!atChoices) { if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) nextQuestion(); return true; }
         if (keyIs(e, 'up') || keyIs(e, 'left')) { pick(-1); return true; }
         if (keyIs(e, 'down') || keyIs(e, 'right')) { pick(1); return true; }
         if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) { selected = selected || pick(1); if (selected) selected.click(); return true; }
@@ -1205,7 +1365,7 @@
         return false;
       });
       box.style.cursor = 'default';
-      shell.layout();
+      showQuestion(); unwatch = watchDialog(box, function () { showQuestion(true); });
     });
   };
 

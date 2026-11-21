@@ -29,8 +29,15 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // 1) 흥정 물음 (js/city/misc.js MK.checkoutDeal 과 같은 글)
       let p = G.UI.ask('이미 깎은 값은 <b>1,944</b>닢입니다. 회계 3의 셈으로 결제 전에 한 번 더 값을 깎아 보겠습니까?<br><span class="muted">추가 협상 3번 남음 · 거절당해도 먼저 정한 가격은 그대로입니다.</span>', [{ label: '한 번 더 흥정한다', value: 'deal' }, { label: '그만둔다', value: 'cancel' }], {});
       await new Promise(r => setTimeout(r, 300));
-      out.ask = grab(); out.bold = !!document.querySelector('.askrow') && !![...document.querySelectorAll('b')].some(b => b.textContent === '1,944');
-      out.muted = [...document.querySelectorAll('span.muted')].some(s => /추가 협상/.test(s.textContent));
+      const askPages=[];out.bold=false;out.muted=false;
+      for(let i=0;i<20;i++){
+        await new Promise(r=>setTimeout(r,260));askPages.push(grab());
+        out.bold=out.bold||[...document.querySelectorAll('b')].some(b=>b.textContent==='1,944');
+        out.muted=out.muted||[...document.querySelectorAll('span.muted')].some(s=>/추가 협상/.test(s.textContent));
+        if(!document.querySelector('.askrow').hidden)break;
+        document.querySelector('.dialog-next').click();
+      }
+      out.ask={text:askPages.map(x=>x.text).join(' '),html:askPages.map(x=>x.html).join('\n')};
       document.querySelector('.askrow button').click(); out.v = await p;
       // 2) 위험한 태그·이름 속 꺾쇠는 글자 그대로
       p = G.UI.say('선장 <img src=x onerror="window.__pwned=1"> 와 <해적> 이 왔다', {});

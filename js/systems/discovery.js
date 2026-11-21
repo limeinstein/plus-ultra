@@ -6,6 +6,12 @@
   G.Disc = D;
   function S() { return G.Game.state; }
 
+  /** 이 항해에서 찾을 수 있는 전체 목록. 다른 이야기의 전용 흔적은 완주 분모에서도 뺀다. */
+  D.forVoyage = function () {
+    var s = S();
+    return G.DISCOVERIES.filter(function (d) { return (!d.song || (s && s.song)) && (!d.tale || (s && s.story)); });
+  };
+
   D.state = function (id) { return S().disc[id] || null; };
   D.position = function (d) {
     if (!d) return null;

@@ -1,0 +1,14 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-11-21",
+  "assets": [
+    {
+      "file": "parchment-20261121.png",
+      "prompt": "Edit the reference wanted poster into a REUSABLE EMPTY PARCHMENT UI FRAME for an age-of-sail RPG. Same portrait 2:3 silhouette, transparent outside torn cream-ivory paper, two bronze pins at upper corners, thin navy double ruled ornamental border, delicate antique-gold details, compass lower left, small blue-grey ocean waves at bottom, softly folded lower-right edge. Preserve exactly its material quality, warm parchment, premium nautical engraving aesthetic. REMOVE ALL WORDS, ALL LETTERS, ALL NUMBERS, ALL FACE, ALL HUMAN FIGURE, ALL CLOTHING. No WANTED heading, no Korean text, no reward amount, no anchors resembling letters. The large central portrait area and upper heading area must be EMPTY bright ivory paper so the GAME can draw its own live character portrait and text. Side ship-rigging line art should be extremely faint and restricted to outer left 6% and outer right 6%, never behind the center. Keep three delicate gold separator ornaments centered around y=19%, y=72%, y=88%. Bottom navy cartouche with fine gold edge spans x=25%..75%, y=91%..96%, COMPLETELY BLANK inside. Narrow gold-edged cream nameplate spans x=13%..87%, y=71%..77%, completely blank inside. Large clean blank space x=8%..92%, y=22%..69% for portrait. Upper x=9%..91%, y=5%..18% blank for heading. Reward zone x=10%..90%, y=79%..88% blank. Transparent outside the parchment only; opaque paper. Entire paper visible with 1% clear margin. This is a blank production UI background asset, not a complete wanted notice."
+    },
+    {
+      "file": "board-20261121.png",
+      "prompt": "Edit the supplied bounty-board scene into a clean EMPTY WOODEN NOTICEBOARD BACKGROUND for the game. Preserve exactly the carved walnut frame, subtly ornate brass/gold accents, navy header plaque, warm candlelit age-of-sail tavern ambience and realistic dark horizontal timber planks. REMOVE all five paper posters, all pins attached to those papers, all numbered badges, all portraits and reward text. The board interior is entirely bare dark warm walnut wood, available for the game to overlay its own five live paper notices. Top center header plaque remains dark NAVY with thin antique GOLD edge but its inside is BLANK, with only one small anchor at each end. NO TEXT anywhere. Landscape 3:2 composition, entire wooden frame visible, 5% outer breathing room, nearly frontal view. Tavern plaster and wood can appear only at outer margins, subtle candles at extreme edges below poster region. Main usable dark wood interior fills x=8%..92%, y=17%..93%. Warm elegant style matching cream/navy/gold nautical dialogue interface. No papers, no notices, no numbers, no letters, no character figures in foreground. This is a production UI background texture for a noticeboard, not a comparison sheet."
+    }
+  ]
+}

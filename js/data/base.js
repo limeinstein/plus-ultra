@@ -691,7 +691,7 @@
     //   현상금 = base × (역사 인물이면 hist) × (바다 하나 더할 때마다 +multi) — round 닢 단위. 벽보는 그 바다에서 지금 활약하는 이름난 해적 posters명까지.
     //   식당 소문: 들르는 동안 한 번, chance로 이름난 해적의 행방을 듣는다 (기한 days일, 앞바다 near°). 여급의 「이름난 해적의 소문」 사례금 기본값 maid.
     //   absorb: 무찌른 이름난 해적의 남은 무리를 같은 바다의 다른 해적이 흡수 — 한 해적이 max명까지. 한 명마다 배 +ships척 · 선원 +crew · 포술 +gun · 일기토 힘 +boss, 현상금 +흡수한 해적 현상금×bounty
-    wanted: { base: 2000, hist: 2, multi: 0.2, round: 100, posters: 8, chance: 0.75, days: 12, maid: 650,
+    wanted: { base: 2000, hist: 2, multi: 0.2, round: 100, posters: 5, chance: 0.75, days: 12, maid: 650,
       absorb: { max: 2, ships: 1, crew: 0.08, gun: 0.1, boss: 4, bounty: 0.5 },
       // 토벌 보상 (2026-11-19 사용자 요청 「5만에서 10만 골드」): 현상금 = min × (역사 인물 hist) × (바다 하나 더할 때마다 +zone) + 흡수한 해적 한 명마다 min × abs, 많아야 max.
       //   예전의 base·hist·multi는 이 값이 없을 때(옛 조정값)만 쓴다. 이미 무찔러 장부에 적힌 현상금은 그대로 받는다.

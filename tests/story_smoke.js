@@ -25,7 +25,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
     await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     const title = await page.evaluate(() => Array.from(document.querySelectorAll('.title-menu .btn')).map(b => b.textContent.trim()));
-    ok(title.some(t => /아버지의 사진/.test(t)), '타이틀 단추: ' + title.join(' · '));
+    ok(title.some(t => /이야기 모드/.test(t)) && await page.evaluate(() => G.StorySelect.list().some(m => m.id === 'photo')), '타이틀 단추 「이야기 모드」 · 고르기 지도에 「아버지의 사진」: ' + title.join(' · '));
 
     // 대화창은 저절로 넘기고, 고를 것은 첫 것으로
     await page.evaluate(() => {

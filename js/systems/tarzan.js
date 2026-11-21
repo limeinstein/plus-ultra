@@ -24,7 +24,11 @@
   function stranger() { var w = who(); return Object.assign({}, w, { name: '숲의 사내' }); }   // 이름을 알기 전
   function first() { return G.Scenes.mateSpeaker('first'); }
   function narrate(t) { return UI.say(t, {}); }
-  function pic(key, title) { return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: 'legend-events/' + key, title: title }) : null; }
+  function pic(key, title) {
+    var img = 'legend-events/' + key;
+    if (key === 'tarzan_gift' && S() && S().song && G.Img && G.Img.has('song/cuts/tarzan')) img = 'song/cuts/tarzan';
+    return G.FamEv && G.FamEv.showPic ? G.FamEv.showPic({ img: img, title: title }) : null;
+  }
   function st() { var s = S(); return s.tarzan || (s.tarzan = {}); }
 
   /** 아직 만날 수 있는가 */
