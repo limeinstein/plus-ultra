@@ -74,17 +74,22 @@ def _shrink(job):
     if s < 1.0:
         im = im.resize((max(1, round(im.width * s)), max(1, round(im.height * s))), Image.LANCZOS)
     part = '%s.%d.part' % (dst, os.getpid())
-    im.save(part, 'WEBP', quality=HALF_Q, method=4)
-    import time
-    for i in range(20):   # Windows: 백신 검사 등으로 잠깐 잠겨 있으면 조금 기다렸다 다시
-        try:
-            os.replace(part, dst)
-            break
-        except PermissionError:
-            if os.path.exists(dst):
-                os.remove(part)
+    try:
+        im.save(part, 'WEBP', quality=HALF_Q, method=4)
+        import time
+        for i in range(20):   # Windows: 백신 검사 등으로 잠깐 잠겨 있으면 조금 기다렸다 다시
+            try:
+                os.replace(part, dst)
                 break
-            time.sleep(0.25 * (i + 1))
+            except PermissionError:
+                if os.path.exists(dst):
+                    break
+                if i == 19:   # 끝내 쓰지 못한 캐시 경로를 성공한 것처럼 돌려주지 않는다
+                    raise
+                time.sleep(0.25 * (i + 1))
+    finally:
+        if os.path.exists(part):
+            os.remove(part)
     return dst
 
 
@@ -271,3 +276,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
