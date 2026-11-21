@@ -23074,6 +23074,7 @@
       "남작의 배를 스무 해 몰아 온 늙은 항해사. 기니 해안까지 다녀왔고, 헤엄은 돌고래처럼, 칼과 포는 군인처럼 다룬다. 말은 적고 손은 빠르다.": "An old navigator who has sailed the baron's ships for twenty years. He's been to the Guinea coast, swims like a dolphin, and handles sword and cannon like a soldier. Few words, quick hands.",
       "로렌초 데 메디치의 맏딸. 아버지 곁에서 은행의 장부와 각국 지점의 편지를 읽으며 자랐다. 셈이 밝고 말씨가 부드러워, 깐깐한 상인도 그녀 앞에서는 값을 깎아 준다.": "Lorenzo de' Medici's eldest daughter. She grew up at her father's side reading the bank's ledgers and letters from its branches abroad. Sharp with figures and soft of speech — even stingy merchants knock down their prices for her.",
       "집사": "Steward",
+      "열기·닫기": "Open/close",
       "항해 수첩": "Voyage Notebook",
       "물": "Water",
       "적재": "Cargo",

@@ -14,9 +14,9 @@ fs.mkdirSync(OUT, { recursive: true });
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load resource|net::ERR_/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href));
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && !G.Scenes.title.bootPending, null, { timeout: 120000 });
     await page.evaluate(() => {
       G.Game.state = G.State.newGame({ name: '항해사', nation: 'PT', job: 'explorer', age: 24, birth: { m: 6, d: 1 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk: {}, lg: [], diff: 'normal' });

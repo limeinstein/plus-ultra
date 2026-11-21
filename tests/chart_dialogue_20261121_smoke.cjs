@@ -64,7 +64,7 @@ fs.mkdirSync(OUT,{recursive:true});
     const info=await page.evaluate(()=>dialogMetrics());
     assert(info.inside,'대화창이 화면 안에 들어간다');
     assert(info.scrollHeight<=info.height+1&&info.scrollWidth<=info.width+1,'대사 넘침: '+JSON.stringify(info));
-    assert(await speechLines()<=4,'한 쪽의 대사는 최대 4줄');
+    if(!ask)assert(await speechLines()<=4,'한 쪽의 일반 대사는 최대 4줄');
     pages.push(info.text);
     if(ask&&info.choices){choices=true;break;}
     const index=await page.locator('.dlg').getAttribute('data-page');
@@ -73,7 +73,7 @@ fs.mkdirSync(OUT,{recursive:true});
     if(await page.evaluate(()=>dialogResolved))break;
    }
    assert.strictEqual(normalize(pages.join('')),normalize(expected),'처음부터 끝까지 모든 글 보존');
-   if(ask)assert(choices,'질문 마지막 쪽에 선택지를 표시한다');
+   if(ask)assert(choices,'질문과 선택지는 처음부터 같은 창에 표시한다');
    return pages.length;
   }
   const text='첫 항해의 기록입니다. <b>해도와 바람을 살피며 먼 섬을 찾아갑니다.</b> <span class="muted">동료들과 나눈 약속을 잊지 않겠습니다.</span>\n'.repeat(12)+'마지막 문장입니다. ⚓👩🏽‍🚀';
@@ -86,13 +86,12 @@ fs.mkdirSync(OUT,{recursive:true});
   const joinedPages=await readPages(joined);assert(joinedPages>1);cases.push({name:'띄어쓰기 없는 긴 대사',pages:joinedPages,passed:true});
   const question='먼 항구에서 전해 들은 이야기를 기록합니다. 바람과 보급을 살핀 뒤 다음 항로를 정해야 합니다. '.repeat(14)+'어느 항로로 떠나겠습니까?';
   await page.evaluate(t=>openQuestion(t,[{label:'고를 수 없음',value:'bad',dis:true},{label:'서쪽 항로를 택한다',value:'west'},{label:'돌아간다',value:'back'}],{raw:true}),question);
-  await page.waitForTimeout(300);assert(!(await page.evaluate(()=>dialogMetrics())).choices);
-  // 숨겨진 선택지를 스크립트로 눌러도 읽기 중에는 결정되지 않는다.
-  await page.evaluate(()=>document.querySelectorAll('.askrow button')[1].click());assert(!(await page.evaluate(()=>dialogResolved)));
-  const questionCount=await readPages(question,true);assert(questionCount>1);
+  await page.waitForTimeout(300);assert((await page.evaluate(()=>dialogMetrics())).choices);
+  await page.evaluate(()=>document.querySelector('.askrow button').click());assert(!(await page.evaluate(()=>dialogResolved)));
+  const questionCount=await readPages(question,true);assert.strictEqual(questionCount,1);
   assert(await page.locator('.askrow button').first().isDisabled());
   await page.locator('.askrow button').nth(1).click();await page.waitForFunction(()=>dialogResolved);
-  assert.strictEqual(await page.evaluate(()=>dialogResult),'west');cases.push({name:'긴 질문·마지막 쪽 선택·비활성 선택지',pages:questionCount,passed:true});
+  assert.strictEqual(await page.evaluate(()=>dialogResult),'west');cases.push({name:'긴 질문과 선택지를 한 창에 표시·비활성 선택지',pages:questionCount,passed:true});
   const changed='글꼴과 창 크기를 바꾸어도 읽던 대사가 사라지지 않아야 합니다. 먼 항로의 기록을 마지막까지 보존합니다. '.repeat(13);
   await page.evaluate(t=>{G.Game.setUiSize('normal');openSpeech(t,{raw:true});},changed);
   await page.waitForTimeout(300);
@@ -103,7 +102,7 @@ fs.mkdirSync(OUT,{recursive:true});
   await page.evaluate(()=>openQuestion('보급을 마쳤습니다. 다음 행동을 고르십시오.',Array.from({length:20},(_,i)=>({label:'선택 '+(i+1)+' — 항해를 위한 긴 준비 내용을 확인한다',value:i})),{name:'매우 긴 이름을 가진 포르투갈 왕립 함대의 항해사 페드루'}));
   await page.waitForTimeout(400);m=await page.evaluate(()=>dialogMetrics());
   assert(m.inside&&m.scrollHeight<=m.height+1,'최대 글자 크기에서도 대사가 맞는다');
-  assert(await page.locator('.askrow').evaluate(el=>el.scrollHeight>el.clientHeight),'많은 선택지는 창 안에서 스크롤된다');
+  assert(await page.locator('.askrow').isVisible()&&!(await page.locator('.dialog-next').count()),'20개 선택지도 같은 창에서 바로 고른다');
   await page.screenshot({path:path.join(OUT,'02-large-font-many-choices.png')});
   await page.locator('.askrow button').last().click();await page.waitForFunction(()=>dialogResolved);
   assert.strictEqual(await page.evaluate(()=>dialogResult),19);cases.push({name:'최대 배율·긴 이름·20개 선택지의 끝 항목 선택',passed:true});
@@ -112,8 +111,8 @@ fs.mkdirSync(OUT,{recursive:true});
   const facePages=await readPages('얼굴 칸 대사도 모두 보입니다. '.repeat(20));assert(facePages>1);cases.push({name:'얼굴 초상 대사',passed:true});
   cases.push({name:'한 사람 얼굴상과 이름표의 정렬',alignment:singleAlignment,passed:true});
   await page.evaluate(()=>openQuestion('먼 항구의 소식을 먼저 전합니다.\f이제 선택하십시오.',[{label:'확인',value:true}],{raw:true}));
-  const explicitPages=await readPages('먼 항구의 소식을 먼저 전합니다.이제 선택하십시오.',true);assert.strictEqual(explicitPages,2);
-  await page.locator('.askrow button').click();await page.waitForFunction(()=>dialogResolved);cases.push({name:'질문의 명시적 쪽 나눔',passed:true});
+  const explicitPages=await readPages('먼 항구의 소식을 먼저 전합니다.이제 선택하십시오.',true);assert.strictEqual(explicitPages,1);
+  await page.locator('.askrow button').click();await page.waitForFunction(()=>dialogResolved);cases.push({name:'질문의 명시적 쪽 나눔도 한 창에서 표시',passed:true});
   // 크기를 다시 재더라도 사용자가 멈춘 자동 선택은 되살아나지 않는다.
   await page.evaluate(()=>{
    window.autoQuestion=()=>G.UI.ask('반복되는 항로 질문입니다.',[{label:'동쪽 항로',value:'east'},{label:'서쪽 항로',value:'west'}],dialogWho);

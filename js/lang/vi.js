@@ -6384,6 +6384,7 @@
       "남작의 배를 스무 해 몰아 온 늙은 항해사. 기니 해안까지 다녀왔고, 헤엄은 돌고래처럼, 칼과 포는 군인처럼 다룬다. 말은 적고 손은 빠르다.": "Lão hoa tiêu đã lái tàu của nam tước hai mươi năm. Đã đến bờ biển Guinea, bơi như cá heo, và dùng kiếm, pháo như một người lính. Ít lời, nhanh tay.",
       "로렌초 데 메디치의 맏딸. 아버지 곁에서 은행의 장부와 각국 지점의 편지를 읽으며 자랐다. 셈이 밝고 말씨가 부드러워, 깐깐한 상인도 그녀 앞에서는 값을 깎아 준다.": "Con gái lớn của Lorenzo de' Medici. Lớn lên bên cha, đọc sổ sách ngân hàng và thư từ các chi nhánh ở nước ngoài. Tinh tính toán và ăn nói dịu dàng — cả những thương nhân keo kiệt cũng hạ giá vì cô.",
       "집사": "Quản gia",
+      "열기·닫기": "Mở/đóng",
       "항해 수첩": "Sổ tay hàng hải",
       "물": "Nước",
       "적재": "Hàng chở",

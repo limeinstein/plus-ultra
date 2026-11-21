@@ -48,6 +48,24 @@
   TABS.forEach(function (t) { if (G.Keys && G.Keys.register) G.Keys.register({ id: 'nb_' + t[0], label: '수첩 — ' + t[1], desc: '수첩을 「' + t[1] + '」 탭으로 열기 · 열려 있으면 그 탭으로', group: 'notebook' }); });
   /** 다음에 탭을 정하지 않고 열 때(하단 「수첩」 단추) 펼칠 탭 — 탭 단축키가 단추를 누르기 전에 맞춘다 */
   I.preset = function (tab) { lastTab = tab; lastTabOf = S(); };
+  /** 해도 장부형 수첩. 그림에는 글을 넣지 않고 실제 탭·값·동료 목록을 그 위에 표시한다. */
+  function notebookSkin(win, count, key) {
+    var f = G.FX && G.FX.notebook || {};
+    win.el.classList.add('notebook-win'); win.el.style.setProperty('--nb-tabs', count);
+    ['Left', 'Right', 'Top', 'Bottom'].forEach(function (side) { if (f['pad' + side] != null) win.el.style.setProperty('--nb-pad-' + side.toLowerCase(), f['pad' + side] + 'px'); });
+    var art = U.el('span', 'nb-paper'), im = new Image(); art.setAttribute('aria-hidden', 'true'); im.alt = ''; im.draggable = false;
+    if (G.Img && G.Img.has('ui/notebook/folio')) { im.src = G.Img.src('ui/notebook/folio'); art.appendChild(im); win.el.insertBefore(art, win.el.firstChild); }
+    var title = win.el.querySelector(':scope > .title'), plaque = title.querySelector('span:not(.x)'), icon = title.querySelector(':scope > svg');
+    if (icon) icon.remove();
+    plaque.className = 'nb-titleplate'; plaque.innerHTML = G.icon('ship') + '<span>' + U.esc(G.T ? G.T('항해 수첩') : '항해 수첩') + '</span>' + G.icon('ship');
+    if (G.Img && G.Img.has('ui/dialogue/nameplate')) {
+      var rect = G.FX.dialogPanel.art.nameplate, surface = U.el('span', 'nb-plaque-art'), plate = new Image();
+      surface.setAttribute('aria-hidden', 'true'); plate.alt = ''; plate.src = G.Img.src('ui/dialogue/nameplate');
+      plate.style.cssText = 'width:' + rect[0] / rect[4] * 100 + '%;height:' + rect[1] / rect[5] * 100 + '%;left:' + -rect[2] / rect[4] * 100 + '%;top:' + -rect[3] / rect[5] * 100 + '%;';
+      surface.appendChild(plate); plaque.insertBefore(surface, plaque.firstChild);
+    }
+    title.insertBefore(U.el('small', 'nb-key', G.icon('book') + (key === '없음' ? '' : U.esc(key) + ' — ' + U.esc(G.T ? G.T('열기·닫기') : '열기·닫기'))), plaque);
+  }
   I.open = function (tab) {
     if (tab === 'menu') return I.settings();
     // 지난번 탭은 같은 항해(저장)에서만 — 다른 저장을 불러오면, 또는 지금 수첩에 없는 탭(이야기 모드의 「아버지의 사진」 등)이면 제독 탭 (QA 2026-10-23)
@@ -58,7 +76,8 @@
     if (!tab && lastTab && !tabList.some(function (t) { return t[0] === lastTab; })) lastTab = null;
     tab = tab || lastTab || 'admiral';
     var nbKey = G.Keys ? G.Keys.label('notebook') : '없음';
-    var win = UI.window({ title: '항해 수첩' + (nbKey !== '없음' ? ' <small class="muted" style="font-size:14px">(' + U.esc(nbKey) + ' — 열기·닫기)</small>' : ''), icon: 'book', width: 1180, height: 780, html: '',
+    var book = G.FX && G.FX.notebook || {};
+    var win = UI.window({ title: '항해 수첩', icon: 'book', width: book.width || 1180, height: book.height || 780, html: '',
       // 수첩 단축키로 닫고, 탭 단축키로 그 탭으로 넘어간다 (글을 쓰는 칸에서는 받지 않는다)
       onKey: function (e) {
         var t = e.target; if (e.repeat || (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return false;
@@ -67,16 +86,17 @@
         if (hit) { if (G.Audio) G.Audio.sfx('page'); win.goTab(hit[0]); return true; }
         return false;
       } });
+    notebookSkin(win, tabList.length, nbKey);
     if (G.Audio) G.Audio.sfx('book');                               // 수첩을 편다
     if (win.result && win.result.then) win.result.then(function () { if (G.Audio) G.Audio.sfx('bookClose'); });   // 덮는다
     var tabs = U.el('div', 'tabs');
     tabList.forEach(function (t) {
-      var b = U.el('div', 'tab' + (t[0] === tab ? ' on' : ''), t[1]); b.dataset.k = t[0];
+      var b = U.el('button', 'tab' + (t[0] === tab ? ' on' : ''), t[1]); b.type = 'button'; b.dataset.k = t[0];
       b.onclick = function () { U.$$('.tab', tabs).forEach(function (x) { x.classList.remove('on'); }); b.classList.add('on'); if (G.Audio) G.Audio.sfx('page'); show(t[0]); };
       tabs.appendChild(b);
     });
     win.el.insertBefore(tabs, win.content);
-    function show(k) { lastTab = PAGES[k] ? k : 'admiral'; lastTabOf = S(); win.content.innerHTML = ''; win.content.scrollTop = 0; (PAGES[k] || PAGES.admiral)(win.content, win); }
+    function show(k) { lastTab = PAGES[k] ? k : 'admiral'; lastTabOf = S(); win.el.dataset.tab = lastTab; win.content.innerHTML = ''; win.content.scrollTop = 0; (PAGES[k] || PAGES.admiral)(win.content, win); }
     win.goTab = function (k) { U.$$('.tab', tabs).forEach(function (x) { x.classList.toggle('on', x.dataset.k === k); }); show(k); };   // 해도의 ? 표식 → 「단서」 (I.showHint)
     show(tab);
     return win.result;

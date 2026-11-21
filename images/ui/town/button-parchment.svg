@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="48" viewBox="0 0 320 48" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="gold" x2="0" y2="1"><stop stop-color="#f9dda0"/><stop offset=".38" stop-color="#ae752a"/><stop offset=".7" stop-color="#f6d994"/><stop offset="1" stop-color="#986022"/></linearGradient>
+    <linearGradient id="paper" x2="0" y2="1"><stop stop-color="#f3dfb7"/><stop offset=".28" stop-color="#fff3d8"/><stop offset=".72" stop-color="#f6e7c7"/><stop offset="1" stop-color="#dfc38f"/></linearGradient>
+    <filter id="grain"><feTurbulence baseFrequency=".7" numOctaves="2" seed="8"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".045"/></feComponentTransfer><feBlend in="SourceGraphic" mode="multiply"/></filter>
+  </defs>
+  <path d="M24 2H296L304 11L309 12L312 19L318 24L312 29L309 36L304 37L296 46H24L16 37L11 36L8 29L2 24L8 19L11 12L16 11Z" fill="url(#gold)" stroke="#593913" stroke-width="1.5"/>
+  <path d="M25 5H295L302 14L307 15L309 21L313 24L309 27L307 33L302 34L295 43H25L18 34L13 33L11 27L7 24L11 21L13 15L18 14Z" fill="url(#paper)" stroke="#fff0ba" filter="url(#grain)"/>
+  <path d="M26 8H294L301 17L305 18L308 24L305 30L301 31L294 40H26L19 31L15 30L12 24L15 18L19 17Z" fill="none" stroke="#c6a16a" stroke-width=".7"/>
+</svg>

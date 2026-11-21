@@ -8,7 +8,7 @@ const { pathToFileURL } = require('url');
 let chromium;
 try { ({ chromium } = require('playwright')); }
 catch (_) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
-const ROOT = path.resolve(__dirname, '..'), OUT = '/tmp/notebook_key';
+const ROOT = path.resolve(__dirname, '..'), OUT = process.env.OUT || path.join(ROOT,'artifacts/notebook-key');
 fs.mkdirSync(OUT, { recursive: true });
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 (async function () {
@@ -16,12 +16,12 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load resource|ERR_FILE_NOT_FOUND/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   const nbOpen = () => page.evaluate(() => [...document.querySelectorAll('.modal-back .win .title')].some(t => /항해 수첩/.test(t.textContent)));
   const tabOn = () => page.evaluate(() => { const t = document.querySelector('.modal-back .tabs .tab.on'); return t ? t.textContent : null; });
   async function settle(ms) { await page.waitForTimeout(ms || 450); }
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href));
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && !G.Scenes.title.bootPending, null, { timeout: 120000 });
     try { await page.evaluate(() => localStorage.clear()); } catch (e) { /* */ }
     await page.evaluate(async () => {

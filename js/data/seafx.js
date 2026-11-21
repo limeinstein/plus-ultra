@@ -9,7 +9,11 @@
     dialogPanel: { height: 224, faceHeight: 164, padX: 168, padRight: 192, padY: 36, facePadY: 18, lineHeight: 1.62, contentGap: 14, paperVeil: 0.72, nameWidth: 300, nameHeight: 46, nameLift: 30, nameInset: 24, bustOverlap: 6,
       choices: { compactAt: 5, padY: 24, maxHeight: 126, fontSize: 17, buttonHeight: 36, padX: 16, gap: 6 }, // 선택지가 많아도 무릎상은 일반 대화와 같은 크기
       choiceMaxHeight: 160, maxLines: 4, advanceMs: 220,
+      fit: { maxHeight: 470, top: 78, portraitRoom: 180, minFont: 18, minChoiceFont: 15, compactPadX: 68, compactPadY: 40, gap: 10, lineHeight: 1.48, choiceHeight: 34, choicePadX: 14, choiceGap: 6 },
       art: { panel: [2172, 724, 0, 157, 2172, 406], nameplate: [2172, 724, 27, 185, 2120, 334], button: [2172, 724, 118, 182, 1937, 358] } },
+    notebook: { width: 1320, height: 840, padLeft: 68, padRight: 36, padTop: 24, padBottom: 30 },
+    // 거리 건물 메뉴: 배경판 없는 양피지 버튼. 실내 명령 메뉴에는 적용하지 않는다.
+    townMenu: { width: 540, top: 96, right: 26, bottom: 86, rowHeight: 40, gap: 6, fontSize: 19, minFont: 16, singleAt: 4 },
     plantSwirl: { cell: 128, columns: 8, rows: 4, seconds: 3.2, cache: 10,
       leaves: 21, radiusMin: 34, radiusMax: 160, coast: 2.2, contractAlpha: 0.8 },
     animalTracking: { enabled: true, spritePixels: 96, senseRadius: 4.8, silhouetteRadius: 2.2,

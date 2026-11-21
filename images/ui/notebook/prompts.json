@@ -1,0 +1,6 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "reference": "사용자가 선택한 해도 장부형",
+  "asset": "folio.png",
+  "prompt": "Create ONE production UI BACKGROUND ASSET from this selected notebook style reference. Keep ONLY the large single flat worn ivory parchment sheet inside its dark chestnut leather cover, realistic stitched LEFT binding with brass loops, thin antique gold outside border, brass corner protectors and subtly aged/deckled page edges. The entire central writing area must be clean pale ivory paper with exceptionally subtle natural grain. REMOVE EVERY LETTER, number, portrait, icon, divider, chart, button, tab, plaque, header and all interior line work. Reconstruct perfectly clean blank parchment where removed. Remove ALL map, ship and wave drawings in the paper/body/footer. No center gutter, no open double-page book; one single broad folio like reference. Preserve dark leather perimeter and left binding, but maximize large quiet writing area. Completely front-on, no perspective, no desk or props, no extra background. Landscape16:10. Fill canvas nearly edge-to-edge with whole outer book visible. This is a blank reusable game UI skin, not a screen mockup. No text anywhere, no hidden letters, no watermarks."
+}

@@ -23025,6 +23025,7 @@
       "아브란테스 태생의 도미니코회 신부. 남작의 고해 신부이자 서고지기. 라틴어와 독일 말에 능통하고 옛 기록과 교회사에 밝다. 남작이 아들 곁에 붙인 「눈」이지만, 본인은 세상의 끝을 보고 싶어 따라나섰다.": "Fraile dominico nacido en Abrantes. Confesor y bibliotecario del barón. Domina el latín y el alemán y conoce bien los registros antiguos y la historia de la Iglesia. Es los «ojos» que el barón puso junto a su hijo, pero él lo siguió porque quiere ver el fin del mundo.",
       "남작의 배를 스무 해 몰아 온 늙은 항해사. 기니 해안까지 다녀왔고, 헤엄은 돌고래처럼, 칼과 포는 군인처럼 다룬다. 말은 적고 손은 빠르다.": "Viejo navegante que lleva veinte años al mando del barco del barón. Ha ido hasta la costa de Guinea, nada como un delfín y maneja espada y cañón como un soldado. Habla poco y tiene las manos rápidas.",
       "로렌초 데 메디치의 맏딸. 아버지 곁에서 은행의 장부와 각국 지점의 편지를 읽으며 자랐다. 셈이 밝고 말씨가 부드러워, 깐깐한 상인도 그녀 앞에서는 값을 깎아 준다.": "Hija mayor de Lorenzo de Médici. Creció junto a su padre leyendo los libros del banco y las cartas de las sucursales de cada país. Lista con las cuentas y de habla suave, hasta el mercader más quisquilloso le rebaja el precio.",
+      "열기·닫기": "Abrir/cerrar",
       "항해 수첩": "Cuaderno de viaje",
       "물": "Agua",
       "적재": "Carga",

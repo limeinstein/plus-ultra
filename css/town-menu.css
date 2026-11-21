@@ -1,0 +1,47 @@
+/* 거리의 분리형 양피지 버튼 — 조정값은 G.FX.townMenu. 큰 배경판·제목 없이 건물만 표시한다. */
+.cmdmenu.town-menu {
+  width: calc(var(--town-width) / 2 * var(--town-cols));
+  max-width: calc(100% - 40px);
+  max-height: calc(100% - var(--town-bottom) - var(--town-top));
+  padding: 0; border: 0; background: none; box-shadow: none;
+  pointer-events: none !important;
+}
+.cmdmenu.town-menu .items {
+  display: grid; grid-template-columns: repeat(var(--town-cols), minmax(0, 1fr));
+  gap: var(--town-gap); max-height: inherit; overflow-y: auto;
+  padding: 3px; margin: -3px; scrollbar-width: thin; scrollbar-color: #b28a45 transparent;
+  pointer-events: none;
+}
+.cmdmenu.town-menu .cmd {
+  display: flex; align-items: center; gap: 8px;
+  min-width: 0; height: auto; min-height: var(--town-rowHeight);
+  padding: 6px 36px 6px 20px; border: 0; border-radius: 0;
+  color: #352311; font-size: var(--town-fontSize); font-weight: 700; line-height: 1.2;
+  background: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22320%22%20height%3D%2248%22%20viewBox%3D%220%200%20320%2048%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23f9dda0%22%2F%3E%3Cstop%20offset%3D%22.38%22%20stop-color%3D%22%23ae752a%22%2F%3E%3Cstop%20offset%3D%22.7%22%20stop-color%3D%22%23f6d994%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23986022%22%2F%3E%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22paper%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23f3dfb7%22%2F%3E%3Cstop%20offset%3D%22.28%22%20stop-color%3D%22%23fff3d8%22%2F%3E%3Cstop%20offset%3D%22.72%22%20stop-color%3D%22%23f6e7c7%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dfc38f%22%2F%3E%3C%2FlinearGradient%3E%0A%20%20%20%20%3Cfilter%20id%3D%22grain%22%3E%3CfeTurbulence%20baseFrequency%3D%22.7%22%20numOctaves%3D%222%22%20seed%3D%228%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3CfeComponentTransfer%3E%3CfeFuncA%20type%3D%22linear%22%20slope%3D%22.045%22%2F%3E%3C%2FfeComponentTransfer%3E%3CfeBlend%20in%3D%22SourceGraphic%22%20mode%3D%22multiply%22%2F%3E%3C%2Ffilter%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cpath%20d%3D%22M24%202H296L304%2011L309%2012L312%2019L318%2024L312%2029L309%2036L304%2037L296%2046H24L16%2037L11%2036L8%2029L2%2024L8%2019L11%2012L16%2011Z%22%20fill%3D%22url%28%23gold%29%22%20stroke%3D%22%23593913%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M25%205H295L302%2014L307%2015L309%2021L313%2024L309%2027L307%2033L302%2034L295%2043H25L18%2034L13%2033L11%2027L7%2024L11%2021L13%2015L18%2014Z%22%20fill%3D%22url%28%23paper%29%22%20stroke%3D%22%23fff0ba%22%20filter%3D%22url%28%23grain%29%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M26%208H294L301%2017L305%2018L308%2024L305%2030L301%2031L294%2040H26L19%2031L15%2030L12%2024L15%2018L19%2017Z%22%20fill%3D%22none%22%20stroke%3D%22%23c6a16a%22%20stroke-width%3D%22.7%22%2F%3E%0A%3C%2Fsvg%3E%0A') center / 100% 100% no-repeat;
+  box-shadow: none; filter: drop-shadow(0 2px 2px #0006); cursor: pointer; pointer-events: auto;
+}
+.cmdmenu.town-menu .cmd > svg {
+  width: 22px; height: 22px; flex: 0 0 22px; color: currentColor;
+}
+.cmdmenu.town-menu .cmd > span:not(.sub):not(.tipdot) {
+  flex: 1 1 auto; min-width: 0; white-space: nowrap; letter-spacing: 0;
+}
+.cmdmenu.town-menu .cmd.tight > span:not(.sub):not(.tipdot) {
+  font-size: var(--town-minFont); white-space: normal; overflow-wrap: anywhere; word-break: keep-all;
+}
+.cmdmenu.town-menu .cmd > .cmd-key {
+  right: 18px; min-width: 18px; padding: 0 2px; color: #50371c;
+  background: #fff5dc88; border: 1px solid #b18b4c; border-radius: 3px;
+}
+.cmdmenu.town-menu .cmd:hover,
+.cmdmenu.town-menu .cmd.kbd-focus,
+.cmdmenu.town-menu:not(:has(.cmd:hover)):not(:has(.kbd-focus)) .cmd:first-child {
+  color: #ffe1a0; background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22320%22%20height%3D%2248%22%20viewBox%3D%220%200%20320%2048%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fff0b9%22%2F%3E%3Cstop%20offset%3D%22.4%22%20stop-color%3D%22%23bc8731%22%2F%3E%3Cstop%20offset%3D%22.7%22%20stop-color%3D%22%23ffe3a2%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23946020%22%2F%3E%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22navy%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%2330445f%22%2F%3E%3Cstop%20offset%3D%22.4%22%20stop-color%3D%22%231b304d%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23102039%22%2F%3E%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cpath%20d%3D%22M24%202H296L304%2011L309%2012L312%2019L318%2024L312%2029L309%2036L304%2037L296%2046H24L16%2037L11%2036L8%2029L2%2024L8%2019L11%2012L16%2011Z%22%20fill%3D%22url%28%23gold%29%22%20stroke%3D%22%23593913%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M25%205H295L302%2014L307%2015L309%2021L313%2024L309%2027L307%2033L302%2034L295%2043H25L18%2034L13%2033L11%2027L7%2024L11%2021L13%2015L18%2014Z%22%20fill%3D%22url%28%23navy%29%22%20stroke%3D%22%23ffe2a0%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M26%208H294L301%2017L305%2018L308%2024L305%2030L301%2031L294%2040H26L19%2031L15%2030L12%2024L15%2018L19%2017Z%22%20fill%3D%22none%22%20stroke%3D%22%23b98b43%22%20stroke-width%3D%22.7%22%2F%3E%0A%3C%2Fsvg%3E%0A');
+  box-shadow: none; filter: drop-shadow(0 2px 3px #0008);
+}
+.cmdmenu.town-menu .cmd:hover > .cmd-key,
+.cmdmenu.town-menu .cmd.kbd-focus > .cmd-key,
+.cmdmenu.town-menu:not(:has(.cmd:hover)):not(:has(.kbd-focus)) .cmd:first-child > .cmd-key {
+  color: #ffe1a0; background: #10243e; border-color: #d5ac60;
+}
+.cmdmenu.town-menu .cmd:active { transform: translateY(1px); }

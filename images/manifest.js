@@ -18503,6 +18503,7 @@ G.IMAGE_FILES = {
   "ui/dialogue/button": "ui/dialogue/button.png",
   "ui/dialogue/nameplate": "ui/dialogue/nameplate.png",
   "ui/dialogue/panel": "ui/dialogue/panel.png",
+  "ui/notebook/folio": "ui/notebook/folio.png",
   "ui/wanted/board": "ui/wanted/board-20261121.png",
   "ui/wanted/board-20261121": "ui/wanted/board-20261121.png",
   "ui/wanted/parchment": "ui/wanted/parchment-20261121.png",

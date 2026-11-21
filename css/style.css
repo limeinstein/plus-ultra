@@ -2365,6 +2365,13 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .dlg.chart-dialog .ask-note { flex:0 1 auto; min-height:0; max-height:2.8em; overflow:auto; margin:0; line-height:1.4; }
 .dlg.chart-dialog [hidden] { display:none !important; }
 .dlg.chart-dialog .dialog-next { flex:0 0 auto; align-self:flex-start; }
+.dlg.chart-question .dialog-copy { flex:0 1 auto; min-height:1.5em; min-width:0; overflow:auto; scrollbar-width:thin; scrollbar-color:#997844 #e8d8b7; }
+.dlg.chart-question .dialog-speech { flex:none; min-height:0; max-height:none; overflow:visible; }
+.dlg.chart-question .ask-note { max-height:none; overflow:visible; margin-top:8px; }
+.dlg.chart-question .askrow { flex:0 0 auto; max-height:none; overflow:auto; }
+.dlg.chart-question.question-compact .askrow { display:grid; grid-template-columns:repeat(var(--dialog-columns,2),minmax(0,1fr)); gap:var(--dialog-choice-gap); }
+.dlg.chart-question.question-compact .askrow .chart-button { font-size:inherit; min-height:var(--dialog-choice-height); line-height:1.25; padding:5px var(--dialog-choice-pad-x); }
+.dlg.chart-question.question-compact .dialog-content { gap:var(--dialog-content-gap); }
 .dlg.chart-dialog .more { right:var(--dialog-pad-x); bottom:6px; color:#806032; }
 .dlg.chart-dialog .auto-left { right:var(--dialog-pad-x); }
 .dlg.chart-dialog .chart-button {

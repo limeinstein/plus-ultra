@@ -810,6 +810,43 @@
     for (var k = best; k > Math.floor(best * 0.6); k--) if (/[\s.!?…。！？]/.test(ends[k - 1].char)) { best = k; break; }
     return [part(best), part(best, true)];
   }
+  /** 선택창은 본문을 쪽으로 자르지 않는다. 여백·버튼 배치·높이를 맞추고, 긴 글은 같은 창 안에서 읽는다. */
+  function fitQuestion(box, body, count) {
+    var p = dialogPanelFx(), f = p.fit; if (!f || !box.classList.contains('chart-dialog')) return;
+    var copy = body.querySelector('.dialog-copy'), words = body.querySelector('.dialog-speech'), row = body.querySelector('.askrow'), content = body.querySelector('.dialog-content');
+    var face = box.classList.contains('chart-face'), many = p.choices && count >= p.choices.compactAt;
+    box.classList.add('chart-question'); box.classList.remove('question-compact');
+    box.style.setProperty('--dialog-pad-x', p.padX + 'px'); box.style.setProperty('--dialog-pad-right', p.padRight + 'px');
+    box.style.setProperty('--dialog-pad-y', (face ? p.facePadY : many ? p.choices.padY : p.padY) + 'px');
+    box.style.setProperty('--dialog-line-height', p.lineHeight); box.style.setProperty('--dialog-content-gap', p.contentGap + 'px');
+    if (many) { box.style.setProperty('--dialog-choice-height', p.choices.buttonHeight + 'px'); box.style.setProperty('--dialog-choice-pad-x', p.choices.padX + 'px'); box.style.setProperty('--dialog-choice-gap', p.choices.gap + 'px'); }
+    words.style.fontSize = ''; row.style.maxHeight = ''; row.style.fontSize = ''; copy.style.maxHeight = ''; copy.style.minHeight = '';
+    var base = face ? p.faceHeight : p.height, bottom = parseFloat(getComputedStyle(box).bottom) || 0;
+    var top = root.querySelector('.dlg-actor') || box.classList.contains('chart-face-name') ? Math.max(f.top, f.portraitRoom) : f.top;
+    var limit = Math.max(1, Math.min(f.maxHeight, root.clientHeight - bottom - top));
+    var baseFont = parseFloat(getComputedStyle(words).fontSize), choiceFont = parseFloat(getComputedStyle(row.querySelector('button') || row).fontSize);
+    function need() { var s = getComputedStyle(body); return Math.ceil(copy.scrollHeight + row.scrollHeight + parseFloat(s.paddingTop) + parseFloat(s.paddingBottom) + parseFloat(getComputedStyle(content).gap)); }
+    function height() { box.style.setProperty('--dialog-height', Math.min(limit, Math.max(Math.min(base, limit), need())) + 'px'); }
+    height();
+    if (need() > limit + 1) {
+      box.classList.add('question-compact');
+      row.style.fontSize = choiceFont + 'px';
+      box.style.setProperty('--dialog-pad-x', f.compactPadX + 'px'); box.style.setProperty('--dialog-pad-right', f.compactPadX + 'px');
+      box.style.setProperty('--dialog-pad-y', f.compactPadY + 'px'); box.style.setProperty('--dialog-line-height', f.lineHeight); box.style.setProperty('--dialog-content-gap', f.gap + 'px');
+      box.style.setProperty('--dialog-choice-height', f.choiceHeight + 'px'); box.style.setProperty('--dialog-choice-pad-x', f.choicePadX + 'px'); box.style.setProperty('--dialog-choice-gap', f.choiceGap + 'px');
+      box.style.setProperty('--dialog-columns', count > 16 ? 4 : count > 8 ? 3 : 2);
+      height();
+      for (var font = baseFont; font >= Math.min(baseFont, f.minFont); font--) { words.style.fontSize = font + 'px'; height(); if (need() <= limit + 1) break; }
+      for (var cf = choiceFont; need() > limit + 1 && cf >= Math.min(choiceFont, f.minChoiceFont); cf--) { row.style.fontSize = cf + 'px'; height(); }
+    }
+    // 선택지는 항상 같은 창에 남긴다. 드물게 아주 긴 본문·대량 목록이면 그 영역만 스크롤한다.
+    var available = content.clientHeight, gap = parseFloat(getComputedStyle(content).gap), line = parseFloat(getComputedStyle(words).lineHeight);
+    row.style.maxHeight = Math.max(f.choiceHeight, available - gap - Math.min(copy.scrollHeight, line * 2)) + 'px';
+    copy.style.minHeight = line + 'px';
+    if (copy.scrollHeight > copy.clientHeight + 1) copy.style.maxHeight = Math.max(line, Math.floor(copy.clientHeight / line) * line) + 'px';
+    box.dataset.page = '1';
+  }
+
   /** 글꼴의 지연 로딩·UI 배율 변경에도 현재 쪽을 다시 맞추고 닫힐 때 감시를 정리한다. */
   function watchDialog(box, refit) {
     var closed = false, pending = false, observer = null, last = '';
@@ -1298,9 +1335,8 @@
       if (G.I18N && !G.I18N.isKo()) { var tq = G.I18N.tr(String(text), true); if (tq != null) text = tq; }   // 다듬기 전에 원문으로 찾는다 (UI.say와 같이)
       var tt = opts.raw ? { text: String(text), notes: [] } : UI.tidySpeech(text);
       var note = tt.notes.length ? '<div class="ask-note">' + tt.notes.map(function (n) { return U.esc(n.replace(/<[^>]+>/g, '').replace(/^—\s*/, '')); }).join(' · ') + '</div>' : '';
-      var nextLabel = G.I18N && G.I18N.tr ? G.I18N.tr('다음 쪽 ▶', true) || '다음 쪽 ▶' : '다음 쪽 ▶';
-      body.innerHTML = '<div class="dialog-content"><div class="dialog-speech"></div>' + note + '<div class="askrow"></div><button type="button" class="dialog-next btn small navy">' + U.esc(nextLabel) + '</button></div>';
-      var row = body.querySelector('.askrow'), words = body.querySelector('.dialog-speech'), nextButton = body.querySelector('.dialog-next'), noteEl = body.querySelector('.ask-note');
+      body.innerHTML = '<div class="dialog-content"><div class="dialog-copy" tabindex="0"><div class="dialog-speech"></div>' + note + '</div><div class="askrow"></div></div>';
+      var row = body.querySelector('.askrow'), words = body.querySelector('.dialog-speech'), copy = body.querySelector('.dialog-copy');
       var panel = dialogPanelFx(), compact = panel.choices;
       if (compact && list.length >= compact.compactAt && !box.classList.contains('chart-face')) {
         box.classList.add('chart-many-choices');
@@ -1311,27 +1347,13 @@
         box.style.setProperty('--dialog-choice-pad-x', compact.padX + 'px');
         box.style.setProperty('--dialog-choice-gap', compact.gap + 'px');
       }
-      var questionPages = String(tt.text).split('\f'), questionIndex = 0, atChoices = true, finished = false, unwatch = null, shownAt = 0;
-      chartButton(nextButton);
+      var question = String(tt.text).replace(/\f/g, '\n\n'), finished = false, unwatch = null;
       function renderQuestion(t) { words.innerHTML = speech(box, t, opts); }
       function showQuestion(refitting) {
         if (finished) return;
-        row.hidden = false; nextButton.hidden = true; if (noteEl) noteEl.hidden = false;
-        // 버튼은 창 안에서 감아 배치한다. 창 높이를 늘려 인물의 무릎상이 작아지지 않게 한다.
-        var cut = splitDialogPage(box, body, questionPages[questionIndex], renderQuestion);
-        if (cut) { questionPages[questionIndex] = cut[0]; questionPages.splice(questionIndex + 1, 0, cut[1]); }
-        atChoices = questionIndex === questionPages.length - 1;
-        if (!atChoices && stopAuto) { stopAuto(); stopAuto = null; }
-        row.hidden = !atChoices; nextButton.hidden = atChoices; if (noteEl) noteEl.hidden = !atChoices;
-        renderQuestion(questionPages[questionIndex]); box.dataset.page = String(questionIndex + 1); if (!refitting) shownAt = Date.now();
-        shell.layout(); if (atChoices) startChoiceAuto();
+        var y = copy.scrollTop; renderQuestion(question); fitQuestion(box, body, list.length); copy.scrollTop = y;
+        shell.layout(); startChoiceAuto();
       }
-      function nextQuestion() {
-        if (atChoices || Date.now() - shownAt < (dialogPanelFx().advanceMs || 220)) return;
-        questionIndex++; showQuestion();
-      }
-      nextButton.onclick = function (e) { e.stopPropagation(); nextQuestion(); };
-      back.addEventListener('click', function (e) { if (!atChoices && !e.target.closest('button, [data-bio]')) nextQuestion(); });
       var selected = null;
       function pick(step) { selected = selectKeyItem(Array.prototype.slice.call(row.querySelectorAll('button')), selected, step); return selected; }
       function done(v) { if (finished) return; finished = true; if (unwatch) unwatch(); unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
@@ -1343,12 +1365,13 @@
         var b = U.el('button', 'btn small' + (i === 0 ? ' navy' : '') + (o.dis ? ' disabled' : '') + (prev != null && prev === o.label ? ' prevpick' : ''), (o.thumb ? '<img class="ask-thumb" src="' + o.thumb + '" alt="">' : o.icon ? G.icon(o.icon) : '') + o.label + (prev != null && prev === o.label ? '<span class="prevtag">지난번</span>' : ''));
         // 고를 수 없는 것(o.dis)은 CSS로 마우스만 막혀 있어 스크립트·보조 기기의 click()으로는 눌렸다 → 값이 넘어가 사건이 깨졌다 (100년 QA 2026-11-18, romeojuliet.js 티볼트 치료)
         if (o.dis) { b.disabled = true; b.setAttribute('aria-disabled', 'true'); }
-        b.onclick = function (e) { e.stopPropagation(); if (!atChoices || o.dis) return; rememberPick(pk, o.label); done(o.value); };
+        b.onclick = function (e) { e.stopPropagation(); if (o.dis) return; rememberPick(pk, o.label); done(o.value); };
         chartButton(b); row.appendChild(b);
       });
       selected = row.querySelector('button:not(.disabled)'); if (selected) selected.classList.add('kbd-focus');
       // 항해 중 사건: 지난번에 고른 것이 있으면 5초 뒤 그대로 고른다 (누르거나 키를 누르면 멈춘다)
       function startChoiceAuto() { if (!autoHalted && !stopAuto && autoOn() && prev != null) {
+        if (copy.scrollHeight > copy.clientHeight + 1 && copy.scrollTop + copy.clientHeight < copy.scrollHeight - 1) return;
         var pv = list.filter(function (o) { return !o.dis && normLabel(o.label) === normLabel(prev); })[0];
         if (pv) {
           stopAuto = autoTimer(box, '지난번처럼 「' + U.esc(normLabel(pv.label).replace(/#/g, '').replace(/\s+/g, ' ').trim()) + '」', function () { stopAuto = null; rememberPick(pk, pv.label); done(pv.value); });
@@ -1357,7 +1380,6 @@
       var unkey = pushKey(function (e) {
         haltChoiceAuto();
         if (keyIs(e, 'cancel') && opts.cancel !== false) { done(opts.cancelValue != null ? opts.cancelValue : null); return true; }
-        if (!atChoices) { if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) nextQuestion(); return true; }
         if (keyIs(e, 'up') || keyIs(e, 'left')) { pick(-1); return true; }
         if (keyIs(e, 'down') || keyIs(e, 'right')) { pick(1); return true; }
         if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) { selected = selected || pick(1); if (selected) selected.click(); return true; }
@@ -1666,10 +1688,18 @@
   /** items: [{label, icon, sub, dim, exit, onClick}]. opts.shortcuts: 도시 건물·실내 바로가기 표시 */
   UI.cmdMenu = function (title, sub, items, opts) {
     var m = U.el('div', 'cmdmenu wood brass-frame' + (items.filter(Boolean).length > 9 ? ' many' : ''));
+    var town = opts && opts.town, townCfg = G.FX.townMenu;
+    if (town) {
+      m.classList.remove('wood', 'brass-frame'); m.classList.add('town-menu');
+      m.setAttribute('role', 'navigation'); m.setAttribute('aria-label', title + ' 건물');
+      m.style.top = townCfg.top + 'px'; m.style.right = townCfg.right + 'px';
+      m.style.setProperty('--town-cols', items.filter(Boolean).length <= townCfg.singleAt ? 1 : 2);
+      ['width', 'top', 'bottom', 'rowHeight', 'gap', 'fontSize', 'minFont'].forEach(function (key) { m.style.setProperty('--town-' + key, townCfg[key] + 'px'); });
+    }
     if (opts && opts.shortcuts) m.setAttribute('data-shortcuts', '');
     if (opts && opts.top != null) m.style.top = opts.top + 'px';
     if (opts && opts.left != null) { m.style.left = opts.left + 'px'; m.style.right = 'auto'; }
-    m.innerHTML = '<h3>' + title + (sub ? '<small>' + sub + '</small>' : '') + '</h3><div class="items"></div>';
+    m.innerHTML = (town ? '' : '<h3>' + title + (sub ? '<small>' + sub + '</small>' : '') + '</h3>') + '<div class="items"></div>';
     var box = m.querySelector('.items');
     // 도움말 풍선은 메뉴마다 하나 — 메뉴 상자 바깥(메뉴가 오른쪽이면 왼쪽)에 띄워 버튼·튜토리얼 「여기」 표·두 칸 메뉴의 옆 칸을 가리지 않는다
     var tip = U.el('div', 'cmd-tip'), tipFor = null;

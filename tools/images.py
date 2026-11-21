@@ -520,6 +520,7 @@ def valid_keys(d):
             k['sprites/' + sid] = '육상 탐험 · 탐험대 8방향 (%s)' % sid[6:]
         else:
             k['sprites/' + sid] = names.get(sid, '스프라이트 · ' + sid) + ' 스프라이트 시트'
+    k['ui/notebook/folio'] = '항해 수첩 · 가죽 제본 양피지'
     return k
 
 
