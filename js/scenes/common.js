@@ -210,6 +210,17 @@
   function lineFor(kind, lv, d) { return trimLine(lineFor0(kind, lv, d)); }
   function lineFor0(kind, lv, d) {
     var sent = periodSentences(d);
+    // 아틀라스는 일반 동물의 번식·먹이·털을 관찰하는 대상이 아니다.
+    if (d.id === 'titan') {
+      if (kind === 'sci') {
+        if (lv >= 3) return '거인의 어깨처럼 솟은 산줄기와 봉우리마다 걸린 구름을 함께 기록하겠습니다. 하늘을 떠받친다는 전승이 이 지형과 어떻게 이어지는지도 살펴보겠습니다.';
+        if (lv >= 2) return '산줄기의 높낮이와 구름이 걸리는 자리를 살피겠습니다. 아틀라스가 돌이 되어 산맥이 되었다는 이야기도 함께 적어 두지요.';
+        return '눈앞의 형상과 이 고장의 전승을 나란히 적어 두겠습니다.';
+      }
+      if (lv >= 3) return '하늘을 짊어진 거대한 어깨와 구름에 잠긴 산봉우리를 한 화폭에 담겠습니다. 빛과 그림자로 그 무게와 장엄함을 전하겠습니다.';
+      if (lv >= 2) return '거인의 윤곽과 산줄기가 이어지는 모습, 구름의 빛깔을 함께 그려 두겠습니다.';
+      return '하늘을 떠받친 듯한 거인의 윤곽부터 화첩에 옮겨 두겠습니다.';
+    }
     if (kind === 'cook') {      // 교역품 × 요리
       if (lv >= 3) return '맛을 보니 알겠습니다. 이것 하나면 궁정의 식탁도 시장의 좌판도 사로잡을 수 있습니다. 어떻게 다루고 무엇과 곁들이는지까지 적어 두면, 들여올 값어치가 훨씬 높게 매겨질 겁니다.' + (sent.length ? '\f「' + sent.slice(0, 2).join(' ') + '」' : '');
       if (lv >= 2) return '향과 맛, 다듬는 법을 기록해 두겠습니다. 쓰임을 알면 사려는 사람도 늘어나지요.' + (sent.length ? '\f「' + sent[0] + '」' : '');
@@ -370,7 +381,7 @@
     var RT = G.RevealTalk, rctx = RT ? RT.context(d) : null;
     await UI.say(RT ? RT.shout(d, rctx) : '제독, 보십시오! 저것이 바로 소문으로만 듣던 ' + d.name + '입니다!', lead);
     await UI.say(RT ? RT.reply(d, rctx) : '마침내 찾았구나. 먼 길을 함께 와 준 덕분이다.', me);
-    var aLine = animal && RT ? RT.animal() : null;
+    var aLine = animal && RT ? RT.animal(d) : null;
     if (aLine) await UI.say(aLine, lead);
     var natural = d.cat === 'nature' || d.natural;
     var art = bestHand('art'), science = animal ? bestHand('sci') : { lv: 0 }, craft = (natural || animal || d.cat === 'geo') ? { lv: 0 } : bestHand('craft'), rec = G.Disc.recordParts ? G.Disc.recordParts(d) : { k: 1 };

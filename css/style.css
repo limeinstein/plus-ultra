@@ -477,6 +477,11 @@ input[type=range] { accent-color: #2a4a70; width: 100%; }
 .sailbar .btn.follow .tog { margin-left: 6px; padding: 1px 6px; border-radius: 6px; font-size: 13px; background: rgba(0,0,0,.28); color: #cdbb98; }
 .sailbar .btn.follow.on { box-shadow: inset 0 0 0 2px #e8c35a, 0 0 10px rgba(232,195,90,.55); }
 .sailbar .btn.follow.on .tog { background: #e8c35a; color: #2a1a08; font-weight: 700; }
+/* 하단 단추 귀퉁이의 단축키 (js/scenes/sea.js keyHints · land.js 해도 — 2026-11-22 베타 피드백 「상륙 단축키가 있으면」) */
+.sailbar .btn.has-hk { padding-right: 22px; }
+.sailbar.land-bar .btn.has-hk { padding-right: 20px; }
+.sailbar .btn > .hk { position: absolute; top: 3px; right: 3px; min-width: 9px; padding: 0 3px; font: 700 10px/13px var(--serif); letter-spacing: 0; text-align: center; color: #50371c; background: #fff5dccc; border: 1px solid #b18b4c; border-radius: 3px; pointer-events: none; }
+.sailbar .btn.disabled > .hk { opacity: .55; }
 .bld-plaque .nm { font-size: 28px; }
 .disc-card { display: flex; flex-direction: column; gap: 12px; }
 .disc-card canvas, .disc-card .disc-build-gif { width: 100%; height: auto; border: 2px solid #7a5c33; box-shadow: 0 0 0 1px #2a1f16; display: block; }

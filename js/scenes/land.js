@@ -115,7 +115,8 @@
     el.back = btn('돌아간다', 'anchor', function () { goBack(); }, 'navy');
     el.city = btn('도시에 들어간다', 'castle', function () { enterCity(); });
     btn('야영', 'tent', function () { camp(); });
-    btn('해도', 'map', function () { chart(); });
+    el.chart = btn('해도', 'map', function () { chart(); });
+    if (G.Keys.ensure().chart) { var hk = U.el('span', 'hk', G.Keys.label('chart')); hk.setAttribute('aria-hidden', 'true'); el.chart.appendChild(hk); el.chart.classList.add('has-hk'); el.chart.title = '해도 — 단축키 ' + G.Keys.label('chart'); }   // 귀퉁이 단축키 (바다와 같이 — 2026-11-22)
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
     if (G.OlympianApostles) btn('12신의 사도','people',function(){
       var here=st; here.busy++; here.path=null; here.dir=null; here.paused=true; refreshBar();
@@ -171,7 +172,7 @@
       if (st.paused) { st.paused = false; refreshBar(); }
       return true;
     }
-    if (k === 'm' || k === 'M') { chart(); return true; }
+    if (G.Keys.is(e, 'chart')) { if (!e.repeat && el.chart) el.chart.click(); return true; }   // 바다와 같은 해도 키 (기본 M · 물리 키라 한글 입력 상태에서도 — 2026-11-22)
     // 배속 키 (바다와 같다: 기본 ` = ×0.5, 1 = ×1, 2 = ×2, 3 = ×4) — 숫자판의 1·3은 그대로 대각선 걷기
     if (!/^Numpad/.test(e.code || '')) {
       if (G.Keys.is(e, 'speedHalf')) { setSpeed(0.5); return true; }

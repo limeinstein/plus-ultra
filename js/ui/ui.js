@@ -9,7 +9,7 @@
 
   // ---------------------------------------------------------------- keyboard bindings
   // 저장 파일마다 바꿀 수 있는 공통 키. code를 저장해 한글/영문 입력 상태와 무관하게 같은 물리 키를 쓴다.
-  var KEY_DEFAULTS = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speedHalf: 'Backquote', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3', mouseFollow: 'ShiftLeft', notebook: 'KeyN' };
+  var KEY_DEFAULTS = { up: 'ArrowUp', down: 'ArrowDown', left: 'ArrowLeft', right: 'ArrowRight', confirm: 'Enter', confirmAlt: 'Space', cancel: 'Escape', speedHalf: 'Backquote', speed1: 'Digit1', speed2: 'Digit2', speed3: 'Digit3', mouseFollow: 'ShiftLeft', chart: 'KeyM', seaLand: 'KeyL', seaFish: 'KeyF', seaSearch: 'KeyS', seaRain: 'KeyR', notebook: 'KeyN' };
   var KEY_ACTIONS = [
     { id: 'up', label: '위', desc: '메뉴 위 · 거리 건물 입장 · 바다/육상/해전 북쪽' },
     { id: 'down', label: '아래', desc: '메뉴 아래 · 바다/육상/해전 남쪽' },
@@ -23,6 +23,13 @@
     { id: 'speed2', label: '속도 ×2', desc: '바다·육상 탐험 배속 2' },
     { id: 'speed3', label: '속도 ×4', desc: '바다·육상 탐험 배속 4' },
     { id: 'mouseFollow', label: '마우스 따라가기', desc: '바다·육상 탐험에서 켬/끔 (기본 SHIFT — 왼쪽·오른쪽 모두)' },
+    // 바다 하단 메뉴 단축키 (2026-11-22 베타 피드백 「해상에서 자주 사용하는 상륙은 단축키 같은 게 있으면」) — 예전 M·L·F는 e.key로 받아 한글 입력 상태에서 먹지 않았다.
+    // 물리 키(code)로 받고 설정에서 바꾸거나 뺄 수 있게 한다. 하단 단추 귀퉁이에 키를 보인다 (js/scenes/sea.js keyHints)
+    { id: 'chart', label: '해도', desc: '바다·육상 탐험에서 해도 열기', optional: true },
+    { id: 'seaLand', label: '상륙', desc: '바다에서 해안 가까이 있을 때 상륙', optional: true },
+    { id: 'seaFish', label: '낚시', desc: '바다에서 낚시', optional: true },
+    { id: 'seaSearch', label: '탐색', desc: '바다에서 배를 세운 뒤 주변 탐색', optional: true },
+    { id: 'seaRain', label: '비 대책', desc: '바다에서 비가 올 때 대책 고르기', optional: true },
     // 수첩 단축키 (2026-10-30 사용자 요청 「수첩 단축기 넣을 수 있게 해줘」) — optional: 「없음」으로 뺄 수 있다. 수첩 탭마다의 키는 js/ui/info.js 가 G.Keys.register로 더한다
     { id: 'notebook', label: '수첩', desc: '항해 수첩 열기·닫기 — 도시·바다·육상 탐험에서 「수첩」 단추가 보일 때', optional: true }
   ];

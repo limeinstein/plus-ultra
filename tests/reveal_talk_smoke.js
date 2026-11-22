@@ -15,6 +15,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   try {
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
@@ -55,6 +56,41 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       // 요리의 값어치 보탬
       const s = G.Game.state; s.player.sk.cook = 3;
       out.ivoryCare = G.Disc.valueParts(ivory).care; out.pepperCare = G.Disc.valueParts(pepper).care;
+      // 아틀라스는 새끼·성체가 있는 일반 동물이 아니라 거인과 산맥의 전승이다.
+      const titan = D.titan, wrongTitan = /새끼|성체|털|비늘|먹이|냄새|달아|짐승|발자국/;
+      const chance = G.U.chance, pickFresh = G.U.pickFresh;
+      out.titanLines = [];
+      try {
+        G.U.chance = () => true;
+        for (let i = 0; i < 3; i++) {
+          G.U.pickFresh = (key, list) => list[i % list.length];
+          const ctx = { d: titan.name, legend: true, tired: true, close: true, rival: '경쟁자', contract: true, sponsor: '후원자' };
+          out.titanLines.push(RT.shout(titan, ctx), RT.reply(titan, ctx), RT.noSkill(titan));
+          if (RT.animal(titan) !== null) out.bad.push('아틀라스에게 일반 동물 보충 대사');
+          if (!RT.animal(D.lion)) out.bad.push('일반 동물 보충 대사 누락');
+        }
+        [1, 2, 3].forEach(lv => ['art', 'sci'].forEach(kind => out.titanLines.push(SC._lineFor(kind, lv, titan))));
+      } finally { G.U.chance = chance; G.U.pickFresh = pickFresh; }
+      out.titanLines.forEach(t => { if (!t || wrongTitan.test(t)) out.bad.push('아틀라스 대사: ' + t); });
+      // 실제 발견 연출에서도 발견물을 animal(d)에 전달하고 특기별 대체 대사를 사용한다.
+      const restore = [], shown = [];
+      function replace(obj, key, value) { restore.push(() => { obj[key] = value; }); obj[key] = value; }
+      const skip = setInterval(() => document.querySelector('.reveal')?.click(), 30);
+      try {
+        s.mates = []; s.player.sk = { art: 3, sci: 3 }; s.settings.res = 0.35;
+        replace(G.UI, 'say', async t => { shown.push(t); });
+        replace(G.U, 'sleep', async () => {});
+        replace(G.U, 'chance', () => true);
+        replace(G.DiscVoice, 'reveal', () => []);
+        replace(G.DiscVoice, 'count', () => 3);
+        replace(G.DiscVoice, 'wish', () => null);
+        replace(G.FamVoice, 'reveal', () => []);
+        out.titanReveal = await SC.discoveryReveal(titan, 100);
+        if (!shown.some(t => /산줄기/.test(t)) || !shown.some(t => /화폭/.test(t))) out.bad.push('아틀라스 실제 발견에서 학문·그림 대사 누락');
+        shown.forEach(t => { if (wrongTitan.test(t)) out.bad.push('아틀라스 실제 발견 대사: ' + t); });
+        if (document.querySelector('.reveal') || document.querySelector('#ui.scenepic-on')) out.bad.push('아틀라스 발견 연출 정리 누락');
+      } finally { clearInterval(skip); restore.reverse().forEach(fn => fn()); }
+      out.titanRevealLines = shown;
       return out;
     });
     console.log(JSON.stringify(r.kinds));
@@ -64,6 +100,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(!r.ivoryEdible && r.pepperEdible, '상아는 맛을 보지 않는다 · 후추는 본다');
     ok(r.bad.length === 0, '교역품·보물·민족·지리의 말이 갈래에 맞다 (' + r.bad.length + '건 어긋남)');
     ok(r.ivoryCare !== 'cook' && r.pepperCare === 'cook', '요리의 값어치 보탬은 맛을 볼 수 있는 교역품에만');
+    ok(r.titanReveal && r.titanLines.length === 15, '아틀라스 전용 반응·특기 1~3단계·실제 발견 연출에서 동물 대사 없음');
     ok(errors.length === 0, '콘솔 오류 0' + (errors.length ? ': ' + errors.join(' | ') : ''));
     console.log('통과');
   } catch (e) { console.error('실패:', e.message, errors); process.exitCode = 1; } finally { await browser.close(); }

@@ -1,0 +1,158 @@
+{
+  "snow-white-pose-20261122/over-shoulder-v4-20261123.json": {
+    "tool": "image_gen.imagegen (built-in)",
+    "prompt": "Use case: identity-preserve / character portrait edit.\nImage 1: EDIT TARGET, existing adult Snow White game character. Preserve this image's exact costume and adult body shape/proportions.\nImage 2: FACE IDENTITY, EXPRESSION, HAIRSTYLE AND POSE reference supplied by the user. This latest request supersedes the old reaching-hand pose.\nPrimary request: naturally re-pose Snow White to match image 2: torso turned away in a gentle three-quarter back/side view, head turned back over her near shoulder to look directly at the viewer, shoulders relaxed, arms lowered naturally as in the reference (no hand reaching at the camera). Extend the reference pose naturally into a head-to-knees standing character portrait.\nMatch image 2's recognizable adult East Asian woman's facial appearance: elegant small face, delicate facial features, gray-brown eyes, soft lips, the exact serene slightly wistful expression and quiet direct gaze, lips softly closed or barely parted without showing teeth. Match the reference hairstyle closely: very long straight natural black hair cascading smoothly down her back and over her shoulder, wispy airy bangs and loose face-framing strands. Replace the target's brown waves and swept-up styling. No red bow where it conflicts with the reference hair silhouette.\nSTRICT costume/body invariants from image 1: same navy velvet bodice and puff sleeves, ivory lace chemise, deep crimson overskirt, intricate gold embroidery, sleeve ribbons, fabric texture, garment coverage, bust/waist/hip proportions and adult build. Rotate this SAME costume and SAME body into the new pose with physically natural fabric drape, not a new dress or slimmer body. Do not copy image 2's white dress. Preserve the modest small head-to-body scale already established. Realistic adult anatomy, no exaggerated body changes.\nIntegrate the new head, hair and face with coherent lighting, skin texture and color matching the neck/shoulders/arms. Photorealistic polished fantasy game asset, natural transitions, no pasted-on face or mismatched skin. Hair should have clean fine strands.\nComposition: one adult woman only, 1024x1536 portrait 2:3, crown fully visible with modest top margin, head to knees framing, dress reaches bottom edge. Genuine transparent background suitable for game dialogue UI. No window, room, flowers, scenery, glowing background, checkerboard, text, watermark or border.",
+    "source": "C:/Users/User/.codex/generated_images/01a203ba-5799-7583-b319-d2e49d2f3515/exec-4b468e38-d8a2-404d-b1d7-c2e330d03417.png",
+    "reference": "over-shoulder-reference-v4.png",
+    "outputs": "기존 의상·체형, 새 얼굴·표정·헤어스타일·돌아보는 포즈. 얼굴상·무릎상 3쌍, 눈·입 좌표 6개 갱신",
+    "previousMaster": "face-reference-v3-master.png",
+    "faceCrop": {
+      "side": 936,
+      "left": 35,
+      "top": -9
+    }
+  },
+  "snow-white-pose-20261122/validation-v4.json": {
+    "images": [
+      {
+        "width": 1024,
+        "height": 1536,
+        "loaded": true
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "loaded": true
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "loaded": true
+      }
+    ],
+    "errors": []
+  },
+  "snow-white-events-20261123/generation.json": {
+    "tool": "image_gen.imagegen (built-in)",
+    "reference": "../snow-white-pose-20261122/generated.png",
+    "jobs": [
+      {
+        "id": "snow_white_rescue",
+        "scene": "images/legend-events/snow_white_rescue.webp",
+        "extra": "Snow White is the central woman holding a red apple with both hands, between a partial armored rescuer on the far left and a retreating hunter on the far right. Replace ONLY her face/hair. Expression: she has just been rescued from the queen's hunter: lingering gentle apprehension in her eyes, inner brows slightly softened, then palpable relief and sincere gratitude toward her rescuer. A small relieved closed-mouth smile, tender grateful eyes, relaxed lips; natural subtle emotion, not broad celebration, not crying. Keep the apple, hands, navy/crimson/ivory historical dress and forest scene exactly.",
+        "prompt": "Use case: identity-preserve / localized character replacement in an existing panoramic game illustration.\nInput 1 is the SCENE TO EDIT. Input 2 is the FINAL APPROVED adult Snow White character identity and hairstyle reference.\nReplace ONLY Snow White in input 1 with the SAME adult woman in input 2: exact recognizable East Asian facial structure, delicate features, gray-brown eyes, small natural head proportion, very long straight black hair, airy wispy bangs and loose face-framing strands. Remove the old red hair bow and old wavy brown hairstyle. Keep her adult body build and anatomically natural proportions.\nHer expression must suit this specific scene, while retaining the reference woman's identity. Do NOT copy the reference's neutral expression automatically. Match the scene's color grading, light direction, exposure and skin tone on face and body with seamless integration.\nPreserve the existing composition, camera, scene, background, all other people and their exact facial identities, all props and costumes except the necessary local adjustments around Snow White's head/hair. Keep Snow White's existing scene-appropriate clothing, body position and hand actions; do not import the portrait's over-shoulder body pose into a group scene. No new characters, no duplicate faces, no text or watermark. Opaque panoramic image, same extra-wide aspect ratio as input 1, designed for final 1881x836 game asset.\nSnow White is the central woman holding a red apple with both hands, between a partial armored rescuer on the far left and a retreating hunter on the far right. Replace ONLY her face/hair. Expression: she has just been rescued from the queen's hunter: lingering gentle apprehension in her eyes, inner brows slightly softened, then palpable relief and sincere gratitude toward her rescuer. A small relieved closed-mouth smile, tender grateful eyes, relaxed lips; natural subtle emotion, not broad celebration, not crying. Keep the apple, hands, navy/crimson/ivory historical dress and forest scene exactly.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a203ba-5799-7583-b319-d2e49d2f3515\\exec-ccb77e23-88f1-4a1f-b00e-a06b5de74cd1.png"
+      },
+      {
+        "id": "onceupon",
+        "scene": "images/achievement-events/onceupon.webp",
+        "extra": "Snow White is the SECOND WOMAN FROM THE LEFT, wearing a dark navy travel coat and carrying a backpack, positioned between blonde Cinderella at far left and curly blonde Sleeping Beauty in pink. Replace ONLY this second woman's face and hair; the other three princesses must stay exactly unchanged. Expression: embarking on a new voyage together, quietly excited, hopeful and curious, a fresh natural cheerful smile and bright eyes looking toward Cinderella, as in the existing interaction. A soft small smile with lips gently parted is appropriate. Keep her navy travel outfit, shoulder straps, boarding pose and ship harbor at sunset.",
+        "prompt": "Use case: identity-preserve / localized character replacement in an existing panoramic game illustration.\nInput 1 is the SCENE TO EDIT. Input 2 is the FINAL APPROVED adult Snow White character identity and hairstyle reference.\nReplace ONLY Snow White in input 1 with the SAME adult woman in input 2: exact recognizable East Asian facial structure, delicate features, gray-brown eyes, small natural head proportion, very long straight black hair, airy wispy bangs and loose face-framing strands. Remove the old red hair bow and old wavy brown hairstyle. Keep her adult body build and anatomically natural proportions.\nHer expression must suit this specific scene, while retaining the reference woman's identity. Do NOT copy the reference's neutral expression automatically. Match the scene's color grading, light direction, exposure and skin tone on face and body with seamless integration.\nPreserve the existing composition, camera, scene, background, all other people and their exact facial identities, all props and costumes except the necessary local adjustments around Snow White's head/hair. Keep Snow White's existing scene-appropriate clothing, body position and hand actions; do not import the portrait's over-shoulder body pose into a group scene. No new characters, no duplicate faces, no text or watermark. Opaque panoramic image, same extra-wide aspect ratio as input 1, designed for final 1881x836 game asset.\nSnow White is the SECOND WOMAN FROM THE LEFT, wearing a dark navy travel coat and carrying a backpack, positioned between blonde Cinderella at far left and curly blonde Sleeping Beauty in pink. Replace ONLY this second woman's face and hair; the other three princesses must stay exactly unchanged. Expression: embarking on a new voyage together, quietly excited, hopeful and curious, a fresh natural cheerful smile and bright eyes looking toward Cinderella, as in the existing interaction. A soft small smile with lips gently parted is appropriate. Keep her navy travel outfit, shoulder straps, boarding pose and ship harbor at sunset.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a203ba-5799-7583-b319-d2e49d2f3515\\exec-2fe42a31-900f-4759-b10b-5f465fa92be5.png"
+      },
+      {
+        "id": "happily_after_all",
+        "scene": "images/legend-events/happily_after_all.webp",
+        "extra": "Snow White is the SECOND WOMAN FROM THE LEFT at the table, between veiled blonde Cinderella and curly blonde Sleeping Beauty, in navy/crimson dress, resting her cheek against her hand. Replace ONLY this second woman's face/hair; keep the other three princesses exactly. Expression: tender marital affection and peaceful newlywed happiness, a gentle loving closed-mouth smile, softly smiling eyes looking affectionately toward Cinderella/the family, no anxious pleading or blank stare. Preserve her cheek-resting hand, all joined hands, table, apple, glass slippers, flowers, sunset and other women's exact faces.",
+        "prompt": "Use case: identity-preserve / localized character replacement in an existing panoramic game illustration.\nInput 1 is the SCENE TO EDIT. Input 2 is the FINAL APPROVED adult Snow White character identity and hairstyle reference.\nReplace ONLY Snow White in input 1 with the SAME adult woman in input 2: exact recognizable East Asian facial structure, delicate features, gray-brown eyes, small natural head proportion, very long straight black hair, airy wispy bangs and loose face-framing strands. Remove the old red hair bow and old wavy brown hairstyle. Keep her adult body build and anatomically natural proportions.\nHer expression must suit this specific scene, while retaining the reference woman's identity. Do NOT copy the reference's neutral expression automatically. Match the scene's color grading, light direction, exposure and skin tone on face and body with seamless integration.\nPreserve the existing composition, camera, scene, background, all other people and their exact facial identities, all props and costumes except the necessary local adjustments around Snow White's head/hair. Keep Snow White's existing scene-appropriate clothing, body position and hand actions; do not import the portrait's over-shoulder body pose into a group scene. No new characters, no duplicate faces, no text or watermark. Opaque panoramic image, same extra-wide aspect ratio as input 1, designed for final 1881x836 game asset.\nSnow White is the SECOND WOMAN FROM THE LEFT at the table, between veiled blonde Cinderella and curly blonde Sleeping Beauty, in navy/crimson dress, resting her cheek against her hand. Replace ONLY this second woman's face/hair; keep the other three princesses exactly. Expression: tender marital affection and peaceful newlywed happiness, a gentle loving closed-mouth smile, softly smiling eyes looking affectionately toward Cinderella/the family, no anxious pleading or blank stare. Preserve her cheek-resting hand, all joined hands, table, apple, glass slippers, flowers, sunset and other women's exact faces.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a203ba-5799-7583-b319-d2e49d2f3515\\exec-6a6c95e5-eb48-4dfa-83ae-b2ac6a120067.png"
+      },
+      {
+        "id": "dreamcome",
+        "scene": "images/achievement-events/dreamcome.webp",
+        "extra": "Snow White is the SECOND WOMAN FROM THE LEFT at the family dining table, between blonde Cinderella at far left and curly blonde Sleeping Beauty; navy/crimson dress, cheek resting on one hand. Replace ONLY this woman's face/hair; keep the other three princesses exactly unchanged. Expression: comfortably happy at home together, relaxed warm eye-smile and natural joyful smile directed toward the other princesses; a little upper teeth may show, subtler than laughter, no distressed brows. Preserve her hand and all overlapping hands on table, food, apple basket, furniture, harbor view, costume and lighting.",
+        "prompt": "Use case: identity-preserve / localized character replacement in an existing panoramic game illustration.\nInput 1 is the SCENE TO EDIT. Input 2 is the FINAL APPROVED adult Snow White character identity and hairstyle reference.\nReplace ONLY Snow White in input 1 with the SAME adult woman in input 2: exact recognizable East Asian facial structure, delicate features, gray-brown eyes, small natural head proportion, very long straight black hair, airy wispy bangs and loose face-framing strands. Remove the old red hair bow and old wavy brown hairstyle. Keep her adult body build and anatomically natural proportions.\nHer expression must suit this specific scene, while retaining the reference woman's identity. Do NOT copy the reference's neutral expression automatically. Match the scene's color grading, light direction, exposure and skin tone on face and body with seamless integration.\nPreserve the existing composition, camera, scene, background, all other people and their exact facial identities, all props and costumes except the necessary local adjustments around Snow White's head/hair. Keep Snow White's existing scene-appropriate clothing, body position and hand actions; do not import the portrait's over-shoulder body pose into a group scene. No new characters, no duplicate faces, no text or watermark. Opaque panoramic image, same extra-wide aspect ratio as input 1, designed for final 1881x836 game asset.\nSnow White is the SECOND WOMAN FROM THE LEFT at the family dining table, between blonde Cinderella at far left and curly blonde Sleeping Beauty; navy/crimson dress, cheek resting on one hand. Replace ONLY this woman's face/hair; keep the other three princesses exactly unchanged. Expression: comfortably happy at home together, relaxed warm eye-smile and natural joyful smile directed toward the other princesses; a little upper teeth may show, subtler than laughter, no distressed brows. Preserve her hand and all overlapping hands on table, food, apple basket, furniture, harbor view, costume and lighting.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a203ba-5799-7583-b319-d2e49d2f3515\\exec-a66fc864-14a4-49d4-8b43-c9f0ef87a696.png"
+      }
+    ],
+    "exportCommand": "node tools/snow_white_event_refresh_20261123.cjs"
+  },
+  "snow-white-events-20261123/validation.json": {
+    "images": [
+      {
+        "id": "snow_white_rescue",
+        "key": "legend-events/snow_white_rescue",
+        "title": "왕비의 사냥꾼 — 안도와 감사",
+        "original": [
+          1881,
+          836
+        ],
+        "size": [
+          1881,
+          836
+        ],
+        "frame": {
+          "width": 1881,
+          "height": 836,
+          "shown": true
+        }
+      },
+      {
+        "id": "onceupon",
+        "key": "achievement-events/onceupon",
+        "title": "Once Upon a Time — 새로운 항해의 설렘",
+        "original": [
+          1882,
+          836
+        ],
+        "size": [
+          1881,
+          836
+        ],
+        "frame": {
+          "width": 1881,
+          "height": 836,
+          "shown": true
+        }
+      },
+      {
+        "id": "happily_after_all",
+        "key": "legend-events/happily_after_all",
+        "title": "Happily Ever After — 다정한 행복",
+        "original": [
+          1881,
+          836
+        ],
+        "size": [
+          1881,
+          836
+        ],
+        "frame": {
+          "width": 1881,
+          "height": 836,
+          "shown": true
+        }
+      },
+      {
+        "id": "dreamcome",
+        "key": "achievement-events/dreamcome",
+        "title": "Dream Come True — 편안한 집",
+        "original": [
+          1881,
+          836
+        ],
+        "size": [
+          1881,
+          836
+        ],
+        "frame": {
+          "width": 1881,
+          "height": 836,
+          "shown": true
+        }
+      }
+    ],
+    "errors": []
+  },
+  "homecoming-embrace-20261122/report.json": {
+    "passed": true,
+    "image": {
+      "src": "images/family-events/12_return_dock_embrace.webp",
+      "width": 576,
+      "height": 256,
+      "alt": "새벽 부두의 포옹"
+    },
+    "errors": [],
+    "eventCompleted": true
+  }
+}

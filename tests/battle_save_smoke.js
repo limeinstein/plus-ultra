@@ -22,7 +22,7 @@ function ok(value, text) { if (!value) throw new Error(text); console.log('  ✓
   });
   fs.mkdirSync(OUT, { recursive: true });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href));
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title');
     const saved = await page.evaluate(async () => {
       const s = G.Game.state = G.State.newGame({ name: '해전 저장 시험', nation: 'PT', job: 'explorer', age: 22, birth: { m: 1, d: 1 }, st: { str: 50, int: 50, mar: 50, cha: 50 }, sk: {}, lg: [], diff: 'normal' });

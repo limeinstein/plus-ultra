@@ -520,6 +520,7 @@
     st.unkey = UI.pushKey(function (e) {
       if (G.Game.scene !== B || UI.busy()) return false;
       var k = String(e.key).toLowerCase();
+      if (!/^[a-z]$/.test(k) && /^Key[A-Z]$/.test(e.code || '')) k = e.code.slice(3).toLowerCase();   // 한글 입력 상태(ㅔ·ㅠ·ㄹ)에서도 P·B·F가 먹게 — 물리 키로 (2026-11-22)
       if (G.Keys.is(e, 'confirmAlt')) { if (!e.repeat) haltFlag(); return true; }
       if (G.Keys.is(e, 'cancel') && st.sel) { selectShip(null); return true; }
       var da = directionAction(e);

@@ -15,6 +15,14 @@
     // 거리 건물 메뉴: 배경판 없는 양피지 버튼. 실내 명령 메뉴에는 적용하지 않는다.
     townMenu: { width: 540, top: 96, right: 26, bottom: 86, rowHeight: 40, gap: 6, fontSize: 19, minFont: 16, singleAt: 4 },
     storySelect: { width: 1540, height: 840, slots: 5, infoWidth: 36,
+      // 선택 카드·소개 초상의 머리 높이와 정수리 자리. 원본 그림은 그대로 쓴다.
+      portraits: { headHeight: 0.58, top: 0.01, frames: {
+        'portraits/player/navigator_white': { centerX: 0.43, top: 0, height: 0.43 },
+        'portraits/player/noble_scholar': { centerX: 0.54, top: 0, height: 0.43 },
+        'portraits/player/jessica': { centerX: 0.49, top: 0.09, height: 0.59, source: 'characters/player_half_jessica' },
+        'characters/player_half_jessica': { centerX: 0.525, top: 0.008, height: 0.16 },
+        'portraits/player/soyoung': { centerX: 0.48, top: 0.055, height: 0.60 }
+      } },
       map: { width: 1440, height: 660, worldHeight: 540, step: 2,
         // 화면 표식만 보정한다. 도시·교역·항해 좌표는 그대로 둔다.
         // 리스본 강변: https://imovel.patrimoniocultural.gov.pt/detalhes.php?code=70275

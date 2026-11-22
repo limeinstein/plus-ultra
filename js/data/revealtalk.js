@@ -8,6 +8,7 @@
 
   // 부관(또는 앞장선 부하)이 외치는 말
   T.SHOUT = {
+    titan: ['제독, 저 거대한 어깨를 보십시오. 하늘을 떠받친다는 아틀라스의 전승이 눈앞에 펼쳐져 있습니다!', '구름에 잠긴 저 봉우리가 거인의 어깨처럼 보입니다. 이곳을 「하늘의 기둥」이라 부른 까닭을 알겠습니다.'],
     geo: ['제독, 해도에 없는 물길입니다! 이 바다는 아직 누구의 지도에도 없습니다.', '측심줄이 바닥에 닿질 않습니다, 제독. 우리가 처음 지나는 바다가 틀림없습니다.',
       '저기 보십시오, 바다가 저쪽으로 열려 있습니다! 이게 바로 {d}입니다.', '나침반을 몇 번이나 다시 봤습니다. 틀림없습니다, 제독. 여기가 {d}입니다.',
       '망대에서 소리칩니다! 물빛이 바뀌었답니다, 제독. {d}에 들어섰습니다.'],
@@ -48,6 +49,7 @@
   };
   // 제독의 대답
   T.REPLY = {
+    titan: ['하늘을 짊어진 거인이라… 산맥과 전승을 함께 기록해 두자.', '저 어깨에 하늘의 무게가 실린 듯하구나. 이 장엄한 모습을 화첩에 남겨라.'],
     any: ['마침내 찾았구나. 먼 길을 함께 와 준 덕분이다.', '이 눈으로 직접 보게 될 줄이야… 모두 수고했다.', '세상에 이런 것이 있었다니. 빠짐없이 기록해 두자.',
       '잘했다. 오늘 밤엔 다들 한 잔씩 더 받아라.', '서두르지 마라. 천천히, 하나도 놓치지 말고 보자.'],
     legend: ['전설이 거짓이 아니었군… 모두 잘해 주었다.', '꿈을 꾸는 것만 같구나. 이 광경을 잊지 말자.', '옛사람들 말을 비웃던 자들에게 보여 주고 싶구나.'],
@@ -62,6 +64,7 @@
   };
   // 그림·세공·학문에 밝은 사람이 없을 때 (가끔만)
   T.NOSKILL = {
+    titan: ['화가가 함께였다면 저 거대한 어깨와 구름 걸린 산봉우리를 한 장에 담았을 텐데요. 이 고장에 전해 오는 아틀라스 이야기도 적어 두겠습니다.'],
     creature: ['생물에 밝은 사람이나 화가가 함께였다면 생김새를 더 자세히 남겼을 텐데요. 눈에 새겨 두겠습니다.', '가까이 갈 수는 없으니 발자국과 생김새를 잘 기억해 두어야겠습니다.',
       '저 녀석 생김새를 말로 옮기자니 막막합니다. 그림 그릴 줄 아는 친구가 하나 있었으면 좋겠습니다.'],
     plant: ['식물에 밝은 학자나 화가가 함께였다면 잎맥 하나까지 그려 갔을 텐데요. 가지 하나를 꺾어 말려 두겠습니다.', '잎과 꽃의 생김새를 말로만 적자니 막막합니다. 그림 그릴 줄 아는 친구가 하나 있었으면 좋겠습니다.'],
@@ -110,6 +113,7 @@
   /** 부하의 첫 외침 */
   T.shout = function (d, ctx) {
     ctx = ctx || T.context(d);
+    if (d.id === 'titan') return pick('titan', T.SHOUT.titan, ctx);
     if (ctx.close && G.U.chance(0.7)) return pick('rival', T.SHOUT.rival, ctx);
     if (ctx.contract && G.U.chance(0.6)) return pick('contract', T.SHOUT.contract, ctx);
     if (ctx.legend && G.U.chance(0.6)) return pick('legend', T.SHOUT.legend, ctx);
@@ -122,6 +126,7 @@
   /** 제독의 대답 */
   T.reply = function (d, ctx) {
     ctx = ctx || T.context(d);
+    if (d.id === 'titan') return pick('r-titan', T.REPLY.titan, ctx);
     if (d.cat === 'trade' && T.tradeKind(d) === 'grave') return pick('r-grave', T.REPLY.grave, ctx);
     if (ctx.tired && G.U.chance(0.6)) return pick('r-tired', T.REPLY.tired, ctx);
     if (ctx.close && G.U.chance(0.6)) return pick('r-rival', T.REPLY.rival, ctx);
@@ -134,8 +139,12 @@
   /** 기록할 사람이 없을 때의 아쉬움 — 셋 중 하나꼴로만 (증거 등급 알림이 따로 있다) */
   T.noSkill = function (d) {
     if (!G.U.chance(0.35)) return null;
-    var key = G.Disc && G.Disc.isPlant && G.Disc.isPlant(d) ? 'plant' : d.cat === 'creature' ? 'creature' : (d.cat === 'nature' || d.natural) ? 'nature' : 'any';
+    var key = d.id === 'titan' ? 'titan' : G.Disc && G.Disc.isPlant && G.Disc.isPlant(d) ? 'plant' : d.cat === 'creature' ? 'creature' : (d.cat === 'nature' || d.natural) ? 'nature' : 'any';
     return pick('n-' + key, T.NOSKILL[key], { d: d.name });
   };
-  T.animal = function () { return G.U.chance(0.5) ? pick('animal', T.ANIMAL, {}) : null; };
+  T.animal = function (d) {
+    // 아틀라스는 하늘을 짊어진 거인과 산맥의 전승이므로 새끼·성체를 관찰하는 말을 붙이지 않는다.
+    if (d && d.id === 'titan') return null;
+    return G.U.chance(0.5) ? pick('animal', T.ANIMAL, {}) : null;
+  };
 })(window.G = window.G || {});

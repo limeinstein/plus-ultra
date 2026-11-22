@@ -167,9 +167,9 @@
     // 입항 단추는 너비를 정해 두고 긴 항구 이름은 말줄임(전체 이름은 풍선 도움말), 비 대책 단추는 늘 자리를 지키고 비가 올 때만 누를 수 있다
     hudEl.port = btn('<span class="pn">입항</span>', 'anchor', function () { tryEnterPort(); }, 'navy portbtn');
     hudEl.land = btn('상륙', 'boot', function () { tryLand(); });
-    if (G.Fishing) btn('낚시', 'fish', function () { goFish(); });
+    if (G.Fishing) hudEl.fish = btn('낚시', 'fish', function () { goFish(); });
     if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { if (!G.Rain.raining()) return; st.busy++; G.Rain.ask(false).then(function () { st.busy = Math.max(0, st.busy - 1); refreshButtons(); }, function () { st.busy = Math.max(0, st.busy - 1); }); }); hudEl.rain.classList.toggle('disabled', !G.Rain.raining()); }   // 비가 오는 동안만 누를 수 있다 (자리는 늘 그대로)
-    btn('해도', 'map', function () { SEA.chart(); });
+    hudEl.chart = btn('해도', 'map', function () { SEA.chart(); });
     btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
     hudEl.follow = btn('', 'mouse', function () { toggleFollow(); }, 'follow');   // 설명·켬/끔·단축키는 풍선 도움말
     // 긴 하단 메뉴에 가려지지 않도록 지도 확대 단추는 오른쪽 위에 둔다.
@@ -388,9 +388,14 @@
       takeCourse(Math.atan2(d[1], d[0]));
       return true;
     }
-    if (k === 'm' || k === 'M') { SEA.chart(); return true; }
-    if (k === 'l' || k === 'L') { tryLand(); return true; }
-    if ((k === 'f' || k === 'F') && G.Fishing) { goFish(); return true; }
+    // 하단 단추의 단축키 (기본 M 해도 · L 상륙 · F 낚시 · S 탐색 · R 비 대책 — 설정에서 바꾸거나 뺀다). 물리 키로 받아 한글 입력 상태에서도 먹는다 (2026-11-22)
+    // 단추를 누른 것과 똑같이 — 다른 창이 떠 있거나 바쁜 동안은 단추처럼 무시된다
+    for (var hi = 0; hi < KEY_HINTS.length; hi++) {
+      if (!G.Keys.is(e, KEY_HINTS[hi][1])) continue;
+      var hb = hudEl[KEY_HINTS[hi][0]];
+      if (hb && !e.repeat) hb.click();
+      return !!hb;
+    }
     if (k === '+' || k === '=') { zoomBy(1.2); return true; }
     if (k === '-') { zoomBy(1 / 1.2); return true; }
     return false;
@@ -2103,17 +2108,37 @@
       UI.toast('보급이 모자랄 듯 — ' + nums, 'bread', 4500);
     }
   }
+  // ---------------------------------------------------------------- 하단 단추의 단축키 표 (2026-11-22 베타 피드백 — 단축키가 있는 줄 몰랐다)
+  // [hudEl 이름, 키 설정 동작(js/ui/ui.js), 풍선 도움말(없으면 refreshButtons가 상태에 맞춰 단다)]
+  var KEY_HINTS = [['chart', 'chart', '해도'], ['land', 'seaLand', '상륙'], ['fish', 'seaFish', '낚시'], ['search', 'seaSearch', null], ['rain', 'seaRain', null]];
+  function hintKey(act) { return G.Keys.ensure()[act] ? G.Keys.label(act) : ''; }
+  function keyTip(t, act) { var k = hintKey(act); return k ? t + ' — 단축키 ' + k : t; }
+  function setTitle(b, t) { var kt = t + '|' + (G.I18N ? G.I18N.lang : ''); if (b._kt !== kt) { b._kt = kt; b.title = t; } }   // 한국어 원문·언어로 견준다 — 번역된 title과 견주면 매번 다시 쓰게 되고, 언어를 바꾸면 새 언어로 다시 옮겨지게
+  /** 단추 귀퉁이에 키를 보인다 — 설정에서 키를 바꾸면 따라 바뀌고, 「없음」이면 지운다 */
+  function keyHints() {
+    KEY_HINTS.forEach(function (h) {
+      var b = hudEl[h[0]]; if (!b) return;
+      var k = hintKey(h[1]), kb = b.querySelector('.hk');
+      if (!k) { if (kb) kb.remove(); b.classList.remove('has-hk'); }
+      else {
+        if (!kb) { kb = U.el('span', 'hk', ''); kb.setAttribute('aria-hidden', 'true'); b.appendChild(kb); b.classList.add('has-hk'); }
+        if (kb.textContent !== k) kb.textContent = k;
+      }
+      if (h[2]) setTitle(b, keyTip(h[2], h[1]));
+    });
+  }
   function refreshButtons() {
     refreshFollow();
     var pn = portNear();
     if (hudEl.port) { hudEl.port.classList.toggle('disabled', !pn); setHtml(hudEl.port, G.icon('anchor') + '<span class="pn">' + (pn ? U.esc(pn.name) + ' 입항' : '입항') + '</span>'); var ptl = pn ? pn.name + ' 입항' : '가까운 항구가 없습니다'; if (hudEl.port.title !== ptl) hudEl.port.title = ptl; }
     if (hudEl.land) hudEl.land.classList.toggle('disabled', !landNear());
-    if (hudEl.rain) { var rn = !G.Rain.raining(); if (hudEl.rain.classList.contains('disabled') !== rn) { hudEl.rain.classList.toggle('disabled', rn); hudEl.rain.title = rn ? '비가 올 때 쓸 수 있습니다' : '비를 맞는 동안의 대책'; } }
+    if (hudEl.rain) { var rn = !G.Rain.raining(); if (hudEl.rain.classList.contains('disabled') !== rn) hudEl.rain.classList.toggle('disabled', rn); setTitle(hudEl.rain, keyTip(rn ? '비가 올 때 쓸 수 있습니다' : '비를 맞는 동안의 대책', 'seaRain')); }
     if (hudEl.search) {
       var canSearch = st.paused && !st.stopping && shipSpeed() < FXS().stopSpeed && !st.busy;
       hudEl.search.classList.toggle('disabled', !canSearch);
-      hudEl.search.title = canSearch ? '하루 동안 배를 세우고 주변 바다와 수평선을 살핍니다.' : '배를 완전히 세운 뒤 탐색할 수 있습니다.';
+      setTitle(hudEl.search, keyTip(canSearch ? '하루 동안 배를 세우고 주변 바다와 수평선을 살핍니다.' : '배를 완전히 세운 뒤 탐색할 수 있습니다.', 'seaSearch'));
     }
+    keyHints();
     var s = S(), l = s.loc;
     var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + (st.paused ? ' 가던 길에 멈춤 — Space·출발로 이어 가기' : (st.autoOn ? ' 자동항해 중' : st.pilot ? ' 바닷길 따라 항해 중' : ' 항해 중')) : (st.paused ? '목적지 가던 길에 멈춤 — Space·출발로 이어 가기' : '목적지로 항해 중'))
       : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — Space·방향키로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.pointerSteer ? '마우스를 따라 조타 중 (' + G.Keys.label('mouseFollow').replace(/^(왼쪽|오른쪽) /, '') + ' 끔)' : st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')

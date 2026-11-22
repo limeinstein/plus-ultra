@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-22",
+  "tool": "built-in image_gen",
+  "input": "images/family-events/12_return_dock_embrace.webp",
+  "source": "artifacts/homecoming-embrace-20261122/source.png",
+  "output": "images/family-events/12_return_dock_embrace.webp",
+  "size": [
+    576,
+    256
+  ],
+  "prompt": "Use case: precise-object-edit\nAsset type: historical sailing game homecoming event illustration, landscape panorama 9:4 (same framing as reference), intended final display 576x256.\nInput image 1: edit target and style/background reference.\nPrimary request: Redraw the adult husband and wife embracing at their home port after a long voyage. Correct the awkward tangled anatomy in the reference. Keep the dawn harbor, ships on the right, stone quay and lantern on the left, warm misty golden light, period clothing palette, cinematic realistic painterly style and central placement. The central embrace must read instantly and anatomically clearly at small game size.\nPose: The husband in a dark navy early Renaissance captain's coat stands with his back in a three-quarter view toward us. The wife in a muted burgundy skirt, brown fitted bodice and ivory linen blouse leans gently against his upper chest, her head beside his shoulder. His near arm bends naturally around her mid-back, one relaxed hand resting at her far waist. His other arm goes around her upper back and is naturally occluded. The wife has exactly TWO arms: her near ivory-sleeved arm rests naturally over his near shoulder with ONE clearly attached relaxed hand on his upper back; her other arm wraps low around his waist, mostly occluded. Keep each sleeve continuously connected to its own shoulder and elbow. Simple, comfortable mutual embrace, believable shoulders, elbows, wrists, hands. Distinct husband/wife silhouettes, realistic proportions, no stiff twisting.\nConstraints: Exactly two adults, each exactly two arms and two hands; only naturally visible hands need to be shown. No duplicated arms, no floating disconnected sleeves, no extra hands at the neck, no fused fingers or interpenetrating bodies. Their faces remain mostly hidden so this illustration can represent different game characters. Maintain wholesome affectionate reunion, full opaque background, no writing, text, borders, UI, watermark, modern objects, fantasy armor. Preserve the wide composition and keep all key embrace anatomy inside the central safe area."
+}

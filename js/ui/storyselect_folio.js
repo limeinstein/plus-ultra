@@ -79,13 +79,18 @@
     });
   }
   function portrait(m, large) {
-    return G.Img.make([m.face], large ? 360 : 220, large ? 300 : 240, function () { var c = document.createElement('canvas'); c.width = 220; c.height = 240; return c; }, {
+    var f = fx().portraits, frame = f && f.frames[m.face];
+    // 아래 여유가 있는 원본을 쓰면 얼굴을 줄여도 어깨가 이름표까지 이어진다.
+    var chain = frame && frame.source ? [frame.source, m.face] : [m.face];
+    return G.Img.make(chain, large ? 360 : 220, large ? 300 : 240, function () { var c = document.createElement('canvas'); c.width = 220; c.height = 240; return c; }, {
       fit: 'contain', fx: .5, fy: .4,
       post: function (ctx, w, h, key) {
         var f = fx().portraits, frame = f && f.frames[key], im = frame && G.Img.get(key);
         if (!im) return;
         // 얼굴의 실제 크기로 배율을 정하고 정수리를 같은 높이에 놓는다.
         var scale = h * f.headHeight / (im.naturalHeight * frame.height);
+        // 카드에서는 어깨 아래가 이름표 뒤까지 이어지도록 원본의 아래끝도 채운다.
+        if (!large) scale = Math.max(scale, h * (1 - f.top) / (im.naturalHeight * (1 - frame.top)));
         ctx.clearRect(0, 0, w, h);
         ctx.drawImage(im, w / 2 - im.naturalWidth * frame.centerX * scale, h * f.top - im.naturalHeight * frame.top * scale, im.naturalWidth * scale, im.naturalHeight * scale);
       }

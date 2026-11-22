@@ -21,7 +21,9 @@
 .ss-atlas .ss-card:hover, .ss-atlas .ss-card.on { outline:0; box-shadow:none; }
 .ss-atlas .ss-card:focus-visible, .storyselect-win .ss-atlas .btn:focus-visible, .ss-atlas .ss-copy:focus-visible { outline:2px solid #ffe3a1; outline-offset:2px; }
 .ss-atlas .ss-card.on > .ss-art-panel, .ss-atlas .ss-card:hover > .ss-art-panel, .ss-atlas .ss-card:focus-visible > .ss-art-panel { filter:drop-shadow(0 0 4px #f3cc72); }
-.ss-atlas .ss-card .ss-face { inset:13px 11px 25px; }
+.ss-atlas .ss-card .ss-face { inset:6px 11px 20px; }
+.ss-atlas .ss-card .ss-face canvas { object-fit:cover; }
+.ss-atlas .ss-face canvas, .ss-atlas .ss-portrait canvas { object-position:center top; }
 .ss-atlas .ss-card .nm { position:absolute; left:-5px; right:-5px; bottom:-4px; min-height:32px; padding:9px 24px; font-size:12px; }
 .ss-atlas .ss-card.on::before { top:-17px; z-index:2; }
 .ss-atlas .ss-empty { border-radius:16px; border-color:#b39a6888; background:#1c393955; }
