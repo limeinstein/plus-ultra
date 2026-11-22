@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-22",
+  "language": "en",
+  "scope": [
+    "이야기 선택 세 주인공 소개·안내",
+    "해적여제 프롤로그·킬리그루·그레이스 사건",
+    "해적여제 수첩·동료·소지품·진행 안내",
+    "수첩·저장·조작 안내 누락"
+  ],
+  "translationSourceRows": 383,
+  "compatibilitySourceRows": 13,
+  "preserved": {
+    "textAndNames": 62123,
+    "patterns": 8392
+  },
+  "storyAndScreenChecks": {
+    "preserved": 62123,
+    "preservedPatterns": 8392,
+    "pages": 167,
+    "dialogueLines": 158,
+    "storyModes": 3,
+    "mates": 8,
+    "items": 7,
+    "guides": 20,
+    "found": {
+      "title": [],
+      "load-menu": [],
+      "display": [],
+      "story-0": [],
+      "story-1": [],
+      "story-2": [],
+      "notebook-story": [],
+      "mates-list": [],
+      "mate-detail": [],
+      "dialogue-roger": [],
+      "dialogue-killigrew-small": []
+    },
+    "koreanRestored": true,
+    "errors": []
+  },
+  "runtimeCrawl": {
+    "before": 5,
+    "after": 0,
+    "remaining": [],
+    "coverage": "타이틀·불러오기·조작 안내·화면 설정·세비야·교역 구입/판매/시세·바다"
+  },
+  "sourceRebuildMatches": true,
+  "checks": {
+    "tsvCompiler": "passed",
+    "dialogTranslationOrder": "passed",
+    "translationTemplates": "passed",
+    "englishStoryScreens": "passed",
+    "existingEnglishFlow": "passed using a temporary copy with language availability checked against the currently loaded packs; the original fixed pending-language list is stale while other language work proceeds"
+  },
+  "remaining": [
+    "해적여제 a5_lucia 이후 사건 본문",
+    "바닷길 노래 사건 본문",
+    "그 밖의 미번역 사건·발견 문장"
+  ],
+  "note": "전체 영어 완역 또는 모든 사건의 화면 검사를 뜻하지 않는다.",
+  "followup": {
+    "report": "i18n-en-followup-2026-11-22.json",
+    "completedPriorRemaining": [
+      "해적여제 a5_lucia 이후 사건 본문",
+      "바닷길 노래 사건 본문"
+    ]
+  }
+}

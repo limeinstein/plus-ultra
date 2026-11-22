@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-22",
+  "language": "es",
+  "scope": "이야기 선택·해적여제 전체 자료와 두 선택 분기·수첩·저장·교역 수요 안내",
+  "addedSourceRows": 991,
+  "sourceFiles": {
+    "compat_20261122.tsv": 3,
+    "names_jhook_ships_20261122.tsv": 10,
+    "names_story_20261122.tsv": 70,
+    "runtime_20261122.tsv": 65,
+    "runtime_economy_20261122.tsv": 1,
+    "story_jhook_choices_20261122.tsv": 34,
+    "story_jhook_main_20261122.tsv": 552,
+    "story_jhook_opening_20261122.tsv": 166,
+    "story_jhook_runtime_20261122.tsv": 5,
+    "story_jhook_ui_20261122.tsv": 75,
+    "story_select_20261122.tsv": 10
+  },
+  "preservedLegacyRows": 3,
+  "buildMatches": true,
+  "checkedNewPatterns": 39,
+  "missingPatternCaptures": 0,
+  "browser": {
+    "preserved": 42987,
+    "preservedPatterns": 4439,
+    "preservedPersons": 1501,
+    "pages": 765,
+    "dialogueLines": 747,
+    "choices": 1,
+    "branches": 2,
+    "fields": 864,
+    "storyModes": 4,
+    "mates": 8,
+    "items": 7,
+    "guides": 20,
+    "found": {
+      "title": [],
+      "load-menu": [],
+      "display": [],
+      "story-0": [],
+      "story-1": [],
+      "story-2": [],
+      "story-3": [],
+      "notebook-story": [],
+      "mates-list": [],
+      "mate-detail": [],
+      "dialogue-roger": [],
+      "dialogue-killigrew-small": [],
+      "final-choice-small": [],
+      "finale": []
+    },
+    "koreanRestored": true,
+    "errors": []
+  },
+  "screenCrawl": {
+    "before": [
+      {
+        "src": "dom",
+        "ko": "이야기 모드",
+        "n": 3
+      },
+      {
+        "src": "dom",
+        "ko": "이 시장의 시대 수요 ×# — 베네치아가 쥐고 있던 시절엔 귀했지만, 인도 항로가 열리자 리스본으로 쏟아지고, #세기에 네덜란드·잉글랜드 동인도회사가 실어 나르며 흔해졌다",
+        "n": 2
+      },
+      {
+        "src": "dom",
+        "ko": "Sevilla 건물",
+        "n": 1
+      }
+    ],
+    "after": []
+  },
+  "languageSelectionSmoke": {
+    "menu": true,
+    "settings": true,
+    "create": true,
+    "persisted": true,
+    "catalog": true,
+    "errors": []
+  },
+  "screenshots": "artifacts/i18n-spanish-20261122/",
+  "remaining": [
+    "바닷길 노래·황금의 바다 본문",
+    "other_g2.tsv·other_g3.tsv에 해당하는 다른 사건·발견 대사",
+    "스페인어 가이드북 전체"
+  ],
+  "note": "기본 화면 순회의 누락 0건은 게임 전체의 완역을 뜻하지 않는다. 대사 수에는 마지막 두 분기의 공통 대사를 각각 포함한다."
+}

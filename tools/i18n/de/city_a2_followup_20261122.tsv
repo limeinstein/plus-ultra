@@ -1,0 +1,142 @@
+/역할을 바꿀 동료를 고르십시오\. 여기서 정하는 것은 <b>기함<\/b>의 부관·항해사·측량사·통역·경리 \(한 명씩 — 경리는 회계로 교역소·시장·후원자 앞에서 값을 후려친다\)입니다\. 기함의 선장은 제독입니다\.<br><small class="muted">기함 말고 다른 배의 선장·조타수·갑판·파수꾼·선실(.*)$/	Wählen Sie den Gefährten, dessen Aufgabe Sie ändern möchten. Hier vergeben Sie auf dem <b>Flaggschiff</b> die Posten Erster Offizier, Navigator, Vermesser, Dolmetscher und Zahlmeister, jeweils einmal. Der Zahlmeister handelt mit Buchhaltung bessere Preise in Kontoren und auf Märkten sowie bessere Bedingungen bei Förderern aus. Kapitän des Flaggschiffs ist der Admiral.<br><small class="muted">Auf anderen Schiffen werden Kapitäne, Steuerleute, Decksmannschaft, Ausguck und Kabinen nach Fähigkeiten automatisch zugewiesen.</small>
+같은 물건을 같은 나라나 지역에 들여와 산 값보다 #% 이상 비싸게 팔아 보게. #일 안에 #번 이상 그런 장사를 하면, 그때부터 조건을 채운 거래마다 #% 확률로 유행이 날 수 있지.	Verkauft dieselbe Ware im selben Land oder Gebiet für mindestens {1}% mehr als den Einkaufspreis. Gelingt das mindestens {3} Mal innerhalb von {2} Tagen, kann danach jedes passende Geschäft mit {4}% Wahrscheinlichkeit eine Mode auslösen.
+같은 날 같은 도시에서 나눠 팔거나, 한 번 입항해 머무는 동안 거듭 판 것은 한 번으로 치네. 유행이 나면 #일 동안 값이 #배로 뛰지. 유행이 끝난 뒤에는 #일 동안 같은 곳에서 같은 물건의 유행이 다시 나지 않는다네.	Aufgeteilte Verkäufe am selben Tag in derselben Stadt sowie wiederholte Verkäufe während eines Hafenaufenthalts zählen zusammen nur einmal. Eine Mode erhöht den Preis für {1} Tage auf das {2}-Fache. Nach ihrem Ende kann dieselbe Ware am selben Ort {3} Tage lang keine neue Mode auslösen.
+/이 조선소의 기술은 ([\d,.]+)등급일세 \(기본 ([\d,.]+)등급, 지금까지 들어온 투자 금화 ([\d,.]+)닢\)\. 금화 ([\d,.]+)닢을 더 대 주면 도크를 넓히고 장인을 불러 ([\d,.]+)등급 배를 지을 수 있네\.(.*)$/	Diese Werft hat Klasse $1 (Grundklasse $2, bisher $3 Goldmünzen investiert). Mit weiteren $4 Goldmünzen erweitere ich die Docks und hole Handwerker, um Schiffe der Klasse $5 zu bauen.
+/(.+?)의 취향: <b>(.+?)<\/b> <span class="muted">— ★ 취향에 맞으면 선금·사례를 후하게, 취향 밖이면 웅변으로 설득해 볼 수 있다<\/span> · 성품: <b>(.+?)<\/b> <span class="muted">— (.+?)<\/span>$/	Interessen von ⟦$1⟧: <b>⟦$2⟧</b> <span class="muted">— ★ passende Funde bringen großzügige Vorschüsse und Belohnungen; andernfalls hilft vielleicht Redekunst</span> · Wesen: <b>⟦$3⟧</b> <span class="muted">— ⟦$4⟧</span>
+/짐은 (.+?)에 관한 이야기라면 언제든 귀를 기울이오\.$/	Geschichten über ⟦$1⟧ hören Wir jederzeit gern.
+/근래 궁정에서도 화제가 된 이야기가 있소\. 부두의 늙은 선원들이 입을 모아 말하더군\. (.+) 그 일을 해내겠다면 기꺼이 후원을 생각해 보겠소\.$/	Eine Geschichte beschäftigt neuerdings auch den Hof. Die alten Seeleute am Kai erzählen alle dasselbe: ⟦$1⟧ Bringt Ihr dies zustande, werden Wir Eure Förderung gern erwägen.
+/저는 (.+?)에 관한 건이라면 언제든 검토합니다\.$/	Angelegenheiten zu ⟦$1⟧ prüfe ich jederzeit gern.
+/나는 (.+?)에 관한 이야기라면 언제든 듣고 싶소\.$/	Ich höre jederzeit gern etwas über ⟦$1⟧.
+/나는 (.+?)에 관한 이야기라면 언제든 귀를 기울이지\.$/	Erzählt mir von ⟦$1⟧, und Ihr habt mein Ohr.
+/<b>(.+?)<\/b> <small class="muted">(.+?)<\/small>$/	<b>⟦$1⟧</b> <small class="muted">⟦$2⟧</small>
+/(.+?) (<span class="pips">.*)$/	⟦$1⟧ $2
+/<b>(.+?)<\/b> <small class="good-text">처음 맛본다<\/small><br><small class="muted">(.+?)<\/small>$/	<b>⟦$1⟧</b> <small class="good-text">erstmals probieren</small><br><small class="muted">⟦$2⟧</small>
+/(.+?) <small class="muted">(.+?)<\/small>$/	⟦$1⟧ <small class="muted">⟦$2⟧</small>
+토마토와 오이, 올리브유를 차갑게 갈아 낸 안달루시아 수프.	Eine kalt pürierte andalusische Suppe aus Tomaten, Gurken und Olivenöl.
+감자와 양파를 달걀에 섞어 두껍게 부친 스페인식 오믈렛.	Ein dickes spanisches Omelett aus Eiern, Kartoffeln und Zwiebeln.
+소금에 절인 대구를 감자와 올리브유로 조리한 포르투갈 음식.	Ein portugiesisches Gericht aus gesalzenem Kabeljau, Kartoffeln und Olivenöl.
+감자와 푸른 잎채소, 소시지를 넣은 포르투갈식 수프.	Eine portugiesische Suppe aus Kartoffeln, grünem Blattgemüse und Wurst.
+쌀에 해산물이나 고기와 향신료를 더해 넓은 팬에 익힌 음식.	Reis mit Meeresfrüchten oder Fleisch und Gewürzen, in einer breiten Pfanne gegart.
+생선이나 고기와 채소를 넣어 큼직하게 구운 갈리시아식 파이.	Eine große galicische Pastete mit Fisch oder Fleisch und Gemüse.
+가볍고 날렵한 찌르기용 검.	Eine leichte, wendige Stichwaffe.
+기사들이 즐겨 쓰는 양날검.	Ein bei Rittern beliebtes zweischneidiges Schwert.
+무두질한 가죽 갑옷.	Eine Rüstung aus gegerbtem Leder.
+쇠고리를 엮은 사슬 갑옷.	Eine Rüstung aus miteinander verflochtenen Eisenringen.
+진행 방향과 풍향을 정확히 알 수 있다.	Zeigt Fahrtrichtung und Windrichtung genau an.
+현재 위치의 위도와 경도를 알 수 있다.	Zeigt den aktuellen Breiten- und Längengrad an.
+장기 항해의 괴혈병을 한동안(#일) 막아 준다. 이베리아·지중해·동아프리카·중근동·인도의 시장에서 판다.	Beugt auf langen Reisen # Tage lang Skorbut vor. Auf Märkten in Iberien, dem Mittelmeerraum, Ostafrika, dem Nahen Osten und Indien erhältlich.
+목판으로 찍어 낸 카드 한 벌. 뱃사람들이 밤새 내기를 한다.	Ein mit Holzstöcken gedrucktes Kartenspiel. Seeleute spielen damit die ganze Nacht um Geld.
+안달루시아 헤레스의 독한 포도주(색). 북쪽 뱃사람들이 가장 탐내는 술.	Ein kräftiger Wein aus Jerez in Andalusien, auch Sack genannt. Bei Seeleuten aus dem Norden besonders begehrt.
+돛과 밧줄까지 깎아 맞춘 카락선 모형. 뱃사람이면 누구나 눈을 떼지 못한다.	Ein bis zu Segeln und Tauen sorgfältig gearbeitetes Karackenmodell. Kein Seemann kann den Blick davon wenden.
+끈에 매달아 목에 거는 작은 금속 호각. 짧고 긴 소리를 나누어 군악 행렬의 출발과 정지를 알린다.	Eine kleine Metallpfeife am Halsband. Kurze und lange Pfiffe geben einer Militärkapelle die Zeichen zum Marschieren und Anhalten.
+나무 손잡이를 잡고 흔들면 안쪽 추자가 종 몸통을 치는 작은 종. 맑고 긴 울림으로 합주와 신호에 쓰인다.	Eine kleine Glocke mit Holzgriff. Beim Schütteln schlägt der Klöppel gegen den Glockenkörper. Ihr heller, langer Klang dient dem Zusammenspiel und als Signal.
+한 손으로 손가락 구멍 세 개를 짚는 긴 피리. 다른 손으로 타보르 북을 치며 혼자 가락과 장단을 함께 연주한다.	Eine lange Flöte mit drei Grifflöchern für eine Hand. Die andere schlägt die Tabor-Trommel: Melodie und Rhythmus von einem einzigen Spieler.
+/단계가 오를수록 교역소 흥정이 잘 통하고 (.*)$/	Höhere Stufen verbessern das Feilschen im Kontor und erlauben mehr Versuche je Besuch. Besseres Verstauen erhöht die Tragfähigkeit. Auf höchster Stufe werden geheime Schwarzmärkte großer Häfen zugänglich. Als Zahlmeister erzielt man bessere Markt- und Kontorpreise sowie günstigere Vorschüsse und Fristen bei Förderern.
+카다모스토 『항해기』	Cadamosto, Reiseberichte
+마르코 폴로 『동방견문록』	Marco Polo, Il Milione
+호메로스 『일리아스』	Homer, Ilias
+호메로스 『오디세이아』	Homer, Odyssee
+헤로도토스 『역사』	Herodot, Historien
+플리니우스 『박물지』	Plinius, Naturalis historia
+토스카넬리의 서한	Toscanellis Brief
+『프레스터 존의 서한』	Brief des Priesterkönigs Johannes
+보라기네 『황금 전설』	Jacobus de Voragine, Legenda aurea
+『맨더빌 여행기』	Die Reisen des John Mandeville
+프톨레마이오스 『지리학』	Ptolemäus, Geographike Hyphegesis
+스트라본 『지리지』	Strabon, Geographika
+『베오울프』	Beowulf
+『빈랜드 사가』	Die Vinland-Sagas
+『노르웨이 왕 연대기』	Heimskringla — Geschichte der norwegischen Könige
+『성 브렌던의 항해』	Die Seereise des heiligen Brendan
+『원초 연대기』	Nestorchronik
+파우사니아스 『그리스 안내기』	Pausanias, Beschreibung Griechenlands
+이븐 바투타 『여행기』	Ibn Battuta, Rihla
+알 이드리시 『지리서』	Al-Idrisi, Das Buch Rogers
+『천일야화』	Tausendundeine Nacht
+알 마크리지 『이집트지』	Al-Maqrizi, Beschreibung Ägyptens
+『알함브라 연대기』	Chronik der Alhambra
+알 마스우디 『황금 목장』	Al-Masudi, Die Goldwiesen
+피르다우시 『샤나메』	Firdausi, Schahname
+라시드 앗딘 『집사』	Raschīd ad-Dīn, Universalgeschichte
+『이스파한 안내기』	Führer durch Isfahan
+현장 『대당서역기』	Xuanzang, Bericht über die westlichen Regionen der Großen Tang
+마환 『영애승람』	Ma Huan, Gesamtschau der Meeresküsten
+사마천 『사기』	Sima Qian, Aufzeichnungen des Chronisten
+『산해경』	Klassiker der Berge und Meere
+『후한서』	Buch der Späteren Han
+『송사』	Geschichte der Song
+주달관 『진랍풍토기』	Zhou Daguan, Bericht über Kambodscha
+『라마야나』	Ramayana
+『비자야나가르 연대기』	Chronik von Vijayanagara
+『몽골 비사』	Die Geheime Geschichte der Mongolen
+『쿠타드구 빌리그』	Kutadgu Bilig
+그리오의 구전 노래 (필사본)	Überlieferte Lieder der Griots (Abschrift)
+『트로아노 고사본』	Codex Tro-Cortesianus
+『보르자 고사본』	Codex Borgia
+키푸의 기록 (풀이본)	Quipu-Aufzeichnungen (Entzifferung)
+『나가라크레타가마』	Nagarakretagama
+『파간 연대기』	Chronik von Pagan
+일연 『삼국유사』	Iryeon, Samguk Yusa
+『고사기』	Kojiki
+신숙주 『해동제국기』	Sin Suk-ju, Haedong Jegukki
+『쇼소인 보물 목록』	Schatzverzeichnis des Shōsōin
+비잔티온의 필론 『세계의 일곱 볼거리』	Philon von Byzanz, Die sieben Sehenswürdigkeiten der Welt
+디오도로스 『역사 총서』	Diodor, Historische Bibliothek
+수에토니우스 『황제 열전』	Sueton, Die zwölf Caesaren
+『로마의 경이』	Die Wunder der Stadt Rom
+베르길리우스 『아이네이스』	Vergil, Aeneis
+아그넬루스 『라벤나 주교 열전』	Agnellus, Buch der Bischöfe von Ravenna
+법현 『불국기』	Faxian, Bericht über die buddhistischen Königreiche
+코스마스 『그리스도교 지지』	Kosmas, Christliche Topographie
+『케브라 나가스트』	Kebra Nagast
+『아리스테아스의 편지』	Aristeasbrief
+반고 『한서』	Ban Gu, Buch der Han
+『이요국 풍토기』 일문	Iyo Fudoki (Fragmente)
+이븐 알 나딤 『피흐리스트』	Ibn an-Nadim, Kitab al-Fihrist
+알 야쿠비 『여러 나라의 책』	Al-Yaqubi, Buch der Länder
+이븐 주바이르 『여행기』	Ibn Dschubair, Reisebericht
+『아즈마 카가미』	Azuma Kagami
+단테 『신곡』	Dante, Die Göttliche Komödie
+장 드 장됭 『파리 찬가』	Jean de Jandun, Lob der Stadt Paris
+『프랑스 대연대기』	Große Chroniken von Frankreich
+『스투를룽가 사가』	Sturlunga-Saga
+『릴라의 이반 성인전』	Leben des heiligen Iwan von Rila
+초서 『캔터베리 이야기』	Chaucer, Canterbury-Erzählungen
+탄조르 대사원 명문 탁본	Abreibung der Tempelinschriften von Thanjavur
+『고팔라 왕통기』	Gopala-Königschronik
+『치앙마이 연대기』	Chronik von Chiang Mai
+조반니 빌라니 『새 연대기』	Giovanni Villani, Neue Chronik
+하페즈 『시집』	Hafis, Diwan
+『명실록』	Wahrhaftige Aufzeichnungen der Ming
+볼프람 폰 에셴바흐 『파르치팔』	Wolfram von Eschenbach, Parzival
+『구마노 참배기』	Bericht einer Pilgerreise nach Kumano
+한노 『항해기』	Hanno, Periplus
+스노리 스투를루손 『에다』	Snorri Sturluson, Edda
+몬머스의 제프리 『브리타니아 열왕사』	Geoffrey von Monmouth, Geschichte der Könige Britanniens
+『오토기조시』	Otogi-zōshi
+『불가타 성경』	Vulgata
+『대월사기전서』	Vollständige Chronik von Đại Việt
+압드 알라티프 알바그다디 『이집트 견문기』	Abd al-Latif al-Baghdadi, Bericht über Ägypten
+아리아노스 『알렉산드로스 원정기』	Arrian, Alexanders Feldzug
+나시르 호스로 『여행기』	Nasir-i Chusrau, Safarnama
+아리스토텔레스 『동물지』	Aristoteles, Tierkunde
+알 다미리 『동물의 삶』	Ad-Damiri, Das Leben der Tiere
+야쿠트 『지명 사전』	Yaqut, Wörterbuch der Länder
+간자의 키라코스 『아르메니아 역사』	Kirakos von Gandsak, Geschichte Armeniens
+투르의 그레고리우스 『프랑크족의 역사』	Gregor von Tours, Geschichte der Franken
+『칼릭스티누스 사본』 — 산티아고 순례자 안내서	Codex Calixtinus — Pilgerführer nach Santiago
+『샤르트르 성모 기적집』	Wunder Unserer Lieben Frau von Chartres
+고메스 이아네스 드 주라라 『기네 발견 연대기』	Gomes Eanes de Zurara, Chronik der Entdeckung Guineas
+안토니오 마네티 『브루넬레스키의 생애』	Antonio Manetti, Das Leben Brunelleschis
+더럼의 시메온 『더럼 교회의 기원』	Symeon von Durham, Über die Ursprünge der Kirche von Durham
+가스통 페뷔스 『사냥의 서』	Gaston Fébus, Das Buch von der Jagd
+『왕통을 밝히는 거울』	Spiegel der königlichen Geschlechter
+괴 로차와 『청사(푸른 연대기)』	Gö Lotsawa, Die Blauen Annalen
+유후 등 『구당서』	Liu Xu und andere, Altes Buch der Tang
+기욤 드 뤼브룩 『동방 여행기』	Wilhelm von Rubruk, Reise in den Osten
+조반니 다 피안 델 카르피네 『몽골인의 역사』	Johannes de Plano Carpini, Geschichte der Mongolen
+요한 실트베르거 『여행기』	Johannes Schiltberger, Reisebuch
+위징 등 『수서』	Wei Zheng und andere, Buch der Sui
+오사련 『대월사기전서』	Ngô Sĩ Liên, Vollständige Chronik von Đại Việt
+『파라라톤』 — 왕들의 책	Pararaton — Das Buch der Könige
+구양수 『귀전록』	Ouyang Xiu, Guitian Lu

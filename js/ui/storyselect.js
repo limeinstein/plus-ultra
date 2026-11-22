@@ -1,4 +1,7 @@
-/* 이야기 고르기 (G.StorySelect) — 타이틀 「이야기 모드」 → 세계 지도 위 주인공 초상을 골라 그 이야기를 시작한다. 2026-11-21 사용자 요청
+/* 이야기 등록·기본 지도 API. 실제 고지도 선택 화면은 다음에 읽는 storyselect_folio.js에서 제공한다.
+   새 이야기의 이름·초상·공개 조건·시작 함수는 이 파일의 G.STORY_MODES에 추가한다.
+   아래 기본 지도는 예전 호출과의 호환을 위해 보존한다.
+   이야기 고르기 (G.StorySelect) — 타이틀 「이야기 모드」 → 세계 지도 위 주인공 초상을 골라 그 이야기를 시작한다. 2026-11-21 사용자 요청
    · 지도: G.Geo.isLand 로 그린 양피지 땅 + 물결무늬 바다 + 금테. 초상은 주인공의 고향 항구 곁에 액자로 서고, 가는 금줄로 항구와 잇는다.
    · 지도는 두 장: 처음엔 유럽만(에스파냐·포르투갈·영국·네덜란드·오스만을 색과 국경·이름으로) → 오른쪽 화살표(▶)나 → 키로 밀면 동쪽 바다(조선)와 소영.
      이야기가 없는 지도는 빠진다(바닷길 노래 공개 전엔 동쪽 바다도 화살표도 없음).
@@ -19,6 +22,11 @@
       party: '스미스 호킨스 · 윌리엄 호킨스 · 코난 홈즈 …', tag: '아버지를 버린 세상에 복수하러 나간 항해',
       synopsis: '사략선장 로저 후크가 왕실의 동맹 거래에 버려져 교수대에 오른다. 딸 제시카는 늙은 선원 스미스와 그 아들 윌리엄과 함께 도망쳐 바다로 나간다. 왕을 죽이러 떠난 항해는, 끝내 자신이 지킬 가족과 나라를 만드는 항해가 된다.',
       ok: function () { return !!(G.JHook && G.JHook.begin); }, begin: function () { return G.JHook.begin(true); } },
+    { id: 'gold', hero: '아드리안 판데르펠더', title: '황금의 바다', sub: '세계를 잇는 상인', city: 24, page: 'eu', year: '1598년 · 암스테르담', bg: '#8a5a1a', dx: 150, dy: -60,
+      face: 'portraits/player/noble_scholar', half: 'characters/player_half_noble_scholar',
+      party: '엘리너르 더비트 · 마리커 판레이우언 · 브람 판호른 …', tag: '세상의 길을 사러 가는 항해',
+      synopsis: '아버지는 해적에게 배를 잃고 빚만 남긴 채 죽었다. 스물두 살 상인에게 남은 것은 작은 배 한 척과 장부 마지막 줄의 한 문장. 밀린 급료를 받으러 온 공증인의 딸, 소문을 파는 소꿉친구, 돈을 빌려준 친구와 함께 — 연합 동인도 회사와 해적섬, 배신과 사랑을 지나 세계에서 가장 부유한 사람이 되는 서른 해.',
+      ok: function () { return !!(G.GoldSea && G.GoldSea.begin); }, begin: function () { return G.GoldSea.begin(true); } },
     { id: 'song', hero: '김소영', title: '바닷길 노래', sub: '바다에 길을 내는 노래', city: 229, page: 'ea', year: '1480년 · 한산도', bg: '#22558a', dx: -126, dy: 52,
       face: 'portraits/player/soyoung', half: 'characters/player_half_soyoung',
       party: '황규 · 박월담 · 임처사 …', tag: '들려준 세상을 직접 만나러 가는 항해',

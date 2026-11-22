@@ -1,0 +1,27 @@
+도크 — 도크 #/#척 · 모항	Docks — #/# navires · Port d’attache
+탐험·교역 계획 — 사건 예고·기한·재조사	Plan d’exploration et de commerce — Événements à venir · Délais · Réexamens
+탐험·교역 계획 — 거래처 정보·역사적 교역 기회	Plan d’exploration et de commerce — Partenaires · Occasions historiques
+호위 요청 — 호위할 상선을 찾아본다	Demandes d’escorte — Chercher un navire marchand à escorter
+#박	# nuits
+상인 @	Marchand @
+술집 손님	Client de la taverne
+기초 #단계	Notions de niveau #
+기초	Notions
+식당 주인	Restaurateur
+소문 속 해적	Pirate des rumeurs
+여관 주인	Aubergiste
+수녀	Religieuse
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+) · 짐승을 잃기 쉽다$/	⟦$1⟧ Allure ×$2 · Fatigue ×$3 · Risque élevé de perdre des animaux
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+)$/	⟦$1⟧ Allure ×$2 · Fatigue ×$3
+사막	Désert
+숲	Forêt
+밀림	Jungle
+설원	Étendue enneigée
+툰드라	Toundra
+빙원	Champ de glace
+발견물 백과사전 — 아직 실린 것이 없다	Encyclopédie des découvertes — aucune entrée
+이베리아 참나무	Chêne ibérique
+기함 변경 — 기함 @호	Changer de navire amiral — actuellement @
+바닥이 얕아 뭍 가까이(해안에서 #° 안)에서 더 빠르고, 여울·암초 사고를 입지 않는다.	Son faible tirant d’eau le rend plus rapide près des côtes (à moins de #°) et le protège des accidents de hauts-fonds et de récifs.
+얕은 흘수	Faible tirant d’eau
+가볍고 날렵해 멀리까지 살핀다. 함대에 있으면 망루의 시야가 넓어진다.	Léger et agile, il explore au loin. Sa présence dans la flotte augmente la portée de la vigie.

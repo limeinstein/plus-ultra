@@ -48,5 +48,5 @@ L.append('    },\n    person: {')
 items = list(PERSON.items())
 L += ['      %s: %s%s' % (js(k), js(v), ',' if i < len(items) - 1 else '') for i, (k, v) in enumerate(items)]
 L.append('    }\n  });\n})(window.G = window.G || {});\n')
-open(sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, '..', '..', 'js', 'lang', 'en.js'), 'w', encoding='utf-8').write('\n'.join(L))
+open(sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, '..', '..', 'js', 'lang', 'en.js'), 'w', encoding='utf-8', newline='\n').write('\n'.join(L))
 print('text', len(TEXT), 'pat', len(P2), 'name', len(NAMES), 'person', sum(len(v) for v in PERSON.values()))

@@ -686,9 +686,8 @@
       try { drawCrowd(cv, 0, 1, rr); } catch (e) { /* */ }
       stopMusic();
       var res = document.createElement('div'); res.className = 'result';
-      res.innerHTML = '<h4>' + U.esc(c.name) + U.esc(U.jx(c.name, '이/가')) + ' 공연장이 되었다</h4>' +
-        '관객 <b>' + U.num(crowd) + '</b>명 · 사례 금화 <b>' + U.num(gold) + '</b>닢 · 사교 명성 <b>+' + so + '</b><br>' +
-        '선원 피로 −' + K.fatigue + ' · 규율 +' + K.discipline +
+      res.innerHTML = G.T('<h4>{city|이/가} 공연장이 되었다</h4>관객 <b>{crowd}</b>명 · 사례 금화 <b>{gold}</b>닢 · 사교 명성 <b>+{fame}</b><br>선원 피로 −{fatigue} · 규율 +{discipline}',
+        { city:c.name, crowd:U.num(crowd), gold:U.num(gold), fame:so, fatigue:K.fatigue, discipline:K.discipline }) +
         (learn ? '<br><b>새 노래를 배웠다 — 「' + U.esc(rinfo.song) + '」</b>' : '');
       stage.appendChild(res);
       var b = win.el.querySelector('.foot button'); if (b) b.textContent = '무대를 정리한다';
@@ -767,7 +766,7 @@
     el.innerHTML = '<div class="grid2" style="grid-template-columns:560px 1fr;gap:22px"><div>' +
       '<div class="song-map" title="도현의 지도 — 소영이 고쳐 쓰는 중"></div>' +
       '<div class="muted" style="font-size:14px;line-height:1.6;margin-top:8px">「가게 되면 내 대신 보고 와 줘.」 — 물음표는 아직 가 보지 못한 곳, 붉은 점은 소영이 직접 보고 고쳐 쓴 곳.</div>' +
-      '<div class="sep"></div><h4 style="margin:0 0 6px">바닷길 공연</h4><div style="font-size:15px;line-height:1.7">공연 <b>' + (t.concerts || 0) + '</b>번 · 관객 <b>' + U.num(t.crowd || 0) + '</b>명 · 공연장이 된 도시 <b>' + Object.keys(t.venues || {}).length + '</b>곳<br>부를 수 있는 노래 — ' + rep + voice + '</div>' +
+      '<div class="sep"></div><h4 style="margin:0 0 6px">바닷길 공연</h4><div style="font-size:15px;line-height:1.7">' + G.T('공연 <b>{shows}</b>번 · 관객 <b>{crowd}</b>명 · 공연장이 된 도시 <b>{cities}</b>곳<br>부를 수 있는 노래 —', { shows:t.concerts||0, crowd:U.num(t.crowd||0), cities:Object.keys(t.venues||{}).length }) + ' ' + rep + voice + '</div>' +
       '<div class="sep"></div><h4 style="margin:0 0 6px">함께 가는 사람</h4><div>' + mates + '</div>' +
       (aboard('sy_hook') && G.Img && G.Img.has('song/cuts/hook_piano') ? '<button class="btn" data-song-piano style="margin-top:10px">후크의 밤 연주 — 특별 원화</button>' : '') +
       '</div><div>' +

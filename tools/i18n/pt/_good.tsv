@@ -1,0 +1,163 @@
+wheat	Trigo
+rice	Arroz
+maize	Milho
+beans	Feijão
+potato	Batatas
+fish	Peixe seco
+beef	Carne de vaca
+dairy	Laticínios
+sugar	Açúcar
+honey	Mel
+salt	Sal-gema
+olive	Azeite
+palmoil	Óleo de palma
+wine	Vinho
+brandy	Aguardente
+rum	Rum
+beer	Cerveja
+pepper	Pimenta
+clove	Cravinho
+nutmeg	Noz-moscada
+cinnamon	Canela
+ginger	Gengibre
+allspice	Pimenta-da-jamaica
+tea	Chá
+coffee	Café
+cacao	Cacau
+tobacco	Tabaco
+wool	Lã
+cotton	Algodão em bruto
+silkraw	Seda em bruto
+hemp	Cânhamo
+woolcloth	Tecido de lã
+cottoncloth	Tecido de algodão
+silk	Tecido de seda
+linen	Linho
+chintz	Chita
+carpet	Tapetes
+iron	Minério de ferro
+copper	Minério de cobre
+tin	Minério de estanho
+mercury	Mercúrio
+coal	Carvão
+gold	Ouro
+silver	Prata
+gems	Pedras preciosas
+pearl	Pérolas
+coral	Coral
+amber	Âmbar
+jade	Jade
+ivory	Marfim
+tortoise	Carapaça de tartaruga
+rhino	Chifre de rinoceronte
+fur	Peles
+ambergris	Âmbar-cinzento
+frankincense	Incenso
+musk	Almíscar
+sandalwood	Sândalo
+glass	Artigos de vidro
+porcelain	Porcelana chinesa
+leathergoods	Artigos de couro
+jewelry	Joias
+art	Obras de arte
+antique	Antiguidades
+guns	Armas de fogo
+cannon	Canhões
+timber	Madeira de construção
+dye	Corantes
+hides	Couros
+herbs	Ervas medicinais
+horses	Cavalos
+faience	Faiança europeia
+cnsilk	Seda chinesa
+calico	Tecido de algodão indiano
+eaart	Pintura da Ásia Oriental
+banana	Bananas
+sweetpotato	Batatas-doces
+sculpture	Esculturas
+slaves	Escravos
+tigerskin	Peles de tigre
+p_bitterorange	Laranjas amargas
+p_marmelo	Marmelos
+p_almond	Amêndoas
+p_madrono	Medronhos
+p_chestnut	Castanhas
+p_apple	Maçãs
+p_lingonberry	Arandos-vermelhos
+p_cloudberry	Amoras-árticas
+p_gooseberry	Groselhas-espinhosas
+p_blackcurrant	Groselhas-negras
+p_fig	Figos secos
+p_lemon	Limões
+p_carob	Alfarroba
+p_citron	Cidras
+p_marasca	Cerejas marascas
+p_baobab	Frutos de embondeiro
+p_kola	Nozes-de-cola
+p_watermelon	Melancias
+p_marula	Frutos de marula
+p_shea	Manteiga de karité
+p_date	Tâmaras
+p_pistachio	Pistácios
+p_apricot	Damascos secos
+p_pomegranate	Romãs
+p_mulberry	Amoras
+p_mango	Mangas
+p_jackfruit	Jacas
+p_tamarind	Tamarindos
+p_amla	Frutos de amla
+p_coconut	Cocos
+p_lychee	Líchias
+p_longan	Longans secos
+p_persimmon	Caquis secos
+p_jujube	Jujubas
+p_omija	Bagas de omija
+p_hamimelon	Melões de Hami
+p_wildapple	Maçãs silvestres de Almaty
+p_walnut	Nozes
+p_seabuckthorn	Bagas de espinheiro-marítimo
+p_barberry	Bagas de bérberis secas
+p_durian	Duriões
+p_mangosteen	Mangostões
+p_rambutan	Rambutões
+p_carambola	Carambolas
+p_salak	Salak
+p_mikan	Tangerinas de Kishu
+p_yuzu	Yuzu
+p_nashi	Peras nashi
+p_akebi	Akebi
+p_biwa	Nêsperas japonesas
+p_pineapple	Ananases
+p_avocado	Abacates
+p_tomato	Tomates
+p_cashew	Cajus
+p_cherimoya	Anonas
+p_maesil	Ameixas verdes ume
+p_orchid	Orquídeas em vaso
+p_chrysanthemum	Chá de crisântemo
+p_bamboo	Bambu
+p_redpine	Pinheiro-vermelho real
+p_azalea	Vinho de azálea
+p_tulip	Bolbos de tulipa
+p_rosewater	Água de rosas
+p_whiterose	Estacas de roseira branca
+p_bluerose	Rosas azuis
+p_cork	Cortiça
+p_oak	Madeira de carvalho
+p_pinenut	Pinhões
+p_gumarabic	Goma-arábica
+p_cedar	Madeira de cedro
+p_teak	Madeira de teca
+p_ginkgo	Sementes de ginkgo
+p_populus	Resina de choupo
+p_camphor	Cânfora de Bornéu
+p_sakura	Mudas de cerejeira
+p_brazilwood	Pau-brasil
+p_cochineal	Cochonilha
+p_saguaro	Frutos de saguaro
+p_cactuspot	Catos em vaso
+p_larch	Madeira de lariço
+p_cedarnut	Pinhões de cedro-siberiano
+p_rhodiola	Rodiola
+p_eleuthero	Ginseng-siberiano
+p_poppyseed	Sementes de papoila

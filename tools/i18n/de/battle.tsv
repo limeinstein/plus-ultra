@@ -1,0 +1,99 @@
+일시정지	Pause
+재개	Fortsetzen
+백병전	Entern
+포격 정지	Feuer einstellen
+포격 재개	Feuer eröffnen
+퇴각	Rückzug
+교전 보기	Kampfansicht
+기함 보기	Flaggschiff anzeigen
+전장 전체	Gesamtes Schlachtfeld
+아군 함대	Eigene Flotte
+적 함대	Feindliche Flotte
+— 1번 기함을 무찌르면 승리	— Flaggschiff Nr. 1 besiegen, um zu gewinnen
+해상 괴물	Seeungeheuer
+— 잠수 중 공격 불가	— unter Wasser nicht angreifbar
+괴물	Ungeheuer
+처치	Erlegt
+해적선 #호	Piratenschiff Nr. #
+왜구선 #호	Wokou-Schiff Nr. #
+상선 #호	Handelsschiff Nr. #
+@ 군함 #호	@ — Kriegsschiff Nr. #
+군함 #호	Kriegsschiff Nr. #
+@호	@
+침몰	Gesunken
+이탈	Entkommen
+나포	Gekapert
+달아남	Geflohen
+상실	Verloren
+빼앗김	Vom Feind erbeutet
+빼앗김 — 이기면 되찾는다	Erbeutet — nach einem Sieg zurückgewonnen
+기함	Flaggschiff
+선원 #	Besatzung #
+내구 # / #	Rumpf # / #
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · B: 백병전 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Pfeiltasten: Flaggschiff steuern · Leertaste: anhalten · Klick: bewegen · Feind anklicken: angreifen · B: entern · F: eigenes Feuer an/aus · P: Pause · Mausrad: Zoom · +/−: Tempo · 1–7: Flottenbefehle · Tab: Schiff wählen
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · 괴물에게 백병전·일기토 불가 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Pfeiltasten: Flaggschiff steuern · Leertaste: anhalten · Klick: bewegen · Feind anklicken: angreifen · Ungeheuer: kein Entern oder Duell · F: eigenes Feuer an/aus · P: Pause · Mausrad: Zoom · +/−: Tempo · 1–7: Flottenbefehle · Tab: Schiff wählen
+섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.	Inseln und Küsten sind unpassierbar. Durch versperrte Seiten ist kein Rückzug möglich.
+함대 명령	Flottenbefehle
+— 기함 전술 (함께 싸울 배 없음)	— Flaggschifftaktik (keine Begleitschiffe)
+— 기함을 뺀 배 모두	— alle Schiffe außer dem Flaggschiff
+직접 조종	Selbst steuern
+기함 추종	Flaggschiff folgen
+학익진	Kranichflügel
+일제 공격	Gebündelter Angriff
+포격전	Artilleriegefecht
+기함 호위	Flaggschiff schützen
+자유 공격	Freier Angriff
+물러나기	Absetzen
+돌격	Sturmangriff
+포격 중심	Geschützfeuer bevorzugen
+자동 교전	Automatischer Kampf
+노림	Ziel
+자리 지킴	Position halten
+기함 혼자: 3 돌격 · 4 포격 중심 · 6 자동 교전 — 방향키·클릭으로 직접 몰면 풀립니다. 학익진·호위는 배가 2척 이상일 때.	Flaggschiff allein: 3 Sturmangriff · 4 Geschützfeuer · 6 Automatischer Kampf. Manuelles Steuern mit Pfeiltasten oder Klick beendet den Befehl. Kranichflügel und Schutz benötigen mindestens 2 Schiffe.
+배를 고르면(줄·지도에서 클릭·Tab) 그 배에게만 — 적함 클릭: 노림 · 바다 클릭: 자리 지킴 · Esc: 풀기	Schiff wählen (Zeile oder Karte anklicken, oder Tab), um nur ihm zu befehlen — Feind anklicken: Ziel · Meer anklicken: Position halten · Esc: Auswahl aufheben
+함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Begleitschiffe erforderlich (mindestens 2 Schiffe in der Flotte).
+학익진은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Kranichflügel benötigt Begleitschiffe (mindestens 2 Schiffe).
+기함 호위은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Flaggschiff schützen benötigt Begleitschiffe (mindestens 2 Schiffe).
+직접 조종: 방향키·클릭으로 기함을 몹니다.	Selbst steuern: Das Flaggschiff mit Pfeiltasten oder Klick bewegen.
+함대 퇴각	Rückzug der Flotte
+기함 뒤로 줄지어 따라가며 기함이 노리는 적을 함께 쏜다.	In Reihe dem Flaggschiff folgen und gemeinsam auf dessen Ziel feuern.
+학이 날개를 펴듯 기함을 가운데 두고 양옆으로 벌려 적을 반원으로 감싼다. 여러 방향에서 쏘면 포격이 더 아프다.	Wie die Flügel eines Kranichs beiderseits des Flaggschiffs auffächern und den Feind im Halbkreis umfassen. Beschuss aus mehreren Richtungen verursacht mehr Schaden.
+모두 한 적에게 바짝 붙어 한꺼번에 쏜다(일제 사격). 선원이 넉넉하면 올라탄다.	Alle Schiffe nähern sich demselben Feind und feuern gleichzeitig eine Salve. Bei ausreichender Besatzung wird geentert.
+사정거리 끝에서 포로만 싸운다. 적이 다가오면 물러나 백병전을 피한다.	Nur mit Geschützen an der Reichweitengrenze kämpfen. Bei Annäherung des Feindes zurückweichen, um Entern zu vermeiden.
+기함 곁을 둘러싸고, 기함에 다가오는 적부터 쏜다.	Das Flaggschiff umgeben und zuerst auf Feinde feuern, die sich ihm nähern.
+배마다 가장 가까운 적과 알아서 싸운다.	Jedes Schiff bekämpft selbstständig den nächsten Feind.
+그 배만 적에게서 먼 쪽으로 전장을 벗어난다 (배는 잃지 않는다).	Nur dieses Schiff verlässt das Schlachtfeld vom Feind weg (es geht dabei nicht verloren).
+@ — @	@ — @
+전장 해도	Gefechtskarte
+클릭: 그곳 보기	Klick: Ort anzeigen
+적함 #척 · 화면 밖 #척	# Feindschiffe · # außerhalb des Bildes
+기함 포격	Geschütze des Flaggschiffs
+좌현	Backbord
+우현	Steuerbord
+선수	Bug
+장전 #% · #초	Laden #% · # Sek.
+장전 완료	Geladen
+발사 준비	Feuerbereit
+해전	Seeschlacht
+아군 #척 · 선원 #	Eigene: # Schiffe · # Seeleute
+적 #척 · 선원 #	Feind: # Schiffe · # Seeleute
+@풍 · 연안 전장	Wind aus @ · Küstengewässer
+@풍 · 격랑 해역	Wind aus @ · Schwere See
+@풍 · @	Wind aus @ · @
+@풍	Wind aus @
+적 기함(1번 · @)을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.	Versenken oder kapern Sie das feindliche Flaggschiff (Nr. 1 · @), um zu gewinnen. Geht Ihr Flaggschiff (Nr. 1) verloren, verlieren Sie die Schlacht.
+해전 승리	Sieg zur See
+승리했다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	Sieg! # Goldmünzen erbeutet. (Ruhm +#)
+적 기함을 무찔러 이겼다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	Das feindliche Flaggschiff ist besiegt! # Goldmünzen erbeutet. (Ruhm +#)
+남은 적 배는 흩어져 달아났다.	Die übrigen Feindschiffe zerstreuten sich und flohen.
+아군 포격 정지 — 적함을 누른 뒤 B로 백병전을 걸 수 있습니다. 적은 계속 포격합니다.	Eigenes Feuer eingestellt — Feindschiff anklicken und B zum Entern drücken. Der Feind feuert weiter.
+아군 포격을 재개합니다.	Die eigene Flotte eröffnet wieder das Feuer.
+아군 함대 전체의 포격 켬/끔 (F). 적의 포격과 이미 발사된 포탄은 유지됩니다. B: 백병전 접근	Geschützfeuer der gesamten eigenen Flotte an/aus (F). Feindfeuer und bereits abgefeuerte Kugeln bleiben aktiv. B: Zum Entern nähern
+기함이 멈춰 있습니다. 방향키로 몰거나 바다·적함을 클릭하십시오.	Das Flaggschiff steht still. Steuern Sie mit den Pfeiltasten oder klicken Sie auf das Meer oder ein Feindschiff.
+퇴각! 전장 가장자리로 벗어나십시오.	Rückzug! Verlassen Sie das Schlachtfeld über den Rand.
+해상 괴물에게는 백병전·나포·일기토를 할 수 없습니다.	Seeungeheuer können weder geentert noch gekapert oder zum Duell gefordert werden.
+아군과 적 함대가 함께 보이도록 배율을 맞춥니다.	Passt die Vergrößerung so an, dass beide Flotten sichtbar sind.
+전장 해도: 파란 점은 아군, 붉은 점은 적군. 클릭하면 해당 위치를 살핍니다.	Gefechtskarte: Blaue Punkte sind eigene, rote feindliche Schiffe. Klicken Sie auf einen Ort, um ihn anzusehen.
+부채꼴은 사거리와 사격 방향, 차오르는 면과 호는 장전 진행도입니다. 점선 원은 약한 근접·추격 사격 범위입니다.	Der Fächer zeigt Reichweite und Schussrichtung. Füllfläche und Bogen zeigen den Ladefortschritt. Der gestrichelte Kreis markiert die Reichweite des schwächeren Nah- und Jagdfeuers.
+해전 배속 ×# (키 + / −)	Gefechtstempo ×# (Tasten + / −)
+#번 @(을|를) 골랐다. 적함 클릭 = 노림 · 바다 클릭 = 자리 지킴 · 1~7 = 이 배에만 명령 · Esc = 풀기	Nr. {1} @ gewählt. Feind anklicken = Ziel · Meer anklicken = Position halten · 1–7 = Befehl nur für dieses Schiff · Esc = Auswahl aufheben

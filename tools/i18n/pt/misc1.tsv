@@ -1,0 +1,91 @@
+집사	Mordomo
+항해 수첩	Caderno de navegação
+물	Água
+적재	Carga
+교역소 주인	Dono da feitoria
+이름	Nome
+특기	Competências
+내구력	Resistência
+#등급	Classe #
+적재량	Capacidade de carga
+돛	Velas
+선실	Cabines
+#칸	# espaços
+현상수배	PROCURADO
+상인	Comerciante
+필요 명성	Fama necessária
+능력치	Atributos
+부관	Imediato
+기함	Nau capitânia
+거래처	Parceiro comercial
+기한	Prazo
+여급 @	Empregada @
+사서	Bibliotecário
+항해일지	Diário de bordo
+자재	Materiais
+선명	Nome do navio
+선종	Tipo de navio
+선장	Capitão
+모항	Porto de origem
+도시 사업	Projetos da cidade
+현재	Atual
+생산시설	Instalações de produção
+상관·창고	Feitoria · Armazém
+판로 개척	Novos mercados
+조선 기술	Construção naval
+천 닢	mil moedas de ouro
+박	 noites
+물건	Objeto
+동료	Companheiros
+단서	Pistas
+당나귀	Burro
+마차	Carroça
+증거	Prova
+#점	# pontos
+#통	# barris
+#척	# navios
+#명	# pessoas
+#일분	Reservas para # dias
+#박	# noites
+이 값은 너무 비싸지 않은가. 옆 가게는 더 싸던데.	Não é um pouco caro? Na loja ao lado era mais barato.
+배를 탈 사람을 찾나? 일거리를 기다리는 뱃사람들이 늘 여기 모여 있지.	Procurais gente para o navio? Os marinheiros à espera de trabalho juntam-se sempre aqui.
+거기, 이쪽으로 오게. 포카나 하세.	Ei, vinde cá. Vamos jogar póquer.
+새 항로 하나에 세관 수입이 몇 곱절로 뜁니다.	Uma nova rota marítima pode multiplicar as receitas alfandegárias.
+원정을 도와 달라는 것이군요. 무엇을 찾으러 가려 하오?	Quereis apoio para uma expedição. O que pretendeis encontrar?
+주님이 지으신 세상은 우리가 아는 것보다 훨씬 넓소.	O mundo que o Senhor criou é muito maior do que imaginamos.
+호오, 그렇다면 모험 목적을 말해 보게.	Ora essa, dizei-me então qual é o objetivo da vossa aventura.
+세상은 우리가 아는 것보다 훨씬 넓다네.	O mundo é muito maior do que imaginamos.
+@ 성문 옆 마구간에서 말·당나귀·마차를 구할 수 있지.	@ No estábulo junto às portas da cidade podeis comprar cavalos, burros e carroças.
+그러고 보니 @	Por falar nisso, @
+뜬소문일 수도 있지만, 해적이란 놈들은 한곳에 오래 머물지 않으니 가 보시려면 서두르시는 게 좋을 겁니다.	Pode ser só um rumor, mas os piratas não ficam muito tempo no mesmo sítio. Se quereis investigar, é melhor despachar-vos.
+수첩 「할 일」에 적었다 — @ 앞바다	Registado em «Tarefas» no caderno — ao largo de @
+@(와|과) @의 싸움이 바다로 번졌다. @에 화약 연기가 자욱하다고 한다.	A guerra entre @ e @ chegou ao mar. Dizem que o fumo da pólvora cobre @.
+@ 함대와 @ 함대가 @에서 맞붙었다는 소식이 들려온다.	Chegam notícias de que a frota de @ e a de @ se enfrentaram em @.
+@에서 @의 군함이 @의 배를 쫓아 포를 쏘았다고 한다.	Dizem que, em {1}, um navio de guerra de {2} perseguiu e disparou sobre um navio de {3}.
+@ 군함	Navio de guerra de @
+교황령 함대	Frota pontifícia
+@(이|가) 술을 마시고 있다.	@ está a beber.
+@에서 @(을|를) 판다고 한다.	Dizem que em {1} se vende {2}.
+@에서 훌륭한 @(을|를) 짠다고 한다.	Dizem que em {1} se tece {2} de excelente qualidade.
+@에서 오래된 유물을 판다고 한다.	Dizem que em @ se vendem relíquias antigas.
+@ 이야기를 들을 수 있다	Podeis ouvir falar de @
+제독, 이것 좀 보십시오! 소문으로만 듣던 @입니다.	Almirante, vede isto! É @, de que só tínhamos ouvido falar!
+제독, 저쪽을 보십시오! 소문으로만 듣던 @입니다.	Almirante, olhai para ali! É @, de que só tínhamos ouvido falar!
+@에 처음으로 입항했다.	Atracou em @ pela primeira vez.
+@에 처음으로 성문을 지나 들어섰다.	Atravessou as portas de @ pela primeira vez.
+피렌체 학자가 보냈다는 편지 이야기가 뱃사람들 사이에 돌고 있네. @	Corre entre os marinheiros uma história sobre uma carta enviada por um sábio de Florença. @
+이 근처 바다에서 새로 목격된 괴물 소식은 없다.	Não há novas notícias de monstros nestas águas.
+기분 좋군!	Que bom!
+오늘은 해적 이야기가 없네요. 다들 날씨와 짐값 이야기뿐입니다.	Hoje ninguém fala de piratas. Só se ouve falar do tempo e do preço das cargas.
+그러고 보니 @ 시장에 「@」(이|가) 나왔다더군. 금화 #닢쯤 부른다던가. 진짜라면 왕이라도 탐낼 물건이지.	Por falar nisso, dizem que apareceu «{2}» no mercado de {1}. Pedem umas {3} moedas de ouro, creio. Se for autêntico, até um rei o cobiçaria.
+@에서 화산 분화가 일어났다.	Houve uma erupção vulcânica em @.
+새 항로 하나가 나라 하나보다 값질 때도 있지요.	Às vezes, uma única rota marítima vale mais do que um país inteiro.
+원정을 도와 달라는 말씀이군요. 무엇을 찾으러 가시려고요?	Quereis ajuda para uma expedição. O que ides procurar?
+세상은 우리가 아는 것보다 훨씬 넓겠지요.	O mundo deve ser muito maior do que imaginamos.
+/(.+?) ([\d]+)세/	⟦$1⟧ ⟪R$2⟫
+/(.+?) 회장님/	Presidente ⟦$1⟧
+/(.+?) 왕비 전하/	Sua Majestade a Rainha ⟦$1⟧
+/(.+?) 전하/	Vossa Alteza ⟦$1⟧
+/(.+?) 박사님/	Doutor ⟦$1⟧
+/(.+?) 상관장 각하/	Sua Excelência o feitor de ⟦$1⟧
+/(.+?) 상관장/	Feitor de ⟦$1⟧

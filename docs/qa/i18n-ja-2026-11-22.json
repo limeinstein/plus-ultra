@@ -1,0 +1,178 @@
+{
+  "date": "2026-11-22",
+  "language": "ja",
+  "status": "기본 화면과 아래 후속 묶음을 번역하고 검증했다. 전체 완역은 아니다.",
+  "sourceRows": 7007,
+  "pack": {
+    "text": 3819,
+    "pat": 674,
+    "city": 327,
+    "good": 163,
+    "name": 1947,
+    "personFragments": 77
+  },
+  "completed": [
+    "첫 화면·설정·새 항해·도시 주요 메뉴·교역·항해·해전·수첩 기본 화면·조작 안내",
+    "튜토리얼 원본 384행, 실제 자료 21단계의 고유 문구 264개",
+    "names_disc1·names_disc2·names_disc3 원본의 발견물 고유 이름 1231개",
+    "일본어 가이드북 11장·70쪽, 원본 그림 38개의 순서와 연결",
+    "네 주인공 이야기 선택 소개·동료 목록·지도 설명·단추",
+    "해적여제 진행 목표·사건 제목·동료 소개·소지품 설명",
+    "바닷길 노래 지도 메모·곡명·공연 안내·관객 반응·공연 뒤 동료의 한마디·결과",
+    "저장·수첩 단축키·동료 상세의 숫자/이름 치환과 수첩 탭·발견물 별칭 누락",
+    "해적여제 서장부터 16막 결말까지 본편 전체: 대사 747줄·765쪽·마지막 선택 두 갈래",
+    "바닷길 노래 본편·탐험 장면·마지막 소절·귀향 결말 전체: 대사 628줄·664쪽·선택 두 갈래",
+    "아버지의 사진 서장·일곱 흔적·아틀란티스의 만남/재방문·가족과 세대 계승·사진/편지/시계·동료 3명의 개인 이야기 18편 및 특기 17종 설명"
+  ],
+  "completeSourceFamilies": [
+    "tutorial",
+    "names_disc1",
+    "names_disc2",
+    "names_disc3",
+    "names_story_20261122",
+    "names_song_20261122",
+    "runtime_20261122",
+    "story_jhook_ui_20261122",
+    "story_song_ui_20261122",
+    "story_jhook_opening_20261122",
+    "story_jhook_rest_20261122",
+    "story_song_20261122",
+    "photo_story_20261122",
+    "photo_heir_20261122",
+    "photo_runtime_20261122",
+    "names_photo_20261122",
+    "names_photo_runtime_20261122"
+  ],
+  "validation": [
+    {
+      "command": "python tests/i18n_japanese_sources_smoke.py",
+      "result": "원본 열 수·번역 열 한국어/손상 문자 0·치환 자리와 변수 보존·17개 원본 묶음 누락 0·원본 재생성 바이트 일치·가이드북 장/절/그림 순서 일치"
+    },
+    {
+      "command": "node tests/i18n_ja_followup_20261122_smoke.cjs",
+      "result": "실제 튜토리얼 fmt와 쪽 나눔 264개 고유 문구·발견물 이름 1231개·실제 가이드 UI 70쪽에서 한국어 잔류 0, 콘솔 오류 0"
+    },
+    {
+      "command": "node tests/i18n_japanese_stories_20261122_smoke.cjs",
+      "result": "새 안내 원문의 변수/숫자/이름 1436개 조합, 실제 네 주인공 선택·소영의 지도·실제 공연 결과·해적여제 수첩에서 한국어 잔류 0, 콘솔 오류 0"
+    },
+    {
+      "command": "node tests/i18n_ja_smoke.cjs",
+      "result": "전체 게임의 기본 화면·도시 327곳·교역품 163개·이름·숫자 틀·조작 안내·설정·주요 건물·수첩 탭 통과, 콘솔 오류 0"
+    },
+    {
+      "command": "$env:LANGS='ja'; node tests/i18n_asian_languages_smoke.cjs",
+      "result": "실제 언어 선택·새 항해·설정·재접속 유지·도감·가이드북 11장 확인, 콘솔 오류 0"
+    },
+    {
+      "command": "node tools/i18n/audit.cjs --out artifacts/i18n-ja-followup-20261122/audit-all.json",
+      "result": "열 언어의 게임/도감 등록·번역 자료 형식 검사 통과"
+    },
+    {
+      "command": "node tests/i18n_japanese_jhook_20261122_smoke.cjs",
+      "result": "실제 대사 747줄·765쪽·마지막 선택 두 갈래·전체 자료 846개와 네 도시 조합 검사. 기존 번역 4216개·틀 524개·생성 인명 보존. 수첩·대화·960×540 선택창·결말 여섯 화면 한국어 잔류 0, 콘솔 오류 0, 한국어 복귀 확인."
+    },
+    {
+      "command": "node tests/i18n_japanese_song_20261122_smoke.cjs",
+      "result": "실제 자료의 대사 628줄·664쪽·선택 두 갈래·전체 자료 781개 및 도시/배운 노래 조합 13338회 검사. 실제 SongStory.play의 치환·화자 이름 13452회 검사. 기존 번역 4965개·틀 528개·생성 인명 보존. 지도·대화·960×540 선택창·아틀란티스 그림·마지막 소절·귀향 결말의 여덟 화면 한국어 잔류 0, 콘솔 오류 0."
+    },
+    {
+      "command": "node tests/i18n_japanese_photo_corpus_20261122.cjs",
+      "result": "고유 원문 399개, 실제 fmt·heirScene의 1~3세대/선대 생존·사망 조합 2464회 누락 0. 동료 3명의 개인 이야기 18편과 특기 설명/도움말 120회 누락 0. 기존 문장 3210개·틀 550개·이름 1915개·도시 327개·교역품 163개·생성 인명 77개 보존."
+    },
+    {
+      "command": "$env:JA_PHOTO_ALL_LANGS='1'; node tests/i18n_japanese_photo_20261122_smoke.cjs",
+      "result": "전체 index.html의 모든 언어가 등록된 상태에서 실제 Story.play의 세대별 치환 2204회·화자 이름 8개 누락 0. 수첩·일곱 탐색 단계·동료 3명 상세·사진 확대·대화·960×540 가족 선택지·2/3세대 수첩·아틀란티스 사건 그림·1/3세대 결말 총 21개 화면 한국어 잔류 0, 콘솔 오류 0. 선택 단추 3개 모두 화면 안에 표시."
+    },
+    {
+      "command": "$env:CORPUS_ONLY='1'; node tests/i18n_japanese_jhook_20261122_smoke.cjs; node tests/i18n_japanese_song_20261122_smoke.cjs",
+      "result": "사진 번역 추가 후 해적여제 6520회·바닷길 노래 13338회 자료/치환 검사와 기존 값 보존 검사 통과."
+    },
+    {
+      "command": "node tools/i18n/audit.cjs --out artifacts/i18n-ja-photo-20261122/audit-all.json",
+      "result": "열 언어의 게임/도감 등록·번역 자료 형식 검사 통과."
+    }
+  ],
+  "artifacts": [
+    "artifacts/i18n-ja-20261122/",
+    "artifacts/i18n-ja-followup-20261122/",
+    "artifacts/i18n-ja-stories-20261122/",
+    "artifacts/i18n-ja-jhook-20261122/",
+    "artifacts/i18n-ja-song-20261122/",
+    "artifacts/i18n-ja-photo-20261122/"
+  ],
+  "notes": [
+    "가이드북의 설명·제목·표·그림 설명을 번역했다. 그림 속 기존 게임 화면은 한국어 원본 이미지다.",
+    "튜토리얼의 번호 있는 안내와 덧장면·에필로그를 포함한 실제 steps 배열 길이는 21이다. 원본 가이드북의 18단계 설명은 그대로 옮겼다.",
+    "진주모나비는 다른 나비의 일본어 이름을 빌리지 않고 영명 Mother-of-Pearl을 음역했다. 종 식별 참고: https://www.sanbi.org/wp-content/uploads/2024/05/2010_BioSeries16.pdf",
+    "처음 전체 게임 검사에서 시간 초과가 있었으나, 이후 전체 게임 기본 화면 검사와 이야기 화면 검사는 정상 통과했다.",
+    "가이드북 화면 검사는 실제 UI/가이드 모듈만 여는 전용 file:// 페이지를 쓴다. 전체 게임 부팅은 별도 기본/이야기/언어 선택 검사가 맡는다.",
+    "시험 브라우저는 finally에서 닫는다. 대기 중이던 첫 이야기 선택 검사 하나는 해당 검사 소유의 Chrome 과정만 확인해 닫고 수정 후 다시 통과했다.",
+    "ready는 현재 작성된 일본어를 고를 수 있다는 뜻이며 전체 완역 표시는 아니다.",
+    "사진 화면 검사 중 선택 뒤 후속 대사가 남아 대기하던 검사 소유 Chrome을 확인하여 종료했다. 선택 뒤 대사를 끝까지 넘기도록 검사 코드를 고친 뒤 focused 실행과 전체 index.html 실행을 통과했다. 모든 시험 브라우저는 finally에서 닫는다.",
+    "사진의 세대 변환 코드가 만들던 중복 친족 호칭(예: 할할아버지)은 원문 열쇠를 유지하고 번역문에서 문맥에 맞게 옮겼다. 일반 동료의 모든 인사·잡담까지 완료했다는 뜻은 아니다."
+  ],
+  "remaining": [
+    "황금의 바다 본편 사건 대사",
+    "일반 발견물의 장문 설명·단서·지식·발견/가족 대사",
+    "일반 인물 소개·생애와 아이템·음식 상세",
+    "일반 세계 사건과 가족 대사, 이번 범위 밖 동료 대화",
+    "이베리아 이외 무작위 생성 인명"
+  ],
+  "next": "현재 일본어 사전과 원본을 먼저 대조해 번역되는 열쇠는 유지하고, 남은 장편 본문과 상세 묶음의 빠진 열쇠만 추가한다.",
+  "jhookFollowup": {
+    "addedRows": 753,
+    "dialogueSourceRows": 742,
+    "nameRows": 7,
+    "runtimeRows": 4,
+    "dialogueLines": 747,
+    "pages": 765,
+    "choices": 1,
+    "branches": 2,
+    "fields": 846,
+    "corpusChecksWithCityVariants": 6520,
+    "preservedEntries": 4216,
+    "preservedPatterns": 524,
+    "screens": 6,
+    "errors": []
+  },
+  "songFollowup": {
+    "addedRows": 672,
+    "dialogueSourceRows": 655,
+    "additionalTextAndRuntimeRows": 7,
+    "nameRows": 10,
+    "dialogueLines": 628,
+    "pages": 664,
+    "choices": 1,
+    "branches": 2,
+    "fields": 781,
+    "corpusCombinations": 13338,
+    "runtimeFormatterAndSpeakerChecks": 13452,
+    "preservedEntries": 4965,
+    "preservedPatterns": 528,
+    "screens": 8,
+    "errors": []
+  },
+  "photoFollowup": {
+    "addedRows": 765,
+    "storyRows": 448,
+    "heirRows": 21,
+    "runtimeRows": 94,
+    "mateStoryRows": 86,
+    "uiRows": 84,
+    "nameRows": 32,
+    "uniqueOriginalLines": 399,
+    "generationChecks": 2464,
+    "runtimeChecks": 2204,
+    "speakerChecks": 8,
+    "mateStories": 18,
+    "skillDescriptions": 17,
+    "detailChecks": 120,
+    "screens": 21,
+    "consoleErrors": 0,
+    "preservedText": 3210,
+    "preservedPatterns": 550,
+    "preservedNames": 1915,
+    "allLanguagesRegistered": true
+  }
+}

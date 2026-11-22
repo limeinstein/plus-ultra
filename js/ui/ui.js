@@ -998,7 +998,7 @@
     var low = !!(root && !UI.busy() && screenEl && screenEl.querySelector('.cmdmenu, .city-banner'));
     var menuEl = low ? screenEl.querySelector('.cmdmenu') : null;
     // 이야기 모드(「아버지의 사진」)는 사건이다 — 어느 화면(술집·도서관·바다·뭍)에서든 마주 선 무릎상 둘로 (얼굴 ↔ 무릎상으로 바뀌지 않게)
-    var story = !!(root && S && S.player && ((G.Story && G.Story.active && G.Story.active()) || (G.SongStory && G.SongStory.active && G.SongStory.active()) || (G.JHook && G.JHook.active && G.JHook.active())));   // 「바닷길 노래」도 (js/systems/song.js)
+    var story = !!(root && S && S.player && ((G.Story && G.Story.active && G.Story.active()) || (G.SongStory && G.SongStory.active && G.SongStory.active()) || (G.JHook && G.JHook.active && G.JHook.active()) || (G.GoldSea && G.GoldSea.active && G.GoldSea.active())));   // 「바닷길 노래」도 (js/systems/song.js)
     var keep = !story && keepScene();
     // 이야기 모드에서 제독 혼자의 말·물음(진행기 밖의 대사): 이 장면에서 방금 마주했던 사람과 둘이 선다. 사람 없는 내레이션이 오면 장면이 바뀐 것으로 본다
     if (story && !opts.portrait && !opts.name) storyPartner = null;
@@ -1355,7 +1355,18 @@
         shell.layout(); startChoiceAuto();
       }
       var selected = null;
-      function pick(step) { selected = selectKeyItem(Array.prototype.slice.call(row.querySelectorAll('button')), selected, step); return selected; }
+      function pick(step) {
+        selected = selectKeyItem(Array.prototype.slice.call(row.querySelectorAll('button')), selected, step);
+        if (selected) selected.focus({ preventScroll: true });
+        return selected;
+      }
+      // Tab으로 옮긴 실제 초점과 방향키로 고른 표시를 같은 선택지에 둔다.
+      row.addEventListener('focusin', function (e) {
+        var button = e.target.closest('button');
+        if (!button || !row.contains(button) || !usable(button)) return;
+        haltChoiceAuto(); selected = button;
+        Array.prototype.forEach.call(row.querySelectorAll('button'), function (b) { b.classList.toggle('kbd-focus', b === selected); });
+      });
       function done(v) { if (finished) return; finished = true; if (unwatch) unwatch(); unkey(); shell.destroy(); if (back.parentNode) modalRoot.removeChild(back); resolve(v); }
       var pk = pickKey(text, list, opts), prev = lastPick(pk), stopAuto = null, autoHalted = false;
       function haltChoiceAuto() { autoHalted = true; if (stopAuto) { stopAuto(); stopAuto = null; } }
@@ -1382,7 +1393,11 @@
         if (keyIs(e, 'cancel') && opts.cancel !== false) { done(opts.cancelValue != null ? opts.cancelValue : null); return true; }
         if (keyIs(e, 'up') || keyIs(e, 'left')) { pick(-1); return true; }
         if (keyIs(e, 'down') || keyIs(e, 'right')) { pick(1); return true; }
-        if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) { selected = selected || pick(1); if (selected) selected.click(); return true; }
+        if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) {
+          var button = e.target && e.target.closest && e.target.closest('button');
+          if (button && row.contains(button)) { if (!usable(button)) return true; selected = button; }
+          selected = selected || pick(1); if (selected) selected.click(); return true;
+        }
         var n = parseInt(e.key, 10); if (n >= 1 && n <= list.length && !list[n - 1].dis) { rememberPick(pk, list[n - 1].label); done(list[n - 1].value); return true; }
         return false;
       });
@@ -1447,6 +1462,13 @@
     var unkey = pushKey(function (e) {
       var typing = e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName);
       if (keyIs(e, 'cancel') && opts.closable !== false && (!typing || eventCode(e) === 'Escape')) { api.close(null); return true; }
+      // 읽기 영역에 초점이 있으면 브라우저가 방향키·쪽 넘김·Space로 스크롤한다.
+      // Enter도 뒤쪽의 시작/확정 단추로 새지 않게 한다.
+      var reading = e.target && e.target.closest && e.target.closest('[data-native-scroll]');
+      if (reading && w.contains(reading)) {
+        if (/^(Arrow(Left|Right|Up|Down)|Page(Up|Down)|Home|End)$/.test(e.key) || e.code === 'Space') return false;
+        if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) return true;
+      }
       if (solo && (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt')) && !typing) { pressSolo(); return true; }
       if (opts.onKey && opts.onKey(e) === true) return true;
       if (!typing && (keyIs(e, 'up') || keyIs(e, 'left'))) { moveSelection(-1); return true; }

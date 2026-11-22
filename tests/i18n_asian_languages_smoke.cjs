@@ -1,29 +1,30 @@
-/* 중국어 간체·번체·베트남어: 실제 언어 선택, 설정, 새 항해, 저장한 선택과 도감. */
+/* 일본어·중국어·베트남어·스페인어: 실제 언어 선택, 설정, 새 항해, 저장한 선택과 도감. */
 'use strict';
 const assert=require('node:assert/strict'),path=require('node:path'),fs=require('node:fs'),{pathToFileURL}=require('node:url');
 const {chromium}=require('../tools/procedural_art/node_modules/playwright-core');
 const root=path.resolve(__dirname,'..'),base=process.env.WEB_BASE||pathToFileURL(root+path.sep).href;
-const cases=[['vi','vi-VN','Tiếng Việt','Chuyến hải hành mới','Sẵn sàng ra khơi'],['zh-Hans','zh-CN','简体中文','新的航海','准备出航'],['zh-Hant','zh-TW','繁體中文','新的航海','準備出航'],['es','es-ES','Español','Nueva travesía','Listo para zarpar']];
+const pending=['pt','de'].filter(id=>!fs.existsSync(path.join(root,'tools/i18n',id,'_ready')));
+const cases=[['ja','ja-JP','日本語','新たな航海','出航準備完了'],['vi','vi-VN','Tiếng Việt','Chuyến hải hành mới','Sẵn sàng ra khơi'],['zh-Hans','zh-CN','简体中文','新的航海','准备出航'],['zh-Hant','zh-TW','繁體中文','新的航海','準備出航'],['es','es-ES','Español','Nueva travesía','Listo para zarpar']].filter(c=>!process.env.LANGS||process.env.LANGS.split(',').includes(c[0]));
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader']});
  const rows=[];
  try{for(const [id,locale,label,voyage,ready] of cases){
   console.log('시작',id);const ctx=await browser.newContext({locale,viewport:{width:1280,height:900}}),p=await ctx.newPage(),errors=[];
   p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-  await p.route(/fonts\.(googleapis|gstatic)\.com/,r=>r.fulfill({contentType:'text/css',body:''}));
+  
   async function title(){await p.waitForFunction(()=>window.G&&G.Game.sceneName==='title'&&document.querySelector('.title-menu .btn:not(.disabled)'),null,{timeout:120000});await p.locator('#boot-loader').waitFor({state:'hidden',timeout:120000});}
   async function choose(name,lang){await p.locator('.title-lang').click();const opt=p.locator('.choices > .choice').filter({hasText:name});await opt.waitFor();assert(!(await opt.getAttribute('class')).includes('dis'));await opt.click();await p.waitForFunction(l=>G.I18N.lang===l&&document.documentElement.lang===l,lang);await title();}
   console.log('첫 화면 열기',id);await p.goto(new URL('index.html',base).href,{waitUntil:'domcontentloaded',timeout:120000});await title();console.log('첫 화면 준비',id);
   assert.equal(await p.evaluate(()=>G.I18N.lang),new URL(base).protocol==='file:'?'ko':id,'첫 방문 브라우저 언어');
-  assert.deepEqual(await p.evaluate(()=>G.I18N.LANGS.filter(l=>!G.I18N.ready(l.id)).map(l=>l.id)),['ja','pt','de']);
+  assert.deepEqual(await p.evaluate(()=>G.I18N.LANGS.filter(l=>!G.I18N.ready(l.id)).map(l=>l.id)),pending);
   if(await p.evaluate(()=>G.I18N.lang!=='ko'))await choose('한국어','ko');
   await choose(label,id);console.log('언어 선택',id);
   assert.equal(await p.evaluate(()=>localStorage.getItem('pu.lang')),id);
   assert((await p.locator('.title-menu').textContent()).includes(voyage),'번역된 새 항해 단추');
   console.log('화면 설정 열기',id);await p.evaluate(()=>{G.Display.open();});await p.waitForSelector('.disp-panel');
   assert((await p.locator('[data-dlang="'+id+'"]').getAttribute('class')).includes('on'));
-  for(const lang of ['vi','zh-Hans','zh-Hant','es'])assert(!(await p.locator('[data-dlang="'+lang+'"]').getAttribute('class')).includes('dim'));
-  for(const lang of ['ja','pt','de'])assert((await p.locator('[data-dlang="'+lang+'"]').getAttribute('class')).includes('dim'));
+  for(const lang of ['ja','vi','zh-Hans','zh-Hant','es'])assert(!(await p.locator('[data-dlang="'+lang+'"]').getAttribute('class')).includes('dim'));
+  for(const lang of ['pt','de'])assert.equal((await p.locator('[data-dlang="'+lang+'"]').getAttribute('class')).includes('dim'),pending.includes(lang));
   for(let i=0;i<6&&await p.evaluate(()=>G.UI.busy());i++)await p.keyboard.press('Escape');
   console.log('화면 설정 닫기',id);await title();await p.locator('.title-menu .btn').filter({hasText:voyage}).click();await p.waitForSelector('.create');console.log('새 항해',id);
   await p.waitForFunction(t=>document.querySelector('#go').textContent.includes(t),ready);

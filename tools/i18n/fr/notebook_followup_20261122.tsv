@@ -1,0 +1,53 @@
+이름 찾기	Rechercher un nom
+동료 이름 검색	Rechercher un compagnon par nom
+동료 정렬 기준	Critère de tri des compagnons
+정렬 방향	Sens du tri
+오름차순 ↑	Croissant ↑
+내림차순 ↓	Décroissant ↓
+동료 보기 전환	Changer la vue des compagnons
+동료 상세	Fiche du compagnon
+선실 배치	Affectation des cabines
+동료 사이	Relations des compagnons
+현재 고용한 전체 동료 목록	Liste de tous les compagnons actuellement recrutés
+동료 ↑	Compagnons ↑
+동료 ↓	Compagnons ↓
+빈 선실	Cabine vide
+대기	En attente
+갑판	Pont
+@ #단계	@ — Niveau #
+★ 배에서 익힘 · 숫자는 현재 단계	★ Appris à bord · Chiffre : niveau actuel
+단계가 오를수록 교역소 흥정이 잘 통하고 한 번 들를 때 흥정할 수 있는 횟수가 늘며(1·2·2·3번), 짐을 고르게 실어 배가 버티는 무게가 늘어난다(+4%·8%·12%). 3단계면 큰 항구의 비밀 암시장에 드나든다. 경리 자리에 두면 교역소·시장에서 값을 후려치고 후원자에게 선금·기한을 더 받아 낸다.	Les niveaux améliorent le marchandage et ses tentatives par visite (1, 2, 2, 3). Un chargement équilibré augmente la charge supportée (+4 %, +8 %, +12 %). Au niveau 3, accès aux marchés noirs des grands ports. Affecté comme comptable, négocie de meilleurs prix, avances et délais.
+선택한 동료 상세	Fiche du compagnon sélectionné
+다른 동료 선택	Choisir un autre compagnon
+함께 항해하는 사람들	Compagnons de traversée
+동료 선택 목록	Liste de sélection des compagnons
+@의 외형	Apparence de @
+말투	Manière de parler
+츤데레형	Froideur et tendresse
+월급	Salaire mensuel
+체력 #	Vitalité #
+지력 #	Intelligence #
+무력 #	Force #
+매력 #	Charisme #
+0 미숙 · 1 기초 · 2 숙련 · 3 달인	0 novice · 1 notions · 2 expérimenté · 3 maître
+0 모름 · 1 기초 · 2 보통 · 3 능숙	0 aucun · 1 notions · 2 moyen · 3 courant
+토착어	 (langues autochtones)
+중남미	Amérique centrale et du Sud
+동료 소지품	Inventaire du compagnon
+가지고 있는 물건이 없습니다.	Aucun objet en possession.
+살아온 이야기	Biographie
+‹ 이전	‹ Précédent
+다음 ›	Suivant ›
+물건을 준다	Donner un objet
+이 동료를 해고한다	Congédier ce compagnon
+해고	Congédier
+파수대	Poste de vigie
+측량사	Cartographe
+조타실	Timonerie
+항해사	Navigateur
+숨은 능력자형	Talent discret
+돌진형	Téméraire
+천재형	Génie
+선실 수련 · @ #일 · 다음 단계 #년 / ☆@ #일 · 다음 단계 #년 #일	Entraînement en cabine · @ # jours · Prochain niveau dans # ans / ☆@ # jours · Prochain niveau dans # ans et # jours
+선실 수련 · @ #일 · 다음 단계 #년 / ☆@ # — 더 늘지 않는다	Entraînement en cabine · @ # jours · Prochain niveau dans # ans / ☆@ # — Niveau maximal
+선실 수련 · @ # — 더 늘지 않는다 / ☆@ #일 · 다음 단계 #년 #일	Entraînement en cabine · @ # — Niveau maximal / ☆@ # jours · Prochain niveau dans # ans et # jours

@@ -1,0 +1,44 @@
+/* 첨부 시안의 가죽·금세공·장식 단추 원화를 실제 글 뒤에 표시한다. */
+.ss-atlas { padding:15px 30px 40px; border:0; border-radius:0; box-shadow:none; background:#1b3b3c; }
+.ss-atlas .ss-art { position:absolute; inset:0; overflow:hidden; z-index:-1; pointer-events:none; }
+.ss-atlas .ss-art img { display:block; position:absolute; left:0; top:0; width:100%; height:100%; max-width:none; }
+.ss-atlas > .ss-art-frame { z-index:20; }
+.ss-atlas .ss-head { height:68px; }
+.ss-atlas .ss-head h2 { min-width:400px; min-height:60px; padding:13px 62px; font-size:29px; }
+.ss-atlas .ss-plaque, .storyselect-win .ss-atlas .btn {
+  position:relative; isolation:isolate; background:none; border:0; outline:0; border-radius:0; box-shadow:none;
+}
+.ss-atlas .ss-head .ss-return { position:absolute; left:28px; min-width:180px; padding:13px 26px; font-size:18px; }
+.ss-atlas .ss-info { position:relative; isolation:isolate; background:none; border:0; border-radius:0; box-shadow:none; padding:25px 28px; }
+.ss-atlas .ss-person { flex-basis:196px; }
+.ss-atlas .ss-name { padding:12px 30px; font-size:18px; }
+.ss-atlas .ss-heading h3 { font-size:28px; }
+.ss-atlas .ss-actions { padding:12px 4px 0; gap:8px; }
+.storyselect-win .ss-atlas .ss-actions .btn { min-height:50px; padding:12px 48px; font-weight:700; }
+.storyselect-win .ss-atlas .ss-go { min-height:60px; font-size:22px; }
+.ss-atlas .ss-tag { margin-top:3px; }
+.ss-atlas .ss-card { isolation:isolate; background:none; border:0; border-radius:0; box-shadow:none; padding:0; }
+.ss-atlas .ss-card:hover, .ss-atlas .ss-card.on { outline:0; box-shadow:none; }
+.ss-atlas .ss-card:focus-visible, .storyselect-win .ss-atlas .btn:focus-visible, .ss-atlas .ss-copy:focus-visible { outline:2px solid #ffe3a1; outline-offset:2px; }
+.ss-atlas .ss-card.on > .ss-art-panel, .ss-atlas .ss-card:hover > .ss-art-panel, .ss-atlas .ss-card:focus-visible > .ss-art-panel { filter:drop-shadow(0 0 4px #f3cc72); }
+.ss-atlas .ss-card .ss-face { inset:13px 11px 25px; }
+.ss-atlas .ss-card .nm { position:absolute; left:-5px; right:-5px; bottom:-4px; min-height:32px; padding:9px 24px; font-size:12px; }
+.ss-atlas .ss-card.on::before { top:-17px; z-index:2; }
+.ss-atlas .ss-empty { border-radius:16px; border-color:#b39a6888; background:#1c393955; }
+.ss-atlas .ss-roster { gap:15px; }
+.ss-atlas .ss-country { color:#3e2b16; text-shadow:0 1px 2px #ffedc3,1px 0 2px #ffedc3,-1px 0 2px #ffedc3; font-size:20px; }
+.ss-atlas .ss-mapview { border:1px solid #bea064; border-radius:0; }
+.ss-atlas .ss-port { width:24px; height:40px; padding:0; display:block; transform:translate(-50%,-100%); }
+.ss-atlas .ss-port > svg { width:24px; height:40px; display:block; overflow:visible; fill:#a47a35; stroke:#f3d28a; stroke-width:1.5; filter:drop-shadow(0 2px 2px #0009); }
+.ss-atlas .ss-port > svg circle { fill:#efdca5; stroke:#8d6326; }
+.ss-atlas .ss-port .ss-pin-cross { fill:none; stroke:#e6c17a; stroke-width:1; }
+.ss-atlas .ss-port .ss-pin-tip { position:absolute; left:9px; bottom:-3px; width:6px; height:6px; border:1px solid #9d7437; border-radius:50%; background:#ffe8aa; box-shadow:0 0 0 1px #67481f66; }
+.ss-atlas .ss-port span { left:26px; top:32px; font-size:13px; padding:3px 8px; background:#1a2d3e; }
+.ss-atlas .ss-port.on > svg { filter:drop-shadow(0 0 5px #efc66e); }
+.ss-atlas .ss-world-port[data-story="photo"] span { left:-57px; top:48px; }
+.ss-atlas .ss-world-port[data-story="jhook"] span { left:-54px; top:-20px; }
+.ss-atlas .ss-world-port[data-story="gold"] span { left:30px; top:0; }
+.ss-atlas .ss-port > svg.ss-callout { position:absolute; left:0; top:0; filter:none; pointer-events:none; }
+.ss-atlas .ss-port > svg.ss-callout path { fill:none; stroke:#ddbd77; stroke-width:1; }
+.ss-atlas:not(.inf) .ss-roster-wrap { flex-basis:235px; }
+.ss-atlas:not(.inf) .ss-country { font-size:17px; }

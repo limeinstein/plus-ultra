@@ -1,0 +1,31 @@
+팔 물건이 있으면 보여 주게.	Montrez-moi ce que vous avez à vendre.
+식량·물을 먼저 싣는다	Embarquer d’abord les vivres et l’eau
+부관 @	Second @
+(대강 알아들음)	(compréhension approximative)
+물건이 있으면	Si vous avez des marchandises
+다음 대사	Suite
+/이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 (.+?) · 일행 (.+?) \((.+?)(?:이|가) 통역 — 파란 점\)$/	Langue locale — Amiral : ⟦$1⟧ · Groupe : ⟦$2⟧ (⟦$3⟧ interprète — points bleus)
+갈 곳	Destination
+(@) — 편도 약 #일	(@) — Environ # jours à l’aller
+실어 올 물건	Marchandises à rapporter
+(상인의 돈으로 산다)	(achetées avec l’argent du marchand)
+까지 @로 (#일)	Retour à @ avant cette date (# jours)
+받는 몫	Votre part
+상인이 남긴 이익의	Du bénéfice réalisé par le marchand
+(지금 시세면 약 #닢 · 적어도 품삯 #닢 · 기한을 넘기면 절반)	(environ # pièces au cours actuel · Salaire minimum de # pièces · Moitié en cas de retard)
+물자비	Coût des réserves
+기한 동안의 식량·물 약 #닢	Vivres et eau pour la durée prévue : environ # pièces
+(품삯은 적어도 그 #배)	(salaire au moins # fois supérieur)
+상인의 배는 함대를 따라다닙니다. 내 짐칸·선원과는 상관없지만,	Le navire marchand suit la flotte sans utiliser votre cale ni vos marins, mais
+함대가 그 배보다 빨리 가지 못합니다.	la flotte ne peut pas aller plus vite que lui.
+상선과 함께면 해적이 더 꾀고, 해전에서 그 배를 잃으면 호위는 실패합니다(명성 −#).	Le navire marchand attire davantage les pirates. S’il est perdu au combat, l’escorte échoue (renommée −#).
+이 고장에서 나는 물건이라 싸고 재고가 넉넉하다. 어디서나 흔한 물건이라 멀리 가져가도 크게 남지는 않는다.	Produit local bon marché et abondant. Comme il est courant partout, l’emporter au loin rapporte peu.
+베네치아가 쥐고 있던 시절엔 귀했지만, 인도 항로가 열리자 리스본으로 쏟아지고, #세기에 네덜란드·잉글랜드 동인도회사가 실어 나르며 흔해졌다	Rare lorsque Venise contrôlait son commerce, ce produit afflua à Lisbonne après l’ouverture de la route des Indes, puis devint abondant au siècle # grâce aux compagnies des Indes orientales néerlandaise et anglaise
+@ 건물	Bâtiments de @
+로마의 기둥	Colonnes romaines
+로마의 기둥 — 살펴보기	Colonnes romaines — Examiner
+@까지 · 상인 @	Jusqu’à @ · Marchand @
+@: 제독, 구름이 흘러가는 쪽이 바람이 부는 쪽입니다. 구름길을 따라 뱃머리를 두면 순풍을 타 배가 더 빨리 달립니다.	@ : Amiral, les nuages suivent le vent. En pointant la proue dans leur direction, nous profiterons du vent arrière et naviguerons plus vite.
+사커포	Couleuvrine bâtarde
+↑ @ 들어가기	↑ Entrer dans @
+<small class="muted">이 브라우저에 남은 항해 일지가 없습니다. 지난번에 기록한 일지가 보이지 않는다면 ① 브라우저를 닫을 때 쿠키·사이트 데이터를 지우는 설정, ② PC 최적화·백신 프로그램의 「인터넷 사용 흔적 삭제」, ③ 시크릿(InPrivate) 창 가운데 하나가 지운 것입니다. 내려받아 둔 일지 파일이 있으면 「파일에서 불러오기」로 이어 가고, 앞으로는 설정의 「일지를 파일로도」를 켜 두십시오.</small>	<small class="muted">Ce navigateur ne contient aucun journal de bord. Si une ancienne sauvegarde a disparu, elle a pu être effacée par ① la suppression des cookies et des données des sites à la fermeture du navigateur, ② le nettoyage de l’historique par un logiciel d’entretien ou un antivirus, ou ③ la navigation privée (InPrivate). Si vous avez téléchargé un journal, reprenez avec « Charger un fichier ». Pensez à activer « Sauvegarder aussi dans un fichier » dans les paramètres.</small>

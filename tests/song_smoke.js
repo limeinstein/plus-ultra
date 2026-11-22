@@ -7,7 +7,7 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-let chromium; try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require('/opt/npm-tools/node_modules/playwright')); }
+let chromium; try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const BASE = process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(__dirname,'..',process.env.PAGE || 'index.html')).href;
 let passed = 0;
 function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.log('  ✓ ' + msg); }
@@ -22,7 +22,7 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
   try {
     // ── 공개일 잠금
     const p0 = await browser.newPage({ viewport: { width: 1280, height: 720 } }); watch(p0);
-    await p0.goto(BASE,{waitUntil:'domcontentloaded',timeout:120000});
+    await p0.goto(BASE);
     await p0.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const t0 = await p0.evaluate(() => ({ list: G.StorySelect.list().map(m => m.id), rel: G.SONG.release, now: Date.now(), released: G.SongStory.released() }));
     if (Date.now() < Date.parse(t0.rel)) ok(!t0.list.includes('song') && !t0.released, '공개일(' + t0.rel + ') 전: 이야기 고르기 지도에 소영이 없다 — ' + t0.list.join(' · '));
@@ -31,20 +31,21 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     await p0.close();
 
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 } }); watch(page);
-    await page.goto(BASE + '?song=1',{waitUntil:'domcontentloaded',timeout:120000});
+    await page.goto(BASE + '?song=1');
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const btns = await page.evaluate(() => G.StorySelect.list().map(m => m.id));
     ok(btns.includes('song'), '?song=1 미리 보기: 이야기 고르기 지도에 소영 — ' + btns.join(' · '));
     await page.evaluate(() => { window.SSOPEN = G.StorySelect.open(); });
     await page.waitForSelector('.ss-card', { timeout: 60000 });
-    const e0 = await page.evaluate(() => ({ page: document.querySelector('.ss-stage').dataset.page, arrow: !document.querySelector('.ss-arrow.r').classList.contains('off'), card: Array.from(document.querySelectorAll('.ss-card')).filter(c => c.dataset.page === 'ea').map(c => c.textContent) }));
-    ok(e0.page === 'eu' && e0.arrow && e0.card.join() === '김소영', '이야기 고르기: 처음엔 유럽 · 오른쪽 화살표 · 동쪽 바다에 소영');
-    await page.keyboard.press('ArrowRight'); await page.keyboard.press('ArrowRight'); await page.waitForTimeout(900);
-    const e1 = await page.evaluate(() => ({ page: document.querySelector('.ss-stage').dataset.page, on: (document.querySelector('.ss-card.on') || {}).textContent, kr: !!(G.StorySelect._labels || {})['ea:조선'], tr: document.querySelector('.ss-strip').style.transform }));
-    ok(e1.page === 'ea' && e1.on === '김소영' && e1.kr && /-1180px/.test(e1.tr), '→ 키로 오른쪽 — 동쪽 바다(조선) · 소영이 골라짐');
-    await page.evaluate(() => document.querySelector('.ss-arrow.l').click()); await page.waitForTimeout(200);
-    ok(await page.evaluate(() => document.querySelector('.ss-stage').dataset.page === 'eu'), '◀ 화살표로 유럽에 돌아옴');
-    await page.evaluate(() => { const b = Array.from(document.querySelectorAll('.btn')).find(x => x.textContent.trim() === '타이틀로'); b && b.click(); });
+    const e0 = await page.evaluate(() => ({ page: document.querySelector('.ss-stage').dataset.page, arrow: !!document.querySelector('.ss-arrow'), card: Array.from(document.querySelectorAll('.ss-card')).filter(c => c.dataset.page === 'ea').map(c => c.textContent) }));
+    ok(e0.page === 'world' && !e0.arrow && e0.card.join() === '김소영', '이야기 고르기: 처음엔 세계 지도 · 지역 단추 없이 소영도 보임');
+    for (let k = 0; k < 6 && await page.evaluate(() => document.querySelector('.ss-stage').dataset.page !== 'ea'); k++) await page.keyboard.press('ArrowRight');   // 유럽의 주인공을 다 지나면 동쪽 바다로
+    await page.waitForTimeout(900);
+    const e1 = await page.evaluate(() => ({ page: document.querySelector('.ss-stage').dataset.page, on: (document.querySelector('.ss-card.on') || {}).textContent, kr: !!(G.StorySelect._labels || {})['ea:조선'] }));
+    ok(e1.page === 'ea' && e1.on === '김소영' && e1.kr, '→ 키로 소영 선택 — 동아시아 지도·소개가 함께 열림');
+    await page.evaluate(() => document.querySelector('.ss-card[data-story="photo"]').click()); await page.waitForTimeout(200);
+    ok(await page.evaluate(() => document.querySelector('.ss-stage').dataset.page === 'eu'), '마테우스 초상으로 유럽에 돌아옴');
+    await page.evaluate(() => document.querySelector('.ss-return').click());
     await page.evaluate(() => window.SSOPEN);
 
     // 대화창은 저절로 넘긴다. 공연 창만 진짜 창으로

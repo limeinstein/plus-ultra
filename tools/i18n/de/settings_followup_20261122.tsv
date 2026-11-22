@@ -1,0 +1,41 @@
+(어디서나 저장 가능)	(Speichern ist überall möglich)
+보통 크기	Normale Größe
+장면에 맞춰	Je nach Szene
+늘 위	Immer oben
+늘 아래	Immer unten
+↑ 북 · ↓ 남 · ← 서 · → 동 (두 키 동시 입력은 대각선) · SPACE 정지	↑ Nord · ↓ Süd · ← West · → Ost (zwei Tasten zugleich: diagonal) · LEERTASTE: anhalten
+바다·육상 탐험 — 켜면 가려는 쪽을 한 번 누른 뒤로는 마우스를 옮기는 대로 방향을 틉니다 · 끄면 누른 곳까지 갑니다 · 수첩 옆 단추나 SHIFT로도 바꿉니다	Auf See und an Land: Bei aktivierter Funktion einmal die gewünschte Richtung anklicken; danach folgt der Kurs der Maus. Sonst bewegt Ihr Euch zum angeklickten Ziel. Auch mit der Taste neben dem Logbuch oder UMSCHALT umschaltbar.
+느리게	Langsam
+빠르게	Schnell
+마우스를 옮기면 침로가 부드럽게 따라 돕니다	Der Kurs folgt den Mausbewegungen mit sanften Drehungen.
+알림만	Nur Hinweis
+멈췄을 때만 묻기	Nur im Stillstand fragen
+항상 묻기	Immer fragen
+항구·성문 곁을 지나면 창 없이 알리기만 합니다 — 들어가려면 ENTER나 「입항」·「도시에 들어간다」 단추	Beim Vorbeifahren an Häfen oder Stadttoren erscheint nur ein Hinweis. Zum Betreten EINGABE oder die Taste „Einlaufen“ bzw. „Stadt betreten“ drücken.
+곧게 가기	Geradeaus segeln
+먼바다에서만	Nur auf hoher See
+언제나	Immer
+자동항해·침로가 맞바람이어도 좌우로 꺾지 않고 곧게 갑니다 — 맞바람이라 느린 것은 같고, 도착하는 날도 지그재그와 같습니다	Bei automatischer Fahrt und festem Kurs segelt Ihr auch bei Gegenwind geradeaus, ohne zu kreuzen. Der Gegenwind bremst Euch weiterhin; der Ankunftstag bleibt derselbe wie beim Kreuzen.
+위	Oben
+메뉴 위 · 거리 건물 입장 · 바다/육상/해전 북쪽	Im Menü nach oben · Gebäude betreten · auf See, an Land und im Seegefecht nach Norden
+아래	Unten
+메뉴 아래 · 바다/육상/해전 남쪽	Im Menü nach unten · auf See, an Land und im Seegefecht nach Süden
+왼쪽	Links
+메뉴/거리 왼쪽 · 바다/육상/해전 서쪽	Im Menü und auf der Straße nach links · auf See, an Land und im Seegefecht nach Westen
+오른쪽	Rechts
+메뉴/거리 오른쪽 · 바다/육상/해전 동쪽	Im Menü und auf der Straße nach rechts · auf See, an Land und im Seegefecht nach Osten
+확정	Bestätigen
+선택 · 입항/도시 입장	Auswählen · Hafen oder Stadt betreten
+확정 보조/정지	Bestätigen / Anhalten
+메뉴 선택 · 이동 중 정지	Menüeintrag auswählen · Bewegung anhalten
+창 닫기 · 건물 나오기	Fenster schließen · Gebäude verlassen
+속도 ×0.5	Tempo ×0.5
+바다·육상 탐험 배속 0.5 (천천히)	See- und Landreisen mit halbem Tempo (langsam)
+속도 ×1	Tempo ×1
+바다·육상 탐험 배속 1	See- und Landreisen mit normalem Tempo
+속도 ×2	Tempo ×2
+바다·육상 탐험 배속 2	See- und Landreisen mit doppeltem Tempo
+속도 ×4	Tempo ×4
+바다·육상 탐험 배속 4	See- und Landreisen mit vierfachem Tempo
+바다·육상 탐험에서 켬/끔 (기본 SHIFT — 왼쪽·오른쪽 모두)	Auf See und an Land ein- und ausschalten (Standard: UMSCHALT, links oder rechts)
+항해 수첩 열기·닫기 — 도시·바다·육상 탐험에서 「수첩」 단추가 보일 때	Logbuch öffnen oder schließen, wenn die Taste „Logbuch“ in der Stadt, auf See oder bei Landreisen sichtbar ist

@@ -1,0 +1,133 @@
+{
+  "date": "2026-11-22",
+  "language": "en",
+  "sourceFiles": {
+    "story_gold_20261122.tsv": 713,
+    "story_gold_ui_20261122.tsv": 164,
+    "names_gold_20261122.tsv": 62
+  },
+  "scope": [
+    "황금의 바다 서장과 16장·62개 사건·여섯 선택의 13개 분기·결말",
+    "인물·배·물건 이름과 동료 소개·물건 설명·칭호·진행 안내",
+    "기록장·금화/동료/선박 보상·회사 입회·결말 통계"
+  ],
+  "corpus": {
+    "unique": 1013,
+    "beats": 62,
+    "choices": 6,
+    "branches": 13,
+    "missing": [],
+    "preserved": {
+      "entries": 63923,
+      "patterns": 8475,
+      "people": 1501
+    }
+  },
+  "actualPlayer": {
+    "pages": 6234,
+    "names": 4842,
+    "choices": 54,
+    "variants": 9,
+    "note": "리스본·항주·해상과 선택 번호 0·1·2를 조합해 실제 G.GoldSea.play의 fmt·화자·분기 처리를 실행. UI.say와 UI.ask만 가로채 번역값을 검증."
+  },
+  "screens": [
+    "story-world",
+    "story-gold",
+    "gold-notebook",
+    "gold-dialogue",
+    "gold-choice-small",
+    "gold-finale-empty-titles",
+    "gold-finale-titles"
+  ],
+  "errors": [],
+  "sourceRebuildMatches": true,
+  "pack": {
+    "text": 58548,
+    "pat": 8520,
+    "name": 6269,
+    "person": 1501
+  },
+  "checks": [
+    "python tests/i18n_tsv_smoke.py",
+    "node --check js/lang/en.js",
+    "node --check tests/i18n_english_gold_20261122_smoke.cjs",
+    "ENGLISH_ONLY=1 EN_BASELINE=tmp/en_before_gold_20261122.js node tests/i18n_english_gold_20261122_smoke.cjs",
+    "build_en.py로 별도 출력 뒤 바이트 단위 일치 확인",
+    "git diff --check"
+  ],
+  "regression": {
+    "goldExistingScenarioChecks": 33,
+    "consoleErrors": 0,
+    "note": "tests/gold_smoke.js의 Playwright 모듈 경로만 로컬 설치로 보정한 임시 사본. 영어 전용 검사 HTML을 한국어 기본 상태로 열어 실행. 원본 테스트와 게임 코드는 수정하지 않음."
+  },
+  "testEnvironment": {
+    "mode": "ENGLISH_ONLY=1",
+    "browser": "Google Chrome / Windows / file://",
+    "note": "다른 언어 묶음만 제외한 임시 HTML. 실제 게임 소스·영어 파일·그림 사용. 전체 언어 묶음의 동시 로딩을 이번 검사 통과로 주장하지 않음.",
+    "cleanup": "정상·실패 모두 finally에서 browser.close(). 대기 중인 모달을 잘못 반환해 멈췄던 1회는 해당 테스트 프로세스와 자식만 식별해 종료 후 테스트 수정·재실행."
+  },
+  "followupInventory": {
+    "collections": 393,
+    "distinctSources": 53126,
+    "personFragments": 1397,
+    "missingCandidates": 3049,
+    "byCollection": {
+      "BOOK": 673,
+      "MATE": 469,
+      "ITEM": 440,
+      "OLYMPIAN_APOSTLE_EVENTS": 196,
+      "MONSTER_TALES": 131,
+      "ELVES": 120,
+      "DISC_KIN": 96,
+      "LEGACY_ELVES": 80,
+      "DISC_FACTS": 78,
+      "ACHV_EVENTS": 70,
+      "DISC": 54,
+      "BOOK_REL": 48,
+      "UNINVITED_APOSTLE_EVENTS": 46,
+      "ACHIEVEMENTS": 42,
+      "TRIBES": 33,
+      "EVENT_RUMORS": 32,
+      "OLYMPIAN_APOSTLES": 31,
+      "CREATURE_RELICS": 30,
+      "HIST_FIG": 30,
+      "DISC_FAM": 28,
+      "GUARDIANS": 26,
+      "GUARDIAN_LINES": 25,
+      "PRINCESS_LINES": 24,
+      "CITY_DATA": 22,
+      "FIGUREHEAD": 22,
+      "MONSTER_EVENT_SHOTS": 21,
+      "SEA_PIRATES": 21,
+      "STORY": 20,
+      "WONDERS": 20,
+      "ELF_COMMON": 18,
+      "MATE_ZONES": 15,
+      "OLYMPIAN_FELLOWSHIP_EVENTS": 15,
+      "DISC_RELICS": 12,
+      "ELF_SISTER_TALK": 12,
+      "COLONY_LINES": 8,
+      "CREATURE_TROPHY": 6,
+      "ELF_EVENT_SHOTS": 4,
+      "ESCORT_LINES": 4,
+      "RELIC_OPEN_LINE": 4,
+      "LANDWAR": 3,
+      "NATION_LEADERS": 3,
+      "BALANCE": 2,
+      "COLONY_NAMES": 2,
+      "KID_VOYAGE": 2,
+      "OSA": 2,
+      "TOMB_GUARDS": 2,
+      "COURT": 1,
+      "HUNT_SPOILS": 1,
+      "ITEM_KIND": 1,
+      "NATION_TITLES": 1,
+      "RIVAL_STAYS": 1,
+      "SHIP_HIST": 1,
+      "STREET_FOLK": 1
+    },
+    "file": "artifacts/i18n-english-registry-20261122/en-corpus.json",
+    "note": "합성 변수를 넣은 자료 검사. 전체 게임의 완성률이 아니며 실제 표시 문맥으로 후속 확인할 목록. 책·동료·물건 상세와 새 사건 등이 남아 있음."
+  },
+  "artifacts": "artifacts/i18n-english-gold-20261122/"
+}

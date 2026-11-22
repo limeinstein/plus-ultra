@@ -14,6 +14,14 @@
     notebook: { width: 1320, height: 840, padLeft: 68, padRight: 36, padTop: 24, padBottom: 30 },
     // 거리 건물 메뉴: 배경판 없는 양피지 버튼. 실내 명령 메뉴에는 적용하지 않는다.
     townMenu: { width: 540, top: 96, right: 26, bottom: 86, rowHeight: 40, gap: 6, fontSize: 19, minFont: 16, singleAt: 4 },
+    storySelect: { width: 1540, height: 840, slots: 5, infoWidth: 36,
+      map: { width: 1440, height: 660, worldHeight: 540, step: 2,
+        // 화면 표식만 보정한다. 도시·교역·항해 좌표는 그대로 둔다.
+        // 리스본 강변: https://imovel.patrimoniocultural.gov.pt/detalhes.php?code=70275
+        anchors: { photo: [-9.13649, 38.707616], song: [128.487, 34.785] },
+        sea: ['#143b3e', '#285658'], land: [235, 208, 154] },
+      art: { navy: [2172, 724, 44, 174, 2084, 366], paper: [2172, 724, 0, 180, 2172, 356], panel: [1086, 1448, 0, 15, 1086, 1419] }
+    },
     plantSwirl: { cell: 128, columns: 8, rows: 4, seconds: 3.2, cache: 10,
       leaves: 21, radiusMin: 34, radiusMax: 160, coast: 2.2, contractAlpha: 0.8 },
     animalTracking: { enabled: true, spritePixels: 96, senseRadius: 4.8, silhouetteRadius: 2.2,

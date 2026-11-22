@@ -1,0 +1,87 @@
+항해 일지 기록	Registar no diário de bordo
+타이틀로 돌아가기	Voltar ao ecrã inicial
+저장은 모국 도시의 여관에서만	Só pode guardar nas estalagens das cidades do seu país
+어디서나 저장 가능	Pode guardar em qualquer lugar
+저장은 여관에서	Guarde numa estalagem
+(저장은 모국 도시의 여관에서만)	(Só pode guardar nas estalagens das cidades do seu país)
+(어디서나 저장 가능)	(Pode guardar em qualquer lugar)
+(저장은 여관에서)	(Guarde numa estalagem)
+효과음	Efeitos sonoros
+전체 화면	Ecrã inteiro
+화질	Gráficos
+빠름	Rápido
+자동 저장	Gravação automática
+일지를 파일로도	Guardar também num ficheiro
+일기토 먹방울	Gotas de tinta nos duelos
+전투 화면 흔들림·번쩍임	Tremores e clarões em combate
+발견 때 부하들의 수다	Conversas dos companheiros nas descobertas
+보통 크기	Tamanho normal
+장면에 맞춰	Conforme a cena
+늘 위	Sempre em cima
+늘 아래	Sempre em baixo
+여느 소식도 띄움	Mostrar também notícias comuns
+큰 일만 띄움	Mostrar só grandes acontecimentos
+항해 상태판	Painel de navegação
+한 줄로 접기	Recolher numa linha
+늘 펼침	Sempre expandido
+바다의 방향키	Setas no mar
+방위로 가기	Seguir uma direção
+손으로 키 잡기	Governo manual
+마우스 따라가기	Seguir o rato
+조작 감도	Sensibilidade dos controlos
+느리게	Devagar
+빠르게	Depressa
+입항·성문 물음	Perguntas nos portos e portas
+알림만	Apenas avisar
+멈췄을 때만 묻기	Perguntar apenas quando parar
+항상 묻기	Perguntar sempre
+맞바람 지그재그	Bordejar contra o vento
+곧게 가기	Seguir em frente
+먼바다에서만	Só em mar aberto
+언제나	Sempre
+키보드 설정	Teclas
+수첩 탭 바로가기	Atalhos dos separadores do caderno
+기본 키로 되돌리기	Repor teclas iniciais
+빼기	Remover
+이 단축키를 뺍니다	Remover este atalho
+위	Cima
+아래	Baixo
+왼쪽	Esquerda
+오른쪽	Direita
+확정	Confirmar
+확정 보조/정지	Confirmar alternativo / parar
+속도 ×#	Velocidade ×#
+메뉴 위 · 거리 건물 입장 · 바다/육상/해전 북쪽	Subir nos menus · entrar em edifícios · norte no mar, em terra e em combate naval
+메뉴 아래 · 바다/육상/해전 남쪽	Descer nos menus · sul no mar, em terra e em combate naval
+메뉴/거리 왼쪽 · 바다/육상/해전 서쪽	Esquerda nos menus e na rua · oeste no mar, em terra e em combate naval
+메뉴/거리 오른쪽 · 바다/육상/해전 동쪽	Direita nos menus e na rua · este no mar, em terra e em combate naval
+선택 · 입항/도시 입장	Selecionar · entrar num porto ou cidade
+메뉴 선택 · 이동 중 정지	Selecionar nos menus · parar durante o movimento
+창 닫기 · 건물 나오기	Fechar janela · sair de um edifício
+바다·육상 탐험 배속 # (천천히)	Velocidade da exploração marítima e terrestre ×# (devagar)
+바다·육상 탐험 배속 #	Velocidade da exploração marítima e terrestre ×#
+바다·육상 탐험에서 켬/끔 (기본 SHIFT — 왼쪽·오른쪽 모두)	Ativar/desativar no mar e em terra (SHIFT por predefinição — esquerdo ou direito)
+항해 수첩 열기·닫기 — 도시·바다·육상 탐험에서 「수첩」 단추가 보일 때	Abrir/fechar o caderno de navegação — na cidade, no mar ou em terra quando o botão «Caderno» está visível
+수첩 — @	Caderno — @
+수첩을 「@」 탭으로 열기 · 열려 있으면 그 탭으로	Abrir o caderno no separador «@» · se já estiver aberto, mudar para esse separador
+F11로도 켜고 끕니다. 게임이 켠 전체 화면에서는 마우스를 맨 위로 올려도 브라우저 메뉴가 내려오지 않습니다.	F11 também ativa ou desativa. Quando o jogo entra em ecrã inteiro, mover o rato para o topo não abre o menu do navegador.
+여관·자택에서 일지를 기록할 때 같은 일지를 파일(.json)로도 내려받습니다. 브라우저를 닫을 때 사이트 데이터를 지우는 설정이거나 PC 정리 프로그램이 인터넷 사용 흔적을 지우면 브라우저 안의 일지가 사라지니, 그럴 때는 켜 두고 「항해 일지 불러오기 → 파일에서 불러오기」로 이어 가십시오.	Ao guardar na estalagem ou em casa, descarrega também o mesmo diário num ficheiro (.json). Se o navegador apagar os dados dos sites ao fechar, ou um programa de limpeza apagar os dados de navegação, o diário guardado no navegador desaparece. Nesse caso, ative esta opção e continue em «Carregar diário de bordo → Carregar de um ficheiro».
+기본은 왼쪽 빈 공간에 표시합니다. 알림을 끌어서 옮기면 이 기기에 위치를 기억하며, 오른쪽 클릭으로 기본 위치로 되돌립니다. 그냥 누르면 닫힙니다. 대화 중 소식은 모아 두었다가 끝나면 띄우며, 지난 소식은 윗줄 왼쪽 나침반에 남습니다.	Por predefinição, os avisos aparecem no espaço livre à esquerda. Arraste para mover; este dispositivo memoriza a posição. O botão direito repõe a posição inicial e um clique fecha. As notícias recebidas durante conversas aparecem no fim. As anteriores ficam na bússola no canto superior esquerdo.
+접으면 목적지·도착·보급 한 줄만 — 마우스를 올리거나 누르면 속력·진로·항해 날수까지 펼칩니다.	Recolhido, mostra apenas destino, chegada e reservas numa linha. Passe o rato ou clique para expandir e ver velocidade, rumo e dias de viagem.
+마우스를 옮겨도 뱃머리·발걸음이 천천히 따라 돌고, 커서 떨림과 작은 움직임은 무시합니다 · 방향키로 도는 것도 느리게	O rumo e a marcha seguem o rato lentamente, ignorando tremores e pequenos movimentos · Também vira mais devagar com as setas
+마우스를 옮기면 침로가 부드럽게 따라 돕니다	O rumo acompanha suavemente o movimento do rato
+마우스를 옮기면 곧바로 그쪽으로 · 방향키로 도는 것도 빠르게 (예전 손맛)	Vira imediatamente para o rato · Também vira mais depressa com as setas (controlo clássico)
+지나갈 때는 알리기만 하고, 그 곁에 멈춰 서면 들어갈지 묻습니다	Avisa ao passar; pergunta se quer entrar quando parar nas proximidades
+항구·성문 곁에 닿을 때마다 들어갈지 묻습니다 (예전 방식)	Pergunta se quer entrar sempre que chega junto de um porto ou das portas de uma cidade (modo clássico)
+자동항해·침로가 맞바람이어도 좌우로 꺾지 않고 곧게 갑니다 — 맞바람이라 느린 것은 같고, 도착하는 날도 지그재그와 같습니다	Na navegação automática ou num rumo definido, segue em frente mesmo contra o vento. O abrandamento e o dia de chegada são os mesmos do percurso em ziguezague
+사방이 트인 먼바다에서만 좌우로 번갈아 거슬러 오르고, 뭍·섬이 가까우면 곧게 갑니다	Bordeja alternadamente para os dois lados apenas em mar aberto; junto à costa e a ilhas, segue em frente
+맞바람이면 언제나 좌우로 번갈아 거슬러 오릅니다 (예전 방식 — 해안 가까이에서는 다리가 뭍에 걸릴 수 있습니다)	Com vento contrário, bordeja sempre alternadamente para os dois lados (modo clássico — perto da costa pode ficar preso em terra)
+기본은 없음 — 정해 두면 수첩이 닫혀 있을 때는 그 탭으로 열고, 열려 있을 때는 그 탭으로 넘어갑니다	Sem atalho por predefinição — ao definir um, abre o caderno nesse separador ou muda para ele se já estiver aberto
+바꿀 항목을 누른 뒤 새 키를 누르십시오. 이미 쓰는 키를 고르면 두 항목의 키가 서로 바뀝니다. 수첩 단축키는 「빼기」로 뺄 수 있습니다(키를 기다릴 때 Delete도 뺍니다).	Clique na ação e prima a nova tecla. Se já estiver em uso, as duas ações trocam de tecla. Remova atalhos do caderno com «Remover» (ou Delete enquanto aguarda uma tecla).
+@ 북 · @ 남 · @ 서 · @ 동 (두 키 동시 입력은 대각선) · @ 정지	@ norte · @ sul · @ oeste · @ este (duas teclas para diagonais) · @ parar
+@ 누르는 동안 나아감 · @/@ 뱃머리 돌리기 · @ 멈춤 · @ 순항/정지	Manter @ para avançar · @/@ para virar · @ parar · @ navegar/parar
+바다·육상 탐험 — 켜면 가려는 쪽을 한 번 누른 뒤로는 마우스를 옮기는 대로 방향을 틉니다 · 끄면 누른 곳까지 갑니다 · 수첩 옆 단추나 @로도 바꿉니다	Mar e terra — ativado: após clicar na direção desejada, segue o movimento do rato · desativado: vai até ao ponto clicado · Também pode usar o botão ao lado do caderno ou @
+항구·성문 곁을 지나면 창 없이 알리기만 합니다 — 들어가려면 @나 「입항」·「도시에 들어간다」 단추	Avisa sem abrir uma janela ao passar junto de portos ou portas — para entrar, use @ ou os botões «Atracar» ou «Entrar na cidade»
+알림을 이 크기로 띄웁니다.	Os avisos serão apresentados com este tamanho.
+마우스 따라가기 켬 — 가려는 쪽을 한 번 누르면, 그 뒤로는 마우스를 옮기는 대로 방향을 틉니다 (@로 끔)	Seguir o rato ativado — clique na direção desejada e depois mova o rato para mudar o rumo (@ para desativar)
+마우스 따라가기 끔 — 누른 곳까지 갑니다 (@로 켬)	Seguir o rato desativado — navega até ao ponto clicado (@ para ativar)

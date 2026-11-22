@@ -1,0 +1,119 @@
+{
+  "date": "2026-11-22",
+  "language": "pt",
+  "variant": "pt-PT",
+  "recognizedLocales": [
+    "pt-PT",
+    "pt-BR"
+  ],
+  "ready": true,
+  "complete": false,
+  "note": "작성된 기본 번역을 선택할 수 있다. 수치와 화면 순회 결과는 전체 게임의 번역 완료율이 아니다.",
+  "previousState": "언어 등록과 빈 준비 파일만 존재; 기존 포르투갈어 번역 열쇠 없음",
+  "sourceRows": {
+    "_city.tsv": 327,
+    "_good.tsv": 163,
+    "battle.tsv": 99,
+    "catalog_ui.tsv": 40,
+    "city_a1.tsv": 319,
+    "city_details.tsv": 55,
+    "core.tsv": 231,
+    "core_pat.tsv": 77,
+    "create.tsv": 107,
+    "econ.tsv": 95,
+    "econ_messages_20261122.tsv": 72,
+    "field.tsv": 124,
+    "lisbon.tsv": 100,
+    "misc1.tsv": 91,
+    "names_core.tsv": 441,
+    "names_ships.tsv": 30,
+    "names_story_20261122.tsv": 32,
+    "notebook.tsv": 146,
+    "person_names.tsv": 1501,
+    "rain_20261122.tsv": 29,
+    "runtime_20261114.tsv": 27,
+    "runtime_20261115.tsv": 26,
+    "runtime_20261122.tsv": 8,
+    "screen_fixes_20261122.tsv": 40,
+    "settings.tsv": 87,
+    "ships.tsv": 30,
+    "story_select_20261122.tsv": 32,
+    "trade_followup_20261122.tsv": 28
+  },
+  "totalSourceRows": 4357,
+  "reusedRomanizationRows": 1501,
+  "reusedRomanizationSource": "tools/i18n/en/person_names.tsv",
+  "counts": {
+    "text": 1242,
+    "pat": 578,
+    "city": 327,
+    "good": 163,
+    "name": 503,
+    "person": 1501
+  },
+  "validation": {
+    "sourceCommand": "python tests/i18n_portuguese_sources_smoke.py",
+    "sourceResult": "포르투갈어 원본 4357행 · 치환 틀 600행 · 변수 누락·번역 열 손상 0",
+    "buildMatchesBytes": true,
+    "outputLineEndings": "LF",
+    "screenCommand": "node tests/i18n_portuguese_20261122_smoke.cjs",
+    "screenResult": "pass",
+    "screenDetails": "artifacts/i18n-pt-20261122/checks.json",
+    "consoleErrors": [],
+    "storyCards": [
+      "photo",
+      "jhook",
+      "gold",
+      "song"
+    ],
+    "settingsVariants": 11,
+    "rainTemplates": 18,
+    "cityAndGoodMissingIds": {
+      "cities": [],
+      "goods": []
+    },
+    "browserLocaleChecks": [
+      "pt-PT",
+      "pt-BR"
+    ],
+    "regression": {
+      "command": "node tests/i18n_templates_20261113_smoke.cjs",
+      "result": "pass",
+      "wishes": 75,
+      "consoleErrors": [],
+      "retryNavigationTimeoutMs": 120000,
+      "firstAttempt": "도감 이동의 기본 30초 제한 초과; 재검사에서 이동 제한을 120초로 늘려 통과"
+    },
+    "tsvCompilerCommand": "python tests/i18n_tsv_smoke.py",
+    "tsvCompilerResult": "pass"
+  },
+  "missingCrawl": {
+    "command": "BROWSER_EXE=<Chrome 경로> node tools/i18n_missing.js pt tmp/i18n_missing_pt.json",
+    "collectedBeforeLastFollowup": 2,
+    "unresolvedCollectedEntriesAfterFollowup": 0,
+    "rows": [
+      {
+        "src": "api",
+        "ko": "장사꾼들 사이에 이런 말이 돈다. 말라가 쪽에 봄비가 한 번도 오지 않았다더군. 이대로 가면 가을에 곡식이 모자랄 걸세.",
+        "n": 1,
+        "translationAfterFollowup": "Corre esta conversa entre os comerciantes. Dizem que não caiu chuva esta primavera para os lados de Málaga. Se continuar assim, faltará cereal no outono."
+      },
+      {
+        "src": "dom",
+        "ko": "장사꾼들 사이에 이런 말이 돈다. 말라가 쪽에 봄비가 한 번도 오지 않았다더군. 이대로 가면 가을에 곡식이 모자랄 걸세.",
+        "n": 1,
+        "translationAfterFollowup": "Corre esta conversa entre os comerciantes. Dizem que não caiu chuva esta primavera para os lados de Málaga. Se continuar assim, faltará cereal no outono."
+      }
+    ],
+    "scope": "타이틀 불러오기·조작 안내·표시 설정·세비야·교역 메뉴/매입/매각/시세·바다의 순회에서 수집한 2개 항목을 보완한 뒤 실제 번역기로 재검사했다. 보완 후 전체 순회를 다시 실행한 것은 아니며, 무작위 사건 전체를 보장하지 않는다."
+  },
+  "remaining": [
+    "이야기 모드와 튜토리얼 본문",
+    "발견물 이름·설명·단서·발견 대사",
+    "인물 생애",
+    "아이템·음식 상세",
+    "수첩 상세 본문 일부",
+    "가이드북 11장 본문"
+  ],
+  "sharedBuilderChange": "build_lang.py의 출력 줄 끝만 LF로 통일; 다른 언어 번역 원본은 이 작업에서 덮어쓰지 않음"
+}

@@ -1,0 +1,140 @@
+{
+  "date": "2026-11-22",
+  "language": "pt",
+  "variant": "pt-PT",
+  "complete": false,
+  "completedScope": [
+    "아버지의 사진 전체 자료·가족·세대 계승·동료 인물 이야기 18편",
+    "해적여제 서장·16막·결말·마지막 선택 두 갈래·동료·물건·진행 안내·수첩",
+    "첫 항해 튜토리얼 21단계·선택 3곳·분기 6개·중단·건너뛰기·완료 안내"
+  ],
+  "addedRows": {
+    "jhook_opening_20261122.tsv": 166,
+    "jhook_rest_20261122.tsv": 576,
+    "jhook_runtime_20261122.tsv": 24,
+    "jhook_ui_20261122.tsv": 73,
+    "names_jhook_20261122.tsv": 68,
+    "names_tutorial_20261122.tsv": 7,
+    "tutorial.tsv": 383
+  },
+  "addedAfterPhoto": 1297,
+  "totalAddedAfterBase": 2090,
+  "totalSourceFiles": 43,
+  "totalSourceRows": 6447,
+  "counts": {
+    "text": 3047,
+    "pat": 743,
+    "name": 622,
+    "city": 327,
+    "good": 163,
+    "person": 1501
+  },
+  "preservation": {
+    "unchanged": true,
+    "text": 1242,
+    "pat": 578,
+    "name": 503,
+    "city": 327,
+    "good": 163,
+    "person": 1501
+  },
+  "validation": {
+    "sources": "python tests/i18n_portuguese_sources_smoke.py",
+    "sourceResult": "pass",
+    "tsv": "python tests/i18n_tsv_smoke.py",
+    "tsvResult": "pass",
+    "buildMatchesBytes": true,
+    "sha256": "747b12758d0158da86f500b747a2aa1235e751326c2020097121f69e9d257fc0",
+    "basicSmoke": "node tests/i18n_portuguese_20261122_smoke.cjs",
+    "basicResult": "pass",
+    "photoCorpus": {
+      "originals": 399,
+      "combinations": 2464,
+      "missing": 0
+    },
+    "jhookCorpus": {
+      "uniqueOriginals": 840,
+      "checks": 2592
+    },
+    "jhook": {
+      "pages": 765,
+      "dialogueLines": 747,
+      "choices": 1,
+      "branches": 2,
+      "fields": 864,
+      "mates": 8,
+      "items": 7,
+      "guides": 20,
+      "playback": {
+        "pages": 1492,
+        "speakers": 1120,
+        "choices": 2
+      },
+      "koreanRestored": true,
+      "errors": []
+    },
+    "jhookScreens": [
+      "title",
+      "load-menu",
+      "display",
+      "story-0",
+      "story-1",
+      "story-2",
+      "story-3",
+      "notebook-story",
+      "mates-list",
+      "mate-0",
+      "mate-1",
+      "mate-2",
+      "mate-3",
+      "mate-4",
+      "mate-5",
+      "mate-6",
+      "mate-7",
+      "dialogue-roger",
+      "dialogue-killigrew-small",
+      "final-choice-small",
+      "finale",
+      "finale-no-titles"
+    ],
+    "jhookScreenMissing": 0,
+    "tutorial": {
+      "corpus": {
+        "pages": 306,
+        "choices": 3,
+        "branches": 6,
+        "steps": 21,
+        "missing": []
+      },
+      "playback": {
+        "groups": 69,
+        "pages": 370,
+        "speakers": 310,
+        "choices": 6
+      },
+      "screens": [
+        "roles-dialogue",
+        "hire-choice-small",
+        "epilogue-small"
+      ],
+      "screenMissing": 0,
+      "errors": []
+    },
+    "screenFixture": "실제 index.html에서 관련 없는 언어 사전만 제외한 file:// 검사 페이지. 게임 코드·스타일·그림·자료는 실제 파일을 사용. 튜토리얼의 비공개 재생 함수는 실제 원본에서 추출하고 UI 경계만 대체. 기본 포르투갈어 화면 검사는 원래 index.html 사용.",
+    "testProcessesClosed": true,
+    "internalEventIdsVisible": false
+  },
+  "remaining": [
+    "바닷길 노래·황금의 바다 본문",
+    "일반 사건·발견물의 이름·설명·단서·발견 대사",
+    "일반 인물 생애",
+    "아이템·음식 상세",
+    "도시·수첩 상세 일부",
+    "가이드북 11장 본문"
+  ],
+  "note": "기존 번역 열쇠를 먼저 확인해 누락만 추가했다. 기존 번역값·게임 진행 규칙·다른 언어 원본은 변경하지 않는다. 이 범위의 검사 통과는 전체 포르투갈어 완역률을 뜻하지 않는다.",
+  "presentationChanges": [
+    "해적여제 수첩의 이름 없는 사건 6개를 고유 이름 표로 옮겨 내부 식별자 대신 포르투갈어 제목 표시",
+    "포르투갈어 수첩 탭을 낱말 단위로 줄바꿈하고 폭에 따라 다음 줄 배치"
+  ]
+}

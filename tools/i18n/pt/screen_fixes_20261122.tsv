@@ -1,0 +1,40 @@
+식량·물을 먼저 싣는다	Carregar primeiro provisões e água
+@까지 · 상인 @	Até @ · comerciante @
+부관 @	Imediato @
+(대강 알아들음)	(compreende o essencial)
+(띄엄띄엄 알아들음)	(compreende apenas fragmentos)
+다음 대사	Continuar
+갈 곳	Destino
+(@) — 편도 약 #일	(@) — cerca de # dias de ida
+실어 올 물건	Mercadoria a trazer
+(상인의 돈으로 산다)	(comprada com o dinheiro do comerciante)
+까지 @로 (#일)	até @ (# dias)
+받는 몫	Parte a receber
+상인이 남긴 이익의	Do lucro do comerciante
+(지금 시세면 약 #닢 · 적어도 품삯 #닢 · 기한을 넘기면 절반)	(cerca de # moedas de ouro aos preços atuais · pagamento mínimo de # · metade se ultrapassar o prazo)
+물자비	Custo das provisões
+기한 동안의 식량·물 약 #닢	Provisões e água para o prazo: cerca de # moedas de ouro
+(품삯은 적어도 그 #배)	(o pagamento é de pelo menos # vezes esse valor)
+상인의 배는 함대를 따라다닙니다. 내 짐칸·선원과는 상관없지만,	O navio do comerciante acompanha a frota. Não usa o seu porão nem a sua tripulação, mas
+함대가 그 배보다 빨리 가지 못합니다.	a frota não pode navegar mais depressa do que esse navio.
+상선과 함께면 해적이 더 꾀고, 해전에서 그 배를 잃으면 호위는 실패합니다(명성 −#).	O mercante atrai mais piratas. Se perder esse navio num combate naval, a escolta falha (fama −#).
+이 고장에서 나는 물건이라 싸고 재고가 넉넉하다. 어디서나 흔한 물건이라 멀리 가져가도 크게 남지는 않는다.	Produto local barato e abundante. É comum em todo o lado, pelo que mesmo levá-lo para longe dá pouco lucro.
+베네치아가 쥐고 있던 시절엔 귀했지만, 인도 항로가 열리자 리스본으로 쏟아지고, #세기에 네덜란드·잉글랜드 동인도회사가 실어 나르며 흔해졌다	Era raro sob o domínio de Veneza, mas a abertura da rota da Índia trouxe grandes quantidades para Lisboa. No século #, as companhias neerlandesa e inglesa das Índias Orientais tornaram-no abundante
+@ 건물	Edifícios de @
+로마의 기둥	Colunas romanas
+로마의 기둥 — 살펴보기	Colunas romanas — observar
+↑ @ 들어가기	↑ Entrar em @
+제독, 구름이 흘러가는 쪽이 바람이 부는 쪽입니다. 구름길을 따라 뱃머리를 두면 순풍을 타 배가 더 빨리 달립니다.	Almirante, as nuvens seguem a direção do vento. Se alinharmos a proa com elas, teremos vento de popa e navegaremos mais depressa.
+켜짐	Ativado
+꺼짐	Desativado
+켬	Ativado
+끔	Desativado
+본명조	Noto Serif KR
+나눔명조	Nanum Myeongjo
+/이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 (.+) · 일행 (.+) \((.+)가 통역 — 파란 점\)/	Idioma desta cidade e nível do grupo — almirante: ⟦$1⟧ · grupo: ⟦$2⟧ (⟦$3⟧ interpreta — ponto azul)
+/(.+)의 건물/	Edifícios de ⟦$1⟧
+/(.+): 제독, 구름이 흘러가는 쪽이 바람이 부는 쪽입니다\. 구름길을 따라 뱃머리를 두면 순풍을 타 배가 더 빨리 달립니다\./	⟦$1⟧: Almirante, as nuvens seguem a direção do vento. Se alinharmos a proa com elas, teremos vento de popa e navegaremos mais depressa.
+가격(1통)	Preço (1 barril)
+외	entre outros
+@ 일대	Região de @
+<small class="muted">이 브라우저에 남은 항해 일지가 없습니다. 지난번에 기록한 일지가 보이지 않는다면 ① 브라우저를 닫을 때 쿠키·사이트 데이터를 지우는 설정, ② PC 최적화·백신 프로그램의 「인터넷 사용 흔적 삭제」, ③ 시크릿(InPrivate) 창 가운데 하나가 지운 것입니다. 내려받아 둔 일지 파일이 있으면 「파일에서 불러오기」로 이어 가고, 앞으로는 설정의 「일지를 파일로도」를 켜 두십시오.</small>	<small class="muted">Não há diários de bordo guardados neste navegador. Se um diário anterior desapareceu, os dados terão sido apagados por ① uma opção que elimina cookies e dados dos sites ao fechar o navegador, ② a limpeza de dados de navegação de um programa de manutenção ou antivírus, ou ③ uma janela privada (InPrivate). Se tiver um diário descarregado, use «Carregar de um ficheiro» para continuar. Para o futuro, ative «Guardar também num ficheiro» nas definições.</small>

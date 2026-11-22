@@ -1,0 +1,91 @@
+집사	Verwalter
+항해 수첩	Seefahrtsnotizbuch
+물	Wasser
+적재	Ladung
+교역소 주인	Kontorinhaber
+이름	Name
+특기	Fertigkeiten
+내구력	Haltbarkeit
+#등급	Klasse #
+적재량	Ladekapazität
+돛	Segel
+선실	Kabinen
+#칸	# Plätze
+현상수배	GESUCHT
+상인	Händler
+필요 명성	Benötigter Ruhm
+능력치	Attribute
+부관	Erster Offizier
+기함	Flaggschiff
+거래처	Geschäftspartner
+기한	Frist
+여급 @	Schankmaid @
+사서	Bibliothekar
+항해일지	Logbuch
+자재	Material
+선명	Schiffsname
+선종	Schiffstyp
+선장	Kapitän
+모항	Heimathafen
+도시 사업	Stadtvorhaben
+현재	Aktuell
+생산시설	Produktionsstätten
+상관·창고	Niederlassung · Lagerhaus
+판로 개척	Neue Absatzmärkte
+조선 기술	Schiffbau
+천 닢	1.000 Goldmünzen
+박	 Nächte
+물건	Gegenstand
+동료	Gefährten
+단서	Hinweise
+당나귀	Esel
+마차	Wagen
+증거	Beweis
+#점	# Punkte
+#통	# Fass
+#척	# Schiffe
+#명	# Personen
+#일분	Vorrat für # Tage
+#박	# Nächte
+이 값은 너무 비싸지 않은가. 옆 가게는 더 싸던데.	Ist das nicht etwas teuer? Nebenan war es günstiger.
+배를 탈 사람을 찾나? 일거리를 기다리는 뱃사람들이 늘 여기 모여 있지.	Sucht Ihr Leute fürs Schiff? Hier treffen sich immer Seeleute, die auf Arbeit warten.
+거기, 이쪽으로 오게. 포카나 하세.	He, kommt herüber! Spielen wir eine Runde Poker.
+새 항로 하나에 세관 수입이 몇 곱절로 뜁니다.	Schon ein neuer Seeweg kann die Zolleinnahmen vervielfachen.
+원정을 도와 달라는 것이군요. 무엇을 찾으러 가려 하오?	Ihr sucht also Unterstützung für eine Expedition. Was wollt Ihr finden?
+주님이 지으신 세상은 우리가 아는 것보다 훨씬 넓소.	Die Welt, die der Herr erschaffen hat, ist weit größer, als wir wissen.
+호오, 그렇다면 모험 목적을 말해 보게.	So, so. Dann nennt mir das Ziel Eures Vorhabens.
+세상은 우리가 아는 것보다 훨씬 넓다네.	Die Welt ist viel größer, als wir ahnen.
+@ 성문 옆 마구간에서 말·당나귀·마차를 구할 수 있지.	@ Im Stall am Stadttor bekommt Ihr Pferde, Esel und Wagen.
+그러고 보니 @	Da fällt mir ein: @
+뜬소문일 수도 있지만, 해적이란 놈들은 한곳에 오래 머물지 않으니 가 보시려면 서두르시는 게 좋을 겁니다.	Vielleicht ist es nur ein Gerücht. Aber Piraten bleiben nie lange an einem Ort. Wenn Ihr nachsehen wollt, solltet Ihr Euch beeilen.
+수첩 「할 일」에 적었다 — @ 앞바다	Unter „Aufgaben“ im Notizbuch vermerkt — vor der Küste von @
+@(와|과) @의 싸움이 바다로 번졌다. @에 화약 연기가 자욱하다고 한다.	Der Krieg zwischen @ und @ hat die See erreicht. Über @ soll dichter Pulverrauch liegen.
+@ 함대와 @ 함대가 @에서 맞붙었다는 소식이 들려온다.	Die Flotten von @ und @ sollen bei @ aufeinandergetroffen sein.
+@에서 @의 군함이 @의 배를 쫓아 포를 쏘았다고 한다.	Bei {1} soll ein Kriegsschiff von {2} ein Schiff von {3} verfolgt und beschossen haben.
+@ 군함	Kriegsschiff — @
+교황령 함대	Päpstliche Flotte
+@(이|가) 술을 마시고 있다.	@ sitzt bei einem Getränk.
+@에서 @(을|를) 판다고 한다.	In {1} soll es {2} zu kaufen geben.
+@에서 훌륭한 @(을|를) 짠다고 한다.	In {1} soll besonders feines {2} gewebt werden.
+@에서 오래된 유물을 판다고 한다.	In @ sollen alte Relikte zum Verkauf stehen.
+@ 이야기를 들을 수 있다	Hier erfahren Sie mehr über @
+제독, 이것 좀 보십시오! 소문으로만 듣던 @입니다.	Admiral, seht Euch das an! @ — bisher kannten wir es nur aus Erzählungen!
+제독, 저쪽을 보십시오! 소문으로만 듣던 @입니다.	Admiral, seht dort hinüber! @ — bisher kannten wir es nur aus Erzählungen!
+@에 처음으로 입항했다.	Zum ersten Mal in @ eingelaufen.
+@에 처음으로 성문을 지나 들어섰다.	Zum ersten Mal die Stadttore von @ durchschritten.
+피렌체 학자가 보냈다는 편지 이야기가 뱃사람들 사이에 돌고 있네. @	Unter den Seeleuten ist von einem Brief eines Florentiner Gelehrten die Rede. @
+이 근처 바다에서 새로 목격된 괴물 소식은 없다.	Keine neuen Berichte über Ungeheuer in diesen Gewässern.
+기분 좋군!	Das tut gut!
+오늘은 해적 이야기가 없네요. 다들 날씨와 짐값 이야기뿐입니다.	Heute spricht niemand über Piraten. Alle reden nur vom Wetter und von Frachtpreisen.
+그러고 보니 @ 시장에 「@」(이|가) 나왔다더군. 금화 #닢쯤 부른다던가. 진짜라면 왕이라도 탐낼 물건이지.	Da fällt mir ein: Auf dem Markt in {1} soll „{2}“ angeboten werden. Für etwa {3} Goldmünzen, glaube ich. Wenn es echt ist, würde selbst ein König danach verlangen.
+@에서 화산 분화가 일어났다.	Bei @ ist ein Vulkan ausgebrochen.
+새 항로 하나가 나라 하나보다 값질 때도 있지요.	Manchmal ist ein einziger neuer Seeweg mehr wert als ein ganzes Land.
+원정을 도와 달라는 말씀이군요. 무엇을 찾으러 가시려고요?	Ihr möchtet also Hilfe für eine Expedition. Was hofft Ihr zu finden?
+세상은 우리가 아는 것보다 훨씬 넓겠지요.	Die Welt muss viel größer sein, als wir wissen.
+/(.+?) ([\d]+)세/	⟦$1⟧ ⟪R$2⟫.
+/(.+?) 회장님/	Vorsitzender ⟦$1⟧
+/(.+?) 왕비 전하/	Ihre Majestät Königin ⟦$1⟧
+/(.+?) 전하/	Eure Hoheit ⟦$1⟧
+/(.+?) 박사님/	Doktor ⟦$1⟧
+/(.+?) 상관장 각하/	Seine Exzellenz, der Faktor von ⟦$1⟧
+/(.+?) 상관장/	Faktor von ⟦$1⟧

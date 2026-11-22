@@ -1,6 +1,6 @@
 /* 대단한 거래 · 교역왕 (2026-11-10) — js/systems/tradeking.js
    ① 대륙 가르기 ② 매각(모두 판다·한 품목·한꺼번에)이 한 번의 이익으로 TK.sold에 닿는다
-   ③ 100만 닢 미만은 기록만, 넘으면 그 대륙 업적 + 장면 ④ 1500년: 네 대륙이면 교역왕 ⑤ 1790년: 오세아니아도 필요
+   ③ 100만 닢 미만은 기록만, 넘으면 그 대륙 업적 + 장면 ④ 1500년에도 원주민 마을 교역소가 있는 다섯 대륙이 필요 ⑤ 1790년에도 오세아니아 필요
    node tests/tradeking_smoke.js */
 'use strict';
 const path = require('path');
@@ -28,7 +28,7 @@ function ok(v, msg) { if (!v) fail++; console.log((v ? '  ✓ ' : '  ✗ ') + ms
     return page.evaluate(() => window.__res);
   }
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href));
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     await page.evaluate(async () => {
       await G.Game.ensureGeo();
@@ -87,7 +87,7 @@ function ok(v, msg) { if (!v) fail++; console.log((v ? '  ✓ ' : '  ✗ ') + ms
     ok(g3 && g3.indexOf('bigdeal_eu') >= 0 && a3.done && /유럽의 대단한 거래/.test(scene.rib), '125만 닢 한 번 → 「유럽의 대단한 거래」 장면 (금빛 띠)');
     ok(a3.fame >= 600 && a3.titles.indexOf('유럽의 큰손') >= 0 && a3.bd.c === 0 && a3.best === 1250000, '보상: 교역 명성 +' + a3.fame + ' · 칭호 「유럽의 큰손」 · 기록 (리스본 1,250,000)');
 
-    // ④ 1500년: 오세아니아는 아직 교역소가 없다 → 네 대륙이면 교역왕
+    // ④ 에오라·아렌테·마오리 마을은 1500년에도 교역소가 있다. 항구 유무와 교역소는 별개다.
     await page.evaluate(() => {
       const TK = G.TradeKing, AC = G.Achieve, by = n => G.CITY_DATA.find(c => c && c.name === n);
       const rows0 = AC.progress(AC.get('tradeking')).rows.map(r => r.label);
@@ -96,12 +96,18 @@ function ok(v, msg) { if (!v) fail++; console.log((v ? '  ✓ ' : '  ✗ ') + ms
         window.__res = { rows0, g: g1.concat(g2).map(a => a.id), king: AC.done('tradeking') }; window.__done = true; })();
     });
     const r4 = await drain(80);
-    ok(r4.rows0 && r4.rows0.length === 4 && r4.rows0.indexOf('오세아니아의 대단한 거래') < 0, '1500년 교역왕 조건: 유럽·아프리카·아시아·아메리카 넷 (오세아니아 없음)');
+    ok(r4.rows0 && r4.rows0.length === 5 && r4.rows0.indexOf('오세아니아의 대단한 거래') >= 0, '1500년 교역왕 조건: 원주민 마을 교역소를 포함한 다섯 대륙');
     ok(r4.g && r4.g.join() === 'bigdeal_af,bigdeal_as' && !r4.king, '아프리카(튀니스)·아시아(고아) 달성, 아직 교역왕 아님');
     await page.evaluate(() => { window.__done = false; window.__g0 = G.Game.state.player.gold; G.TradeKing.sold(G.CITY_DATA.find(c => c && c.name === '아바나'), 3000000).then(g => { window.__res = g.map(a => a.id); window.__done = true; }); });
     const g5 = await drain(80);
     const a5 = await page.evaluate(() => ({ king: G.Achieve.done('tradeking'), gold: G.Game.state.player.gold - window.__g0, titles: G.Achieve.titles() }));
-    ok(g5 && g5.join() === 'bigdeal_am,tradeking' && a5.king && a5.gold === 200000 && a5.titles.indexOf('교역왕') >= 0, '아메리카(아바나) → 「신대륙의 대단한 거래」와 「교역왕」 (금화 +' + a5.gold + ', 칭호 교역왕)');
+    ok(g5 && g5.join() === 'bigdeal_am' && !a5.king && a5.gold === 0, '아메리카(아바나) 달성 뒤에도 원주민 마을이 있는 오세아니아가 남는다');
+    const native = await page.evaluate(() => { const c=G.CITY_DATA.find(c=>c&&c.name==='에오라 마을');return {exists:G.R.cityExists(c),trade:G.R.facilities(c).trade,continent:G.TradeKing.continent(c)}; });
+    ok(native.exists && native.trade && native.continent==='oc','1500년 에오라 마을의 실제 교역소·대륙 자료');
+    await page.evaluate(() => { window.__done=false;window.__g0=G.Game.state.player.gold;G.TradeKing.sold(G.CITY_DATA.find(c=>c&&c.name==='에오라 마을'),1000000).then(g=>{window.__res=g.map(a=>a.id);window.__done=true;}); });
+    const gNative=await drain(80);
+    const aNative=await page.evaluate(async()=>({king:G.Achieve.done('tradeking'),gold:G.Game.state.player.gold-window.__g0,titles:G.Achieve.titles(),repeat:(await G.TradeKing.sold(G.CITY_DATA.find(c=>c&&c.name==='에오라 마을'),1000000)).length}));
+    ok(gNative&&gNative.join()==='bigdeal_oc,tradeking'&&aNative.king&&aNative.gold===200000&&aNative.titles.includes('교역왕')&&aNative.repeat===0,'오세아니아(에오라 마을) → 교역왕·금화 20만 닢, 같은 거래 재호출 보상 중복 없음');
 
     // ⑤ 1790년 (시드니가 있다): 오세아니아도 교역왕의 조건
     const r6 = await page.evaluate(() => {

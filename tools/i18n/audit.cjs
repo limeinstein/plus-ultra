@@ -1,11 +1,11 @@
-/* 아홉 언어의 등록·번역 자료·원본 재생성·미번역 범위를 한 번에 확인한다.
+/* 열 언어의 등록·번역 자료·원본 재생성·미번역 범위를 한 번에 확인한다.
    node tools/i18n/audit.cjs [--build-check] [--out docs/qa/i18n-날짜.json]
    build-check는 임시 폴더만 쓰며 게임 파일을 덮어쓰지 않는다. */
 'use strict';
 const fs = require('node:fs'), path = require('node:path'), os = require('node:os');
 const vm = require('node:vm'), { spawnSync } = require('node:child_process');
 const root = path.resolve(__dirname, '../..'), args = process.argv.slice(2);
-const expected = ['ko', 'en', 'zh-Hans', 'zh-Hant', 'ja', 'vi', 'es', 'pt', 'de'];
+const expected = ['ko', 'en', 'zh-Hans', 'zh-Hant', 'ja', 'vi', 'es', 'pt', 'de', 'fr'];
 const errors = [], check = (ok, message) => { if (!ok) errors.push(message); };
 const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 const normLines = s => s.replace(/\r\n/g, '\n');
@@ -18,7 +18,7 @@ vm.runInContext('window = globalThis; G = {};', context);
 const load = rel => vm.runInContext(read(rel), context, { filename: rel });
 load('js/core/i18n.js');
 const I = context.G.I18N;
-check(JSON.stringify(I.LANGS.map(l => l.id)) === JSON.stringify(expected), '요청한 아홉 언어의 등록 목록');
+check(JSON.stringify(I.LANGS.map(l => l.id)) === JSON.stringify(expected), '요청한 열 언어의 등록 목록');
 const scriptLists = ['index.html', 'catalog.html'].map(page => {
   const scripts = [...read(page).matchAll(/<script src="(js\/lang\/[^"?]+\.js)"/g)].map(m => m[1]);
   for (const id of expected.filter(id => id !== 'ko')) check(scripts.includes('js/lang/' + id + '.js'), page + ': ' + id + ' 번역 파일 누락');
@@ -81,7 +81,7 @@ try {
   }
   // 포르투갈어권·준비 중 언어의 첫 방문은 영어로, 공개 뒤에는 해당 언어로 간다.
   context.location.protocol = 'https:';
-  for (const [locale, expectedId] of [['ko-KR', 'ko'], ['en-US', 'en'], ['zh-CN', 'zh-Hans'], ['zh-TW', 'zh-Hant'], ['vi-VN', 'vi'], ['es-ES', 'es'], ['pt-BR', 'en'], ['pt-PT', 'en'], ['ja-JP', 'en'], ['de-DE', 'en']]) {
+  for (const [locale, expectedId] of [['ko-KR', 'ko'], ['en-US', 'en'], ['zh-CN', 'zh-Hans'], ['zh-TW', 'zh-Hant'], ['vi-VN', 'vi'], ['es-ES', 'es'], ['pt-BR', I.ready('pt') ? 'pt' : 'en'], ['pt-PT', I.ready('pt') ? 'pt' : 'en'], ['ja-JP', I.ready('ja') ? 'ja' : 'en'], ['de-DE', I.ready('de') ? 'de' : 'en'], ['de-AT', I.ready('de') ? 'de' : 'en'], ['de-CH', I.ready('de') ? 'de' : 'en'], ['fr-FR', I.ready('fr') ? 'fr' : 'en'], ['fr-CA', I.ready('fr') ? 'fr' : 'en'], ['fr-BE', I.ready('fr') ? 'fr' : 'en'], ['fr-CH', I.ready('fr') ? 'fr' : 'en']]) {
     context.navigator.languages = [locale]; check(I.pref() === expectedId, locale + ': 브라우저 언어 선택');
   }
   I.packs.pt.ready = true;
@@ -98,4 +98,4 @@ if (args.includes('--out')) {
   fs.mkdirSync(path.dirname(output), { recursive: true }); fs.writeFileSync(output, JSON.stringify(report, null, 2) + '\n');
 }
 if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
-else console.log('아홉 언어 검사 통과');
+else console.log('열 언어 검사 통과');

@@ -1,0 +1,75 @@
+이야기 모드	Story Mode
+이야기 모드 — 주인공을 고른다	Story Mode — Choose Your Protagonist
+초상을 누르면 이야기를 볼 수 있습니다 · ← → 고르기 (끝에서 옆 바다로) · Enter 열기	Click a portrait to read the story · ← → Choose (continue to the next sea at either end) · Enter Open
+초상을 누르면 이야기를 볼 수 있습니다 · ← → 고르기 · Enter 열기	Click a portrait to read the story · ← → Choose · Enter Open
+이 이야기로 시작	Start This Story
+다른 사람을 고른다	Choose Someone Else
+‹ 타이틀로	‹ Back to Title
+함께 떠나는 사람	Sailing Companions
+주인공 선택	Choose a Protagonist
+추가 주인공 자리	Space for Another Protagonist
+이전 캐릭터 다섯 명	Previous Five Characters
+다음 캐릭터 다섯 명	Next Five Characters
+새로운 이야기	A New Story
+주인공을 선택하면 이야기를 볼 수 있습니다 · ← → 고르기 · Enter 열기	Choose a protagonist to read their story · ← → Choose · Enter Open
+함께 떠나는 사람 — @	Sailing with you — @
+스미스 호킨스 · 윌리엄 호킨스 · 코난 홈즈 …	Smith Hawkins · William Hawkins · Conan Holmes …
+황규 · 박월담 · 임처사 …	Hwang Gyu · Park Woldam · Master Im …
+유럽 — 대서양에서 흑해까지	Europe — From the Atlantic to the Black Sea
+동쪽 바다 — 조선	Eastern Seas — Joseon
+아버지를 찾아가는 항해	A voyage in search of his father
+아버지를 버린 세상에 복수하러 나간 항해	A voyage of revenge against the world that betrayed her father
+들려준 세상을 직접 만나러 가는 항해	A voyage to see the world from his stories
+행방불명된 아버지가 남긴 「있을 수 없는 그림」 한 장 — 붓 자국이 없고, 세상 어디에도 없는 옷과 지붕이 찍힌 사진. 하얀 남방의 항해사는 남작의 아들, 신부, 늙은 항해사와 함께 아버지의 자취를 따라 동쪽으로 떠난다.	His missing father left behind an impossible picture: a photograph with no brushstrokes, showing clothes and rooftops unlike anything in the known world. With a baron's son, a priest, and an old navigator beside him, the sailor in the white shirt heads east to follow his father's trail.
+사략선장 로저 후크가 왕실의 동맹 거래에 버려져 교수대에 오른다. 딸 제시카는 늙은 선원 스미스와 그 아들 윌리엄과 함께 도망쳐 바다로 나간다. 왕을 죽이러 떠난 항해는, 끝내 자신이 지킬 가족과 나라를 만드는 항해가 된다.	The Crown sacrifices privateer Roger Hook to secure an alliance and sends him to the gallows. His daughter Jessica escapes to sea with the old sailor Smith and his son William. Her voyage begins with a vow to kill the king, but leads her to build a family and a homeland of her own.
+여섯 해 전 갯바위에서 건진 사내는 세상 이야기와 물음표투성이 지도, 끝맺지 못한 노래 한 곡을 남기고 사라졌다. 열여덟 소리꾼은 재담꾼과 낙방 선비를 데리고 그 세상을 만나러 떠난다. 그녀가 노래하면 어느 나라든 공연장이 된다.	Six years ago, a man rescued from the coastal rocks vanished, leaving tales of the world, a map full of question marks, and an unfinished song. Now eighteen, a young singer sets out to see that world with a jester and a scholar who never passed his exams. Wherever she sings, any land can become her stage.
+/(.+?) — 「(아버지의 사진|해적여제|바닷길 노래)」/	⟦$1⟧ — “⟦$2⟧”
+여관 일지 #	Inn Journal #
+여관 일지 # — @	Inn Journal # — @
+불러오지 못했습니다: @	Couldn't load the journal: @
+일지를 내려받았습니다: @	Journal downloaded: @
+수첩 — @	Notebook — @
+@ — 열기·닫기	@ — Open/Close
+수첩을 「@」 탭으로 열기 · 열려 있으면 그 탭으로	Open the notebook to the @ tab, or switch to it if already open
+@ 상세 보기	View details for @
+노장 · #년	Veteran · # years
+@ · 지금 # / 본디 #단계 · 선실 수련 +#	@ · Current # / Base level # · Cabin training +#
+@ · 지금 # / 본디 #단계	@ · Current # / Base level #
+#개 — 상세에서 모두 보기	# total — view them all in the details
+나머지 특기 #개 — 상세에서 모두 보기	# more skills — view them all in the details
+나머지 언어 #개 — 상세에서 모두 보기	# more languages — view them all in the details
+슬라브·	Slavic · 
+그리스어	Greek
+북미	North American 
+#개	# items
+@ 솜씨를 믿고 배에 오른 동료. 낯선 항구와 거친 바다를 지나며 자신의 솜씨를 일행과 나눈다. 함께한 항로의 다음 이야기는 아직 항해일지에 쓰이는 중이다.	A companion who came aboard with a talent for @. Through unfamiliar ports and rough seas, they put that skill to work for the crew. The next chapter of your voyage together is still being written.
+@ · 음악실 배치 시 효과 #배	@ · Effect in the music room: ×#
+결투 공격 +#	Duel attack +#
+결투 방어 +#	Duel defense +#
+일을 건성으로 · 효율 #%	Slacking off · Efficiency #%
+부상 #일	Injured for # days
+@ 효과	@ effect
+#배	×#
+음악실 배치 시 @ 효과	In the music room: @ effect
+체력 #, 지력 #, 무력 #, 매력 #	Vitality #, Intelligence #, Strength #, Charm #
+괴물 목격 소식	Monster Sightings
+「@」에서 이어진 실마리	A lead from “@”
+「@」에 적힌 이야기	A tale recorded in “@”
+같은 능력치는 가장 높은 물건 하나만	For each stat, only the strongest item applies
+(같은 능력치는 가장 높은 물건 하나만)	(For each stat, only the strongest item applies)
+마우스 따라가기 켬 — 가려는 쪽을 한 번 누르면, 그 뒤로는 마우스를 옮기는 대로 방향을 틉니다 (@로 끔)	Mouse steering on — click once in the direction you want to go, then move the mouse to steer (@ to turn off)
+마우스 따라가기 끔 — 누른 곳까지 갑니다 (@로 켬)	Mouse steering off — sail to the point you click (@ to turn on)
+전체 화면 — 끄려면 F11	Full screen — press F11 to exit
+다음 대사	Next Line
+# 고름	# selected
+모두 선택	Select all
+모두 해제	Clear all
+@ — 단축키 @	@ — Shortcut @
+그 키는 「@」에 쓰고 있어 바꿀 수 없습니다 — 다른 키를 고르십시오.	That key is reserved for “@”. Choose another key.
+@에 덮어쓰겠습니까?	Overwrite @?
+기록하지 못했습니다 — @	Couldn't save the journal — @
+산 곳: @	Bought in: @
+@의 이야기	@'s story
+누르면 @의 이야기	Click to read @'s story
+식량·물을 먼저 싣는다	Load food and water first
+@ 건물	@ Buildings

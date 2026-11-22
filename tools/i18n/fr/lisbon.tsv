@@ -1,0 +1,100 @@
+/(.+?) ([\d]+)세/	⟦$1⟧ ⟪R$2⟫
+/(.+?) 회장님/	Le président ⟦$1⟧
+/(.+?) 왕비 전하/	Sa Majesté la reine ⟦$1⟧
+/(.+?) 전하/	Votre Altesse ⟦$1⟧
+/(.+?) 박사님/	Docteur ⟦$1⟧
+/(.+?) 상관장 각하/	Son Excellence, le directeur du comptoir de ⟦$1⟧
+/(.+?) 상관장/	Directeur du comptoir de ⟦$1⟧
+기함 @호	Navire amiral @
+바칼라우 외 #가지	Bacalhau et # autres plats
+@ · @ (세력 @ · 성품 @)	@ · @ (faction @ · Caractère @)
+우주지 학자	Cosmographe
+모험 제안	Proposer une expédition
+보고	Faire un rapport
+이야기	Converser
+해도 보고	Présenter la carte
+새로 그린 해도가 아직 적다	Trop peu de nouveaux relevés
+해도 보고 — 새로 그린 해도가 아직 적다	Présenter la carte — Trop peu de nouveaux relevés
+저택을 나온다	Quitter la demeure
+실패	Échec
+작은 일거리 — @	Petit travail — @
+보수 #닢 · 명성 +#	Récompense : # pièces · Renommée +#
+보수 #닢	Récompense : # pièces
+@: 출항할 때에는 말해 주십시오. 곧 준비하겠습니다.	@ : Prévenez-nous lorsque vous souhaiterez appareiller. Nous serons vite prêts.
+@: 모항에 돌아오면 안심되는군요.	@ : Quel soulagement de retrouver notre port d’attache.
+@: 제독, 이 마을에서 잠깐 쉽시다.	@ : Amiral, reposons-nous un peu dans cette ville.
+@: 배는 잘 정박해 두었습니다.	@ : Les navires sont bien amarrés.
+제독이 호위할 배를 찾는다는 말을 교역소 주인에게 들었소. 나는 @, @ 한 척으로 장사하는 사람이오.	Le maître du comptoir m’a dit que vous cherchiez un navire à escorter. Je suis @, marchand avec un seul @.
+@호	@
+저쪽 구석에서 해도를 펼쳐 놓은 사내 보이나? 제노바에서 온 크리스토발 콜론이라는 자일세. 페레스트렐루 집안 딸과 혼인해 리스본에 눌러앉았지. 제 배를 꾸려 다니는 사람이라 남의 밑에서 일하지는 않을 걸세.	Vous voyez cet homme dans le coin avec ses cartes étalées ? C’est Christophe Colomb, de Gênes. Il a épousé une fille des Perestrelo et s’est installé à Lisbonne. Il possède son propre navire : je doute qu’il entre au service de quelqu’un.
+부두의 늙은 선원들이 입을 모아 말하더군. @	Les vieux marins du quai disent tous la même chose. @
+장사꾼들이 이 자리에서 떠드는 걸 들었네만—	J’ai entendu les marchands en parler ici même…
+@ — 호감 @	@ — Affection @
+일손이 필요하긴 해요. 부엌일과 장작 패기를 해 주시면 품삯을 드릴게요. (일하는 동안 @(을|를) 익힐 수 있지만, 바다의 제독이 허드렛일을 한다는 소문에 하루에 명성이 #씩 내려갑니다)	Nous aurions bien besoin d’aide. Aidez en cuisine et fendez du bois, je vous paierai. (Vous apprendrez {1}, mais perdrez {2} de renommée par jour : on jasera de voir un amiral faire de petits travaux.)
+마침 일손이 모자라던 참입니다. 부엌일과 장작 패기를 해 주시면 품삯을 드리지요. (일하는 동안 @(을|를) 익힐 수 있지만, 바다의 제독이 허드렛일을 한다는 소문에 하루에 명성이 #씩 내려갑니다)	Nous manquons justement de bras. Aidez en cuisine et fendez du bois, je vous paierai. (Vous apprendrez {1}, mais perdrez {2} de renommée par jour : on jasera de voir un amiral faire de petits travaux.)
+별로 위도를 잰다. 위도만 표시된다.	Mesure la latitude à l’aide des étoiles. N’affiche que la latitude.
+배에 사는 쥐를 잡아 식량을 지킨다.	Chasse les rats du bord et protège les vivres.
+고운 빛깔의 리본.	Un ruban aux jolies couleurs.
+청혼할 때 건네는 반지.	Une bague à offrir lors d’une demande en mariage.
+몸에 고정하는 받침과 울림줄을 갖춘 행진용 작은북. 두 채로 또렷한 장단을 치며 대열의 걸음을 맞춘다.	Petit tambour de marche doté d’un support et de timbres. Deux baguettes marquent nettement le rythme pour régler le pas des troupes.
+작은 조개 모양 나무판 두 쌍. 손가락에 걸고 맞부딪쳐 이베리아 춤의 박자를 맞춘다.	Deux paires de petites pièces de bois en forme de coquillages. Fixées aux doigts, elles s’entrechoquent pour rythmer les danses ibériques.
+둥글게 부푼 나무 몸통과 뒤로 꺾인 줄감개를 가진 현악기. 노래 반주에 어울린다.	Instrument à cordes au corps de bois bombé et au chevillier recourbé. Convient à l’accompagnement du chant.
+폼포니우스 멜라 『지지』	Pomponius Mela, Chorographie
+원정을 후원해 달라? 좋소, 무엇을 찾으러 가겠다는 것이오?	Soutenir votre expédition ? Fort bien. Que voulez-vous chercher ?
+@ 사이에서 @(이|가) 유행이다. @ 말로는 @ 값이 @ 올랐다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	Chez {1}, {2} est à la mode. Selon {3}, le prix de {4} a augmenté de {5}. La demande devrait se maintenir encore {6}.
+베네치아·제노바의 부자들	les riches de Venise et de Gênes
+지중해 상인들	les marchands de Méditerranée
+@에서 지진이 일어났다.	Un tremblement de terre a frappé @.
+이탈리아	Italie
+원정 자금 말씀이시군요. 무엇을 찾으러 가시는지부터 들어 보지요.	Un financement d’expédition ? Commençons par ce que vous comptez chercher.
+조급함	Impatience
+기한을 짧게 잡고 늦으면 크게 깎는다. 대신 선금이 후하다.	Impose des délais courts et sanctionne lourdement les retards, mais accorde des avances généreuses.
+별 용건이 없으시면 이만. 저도 장부를 봐야 해서요.	Si vous n’avez rien d’autre, arrêtons-nous là. Je dois examiner mes comptes.
+나리와 맺은 계약은 없는 것 같습니다만?	Je ne crois pas avoir de contrat avec vous, monsieur.
+/저는 (.+?)에 관한 이야기라면 언제든 귀가 솔깃합니다\./	Les histoires de ⟦$1⟧ retiennent toujours mon attention.
+돈보다 귀한 건 남보다 먼저 아는 소식입니다.	Les nouvelles que l’on apprend avant les autres valent plus que l’argent.
+오래 기다리셨습니다. 제가 @의 집사입니다. 무기는 여기서 보관하겠습니다. 그러면 안으로 들어가십시오.	Merci d’avoir patienté. Je suis l’intendant de @. Vos armes resteront ici. Veuillez entrer.
+허허, 그대가 요즘 소문난 항해자로구려. 바다에서 본 것을 들려주러 왔소?	Ah ! Voici donc le navigateur dont tout le monde parle. Venez-vous me raconter ce que vous avez vu en mer ?
+허허, 그 목적부터 들어 봅시다.	Eh bien, commençons par votre objectif.
+용건이 없다면 나는 다시 책으로 돌아가겠소.	Si vous n’avez pas de demande, je vais retrouver mes livres.
+그대와 약속한 일은 없는 것 같은데?	Je ne crois pas avoir pris d’engagement envers vous.
+/나는 (.+?)에 관한 이야기라면 언제든 귀를 기울이오\./	J’écoute toujours volontiers les histoires de ⟦$1⟧.
+금보다 귀한 것은 새로운 지식이오.	Le savoir nouveau est plus précieux que l’or.
+돈보다 귀한 것은 새로운 지식일세.	Le savoir nouveau vaut plus que l’argent.
+이 해도는 지난번에 본 것과 거의 같군요. 새 바다를 더 그리거나, 지나온 바다를 다시 지나며 강·산·지형까지 채워 오십시오.	Cette carte ressemble beaucoup à la précédente. Tracez de nouvelles mers, ou reprenez les routes connues pour y ajouter fleuves, montagnes et terrains.
+주인께서는 만나실 수 없지만, 믿을 만한 항해자에게 맡길 작은 일이 있다고 하셨습니다. 해내시면 주인께 말씀드려 두지요.	Mon maître ne peut vous recevoir, mais il a un petit travail pour un navigateur fiable. Accomplissez-le et je lui parlerai de vous.
+「@」 소문 확인	Vérifier la rumeur de « @ »
+요즘 이런 소문이 도네. @ 정말인지 가서 확인해 오게. — 기한 #년, 선금 #닢	Cette rumeur circule : {1} Allez vérifier si elle est vraie. — Délai : {2} ans, avance : {3} pièces
+@ @쪽 @ 해도	Carte de {1} · Vers {2} · {3}
+@ 북위 #° · 서경 #° 부근의 물길과 바람을 살펴 해도를 그려 오게. (#° 거리) — 기한 #년, 선금 #닢	Relevez courants et vents de {1}, près de {2}°N et {3}°O, et rapportez une carte. (Distance : {4}°) — Délai : {5} ans, avance : {6} pièces
+@ #통 조달	Fournir {2} tonneaux de {1}
+이곳에서는 @(을|를) 구하기 어렵네. @ 같은 곳에서 #통만 사다 주게. 값은 넉넉히 치르겠네. — 기한 #년	{1} est difficile à trouver ici. Achetez-en {3} tonneaux, par exemple à {2}. Je vous paierai bien. — Délai : {4} ans
+주인께서 믿을 만한 항해자에게 맡기시려는 일입니다. 해내시면 주인께 이름이 알려질 것입니다.	Mon maître veut confier cette tâche à un navigateur digne de confiance. Réussissez, et il connaîtra votre nom.
+알겠습니다. 마음이 바뀌시면 다시 오십시오.	Bien compris. Revenez si vous changez d’avis.
+어디 들어 볼까요. 무엇을 찾고 싶으신가요?	Je vous écoute. Que souhaitez-vous trouver ?
+용건이 없으시다면 오늘은 이만 하지요.	Si vous n’avez rien à demander, arrêtons-nous là pour aujourd’hui.
+당신과 약속한 일은 없는 것 같은데요?	Je ne crois pas avoir pris d’engagement envers vous.
+/나는 (.+?)에 관한 이야기라면 언제든 듣고 싶어요\./	J’aimerais toujours entendre des histoires de ⟦$1⟧.
+보석보다 귀한 건 새로운 이야기예요.	Une histoire nouvelle est plus précieuse que les joyaux.
+<b>이 근해의 해적선 #척을 쳐부순다</b> <small class="muted">해적 퇴치</small>	<b>Vaincre # navires pirates dans ces eaux</b> <small class="muted">Chasse aux pirates</small>
+<b>@(을|를) @까지 모신다</b> <small class="muted">사람 이송</small>	<b>Escorter @ jusqu’à @</b> <small class="muted">Transport de passagers</small>
+<b>해안에 묻힌 보물 (지도)</b> <small class="muted">보물 찾기</small>	<b>Trésor enfoui sur la côte (carte)</b> <small class="muted">Chasse au trésor</small>
+해적 퇴치	Chasse aux pirates
+보물 찾기	Chasse au trésor
+@ 영토 · 국왕 @	Territoire de @ · Souverain @
+누르면 @의 이야기	Cliquer pour lire l’histoire de @
+상인 @	Marchand @
+여관 안주인	Aubergiste
+신부	Prêtre
+@ · @(을|를) 떠돎 · #~#년	@ · Parcourt @ · #–#
+@ · @(을|를) 떠돎 · #~#년 ·	@ · Parcourt @ · #–# ·
+남자	Homme
+여자	Femme
+나는 모름	Mes connaissances : aucune
+고용 불가	Recrutement impossible
+· @ @호 (짐칸 #통)	· @ @ (cale : # tonneaux)
+목재 시장	Marché du bois
+배값 #% 할인 · 사업 투자 #등급	Prix des navires -#% · Niveau d’investissement #
+이 도시 사업에 더 투자하면(#등급) 가까운 고장의 목재를, 더 많이(#등급) 투자하면 세계 각지의 목재를 들여올 수 있네.	En investissant davantage dans cette ville (niveau #), vous pourrez importer du bois des environs. Avec un investissement supérieur (niveau #), vous en trouverez du monde entier.
+선불이에요. 하룻밤에 금화 #닢인데, 며칠 묵으시겠어요?	Le paiement se fait d’avance. La nuit coûte # pièces d’or. Combien de nuits resterez-vous ?
+@에게 말을 건다	Parler à @

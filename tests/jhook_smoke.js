@@ -5,7 +5,7 @@
 'use strict';
 const path = require('path');
 const { pathToFileURL } = require('url');
-let chromium; try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require('/opt/npm-tools/node_modules/playwright')); }
+let chromium; try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
 const BASE = process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(__dirname,'..',process.env.PAGE || 'index.html')).href;
 let passed = 0;
 function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.log('  ✓ ' + msg); }
@@ -36,10 +36,10 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     await page.waitForTimeout(800);
     const cards = await page.evaluate(() => Array.from(document.querySelectorAll('.ss-card .nm')).map(n => n.textContent));
     ok(cards.includes('마테우스 다 코스타') && cards.includes('제시카 후크'), '지도 위 초상: ' + cards.join(' · '));
-    const mp = await page.evaluate(() => ({ page: document.querySelector('.ss-stage').dataset.page, labels: Object.keys(G.StorySelect._labels || {}).filter(k => /^eu:/.test(k)).map(k => k.slice(3)),
-      eu: Array.from(document.querySelectorAll('.ss-card')).filter(c => c.dataset.page === 'eu').map(c => c.textContent), arrow: !document.querySelector('.ss-arrow.r').classList.contains('off'), song: G.SongStory.released() }));
-    ok(mp.page === 'eu' && ['에스파냐', '포르투갈', '영국', '네덜란드', '오스만'].every(n => mp.labels.includes(n)) && mp.eu.length >= 2, '처음 지도는 유럽 — 나라: ' + mp.labels.join('·'));
-    ok(mp.arrow === mp.song, mp.song ? '오른쪽 화살표(동쪽 바다)가 있다' : '바닷길 노래 공개 전: 오른쪽 화살표 없음');
+    const mp = await page.evaluate(() => ({ page: document.querySelector('.ss-stage').dataset.page, labels: Object.keys(G.StorySelect._labels || {}).filter(k => /^world:/.test(k)).map(k => k.slice(6)),
+      eu: Array.from(document.querySelectorAll('.ss-card')).filter(c => c.dataset.page === 'eu').map(c => c.textContent), arrow: !!document.querySelector('.ss-arrow'), song: G.SongStory.released() }));
+    ok(mp.page === 'world' && ['북아메리카', '남아메리카', '유럽', '아프리카', '아시아', '오세아니아'].every(n => mp.labels.includes(n)) && mp.eu.length >= 2, '처음 지도는 세계 — 지역: ' + mp.labels.join('·'));
+    ok(!mp.arrow, '지역 전환 화살표 없음 — 주인공을 누르면 출발 지도로 바뀐다');
     await page.screenshot({ path: path.join(process.env.SHOT_DIR || '/tmp', 'storyselect_map.png') });
     const ci = cards.indexOf('제시카 후크');
     await page.evaluate((i) => document.querySelectorAll('.ss-card')[i].click(), ci);

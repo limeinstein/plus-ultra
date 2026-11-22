@@ -1,0 +1,8 @@
+{
+  "mode": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a1f9ed-3388-7e20-9690-9e249440b34c\\exec-04515b27-74ca-4c67-93a9-6893ec52a499.png",
+  "prompt": "Use case: game map background asset. Generate ONE flat complete WORLD MAP BACKGROUND matching reference's antique engraved nautical atlas style: midnight muted teal sea, honey ivory parchment continents with fine engraved low-relief mountains, thin brownink inland contours and delicate gold rhumb lines. No text, no labels, no port pins, no compass medallions, no borders, no UI, no people or ships. Exact geographic layout: equirectangular canvas bounds longitude -180 to +180, latitude +83 atTOP to -65 atBOTTOM. Americas on left, Europe/Africa center, Asia/Oceania on right; Greenland visible near top, Patagonia and NewZealand near bottom. Recognizable correct coastlines and all continents, no giant invented peninsulas. Wide approximately2.667:1 ratio, about1920x720. Mapedge toedge, no margins, no diagonalperspective or blur. This artwork will be used only for parchment/terrain texture underneath a mathematically exact geographic mask, so prioritize consistent antique materials, mountainengraving and legibility. No moderntrainsbuildings, no flagcolors. The reference is style inspiration only, do not copy its frame ordecorativeportraits.",
+  "references": [
+    "C:/Users/User/AppData/Local/Temp/codex-clipboard-4bd58c6c-4936-42ce-a94f-47d5bb11e4b4.png"
+  ]
+}

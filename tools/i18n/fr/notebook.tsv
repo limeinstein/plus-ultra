@@ -1,0 +1,146 @@
+#세 (#월 #일생 · @)	{1} ans (né le {3}/{2} · @)
+예금	Dépôts
+악명	Infamie
+건강	Santé
+명성 갈래	Renommée par domaine
+탐험	Exploration
+교역	Commerce
+전투	Combat
+사교	Société
+작위	Titre de noblesse
+적대	Hostilités
+없음	Aucun
+없음 — 통합 명성 #부터 국왕이 부른다	Aucun — le roi vous convoque à partir de # de renommée totale
+@ (공격 #)	@ (attaque #)
+@ (방어 #)	@ (défense #)
+배우자	Conjoint
+자녀	Enfants
+직업 잠재 특성 · 아직 드러나지 않음	Talent latent du métier · pas encore révélé
+직업 잠재 특성 · @	Talent latent du métier · @
+지평선의 위안	Réconfort de l’horizon
+층위의 눈	Lecture des strates
+빈틈없는 해체	Dépeçage minutieux
+열세의 돌격	Assaut en infériorité
+한마음의 기도	Prière à l’unisson
+거래처의 사례	Gratitude des partenaires
+질서 있는 일제사격	Salve disciplinée
+“해도에 없던 풍경이군. 이곳을 기억하면 다음 길도 찾을 수 있겠어.”	« Ce paysage ne figure sur aucune carte. Retenons-le, il nous guidera pour la suite. »
+“흙의 층과 작은 흔적까지 남겨라. 보물보다 오래갈 것은 이 기록이다.”	« Consignez chaque couche de terre et la moindre trace. Ces notes dureront plus longtemps que les trésors. »
+“가죽이 상하지 않게 결을 따라 벗겨라. 버릴 몫도 살릴 수 있다.”	« Suivez le sens du poil pour préserver la peau. Même les chutes peuvent servir. »
+“수가 적어도 물러서지 마라. 좁은 갑판에서는 먼저 자리를 잡는 쪽이 이긴다!”	« Ne reculez pas parce que nous sommes moins nombreux ! Sur un pont étroit, le premier en position l’emporte ! »
+“믿는 이름은 달라도 무사히 돌아가고 싶은 마음은 같지. 함께 쉬어 가세.”	« Nous ne prions pas tous le même dieu, mais nous voulons tous rentrer sains et saufs. Reposons-nous ensemble. »
+“산 값과 운반한 수고를 장부에 남겨라. 신뢰가 쌓이면 거래처도 사례하는 법이지.”	« Notez le prix d’achat et les efforts du transport. La confiance finit par porter ses fruits auprès des partenaires. »
+“각 포대는 명령을 기다려라. 같은 순간에 조준하고, 한 번에 쏜다!”	« Toutes les batteries attendent mon ordre ! Visez ensemble et tirez d’un seul coup ! »
+지리·자연을 새로 발견하면 피로 # 회복. 하루 최대 #.	Une nouvelle découverte géographique ou naturelle réduit la fatigue de #. Maximum # par jour.
+유적·보물의 첫 발견 명성 +#%. 발견당 최대 #, 하루 최대 #. 보고 보상에는 미적용.	Renommée de première découverte d’une ruine ou d’un trésor +#%. Maximum # par découverte et # par jour. Sans effet sur les récompenses de rapport.
+사냥 후 실제로 싣는 전리품 +#%(버림). 하루 최대 #통. 짐칸 한도 적용.	Butin réellement embarqué après la chasse +#% (arrondi à l’inférieur). Maximum # tonneaux par jour. La capacité de la cale s’applique.
+기함의 접현 시작 시 아군 선원이 적보다 적으면 해당 백병전 공격력 +#%. 특기 조합과는 큰 쪽만 적용.	Si le navire amiral aborde avec moins de marins que l’ennemi, son attaque d’abordage augmente de #%. Seul le bonus le plus élevé s’applique avec les combinaisons de compétences.
+함께 기도하면 추가 규율 +#, 피로 -#. 하루 #회.	Prier ensemble ajoute # de discipline et réduit la fatigue de #. # fois par jour.
+타지 매입분만 팔아 이익을 낸 거래에 순이익 #%의 사례금(버림). 하루 최대 #닢. 산 곳 없는 전리품·노예 거래 제외.	Une vente bénéficiaire composée uniquement de lots achetés ailleurs rapporte une prime de #% du bénéfice net (arrondie à l’inférieur). Maximum # pièces d’or par jour. Exclut le butin sans lieu d’achat et le commerce des esclaves.
+규율 # 이상일 때 기함의 포격 명중률 +#%p. 특기 조합과 큰 쪽만 적용하며 최종 상한 95% 유지.	À partir de # de discipline, la précision des canons du navire amiral augmente de # points de pourcentage. Seul le meilleur bonus s’applique avec les combinaisons de compétences. Le plafond reste fixé à 95%.
+(동료 포함 실효 수준 ·	(niveau effectif avec les compagnons ·
+제독 본인 ·	Amiral seul ·
+동료로 올린 것)	amélioré par les compagnons)
+숨은 능력	Aptitudes cachées
+(제독 본인의 LV3 특기 조합)	(combinaisons de compétences personnelles de niveau 3)
+제독 본인이 서로 맞는 특기 세 가지를 LV3까지 익히면 숨은 능력이 드러납니다.	Maîtrisez vous-même trois compétences compatibles au niveau 3 pour révéler une aptitude cachée.
+통역	Interprétariat
+경험과 성장	Expérience et progression
+— 일을 해낼수록 능력치가 조금씩 오른다 (높을수록 더디다)	— Les tâches accomplies améliorent progressivement les attributs (plus lentement aux niveaux élevés)
+설득	Persuasion
+거래	Transactions
+일기토	Duels
+미식	Gastronomie
+# / # · 올해 #/#	# / # · Cette année #/#
+최고 · 올해 #/#	Maximum · Cette année #/#
+/(.+·.+)/	⟦$1⟧
+기함 선실 — 부하 배치	Cabines du navire amiral — Affecter les officiers
+식량 / 물	Vivres / Eau
+약 #일분	Environ # jours de réserves
+교역품 #통 · #/#종 · 무게 # / #	Marchandises : # tonneaux · #/# types · Poids # / #
+교역품 #통 · #/#종	Marchandises : # tonneaux · #/# types
+규율	Discipline
+선수상	Figure de proue
+함대 속력	Vitesse de la flotte
+(바람을 고르게 받을 때의 평균)	(moyenne avec un vent régulier)
+조함	Conduite
+짐	Cargaison
+평균 선속	Vitesse moyenne
+#°/일	#°/jour
+배가 한 척이면 그 배의 선속이 곧 함대 속력입니다. 두 척 이상이면 가장 느린 배에 맞추되, 운용술로 예인 보조를 받고 편대 유지 부담을 줄입니다.	Avec un seul navire, sa vitesse est celle de la flotte. Avec plusieurs navires, le plus lent impose l’allure. La manœuvre apporte une aide au remorquage et réduit les contraintes de formation.
+적재 교역품	Marchandises embarquées
+발견물 # / #	Découvertes # / #
+해도 작성 #%	Carte complétée à #%
+해도의 상세함: ① 윤곽 #칸 · ② 강 #칸 · ③ 산 #칸 · ④ 지형 #칸 · 보고하지 않은 몫	Détails cartographiques : ① contours # cases · ② fleuves # · ③ montagnes # · ④ terrains # · Partie non signalée
+(왕·학자 후원자에게 「해도 보고」) · 지도 제작 속도 +#%	(« Présenter la carte » à un mécène royal ou savant) · Vitesse de cartographie +#%
+(왕·학자 후원자에게 「해도 보고」) · 지도 제작 속도 -#%	(« Présenter la carte » à un mécène royal ou savant) · Vitesse de cartographie -#%
+개척 현황	Progression de l’exploration
+— 지금 단서를 들을 수 있는 미발견 발견물 #곳. 앞 단계가 알려질수록 더 먼 곳, 더 무거운 발견물의 단서가 열립니다. 칸에 마우스를 올리면 다음 조건이 보입니다.	— Des indices sont accessibles pour # découvertes encore inconnues. Les premières étapes révèlent des pistes vers des lieux plus lointains et des découvertes majeures. Survolez une case pour voir la condition suivante.
+처음부터 아는 세계	Le monde connu au départ
+동쪽 길	Route de l’Est
+서쪽 길	Route de l’Ouest
+미지	Inconnu
+소문	Rumeurs
+항로 탐색	Recherche de routes maritimes
+개척	Exploré
+깊은 곳	Exploration approfondie
+끝까지	Exploration complète
+@ · #/#	@ · #/#
+@ 다음 목표 — 〈@〉	@ — prochain objectif : 〈@〉
+「@」(을|를) 찾으면(또는 경쟁자가 발표하면) 이 땅이 열립니다.	Découvrez « @ » (ou attendez l’annonce d’un rival) pour ouvrir cette région.
+@(이|가) 알려지면 소문이 돌기 시작합니다.	Lorsque @ est connu, les rumeurs commencent à circuler.
+맛보기 발견(@)을 #개 찾으면 「@」의 단서가 나옵니다.	Faites {2} premières découvertes (@) pour obtenir des indices sur « {3} ».
+이곳에서 발견 #곳(지금 #곳)을 채우거나 몇 해가 지나면 더 무거운 발견물의 단서가 나옵니다.	Après # découvertes dans cette région (# actuellement), ou quelques années, des indices de découvertes majeures apparaîtront.
+이곳에서 발견 #곳(지금 #곳)을 채우면 가장 무거운 발견물의 단서가 나옵니다.	Après # découvertes dans cette région (# actuellement), des indices des découvertes les plus importantes apparaîtront.
+모든 단서를 들을 수 있습니다.	Tous les indices sont accessibles.
+진행 중인 계약이 없습니다. 단서를 모아 왕궁이나 저택의 후원자를 찾아가 모험을 제안하십시오. 아직 이름이 없으면 후원자(또는 집사)에게 「작은 일거리」를 청해 해도 작성·물자 조달·소문 확인부터 시작할 수 있습니다.	Aucun contrat en cours. Recueillez des indices et proposez une expédition à un mécène au palais ou dans sa demeure. Si vous êtes encore inconnu, demandez-lui (ou à son intendant) de « Petits travaux » : cartographie, approvisionnement ou vérification de rumeurs.
+진행 중인 계약	Contrat en cours
+왕명	Missions royales
+맡은 왕명이 없습니다. 통합 명성 #부터.	Aucune mission royale. À partir de # de renommée totale.
+맡은 왕명이 없습니다. 통합 명성 #부터. 다른 나라의 군주를 알현해도 명예 작위가 걸린 왕명을 받을 수 있습니다.	Aucune mission royale. À partir de # de renommée totale. Les souverains étrangers peuvent aussi confier des missions récompensées par un titre honorifique.
+맡은 왕명이 없습니다. 다른 나라의 군주를 알현해도 명예 작위가 걸린 왕명을 받을 수 있습니다.	Aucune mission royale. Les souverains étrangers peuvent aussi confier des missions récompensées par un titre honorifique.
+직접 들은 소문과 거래처 정보, 공개된 발견의 재조사 의뢰를 적어 둡니다.	Rumeurs entendues personnellement, renseignements commerciaux et demandes de réexamen de découvertes publiées.
+장소·기한·거래처 보기	Voir les lieux, délais et partenaires
+맡은 조합 의뢰	Missions de guilde acceptées
+맡은 의뢰가 없습니다. 조합에서 의뢰를 살펴보십시오.	Aucune mission acceptée. Consultez les offres de la guilde.
+거듭 지나온 길이 자세해집니다: 윤곽 → 강 → 산 → 지형. 휠로 확대·축소하고 끌어서 옮깁니다.	Les passages répétés précisent la carte : contours → fleuves → montagnes → terrains. Molette pour zoomer, glisser pour déplacer.
+도시 찾기	Rechercher une ville
+알고 있는 도시 이름	Nom d’une ville connue
+여기	Ici
+확대	Agrandir
+축소	Réduire
+전체	Tout
+알려진 해도 전체	Toute la carte connue
+지금 위치	Position actuelle
+재탐사 ① 윤곽 ② 강 ③ 산 ④ 지형	Nouveaux relevés : ① contours ② fleuves ③ montagnes ④ terrains
+미지의 삽화: 옛 항해자의 상상	Images de l’inconnu : l’imagination des anciens navigateurs
+⚑ 수도	⚑ Capitale
+모형 크기: 대·중·소	Taille des modèles : grande · moyenne · petite
+▥ 발견한 유적·자연 경관	▥ Ruines et merveilles naturelles découvertes
+〰 항구	〰 Port
+┄ 내륙	┄ Intérieur des terres
+⌜ 청록 모서리: 자동항해	⌜ Coin turquoise : navigation automatique
+밑줄 색: 다스리는 나라	Couleur du soulignement : pays souverain
+후원자	Mécène
+계약	Contrat
+? 단서(술집 소문·망루) — 올리면 이름, 누르면 단서	? Indice (rumeurs de taverne · vigie) — Survol : nom · Clic : indice
+항로 경험	Expérience des routes
+— 한 항구에서 출항해 다른 항구에 곧장(다른 항구에 들르지 않고) 입항하면 두 항구 사이의 자동항해가 열립니다(오는 길도). 자동항해 중 손으로 몰면 풀리고, 다음 항구에 들어간 뒤 그 항구와 이어진 항로에서 다시 쓸 수 있습니다.	— Rejoindre directement un autre port sans escale débloque la navigation automatique entre les deux ports, dans les deux sens. Gouverner manuellement l’interrompt. Après votre arrivée, vous pouvez la réutiliser sur les routes partant de ce port.
+아직 항구와 항구 사이를 오간 적이 없습니다. 익숙하지 않은 항로도 바닷길을 따라가지만(배속은 그대로) — 한 번 다녀오면 자동항해가 열립니다. 뭍에 막히면 바다를 눌러 돌아가야 합니다.	Vous n’avez pas encore relié deux ports. Les routes inconnues suivent aussi les voies maritimes, à vitesse normale. Un premier trajet débloque la navigation automatique. Si la terre bloque le passage, cliquez sur la mer pour la contourner.
+항해자 @(이|가) @에서 모험의 첫걸음을 내디뎠다.	Le navigateur @ a commencé son aventure à @.
+@에서 @(이|가) 유행이다. @ 말로는 @ 값이 @ 올랐다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	À {1}, {2} est à la mode. Selon {3}, le prix de {4} a augmenté de {5}. La demande devrait se maintenir encore {6}.
+@ 사이에서 @(이|가) 유행이다. @ 말로는 @ 값이 @로 뛰었다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	Chez {1}, {2} est à la mode. Selon {3}, le prix de {4} est passé à {5}. La demande devrait se maintenir encore {6}.
+@에서 @(이|가) 유행이다. @ 말로는 @ 값이 @로 뛰었다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	À {1}, {2} est à la mode. Selon {3}, le prix de {4} est passé à {5}. La demande devrait se maintenir encore {6}.
+리스본·세비야의 귀족들	les nobles de Lisbonne et de Séville
+세비야 상인들의 잔치	les banquets des marchands de Séville
+마드리드 궁정	la cour de Madrid
+안트베르펜·암스테르담 상인들	les marchands d’Anvers et d’Amsterdam
+런던과 파리의 멋쟁이들	les élégants de Londres et de Paris
+파리 궁정	la cour de Paris
+로마 추기경들의 잔치	les banquets des cardinaux de Rome
+피렌체 은행가들	les banquiers de Florence
+세 곱절	le triple
+곱절 반	deux fois et demie
+곱절	le double
+절반쯤 더	environ la moitié de plus
+서너 할쯤 더	environ trente à quarante pour cent de plus

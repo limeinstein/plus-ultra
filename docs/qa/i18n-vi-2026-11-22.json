@@ -1,0 +1,322 @@
+{
+  "date": "2026-11-22",
+  "language": "vi",
+  "note": "영어 사전의 열쇠 비교는 전체 게임의 번역 완료율이 아니다. 화면 순회에서 미번역 0건이어도 모든 사건·발견 대사가 번역되었다는 뜻은 아니다.",
+  "complete": false,
+  "addedRows": {
+    "catalog.tsv": 3003,
+    "other_g1h.tsv": 425,
+    "runtime_20261122.tsv": 52,
+    "catalog_bios.tsv": 437,
+    "bios_runtime_20261122.tsv": 17,
+    "names_story_20261122.tsv": 68,
+    "names_gold_select_20261122.tsv": 6,
+    "runtime_followup_20261122.tsv": 68,
+    "story_jhook_ui_20261122.tsv": 75,
+    "story_select_followup_20261122.tsv": 8,
+    "story_jhook_opening_20261122.tsv": 166
+  },
+  "preservedLegacyRows": {
+    "compat_20261122.tsv": 3
+  },
+  "totalAddedRows": 4325,
+  "preservation": {
+    "text": {
+      "before": 12801,
+      "after": 16474,
+      "removed": 0,
+      "changed": 0
+    },
+    "pat": {
+      "before": 2114,
+      "after": 2695,
+      "removed": 0,
+      "changed": 0
+    },
+    "city": {
+      "before": 316,
+      "after": 316,
+      "removed": 0,
+      "changed": 0
+    },
+    "good": {
+      "before": 163,
+      "after": 163,
+      "removed": 0,
+      "changed": 0
+    },
+    "name": {
+      "before": 6086,
+      "after": 6160,
+      "removed": 0,
+      "changed": 0
+    },
+    "person": {
+      "before": 31,
+      "after": 31,
+      "removed": 0,
+      "changed": 0
+    }
+  },
+  "validation": {
+    "sourceRebuildMatches": true,
+    "placeholderCoverage": true,
+    "noDuplicateAddedKeys": true,
+    "translatedColumnsNoHangulOrReplacementCharacter": true,
+    "syntaxCheck": true,
+    "tsvSmoke": true,
+    "multilingualTemplates": {
+      "passed": true,
+      "wishes": 75,
+      "consoleErrors": 0
+    },
+    "asianLanguageScreens": {
+      "passed": true,
+      "languages": [
+        "vi",
+        "zh-Hans",
+        "zh-Hant",
+        "es"
+      ],
+      "checks": [
+        "언어 선택",
+        "화면 설정",
+        "새 항해",
+        "재접속 유지",
+        "도감"
+      ],
+      "consoleErrors": 0
+    },
+    "runtimeExamples": 12,
+    "screenCrawl": {
+      "screens": [
+        "타이틀 불러오기",
+        "조작 안내",
+        "화면 설정",
+        "도시",
+        "교역 메뉴",
+        "구입",
+        "판매",
+        "시세",
+        "바다"
+      ],
+      "missingBefore": 9,
+      "missingAfter": 0,
+      "pageErrors": 0
+    }
+  },
+  "completedEnglishSourceGroups": [
+    "catalog.tsv",
+    "catalog_pat.tsv",
+    "catalog_misc.tsv",
+    "catalog_misc2.tsv",
+    "qa_fix.tsv",
+    "other_g1h.tsv",
+    "catalog_bios.tsv",
+    "names_story_20261122.tsv",
+    "runtime_20261122.tsv",
+    "story_jhook_ui_20261122.tsv",
+    "story_jhook_opening_20261122.tsv"
+  ],
+  "remainingSourceGroups": [
+    "discfacts.tsv",
+    "discfacts2.tsv",
+    "discfam.tsv",
+    "discfam2.tsv",
+    "other_g1.tsv",
+    "other_g2.tsv",
+    "other_g3.tsv",
+    "scenes_legend.tsv",
+    "story_jhook_rest_20261122.tsv",
+    "story_song_20261122.tsv",
+    "story_song_ui_20261122.tsv",
+    "names_song_20261122.tsv"
+  ],
+  "nextStep": "기존 번역과 같은 열쇠는 유지하고 해적여제 본편·바닷길 노래의 남은 대사와 발견 때의 지식·가족 대사를 이어서 번역한다.",
+  "initialAddedRows": {
+    "catalog.tsv": 3003,
+    "other_g1h.tsv": 425,
+    "runtime_20261122.tsv": 52
+  },
+  "followup": {
+    "date": "2026-11-22",
+    "addedRows": {
+      "catalog_bios.tsv": 437,
+      "bios_runtime_20261122.tsv": 17,
+      "names_story_20261122.tsv": 68,
+      "names_gold_select_20261122.tsv": 6,
+      "runtime_followup_20261122.tsv": 68,
+      "story_jhook_ui_20261122.tsv": 75,
+      "story_select_followup_20261122.tsv": 8,
+      "story_jhook_opening_20261122.tsv": 166
+    },
+    "totalAddedRows": 845,
+    "preservation": {
+      "text": {
+        "before": 15745,
+        "after": 16474,
+        "removed": 0,
+        "changed": 0
+      },
+      "pat": {
+        "before": 2653,
+        "after": 2695,
+        "removed": 0,
+        "changed": 0
+      },
+      "city": {
+        "before": 316,
+        "after": 316,
+        "removed": 0,
+        "changed": 0
+      },
+      "good": {
+        "before": 163,
+        "after": 163,
+        "removed": 0,
+        "changed": 0
+      },
+      "name": {
+        "before": 6086,
+        "after": 6160,
+        "removed": 0,
+        "changed": 0
+      },
+      "person": {
+        "before": 31,
+        "after": 31,
+        "removed": 0,
+        "changed": 0
+      }
+    },
+    "sourceRebuildMatches": true,
+    "duplicateAddedKeys": 0,
+    "placeholderOmissions": 0,
+    "translatedColumnErrors": 0,
+    "yearOmissions": 0,
+    "screenValidation": {
+      "sourceRows": 437,
+      "sourceMismatches": 0,
+      "loadedBios": 454,
+      "missingBios": [],
+      "missingStory": [],
+      "prologueScenes": 3,
+      "prologueLines": 80,
+      "prologuePages": 88,
+      "missingPrologue": [],
+      "openingSourceRows": 166,
+      "openingRuntimeCovered": 166,
+      "openingScenes": [
+        {
+          "path": "JHOOK.prologue.pro",
+          "pages": 20
+        },
+        {
+          "path": "JHOOK.prologue.a1",
+          "pages": 37
+        },
+        {
+          "path": "JHOOK.prologue.a2",
+          "pages": 31
+        },
+        {
+          "path": "JHOOK.beats.0.lines",
+          "pages": 45
+        },
+        {
+          "path": "JHOOK.beats.1.lines",
+          "pages": 33
+        },
+        {
+          "path": "JHOOK.beats.3.lines",
+          "pages": 1
+        },
+        {
+          "path": "JHOOK.beats.18.lines",
+          "pages": 1
+        },
+        {
+          "path": "JHOOK.beats.29.lines",
+          "pages": 1
+        }
+      ],
+      "dialogs": [
+        {
+          "name": "크리스토발 콜론",
+          "translated": true
+        },
+        {
+          "name": "레오나르도 다 빈치",
+          "translated": true
+        },
+        {
+          "name": "이순신",
+          "translated": true
+        },
+        {
+          "name": "황진이",
+          "translated": true
+        },
+        {
+          "name": "응우옌 빈 키엠",
+          "translated": true
+        }
+      ],
+      "storyScreens": [
+        {
+          "id": "photo",
+          "missing": []
+        },
+        {
+          "id": "jhook",
+          "missing": []
+        },
+        {
+          "id": "gold",
+          "missing": []
+        },
+        {
+          "id": "song",
+          "missing": []
+        }
+      ],
+      "catalogBiography": true,
+      "errors": []
+    },
+    "screenTest": "node tests/i18n_vietnamese_20261122_smoke.cjs",
+    "basicScreenTest": "LANGS=vi node tests/i18n_asian_languages_smoke.cjs",
+    "basicScreenTestPassed": true,
+    "artifacts": "artifacts/i18n-vi-followup-20261122",
+    "notes": [
+      "초기 전체 사전 로딩 두 차례 시간 초과 후 다른 언어 사전만 제외한 동일 게임 코드에서 상세 검사를 통과했다.",
+      "인물 생애 기준 파일에 없던 실제 등록본 17개도 추가해 G.BIOS의 454개 전체를 확인했다."
+    ]
+  },
+  "englishKeysAtInitialPass": {
+    "text": {
+      "present": 15744,
+      "total": 56318,
+      "missing": 40574
+    },
+    "pat": {
+      "present": 2650,
+      "total": 8425,
+      "missing": 5775
+    },
+    "city": {
+      "present": 316,
+      "total": 316,
+      "missing": 0
+    },
+    "good": {
+      "present": 163,
+      "total": 163,
+      "missing": 0
+    },
+    "name": {
+      "present": 6086,
+      "total": 6153,
+      "missing": 67
+    }
+  }
+}

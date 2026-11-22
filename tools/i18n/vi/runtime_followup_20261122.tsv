@@ -1,0 +1,68 @@
+이야기 모드 — 주인공을 고른다	Chế độ cốt truyện — Chọn nhân vật chính
+초상을 누르면 이야기를 볼 수 있습니다 · ← → 고르기 (끝에서 옆 바다로) · Enter 열기	Nhấp chân dung để đọc câu chuyện · ← → Chọn (đến cuối sẽ sang vùng biển bên cạnh) · Enter Mở
+초상을 누르면 이야기를 볼 수 있습니다 · ← → 고르기 · Enter 열기	Nhấp chân dung để đọc câu chuyện · ← → Chọn · Enter Mở
+이 이야기로 시작	Bắt đầu câu chuyện này
+다른 사람을 고른다	Chọn người khác
+‹ 타이틀로	‹ Về màn hình đầu
+함께 떠나는 사람	Những người cùng lên đường
+주인공 선택	Chọn nhân vật chính
+추가 주인공 자리	Chỗ cho nhân vật chính mới
+이전 캐릭터 다섯 명	Năm nhân vật trước
+다음 캐릭터 다섯 명	Năm nhân vật tiếp theo
+새로운 이야기	Câu chuyện mới
+주인공을 선택하면 이야기를 볼 수 있습니다 · ← → 고르기 · Enter 열기	Chọn nhân vật chính để đọc câu chuyện · ← → Chọn · Enter Mở
+함께 떠나는 사람 — @	Những người cùng lên đường — @
+스미스 호킨스 · 윌리엄 호킨스 · 코난 홈즈 …	Smith Hawkins · William Hawkins · Conan Holmes …
+황규 · 박월담 · 임처사 …	Hwang Gyu · Park Woldam · Ẩn sĩ Im …
+유럽 — 대서양에서 흑해까지	Châu Âu — Từ Đại Tây Dương đến Hắc Hải
+동쪽 바다 — 조선	Biển phương Đông — Triều Tiên
+아버지를 찾아가는 항해	Hải trình đi tìm cha
+아버지를 버린 세상에 복수하러 나간 항해	Hải trình báo thù thế giới đã ruồng bỏ cha
+들려준 세상을 직접 만나러 가는 항해	Hải trình tận mắt gặp thế giới trong lời kể
+행방불명된 아버지가 남긴 「있을 수 없는 그림」 한 장 — 붓 자국이 없고, 세상 어디에도 없는 옷과 지붕이 찍힌 사진. 하얀 남방의 항해사는 남작의 아들, 신부, 늙은 항해사와 함께 아버지의 자취를 따라 동쪽으로 떠난다.	Người cha mất tích để lại một “bức tranh không thể có” — tấm ảnh không vết cọ, ghi lại áo quần và mái nhà không nơi nào trên đời có được. Cùng con trai nam tước, một linh mục và người đi biển già, chàng thủy thủ áo trắng lên đường về phương đông, lần theo dấu cha.
+사략선장 로저 후크가 왕실의 동맹 거래에 버려져 교수대에 오른다. 딸 제시카는 늙은 선원 스미스와 그 아들 윌리엄과 함께 도망쳐 바다로 나간다. 왕을 죽이러 떠난 항해는, 끝내 자신이 지킬 가족과 나라를 만드는 항해가 된다.	Thuyền trưởng tư lược Roger Hook bị hoàng gia hy sinh để đổi lấy liên minh và đưa lên giá treo cổ. Con gái Jessica trốn ra biển cùng thủy thủ già Smith và con trai ông, William. Chuyến đi nhằm giết nhà vua cuối cùng trở thành hải trình gây dựng gia đình và quê hương mà nàng muốn bảo vệ.
+여섯 해 전 갯바위에서 건진 사내는 세상 이야기와 물음표투성이 지도, 끝맺지 못한 노래 한 곡을 남기고 사라졌다. 열여덟 소리꾼은 재담꾼과 낙방 선비를 데리고 그 세상을 만나러 떠난다. 그녀가 노래하면 어느 나라든 공연장이 된다.	Sáu năm trước, người đàn ông được cứu bên ghềnh đá biến mất, để lại chuyện thế giới, tấm bản đồ đầy dấu hỏi và một khúc ca dang dở. Nữ nghệ nhân mười tám tuổi cùng người kể chuyện hài và chàng nho sinh thi trượt lên đường gặp thế giới ấy. Nàng cất tiếng hát, đất nước nào cũng thành sân khấu.
+/(.+?) — 「(아버지의 사진|해적여제|바닷길 노래)」/	⟦$1⟧ — “⟦$2⟧”
+여관 일지 #	Nhật ký nhà trọ #
+여관 일지 # — @	Nhật ký nhà trọ # — @
+불러오지 못했습니다: @	Không nạp được nhật ký: @
+일지를 내려받았습니다: @	Đã tải nhật ký: @
+수첩 — @	Sổ tay — @
+@ — 열기·닫기	@ — Mở/Đóng
+수첩을 「@」 탭으로 열기 · 열려 있으면 그 탭으로	Mở sổ tay ở thẻ “@” · nếu đang mở thì chuyển sang thẻ đó
+노장 · #년	Lão luyện · # năm
+@ · 지금 # / 본디 #단계 · 선실 수련 +#	@ · Hiện tại # / Cấp gốc # · Rèn luyện trong khoang +#
+@ · 지금 # / 본디 #단계	@ · Hiện tại # / Cấp gốc #
+#개 — 상세에서 모두 보기	Tổng # — xem tất cả trong chi tiết
+나머지 특기 #개 — 상세에서 모두 보기	Còn # sở trường — xem tất cả trong chi tiết
+나머지 언어 #개 — 상세에서 모두 보기	Còn # ngôn ngữ — xem tất cả trong chi tiết
+슬라브·	Slav ·
+그리스어	Tiếng Hy Lạp
+북미	Bắc Mỹ
+#개	# món
+@ 솜씨를 믿고 배에 오른 동료. 낯선 항구와 거친 바다를 지나며 자신의 솜씨를 일행과 나눈다. 함께한 항로의 다음 이야기는 아직 항해일지에 쓰이는 중이다.	Người bạn đồng hành lên tàu với tài năng @. Qua những cảng lạ và biển dữ, người ấy đem tài nghệ giúp cả đoàn. Chương tiếp theo của hải trình chung vẫn đang được viết trong nhật ký.
+@ · 음악실 배치 시 효과 #배	@ · Hiệu quả khi ở phòng nhạc: ×#
+결투 공격 +#	Tấn công đấu tay đôi +#
+결투 방어 +#	Phòng thủ đấu tay đôi +#
+일을 건성으로 · 효율 #%	Làm việc qua loa · Hiệu suất #%
+부상 #일	Bị thương # ngày
+@ 효과	Hiệu quả @
+#배	×#
+음악실 배치 시 @ 효과	Khi ở phòng nhạc: hiệu quả @
+체력 #, 지력 #, 무력 #, 매력 #	Thể lực #, Trí lực #, Vũ lực #, Sức hấp dẫn #
+괴물 목격 소식	Tin trông thấy quái vật
+「@」에서 이어진 실마리	Đầu mối nối tiếp từ “@”
+「@」에 적힌 이야기	Câu chuyện ghi trong “@”
+같은 능력치는 가장 높은 물건 하나만	Mỗi chỉ số chỉ lấy vật phẩm có hiệu quả cao nhất
+(같은 능력치는 가장 높은 물건 하나만)	(Mỗi chỉ số chỉ lấy vật phẩm có hiệu quả cao nhất)
+마우스 따라가기 켬 — 가려는 쪽을 한 번 누르면, 그 뒤로는 마우스를 옮기는 대로 방향을 틉니다 (@로 끔)	Đã bật đi theo chuột — nhấp một lần theo hướng muốn đi, sau đó di chuột để đổi hướng (@ để tắt)
+마우스 따라가기 끔 — 누른 곳까지 갑니다 (@로 켬)	Đã tắt đi theo chuột — đi đến chỗ đã nhấp (@ để bật)
+전체 화면 — 끄려면 F11	Toàn màn hình — bấm F11 để thoát
+# 고름	Đã chọn #
+모두 선택	Chọn tất cả
+모두 해제	Bỏ chọn tất cả
+@ — 단축키 @	{1} — Phím tắt {2}
+그 키는 「@」에 쓰고 있어 바꿀 수 없습니다 — 다른 키를 고르십시오.	Phím đó dành riêng cho “@” nên không thể đổi — hãy chọn phím khác.
+@에 덮어쓰겠습니까?	Ghi đè lên @?
+기록하지 못했습니다 — @	Không lưu được nhật ký — @
+@의 이야기	Câu chuyện của @

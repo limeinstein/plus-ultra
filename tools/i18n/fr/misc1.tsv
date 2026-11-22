@@ -1,0 +1,91 @@
+집사	Intendant
+항해 수첩	Carnet de navigation
+물	Eau
+적재	Cargaison
+교역소 주인	Maître du comptoir
+이름	Nom
+특기	Compétences
+내구력	Résistance
+#등급	Classe #
+적재량	Capacité de chargement
+돛	Voiles
+선실	Cabines
+#칸	# places
+현상수배	RECHERCHÉ
+상인	Marchand
+필요 명성	Renommée requise
+능력치	Attributs
+부관	Second
+기함	Navire amiral
+거래처	Partenaire commercial
+기한	Échéance
+여급 @	Serveuse @
+사서	Bibliothécaire
+항해일지	Journal de bord
+자재	Matériaux
+선명	Nom du navire
+선종	Type de navire
+선장	Capitaine
+모항	Port d’attache
+도시 사업	Projets urbains
+현재	Actuellement
+생산시설	Sites de production
+상관·창고	Comptoir · Entrepôt
+판로 개척	Débouchés commerciaux
+조선 기술	Construction navale
+천 닢	Mille pièces d’or
+박	nuits
+물건	Objet
+동료	Compagnons
+단서	Indices
+당나귀	Ânes
+마차	Chariots
+증거	Preuve
+#점	# objets
+#통	# tonneaux
+#척	# navires
+#명	# personnes
+#일분	Réserves pour # jours
+#박	# nuits
+이 값은 너무 비싸지 않은가. 옆 가게는 더 싸던데.	Ce prix n’est-il pas un peu élevé ? La boutique d’à côté vend moins cher.
+배를 탈 사람을 찾나? 일거리를 기다리는 뱃사람들이 늘 여기 모여 있지.	Vous cherchez des hommes pour votre navire ? Les marins en quête de travail se retrouvent toujours ici.
+거기, 이쪽으로 오게. 포카나 하세.	Hé, venez par ici ! Faisons une partie de poker.
+새 항로 하나에 세관 수입이 몇 곱절로 뜁니다.	Une seule nouvelle route maritime peut multiplier les recettes douanières.
+원정을 도와 달라는 것이군요. 무엇을 찾으러 가려 하오?	Vous souhaitez donc un soutien pour votre expédition. Que comptez-vous chercher ?
+주님이 지으신 세상은 우리가 아는 것보다 훨씬 넓소.	Le monde créé par le Seigneur est bien plus vaste que nous ne l’imaginons.
+호오, 그렇다면 모험 목적을 말해 보게.	Ah, vraiment ? Dites-moi donc le but de votre aventure.
+세상은 우리가 아는 것보다 훨씬 넓다네.	Le monde est bien plus vaste que nous ne le pensons.
+@ 성문 옆 마구간에서 말·당나귀·마차를 구할 수 있지.	@ Vous trouverez chevaux, ânes et chariots à l’écurie près de la porte.
+그러고 보니 @	À propos, @
+뜬소문일 수도 있지만, 해적이란 놈들은 한곳에 오래 머물지 않으니 가 보시려면 서두르시는 게 좋을 겁니다.	Ce n’est peut-être qu’une rumeur, mais les pirates ne restent jamais longtemps au même endroit. Si vous voulez vérifier, mieux vaut vous hâter.
+수첩 「할 일」에 적었다 — @ 앞바다	Noté dans les « Tâches » du carnet — au large de @
+@(와|과) @의 싸움이 바다로 번졌다. @에 화약 연기가 자욱하다고 한다.	La guerre entre @ et @ a gagné la mer. On dit que la fumée des canons couvre @.
+@ 함대와 @ 함대가 @에서 맞붙었다는 소식이 들려온다.	Les flottes de @ et de @ se seraient affrontées à @.
+@에서 @의 군함이 @의 배를 쫓아 포를 쏘았다고 한다.	À {1}, un navire de guerre de {2} aurait poursuivi et canonné un navire de {3}.
+@ 군함	Navire de guerre de @
+교황령 함대	Flotte pontificale
+@(이|가) 술을 마시고 있다.	@ prend un verre.
+@에서 @(을|를) 판다고 한다.	On vendrait {2} à {1}.
+@에서 훌륭한 @(을|를) 짠다고 한다.	On tisserait de magnifiques {2} à {1}.
+@에서 오래된 유물을 판다고 한다.	On vendrait d’anciennes reliques à @.
+@ 이야기를 들을 수 있다	Vous pouvez entendre parler de @
+제독, 이것 좀 보십시오! 소문으로만 듣던 @입니다.	Amiral, regardez donc ! @, que nous ne connaissions que par les rumeurs !
+제독, 저쪽을 보십시오! 소문으로만 듣던 @입니다.	Amiral, regardez là-bas ! @, que nous ne connaissions que par les rumeurs !
+@에 처음으로 입항했다.	Première entrée au port de @.
+@에 처음으로 성문을 지나 들어섰다.	Premier passage des portes de @.
+피렌체 학자가 보냈다는 편지 이야기가 뱃사람들 사이에 돌고 있네. @	Les marins parlent d’une lettre envoyée par un savant florentin. @
+이 근처 바다에서 새로 목격된 괴물 소식은 없다.	Aucun nouveau signalement de monstre dans ces eaux.
+기분 좋군!	Voilà qui fait du bien !
+오늘은 해적 이야기가 없네요. 다들 날씨와 짐값 이야기뿐입니다.	Pas d’histoires de pirates aujourd’hui. Tout le monde parle du temps et du prix des cargaisons.
+그러고 보니 @ 시장에 「@」(이|가) 나왔다더군. 금화 #닢쯤 부른다던가. 진짜라면 왕이라도 탐낼 물건이지.	À propos, on proposerait « {2} » sur le marché de {1}. Pour environ {3} pièces d’or, je crois. Si l’objet est authentique, même un roi le convoiterait.
+@에서 화산 분화가 일어났다.	Un volcan est entré en éruption à @.
+새 항로 하나가 나라 하나보다 값질 때도 있지요.	Une nouvelle route maritime vaut parfois plus qu’un royaume entier.
+원정을 도와 달라는 말씀이군요. 무엇을 찾으러 가시려고요?	Vous désirez donc de l’aide pour une expédition. Que souhaitez-vous trouver ?
+세상은 우리가 아는 것보다 훨씬 넓겠지요.	Le monde doit être bien plus vaste que nous ne le connaissons.
+/(.+?) ([\d]+)세/	⟦$1⟧ ⟪R$2⟫
+/(.+?) 회장님/	Le président ⟦$1⟧
+/(.+?) 왕비 전하/	Sa Majesté la reine ⟦$1⟧
+/(.+?) 전하/	Votre Altesse ⟦$1⟧
+/(.+?) 박사님/	Docteur ⟦$1⟧
+/(.+?) 상관장 각하/	Son Excellence, le directeur du comptoir de ⟦$1⟧
+/(.+?) 상관장/	Directeur du comptoir de ⟦$1⟧

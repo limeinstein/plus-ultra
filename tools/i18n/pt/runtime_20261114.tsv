@@ -1,0 +1,27 @@
+도크 — 도크 #/#척 · 모항	Doca — #/# navios · porto de origem
+탐험·교역 계획 — 사건 예고·기한·재조사	Planeamento de exploração e comércio — Próximos acontecimentos · Prazos · Novas investigações
+탐험·교역 계획 — 거래처 정보·역사적 교역 기회	Planeamento de exploração e comércio — Parceiros comerciais · Oportunidades históricas
+호위 요청 — 호위할 상선을 찾아본다	Pedidos de escolta — Procurar um navio mercante para escoltar
+#박	# noites
+상인 @	Comerciante @
+술집 손님	Cliente da taverna
+기초 #단계	Elementar, nível #
+기초	Elementar
+식당 주인	Dono do restaurante
+소문 속 해적	Pirata dos rumores
+여관 주인	Estalajadeiro
+수녀	Freira
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+) · 짐승을 잃기 쉽다$/	⟦$1⟧ Passo ×$2 · fadiga ×$3 · é fácil perder animais
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+)$/	⟦$1⟧ Passo ×$2 · fadiga ×$3
+사막	Deserto
+숲	Floresta
+밀림	Selva
+설원	Campo de neve
+툰드라	Tundra
+빙원	Campo de gelo
+발견물 백과사전 — 아직 실린 것이 없다	Enciclopédia das descobertas — ainda sem entradas
+이베리아 참나무	Carvalho ibérico
+기함 변경 — 기함 @호	Mudar a capitânia — capitânia atual @
+바닥이 얕아 뭍 가까이(해안에서 #° 안)에서 더 빠르고, 여울·암초 사고를 입지 않는다.	O baixo calado torna-o mais rápido junto à costa (a menos de #°) e evita acidentes em baixios e recifes.
+얕은 흘수	Baixo calado
+가볍고 날렵해 멀리까지 살핀다. 함대에 있으면 망루의 시야가 넓어진다.	Leve e ágil, permite explorar mais longe. Na frota, aumenta o campo de visão do vigia.

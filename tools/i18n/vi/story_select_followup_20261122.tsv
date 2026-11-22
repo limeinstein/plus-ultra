@@ -1,0 +1,8 @@
+세상의 길을 사러 가는 항해	Hải trình mua những con đường của thế giới
+엘리너르 더비트 · 마리커 판레이우언 · 브람 판호른 …	Eleonoor de Wit · Marieke van Leeuwen · Bram van Hoorn …
+아버지는 해적에게 배를 잃고 빚만 남긴 채 죽었다. 스물두 살 상인에게 남은 것은 작은 배 한 척과 장부 마지막 줄의 한 문장. 밀린 급료를 받으러 온 공증인의 딸, 소문을 파는 소꿉친구, 돈을 빌려준 친구와 함께 — 연합 동인도 회사와 해적섬, 배신과 사랑을 지나 세계에서 가장 부유한 사람이 되는 서른 해.	Cha mất sau khi bị hải tặc cướp tàu, chỉ để lại nợ nần. Chàng thương nhân hai mươi hai tuổi còn một chiếc tàu nhỏ và câu viết ở dòng cuối sổ sách. Cùng con gái công chứng viên đến đòi lương nợ, cô bạn thuở nhỏ bán tin đồn và người bạn cho vay tiền — chàng trải ba mươi năm qua Công ty Đông Ấn Hà Lan, đảo hải tặc, phản bội và tình yêu, để trở thành người giàu nhất thế giới.
+주인공들의 출발지를 표시한 세계 지도	Bản đồ thế giới đánh dấu nơi xuất phát của các nhân vật chính
+동아시아 지도	Bản đồ Đông Á
+유럽 지도	Bản đồ châu Âu
+/(.+?) — (아버지의 사진|해적여제|황금의 바다|바닷길 노래)/	⟦$1⟧ — ⟦$2⟧
+/(.+?) — (마테우스 다 코스타|제시카 후크|아드리안 판데르펠더|김소영)/	⟦$1⟧ — ⟦$2⟧

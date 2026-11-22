@@ -3,7 +3,7 @@
    · 영어: 타이틀 단추 · 조작 안내 · 화면·글꼴의 언어 줄 · 도시 거리 · 교역소 구입 창 · 캔버스 글자(도시 이름표)가 영어로
    · 이름: G.cityName·G.goodName·G.N, G.T에 끼운 도시 이름이 저절로 옮겨진다
    · 언어 바꾸기: 타이틀 오른쪽 위 단추 → 영어 → 한국어로 돌아오면 다시 한국어
-   · 중국어 간체·번체·베트남어·스페인어도 고를 수 있다. 일본어·포르투갈어·독일어는 준비 중이다.
+   · 일본어·중국어 간체·번체·베트남어·스페인어·독일어도 고를 수 있다. 포르투갈어는 준비 중이다.
    · 콘솔 오류 0
    node tests/i18n_smoke.js */
 'use strict';
@@ -52,8 +52,9 @@ const HANGUL = /[가-힣]/;
     await page.waitForTimeout(500);
     const choices = await page.evaluate(() => [...document.querySelectorAll('.choices > .choice')].map(b => ({ t: b.textContent.trim(), dis: b.classList.contains('dis') })));
     const dis = choices.filter(c => c.dis).map(c => c.t);
-    ok(dis.length === 3 && ['日本語', 'Português', 'Deutsch'].every(label => dis.some(t => t.includes(label))), '번역 자료가 없는 일본어·포르투갈어·독일어만 준비 중');
-    ok(['简体中文', '繁體中文', 'Tiếng Việt', 'Español'].every(label => choices.some(c => c.t.includes(label) && !c.dis)), '중국어 간체·번체·베트남어·스페인어 선택 가능');
+    const pendingLabels = ['pt', 'de'].filter(id => !require('fs').existsSync(path.join(ROOT, 'tools/i18n', id, '_ready'))).map(id => id === 'pt' ? 'Português' : 'Deutsch');
+    ok(dis.length === pendingLabels.length && pendingLabels.every(label => dis.some(t => t.includes(label))), '번역 자료가 없는 언어만 준비 중');
+    ok(['日本語', '简体中文', '繁體中文', 'Tiếng Việt', 'Español'].every(label => choices.some(c => c.t.includes(label) && !c.dis)), '일본어·중국어 간체·번체·베트남어·스페인어 선택 가능');
     await page.evaluate(() => { [...document.querySelectorAll('.choices > .choice')].find(b => /English/.test(b.textContent)).click(); });
     await page.waitForFunction(() => G.I18N.lang === 'en' && G.Game.sceneName === 'title' && document.querySelector('.title-menu .btn'), null, { timeout: 30000 });
     await page.waitForTimeout(800);

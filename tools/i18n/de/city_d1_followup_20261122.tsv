@@ -1,0 +1,242 @@
+부관 @	Erster Offizier @
+(대강 알아들음)	(versteht das Wesentliche)
+/이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 (.+?) · 일행 (.+?) \((.+?)(?:이|가) 통역 — 파란 점\)$/	Hiesige Sprache und Kenntnisse der Gruppe — Admiral: ⟦$1⟧ · Gruppe: ⟦$2⟧ (⟦$3⟧ dolmetscht — blaue Punkte)
+누르면 이 배의 역사와 게임 설정을 봅니다 · 권장 여유자금 약 #닢 (화물·보급·급료 준비, 실제 비용은 항로·선원에 따라 다릅니다)	Anklicken: Geschichte und Spielwerte dieses Schiffs · Empfohlene Geldreserve etwa # Goldmünzen für Ladung, Vorräte und Löhne; die tatsächlichen Kosten hängen von Route und Besatzung ab
+고정 — 일괄 매각의 「전체 선택」과 보관함의 「모두 맡긴다」에서 빠진다	Angeheftet — wird bei „Alle auswählen“ im Sammelverkauf und „Alles einlagern“ im Lagerraum ausgelassen
+탐험선	Erkundungsschiff
+가진 차례	Erwerbsreihenfolge
+고정한 것 먼저	Angeheftete zuerst
+최저 #	Minimum #
+교대 넉넉 #	Gute Wachablösung #
+그대로 · 하루 식량·물 각 #통 · 지금 실은 것으로 #일	Unverändert · Täglich je # Fass Proviant und Wasser · Vorräte an Bord für # Tage
+일분	Tagesvorrat
+비움	Leer
+사각돛이 많아 맞바람에 느리다 — 「개조」에서 삭구 개량·돛 바꾸기로 보강	Viele Rahsegel, daher langsam bei Gegenwind — unter „Umbauen“ Takelage verbessern oder Segel wechseln
+약함	Schwach
+(기함보다 #칸 많음)	(# Kabinen mehr als das Flaggschiff)
+/(.+?) ([\d]+)$/	⟦$1⟧ $2
+인물 이야기	Lebensgeschichte
+📜 이야기	📜 Geschichte
+실존 인물 — 지명도가 높을수록 특기가 많다	Historische Person — bekanntere Personen besitzen mehr Fertigkeiten
+지명도 ★ 기록에 남은 사람	Bekanntheit ★ historisch überliefert
+· 월급	· Monatslohn
+통함 보통	Verständigung: mittel
+@(으로|로) 그럭저럭 뜻이 통한다. 처음에는 마음을 다 열지 않을 것이다.	Mit @ ist eine einfache Verständigung möglich. Anfangs wird sich die Person Ihnen nicht völlig öffnen.
+만나서 이야기한다	Treffen und sprechen
+# / #명	# / # Personen
+특기 단계 합계	Summe der Fertigkeitsstufen
+언어 단계 합계	Summe der Sprachstufen
+월급	Monatslohn
+/(.+?) 단계$/	Stufe in ⟦$1⟧
+오름차순 ↑	Aufsteigend ↑
+선실 배치	Kabinenbelegung
+동료 사이	Beziehungen
+현재 고용한 전체 동료 목록	Alle derzeit angeheuerten Gefährten
+동료 ↑	Gefährte ↑
+@ 상세 보기	@ ansehen
+/(.+?) · 지금 ([\d]+) \/ 본디 ([\d]+)단계 (.+)$/	⟦$1⟧ · aktuell $2 / angeborene Stufe $3 ⟦$4⟧
+마모라 해적 의회	Piratenrat von Mamora
+장비 중	Ausgerüstet
+#필	# Tiere
+세이커포 #/#	Saker #/#
+역풍에 강한 탐험선	Ein Erkundungsschiff, das gut gegen den Wind segelt
+함대 전체 선원을 몇 명으로 할까요? 모자라면 모집하고(한 사람 금화 #닢), 남으면 이 도시에서 내립니다.	Wie viele Seeleute soll die gesamte Flotte haben? Fehlende Leute werden für # Goldmünzen je Person angeheuert; überzählige gehen hier an Land.
+최저 #명(모자라면 느리고 쉽게 지침) · 교대가 넉넉한 #명(피로가 덜 쌓임) · 최대 #명(백병전·일손). 사람이 많을수록 식량·물이 빨리 줄어듭니다.	Mindestens # Seeleute (darunter langsam und schnell erschöpft) · # für gute Wachablösung (weniger Erschöpfung) · Höchstens # (Enterkampf und zusätzliche Hände). Mehr Leute verbrauchen mehr Proviant und Wasser.
+#닢/통 · 하루 #통	# Goldmünzen/Fass · # Fass täglich
+들은 소식	Gehörte Nachrichten
+기다리는 소식	Erwartete Nachrichten
+남겨 둔 기록	Aufbewahrte Notizen
+발표된 발견 재조사	Veröffentlichte Entdeckungen erneut untersuchen
+직접 들은 이야기만 적혀 있습니다. 더 자세한 사정은 현지에서 알아보십시오.	Hier steht nur, was Sie selbst gehört haben. Näheres erfahren Sie vor Ort.
+들은 이야기	Gehörte Geschichte
+장소	Ort
+메모	Notiz
+아직 적어 둔 소식이 없습니다. 마을 사람이나 거래처와 이야기를 나눠 보십시오.	Noch keine Nachrichten verzeichnet. Sprechen Sie mit Stadtbewohnern und Geschäftspartnern.
+항구 관리인	Hafenmeister
+갈 곳	Ziel
+실어 올 물건	Mitgebrachte Ware
+(상인의 돈으로 산다)	(mit dem Geld des Händlers gekauft)
+까지 @(으로|로) (#일)	zurück nach @ bis dahin (# Tage)
+받는 몫	Ihr Anteil
+상인이 남긴 이익의	des Händlergewinns
+(지금 시세면 약 #닢 · 적어도 품삯 #닢 · 기한을 넘기면 절반)	(bei jetzigen Preisen etwa # Goldmünzen · mindestens # Goldmünzen Lohn · bei Verspätung die Hälfte)
+물자비	Versorgungskosten
+기한 동안의 식량·물 약 #닢	Proviant und Wasser für die Frist etwa # Goldmünzen
+(품삯은 적어도 그 #배)	(der Lohn beträgt mindestens das #-Fache)
+상인의 배는 함대를 따라다닙니다. 내 짐칸·선원과는 상관없지만,	Das Handelsschiff folgt Ihrer Flotte. Es benötigt weder Ihren Laderaum noch Ihre Besatzung, aber
+함대가 그 배보다 빨리 가지 못합니다.	die Flotte kann nicht schneller fahren als dieses Schiff.
+상선과 함께면 해적이 더 꾀고, 해전에서 그 배를 잃으면 호위는 실패합니다(명성 −#).	Mit Handelsschiffen werden mehr Piraten angelockt. Geht das Schiff im Gefecht verloren, scheitert der Geleitschutz (Ruhm −#).
+사각	Rahsegel
+(기함 @호보다 #칸 적음)	({2} Kabinen weniger als Flaggschiff {1})
+맞바람에 그럭저럭 — 삭구 개량으로 보강	Bei Gegenwind passabel — durch bessere Takelage ausbaubar
+높은 선루와 갑판 덕분에 백병전에서 유리하다 (공격·방어 모두).	Hohe Aufbauten und Decks geben im Enterkampf Vorteile bei Angriff und Verteidigung.
+높은 갑판	Hohes Deck
+동료 정렬 기준	Gefährten sortieren nach
+정렬 방향	Sortierrichtung
+동료 보기 전환	Gefährtenansicht wechseln
+동료 상세	Gefährtendetails
+미숙 #단계	Unerfahren, Stufe #
+미숙	Unerfahren
+숙련 #단계	Erfahren, Stufe #
+숙련	Erfahren
+달인 #단계	Meister, Stufe #
+달인	Meister
+모름 #단계	Keine Kenntnisse, Stufe #
+모름	Keine Kenntnisse
+보통 #단계	Mittel, Stufe #
+능숙 #단계	Fließend, Stufe #
+능숙	Fließend
+★ 배에서 익힘 · 숫자는 현재 단계	★ An Bord erlernt · Zahlen zeigen die aktuelle Stufe
+현상수배 벽보를 본다 — 대서양의 이름난 해적 #명	Steckbriefe ansehen — # berüchtigte Piraten des Atlantiks
+조합장	Gildenmeister
+수위	Torwächter
+· 초원	· Grasland
+맞춘 뒤 교역품 포함 항해 가능	Reichweite nach Übernahme, einschließlich Handelswaren
+식량 #+#일 · 물 #+#일	Proviant #+# Tage · Wasser #+# Tage
+(보급품+교역품 대체분 · 교역품을 팔면 감소)	(Vorräte + Ersatz aus Handelswaren; Warenverkauf verringert die Reichweite)
+보급품만	Nur Versorgungsgüter
+(식량 #일 · 물 #일) · 자재 #통 · 사는 값 금화	(Proviant # Tage · Wasser # Tage) · Material # Fass · Einkaufspreis in Goldmünzen
+닢 · 남는 짐칸 #통	Goldmünzen · Verbleibender Laderaum # Fass
+곡식·어육·고기·유제품 같은 교역품은 식량으로, 맥주·포도주는 물 대신 쓸 수 있습니다(모자라면 바다에서 먹고 마십니다).	Getreide, Trockenfisch, Fleisch und Milchprodukte dienen auch als Proviant. Bier und Wein können Wasser ersetzen. Fehlen Versorgungsgüter, verbraucht die Besatzung diese Handelswaren auf See.
+이베리아 참나무 — 내구 +#%	Iberische Eiche — Haltbarkeit +#%
+삼각 · 삼각	Lateinersegel · Lateinersegel
+삭구 개량: 안 함	Takelageverbesserung: keine
+안 함	Keine
+포문 #/#문 (늘릴 수 있음) · 이베리아 참나무 — 내구 +#%	Geschützpforten #/# (erweiterbar) · Iberische Eiche — Haltbarkeit +#%
+금화 #닢 → 조선 기술 #등급 · 남는 돈 #닢	# Goldmünzen → Schiffbauklasse # · # Goldmünzen übrig
+손님들의 해적 이야기를 듣는다 — 이름난 해적의 행방을 들을지도	Piratengeschichten der Gäste hören — vielleicht erfahren Sie den Aufenthaltsort bekannter Piraten
+비용 금화 #닢	Kosten # Goldmünzen
+값 높은 순	Höchster Preis zuerst
+아직 고른 물건이 없습니다	Noch nichts ausgewählt
+열람 — 서가에서 책을 고른다	Lesen — Buch aus dem Regal wählen
+서가의 책 #권 · 지금 읽을 수 있는 책 #권 · 읽는 데 하루	# Bücher im Regal · # derzeit lesbar · Lesen dauert einen Tag
+책에 가까이 가면 제목과 지은이가 보입니다. 눌러서 펼쳐 봅니다. (방향키로 고르고 Enter)	Nähern Sie sich einem Buch, um Titel und Verfasser zu sehen. Zum Öffnen anklicken (mit Pfeiltasten wählen und Enter drücken).
+탐험 장비 — 화승총 · 창 · 흉갑	Expeditionsausrüstung — Arkebusen · Piken · Brustpanzer
+마구간에 #필 (대원 #명에 #필) · 금화 #닢	{1} Tiere im Stall ({2} Teilnehmer benötigen {3}) · {4} Goldmünzen
+대원 #명에 필요한 수	Bedarf für # Teilnehmer
+· 새로 사는 것	· Neu zu kaufen
+· (#~#필)	· (#–# Tiere)
+말 #필을 사서 맡긴다 (#닢)	# Pferde kaufen und hier unterbringen (# Goldmünzen)
+책을 누르면 펼쳐 봅니다. 맨 윗칸은 항해일지 — #년마다 한 권으로 엮입니다.	Buch anklicken zum Lesen. Oben stehen die Logbücher; alle # Jahre entsteht ein neuer Band.
+꺼낼 물건과 수량을 골라 주십시오.	Wählen Sie Gegenstände und Mengen zur Abholung.
+승원 #명 · 짐칸 #통 (교역품 #통) — 식량·물·자재를 따로 정합니다.	# Personen an Bord · Laderaum # Fass (Handelswaren #) — Proviant, Wasser und Material getrennt festlegen.
+지금보다 줄이면	Wenn Sie weniger behalten als jetzt,
+내려서 보급값의 #%에 되팔고, 그 자리에 교역품을 더 실을 수 있습니다.	wird der Überschuss für #% des Versorgungspreises zurückverkauft. Der freie Platz kann Handelswaren aufnehmen.
+식량·물 함께	Proviant und Wasser gemeinsam
+(며칠 항해할 만큼)	(für wie viele Reisetage)
+지금 보급품	Jetzige Vorräte
+남길 보급품	Zu behaltende Vorräte
+#닢/통 · 바다 위 수리에 씀 (내구 #에 #통)	{1} Goldmünzen/Fass · Für Reparaturen auf See ({3} Fass je {2} Haltbarkeit)
+/함대에는 최대 ([\d]+)척까지 편성할 수 있습니다\. (.*)$/	Eine Flotte fasst höchstens $1 Schiffe. Das oberste ist das vom Admiral geführte Flaggschiff. Kapitäne, Steuerleute, Decksleute und Ausguck der übrigen Schiffe werden nach Fähigkeiten aus den Gefährten ausgewählt.
+/함대에서 뺀 배를 도크에 맡겨 둡니다\. 모항\((.+?)\) 도크에는 ([\d]+)척까지 기한 없이, 다른 항구 도크에는 ([\d]+)척까지 맡길 수 있고 ([\d]+)년이 지나면 폐기됩(.*)$/	Aus der Flotte genommene Schiffe können ins Dock. Im Heimathafen ⟦$1⟧ ist Platz für $2 Schiffe ohne Zeitlimit. Andere Häfen halten bis zu $3 Schiffe; nach $4 Jahren werden sie abgewrackt.
+기함 말고는 맡길 배가 없습니다.	Außer dem Flaggschiff ist kein Schiff zum Zurücklassen vorhanden.
+@ 도크 — #/#척	Dock von @ — #/# Schiffe
+맡긴 배가 없습니다.	Keine Schiffe im Dock.
+(@) — 편도 약 #일	(@) — etwa # Tage einfache Fahrt
+누적 출자	Bisherige Beteiligung
+#닢 · #등급 없음	# Goldmünzen · Stufe # noch nicht erreicht
+다음 등급	Nächste Stufe
+#닢 추가	Weitere # Goldmünzen
+거래 우대	Handelsvorteile
+매입 #% 할인 · 매각 #% 우대	Einkauf −#% · Verkauf +#%
+품목 확장 계획	Geplante Sortimentserweiterung
+@ (#등급 · 누적 #닢)	@ (Stufe # · # Goldmünzen investiert)
+쌓인 배당	Angesammelte Dividenden
+/출자금과 시설 공사비는 돌려받지 못합니다\.(.*)$/	Beteiligungen und Baukosten werden nicht erstattet. Beteiligungen bringen Handelsvorteile, neue Waren und Dividenden; Bauvorhaben erhöhen die Mengen. Jede Anlage ist ab Beteiligungsstufe 1 in drei Stufen ausbaubar.
+다음 공사비	Nächste Baukosten
+산지·중계 공급망을 보강한다. 단계마다 공급 한도 #%, 하루 입하량 #% 증가	Stärkt heimische und überregionale Lieferketten. Je Stufe: Angebotsgrenze +#%, täglicher Nachschub +#%
+교역소 저장 시설을 넓힌다. 단계마다 공급 한도 #% 증가. 제독의 화물 보관함과는 별개	Erweitert die Lager des Kontors. Je Stufe: Angebotsgrenze +#%. Getrennt vom eigenen Frachtlager
+상인·공방과 판로를 넓힌다. 단계마다 시장이 받아 줄 물량 #% 증가	Erschließt Absatzwege bei Händlern und Werkstätten. Je Stufe: Aufnahmemenge des Marktes +#%
+목재:	Holz:
+(내구 +#%)	(Haltbarkeit +#%)
+· 사업 투자 #등급	· Investitionsstufe #
+다른 고장 목재를 쓰려면 목재 시장이 있는 도시에서 사업에 투자하거나, 투자한 도시에 목재를 실어 오게.	Für fremde Holzarten investieren Sie in einer Stadt mit Holzmarkt oder liefern Bauholz in eine Stadt, an der Sie beteiligt sind.
+바르카	Barke
+가장 값싼 원양 배	Das günstigste hochseetaugliche Schiff
+포르투갈 사람들이 아프리카 해안을 더듬어 내려갈 때 쓴 외돛 작은 배. 짐은 적지만 싸고 얕은 물에 강하다.	Ein kleines portugiesisches Einmastschiff für Fahrten entlang Afrikas Küste. Wenig Ladung, aber günstig und für flaches Wasser geeignet.
+느리지만 튼튼한 북해의 짐배	Ein langsamer, robuster Nordseefrachter
+두꺼운 판자로 지어 폭풍 피해가 적고 먼 바다의 파도에도 끄떡없다.	Dicke Planken verringern Sturmschäden und halten den Wellen auf hoher See stand.
+튼튼한 선체	Robuster Rumpf
+판자를 겹쳐 붙인 북유럽의 외돛 범선. 느리지만 폭풍에 강하다.	Ein nordisches Einmastschiff mit überlappenden Planken. Langsam, aber sturmfest.
+삼각돛으로 맞바람도 거슬러 오르는 포르투갈의 탐험선. 얕은 해안을 살피며 나아가기 좋다.	Ein portugiesisches Erkundungsschiff, dessen Lateinersegel auch gegen den Wind vorankommen. Gut zum Erkunden flacher Küstengewässer.
+삼각·삼각	Lateinersegel · Lateinersegel
+삼각돛·살돛으로 맞바람에 강하다	Lateiner- und Sprietsegel eignen sich gut für Gegenwind
+강함	Stark
+(기함과 같음)	(gleich wie das Flaggschiff)
+대형카라벨	Große Karavelle
+원양 탐험의 주력	Das Arbeitspferd der Hochseeerkundung
+사각돛을 더한 카라벨(카라벨라 레돈다). 순풍에서도 역풍에서도 고르게 달려 대양 탐험에 알맞다.	Eine Karavelle mit zusätzlichen Rahsegeln (Caravela redonda). Ausgewogen mit und gegen den Wind, ideal für die Erkundung der Ozeane.
+사각·삼각·삼각	Rahsegel · Lateinersegel · Lateinersegel
+높은 선루의 원양 무역선	Hochseefrachter mit hohen Aufbauten
+앞뒤로 높은 선루를 올린 원양 무역선(나우). 선창이 넓고 백병전에 강하다.	Ein Hochseefrachter (Nau) mit hohen Vor- und Achterkastellen. Viel Laderaum und stark im Enterkampf.
+사각·사각·삼각	Rahsegel · Rahsegel · Lateinersegel
+대형카락	Große Karacke
+인도 항로의 거대한 상선	Das gewaltige Handelsschiff der Indienroute
+인도 항로를 오가던 거대한 카락. 향료를 가득 싣고 대양을 건넌다.	Eine gewaltige Karacke auf der Indienroute. Überquert die Ozeane mit vollen Gewürzlagern.
+사각·사각·삼각·삼각	Rahsegel · Rahsegel · Lateinersegel · Lateinersegel
+한 단위는 금화 #닢입니다. 이 조선소의 마지막 등급까지 필요한 금액만 받습니다.	Eine Einheit entspricht # Goldmünzen. Berechnet wird nur der Betrag bis zur höchsten Klasse dieser Werft.
+대서양에서 활약하는 이름난 해적들의 현상수배 벽보입니다. 벽보를 누르면 자세히 봅니다.	Steckbriefe berüchtigter Piraten des Atlantiks. Klicken Sie einen Steckbrief für Einzelheiten an.
+쿨롱 함대	Coullons Flotte
+실존 인물	Historische Person
+허풍쟁이 코너	Connor der Prahler
+하이브라질 해적단	Hy-Brasil-Piraten
+검은 개 해리	Harry der Schwarze Hund
+갈고리 손 톰 크롤리	Tom Crawley mit dem Haken
+소금 눈 피터 모건	Peter Morgan mit dem Salzauge
+방값은 미리 받습니다. 하룻밤에 금화 #닢인데, 며칠 묵으시겠습니까?	Zimmer sind im Voraus zu bezahlen. Eine Nacht kostet # Goldmünzen. Wie viele Nächte möchtet Ihr bleiben?
+팔 물건을 고르십시오. 「전체 선택」 뒤 남길 것만 끄면 됩니다. 물건 앞	Wählen Sie die zu verkaufenden Gegenstände. Nach „Alle auswählen“ können Sie die zu behaltenden abwählen. Klicken Sie vor einem Gegenstand auf
+을 눌러 고정하면 「전체 선택」에서 빠집니다. 여러 개 가진 물건은 막대를 끌어 몇 개 팔지 정합니다. 먼 곳의 진귀한 유물일수록 값을 잘 쳐 줍니다.	, um ihn anzuheften und von „Alle auswählen“ auszunehmen. Bei mehreren Exemplaren bestimmt der Schieberegler die Verkaufsmenge. Seltene Relikte aus fernen Ländern erzielen besonders gute Preise.
+#개 값	Preis für # Stück
+팔 수량	Verkaufsmenge
+받을 돈	Erlös
+이동 장비	Reit- und Transportmittel
+소지품 칸을 쓰지 않음	Belegt keinen Gepäckplatz
+보유한 이동 장비가 없습니다. 도시 성문의 마구간에서 말·당나귀 같은 탈것을 사면 이곳에 표시됩니다.	Keine Transportmittel vorhanden. Gekaufte Pferde, Esel und andere Tiere aus den Ställen am Stadttor erscheinen hier.
+/말·당나귀 같은 탈것은 소모품이 아닙니다\.(.*)$/	Pferde und Esel werden nicht verbraucht. Verloren gehen nur Tiere, die während einer Expedition sterben. Überlebende bleiben danach im Stall der Ausgangsstadt und können erneut genutzt werden.
+소지품 #/# · 발견의 증거는 칸을 차지하지 않는다 (보고·발표하면 차지한다)	Gepäck #/# · Entdeckungsbeweise belegen erst nach Bericht oder Bekanntgabe einen Platz
+설명	Beschreibung
+버림	Wegwerfen
+얼마를 기부하시겠습니까? 악명이 줄고 세상의 평판이 오릅니다.	Wie viel möchten Sie spenden? Spenden senken die Verrufenheit und verbessern Ihren Ruf.
+읽은 책	Gelesene Bücher
+읽을 수 있는 책	Lesbare Bücher
+아직 읽을 수 없는 책	Noch nicht lesbare Bücher
+탐험대	Expedition
+· 소지금	· Verfügbares Gold
+도보	Zu Fuß
+돈이 들지 않는다	Kostenlos
+모든 땅 ×#	Jedes Gelände ×#
+짐을 저마다 지고 걷는다. 돈이 들지 않고 어디든 갈 수 있지만 느리고 쉽게 지친다.	Alle tragen ihr Gepäck selbst. Kostenlos und überall möglich, aber langsam und anstrengend.
+피로 ×# · 물 ×#(사막) · 싸움 +#% · 정찰 +#°	Erschöpfung ×# · Wasser ×# (Wüste) · Kampf +#% · Aufklärung +#°
+대원 모두 말을 탄 기마 탐험대. 초원과 평야에서 가장 빠르고 멀리 살피며 싸움에도 강하다. 사막·밀림·설원에서는 말이 쓰러진다.	Eine vollständig berittene Expedition. In Grasland und Ebenen am schnellsten, mit weiter Sicht und hoher Kampfkraft. In Wüsten, Dschungeln und Schnee brechen Pferde zusammen.
+마구간에 #필 (대원 #명에 #필 · #명에 하나) · 금화 #닢	{1} Tiere im Stall ({2} Teilnehmer benötigen {3} · eines je {4}) · {5} Goldmünzen
+피로 ×# (가장 ×#)	Erschöpfung ×# (Minimum ×#)
+짐바구니를 얹은 당나귀 행렬. 빠르지는 않아도 산길과 메마른 땅에 강하고 값이 싸다.	Eine Eselkarawane mit Packkörben. Nicht schnell, aber günstig und trittsicher auf Bergpfaden und trockenem Boden.
+말이 끈다	Von Pferden gezogen
+마구간에 #대 (대원 #명에 #대 · #명에 하나) · 금화 #닢	{1} Wagen im Stall ({2} Teilnehmer benötigen {3} · einer je {4}) · {5} Goldmünzen
+· 스텝	· Steppe
+피로 ×# · 물 ×#(사막) · 식량 ×# · 싸움 +#%	Erschöpfung ×# · Wasser ×# (Wüste) · Proviant ×# · Kampf +#%
+/포장을 씌운 짐마차와 끄는 짐승(.*)$/	Planwagen mit Zugtieren: Pferde in Europa und der Steppe, Ochsen in Indien, China und Afrika. Bequem auf ebenem Boden und mit Platz für viele Vorräte. In Bergen und Dschungeln langsamer als Fußgänger; Räder können brechen.
+지형 적합도	Geländeeignung
+아주 좋음(×# 넘게)	Ausgezeichnet (über ×#)
+좋음	Gut
+조금 나음	Etwas besser
+나쁨(느리거나 짐승을 잃는다) · 짐승이 모자라면 효과가 그만큼 줄어든다	Schlecht (langsamer oder Tierverluste) · Bei zu wenigen Tieren nimmt die Wirkung entsprechend ab
+도서관에서 읽은 책 (필사본)	In Bibliotheken gelesene Bücher (Abschriften)
+발견물에서 얻은 책	Bei Entdeckungen erhaltene Bücher
+항해일지 #권 · 필사본 #권 · 발견물의 책 #권	# Logbücher · # Abschriften · # Fundbücher
+#부	# Abschriften
+빈 칸 — 도서관에서 읽은 책(필사본)이나 발견물에서 얻은 책을 꽂을 수 있다	Freier Platz — für eine Bibliotheksabschrift oder ein bei einer Entdeckung erhaltenes Buch
+맡긴 물건은 몇 개든 둘 수 있고 소지품 칸을 차지하지 않습니다. 아직 보고·발표하지 않은 발견의	Eingelagerte Gegenstände belegen unabhängig von ihrer Zahl keine Gepäckplätze. Beweise noch nicht gemeldeter oder bekannt gegebener Entdeckungen
+는 칸을 차지하지 않으니 들고 다니십시오 — 보고·발표하면 그때부터 칸을 차지합니다. 물건 앞	belegen ebenfalls keinen Platz; behalten Sie sie bei sich. Erst Bericht oder Bekanntgabe macht sie zu normalen Gegenständen. Vor einem Gegenstand auf
+을 누르면	klicken zum
+고정	Anheften
+— 「모두 맡긴다」와 시장의 「전체 선택」에서 빠집니다.	— wird bei „Alles einlagern“ und „Alle auswählen“ auf dem Markt ausgelassen.
+/장비 중인 것·아직 보고하지 않은 증거·고정\(📌\)한 것은 맡기지 않는다(.*)$/	Ausgerüstete Gegenstände, ungemeldete Beweise und angeheftete Dinge (📌) bleiben bei Ihnen. Navigationshilfen wie Limetten, Katzen und Sextanten bleiben ebenfalls an Bord; zum Einlagern zuerst „Navigationsinstrumente“ wählen.
+장비 중·증거·고정·항해도구 말고 모두 맡긴다	Alles außer Ausrüstung, Beweisen, angehefteten Dingen und Navigationshilfen einlagern
+맡긴 차례	Einlagerungsreihenfolge
+보이는 것 선택	Sichtbare auswählen
+선택 해제	Auswahl aufheben
+맡긴 물건이 없다	Nichts eingelagert
+고른 수량 꺼내기	Auswahl abholen
+같은 일반 물건은 한 칸에 합칩니다. 유물처럼 개별 상태가 있는 물건은 각각 칸이 필요합니다.	Gleiche gewöhnliche Gegenstände teilen sich einen Platz. Dinge mit individuellem Zustand, etwa Relikte, benötigen je einen eigenen Platz.
+↑ @ 들어가기	↑ @ betreten

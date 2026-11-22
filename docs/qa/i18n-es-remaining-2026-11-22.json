@@ -1,0 +1,175 @@
+{
+  "date": "2026-11-22",
+  "language": "es",
+  "scope": "바닷길 노래·황금의 바다 전체 이야기와 UI, 가이드북 전체, 아프리카 17세기 사건 다섯 편의 대사·선택·소식",
+  "sourceFiles": {
+    "song_main_20261122.tsv": 797,
+    "gold_main_20261122.tsv": 918,
+    "names_song_followup_20261122.tsv": 44,
+    "names_gold_followup_20261122.tsv": 73,
+    "runtime_stories_followup_20261122.tsv": 67,
+    "runtime_story_details_20261122.tsv": 57,
+    "events_africa17_20261122.tsv": 127,
+    "names_africa17_20261122.tsv": 19
+  },
+  "sourceRows": 2102,
+  "checkedPatterns": 115,
+  "guidebook": {
+    "chapters": 11,
+    "pages": 70,
+    "imageReferences": 39,
+    "imageKeys": 38,
+    "tableRows": 488
+  },
+  "buildMatches": true,
+  "appliedCounts": {
+    "text": 39145,
+    "patterns": 4593,
+    "city": 316,
+    "good": 163,
+    "name": 6300,
+    "person": 1501
+  },
+  "storiesAndGuide": {
+    "corpus": {
+      "counts": {
+        "song": 1641,
+        "gold": 1892
+      },
+      "choices": 7,
+      "branches": 15,
+      "missing": [],
+      "preserved": 43939,
+      "preservedPatterns": 4478,
+      "preservedPersons": 1501,
+      "songPlayed": {
+        "pages": 7800,
+        "names": 5382,
+        "choices": 12
+      },
+      "goldPlayed": {
+        "pages": 6234,
+        "names": 4842,
+        "choices": 54
+      }
+    },
+    "screens": {
+      "story-world": [],
+      "song-notebook": [],
+      "song-dialogue": [],
+      "song-concert": [],
+      "song-ending": [],
+      "song-notebook-complete": [],
+      "gold-notebook": [],
+      "gold-dialogue": [],
+      "gold-choice-small": [],
+      "gold-finale": [],
+      "guide-0": [],
+      "guide-20": [],
+      "guide-40": [],
+      "guide-69": [],
+      "guide-small": []
+    },
+    "concert": {
+      "crowd": 1689,
+      "gold": 1013,
+      "so": 15,
+      "learn": true
+    },
+    "guidePages": 70,
+    "guideMissing": [],
+    "errors": []
+  },
+  "africa17": {
+    "corpus": {
+      "cases": 27,
+      "speech": 258,
+      "choices": 30,
+      "labels": 80,
+      "names": 223,
+      "logs": 72,
+      "toasts": 33,
+      "news": 6,
+      "unique": 175,
+      "missing": []
+    },
+    "screen": {
+      "text": "Mateus\nMwana Zahra\nLa petición de Zahra\nSacarla con los manuscritos por mar de noche\nLlevar 10 barriles de hierbas medicinales al fuerte con su ayuda (Medicina 2 — Almirante)\nIrse",
+      "width": 960,
+      "height": 540
+    },
+    "errors": []
+  },
+  "previousStoryRegression": {
+    "preserved": 43939,
+    "preservedPatterns": 4478,
+    "preservedPersons": 1501,
+    "pages": 765,
+    "dialogueLines": 747,
+    "choices": 1,
+    "branches": 2,
+    "fields": 864,
+    "storyModes": 4,
+    "mates": 8,
+    "items": 7,
+    "guides": 20,
+    "found": {
+      "title": [],
+      "load-menu": [],
+      "display": [],
+      "story-0": [],
+      "story-1": [],
+      "story-2": [],
+      "story-3": [],
+      "notebook-story": [],
+      "mates-list": [],
+      "mate-detail": [],
+      "dialogue-roger": [],
+      "dialogue-killigrew-small": [],
+      "final-choice-small": [],
+      "finale": []
+    },
+    "koreanRestored": true,
+    "errors": []
+  },
+  "guidePreservation": {
+    "koreanPreserved": true,
+    "previousLanguages": [
+      "en",
+      "zh-Hans",
+      "zh-Hant",
+      "vi",
+      "ja",
+      "fr"
+    ],
+    "chapters": 11
+  },
+  "checks": [
+    "python -X utf8 tests/i18n_spanish_sources_smoke.py",
+    "python -X utf8 tests/i18n_tsv_smoke.py",
+    "PREVIOUS_ES_FILE=tmp/es_followup_20261122/es.before.js node tests/i18n_spanish_remaining_20261122_smoke.cjs",
+    "node tests/i18n_spanish_africa17_20261122_smoke.cjs",
+    "PREVIOUS_ES_FILE=tmp/es_followup_20261122/es.before.js node tests/i18n_spanish_story_20261122_smoke.cjs",
+    "LANGS=es node tests/i18n_asian_languages_smoke.cjs",
+    "node tests/i18n_templates_20261113_smoke.cjs"
+  ],
+  "allChecksPassed": true,
+  "visualChecks": [
+    "guide-small.png",
+    "song-concert.png",
+    "gold-choice-small.png",
+    "mombasa-choice-small.png"
+  ],
+  "remaining": {
+    "sourceKeyCandidates": {
+      "other_g2.tsv": 11298,
+      "other_g3.tsv": 12069
+    },
+    "meaning": "영어 원본의 정규화된 문장·번역 틀 열쇠와 스페인어 원본의 차이다. 더 넓은 틀이나 이름 조합으로 이미 옮겨지는 문장도 포함할 수 있으므로 실제 미번역 개수나 완성률이 아니다.",
+    "scope": "그 밖의 일반·역사·전설 사건, 발견물·도서·가족과 동료의 상호작용은 실제 표시 문맥을 확인하며 누락만 이어서 채운다."
+  },
+  "limitations": [
+    "가이드북의 기존 예시 화면 이미지는 한국어 원본을 공유한다. 본문·표·그림 설명·장과 쪽 안내는 스페인어다.",
+    "게임 전체 스페인어 완역을 뜻하지 않는다. 배포는 하지 않았다."
+  ]
+}

@@ -72,7 +72,8 @@
     if (lastTabOf !== S()) lastTab = null;
     var tabList = TABS.concat(S().story && G.Story ? [['story', G.Story.photoName ? G.Story.photoName() : '아버지의 사진']] : []);   // 이야기 모드 (js/systems/story.js)
     if (S().song && G.SongStory) tabList = tabList.concat([['song', '소영의 지도']]);
-    if (S().jhook && G.JHook) tabList = tabList.concat([['jhook', '해적여제']]);   // 「해적여제」 (js/systems/jhook.js)   // 「바닷길 노래」 (js/systems/song.js)
+    if (S().jhook && G.JHook) tabList = tabList.concat([['jhook', '해적여제']]);
+    if (S().gold && G.GoldSea) tabList = tabList.concat([['gold', '황금의 바다']]);   // 「황금의 바다」 (js/systems/gold.js)   // 「해적여제」 (js/systems/jhook.js)   // 「바닷길 노래」 (js/systems/song.js)
     if (!tab && lastTab && !tabList.some(function (t) { return t[0] === lastTab; })) lastTab = null;
     tab = tab || lastTab || 'admiral';
     var nbKey = G.Keys ? G.Keys.label('notebook') : '없음';
@@ -123,6 +124,7 @@
   PAGES.story = function (el) { if (G.Story) G.Story.page(el); };
   PAGES.song = function (el) { if (G.SongStory) G.SongStory.page(el); };
   PAGES.jhook = function (el) { if (G.JHook) G.JHook.page(el); };
+  PAGES.gold = function (el) { if (G.GoldSea) G.GoldSea.page(el); };
 
   function pips(v, mx) { var h = '<span class="pips">'; for (var i = 1; i <= (mx || 3); i++) h += '<i class="' + (i <= v ? 'on' : '') + '"></i>'; return h + '</span>'; }
   I.pips = pips;

@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-22",
+  "language": "pt",
+  "variant": "pt-PT",
+  "complete": false,
+  "completedScope": "아버지의 사진 자료·본편·결말·가족·세대 계승·동료 3명의 인물 이야기 18편·관련 수첩과 길잡이",
+  "addedRows": {
+    "photo_story_20261122.tsv": 448,
+    "photo_runtime_20261122.tsv": 102,
+    "photo_heir_20261122.tsv": 21,
+    "names_photo_20261122.tsv": 17,
+    "names_photo_runtime_20261122.tsv": 27,
+    "notebook_details_20261122.tsv": 38,
+    "photo_mates_ui_20261122.tsv": 36,
+    "photo_mate_bios_20261122.tsv": 104
+  },
+  "totalAddedRows": 793,
+  "totalSourceRows": 5150,
+  "counts": {
+    "text": 1849,
+    "pat": 720,
+    "name": 547,
+    "city": 327,
+    "good": 163
+  },
+  "preservation": {
+    "unchanged": true,
+    "text": 1242,
+    "pat": 578,
+    "name": 503,
+    "city": 327,
+    "good": 163,
+    "person": 1501
+  },
+  "validation": {
+    "buildMatchesBytes": true,
+    "sourceCommand": "python tests/i18n_portuguese_sources_smoke.py",
+    "sourceResult": "pass",
+    "corpusCommand": "node tests/i18n_portuguese_photo_corpus_20261122.cjs",
+    "uniqueOriginalLines": 399,
+    "corpusCombinations": 2464,
+    "corpusMissing": 0,
+    "screenCommand": "node tests/i18n_portuguese_photo_20261122_smoke.cjs",
+    "actualGameFormatCombinations": 2204,
+    "screenCount": 16,
+    "screenNames": [
+      "notebook-first",
+      "notebook-letter",
+      "guide-knossos",
+      "guide-akrotiri",
+      "guide-timaeus",
+      "guide-gibraltar",
+      "guide-gadir",
+      "guide-azoresridge",
+      "guide-atlantis",
+      "mates",
+      "mate-0",
+      "mate-1",
+      "mate-2",
+      "photo-large",
+      "prologue-dialogue",
+      "family-choice"
+    ],
+    "screenMissing": 0,
+    "consoleErrors": [],
+    "screenFixture": "실제 index.html의 게임 코드·스타일·자료를 그대로 쓰고 다른 언어 묶음만 제외한 file:// 페이지. PT_PHOTO_ALL_LANGS=1은 원래 index.html. 전체 페이지 읽기 제한 초과 후 초점 검사로 검증했다.",
+    "artifacts": "artifacts/i18n-pt-photo-20261122/"
+  },
+  "remaining": [
+    "바닷길 노래·황금의 바다 본문",
+    "일반 발견물 이름·설명·단서·발견 대사",
+    "일반 인물 생애",
+    "아이템·음식 상세",
+    "수첩 상세 일부",
+    "가이드북 11장 본문"
+  ],
+  "note": "이번 범위의 검사 통과는 전체 포르투갈어 완역을 뜻하지 않는다. 기존 번역값과 게임 규칙은 변경하지 않는다.",
+  "followup": "해적여제·튜토리얼은 docs/qa/i18n-pt-followup-2026-11-22.json에서 후속 완료. 이 문서의 행 수와 적용본 수치는 사진 이야기 작업 시점 기록이다."
+}

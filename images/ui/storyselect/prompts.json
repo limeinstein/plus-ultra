@@ -1,0 +1,23 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "id": "eu",
+      "prompt": "Use case: precise-object-edit. Produce a clean GAME MAP BACKGROUND ASSET, NOT A UI MOCKUP. Reference1 is the exact geographic map composition and coastlines; preserve its full bounding rectangle, all land/sea shapes, coastline locations and margins as accurately as possible. Reference2 is ONLY style reference for engraved parchment land, low-relief mountain drawings and muted dark teal sea. Ignore ALL its UI, portraits, buttons and text. Restyle reference1 in the gorgeous detailed antique engraved nautical atlas aesthetic of reference2: honey-ivory aged parchment land, finely engraved mountains and terrain relief, subtle ink river contours, desaturated deep teal seas, fine restrained brass-colored rhumb lines. Remove ALL text including all Korean country/sea labels, remove bright political country colors; subtle brown ink boundaries only. No letters, no numbers, no city pins, no map legends, no compass medallions, no border, no picture frame, no shadows around image, no portraits, no buttons, no flags, no waves repeated as UI doodles. Very fine aged paper grain. Map edge to edge. Geographic geometry MUST follow first reference, do not reframe, crop, zoom, move coasts or invent any peninsula. Maintain same wide approximately2.185:1aspect ratio. Output ONLY map artwork. Region EUROPE andMediterranean. Britain upperleft, Iberia lowerleft, Italy centerbottom, Anatolia lowerright.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/story-select-20261122/sources/eu.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-5caf6a71-2183-4775-b8d8-d5c300679854.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1f9ed-3388-7e20-9690-9e249440b34c\\exec-dbe4e953-9da3-4435-aa43-c951686b22b7.png"
+    },
+    {
+      "id": "ea",
+      "prompt": "Use case: precise-object-edit. Produce a clean GAME MAP BACKGROUND ASSET, NOT A UI MOCKUP. Reference1 is the exact geographic map composition and coastlines; preserve its full bounding rectangle, all land/sea shapes, coastline locations and margins as accurately as possible. Reference2 is ONLY style reference for engraved parchment land, low-relief mountain drawings and muted dark teal sea. Ignore ALL its UI, portraits, buttons and text. Restyle reference1 in the gorgeous detailed antique engraved nautical atlas aesthetic of reference2: honey-ivory aged parchment land, finely engraved mountains and terrain relief, subtle ink river contours, desaturated deep teal seas, fine restrained brass-colored rhumb lines. Remove ALL text including all Korean country/sea labels, remove bright political country colors; subtle brown ink boundaries only. No letters, no numbers, no city pins, no map legends, no compass medallions, no border, no picture frame, no shadows around image, no portraits, no buttons, no flags, no waves repeated as UI doodles. Very fine aged paper grain. Map edge to edge. Geographic geometry MUST follow first reference, do not reframe, crop, zoom, move coasts or invent any peninsula. Maintain same wide approximately2.185:1aspect ratio. Output ONLY map artwork. Region EASTASIA. China left, Korean peninsula uppermiddle, Japan separate islandchain onright, Taiwan lowerleft. Preserve exactly these separate landmasses, no duplicated Japan and no fake peninsula.",
+      "refs": [
+        "D:/Git/대항해2 CLAUDE/WebGame/artifacts/story-select-20261122/sources/ea.png",
+        "C:/Users/User/AppData/Local/Temp/codex-clipboard-5caf6a71-2183-4775-b8d8-d5c300679854.png"
+      ],
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1f9ed-3388-7e20-9690-9e249440b34c\\exec-0f21bdec-55cf-4026-9b9d-ac7620094af6.png"
+    }
+  ]
+}

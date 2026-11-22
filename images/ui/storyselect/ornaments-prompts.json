@@ -1,0 +1,33 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "id": "frame",
+      "file": "atlas-frame.png",
+      "transparent": true,
+      "prompt": "Use case: product-mockup/game UI asset extraction. The reference is an accepted game interface. Match its exact warm antique BRASS + dark worn BROWN LEATHER + IVORY PARCHMENT + MIDNIGHT NAVY material and ornamental silhouette. Generate ONE REUSABLE flat front-facing production GAME UI ASSET only, no complete UI screen, no text or letters, no characters, no map, no mockup perspective. Fine hand-crafted antique gold filigree, elegant maritime age-of-sail premium game interface, delicate fine embossed multiple borderlines. Real transparent PNG outside the requested asset. Asset: OUTER SCREEN FRAME alone, full16:9, approximately1920x1080. Narrow dark brown worn leather strip around allfour screenedges, stitched seam, small brass rivets and finely engraved gold corner fittings, slender curving gold lines alonginneredge; exactly the leatherbound atlas perimeter from reference. Borderwidth about2%imagewidth, do not consume screen. Most CENTER98% ofimage must be FULLY TRANSPARENT so actualmap+UIshows through. Elegant curved pointed corner metalwork extending only slightly inward. No solid background, no parchment fill, no atlascontent, no vignettematte.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1f9ed-3388-7e20-9690-9e249440b34c\\exec-5bd66d2d-555e-477b-9829-2bb2238f4e0e.png"
+    },
+    {
+      "id": "panel",
+      "file": "parchment-panel.png",
+      "transparent": true,
+      "prompt": "Use case: product-mockup/game UI asset extraction. The reference is an accepted game interface. Match its exact warm antique BRASS + dark worn BROWN LEATHER + IVORY PARCHMENT + MIDNIGHT NAVY material and ornamental silhouette. Generate ONE REUSABLE flat front-facing production GAME UI ASSET only, no complete UI screen, no text or letters, no characters, no map, no mockup perspective. Fine hand-crafted antique gold filigree, elegant maritime age-of-sail premium game interface, delicate fine embossed multiple borderlines. Real transparent PNG outside the requested asset. Asset: ONE tall portrait-format blank parchment STORY PANEL, ratio3:4, approximately900x1200. Match reference's left character information panel silhouette: warm light ivory aged textured paper fillingthecenter, thin highlydetailed sculptedgoldframe, upward curved shoulder corners, slender gracefulgoldfiligree atfourcorners, subtle fine doubleinnergoldrule. A faint small sepia sailing ship engraving ONLY bottomleft corner belowwherecopywouldbe, verylowcontrast. Restofcenter blankcream withnotext. Tiny transparentoutside margins, panelalmostfillsimage. No leatherbigframe, no ornamentsintextregion, no navybar, nobuttons.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1f9ed-3388-7e20-9690-9e249440b34c\\exec-5a48ce78-ef73-45e5-8d9a-e9bbac2a929c.png"
+    },
+    {
+      "id": "navy",
+      "file": "button-navy-ornate.png",
+      "transparent": true,
+      "prompt": "Use case: product-mockup/game UI asset extraction. The reference is an accepted game interface. Match its exact warm antique BRASS + dark worn BROWN LEATHER + IVORY PARCHMENT + MIDNIGHT NAVY material and ornamental silhouette. Generate ONE REUSABLE flat front-facing production GAME UI ASSET only, no complete UI screen, no text or letters, no characters, no map, no mockup perspective. Fine hand-crafted antique gold filigree, elegant maritime age-of-sail premium game interface, delicate fine embossed multiple borderlines. Real transparent PNG outside the requested asset. Asset: ONE WIDE horizontal midnightnavy blank BUTTON/NAMEPLATE, ratio6:1, approximately1500x250. Match reference primary '이 이야기로 시작' button's exact cutcorner-scalloped-end silhouette and antiquegoldtripleborder, subtly curved long upper/lower edges, deepnavygrainfill. ONE small engraved antiquegold eight-point compass star at LEFTend andone atRIGHTend, bothinsideshape, leaving80%middleblank foroverlaytext. Premium layeredbrasslinework, no hugewings/curls outsidebutton, tinytransparentmargins. No text, noshipicon, noshadowmatte.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1f9ed-3388-7e20-9690-9e249440b34c\\exec-0f7b5061-4c35-45ae-9135-739ae8a5ee3d.png"
+    },
+    {
+      "id": "paper",
+      "file": "button-paper-ornate.png",
+      "transparent": true,
+      "prompt": "Use case: product-mockup/game UI asset extraction. The reference is an accepted game interface. Match its exact warm antique BRASS + dark worn BROWN LEATHER + IVORY PARCHMENT + MIDNIGHT NAVY material and ornamental silhouette. Generate ONE REUSABLE flat front-facing production GAME UI ASSET only, no complete UI screen, no text or letters, no characters, no map, no mockup perspective. Fine hand-crafted antique gold filigree, elegant maritime age-of-sail premium game interface, delicate fine embossed multiple borderlines. Real transparent PNG outside the requested asset. Asset: ONE WIDE horizontal blank IVORY PARCHMENT secondary BUTTON, ratio6:1, approximately1500x250. Match reference's '다른 사람을 고른다' button exact shallowcutcorner elongatedoctagonal silhouette, not rectangularorpill. Warmivoryagedpaperfill, elegant narrowantiquegoldtriplelineoutline, gentlypointedleftandright ends, restrained smallengravedcornerdetails leaving90%centerblankfortext. No stars, nosymbols, no text, no navy, tinytransparentmargins.",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a1f9ed-3388-7e20-9690-9e249440b34c\\exec-69e4ed22-7766-4a8a-a7fc-7196bffb803c.png"
+    }
+  ]
+}

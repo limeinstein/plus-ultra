@@ -1,0 +1,163 @@
+wheat	Weizen
+rice	Reis
+maize	Mais
+beans	Bohnen
+potato	Kartoffeln
+fish	Trockenfisch
+beef	Rindfleisch
+dairy	Milchprodukte
+sugar	Zucker
+honey	Honig
+salt	Steinsalz
+olive	Olivenöl
+palmoil	Palmöl
+wine	Wein
+brandy	Branntwein
+rum	Rum
+beer	Bier
+pepper	Pfeffer
+clove	Gewürznelken
+nutmeg	Muskatnuss
+cinnamon	Zimt
+ginger	Ingwer
+allspice	Piment
+tea	Tee
+coffee	Kaffee
+cacao	Kakao
+tobacco	Tabak
+wool	Wolle
+cotton	Rohbaumwolle
+silkraw	Rohseide
+hemp	Hanf
+woolcloth	Wolltuch
+cottoncloth	Baumwollstoff
+silk	Seidenstoff
+linen	Leinen
+chintz	Chintz
+carpet	Teppiche
+iron	Eisenerz
+copper	Kupfererz
+tin	Zinnerz
+mercury	Quecksilber
+coal	Kohle
+gold	Gold
+silver	Silber
+gems	Edelsteine
+pearl	Perlen
+coral	Korallen
+amber	Bernstein
+jade	Jade
+ivory	Elfenbein
+tortoise	Schildpatt
+rhino	Nashornhorn
+fur	Pelze
+ambergris	Ambra
+frankincense	Weihrauch
+musk	Moschus
+sandalwood	Sandelholz
+glass	Glaswaren
+porcelain	Chinesisches Porzellan
+leathergoods	Lederwaren
+jewelry	Schmuck
+art	Kunstwerke
+antique	Antiquitäten
+guns	Feuerwaffen
+cannon	Kanonen
+timber	Bauholz
+dye	Farbstoffe
+hides	Häute
+herbs	Heilkräuter
+horses	Pferde
+faience	Europäische Fayence
+cnsilk	Chinesische Seide
+calico	Indischer Kattun
+eaart	Ostasiatische Malerei
+banana	Bananen
+sweetpotato	Süßkartoffeln
+sculpture	Skulpturen
+slaves	Sklaven
+tigerskin	Tigerfelle
+p_bitterorange	Bitterorangen
+p_marmelo	Quitten
+p_almond	Mandeln
+p_madrono	Erdbeerbaumfrüchte
+p_chestnut	Esskastanien
+p_apple	Äpfel
+p_lingonberry	Preiselbeeren
+p_cloudberry	Moltebeeren
+p_gooseberry	Stachelbeeren
+p_blackcurrant	Schwarze Johannisbeeren
+p_fig	Getrocknete Feigen
+p_lemon	Zitronen
+p_carob	Johannisbrot
+p_citron	Zitronatzitronen
+p_marasca	Maraska-Kirschen
+p_baobab	Baobabfrüchte
+p_kola	Kolanüsse
+p_watermelon	Wassermelonen
+p_marula	Marulafrüchte
+p_shea	Sheabutter
+p_date	Datteln
+p_pistachio	Pistazien
+p_apricot	Getrocknete Aprikosen
+p_pomegranate	Granatäpfel
+p_mulberry	Maulbeeren
+p_mango	Mangos
+p_jackfruit	Jackfrüchte
+p_tamarind	Tamarinden
+p_amla	Amlafrüchte
+p_coconut	Kokosnüsse
+p_lychee	Litschis
+p_longan	Getrocknete Longans
+p_persimmon	Getrocknete Kakis
+p_jujube	Jujuben
+p_omija	Omija-Beeren
+p_hamimelon	Hami-Melonen
+p_wildapple	Wildäpfel aus Almaty
+p_walnut	Walnüsse
+p_seabuckthorn	Sanddornbeeren
+p_barberry	Getrocknete Berberitzen
+p_durian	Durian
+p_mangosteen	Mangostanen
+p_rambutan	Rambutans
+p_carambola	Sternfrüchte
+p_salak	Salakfrüchte
+p_mikan	Kishu-Mandarinen
+p_yuzu	Yuzu
+p_nashi	Nashi-Birnen
+p_akebi	Akebi
+p_biwa	Japanische Wollmispeln
+p_pineapple	Ananas
+p_avocado	Avocados
+p_tomato	Tomaten
+p_cashew	Cashewnüsse
+p_cherimoya	Cherimoyas
+p_maesil	Grüne Ume-Pflaumen
+p_orchid	Topforchideen
+p_chrysanthemum	Chrysanthementee
+p_bamboo	Bambus
+p_redpine	Königliche Rotkiefer
+p_azalea	Azaleenwein
+p_tulip	Tulpenzwiebeln
+p_rosewater	Rosenwasser
+p_whiterose	Stecklinge weißer Rosen
+p_bluerose	Blaue Rosen
+p_cork	Kork
+p_oak	Eichenholz
+p_pinenut	Pinienkerne
+p_gumarabic	Gummi arabicum
+p_cedar	Zedernholz
+p_teak	Teakholz
+p_ginkgo	Ginkgonüsse
+p_populus	Pappelharz
+p_camphor	Borneokampfer
+p_sakura	Kirschbaumsetzlinge
+p_brazilwood	Brasilholz
+p_cochineal	Cochenille
+p_saguaro	Saguaro-Früchte
+p_cactuspot	Topfkakteen
+p_larch	Lärchenholz
+p_cedarnut	Sibirische Zirbelkerne
+p_rhodiola	Rosenwurz
+p_eleuthero	Sibirischer Ginseng
+p_poppyseed	Mohnsamen

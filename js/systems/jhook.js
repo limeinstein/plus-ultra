@@ -288,7 +288,7 @@
     var acts = {}; (D.beats || []).forEach(function (b) { (acts[b.act] || (acts[b.act] = [])).push(b); });
     var rows = Object.keys(acts).map(function (a) {
       var bs = acts[a], n = bs.filter(function (b) { return done(b.id); }).length;
-      return '<tr><td>' + a + '막</td><td>' + bs.map(function (b) { return (done(b.id) ? '<b>' : '<span class="muted">') + U.esc(TITLES[b.id] || b.id) + (done(b.id) ? '</b>' : '</span>'); }).join(' · ') + '</td><td>' + (n === bs.length ? '<span class="tag good-text">끝</span>' : n ? '<span class="tag warn-text">' + n + '/' + bs.length + '</span>' : '') + '</td></tr>';
+      return '<tr><td>' + a + '막</td><td>' + bs.map(function (b) { return (done(b.id) ? '<b>' : '<span class="muted">') + U.esc(G.N(TITLES[b.id] || b.id)) + (done(b.id) ? '</b>' : '</span>'); }).join(' · ') + '</td><td>' + (n === bs.length ? '<span class="tag good-text">끝</span>' : n ? '<span class="tag warn-text">' + n + '/' + bs.length + '</span>' : '') + '</td></tr>';
     }).join('');
     var mates = ['jh_smith', 'jh_william', 'jh_conan', 'jh_lucia', 'jh_kofi', 'jh_mariam', 'jh_chenlei', 'jh_jane'].map(function (id) { var m = G.MATE[id]; return m ? '<span class="tag' + (aboard(id) ? ' good-text' : '') + '" style="margin:2px">' + U.esc(m.name) + (aboard(id) ? '' : ' …') + '</span>' : ''; }).join('');
     var g = JH.guide();

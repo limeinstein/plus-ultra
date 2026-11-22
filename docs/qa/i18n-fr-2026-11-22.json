@@ -1,0 +1,538 @@
+{
+  "date": "2026-11-22",
+  "note": "영어 사전과 같은 열쇠의 수를 비교한다. 번역 품질이나 전체 게임의 번역 완료율을 뜻하지 않는다. ready는 현재 선택 가능 여부다.",
+  "languages": [
+    {
+      "id": "ko",
+      "label": "한국어",
+      "status": "한국어 원문",
+      "ready": true
+    },
+    {
+      "id": "en",
+      "label": "English",
+      "ready": true,
+      "status": "작성된 번역 적용 중",
+      "sourceFiles": 75,
+      "sourceRows": 74528,
+      "counts": {
+        "text": 58548,
+        "pat": 8520,
+        "city": 316,
+        "good": 163,
+        "name": 6269,
+        "person": 1501
+      },
+      "englishKeys": {
+        "text": {
+          "present": 58548,
+          "total": 58548,
+          "missing": 0
+        },
+        "pat": {
+          "present": 8520,
+          "total": 8520,
+          "missing": 0
+        },
+        "city": {
+          "present": 316,
+          "total": 316,
+          "missing": 0
+        },
+        "good": {
+          "present": 163,
+          "total": 163,
+          "missing": 0
+        },
+        "name": {
+          "present": 6269,
+          "total": 6269,
+          "missing": 0
+        }
+      },
+      "guideChapters": 11,
+      "buildMatches": true
+    },
+    {
+      "id": "zh-Hans",
+      "label": "简体中文",
+      "ready": true,
+      "status": "작성된 번역 적용 중",
+      "sourceFiles": 88,
+      "sourceRows": 80221,
+      "counts": {
+        "text": 61944,
+        "pat": 8637,
+        "city": 327,
+        "good": 163,
+        "name": 7526,
+        "person": 1501
+      },
+      "englishKeys": {
+        "text": {
+          "present": 58511,
+          "total": 58548,
+          "missing": 37
+        },
+        "pat": {
+          "present": 8487,
+          "total": 8520,
+          "missing": 33
+        },
+        "city": {
+          "present": 316,
+          "total": 316,
+          "missing": 0
+        },
+        "good": {
+          "present": 163,
+          "total": 163,
+          "missing": 0
+        },
+        "name": {
+          "present": 6214,
+          "total": 6269,
+          "missing": 55
+        }
+      },
+      "guideChapters": 11,
+      "buildMatches": true
+    },
+    {
+      "id": "zh-Hant",
+      "label": "繁體中文",
+      "ready": true,
+      "status": "작성된 번역 적용 중",
+      "sourceFiles": 88,
+      "sourceRows": 80221,
+      "counts": {
+        "text": 61944,
+        "pat": 8637,
+        "city": 327,
+        "good": 163,
+        "name": 7526,
+        "person": 1501
+      },
+      "englishKeys": {
+        "text": {
+          "present": 58511,
+          "total": 58548,
+          "missing": 37
+        },
+        "pat": {
+          "present": 8487,
+          "total": 8520,
+          "missing": 33
+        },
+        "city": {
+          "present": 316,
+          "total": 316,
+          "missing": 0
+        },
+        "good": {
+          "present": 163,
+          "total": 163,
+          "missing": 0
+        },
+        "name": {
+          "present": 6214,
+          "total": 6269,
+          "missing": 55
+        }
+      },
+      "guideChapters": 11,
+      "buildMatches": true
+    },
+    {
+      "id": "ja",
+      "label": "日本語",
+      "ready": true,
+      "status": "작성된 번역 적용 중",
+      "sourceFiles": 41,
+      "sourceRows": 7007,
+      "counts": {
+        "text": 3819,
+        "pat": 674,
+        "city": 327,
+        "good": 163,
+        "name": 1947,
+        "person": 77
+      },
+      "englishKeys": {
+        "text": {
+          "present": 3653,
+          "total": 58548,
+          "missing": 54895
+        },
+        "pat": {
+          "present": 623,
+          "total": 8520,
+          "missing": 7897
+        },
+        "city": {
+          "present": 316,
+          "total": 316,
+          "missing": 0
+        },
+        "good": {
+          "present": 163,
+          "total": 163,
+          "missing": 0
+        },
+        "name": {
+          "present": 1845,
+          "total": 6269,
+          "missing": 4424
+        }
+      },
+      "guideChapters": 11,
+      "buildMatches": true
+    },
+    {
+      "id": "vi",
+      "label": "Tiếng Việt",
+      "ready": true,
+      "status": "작성된 번역 적용 중",
+      "sourceFiles": 64,
+      "sourceRows": 27370,
+      "counts": {
+        "text": 16474,
+        "pat": 2695,
+        "city": 316,
+        "good": 163,
+        "name": 6160,
+        "person": 1501
+      },
+      "englishKeys": {
+        "text": {
+          "present": 16474,
+          "total": 58548,
+          "missing": 42074
+        },
+        "pat": {
+          "present": 2691,
+          "total": 8520,
+          "missing": 5829
+        },
+        "city": {
+          "present": 316,
+          "total": 316,
+          "missing": 0
+        },
+        "good": {
+          "present": 163,
+          "total": 163,
+          "missing": 0
+        },
+        "name": {
+          "present": 6160,
+          "total": 6269,
+          "missing": 109
+        }
+      },
+      "guideChapters": 11,
+      "buildMatches": true
+    },
+    {
+      "id": "es",
+      "label": "Español",
+      "ready": true,
+      "status": "작성된 번역 적용 중",
+      "sourceFiles": 83,
+      "sourceRows": 51850,
+      "counts": {
+        "text": 38988,
+        "pat": 4566,
+        "city": 316,
+        "good": 163,
+        "name": 6275,
+        "person": 1501
+      },
+      "englishKeys": {
+        "text": {
+          "present": 38868,
+          "total": 58548,
+          "missing": 19680
+        },
+        "pat": {
+          "present": 4547,
+          "total": 8520,
+          "missing": 3973
+        },
+        "city": {
+          "present": 316,
+          "total": 316,
+          "missing": 0
+        },
+        "good": {
+          "present": 163,
+          "total": 163,
+          "missing": 0
+        },
+        "name": {
+          "present": 6258,
+          "total": 6269,
+          "missing": 11
+        }
+      },
+      "guideChapters": 0,
+      "buildMatches": true
+    },
+    {
+      "id": "pt",
+      "label": "Português",
+      "ready": true,
+      "status": "작성된 번역 적용 중",
+      "sourceFiles": 43,
+      "sourceRows": 6447,
+      "counts": {
+        "text": 3047,
+        "pat": 743,
+        "city": 327,
+        "good": 163,
+        "name": 622,
+        "person": 1501
+      },
+      "englishKeys": {
+        "text": {
+          "present": 2853,
+          "total": 58548,
+          "missing": 55695
+        },
+        "pat": {
+          "present": 610,
+          "total": 8520,
+          "missing": 7910
+        },
+        "city": {
+          "present": 316,
+          "total": 316,
+          "missing": 0
+        },
+        "good": {
+          "present": 163,
+          "total": 163,
+          "missing": 0
+        },
+        "name": {
+          "present": 573,
+          "total": 6269,
+          "missing": 5696
+        }
+      },
+      "guideChapters": 0,
+      "buildMatches": true
+    },
+    {
+      "id": "de",
+      "label": "Deutsch",
+      "ready": true,
+      "status": "작성된 번역 적용 중",
+      "sourceFiles": 38,
+      "sourceRows": 6689,
+      "counts": {
+        "text": 3361,
+        "pat": 767,
+        "city": 327,
+        "good": 163,
+        "name": 532,
+        "person": 1501
+      },
+      "englishKeys": {
+        "text": {
+          "present": 3162,
+          "total": 58548,
+          "missing": 55386
+        },
+        "pat": {
+          "present": 736,
+          "total": 8520,
+          "missing": 7784
+        },
+        "city": {
+          "present": 316,
+          "total": 316,
+          "missing": 0
+        },
+        "good": {
+          "present": 163,
+          "total": 163,
+          "missing": 0
+        },
+        "name": {
+          "present": 494,
+          "total": 6269,
+          "missing": 5775
+        }
+      },
+      "guideChapters": 0,
+      "buildMatches": true
+    },
+    {
+      "id": "fr",
+      "label": "Français",
+      "ready": true,
+      "status": "작성된 번역 적용 중",
+      "sourceFiles": 51,
+      "sourceRows": 7840,
+      "counts": {
+        "text": 4380,
+        "pat": 683,
+        "city": 316,
+        "good": 163,
+        "name": 753,
+        "person": 1501
+      },
+      "englishKeys": {
+        "text": {
+          "present": 4024,
+          "total": 58548,
+          "missing": 54524
+        },
+        "pat": {
+          "present": 623,
+          "total": 8520,
+          "missing": 7897
+        },
+        "city": {
+          "present": 316,
+          "total": 316,
+          "missing": 0
+        },
+        "good": {
+          "present": 163,
+          "total": 163,
+          "missing": 0
+        },
+        "name": {
+          "present": 693,
+          "total": 6269,
+          "missing": 5576
+        }
+      },
+      "guideChapters": 11,
+      "buildMatches": true
+    }
+  ],
+  "errors": [],
+  "frenchWork": {
+    "date": "2026-11-22",
+    "status": "기본 화면·네 주인공 이야기·가이드북 번역 적용 · 전체 게임 완역 아님",
+    "sourceRows": 7840,
+    "runtimeMissingBefore": 33,
+    "runtimeMissingAfter": 0,
+    "fileChecks": "artifacts/i18n-fr-20261122/checks.json",
+    "webChecks": "artifacts/i18n-fr-20261122/web/checks.json",
+    "testedStoryIds": [
+      "photo",
+      "jhook",
+      "gold",
+      "song"
+    ],
+    "webPreferences": {
+      "fr-FR": "fr",
+      "fr-CA": "fr",
+      "fr-BE": "fr",
+      "fr-CH": "fr"
+    },
+    "consoleErrors": [],
+    "remaining": [
+      "일반 항해 튜토리얼과 세부 도시 사건",
+      "전설·역사·세계 사건과 소식",
+      "일반 동료 전기·대화",
+      "도감 발견물·물건 전체 설명과 이름",
+      "발견 지식·연애·가족 상호작용"
+    ],
+    "initialSourceRows": 4185,
+    "followupSourceRows": 3655,
+    "counts": {
+      "text": 4380,
+      "pat": 683,
+      "city": 316,
+      "good": 163,
+      "name": 753,
+      "person": 1501
+    },
+    "preservation": {
+      "entries": 2188,
+      "patterns": 458,
+      "personFragments": 1501,
+      "changed": 0
+    },
+    "completed": {
+      "jhook": {
+        "dialogueLines": 747,
+        "pages": 765,
+        "branches": 2,
+        "mates": 8,
+        "items": 7,
+        "guides": 20,
+        "checks": "artifacts/i18n-french-followup-20261122/results.json"
+      },
+      "photo": {
+        "uniqueOriginalLines": 399,
+        "generationChecks": 2464,
+        "missing": 0,
+        "personalStories": 18,
+        "checks": "artifacts/i18n-fr-photo-20261122/checks.json",
+        "corpus": "artifacts/i18n-fr-photo-20261122/corpus.json"
+      },
+      "song": {
+        "addedOriginalRows": 795,
+        "corpusChecks": 1644,
+        "branches": 2,
+        "played": {
+          "pages": 7800,
+          "names": 5382,
+          "choices": 12
+        },
+        "screens": 7,
+        "checks": "artifacts/i18n-french-song-20261122/results.json"
+      },
+      "gold": {
+        "addedOriginalRows": 916,
+        "uniqueChecks": 1013,
+        "beats": 62,
+        "choices": 6,
+        "branches": 13,
+        "played": {
+          "pages": 6234,
+          "names": 4842,
+          "choices": 54
+        },
+        "screens": 7,
+        "checks": "artifacts/i18n-french-gold-20261122/results.json"
+      },
+      "guidebook": {
+        "chapters": 11,
+        "pages": 70,
+        "images": 39,
+        "tableRows": 488,
+        "source": "docs/guidebook.fr.md",
+        "allPagesChecked": true
+      }
+    },
+    "runtimeTemplates": {
+      "photo": 71,
+      "song": 17,
+      "gold": 34
+    },
+    "sourceValidation": {
+      "hangulInFrenchValues": 0,
+      "badPlaceholderReferences": 0,
+      "rebuildMatches": true
+    },
+    "verification": [
+      "python tests/i18n_french_sources_smoke.py",
+      "python tests/i18n_tsv_smoke.py",
+      "node tests/i18n_french_20261122_smoke.cjs",
+      "node tests/i18n_french_story_20261122_smoke.cjs",
+      "node tests/i18n_french_photo_corpus_20261122.cjs",
+      "node tests/i18n_french_photo_20261122_smoke.cjs",
+      "node tests/i18n_french_song_20261122_smoke.cjs",
+      "node tests/i18n_french_gold_20261122_smoke.cjs",
+      "BROWSER_EXE=\"C:/Program Files/Google/Chrome/Application/chrome.exe\" node tests/i18n_smoke.js",
+      "node tools/i18n/audit.cjs --build-check"
+    ]
+  }
+}

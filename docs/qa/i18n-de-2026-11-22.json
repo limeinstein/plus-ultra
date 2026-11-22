@@ -1,0 +1,246 @@
+{
+  "date": "2026-11-22",
+  "language": "de",
+  "ready": true,
+  "status": "도시 상세·첫 항해 튜토리얼·아버지의 사진 본문 반영, 전체 완역 아님",
+  "counts": {
+    "text": 3361,
+    "pat": 767,
+    "city": 327,
+    "good": 163,
+    "name": 532,
+    "person": 1501
+  },
+  "sourceFiles": 38,
+  "sourceRows": 6689,
+  "buildMatches": true,
+  "sourceKeyCoverage": {
+    "core.tsv": {
+      "referenceRows": 231,
+      "missingRows": 0
+    },
+    "core_pat.tsv": {
+      "referenceRows": 77,
+      "missingRows": 0
+    },
+    "create.tsv": {
+      "referenceRows": 107,
+      "missingRows": 0
+    },
+    "battle.tsv": {
+      "referenceRows": 99,
+      "missingRows": 0
+    },
+    "field.tsv": {
+      "referenceRows": 124,
+      "missingRows": 0
+    },
+    "city_a1.tsv": {
+      "referenceRows": 319,
+      "missingRows": 0
+    },
+    "notebook.tsv": {
+      "referenceRows": 146,
+      "missingRows": 0
+    },
+    "ships.tsv": {
+      "referenceRows": 30,
+      "missingRows": 0
+    },
+    "misc1.tsv": {
+      "referenceRows": 84,
+      "missingRows": 0
+    },
+    "lisbon.tsv": {
+      "referenceRows": 100,
+      "missingRows": 0
+    },
+    "runtime_20261115.tsv": {
+      "referenceRows": 6,
+      "missingRows": 0
+    },
+    "city_a2.tsv": {
+      "referenceRows": 158,
+      "missingRows": 0
+    },
+    "city_d1.tsv": {
+      "referenceRows": 316,
+      "missingRows": 0
+    },
+    "city_l1.tsv": {
+      "referenceRows": 350,
+      "missingRows": 0
+    },
+    "city_l2.tsv": {
+      "referenceRows": 223,
+      "missingRows": 0
+    },
+    "econ.tsv": {
+      "referenceRows": 95,
+      "missingRows": 0
+    },
+    "tutorial.tsv": {
+      "referenceRows": 384,
+      "missingRows": 0
+    },
+    "other_g1h.tsv": {
+      "referenceRows": 429,
+      "missingRows": 0
+    },
+    "runtime_20261114.tsv": {
+      "referenceRows": 20,
+      "missingRows": 0
+    },
+    "runtime_20261122.tsv": {
+      "referenceRows": 75,
+      "missingRows": 0
+    }
+  },
+  "sharedRomanizedPersonFragments": 1501,
+  "remaining": [
+    "해적여제·황금의 바다·바닷길 노래의 본문",
+    "일반 사건·전설·동료 대화",
+    "발견물·아이템·일반 동료의 전체 설명과 이름",
+    "발견 지식·가족 상호작용 대사",
+    "인물 전기",
+    "가이드북 본문"
+  ],
+  "verificationErrors": [],
+  "runtimeReport": "artifacts/i18n-de-20261122/checks.json",
+  "runtimeCommand": "node tests/i18n_german_20261122_smoke.cjs",
+  "regressionChecks": {
+    "koreanEnglishSmoke": true,
+    "tsvCompilerSmoke": true
+  },
+  "otherLanguageWork": "동시에 바뀌는 다른 언어 원고와 적용 파일은 이 작업에서 재생성하지 않았다.",
+  "runtimeChecks": {
+    "passed": true,
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "notebookLabelsFit": true,
+    "screens": [
+      "title",
+      "settings",
+      "create",
+      "city",
+      "trade",
+      "notebook",
+      "sea",
+      "battle",
+      "catalog"
+    ],
+    "screenshots": "artifacts/i18n-de-20261122/",
+    "notebookTabsFit": true
+  },
+  "followup": {
+    "previousCounts": {
+      "text": 1039,
+      "pat": 403,
+      "city": 316,
+      "good": 163,
+      "name": 471,
+      "person": 1501
+    },
+    "previousSourceRows": 3931,
+    "addedSourceRows": 2758,
+    "preservedEntries": 3893,
+    "previousSourceChanges": [
+      "_city.tsv"
+    ],
+    "previousSourceChangeReason": "_city.tsv에 원주민 마을 11곳을 덧붙였으며 기존 316개 값은 보존했다.",
+    "sourceCommand": "python tests/i18n_german_sources_smoke.py",
+    "tutorial": {
+      "pages": 305,
+      "choices": 3,
+      "branches": 6,
+      "steps": 21,
+      "missing": []
+    },
+    "storyModes": [
+      {
+        "id": "photo",
+        "missing": []
+      },
+      {
+        "id": "jhook",
+        "missing": []
+      },
+      {
+        "id": "gold",
+        "missing": []
+      },
+      {
+        "id": "song",
+        "missing": []
+      }
+    ],
+    "screens": [
+      "story-0",
+      "story-1",
+      "story-2",
+      "story-3",
+      "settings",
+      "supplies",
+      "tutorial-roles"
+    ],
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "runtimeReport": "artifacts/i18n-de-followup-20261122/checks.json",
+    "runtimeCommand": "node tests/i18n_german_followup_20261122_smoke.cjs",
+    "photo": {
+      "corpus": {
+        "uniqueOriginalLines": 399,
+        "checks": 2416,
+        "missing": [],
+        "samples": []
+      },
+      "generations": [
+        1,
+        2,
+        3
+      ],
+      "predecessorAliveOrGone": [
+        false,
+        true
+      ],
+      "includesTransformedHeirScenes": true,
+      "companionBiographies": 18,
+      "tileOverflow": {
+        "mate-0-tileOverflow": [],
+        "mate-1-tileOverflow": [],
+        "mate-2-tileOverflow": []
+      },
+      "screens": [
+        "story-intro",
+        "notebook-first",
+        "notebook-letter",
+        "guide-knossos",
+        "guide-akrotiri",
+        "guide-timaeus",
+        "guide-gibraltar",
+        "guide-gadir",
+        "guide-azoresridge",
+        "guide-atlantis",
+        "mates",
+        "mate-0",
+        "mate-0-tileOverflow",
+        "mate-0-story",
+        "mate-1",
+        "mate-1-tileOverflow",
+        "mate-1-story",
+        "mate-2",
+        "mate-2-tileOverflow",
+        "mate-2-story",
+        "photo-large",
+        "prologue-dialogue",
+        "family-choice"
+      ],
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "runtimeReport": "artifacts/i18n-de-photo-20261122/checks.json",
+      "runtimeCommand": "node tests/i18n_german_photo_20261122_smoke.cjs"
+    },
+    "buildSha256": "c8b8bc131d853a61a312dc2f58cc6d5a57ea087f29e1d5ef3641adae3348be67",
+    "scopeNote": "지정 원문과 실제 자료·화면 검사 결과다. 나머지 이야기·일반 발견 및 인물 자료 전체의 완역 표시는 아니다."
+  }
+}

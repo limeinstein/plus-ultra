@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-22",
+  "language": "en",
+  "sourceFiles": {
+    "story_jhook_rest_20261122.tsv": 576,
+    "story_song_20261122.tsv": 655,
+    "story_song_ui_20261122.tsv": 212,
+    "names_song_20261122.tsv": 54
+  },
+  "scope": [
+    "해적여제 5막부터 결말까지 모든 사건·선택지·분기",
+    "바닷길 노래 서장·본편·발견지 사건·아틀란티스·귀향·연애 대사",
+    "바닷길 노래 지도 메모·공연 곡명·반응·진행 안내",
+    "황금의 바다 선택 화면 소개"
+  ],
+  "coverage": {
+    "counts": {
+      "jhook": 864,
+      "song": 817,
+      "modes": 27,
+      "repertoire": 8
+    },
+    "missing": [],
+    "preserved": {
+      "entries": 62471,
+      "patterns": 8430
+    },
+    "screens": [
+      "jhook-choice",
+      "song-confession",
+      "song-finale-small",
+      "song-map",
+      "concert-song-choices",
+      "concert-result",
+      "concert-after"
+    ],
+    "errors": []
+  },
+  "sourceRebuildMatches": true,
+  "regression": {
+    "songExistingScenarioChecks": 38,
+    "consoleErrors": 0,
+    "note": "기존 tests/song_smoke.js의 Playwright 모듈 경로만 로컬 설치 경로로 바꾼 임시 사본과 동일한 영어 전용 HTML에서 한국어 기본 상태로 실행"
+  },
+  "runtimeFix": "공연 결과와 수첩 통계의 숫자·인원 단위를 G.T 통문장으로 번역하여 명이 Ming으로 옮겨지는 문제를 방지",
+  "testEnvironment": {
+    "mode": "ENGLISH_ONLY=1",
+    "note": "기본 index.html 전체 언어 파일 로딩은 초기 제한 120초에 두 차례 도달했다. 최종 검사는 다른 언어 파일만 제외하고 실제 게임 소스·영어·그림을 불러오는 임시 HTML에서 실행했다.",
+    "baseline": "작업 직전 js/lang/en.js와 기존 문장·이름 62471개 및 틀 8430개 동일 확인"
+  },
+  "remaining": [
+    "황금의 바다 본문",
+    "그 밖의 새 사건·발견 문구는 별도 전체 점검 필요"
+  ],
+  "note": "두 이야기의 현재 자료 범위를 번역·검증한 결과이며 게임 전체 영어 완역 표시는 아니다.",
+  "sourceRows": 1497
+}

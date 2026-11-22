@@ -1,0 +1,99 @@
+일시정지	Pausa
+재개	Retomar
+백병전	Abordar
+포격 정지	Cessar fogo
+포격 재개	Retomar fogo
+퇴각	Retirar
+교전 보기	Ver combate
+기함 보기	Ver nau capitânia
+전장 전체	Campo inteiro
+아군 함대	Frota aliada
+적 함대	Frota inimiga
+— 1번 기함을 무찌르면 승리	— derrote a nau capitânia n.º 1 para vencer
+해상 괴물	Monstro marinho
+— 잠수 중 공격 불가	— não pode ser atacado enquanto está submerso
+괴물	Monstro
+처치	Abatido
+해적선 #호	Navio pirata n.º #
+왜구선 #호	Navio wako n.º #
+상선 #호	Navio mercante n.º #
+@ 군함 #호	Navio de guerra de @ n.º #
+군함 #호	Navio de guerra n.º #
+@호	@
+침몰	Afundado
+이탈	Escapou
+나포	Capturado
+달아남	Fugiu
+상실	Perdido
+빼앗김	Tomado
+빼앗김 — 이기면 되찾는다	Tomado — vença para o recuperar
+기함	Nau capitânia
+선원 #	Tripulação #
+내구 # / #	Casco # / #
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · B: 백병전 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Setas: governar a nau capitânia · Space: parar · Clique: mover · Clique no inimigo: atacar · B: abordar · F: ativar/desativar fogo aliado · P: pausa · Roda: ampliar · +/−: velocidade · 1–7: ordens à frota · Tab: escolher navio
+방향키: 기함 몰기 · Space: 기함 정지 · 클릭: 이동 · 적함 클릭: 공격 · 괴물에게 백병전·일기토 불가 · F: 아군 포격 켬/끔 · P: 일시정지 · 휠: 확대 · +/−: 배속 · 1~7: 함대 명령 · Tab: 배 고르기	Setas: governar a nau capitânia · Space: parar · Clique: mover · Clique no inimigo: atacar · Sem abordagens ou duelos contra monstros · F: ativar/desativar fogo aliado · P: pausa · Roda: ampliar · +/−: velocidade · 1–7: ordens à frota · Tab: escolher navio
+섬·해안은 통과할 수 없으며, 막힌 쪽으로는 퇴각할 수 없습니다.	Não pode atravessar ilhas nem costas, nem retirar por uma saída bloqueada.
+함대 명령	Ordens à frota
+— 기함 전술 (함께 싸울 배 없음)	— táticas da nau capitânia (sem outros navios aliados)
+— 기함을 뺀 배 모두	— todos os navios exceto a nau capitânia
+직접 조종	Controlo manual
+기함 추종	Seguir a capitânia
+학익진	Asas de grou
+일제 공격	Ataque concentrado
+포격전	Duelo de artilharia
+기함 호위	Escoltar a capitânia
+자유 공격	Ataque livre
+물러나기	Recuar
+돌격	Investida
+포격 중심	Prioridade aos canhões
+자동 교전	Combate automático
+노림	Alvo
+자리 지킴	Manter posição
+기함 혼자: 3 돌격 · 4 포격 중심 · 6 자동 교전 — 방향키·클릭으로 직접 몰면 풀립니다. 학익진·호위는 배가 2척 이상일 때.	Capitânia sozinha: 3 Investida · 4 Prioridade aos canhões · 6 Combate automático — governar com as setas ou cliques cancela a ordem. Asas de grou e Escoltar exigem pelo menos 2 navios.
+배를 고르면(줄·지도에서 클릭·Tab) 그 배에게만 — 적함 클릭: 노림 · 바다 클릭: 자리 지킴 · Esc: 풀기	Escolha um navio (clique na lista ou no mapa, ou Tab) para dar ordens só a esse navio — clique no inimigo: alvo · clique no mar: manter posição · Esc: desmarcar
+함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Precisa de outros navios aliados (frota de pelo menos 2 navios).
+학익진은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Asas de grou exige outros navios aliados (frota de pelo menos 2 navios).
+기함 호위은 함께 싸울 배가 있어야 합니다 (함대 2척 이상).	Escoltar a capitânia exige outros navios aliados (frota de pelo menos 2 navios).
+직접 조종: 방향키·클릭으로 기함을 몹니다.	Controlo manual: governe a nau capitânia com as setas e cliques.
+함대 퇴각	Retirada da frota
+기함 뒤로 줄지어 따라가며 기함이 노리는 적을 함께 쏜다.	Formam uma fila atrás da capitânia e disparam sobre o seu alvo.
+학이 날개를 펴듯 기함을 가운데 두고 양옆으로 벌려 적을 반원으로 감싼다. 여러 방향에서 쏘면 포격이 더 아프다.	Abrem-se pelos dois lados da capitânia como as asas de um grou e envolvem o inimigo num semicírculo. O fogo de vários ângulos causa mais danos.
+모두 한 적에게 바짝 붙어 한꺼번에 쏜다(일제 사격). 선원이 넉넉하면 올라탄다.	Todos se aproximam do mesmo inimigo e disparam em conjunto. Abordam se houver tripulação suficiente.
+사정거리 끝에서 포로만 싸운다. 적이 다가오면 물러나 백병전을 피한다.	Combatem apenas com canhões, no limite do alcance. Recuam quando o inimigo se aproxima para evitar abordagens.
+기함 곁을 둘러싸고, 기함에 다가오는 적부터 쏜다.	Rodeiam a capitânia e disparam primeiro sobre os inimigos que se aproximam dela.
+배마다 가장 가까운 적과 알아서 싸운다.	Cada navio combate por sua conta o inimigo mais próximo.
+그 배만 적에게서 먼 쪽으로 전장을 벗어난다 (배는 잃지 않는다).	Apenas este navio abandona o combate pelo lado mais afastado do inimigo (o navio não se perde).
+@ — @	@ — @
+전장 해도	Carta de combate
+클릭: 그곳 보기	Clique: observar o local
+적함 #척 · 화면 밖 #척	Navios inimigos # · fora do ecrã #
+기함 포격	Canhões da capitânia
+좌현	Bombordo
+우현	Estibordo
+선수	Proa
+장전 #% · #초	A carregar #% · # s
+장전 완료	Carregado
+발사 준비	Pronto a disparar
+해전	Combate naval
+아군 #척 · 선원 #	Aliados # navios · tripulação #
+적 #척 · 선원 #	Inimigos # navios · tripulação #
+@풍 · 연안 전장	Vento de @ · águas costeiras
+@풍 · 격랑 해역	Vento de @ · mar agitado
+@풍 · @	Vento de @ · @
+@풍	Vento de @
+적 기함(1번 · @)을 가라앉히거나 나포하면 이깁니다. 우리 기함(1번)을 잃으면 집니다.	Afunde ou capture a capitânia inimiga (n.º 1 · @) para vencer. Perder a nossa capitânia (n.º 1) significa a derrota.
+해전 승리	Vitória no mar
+승리했다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	Vitória! Obtivemos # moedas de ouro em despojos. (Fama +#)
+적 기함을 무찔러 이겼다! 전리품으로 금화 #닢을 얻었다. (명성 +#)	Derrotámos a capitânia inimiga! Obtivemos # moedas de ouro em despojos. (Fama +#)
+남은 적 배는 흩어져 달아났다.	Os restantes navios inimigos dispersaram e fugiram.
+아군 포격 정지 — 적함을 누른 뒤 B로 백병전을 걸 수 있습니다. 적은 계속 포격합니다.	Fogo aliado suspenso — clique num navio inimigo e prima B para abordar. O inimigo continua a disparar.
+아군 포격을 재개합니다.	O fogo aliado foi retomado.
+아군 함대 전체의 포격 켬/끔 (F). 적의 포격과 이미 발사된 포탄은 유지됩니다. B: 백병전 접근	Ativar/desativar o fogo de toda a frota aliada (F). O fogo inimigo e as balas já disparadas mantêm-se. B: aproximar para abordar
+기함이 멈춰 있습니다. 방향키로 몰거나 바다·적함을 클릭하십시오.	A nau capitânia está parada. Governe com as setas ou clique no mar ou num navio inimigo.
+퇴각! 전장 가장자리로 벗어나십시오.	Retirada! Saia pela margem do campo de combate.
+해상 괴물에게는 백병전·나포·일기토를 할 수 없습니다.	Não pode abordar, capturar ou desafiar para duelo um monstro marinho.
+아군과 적 함대가 함께 보이도록 배율을 맞춥니다.	Ajusta a ampliação para mostrar ambas as frotas.
+전장 해도: 파란 점은 아군, 붉은 점은 적군. 클릭하면 해당 위치를 살핍니다.	Carta de combate: pontos azuis são aliados e vermelhos são inimigos. Clique para observar esse local.
+부채꼴은 사거리와 사격 방향, 차오르는 면과 호는 장전 진행도입니다. 점선 원은 약한 근접·추격 사격 범위입니다.	O setor mostra o alcance e a direção de tiro; a área e o arco que se preenchem mostram o recarregamento. O círculo tracejado indica o alcance dos tiros fracos de proximidade e perseguição.
+해전 배속 ×# (키 + / −)	Velocidade do combate ×# (teclas + / −)
+#번 @(을|를) 골랐다. 적함 클릭 = 노림 · 바다 클릭 = 자리 지킴 · 1~7 = 이 배에만 명령 · Esc = 풀기	Navio n.º {1} @ selecionado. Clique no inimigo = alvo · clique no mar = manter posição · 1–7 = ordens só a este navio · Esc = desmarcar

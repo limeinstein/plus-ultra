@@ -1,0 +1,146 @@
+#세 (#월 #일생 · @)	{1} anos (nascido em {3}/{2} · @)
+예금	Depósitos
+악명	Infâmia
+건강	Saúde
+명성 갈래	Fama por área
+탐험	Exploração
+교역	Comércio
+전투	Combate
+사교	Sociedade
+작위	Título de nobreza
+적대	Hostilidades
+없음	Nenhum
+없음 — 통합 명성 #부터 국왕이 부른다	Nenhum — o rei chama-o a partir de # de fama total
+@ (공격 #)	@ (ataque #)
+@ (방어 #)	@ (defesa #)
+배우자	Cônjuge
+자녀	Filhos
+직업 잠재 특성 · 아직 드러나지 않음	Característica oculta da profissão · ainda não revelada
+직업 잠재 특성 · @	Característica oculta da profissão · @
+지평선의 위안	Consolo do horizonte
+층위의 눈	Olhar estratigráfico
+빈틈없는 해체	Esfolamento cuidadoso
+열세의 돌격	Investida em inferioridade
+한마음의 기도	Oração em união
+거래처의 사례	Gratidão dos parceiros
+질서 있는 일제사격	Salva disciplinada
+“해도에 없던 풍경이군. 이곳을 기억하면 다음 길도 찾을 수 있겠어.”	“Uma paisagem que não estava na carta. Se nos lembrarmos deste lugar, também encontraremos o próximo caminho.”
+“흙의 층과 작은 흔적까지 남겨라. 보물보다 오래갈 것은 이 기록이다.”	“Registai cada camada de terra e cada vestígio. Estes registos durarão mais do que o tesouro.”
+“가죽이 상하지 않게 결을 따라 벗겨라. 버릴 몫도 살릴 수 있다.”	“Retirai a pele no sentido do pelo, sem a danificar. Até o que parecia desperdício pode aproveitar-se.”
+“수가 적어도 물러서지 마라. 좁은 갑판에서는 먼저 자리를 잡는 쪽이 이긴다!”	“Não recueis por sermos menos! Num convés estreito, vence quem primeiro conquista o seu lugar!”
+“믿는 이름은 달라도 무사히 돌아가고 싶은 마음은 같지. 함께 쉬어 가세.”	“Podemos rezar a nomes diferentes, mas todos queremos regressar sãos e salvos. Descansemos juntos.”
+“산 값과 운반한 수고를 장부에 남겨라. 신뢰가 쌓이면 거래처도 사례하는 법이지.”	“Registai o custo de compra e o esforço do transporte. Quando há confiança, os parceiros também sabem agradecer.”
+“각 포대는 명령을 기다려라. 같은 순간에 조준하고, 한 번에 쏜다!”	“Todas as baterias aguardem a ordem! Apontar ao mesmo tempo e disparar em conjunto!”
+지리·자연을 새로 발견하면 피로 # 회복. 하루 최대 #.	Novas descobertas de geografia ou natureza recuperam # de fadiga. Máximo de # por dia.
+유적·보물의 첫 발견 명성 +#%. 발견당 최대 #, 하루 최대 #. 보고 보상에는 미적용.	Fama na primeira descoberta de ruínas ou tesouros +#%. Máximo de # por descoberta e # por dia. Não se aplica à recompensa do relatório.
+사냥 후 실제로 싣는 전리품 +#%(버림). 하루 최대 #통. 짐칸 한도 적용.	Despojos efetivamente embarcados após a caça +#% (arredondado para baixo). Máximo de # barris por dia. Sujeito à capacidade do porão.
+기함의 접현 시작 시 아군 선원이 적보다 적으면 해당 백병전 공격력 +#%. 특기 조합과는 큰 쪽만 적용.	Se a capitânia iniciar uma abordagem com menos tripulantes do que o inimigo, recebe +#% de ataque nesse combate. Com combinações de competências, aplica-se apenas o maior bónus.
+함께 기도하면 추가 규율 +#, 피로 -#. 하루 #회.	Rezar em conjunto concede disciplina adicional +# e fadiga -#. # vezes por dia.
+타지 매입분만 팔아 이익을 낸 거래에 순이익 #%의 사례금(버림). 하루 최대 #닢. 산 곳 없는 전리품·노예 거래 제외.	Venda lucrativa apenas de mercadorias compradas noutros locais: gratificação de #% do lucro líquido (arredondado para baixo). Máximo de # moedas de ouro por dia. Exclui despojos sem local de compra e tráfico de escravos.
+규율 # 이상일 때 기함의 포격 명중률 +#%p. 특기 조합과 큰 쪽만 적용하며 최종 상한 95% 유지.	Com disciplina de pelo menos #, a precisão dos canhões da capitânia aumenta # pontos percentuais. Aplica-se apenas o maior bónus entre este e as combinações de competências. Mantém-se o limite de 95%.
+(동료 포함 실효 수준 ·	(nível efetivo, incluindo companheiros ·
+제독 본인 ·	O próprio almirante ·
+동료로 올린 것)	aumento pelos companheiros)
+숨은 능력	Habilidades ocultas
+(제독 본인의 LV3 특기 조합)	(combinações de competências do almirante no nível 3)
+제독 본인이 서로 맞는 특기 세 가지를 LV3까지 익히면 숨은 능력이 드러납니다.	O almirante revela uma habilidade oculta ao dominar três competências compatíveis no nível 3.
+통역	Intérprete
+경험과 성장	Experiência e crescimento
+— 일을 해낼수록 능력치가 조금씩 오른다 (높을수록 더디다)	— cumprir tarefas aumenta gradualmente os atributos (mais devagar nos valores altos)
+설득	Persuasão
+거래	Negócios
+일기토	Duelos
+미식	Gastronomia
+# / # · 올해 #/#	# / # · este ano #/#
+최고 · 올해 #/#	Máximo · este ano #/#
+/(.+·.+)/	⟦$1⟧
+기함 선실 — 부하 배치	Cabines da capitânia — distribuição dos companheiros
+식량 / 물	Provisões / Água
+약 #일분	Reservas para cerca de # dias
+교역품 #통 · #/#종 · 무게 # / #	Mercadorias # barris · #/# tipos · peso # / #
+교역품 #통 · #/#종	Mercadorias # barris · #/# tipos
+규율	Disciplina
+선수상	Figura de proa
+함대 속력	Velocidade da frota
+(바람을 고르게 받을 때의 평균)	(média com vento uniforme)
+조함	Governo do navio
+짐	Carga
+평균 선속	Velocidade média
+#°/일	#°/dia
+배가 한 척이면 그 배의 선속이 곧 함대 속력입니다. 두 척 이상이면 가장 느린 배에 맞추되, 운용술로 예인 보조를 받고 편대 유지 부담을 줄입니다.	Com um só navio, a velocidade da frota é a desse navio. Com dois ou mais, adapta-se ao mais lento. A manobra naval ajuda no reboque e reduz o esforço de manter a formação.
+적재 교역품	Mercadorias a bordo
+발견물 # / #	Descobertas # / #
+해도 작성 #%	Carta náutica #%
+해도의 상세함: ① 윤곽 #칸 · ② 강 #칸 · ③ 산 #칸 · ④ 지형 #칸 · 보고하지 않은 몫	Detalhe da carta: ① contornos # células · ② rios # · ③ montanhas # · ④ terreno # · ainda não apresentado
+(왕·학자 후원자에게 「해도 보고」) · 지도 제작 속도 +#%	(«Apresentar carta náutica» a um patrono real ou erudito) · velocidade de cartografia +#%
+(왕·학자 후원자에게 「해도 보고」) · 지도 제작 속도 -#%	(«Apresentar carta náutica» a um patrono real ou erudito) · velocidade de cartografia -#%
+개척 현황	Progresso da exploração
+— 지금 단서를 들을 수 있는 미발견 발견물 #곳. 앞 단계가 알려질수록 더 먼 곳, 더 무거운 발견물의 단서가 열립니다. 칸에 마우스를 올리면 다음 조건이 보입니다.	— Há pistas disponíveis para # descobertas ainda por encontrar. Conhecer as etapas anteriores abre pistas para locais mais distantes e descobertas mais importantes. Passe o rato sobre uma célula para ver o próximo requisito.
+처음부터 아는 세계	O mundo conhecido de início
+동쪽 길	Caminho oriental
+서쪽 길	Caminho ocidental
+미지	Desconhecido
+소문	Rumores
+항로 탐색	Procurar rota marítima
+개척	Explorado
+깊은 곳	Exploração profunda
+끝까지	Exploração completa
+@ · #/#	@ · #/#
+@ 다음 목표 — 〈@〉	@ — próximo objetivo: 〈@〉
+「@」(을|를) 찾으면(또는 경쟁자가 발표하면) 이 땅이 열립니다.	Encontre «@» (ou espere que um rival anuncie a descoberta) para abrir esta região.
+@(이|가) 알려지면 소문이 돌기 시작합니다.	Assim que @ for conhecido, começam a circular rumores.
+맛보기 발견(@)을 #개 찾으면 「@」의 단서가 나옵니다.	Encontre {2} descobertas iniciais (@) para obter pistas de «{3}».
+이곳에서 발견 #곳(지금 #곳)을 채우거나 몇 해가 지나면 더 무거운 발견물의 단서가 나옵니다.	Após # descobertas nesta região (atualmente #), ou passados alguns anos, surgem pistas de descobertas mais importantes.
+이곳에서 발견 #곳(지금 #곳)을 채우면 가장 무거운 발견물의 단서가 나옵니다.	Após # descobertas nesta região (atualmente #), surgem pistas das descobertas mais importantes de todas.
+모든 단서를 들을 수 있습니다.	Todas as pistas estão disponíveis.
+진행 중인 계약이 없습니다. 단서를 모아 왕궁이나 저택의 후원자를 찾아가 모험을 제안하십시오. 아직 이름이 없으면 후원자(또는 집사)에게 「작은 일거리」를 청해 해도 작성·물자 조달·소문 확인부터 시작할 수 있습니다.	Não há contratos em curso. Reúna pistas e proponha uma expedição a um patrono num palácio ou residência. Se ainda for desconhecido, peça «Pequenas tarefas» ao patrono ou ao mordomo para começar com cartografia, abastecimento e investigação de rumores.
+진행 중인 계약	Contrato em curso
+왕명	Missões reais
+맡은 왕명이 없습니다. 통합 명성 #부터.	Não há missões reais. A partir de # de fama total.
+맡은 왕명이 없습니다. 통합 명성 #부터. 다른 나라의 군주를 알현해도 명예 작위가 걸린 왕명을 받을 수 있습니다.	Não há missões reais. A partir de # de fama total. Uma audiência com um soberano estrangeiro também pode conceder uma missão com um título honorário como recompensa.
+맡은 왕명이 없습니다. 다른 나라의 군주를 알현해도 명예 작위가 걸린 왕명을 받을 수 있습니다.	Não há missões reais. Uma audiência com um soberano estrangeiro também pode conceder uma missão com um título honorário como recompensa.
+직접 들은 소문과 거래처 정보, 공개된 발견의 재조사 의뢰를 적어 둡니다.	Registos de rumores ouvidos, informações de parceiros comerciais e pedidos de nova investigação de descobertas anunciadas.
+장소·기한·거래처 보기	Ver locais, prazos e parceiros comerciais
+맡은 조합 의뢰	Missões da guilda aceites
+맡은 의뢰가 없습니다. 조합에서 의뢰를 살펴보십시오.	Não há missões aceites. Consulte as ofertas da guilda.
+거듭 지나온 길이 자세해집니다: 윤곽 → 강 → 산 → 지형. 휠로 확대·축소하고 끌어서 옮깁니다.	As viagens repetidas acrescentam detalhe: contornos → rios → montanhas → terreno. Use a roda para ampliar e arraste para mover.
+도시 찾기	Procurar cidade
+알고 있는 도시 이름	Nome de uma cidade conhecida
+여기	Aqui
+확대	Ampliar
+축소	Reduzir
+전체	Todos
+알려진 해도 전체	Toda a carta náutica conhecida
+지금 위치	Posição atual
+재탐사 ① 윤곽 ② 강 ③ 산 ④ 지형	Nova exploração: ① contornos ② rios ③ montanhas ④ terreno
+미지의 삽화: 옛 항해자의 상상	Imagens do desconhecido: a imaginação dos antigos navegadores
+⚑ 수도	⚑ Capital
+모형 크기: 대·중·소	Tamanho dos modelos: grande · médio · pequeno
+▥ 발견한 유적·자연 경관	▥ Ruínas e paisagens naturais descobertas
+〰 항구	〰 Porto
+┄ 내륙	┄ Interior
+⌜ 청록 모서리: 자동항해	⌜ Canto turquesa: navegação automática
+밑줄 색: 다스리는 나라	Cor do sublinhado: país governante
+후원자	Patrono
+계약	Contrato
+? 단서(술집 소문·망루) — 올리면 이름, 누르면 단서	? Pista (rumores da taverna · vigia) — passar o rato: nome · clicar: pista
+항로 경험	Experiência de rota
+— 한 항구에서 출항해 다른 항구에 곧장(다른 항구에 들르지 않고) 입항하면 두 항구 사이의 자동항해가 열립니다(오는 길도). 자동항해 중 손으로 몰면 풀리고, 다음 항구에 들어간 뒤 그 항구와 이어진 항로에서 다시 쓸 수 있습니다.	— Uma viagem direta entre dois portos, sem escalas, desbloqueia a navegação automática entre ambos, nos dois sentidos. O controlo manual cancela-a. Após entrar no porto seguinte, pode voltar a usá-la nas rotas ligadas a esse porto.
+아직 항구와 항구 사이를 오간 적이 없습니다. 익숙하지 않은 항로도 바닷길을 따라가지만(배속은 그대로) — 한 번 다녀오면 자동항해가 열립니다. 뭍에 막히면 바다를 눌러 돌아가야 합니다.	Ainda não viajou entre dois portos. As rotas desconhecidas também seguem os caminhos marítimos, à velocidade normal. Após a primeira viagem, a navegação automática fica disponível. Se houver terra a bloquear o caminho, clique no mar para a contornar.
+항해자 @(이|가) @에서 모험의 첫걸음을 내디뎠다.	O navegador @ deu os primeiros passos da sua aventura em @.
+@에서 @(이|가) 유행이다. @ 말로는 @ 값이 @ 올랐다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	Em {1}, {2} está na moda. Segundo {3}, o preço de {4} subiu {5}. {6} diz que esta procura não vai abrandar.
+@ 사이에서 @(이|가) 유행이다. @ 말로는 @ 값이 @로 뛰었다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	Entre {1}, {2} está na moda. Segundo {3}, o preço de {4} saltou para {5}. {6} diz que esta procura não vai abrandar.
+@에서 @(이|가) 유행이다. @ 말로는 @ 값이 @로 뛰었다며, @(은|는) 이 바람이 가라앉지 않을 거라고 한다.	Em {1}, {2} está na moda. Segundo {3}, o preço de {4} saltou para {5}. {6} diz que esta procura não vai abrandar.
+리스본·세비야의 귀족들	os nobres de Lisboa e Sevilha
+세비야 상인들의 잔치	as festas dos comerciantes de Sevilha
+마드리드 궁정	a corte de Madrid
+안트베르펜·암스테르담 상인들	os comerciantes de Antuérpia e Amesterdão
+런던과 파리의 멋쟁이들	os elegantes de Londres e Paris
+파리 궁정	a corte de Paris
+로마 추기경들의 잔치	as festas dos cardeais de Roma
+피렌체 은행가들	os banqueiros de Florença
+세 곱절	para o triplo
+곱절 반	para duas vezes e meia
+곱절	para o dobro
+절반쯤 더	cerca de metade mais
+서너 할쯤 더	cerca de trinta a quarenta por cento mais

@@ -58,3 +58,42 @@
 .notebook-win .mb-record-scroll { scrollbar-width:thin; scrollbar-color:#a58a55 #efe0bf; }
 .notebook-win .mb-all-skills, .notebook-win .mb-all-languages { display:grid; grid-template-columns:repeat(auto-fit,minmax(96px,1fr)); }
 .notebook-win .mb-all-skills .mb-tile, .notebook-win .mb-all-languages .mb-tile { width:auto; min-width:0; }
+
+/* 독일어의 긴 낱말은 제독 장부의 짧은 한국어 칸에 맞춰 쪼개지지 않게 한다. */
+html[data-lang="de"] .notebook-win .tabs .tab { font-size:12px; hyphens:auto; overflow-wrap:normal; }
+html[data-lang="de"] .notebook-win[data-tab="admiral"] .kv { grid-template-columns:132px minmax(0,1fr) 132px minmax(0,1fr) !important; }
+html[data-lang="de"] .notebook-win .famebar { grid-template-columns:100px minmax(20px,1fr) 44px; font-size:14px; }
+html[data-lang="de"] .notebook-win .famebar .fn { white-space:nowrap; }
+html[data-lang="de"] .notebook-win[data-tab="admiral"] .skillgrid .flex { font-size:14px !important; }
+html[data-lang="de"] .notebook-win[data-tab="admiral"] .skillgrid .flex > span:first-child { width:auto !important; flex:1; white-space:nowrap; }
+html[data-lang="de"] .notebook-win[data-tab="admiral"] .skillgrid .pips { flex-shrink:0; }
+
+/* 독일어 동료 상세: 긴 언어 이름과 단계 설명이 이웃 칸을 덮지 않게 한다. */
+html[data-lang="de"] .notebook-win > .tabs { grid-template-columns:repeat(auto-fit,minmax(92px,1fr)); }
+html[data-lang="de"] .notebook-win .mb-all-skills,
+html[data-lang="de"] .notebook-win .mb-all-languages { grid-template-columns:repeat(auto-fit,minmax(112px,1fr)); }
+html[data-lang="de"] .notebook-win .mb-record-scroll > .mb-tiles .mb-tile { box-sizing:border-box; height:auto; min-height:36px; }
+html[data-lang="de"] .notebook-win .mb-record-scroll > .mb-tiles .mb-tile.language { min-height:48px; }
+html[data-lang="de"] .notebook-win .mb-tile > span { min-width:0; hyphens:auto; overflow-wrap:normal; word-break:normal; }
+html[data-lang="de"] .notebook-win .mb-facts { grid-template-columns:78px minmax(0,1fr); }
+html[data-lang="de"] .notebook-win .mb-legend .mb-tile { width:auto; flex:0 0 auto; min-width:70px; height:auto; min-height:26px; }
+html[data-lang="de"] .notebook-win .mb-legend .mb-tile > span { white-space:nowrap; }
+html[data-lang="de"] .notebook-win .mb-stats { width:150px; }
+html[data-lang="de"] .notebook-win .mb-stats svg { overflow:visible; }
+html[data-lang="de"] .notebook-win .mb-record-scroll > .mb-story { flex:0 0 auto; min-height:180px; max-height:320px; }
+
+/* 프랑스어 동료 수첩: 긴 언어 이름을 칸 안에서 읽고 탭은 낱말 단위로 넘긴다. */
+html[data-lang="fr"] .notebook-win > .tabs { grid-template-columns:repeat(auto-fit,minmax(92px,1fr)); }
+html[data-lang="fr"] .notebook-win .tabs .tab { font-size:12px; hyphens:auto; overflow-wrap:normal; }
+html[data-lang="fr"] .notebook-win .mb-all-skills,
+html[data-lang="fr"] .notebook-win .mb-all-languages { grid-template-columns:repeat(auto-fit,minmax(112px,1fr)); }
+html[data-lang="fr"] .notebook-win .mb-record-scroll > .mb-tiles .mb-tile { box-sizing:border-box; height:auto; min-height:36px; }
+html[data-lang="fr"] .notebook-win .mb-record-scroll > .mb-tiles .mb-tile.language { min-height:60px; }
+html[data-lang="fr"] .notebook-win .mb-tile > span { min-width:0; hyphens:auto; overflow-wrap:normal; word-break:normal; }
+html[data-lang="fr"] .notebook-win .mb-facts { grid-template-columns:78px minmax(0,1fr); }
+html[data-lang="fr"] .notebook-win .mb-legend .mb-tile { width:auto; flex:0 0 auto; min-width:70px; height:auto; min-height:26px; }
+html[data-lang="fr"] .notebook-win .mb-legend .mb-tile > span { white-space:nowrap; }
+
+/* 포르투갈어 수첩: 긴 탭은 낱말 단위로 읽고, 폭이 좁아지면 다음 줄로 넘긴다. */
+html[data-lang="pt"] .notebook-win > .tabs { grid-template-columns:repeat(auto-fit,minmax(92px,1fr)); }
+html[data-lang="pt"] .notebook-win .tabs .tab { font-size:12px; hyphens:auto; overflow-wrap:normal; word-break:normal; }

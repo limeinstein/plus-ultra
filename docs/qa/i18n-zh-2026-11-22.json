@@ -1,0 +1,1083 @@
+{
+  "date": "2026-11-22",
+  "scope": "기존 중국어 번역 보존. 이야기·최근 정적 자료에 이어 수첩과 서유기·동물 동료·사도·엘프의 실행 중 조합 문구 보완. 지정 화면·사건 경로의 검사이며 게임 전체 완역률이나 모든 함수의 전수 검사를 뜻하지 않는다.",
+  "languages": [
+    {
+      "lang": "zh-Hans",
+      "sources": [
+        {
+          "file": "legacy_keys_20261122.tsv",
+          "rows": 13
+        },
+        {
+          "file": "names_song_20261122.tsv",
+          "rows": 47
+        },
+        {
+          "file": "runtime_20261122.tsv",
+          "rows": 119
+        },
+        {
+          "file": "song_20261122.tsv",
+          "rows": 902
+        },
+        {
+          "file": "rain_20261122.tsv",
+          "rows": 6
+        }
+      ],
+      "sourceRowsAdded": 1087,
+      "counts": {
+        "text": 56985,
+        "pat": 8462,
+        "name": 6133,
+        "person": 1501,
+        "city": 316,
+        "good": 163
+      },
+      "buildMatches": true,
+      "preserved": {
+        "text": true,
+        "name": true,
+        "city": true,
+        "good": true,
+        "person": true,
+        "pat": true
+      },
+      "additionalRuntimeChecks": 24,
+      "crawlRemainingAfterTranslation": []
+    },
+    {
+      "lang": "zh-Hant",
+      "sources": [
+        {
+          "file": "legacy_keys_20261122.tsv",
+          "rows": 13
+        },
+        {
+          "file": "names_song_20261122.tsv",
+          "rows": 47
+        },
+        {
+          "file": "runtime_20261122.tsv",
+          "rows": 119
+        },
+        {
+          "file": "song_20261122.tsv",
+          "rows": 902
+        },
+        {
+          "file": "rain_20261122.tsv",
+          "rows": 6
+        }
+      ],
+      "sourceRowsAdded": 1087,
+      "counts": {
+        "text": 56985,
+        "pat": 8462,
+        "name": 6133,
+        "person": 1501,
+        "city": 316,
+        "good": 163
+      },
+      "buildMatches": true,
+      "preserved": {
+        "text": true,
+        "name": true,
+        "city": true,
+        "good": true,
+        "person": true,
+        "pat": true
+      },
+      "additionalRuntimeChecks": 24,
+      "crawlRemainingAfterTranslation": []
+    }
+  ],
+  "screens": [
+    {
+      "lang": "zh-Hans",
+      "corpus": {
+        "count": 2548,
+        "missing": [],
+        "samples": [
+          [
+            "계약 성립! 선금 1닢을 받았다.",
+            "合同成立！收到了预付款1枚。"
+          ],
+          [
+            "이 도시에서는 1일 뒤에 다시 열 수 있다",
+            "1天后可在这座城市再次演出"
+          ],
+          [
+            "선원 1명이 갑판원이 되었다.",
+            "1名船员成为了甲板水手。"
+          ],
+          [
+            "리스본에서 바닷길 공연을 열었다 — 관객 1명, 사례 2,400닢.",
+            "在里斯本举办海路演出——观众1人，酬金2,400枚。"
+          ],
+          [
+            "계약 성립! 선금 75닢을 받았다.",
+            "合同成立！收到了预付款75枚。"
+          ],
+          [
+            "이 도시에서는 75일 뒤에 다시 열 수 있다",
+            "75天后可在这座城市再次演出"
+          ],
+          [
+            "선원 75명이 갑판원이 되었다.",
+            "75名船员成为了甲板水手。"
+          ],
+          [
+            "리스본에서 바닷길 공연을 열었다 — 관객 75명, 사례 2,400닢.",
+            "在里斯本举办海路演出——观众75人，酬金2,400枚。"
+          ],
+          [
+            "계약 성립! 선금 1,200닢을 받았다.",
+            "合同成立！收到了预付款1,200枚。"
+          ],
+          [
+            "이 도시에서는 1,200일 뒤에 다시 열 수 있다",
+            "1,200天后可在这座城市再次演出"
+          ],
+          [
+            "선원 1,200명이 갑판원이 되었다.",
+            "1,200名船员成为了甲板水手。"
+          ],
+          [
+            "리스본에서 바닷길 공연을 열었다 — 관객 1,200명, 사례 2,400닢.",
+            "在里斯本举办海路演出——观众1,200人，酬金2,400枚。"
+          ],
+          [
+            "계약 성립! 선금 9,876닢을 받았다.",
+            "合同成立！收到了预付款9,876枚。"
+          ],
+          [
+            "이 도시에서는 9,876일 뒤에 다시 열 수 있다",
+            "9,876天后可在这座城市再次演出"
+          ],
+          [
+            "선원 9,876명이 갑판원이 되었다.",
+            "9,876名船员成为了甲板水手。"
+          ],
+          [
+            "리스본에서 바닷길 공연을 열었다 — 관객 9,876명, 사례 2,400닢.",
+            "在里斯本举办海路演出——观众9,876人，酬金2,400枚。"
+          ]
+        ],
+        "rainChecks": 18
+      },
+      "storySelect": true,
+      "help": true,
+      "map": true,
+      "concert": {
+        "crowd": 1642,
+        "gold": 985,
+        "so": 15,
+        "learn": true
+      },
+      "errors": []
+    },
+    {
+      "lang": "zh-Hant",
+      "corpus": {
+        "count": 2548,
+        "missing": [],
+        "samples": [
+          [
+            "계약 성립! 선금 1닢을 받았다.",
+            "合同成立！收到了預付款1枚。"
+          ],
+          [
+            "이 도시에서는 1일 뒤에 다시 열 수 있다",
+            "1天后可在這座城市再次演出"
+          ],
+          [
+            "선원 1명이 갑판원이 되었다.",
+            "1名船員成為了甲板水手。"
+          ],
+          [
+            "리스본에서 바닷길 공연을 열었다 — 관객 1명, 사례 2,400닢.",
+            "在里斯本舉辦海路演出——觀眾1人，酬金2,400枚。"
+          ],
+          [
+            "계약 성립! 선금 75닢을 받았다.",
+            "合同成立！收到了預付款75枚。"
+          ],
+          [
+            "이 도시에서는 75일 뒤에 다시 열 수 있다",
+            "75天后可在這座城市再次演出"
+          ],
+          [
+            "선원 75명이 갑판원이 되었다.",
+            "75名船員成為了甲板水手。"
+          ],
+          [
+            "리스본에서 바닷길 공연을 열었다 — 관객 75명, 사례 2,400닢.",
+            "在里斯本舉辦海路演出——觀眾75人，酬金2,400枚。"
+          ],
+          [
+            "계약 성립! 선금 1,200닢을 받았다.",
+            "合同成立！收到了預付款1,200枚。"
+          ],
+          [
+            "이 도시에서는 1,200일 뒤에 다시 열 수 있다",
+            "1,200天后可在這座城市再次演出"
+          ],
+          [
+            "선원 1,200명이 갑판원이 되었다.",
+            "1,200名船員成為了甲板水手。"
+          ],
+          [
+            "리스본에서 바닷길 공연을 열었다 — 관객 1,200명, 사례 2,400닢.",
+            "在里斯本舉辦海路演出——觀眾1,200人，酬金2,400枚。"
+          ],
+          [
+            "계약 성립! 선금 9,876닢을 받았다.",
+            "合同成立！收到了預付款9,876枚。"
+          ],
+          [
+            "이 도시에서는 9,876일 뒤에 다시 열 수 있다",
+            "9,876天后可在這座城市再次演出"
+          ],
+          [
+            "선원 9,876명이 갑판원이 되었다.",
+            "9,876名船員成為了甲板水手。"
+          ],
+          [
+            "리스본에서 바닷길 공연을 열었다 — 관객 9,876명, 사례 2,400닢.",
+            "在里斯本舉辦海路演出——觀眾9,876人，酬金2,400枚。"
+          ]
+        ],
+        "rainChecks": 18
+      },
+      "storySelect": true,
+      "help": true,
+      "map": true,
+      "concert": {
+        "crowd": 1659,
+        "gold": 995,
+        "so": 15,
+        "learn": true
+      },
+      "errors": []
+    }
+  ],
+  "regression": {
+    "command": "node tests/i18n_templates_20261113_smoke.cjs",
+    "passed": true,
+    "wishes": 75,
+    "errors": []
+  },
+  "remainingScope": [],
+  "sharedAuditErrorsOutsideScope": [
+    "스페인어 원본과 적용 파일 불일치(변경 전부터 존재)"
+  ],
+  "visualIssues": [],
+  "completedPreviousRemainingScope": [
+    "해적여제 본문",
+    "황금의 바다 본문",
+    "최근 다른 사건·발견물·시장·업적 전체의 누락 점검"
+  ],
+  "followup": {
+    "sourceRowsAddedPerLanguage": 6241,
+    "sources": [
+      {
+        "file": "composed_remaining_20261122.tsv",
+        "rows": 89
+      },
+      {
+        "file": "events_remaining_20261122.tsv",
+        "rows": 1325
+      },
+      {
+        "file": "library_aliases_remaining_20261122.tsv",
+        "rows": 432
+      },
+      {
+        "file": "names_events_remaining_20261122.tsv",
+        "rows": 285
+      },
+      {
+        "file": "names_library_remaining_20261122.tsv",
+        "rows": 432
+      },
+      {
+        "file": "names_recent_remaining_20261122.tsv",
+        "rows": 574
+      },
+      {
+        "file": "names_registry_remaining_20261122.tsv",
+        "rows": 2
+      },
+      {
+        "file": "names_stories_remaining_20261122.tsv",
+        "rows": 90
+      },
+      {
+        "file": "names_story_aliases_20261122.tsv",
+        "rows": 10
+      },
+      {
+        "file": "recent_catalog_remaining_20261122.tsv",
+        "rows": 1210
+      },
+      {
+        "file": "stories_ui_remaining_20261122.tsv",
+        "rows": 51
+      },
+      {
+        "file": "story_gold_remaining_20261122.tsv",
+        "rows": 909
+      },
+      {
+        "file": "story_jhook_remaining_20261122.tsv",
+        "rows": 821
+      }
+    ],
+    "cityRowsAdded": {
+      "file": "_city.tsv",
+      "ids": [
+        316,
+        317,
+        318,
+        319,
+        320,
+        321,
+        322,
+        323,
+        324,
+        325,
+        326
+      ],
+      "rows": 11
+    },
+    "storyPagesAdded": {
+      "JHOOK": 821,
+      "GOLD": 909
+    },
+    "catalogInitialMissing": 1248,
+    "catalogRowsAdded": 1210,
+    "catalogInternalNameFragmentsAlreadyTranslated": 38,
+    "reusedBookAliases": 432,
+    "reusedSentenceCompositions": 89,
+    "counts": {
+      "zh-Hans": {
+        "counts": {
+          "text": 61732,
+          "pat": 8552,
+          "name": 7526,
+          "city": 327,
+          "good": 163,
+          "person": 1501
+        },
+        "before": {
+          "text": 56985,
+          "pat": 8462,
+          "name": 6133,
+          "city": 316,
+          "good": 163,
+          "person": 1501
+        }
+      },
+      "zh-Hant": {
+        "counts": {
+          "text": 61732,
+          "pat": 8552,
+          "name": 7526,
+          "city": 327,
+          "good": 163,
+          "person": 1501
+        },
+        "before": {
+          "text": 56985,
+          "pat": 8462,
+          "name": 6133,
+          "city": 316,
+          "good": 163,
+          "person": 1501
+        }
+      }
+    },
+    "preserved": {
+      "text": true,
+      "pat": true,
+      "name": true,
+      "city": true,
+      "good": true,
+      "person": true,
+      "entriesPerLanguage": 73560
+    },
+    "buildMatches": true,
+    "tests": {
+      "storyAndUI": {
+        "command": "CHINESE_BASELINE_DIR=tmp node tests/i18n_chinese_remaining_20261122_smoke.cjs",
+        "languages": [
+          {
+            "lang": "zh-Hans",
+            "corpus": {
+              "counts": {
+                "JHOOK": 841,
+                "GOLD": 959,
+                "DISCOVERIES": 5558,
+                "ITEMS": 3836,
+                "MATES": 1466,
+                "GOODS": 107,
+                "CITY_DATA": 481,
+                "ACHIEVEMENTS": 326,
+                "SPONSORS": 796,
+                "DISC_FACTS": 8790,
+                "DISC_FAM": 5168,
+                "REGION_FOLK": 277,
+                "RUNTIME": 14
+              },
+              "unique": 28605,
+              "choices": 7,
+              "branches": 15,
+              "missing": [],
+              "preserved": 63597
+            },
+            "screens": [
+              "story-world",
+              "story-jhook",
+              "story-gold",
+              "jhook-notebook",
+              "jhook-dialogue",
+              "jhook-finale",
+              "gold-notebook",
+              "gold-dialogue",
+              "gold-choice-small",
+              "gold-finale"
+            ],
+            "errors": []
+          },
+          {
+            "lang": "zh-Hant",
+            "corpus": {
+              "counts": {
+                "JHOOK": 841,
+                "GOLD": 959,
+                "DISCOVERIES": 5558,
+                "ITEMS": 3836,
+                "MATES": 1466,
+                "GOODS": 107,
+                "CITY_DATA": 481,
+                "ACHIEVEMENTS": 326,
+                "SPONSORS": 796,
+                "DISC_FACTS": 8790,
+                "DISC_FAM": 5168,
+                "REGION_FOLK": 277,
+                "RUNTIME": 14
+              },
+              "unique": 28605,
+              "choices": 7,
+              "branches": 15,
+              "missing": [],
+              "preserved": 63597
+            },
+            "screens": [
+              "story-world",
+              "story-jhook",
+              "story-gold",
+              "jhook-notebook",
+              "jhook-dialogue",
+              "jhook-finale",
+              "gold-notebook",
+              "gold-dialogue",
+              "gold-choice-small",
+              "gold-finale"
+            ],
+            "errors": []
+          }
+        ]
+      },
+      "registry": {
+        "command": "node tests/i18n_chinese_registry_20261122_smoke.cjs",
+        "languages": [
+          {
+            "lang": "zh-Hans",
+            "errors": [],
+            "corpus": {
+              "roots": 393,
+              "unique": 53126,
+              "fragments": 1397,
+              "counts": {
+                "ACHIEVEMENTS": 327,
+                "ACHV_EVENTS": 360,
+                "BALANCE": 171,
+                "BALL_APPROACH": 4,
+                "BALL_LADIES": 199,
+                "BALL_LINES": 61,
+                "BALL_WITCH": 2,
+                "BANTER": 262,
+                "BIOS": 442,
+                "BOOK": 1194,
+                "BOOK_REL": 120,
+                "CABIN": 69,
+                "CANNON": 22,
+                "CHAINS": 11,
+                "CHAIN_LINE_MORE": 1,
+                "CITY_DATA": 461,
+                "CLUE_NAME": 2,
+                "CLUE_SERIES_NAME": 37,
+                "CLUE_WHERE": 3,
+                "COFFEE": 40,
+                "COFFEE_ZONE": 12,
+                "COLONY_ARCHETYPES": 16,
+                "COLONY_BUILD_NAMES": 9,
+                "COLONY_LINES": 36,
+                "COLONY_NAMES": 154,
+                "COLONY_NATION": 1,
+                "COLONY_SITES": 36,
+                "COLONY_STAGES": 5,
+                "COMPANIES": 88,
+                "COMPANY_EVENTS": 14,
+                "COMPANY_SHOCKS": 14,
+                "COURT": 186,
+                "COVEN_EVENTS": 18,
+                "CREATURE_RELICS": 31,
+                "CREATURE_TROPHY": 6,
+                "CUISINE": 240,
+                "DISASTERS": 298,
+                "DISASTER_KINDS": 5,
+                "DISC": 5523,
+                "DISC_CATS": 5,
+                "DISC_COLLECTIONS": 8,
+                "DISC_FACTS": 8790,
+                "DISC_FAM": 5168,
+                "DISC_KIN": 96,
+                "DISC_MOVES": 21,
+                "DISC_NAMES": 1,
+                "DISC_RELICS": 826,
+                "DISC_WISH": 12,
+                "DOMINION": 178,
+                "DUEL_ART": 85,
+                "ECON_EVENTS": 62,
+                "ECON_WARS": 20,
+                "ECON_WAR_EVENT": 4,
+                "ELF_COMMON": 18,
+                "ELF_EVENT_SHOTS": 4,
+                "ELF_SISTER_TALK": 12,
+                "ELVES": 120,
+                "ERA_DEMAND": 38,
+                "ERA_MARKETS": 14,
+                "ERA_NEWS": 21,
+                "ERA_SUPPLY": 4,
+                "ESCORT_LINES": 19,
+                "ESCORT_NAMES": 37,
+                "EVENT_ART": 35,
+                "EVENT_RUMORS": 226,
+                "EXPEDITION_CREW": 12,
+                "EXPEDITION_MOTION": 8,
+                "FAD_PLACES": 9,
+                "FAMILY_EVENTS": 256,
+                "FESTIVAL": 42,
+                "FIGUREHEAD": 246,
+                "FIRST_LOVE": 62,
+                "FIVE_TIGERS": 40,
+                "FOLK_JOIN": 539,
+                "FOLK_JOIN_LINES": 12,
+                "FOLK_LABEL": 5,
+                "FRONTIER": 10,
+                "FX": 16,
+                "GEO_LEADS": 12,
+                "GLOBE_SONGS": 18,
+                "GLORY": 102,
+                "GOLD": 924,
+                "GOOD": 105,
+                "GOOD_CATS": 12,
+                "GUARDIANS": 26,
+                "GUARDIAN_LINES": 26,
+                "GYEONWOO": 49,
+                "HAZARD_ZONES": 24,
+                "HEIR_PLAN": 46,
+                "HERITAGE": 4,
+                "HIST_FIG": 1383,
+                "HOME_ACTS": 118,
+                "HOME_AIMS": 7,
+                "HOME_HAPPEN": 72,
+                "HOME_KEEPS": 7,
+                "HOME_LESSONS": 8,
+                "HOME_QUOTES": 67,
+                "HOME_SNEAK": 6,
+                "HOME_SNEAK_CAUGHT": 6,
+                "HUNT_SPOILS": 2,
+                "INTERESTS": 1,
+                "ITEM": 2764,
+                "ITEM_KIND": 11,
+                "JHOOK": 832,
+                "JOBS": 12,
+                "KIDWED": 58,
+                "KID_TEMPER": 8,
+                "KID_VOICES": 236,
+                "KID_VOYAGE": 462,
+                "KONGO": 92,
+                "LANDWAR": 127,
+                "LANDWAR_ART": 21,
+                "LANGS": 16,
+                "LANG_LV": 4,
+                "LEGACY_ELVES": 80,
+                "LIKES": 8,
+                "MAID": 179,
+                "MASTERWORKS": 144,
+                "MASTERWORKS_GENERIC": 5,
+                "MASTERWORK_LINES": 6,
+                "MATE": 1377,
+                "MATE_LEAVE": 83,
+                "MATE_STORIES": 47,
+                "MATE_ZONES": 26,
+                "MONSOON": 6,
+                "MONSTER_EVENT_SHOTS": 21,
+                "MONSTER_TALES": 131,
+                "MOUNTS": 10,
+                "MOUNT_TERR_NAME": 4,
+                "MUSIC": 12,
+                "NATION_LEADERS": 2212,
+                "NATION_TITLES": 21,
+                "OLD_GUARD": 51,
+                "OLD_GUARD_FRIEND_LOOKS": 4,
+                "OLYMPIAN_APOSTLES": 31,
+                "OLYMPIAN_APOSTLE_EVENTS": 196,
+                "OLYMPIAN_FELLOWSHIP_EVENTS": 15,
+                "OSA": 1303,
+                "PIRATE_BANDS": 204,
+                "PIRATE_LAIR": 97,
+                "PITCH": 110,
+                "PRINCESS_LINES": 46,
+                "PRINCESS_STORIES": 62,
+                "REAL_NAME": 83,
+                "REGION_FOLK": 241,
+                "RELATIONS": 85,
+                "RELIC_OPEN_LINE": 4,
+                "REL_EVENTS": 238,
+                "RENOWN_NAME": 4,
+                "RIVAL_NEWS": 26,
+                "RIVAL_STAYS": 497,
+                "RIVAL_VOYAGES": 46,
+                "ROADS": 3,
+                "ROLES": 2,
+                "ROMANCE_LINES": 113,
+                "ROMANCE_PICS": 5,
+                "ROMANCE_STAGE": 5,
+                "SAIL_NAME": 3,
+                "SEA_CAPTAINS": 266,
+                "SEA_GROUPS": 7,
+                "SEA_MONSTER_LAYOUT": 8,
+                "SEA_PIRATES": 398,
+                "SHIP": 137,
+                "SHIP_CULT": 1,
+                "SHIP_HIST": 87,
+                "SHIP_LV": 5,
+                "SHIP_NAMES": 24,
+                "SHIP_TRAITS": 42,
+                "SIBLINGS": 99,
+                "SKILLS": 24,
+                "SKY": 133,
+                "SLAVE": 1,
+                "SPONSOR": 305,
+                "SPONSOR_SELF": 1,
+                "SPONSOR_TEMPERS": 12,
+                "SPONSOR_TYPE": 3,
+                "SPONSOR_VOICE": 929,
+                "STATS": 4,
+                "STORY": 367,
+                "STREET_FOLK": 724,
+                "TAVERN_SPECIAL": 78,
+                "TEPPO": 64,
+                "TIMBER": 32,
+                "TOMB_GUARDS": 144,
+                "TRADE_ROUTES": 13,
+                "TREATY": 5,
+                "TRIBES": 66,
+                "TUTORIAL": 284,
+                "UNINVITED_APOSTLE_EVENTS": 46,
+                "VOICES": 3907,
+                "VOICE_TIPS": 50,
+                "VOICE_TYPES": 524,
+                "VOLCANOES": 31,
+                "WANDER_NATIONS": 664,
+                "WANDER_TEXT": 66,
+                "WANDER_TYPES": 6,
+                "WIFE_VOICES": 189,
+                "WONDERS": 293,
+                "ZODIAC": 12
+              },
+              "missing": []
+            }
+          },
+          {
+            "lang": "zh-Hant",
+            "errors": [],
+            "corpus": {
+              "roots": 393,
+              "unique": 53126,
+              "fragments": 1397,
+              "counts": {
+                "ACHIEVEMENTS": 327,
+                "ACHV_EVENTS": 360,
+                "BALANCE": 171,
+                "BALL_APPROACH": 4,
+                "BALL_LADIES": 199,
+                "BALL_LINES": 61,
+                "BALL_WITCH": 2,
+                "BANTER": 262,
+                "BIOS": 442,
+                "BOOK": 1194,
+                "BOOK_REL": 120,
+                "CABIN": 69,
+                "CANNON": 22,
+                "CHAINS": 11,
+                "CHAIN_LINE_MORE": 1,
+                "CITY_DATA": 461,
+                "CLUE_NAME": 2,
+                "CLUE_SERIES_NAME": 37,
+                "CLUE_WHERE": 3,
+                "COFFEE": 40,
+                "COFFEE_ZONE": 12,
+                "COLONY_ARCHETYPES": 16,
+                "COLONY_BUILD_NAMES": 9,
+                "COLONY_LINES": 36,
+                "COLONY_NAMES": 154,
+                "COLONY_NATION": 1,
+                "COLONY_SITES": 36,
+                "COLONY_STAGES": 5,
+                "COMPANIES": 88,
+                "COMPANY_EVENTS": 14,
+                "COMPANY_SHOCKS": 14,
+                "COURT": 186,
+                "COVEN_EVENTS": 18,
+                "CREATURE_RELICS": 31,
+                "CREATURE_TROPHY": 6,
+                "CUISINE": 240,
+                "DISASTERS": 298,
+                "DISASTER_KINDS": 5,
+                "DISC": 5523,
+                "DISC_CATS": 5,
+                "DISC_COLLECTIONS": 8,
+                "DISC_FACTS": 8790,
+                "DISC_FAM": 5168,
+                "DISC_KIN": 96,
+                "DISC_MOVES": 21,
+                "DISC_NAMES": 1,
+                "DISC_RELICS": 826,
+                "DISC_WISH": 12,
+                "DOMINION": 178,
+                "DUEL_ART": 85,
+                "ECON_EVENTS": 62,
+                "ECON_WARS": 20,
+                "ECON_WAR_EVENT": 4,
+                "ELF_COMMON": 18,
+                "ELF_EVENT_SHOTS": 4,
+                "ELF_SISTER_TALK": 12,
+                "ELVES": 120,
+                "ERA_DEMAND": 38,
+                "ERA_MARKETS": 14,
+                "ERA_NEWS": 21,
+                "ERA_SUPPLY": 4,
+                "ESCORT_LINES": 19,
+                "ESCORT_NAMES": 37,
+                "EVENT_ART": 35,
+                "EVENT_RUMORS": 226,
+                "EXPEDITION_CREW": 12,
+                "EXPEDITION_MOTION": 8,
+                "FAD_PLACES": 9,
+                "FAMILY_EVENTS": 256,
+                "FESTIVAL": 42,
+                "FIGUREHEAD": 246,
+                "FIRST_LOVE": 62,
+                "FIVE_TIGERS": 40,
+                "FOLK_JOIN": 539,
+                "FOLK_JOIN_LINES": 12,
+                "FOLK_LABEL": 5,
+                "FRONTIER": 10,
+                "FX": 16,
+                "GEO_LEADS": 12,
+                "GLOBE_SONGS": 18,
+                "GLORY": 102,
+                "GOLD": 924,
+                "GOOD": 105,
+                "GOOD_CATS": 12,
+                "GUARDIANS": 26,
+                "GUARDIAN_LINES": 26,
+                "GYEONWOO": 49,
+                "HAZARD_ZONES": 24,
+                "HEIR_PLAN": 46,
+                "HERITAGE": 4,
+                "HIST_FIG": 1383,
+                "HOME_ACTS": 118,
+                "HOME_AIMS": 7,
+                "HOME_HAPPEN": 72,
+                "HOME_KEEPS": 7,
+                "HOME_LESSONS": 8,
+                "HOME_QUOTES": 67,
+                "HOME_SNEAK": 6,
+                "HOME_SNEAK_CAUGHT": 6,
+                "HUNT_SPOILS": 2,
+                "INTERESTS": 1,
+                "ITEM": 2764,
+                "ITEM_KIND": 11,
+                "JHOOK": 832,
+                "JOBS": 12,
+                "KIDWED": 58,
+                "KID_TEMPER": 8,
+                "KID_VOICES": 236,
+                "KID_VOYAGE": 462,
+                "KONGO": 92,
+                "LANDWAR": 127,
+                "LANDWAR_ART": 21,
+                "LANGS": 16,
+                "LANG_LV": 4,
+                "LEGACY_ELVES": 80,
+                "LIKES": 8,
+                "MAID": 179,
+                "MASTERWORKS": 144,
+                "MASTERWORKS_GENERIC": 5,
+                "MASTERWORK_LINES": 6,
+                "MATE": 1377,
+                "MATE_LEAVE": 83,
+                "MATE_STORIES": 47,
+                "MATE_ZONES": 26,
+                "MONSOON": 6,
+                "MONSTER_EVENT_SHOTS": 21,
+                "MONSTER_TALES": 131,
+                "MOUNTS": 10,
+                "MOUNT_TERR_NAME": 4,
+                "MUSIC": 12,
+                "NATION_LEADERS": 2212,
+                "NATION_TITLES": 21,
+                "OLD_GUARD": 51,
+                "OLD_GUARD_FRIEND_LOOKS": 4,
+                "OLYMPIAN_APOSTLES": 31,
+                "OLYMPIAN_APOSTLE_EVENTS": 196,
+                "OLYMPIAN_FELLOWSHIP_EVENTS": 15,
+                "OSA": 1303,
+                "PIRATE_BANDS": 204,
+                "PIRATE_LAIR": 97,
+                "PITCH": 110,
+                "PRINCESS_LINES": 46,
+                "PRINCESS_STORIES": 62,
+                "REAL_NAME": 83,
+                "REGION_FOLK": 241,
+                "RELATIONS": 85,
+                "RELIC_OPEN_LINE": 4,
+                "REL_EVENTS": 238,
+                "RENOWN_NAME": 4,
+                "RIVAL_NEWS": 26,
+                "RIVAL_STAYS": 497,
+                "RIVAL_VOYAGES": 46,
+                "ROADS": 3,
+                "ROLES": 2,
+                "ROMANCE_LINES": 113,
+                "ROMANCE_PICS": 5,
+                "ROMANCE_STAGE": 5,
+                "SAIL_NAME": 3,
+                "SEA_CAPTAINS": 266,
+                "SEA_GROUPS": 7,
+                "SEA_MONSTER_LAYOUT": 8,
+                "SEA_PIRATES": 398,
+                "SHIP": 137,
+                "SHIP_CULT": 1,
+                "SHIP_HIST": 87,
+                "SHIP_LV": 5,
+                "SHIP_NAMES": 24,
+                "SHIP_TRAITS": 42,
+                "SIBLINGS": 99,
+                "SKILLS": 24,
+                "SKY": 133,
+                "SLAVE": 1,
+                "SPONSOR": 305,
+                "SPONSOR_SELF": 1,
+                "SPONSOR_TEMPERS": 12,
+                "SPONSOR_TYPE": 3,
+                "SPONSOR_VOICE": 929,
+                "STATS": 4,
+                "STORY": 367,
+                "STREET_FOLK": 724,
+                "TAVERN_SPECIAL": 78,
+                "TEPPO": 64,
+                "TIMBER": 32,
+                "TOMB_GUARDS": 144,
+                "TRADE_ROUTES": 13,
+                "TREATY": 5,
+                "TRIBES": 66,
+                "TUTORIAL": 284,
+                "UNINVITED_APOSTLE_EVENTS": 46,
+                "VOICES": 3907,
+                "VOICE_TIPS": 50,
+                "VOICE_TYPES": 524,
+                "VOLCANOES": 31,
+                "WANDER_NATIONS": 664,
+                "WANDER_TEXT": 66,
+                "WANDER_TYPES": 6,
+                "WIFE_VOICES": 189,
+                "WONDERS": 293,
+                "ZODIAC": 12
+              },
+              "missing": []
+            }
+          }
+        ]
+      },
+      "songRegression": {
+        "command": "node tests/i18n_chinese_20261122_smoke.cjs",
+        "passed": true,
+        "checksPerLanguage": 2548,
+        "rainChecksPerLanguage": 18,
+        "errors": []
+      },
+      "templateRegression": {
+        "command": "node tests/i18n_templates_20261113_smoke.cjs",
+        "passed": true,
+        "wishes": 75,
+        "errors": []
+      }
+    },
+    "screenshots": [
+      "tests/_out/i18n-chinese-remaining-20261122/",
+      "tests/_out/i18n-chinese-registry-20261122/"
+    ],
+    "registryCoverage": "js/data/*.js의 G 자료 선언 393묶음. 바닷길 노래는 별도 회귀 검사. GUIDEBOOK·GUIDEBOOK_I18N·WORLD_DATA·파일 목록·스프라이트 목록은 제외. 화자 표시는 제거하고 실제 변수 자리와 조사를 치환하며, 내부 인명 조각은 기존 person 표로 검증한다.",
+    "nameReferences": [
+      {
+        "ko": "사캬 소남 걀첸",
+        "zh": "萨迦·索南坚赞",
+        "source": "https://www.tibetology.ac.cn/2021-09/26/content_41683849.htm"
+      },
+      {
+        "ko": "장금성·양완우",
+        "zh": "张金城·杨浣雨",
+        "source": "https://www.guzhiguan.com/fuzhi/377.html"
+      },
+      {
+        "ko": "괴 로차와 쇤누 펠",
+        "zh": "廓·译师循努白",
+        "source": "https://www.zangx.com/uploads/ueditor/file/20221108/1667875015.pdf"
+      }
+    ],
+    "sourceUIObservation": "후크 수첩의 a5_lucia·a8_letter1~5 같은 사건 ID 표시는 원문 TITLES에 이름이 없는 데서 생긴다. 번역 데이터 작업에서 게임 진행기는 변경하지 않았다."
+  },
+  "visualIssuesPreviously": [
+    {
+      "screen": "이야기 선택 소개",
+      "observed": "번역된 소개와 시작 단추가 화면에서 가려짐. 원문 자료·DOM 문자 번역은 정상.",
+      "cause": "js/ui/storyselect.js의 가로 배치(.half/.tx/.bt)와 css/storyselect.css의 세로 배치(.ss-info flex-direction:column)가 혼재함.",
+      "screenshot": "tests/_out/i18n-chinese-20261122/zh-Hant-stories.png",
+      "scope": "중국어 번역과 별개인 현재 작업본 UI 문제. 이 작업에서 배치 코드는 변경하지 않음."
+    }
+  ],
+  "visualRecheck": {
+    "screen": "현재 이야기 선택 소개",
+    "result": "고지도 선택 화면에서 중국어 소개·동료·시작 단추가 표시됨",
+    "screenshot": "tests/_out/i18n-chinese-remaining-20261122/zh-Hans-story-gold.png"
+  },
+  "runtimeFollowup": {
+    "date": "2026-11-22",
+    "source": "tools/i18n/{zh-Hans,zh-Hant}/runtime_remaining_20261122.tsv",
+    "rowsPerLanguage": 297,
+    "added": {
+      "text": 212,
+      "pat": 85
+    },
+    "counts": {
+      "text": 61944,
+      "pat": 8637,
+      "name": 7526,
+      "person": 1501,
+      "city": 327,
+      "good": 163
+    },
+    "preservedPerLanguage": 79801,
+    "buildMatches": true,
+    "sourceDuplicates": 0,
+    "hangulInTargetColumns": 0,
+    "scope": [
+      "철새·소지품·수집 업적의 동적 수치·기간·속성 이름",
+      "서유기 사카이부터 인도까지 선택·승패·거절 분기와 화과산 곁길",
+      "동물 동료 19종과 소동 4종, 두 회복 수치 조건",
+      "열두 신 사도의 시험·재도전·고용과 추가 사도의 승패·재회",
+      "엘프 자매 설득·결투·재회"
+    ],
+    "runtimeFix": {
+      "file": "js/core/i18n.js",
+      "description": "인명 색인을 만들기 전에 현재 색인을 등록한다. 이름 (도시) 형식의 도시를 G.N으로 옮길 때 색인 생성에 재진입하여 발생하던 RangeError를 막는다.",
+      "reproduced": true,
+      "regression": "person-suffix, 중국어 두 언어"
+    },
+    "runtimeTest": {
+      "command": "node tests/i18n_chinese_runtime_20261122_smoke.cjs",
+      "baselineEnv": "CHINESE_RUNTIME_BASELINE_DIR=tmp",
+      "passed": true,
+      "languages": [
+        {
+          "lang": "zh-Hans",
+          "screens": 36,
+          "missingOnScreens": 0,
+          "runtimeSamples": 2372,
+          "uniqueSamples": 763,
+          "counts": {
+            "person-suffix": 1,
+            "xiyou": 653,
+            "crew-pets": 230,
+            "apostles": 1252,
+            "elves": 141,
+            "uninvited": 95
+          },
+          "missing": 0,
+          "preserved": 79801,
+          "errors": []
+        },
+        {
+          "lang": "zh-Hant",
+          "screens": 36,
+          "missingOnScreens": 0,
+          "runtimeSamples": 2372,
+          "uniqueSamples": 763,
+          "counts": {
+            "person-suffix": 1,
+            "xiyou": 653,
+            "crew-pets": 230,
+            "apostles": 1252,
+            "elves": 141,
+            "uninvited": 95
+          },
+          "missing": 0,
+          "preserved": 79801,
+          "errors": []
+        }
+      ]
+    },
+    "regressions": [
+      {
+        "command": "node tests/i18n_chinese_registry_20261122_smoke.cjs",
+        "passed": true,
+        "roots": 393,
+        "samplesPerLanguage": 53126,
+        "missing": 0,
+        "errors": []
+      },
+      {
+        "command": "node tests/i18n_chinese_remaining_20261122_smoke.cjs",
+        "passed": true,
+        "corpusPerLanguage": 28605,
+        "choices": 7,
+        "branches": 15,
+        "screensPerLanguage": 10,
+        "errors": []
+      },
+      {
+        "command": "node tests/i18n_chinese_20261122_smoke.cjs",
+        "passed": true,
+        "samplesPerLanguage": 2548,
+        "errors": []
+      },
+      {
+        "command": "node tests/i18n_templates_20261113_smoke.cjs",
+        "passed": true,
+        "wishes": 75,
+        "errors": []
+      }
+    ],
+    "artifacts": "tests/_out/i18n-chinese-runtime-20261122/",
+    "limits": "사건 검사는 실제 사건 함수를 실행하되 전투 결과·그림 대기와 UI 입력을 고정한다. 실제 화면에서는 음표 게임·동물 대화·서유기 선택을 별도로 표시한다. 다른 함수에서 생성되는 미점검 문구는 후속 작업 범위다."
+  }
+}

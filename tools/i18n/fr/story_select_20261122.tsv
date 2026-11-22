@@ -1,0 +1,72 @@
+이야기 모드 — 주인공을 고른다	Mode histoire — Choisissez votre personnage
+초상을 누르면 이야기를 볼 수 있습니다 · ← → 고르기 (끝에서 옆 바다로) · Enter 열기	Cliquez sur un portrait pour lire son histoire · ← → Choisir (changer de mer à l’extrémité) · Entrée Ouvrir
+초상을 누르면 이야기를 볼 수 있습니다 · ← → 고르기 · Enter 열기	Cliquez sur un portrait pour lire son histoire · ← → Choisir · Entrée Ouvrir
+이 이야기로 시작	Commencer cette histoire
+다른 사람을 고른다	Choisir un autre personnage
+‹ 타이틀로	‹ Retour à l’accueil
+함께 떠나는 사람	Compagnons de voyage
+주인공 선택	Choisir un personnage
+추가 주인공 자리	Place pour un autre personnage
+이전 캐릭터 다섯 명	Cinq personnages précédents
+다음 캐릭터 다섯 명	Cinq personnages suivants
+새로운 이야기	Une nouvelle histoire
+주인공을 선택하면 이야기를 볼 수 있습니다 · ← → 고르기 · Enter 열기	Choisissez un personnage pour lire son histoire · ← → Choisir · Entrée Ouvrir
+함께 떠나는 사람 — @	Compagnons de voyage — @
+스미스 호킨스 · 윌리엄 호킨스 · 코난 홈즈 …	Smith Hawkins · William Hawkins · Conan Holmes …
+황규 · 박월담 · 임처사 …	Hwang Gyu · Park Woldam · Maître Im …
+유럽 — 대서양에서 흑해까지	Europe — De l’Atlantique à la mer Noire
+동쪽 바다 — 조선	Mers d’Orient — Joseon
+아버지를 찾아가는 항해	Une traversée à la recherche de son père
+아버지를 버린 세상에 복수하러 나간 항해	Une traversée pour se venger du monde qui a trahi son père
+들려준 세상을 직접 만나러 가는 항해	Une traversée pour découvrir le monde de ses récits
+행방불명된 아버지가 남긴 「있을 수 없는 그림」 한 장 — 붓 자국이 없고, 세상 어디에도 없는 옷과 지붕이 찍힌 사진. 하얀 남방의 항해사는 남작의 아들, 신부, 늙은 항해사와 함께 아버지의 자취를 따라 동쪽으로 떠난다.	Son père disparu a laissé une image impossible : une photographie sans trace de pinceau, montrant des vêtements et des toits inconnus de ce monde. Accompagné du fils d’un baron, d’un prêtre et d’un vieux navigateur, le marin en chemise blanche part vers l’est sur les traces de son père.
+사략선장 로저 후크가 왕실의 동맹 거래에 버려져 교수대에 오른다. 딸 제시카는 늙은 선원 스미스와 그 아들 윌리엄과 함께 도망쳐 바다로 나간다. 왕을 죽이러 떠난 항해는, 끝내 자신이 지킬 가족과 나라를 만드는 항해가 된다.	Pour conclure une alliance, la Couronne sacrifie le corsaire Roger Hook et l’envoie à la potence. Sa fille Jessica s’enfuit en mer avec le vieux marin Smith et son fils William. Partie pour tuer le roi, elle finira par bâtir une famille et un pays à protéger.
+여섯 해 전 갯바위에서 건진 사내는 세상 이야기와 물음표투성이 지도, 끝맺지 못한 노래 한 곡을 남기고 사라졌다. 열여덟 소리꾼은 재담꾼과 낙방 선비를 데리고 그 세상을 만나러 떠난다. 그녀가 노래하면 어느 나라든 공연장이 된다.	Six ans auparavant, un homme recueilli sur les rochers du rivage a disparu, laissant des récits du monde, une carte pleine de points d’interrogation et un chant inachevé. À dix-huit ans, une chanteuse part découvrir ce monde avec un conteur facétieux et un lettré malheureux aux examens. Partout où elle chante, le pays devient sa scène.
+/(.+?) — 「(아버지의 사진|해적여제|바닷길 노래)」/	⟦$1⟧ — « ⟦$2⟧ »
+@ 상세 보기	Voir les détails de @
+노장 · #년	Vétéran · # ans
+@ · 지금 # / 본디 #단계 · 선실 수련 +#	@ · Actuel # / Niveau initial # · Entraînement en cabine +#
+@ · 지금 # / 본디 #단계	@ · Actuel # / Niveau initial #
+#개 — 상세에서 모두 보기	# au total — Tout voir dans les détails
+나머지 특기 #개 — 상세에서 모두 보기	# autres compétences — Tout voir dans les détails
+나머지 언어 #개 — 상세에서 모두 보기	# autres langues — Tout voir dans les détails
+슬라브·	Slaves ·
+그리스어	Grec
+북미	Amérique du Nord
+#개	# éléments
+@ 솜씨를 믿고 배에 오른 동료. 낯선 항구와 거친 바다를 지나며 자신의 솜씨를 일행과 나눈다. 함께한 항로의 다음 이야기는 아직 항해일지에 쓰이는 중이다.	Un compagnon embarqué pour son talent en @. De ports inconnus en mers agitées, il met son savoir-faire au service du groupe. Le prochain chapitre de votre voyage commun s’écrit encore dans le journal de bord.
+@ · 음악실 배치 시 효과 #배	@ · Effet dans la salle de musique : ×#
+결투 공격 +#	Attaque en duel +#
+결투 방어 +#	Défense en duel +#
+일을 건성으로 · 효율 #%	Travail négligé · Efficacité #%
+부상 #일	Blessé pour # jours
+@ 효과	Effet de @
+#배	×#
+음악실 배치 시 @ 효과	Effet de @ dans la salle de musique
+체력 #, 지력 #, 무력 #, 매력 #	Vitalité #, intelligence #, force #, charisme #
+괴물 목격 소식	Signalements de monstres
+「@」에서 이어진 실마리	Une piste issue de « @ »
+「@」에 적힌 이야기	Un récit consigné dans « @ »
+같은 능력치는 가장 높은 물건 하나만	Pour chaque attribut, seul l’objet le plus puissant s’applique
+(같은 능력치는 가장 높은 물건 하나만)	(Pour chaque attribut, seul l’objet le plus puissant s’applique)
+# 고름	# sélectionnés
+모두 선택	Tout sélectionner
+모두 해제	Tout désélectionner
+@에 덮어쓰겠습니까?	Remplacer @ ?
+기록하지 못했습니다 — @	Échec de la sauvegarde — @
+산 곳: @	Lieu d’achat : @
+@의 이야기	L’histoire de @
+#년 · @	# · @
+주인공들의 출발지를 표시한 세계 지도	Carte du monde montrant les ports de départ des personnages
+동아시아 지도	Carte de l’Asie orientale
+유럽 지도	Carte de l’Europe
+북아메리카	Amérique du Nord
+남아메리카	Amérique du Sud
+아시아	Asie
+오세아니아	Océanie
+오스만	Empire ottoman
+황금의 바다	La mer de l’or
+세계를 잇는 상인	Le marchand qui relie le monde
+세상의 길을 사러 가는 항해	Une traversée pour acquérir les routes du monde
+엘리너르 더비트 · 마리커 판레이우언 · 브람 판호른 …	Eleonoor de Wit · Marieke van Leeuwen · Bram van Hoorn …
+아버지는 해적에게 배를 잃고 빚만 남긴 채 죽었다. 스물두 살 상인에게 남은 것은 작은 배 한 척과 장부 마지막 줄의 한 문장. 밀린 급료를 받으러 온 공증인의 딸, 소문을 파는 소꿉친구, 돈을 빌려준 친구와 함께 — 연합 동인도 회사와 해적섬, 배신과 사랑을 지나 세계에서 가장 부유한 사람이 되는 서른 해.	Son père est mort endetté après avoir perdu son navire aux mains des pirates. À vingt-deux ans, le marchand n’hérite que d’un petit bateau et d’une phrase à la dernière ligne du grand livre. Avec la fille d’un notaire venue réclamer des salaires impayés, une amie d’enfance marchande de rumeurs et un ami qui lui a prêté de l’argent, il traverse trente années de compagnies des Indes, d’îles pirates, de trahisons et d’amour pour devenir l’homme le plus riche du monde.

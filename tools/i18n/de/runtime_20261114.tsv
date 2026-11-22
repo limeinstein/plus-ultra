@@ -1,0 +1,27 @@
+도크 — 도크 #/#척 · 모항	Dock — #/# Schiffe · Heimathafen
+탐험·교역 계획 — 사건 예고·기한·재조사	Expeditions- und Handelsplanung — Ereignisvorschau · Fristen · Nachforschungen
+탐험·교역 계획 — 거래처 정보·역사적 교역 기회	Expeditions- und Handelsplanung — Geschäftspartner · Historische Handelsgelegenheiten
+호위 요청 — 호위할 상선을 찾아본다	Geleitschutzgesuche — passendes Handelsschiff suchen
+#박	# Nächte
+상인 @	Händler @
+술집 손님	Tavernengast
+기초 #단계	Grundkenntnisse, Stufe #
+기초	Grundkenntnisse
+식당 주인	Wirt des Speisehauses
+소문 속 해적	Pirat aus den Gerüchten
+여관 주인	Gastwirt
+수녀	Nonne
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+) · 짐승을 잃기 쉽다$/	⟦$1⟧ Tempo ×$2 · Erschöpfung ×$3 · Tiere gehen leicht verloren
+/(.+?) 걸음 ×([\d.]+) · 피로 ×([\d.]+)$/	⟦$1⟧ Tempo ×$2 · Erschöpfung ×$3
+사막	Wüste
+숲	Wald
+밀림	Dschungel
+설원	Schneefeld
+툰드라	Tundra
+빙원	Eisfeld
+발견물 백과사전 — 아직 실린 것이 없다	Enzyklopädie der Entdeckungen — noch keine Einträge
+이베리아 참나무	Iberische Eiche
+기함 변경 — 기함 @호	Flaggschiff wechseln — derzeit @
+바닥이 얕아 뭍 가까이(해안에서 #° 안)에서 더 빠르고, 여울·암초 사고를 입지 않는다.	Dank geringen Tiefgangs nahe der Küste (innerhalb von #°) schneller und vor Unfällen durch Untiefen und Riffe geschützt.
+얕은 흘수	Geringer Tiefgang
+가볍고 날렵해 멀리까지 살핀다. 함대에 있으면 망루의 시야가 넓어진다.	Leicht und wendig für weite Erkundungen. In der Flotte erhöht dieses Schiff die Sichtweite des Ausgucks.

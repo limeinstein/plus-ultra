@@ -30,7 +30,8 @@
     { id: 'vi', label: 'Tiếng Việt', html: 'vi', font: LATIN },
     { id: 'es', label: 'Español', html: 'es', font: LATIN },
     { id: 'pt', label: 'Português', html: 'pt', font: LATIN },
-    { id: 'de', label: 'Deutsch', html: 'de', font: LATIN }   // 2026-11-14 사용자 요청으로 독일어 추가
+    { id: 'de', label: 'Deutsch', html: 'de', font: LATIN },
+    { id: 'fr', label: 'Français', html: 'fr', font: LATIN } // 2026-11-22 사용자 요청으로 프랑스어 추가
   ];
   I.packs = {};          // 언어 → {text, pat, city, good, name, ready}
   I.miss = {};           // 옮기지 못한 한국어 글 → 본 횟수
@@ -94,8 +95,10 @@
     (G.MATES || []).forEach(function (m) { if (m && m.name) list.push(m); });
     if (defs) for (var dk in defs) if (defs[dk] && defs[dk].name) list.push(defs[dk]);
     var map = {};
+    // 「이름 (도시)」의 도시를 옮기며 G.N으로 다시 들어와도 색인을 처음부터 만들지 않는다.
+    personIdx = { lang: I.lang, sig: sig, map: map };
     list.forEach(function (m) { var k = norm(m.name); if (map[k] == null) { var e = personEn(k, p.person, m.nat, true); if (e != null) map[k] = e; } });
-    personIdx = { lang: I.lang, sig: sig, map: map }; trReset();
+    trReset();
     return map;
   }
   function personGuess(k) { var p = I.packs[I.lang]; return p && p.person ? personEn(k, p.person, null, false) : null; }
@@ -422,7 +425,7 @@
     var v = lsGet(KEY); if (v && I.info(v)) return v;
     if (location.protocol === 'file:') return 'ko';   // 파일로 연 게임(개발·시험)은 한국어 — 웹판(http·https)에서만 브라우저 언어를 본다
     var nav = String((navigator.languages && navigator.languages[0]) || navigator.language || 'ko').toLowerCase();
-    var guess = /^ko/.test(nav) ? 'ko' : /^zh-(tw|hk|mo|hant)/.test(nav) ? 'zh-Hant' : /^zh/.test(nav) ? 'zh-Hans' : /^ja/.test(nav) ? 'ja' : /^vi/.test(nav) ? 'vi' : /^es/.test(nav) ? 'es' : /^pt/.test(nav) ? 'pt' : /^de/.test(nav) ? 'de' : /^en/.test(nav) ? 'en' : 'ko';
+    var guess = /^ko/.test(nav) ? 'ko' : /^zh-(tw|hk|mo|hant)/.test(nav) ? 'zh-Hant' : /^zh/.test(nav) ? 'zh-Hans' : /^ja/.test(nav) ? 'ja' : /^vi/.test(nav) ? 'vi' : /^es/.test(nav) ? 'es' : /^pt/.test(nav) ? 'pt' : /^de/.test(nav) ? 'de' : /^fr/.test(nav) ? 'fr' : /^en/.test(nav) ? 'en' : 'ko';
     return I.ready(guess) ? guess : (I.ready('en') && guess !== 'ko' ? 'en' : 'ko');
   };
   I.apply = function () {

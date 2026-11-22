@@ -1,0 +1,65 @@
+이야기 모드	Modo historia
+이야기 모드 — 주인공을 고른다	Modo historia — Elige protagonista
+초상을 누르면 이야기를 볼 수 있습니다 · ← → 고르기 (끝에서 옆 바다로) · Enter 열기	Pulsa un retrato para leer su historia · ← → Elegir (al llegar al extremo, pasa al otro mar) · Intro Abrir
+초상을 누르면 이야기를 볼 수 있습니다 · ← → 고르기 · Enter 열기	Pulsa un retrato para leer su historia · ← → Elegir · Intro Abrir
+이 이야기로 시작	Comenzar esta historia
+다른 사람을 고른다	Elegir a otra persona
+‹ 타이틀로	‹ Volver al título
+함께 떠나는 사람	Compañeros de viaje
+주인공 선택	Elige protagonista
+추가 주인공 자리	Espacio para otro protagonista
+이전 캐릭터 다섯 명	Cinco personajes anteriores
+다음 캐릭터 다섯 명	Cinco personajes siguientes
+새로운 이야기	Una nueva historia
+주인공을 선택하면 이야기를 볼 수 있습니다 · ← → 고르기 · Enter 열기	Elige protagonista para leer su historia · ← → Elegir · Intro Abrir
+함께 떠나는 사람 — @	Compañeros de viaje — @
+스미스 호킨스 · 윌리엄 호킨스 · 코난 홈즈 …	Smith Hawkins · William Hawkins · Conan Holmes …
+황규 · 박월담 · 임처사 …	Hwang Gyu · Park Woldam · Maestro Im …
+유럽 — 대서양에서 흑해까지	Europa — Del Atlántico al mar Negro
+동쪽 바다 — 조선	Mares orientales — Joseon
+아버지를 찾아가는 항해	Un viaje en busca de su padre
+아버지를 버린 세상에 복수하러 나간 항해	Un viaje para vengarse del mundo que traicionó a su padre
+들려준 세상을 직접 만나러 가는 항해	Un viaje para conocer el mundo de sus relatos
+행방불명된 아버지가 남긴 「있을 수 없는 그림」 한 장 — 붓 자국이 없고, 세상 어디에도 없는 옷과 지붕이 찍힌 사진. 하얀 남방의 항해사는 남작의 아들, 신부, 늙은 항해사와 함께 아버지의 자취를 따라 동쪽으로 떠난다.	Su padre desaparecido dejó una imagen imposible: una fotografía sin pinceladas, con ropas y tejados que no existen en el mundo conocido. El navegante de camisa blanca parte hacia el este siguiendo su rastro, acompañado por el hijo de un barón, un sacerdote y un viejo navegante.
+사략선장 로저 후크가 왕실의 동맹 거래에 버려져 교수대에 오른다. 딸 제시카는 늙은 선원 스미스와 그 아들 윌리엄과 함께 도망쳐 바다로 나간다. 왕을 죽이러 떠난 항해는, 끝내 자신이 지킬 가족과 나라를 만드는 항해가 된다.	La Corona sacrifica al corsario Roger Hook para sellar una alianza y lo envía a la horca. Su hija Jessica huye al mar con el viejo marinero Smith y su hijo William. El viaje que comienza con el juramento de matar al rey acaba llevándola a crear una familia y una patria que proteger.
+여섯 해 전 갯바위에서 건진 사내는 세상 이야기와 물음표투성이 지도, 끝맺지 못한 노래 한 곡을 남기고 사라졌다. 열여덟 소리꾼은 재담꾼과 낙방 선비를 데리고 그 세상을 만나러 떠난다. 그녀가 노래하면 어느 나라든 공연장이 된다.	Hace seis años, un hombre rescatado entre las rocas de la costa desapareció y dejó relatos del mundo, un mapa lleno de interrogantes y una canción sin terminar. Ahora, una joven cantante de dieciocho años parte a conocer ese mundo con un comediante y un erudito que nunca aprobó sus exámenes. Donde ella canta, cualquier país se convierte en escenario.
+/(.+?) — 「(아버지의 사진|해적여제|바닷길 노래)」/	⟦$1⟧ — «⟦$2⟧»
+여관 일지 #	Diario de posada #
+여관 일지 # — @	Diario de posada # — @
+불러오지 못했습니다: @	No se pudo cargar el diario: @
+일지를 내려받았습니다: @	Diario descargado: @
+수첩 — @	Cuaderno — @
+@ — 열기·닫기	@ — Abrir/cerrar
+노장 · #년	Veterano · # años
+@ · 지금 # / 본디 #단계 · 선실 수련 +#	@ · Actual # / Nivel base # · Entrenamiento en camarote +#
+@ · 지금 # / 본디 #단계	@ · Actual # / Nivel base #
+#개 — 상세에서 모두 보기	# en total — Ver todos en los detalles
+나머지 특기 #개 — 상세에서 모두 보기	# habilidades más — Ver todas en los detalles
+나머지 언어 #개 — 상세에서 모두 보기	# idiomas más — Ver todos en los detalles
+슬라브·	Eslavo · 
+그리스어	Griego
+북미	Norteamericano 
+#개	# en total
+@ · 음악실 배치 시 효과 #배	@ · Efecto en la sala de música: ×#
+결투 공격 +#	Ataque en duelo +#
+결투 방어 +#	Defensa en duelo +#
+일을 건성으로 · 효율 #%	Trabaja sin ganas · Eficiencia #%
+부상 #일	Herido durante # días
+@ 효과	Efecto de @
+#배	×#
+음악실 배치 시 @ 효과	En la sala de música: efecto de @
+체력 #, 지력 #, 무력 #, 매력 #	Vitalidad #, Inteligencia #, Fuerza #, Carisma #
+괴물 목격 소식	Avistamientos de monstruos
+같은 능력치는 가장 높은 물건 하나만	Para cada atributo, solo se aplica el objeto más potente
+(같은 능력치는 가장 높은 물건 하나만)	(Para cada atributo, solo se aplica el objeto más potente)
+전체 화면 — 끄려면 F11	Pantalla completa — F11 para salir
+다음 대사	Siguiente diálogo
+# 고름	# seleccionados
+모두 선택	Seleccionar todo
+모두 해제	Deseleccionar todo
+@ — 단축키 @	@ — Atajo @
+@에 덮어쓰겠습니까?	¿Sobrescribir @?
+기록하지 못했습니다 — @	No se pudo guardar el diario — @
+@의 이야기	La historia de @
+식량·물을 먼저 싣는다	Cargar primero víveres y agua
+@ 건물	Edificios de @

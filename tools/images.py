@@ -521,6 +521,8 @@ def valid_keys(d):
         else:
             k['sprites/' + sid] = names.get(sid, '스프라이트 · ' + sid) + ' 스프라이트 시트'
     k['ui/notebook/folio'] = '항해 수첩 · 가죽 제본 양피지'
+    for name in ['atlas-frame','parchment-panel','button-navy-ornate','button-paper-ornate','map-world','map-eu','map-ea']:
+        k['ui/storyselect/' + name] = '고지도 이야기 선택 · ' + name
     return k
 
 
