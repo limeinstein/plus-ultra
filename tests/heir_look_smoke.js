@@ -15,7 +15,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|ERR_NAME/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   try {
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
@@ -38,7 +38,8 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.kid = [5, 10, 15, 20].map(a => { s.player.kids = []; const k = kid('m', a); k.portraitVariant = 3; return G.HomeLife.chain(k, false)[0] + '|' + G.HomeLife.chain(k, true)[0]; }).join(' ');
       out.daughter = [5, 10, 15, 20].map(a => { s.player.kids = []; const k = kid('f', a); k.portraitVariant = 2; return G.HomeLife.chain(k, false)[0] + '|' + G.HomeLife.chain(k, true)[0]; }).join(' ');
       out.has = ['son', 'daughter'].flatMap(b => [5, 10, 15, 20, 40].flatMap(a => [1, 2, 3, 4, 5].flatMap(v => [b + '_age' + a + '_v' + v, b + '_age' + a + '_v' + v + '_half']))).map(x => I.has('portraits/family/' + x) ? 1 : 0).join('');
-      out.looks = I.list('portraits/player/').map(x => x.split('/').pop()).filter(l => l !== 'admiral' && l !== 'ganghui').filter(l => !['5', '10', '15'].every(a => I.has('portraits/family/' + l + '/son_age' + a) && I.has('portraits/family/' + l + '/son_age' + a + '_half')));
+      // 생김새별 아들 그림은 남성 제독의 외형을 검사한다. 딸의 계승은 아래에서 따로 확인한다.
+      out.looks = I.heroFaces('m').map(x => x.split('/').pop()).filter(l => l !== 'admiral' && l !== 'ganghui').filter(l => !['5', '10', '15'].every(a => I.has('portraits/family/' + l + '/son_age' + a) && I.has('portraits/family/' + l + '/son_age' + a + '_half')));
       // 아들이 잇는다 (17살)
       s.player.kids = []; const son = kid('m', 17);
       son.portraitVariant = 4;

@@ -31,7 +31,7 @@
   var REG = { man: 'o', woman: 'y', boy: 'y', girl: 'y', elder: 'o', grandma: 'o', librarian: 'y', innkeeper: 'o', adventurer: 'o', merchant: 'o', noble: 'o', soldier: 'o', navigator: 'o' };
   /** 지금 이 소문으로 할 수 있는 말들 (text가 함수면 사건의 단계·날짜에 맞는 말만) — 문자열이거나 {y, o} */
   ER.texts = function (r) {
-    var s = S(), t = r.text;
+    var s = S(), t = (r.textF && G.R.heroFemale()) ? r.textF : r.text;   // textF: 여성 제독에게 들려주는 말 (없으면 text)
     if (typeof t === 'function') { try { t = t(s); } catch (e) { t = null; } }
     return (t || []).filter(Boolean);
   };

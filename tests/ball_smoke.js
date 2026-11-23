@@ -10,8 +10,7 @@ const ROOT = path.resolve(__dirname, '..');
   const b = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
   try {
   const page = await b.newPage({ viewport: { width: 1600, height: 900 } });
-  const errs = []; page.on('pageerror', e => errs.push('PAGEERR ' + e.message)); page.on('console', m => { if (m.type() === 'error' && !/Failed to load|net::|fonts|ERR_FILE/.test(m.text())) errs.push('CONSOLE ' + m.text()); });
-  await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+  const errs = []; page.on('pageerror', e => errs.push('PAGEERR ' + e.message)); page.on('console', m => { if (m.type() === 'error') errs.push('CONSOLE ' + m.text()); });
   await page.addInitScript(() => { window.requestAnimationFrame = () => 0; });
   await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.waitForFunction(() => window.G && G.Game && G.Ball && G.Court && G.Scenes && G.Scenes.city, null, { timeout: 90000, polling: 200 });

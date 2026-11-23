@@ -127,7 +127,7 @@
       holders: [[1480, 1489, '경주 부윤'], [1489, 1529, '우재 손중돈'], [1529, 1547, '회재 이언적'], [1547, 1600, '경주 부윤']] },
     { id: 'kr_hansan', title: '삼도수군통제사', type: 'official', city: 229, bld: 'mansion', place: '제승당', honor: '영감', pw: 3, wealth: 2, lang: 14, rel: 'K', taste: ['geo', 'creature'],
       holders: [[1593, 1599, '통제사 이순신']] },
-    { id: 'jp_shogun', title: '무로마치 쇼군', type: 'king', city: 193, bld: 'palace', pw: 3, wealth: 3, lang: 13, rel: 'J', taste: ['treasure', 'geo', 'trade'],
+    { id: 'jp_shogun', title: '무로마치 쇼군', eraTitles: [[1573, '천하의 실권자'], [1603, '도쿠가와 쇼군']], type: 'king', city: 193, bld: 'palace', pw: 3, wealth: 3, lang: 13, rel: 'J', taste: ['treasure', 'geo', 'trade'],
       holders: [[1480, 1600, '쇼군']] },
     { id: 'jp_sakai', title: '사카이 회합중', type: 'merchant', city: 192, bld: 'mansion', pw: 3, wealth: 4, lang: 13, rel: 'J', taste: ['trade'],
       holders: [[1480, 1600, '사카이 회합중 대표']] },

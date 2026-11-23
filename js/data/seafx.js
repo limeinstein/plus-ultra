@@ -5,6 +5,8 @@
 (function (G) {
   'use strict';
   G.FX = {
+    // 제독 얼굴상·무릎상: 40세부터 중년, 70세부터 노년 그림을 쓴다.
+    heroPortraitAge: { middle: 40, elderly: 70 },
     // 해도 대화창: 무대 안쪽 크기, 이름표 자리, 다음 쪽 오입력 방지. 그림의 투명 여백은 원본을 보존한 채 잘라 보여 준다.
     dialogPanel: { height: 224, faceHeight: 164, padX: 168, padRight: 192, padY: 36, facePadY: 18, lineHeight: 1.62, contentGap: 14, paperVeil: 0.72, nameWidth: 300, nameHeight: 46, nameLift: 30, nameInset: 24, bustOverlap: 6,
       choices: { compactAt: 5, padY: 24, maxHeight: 126, fontSize: 17, buttonHeight: 36, padX: 16, gap: 6 }, // 선택지가 많아도 무릎상은 일반 대화와 같은 크기
@@ -771,6 +773,15 @@
       3: [[.51, .03, 1, .94], [.78, .59, .53, .84], [.96, .85, .32, .49]]
     },
     profiles: {
+      shipline: [[.28,.76,'sq',3,1.66],[-.04,.86,'sq',3,1.85],[-.34,.56,'lat',1,.85]],
+      sloop: [[.13,.80,'gaff',1,1.8]],
+      eastindiaman: [[.28,.70,'sq',2,1.48],[-.03,.81,'sq',2,1.65],[-.34,.51,'lat',1,.78]],
+      ketch: [[.20,.72,'gaff',1,1.50],[-.32,.45,'gaff',1,.85]],
+      koch: [[.22,.61,'sq',1,1.25],[-.24,.46,'sq',1,1.02]],
+      jounseon: [[.26,.63,'kr',1,.84],[-.25,.54,'kr',1,.72]],
+      bezaisen: [[-.02,.84,'jp',1,1.65]],
+      padewakang: [[.25,.65,'tanja',1,1.05],[-.24,.55,'tanja',1,.89]],
+      ghurab: [[.20,.67,'lat',1,1.5],[-.27,.49,'lat',1,.94]],
       barca: [[.04,.58,'sq',1,1.30]], cog: [[.02,.66,'sq',1,1.50]],
       hulk: [[.22,.69,'sq',2,1.45],[-.22,.53,'sq',1,1.05]],
       caravel: [[.20,.58,'lat',1,1.05],[-.24,.46,'lat',1,.85]],
@@ -804,6 +815,14 @@
       atakebune: [[.10,.77,'jp',1,1.10]], balsa: [[.08,.55,'sq',1,.86]]
     }
   };
+  // 돛 염색 팔레트. null은 선종 고유의 원래 천 색이다.
+  G.FX.sailColors = [
+    { name: '원래 색', color: null }, { name: '상아색', color: '#f1e6cc' },
+    { name: '황토색', color: '#c69b62' }, { name: '벽돌색', color: '#aa4f3b' },
+    { name: '와인색', color: '#79364d' }, { name: '남색', color: '#435d87' },
+    { name: '청록색', color: '#3d7b78' }, { name: '숲색', color: '#507452' },
+    { name: '먹색', color: '#383c43' }
+  ];
   G.FX.shipArt = {
     families: {
       west: { hull: '#73482e', deck: '#ac8956', inner: '#88613b', wales: '#302319', paint: '#24484c', mast: '#68462d', rope: '#4c3e29', boltRope: '#9b8055', sail: '#e8ddc1', woodRelief: .13, clothRelief: .07 },
@@ -817,6 +836,15 @@
       raft: { hull: '#997140', deck: '#c09c5e', inner: '#ac8649', paint: '#70502c', sail: '#c6ad7d' }
     },
     profiles: {
+      shipline: { family: 'west', paint: '#283e54', kit: 'gallery', cargo: 1 },
+      sloop: { family: 'west', paint: '#526257', kit: 'open', cargo: 1 },
+      eastindiaman: { family: 'west', paint: '#365b4a', kit: 'gallery', cargo: 5 },
+      ketch: { family: 'west', paint: '#76503b', kit: 'merchant', cargo: 2 },
+      koch: { family: 'west', hull: '#856449', paint: '#5c5143', kit: 'explorer', cargo: 2 },
+      jounseon: { family: 'korean', paint: '#6e5940', kit: 'cargo-kr', cargo: 4 },
+      bezaisen: { family: 'japanese', paint: '#34302b', kit: 'cargo-jp', cargo: 4 },
+      padewakang: { family: 'jong', paint: '#644631', kit: 'woven', cargo: 3 },
+      ghurab: { family: 'dhow', paint: '#465c58', kit: 'armed', cargo: 1 },
       barca: { family: 'west', paint: '#41565c', kit: 'open', cargo: 1 },
       cog: { family: 'west', paint: '#823d2d', kit: 'merchant', cargo: 3 },
       hulk: { family: 'west', paint: '#534638', kit: 'merchant', cargo: 4 },

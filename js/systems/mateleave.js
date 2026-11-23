@@ -67,7 +67,7 @@
     return Math.max(0, Math.floor((U.dateNum(s.date) - m.joined) / 10000));
   };
   function tut() { return !!(G.Tutorial && G.Tutorial.active && G.Tutorial.active()); }
-  function isWife(id) { var p = S().player; return p.wife === id || !!(G.Wives && G.Wives.of && G.Wives.of(id)); }
+  function isWife(id) { var p = S().player; return p.wife === id || !!(G.Wives && G.Wives.of && G.Wives.of(id)) || !!(G.Husbands && G.Husbands.is(id)); }   // 여성 제독의 남편도
   /** 사건으로 얻은 부하인가 — 이별을 겪지 않는다 */
   MLV.eventMate = function (m) {
     var d = G.MATE[m.id], s = S(); if (!d) return false;

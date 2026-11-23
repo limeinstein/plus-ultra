@@ -199,9 +199,11 @@
       ps.forEach(function (a, i) { ps.slice(i + 1).forEach(function (b) {
         if (!RL.atWar(a, b) || !RL.seaWarOK(a, b) || !U.chance(B().seaWarMonth)) return;
         var sk = key(a, b), once = seaLog[sk] !== s.date.y;
-        if (once) seaLog[sk] = s.date.y;
-        out.push({ icon: 'cannon', minor: true, nolog: !once, text: U.pick(['{a} 함대와 {b} 함대가 {sea}에서 맞붙었다는 소식이 들려온다.', '{sea}에서 {a}의 군함이 {b}의 배를 쫓아 포를 쏘았다고 한다.', '{a}{과} {b}의 싸움이 바다로 번졌다 — {sea}에 화약 연기가 자욱하다고 한다.'])
-          .replace('{a}', RL.name(a)).replace('{b}', RL.name(b)).replace('{과}', U.jx(RL.name(a), '과/와')).replace('{sea}', seaOf(a, b)) });
+        if (!once) return;   // 먼 바다의 해전 소식은 알림으로 띄우지 않는다 — 항해 일지에만 한 해 한 줄 (2026-11-23)
+        seaLog[sk] = s.date.y;
+        var txt = (U.pick(['{a} 함대와 {b} 함대가 {sea}에서 맞붙었다는 소식이 들려온다.', '{sea}에서 {a}의 군함이 {b}의 배를 쫓아 포를 쏘았다고 한다.', '{a}{과} {b}의 싸움이 바다로 번졌다 — {sea}에 화약 연기가 자욱하다고 한다.'])
+          .replace('{a}', RL.name(a)).replace('{b}', RL.name(b)).replace('{과}', U.jx(RL.name(a), '과/와')).replace('{sea}', seaOf(a, b)));
+        if (G.Journal && G.Journal.add && G.Journal.add(txt, 'B')) { var l = s.log && s.log[s.log.length - 1]; if (l) l.k = 'sea'; }   // 작은 소식: 넘칠 때 먼저 지운다
       }); });
     }
     return out;
@@ -302,16 +304,17 @@
     var v = await UI.ask(tt + ' — 소지금 ' + U.num(p.gold) + '닢', [
       { label: (a.label || '예물을 바친다') + ' (금화 ' + U.num(a.gold) + '닢 · 사교 명성 +' + (G.Fame ? G.Fame.mul('so', a.so) : a.so) + (a.trust ? ' · 신뢰 +' + a.trust[1] : '') + ')', value: 'give' },
       { label: '정중히 사양한다', value: 'no' }], who);
+    var soft = !!(e.who && e.who.princess);   // 왕녀는 공손한 말씨로 (2026-11-23 — 「그렇소? 하는 수 없지」)
     if (v === 'give' && p.gold >= a.gold) {
       p.gold -= a.gold;
       var so = G.Fame ? G.Fame.add('so', a.so) : a.so;
       var sp = a.trust && G.SPONSOR[a.trust[0]];
       if (sp && G.Sponsor) G.Sponsor.addTrust(G.Sponsor.rel(sp.id), a.trust[1]);
-      await UI.say(a.thanks || (e.who && e.who.legate ? '성하께서 그대의 이름을 기억하실 것이오. 주님의 축복이 그대의 배와 함께하기를.' : '고맙소. 그대의 마음을 잊지 않겠소.'), who);
+      await UI.say(a.thanks || (e.who && e.who.legate ? '성하께서 그대의 이름을 기억하실 것이오. 주님의 축복이 그대의 배와 함께하기를.' : soft ? '고맙습니다. 제독님의 마음, 오래도록 잊지 않을게요.' : '고맙소. 그대의 마음을 잊지 않겠소.'), who);
       G.State.log('「' + e.title + '」 — 금화 ' + U.num(a.gold) + '닢을 바쳤다. (사교 명성 +' + so + ')');
       UI.toast(e.title + ' — 사교 명성 +' + so + (sp ? ' · ' + G.Sponsor.holderName(sp) + '의 신뢰 +' + a.trust[1] : ''), e.who && e.who.legate ? 'pray' : 'heart', 5000);
-    } else if (v === 'give') await UI.say('…마음만으로도 고맙소.', who);
-    else await UI.say('그렇소? 하는 수 없지.', who);
+    } else if (v === 'give') await UI.say(soft ? '…마음만으로도 고마워요.' : '…마음만으로도 고맙소.', who);
+    else await UI.say(soft ? '그러세요? 아쉽지만 어쩔 수 없지요.' : '그렇소? 하는 수 없지.', who);
     if (G.Game.refreshHud) G.Game.refreshHud();
   }
   var L0 = { legate: 1 };

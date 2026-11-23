@@ -1274,6 +1274,7 @@
     if (picWait) return picWait.then(function () { return UI.say(text, opts); });
     opts = withFace(opts || {});
     var pages = Array.isArray(text) ? text.slice() : String(text).split('\f');
+    if (G.R && G.R.heroSay) pages = pages.map(function (pg) { return G.R.heroSay(pg, opts); });   // 여성 제독을 부르는 말 · 제독의 아이가 하는 말 (js/core/rules.js — 한국어만)
     // 다른 언어: 쪽을 다듬거나(괄호 안내·줄표) 얼굴 칸에 맞춰 자르기 전에 원문 그대로 사전에서 찾는다 — 다듬은 뒤의 글은 열쇠와 달라진다 (2026-11-12 영어 ⑤)
     if (G.I18N && !G.I18N.isKo()) pages = pages.map(function (pg) { var e = G.I18N.tr(String(pg), true); return e != null ? e : pg; });
     if (!opts.raw) {
@@ -1310,6 +1311,7 @@
       var auto = autoOn(), seen = auto ? seenStore() : null, sk = auto ? sayKey(pages.join('\f'), opts) : null, stopAuto = null;
       function done() { if (finished) return; finished = true; if (unwatch) unwatch(); if (stopAuto) stopAuto(); unkey(); shell.destroy(); if (back.parentNode) back.parentNode.removeChild(back); resolve(); }
       var unkey = pushKey(function (e) {
+        if (keyIs(e, 'cancel') && opts.onSceneCancel) { opts.onSceneCancel(); done(); return true; }
         if (keyIs(e, 'confirm') || keyIs(e, 'confirmAlt') || keyIs(e, 'cancel')) { next(); return true; }
         return false;
       });

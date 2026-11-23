@@ -13,6 +13,12 @@
   function T() { return C.B.tavern; }
   function heart(a) { var n = Math.round((a || 0) / 20); return '♥♥♥♥♥'.slice(0, n) + '♡♡♡♡♡'.slice(0, 5 - n); }
   MT.heart = heart;
+  /** 이 부하와 애정선(호감·청혼)이 있나 — 남성 제독은 여성 부하, 여성 제독은 남성 부하 (js/systems/husbands.js).
+      아이·동생·이미 짝이 있는 부하(d.minor · d.sib · d.wed)는 누구에게도 없다. 여성 제독과 여성 부하 사이에도 없다 (2026-11-23) */
+  MT.loveable = function (d) {
+    if (!d) return false;
+    return G.R.heroFemale() ? !!(G.Husbands && G.Husbands.loveable(d)) : d.g === 'f' && !d.sib && !d.minor && !d.wed;
+  };
 
   /** 술집·여관 메뉴 한 줄 */
   MT.menuItem = function (c) {
@@ -26,8 +32,8 @@
 
   function lines(d, m) {
     var lo = m.loyal || 70, f = d.g === 'f', aff = m.aff || 0;
-    if (f && aff >= 80) return ['제독… 요즘은 바다보다 당신 얼굴을 더 자주 보게 되네요.', '다음 항구에 닿으면, 잠깐 둘이서 걸어요.', '당신 배에 오르길 정말 잘했어요.'];
-    if (f && aff >= 50) return ['제독과 이야기하는 시간이 제일 좋아요.', '오늘은 파도가 잔잔해서 기분이 좋아요. 당신 덕분인가 봐요.'];
+    if (f && aff >= 80 && MT.loveable(d)) return ['제독… 요즘은 바다보다 당신 얼굴을 더 자주 보게 되네요.', '다음 항구에 닿으면, 잠깐 둘이서 걸어요.', '당신 배에 오르길 정말 잘했어요.'];
+    if (f && aff >= 50 && MT.loveable(d)) return ['제독과 이야기하는 시간이 제일 좋아요.', '오늘은 파도가 잔잔해서 기분이 좋아요. 당신 덕분인가 봐요.'];
     if (f) return lo >= 80 ? ['제독과 함께라면 세상 끝이라도 갈 거예요.', '요즘 배 위가 즐거워요. 다음 바다는 어디예요?'] : lo >= 50 ? ['그럭저럭 지낼 만해요.', '다음 항구에서는 좀 쉬었으면 좋겠어요.', '선원들이 저를 조금씩 믿어 주는 것 같아요.'] : ['솔직히 요즘 마음이 좀 떠 있어요…', '급료가 조금만 더 오르면 좋겠어요.'];
     if (lo >= 80) return ['제독과 함께라면 세상 끝이라도 가겠소.', '요즘 배 위가 즐겁소. 다음 바다는 어디요?', '선원들도 제독을 믿고 있소. 나도 그렇고.'];
     if (lo >= 50) return ['그럭저럭 지낼 만하오.', '선원들 사이에 별 탈은 없소. 식량만 넉넉하면 되오.', '다음 항구에서는 좀 쉬었으면 좋겠군.'];
@@ -54,7 +60,7 @@
   /** 마주 앉았을 때 부하가 먼저 건네는 말 — 충성·호감 수치는 고르는 목록에 이미 있으니 말로만 (QA 2026-10-11) */
   function greet(d, m, f) {
     var lo = m.loyal || 70, a = m.aff || 0, L;
-    if (f && a >= 70) L = ['오셨어요, 제독? 마침 이야기 상대가 필요했어요.', '제독이 먼저 불러 주시니 기분이 좋네요.', '무슨 일이세요? 얼굴 보니 좋은 일인가 봐요.'];
+    if (f && a >= 70 && MT.loveable(d)) L = ['오셨어요, 제독? 마침 이야기 상대가 필요했어요.', '제독이 먼저 불러 주시니 기분이 좋네요.', '무슨 일이세요? 얼굴 보니 좋은 일인가 봐요.'];
     else if (lo < 45) L = f ? ['…무슨 일이세요?', '부르셨어요? 할 말이 있으면 빨리 해 주세요.'] : ['…무슨 일이오?', '부르셨소? 용건부터 들읍시다.'];
     else if (lo >= 85) L = f ? ['부르셨어요, 제독? 언제든 말씀하세요.', '제독, 한숨 돌리시는 거예요? 저도 같이 쉴게요.'] : ['부르셨습니까, 제독? 언제든 말씀하십시오.', '제독, 잠깐 쉬어 가시는 겁니까? 저도 한숨 돌리지요.'];
     else L = f ? ['부르셨어요, 제독?', '무슨 일이세요, 제독?', '네, 제독. 듣고 있어요.'] : ['부르셨소, 제독?', '무슨 일이오, 제독?', '예, 제독. 말씀하시오.'];
@@ -93,11 +99,11 @@
     }), { width: 620 });
     if (gi == null) return null;
     var it = gifts[gi], result = R.giveMateItem(m, it); if (!result) return null;
-    var gd = G.ITEM[it.id], gv = MT.giftValue(gd), f = d.g === 'f', opp = f !== (S().player.g === 'f'), lo0 = m.loyal == null ? 70 : m.loyal, af0 = m.aff || 0;
+    var gd = G.ITEM[it.id], gv = MT.giftValue(gd), f = d.g === 'f', opp = f !== G.R.heroFemale(), lo0 = m.loyal == null ? 70 : m.loyal, af0 = m.aff || 0;
     // 무기·갑옷은 예전처럼 충성만, 호감은 소모한 호감용 선물에서만 오른다.
     if (gv > 0 && (result.consumed || gd.kind === 'weapon' || gd.kind === 'armor')) {
       R.setLoyal(m, lo0 + (opp || !f ? Math.max(cf.giftLoyalMin || 3, Math.round(gv * (cf.giftLoyal == null ? 0.6 : cf.giftLoyal))) : 2));
-      if (result.consumed && f && !d.sib && !d.minor && !d.wed) m.aff = Math.min(100, af0 + gv + R.skill('craft'));
+      if (result.consumed && MT.loveable(d)) m.aff = Math.min(100, af0 + gv + R.skill('craft'));   // 호감은 애정선이 있는 부하에게만 (여성 제독은 남성 부하의 남자 선물로)
     }
     var note = result.consumed ? '선물로 사용했다' : '소지품으로 보관한다';
     if (m.loyal > lo0) note += ' · 충성 +' + (m.loyal - lo0);
@@ -125,7 +131,8 @@
     function say(t, e) { return UI.say(t, speaker(d, e, false)); }
     function ask(t, ch) { return UI.ask(t, ch, speaker(d, 'warm', true)); }
     var turn = 0;
-    function gainAff(n) { if (f && !noLove) m.aff = Math.min(100, (m.aff || 0) + n); }
+    var love = MT.loveable(d), wedH = !!(G.Husbands && G.Husbands.is(d.id));   // 애정선이 있는 부하 · 이미 남편인 부하
+    function gainAff(n) { if (love) m.aff = Math.min(100, (m.aff || 0) + n); }
     for (;;) {
       var bio = G.Bio && G.Bio.find(d.name);
       var opts = [{ label: '요즘 어떤가', value: 'chat' }, { label: '살아온 이야기', value: 'life' }];
@@ -135,12 +142,15 @@
       if (d.witch) opts.push({ label: '점괘를 본다', value: 'fortune' });
       var w2 = G.Wives && G.Wives.of(d.id);     // 둘째 부인으로 함께 다니는 사람 (js/systems/wives.js)
       opts.push({ label: '선물한다', value: 'gift' });   // 수첩의 물건 전달과 같은 창
-      if (f && !noLove) opts.push(w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
+      // 여성 제독은 여성 부하에게 청혼하지 않는다 (2026-11-23). 옛 저장에서 이미 둘째 부인인 사람의 「집으로 보낸다」는 남긴다
+      if (!f && love && !wedH && G.R.heroFemale()) opts.push({ label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });   // 여성 제독 → 남성 부하 (남편 — js/systems/husbands.js)
+      if (f && !noLove && (w2 || !G.R.heroFemale())) opts.push(w2 ? { label: '집으로 보낸다', value: 'w2home' } : { label: '청혼한다', value: 'wed', dis: !((m.aff || 0) >= (cf.wedAff || 90)) });
       opts.push({ label: '그만둔다', value: null });
       var v = await ask(turn++ ? ((VO() && VO().again(d)) || U.pick(f ? ['또 무슨 이야기를 할까요?', '더 하실 말씀 있으세요?', '다른 건요, 제독?'] : ['또 무슨 이야기를 할까?', '더 할 말이 있소?', '다른 용건은 없소, 제독?'])) : ((VO() && VO().greet(d, m)) || greet(d, m, f)), opts);
       if (!v) return;
       if (v === 'chat') {
-        await say((VO() && VO().chat(d, m)) || U.pick(lines(d, m)), f && (m.aff || 0) >= 50 && !noLove ? 'happy' : 'warm');
+        var hl = !f && love && G.Husbands && G.R.heroFemale() ? G.Husbands.chatLine(d, m) : null;   // 여성 제독에게 마음이 있는 남성 부하·남편의 말
+        await say(hl || (VO() && VO().chat(d, m)) || U.pick(lines(d, m)), love && (m.aff || 0) >= 50 ? 'happy' : 'warm');
         if (m.chat !== today) {
           m.chat = today; m.loyal = Math.min(100, (m.loyal || 70) + (cf.chatLoyal || 1)); gainAff(cf.chatAff || 2);
           if (U.chance(0.35)) {
@@ -194,6 +204,7 @@
         G.Wives.settle(wv, !here);
         return;
       } else if (v === 'wed') {
+        if (G.R.heroFemale()) { if (!f && love && G.Husbands && await G.Husbands.propose(d, m, say)) return; continue; }   // 여성 제독: 남성 부하를 남편으로 (부하로 남는다)
         var taken = G.Romance ? G.Romance.blocksWed(d.id) : '';   // 다른 부하와 연인·부부인 사람 (js/systems/romance.js)
         if (taken) { await say(taken, 'shy'); continue; }
         if (!R.hasItem('ring')) { UI.toast('청혼하려면 약속 반지가 필요합니다.', 'ring'); continue; }

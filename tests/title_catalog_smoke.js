@@ -14,7 +14,6 @@ const out = path.join(ROOT, 'artifacts/title-catalog-20261108'); fs.mkdirSync(ou
   try {
     const page = await browser.newPage({ viewport: { width: 960, height: 640 } });
     page.setDefaultTimeout(30000);
-    await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({ contentType: 'text/css', body: '' }));
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
     await page.goto(base + 'catalog.html?view=player&all=1&from=index.html#people', { waitUntil: 'load', timeout: 120000 });

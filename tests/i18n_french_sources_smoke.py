@@ -37,6 +37,9 @@ for file in sorted(source.glob('*.tsv')):
             original, translated = variables(key), variables(replacement)
             if key == '{y}년 {m}월 {d}일':
                 translated = {'m' if v == 'mon' else v for v in translated}
+            # 이야기 날짜 포맷은 월 번호와 번역한 월 이름을 함께 제공한다.
+            if file.name == 'story_qa_20261123.tsv' and 'monthNum' in original:
+                translated = {'monthNum' if v == 'month' else v for v in translated}
             assert original == translated, (label, original, translated)
 
 templates = {}

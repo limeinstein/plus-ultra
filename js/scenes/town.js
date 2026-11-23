@@ -1487,7 +1487,7 @@
     (st.folks || []).forEach(function (f) {
       // 멈춘 제독 곁을 지나가는 성인 이성에게만 인사한다. 대화에는 인사를 끼우지 않는다.
       var sex = f.spec && f.spec.sex;
-      if (f.animal || !f.spec || f.spec.child || (sex !== 'm' && sex !== 'f') || sex === (S().player.g || 'm') ||
+      if (f.animal || !f.spec || f.spec.child || (sex !== 'm' && sex !== 'f') || sex === G.R.heroSex() ||
           f.state !== 'walk' || !(f.v > 0) || Math.abs(f.y - (GROUND + 34)) > fx.greetDepth) return;
       var record = (hero.greeted || []).filter(function (r) { return r.npc === f; })[0];
       if (record && (record.near || record.until > st.t)) return;

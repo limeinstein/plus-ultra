@@ -61,6 +61,16 @@
       if (c.rel === 'N') { if (INCA.indexOf(id) >= 0) add('balsa'); }
       else { add('barca'); add('caravel'); add('pinnace'); add('lcaravel'); add('carrack'); add('galleon'); if (id === 196 || id === 205) add('lgalleon'); }
     }
+    if (r === 1 && c.port) {
+      if (DUTCH.indexOf(id) >= 0 || ENGLAND.indexOf(id) >= 0) { add('sloop'); add('ketch'); if (c.size >= 2) add('eastindiaman'); }
+      if (c.size >= 2 && (DUTCH.indexOf(id) >= 0 || ENGLAND.indexOf(id) >= 0 || c.nation === '프랑스')) add('shipline');
+      if ([64, 67, 68].indexOf(id) >= 0 || c.style === 'ru') add('koch');
+    }
+    if (r === 10 && c.port && c.rel !== 'N') { add('sloop'); if (c.lat >= 30) add('ketch'); }
+    if (r === 5 && (id === 150 || MALABAR.indexOf(id) >= 0)) add('ghurab');
+    if (r === 6 && c.style === 'kr') add('jounseon');
+    if (r === 9 && c.port) add('bezaisen');
+    if (r === 8 && [169, 171, 172].indexOf(id) >= 0) add('padewakang');
     // 등급 순으로
     return out.sort(function (a2, b2) { return G.SHIP[a2].lv - G.SHIP[b2].lv; });
   };
@@ -239,7 +249,7 @@
     var lock = opt.buy && c ? Y.locked(c, id) : null;
     var btns = (opt.buy && !lock ? [{ label: '이 배를 산다', value: 'buy', cls: 'primary' }] : []).concat([{ label: opt.buy ? '다른 배를 본다' : '닫기', value: null }]);
     var win = UI.window({ title: '배 도움말 — ' + t.name, icon: 'ship', width: 940, html: '<div class="scroll" style="max-height:620px">' + html + (lock ? '<div class="warn-text" style="margin-top:8px">' + G.icon('seal') + lock + '</div>' : '') + '</div>', buttons: btns,
-      onBuild: function (el) { U.$$('.pic', el).forEach(function (pc) { pc.appendChild(A.shipCard(pc.dataset.t, 300, 165)); }); } });
+      onBuild: function (el) { U.$$('.pic', el).forEach(function (pc) { pc.appendChild(A.shipCard(pc.dataset.t, 300, 165, null, sh || null)); }); } });
     return win.result;
   };
 
@@ -334,6 +344,7 @@
       var v = await UI.choose(sh.name + '호 개조', [
         { label: '대포', right: (G.CANNON[sh.guns.type] || {}).name + ' ' + sh.guns.n + '/' + sh.ports + '문', value: 'gun', icon: 'cannon' },
         { label: '돛', right: sh.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k] || k; }).join('·'), value: 'sail', icon: 'sail' },
+        { label: '돛 색깔', right: A.sailColorName(sh.sailColor), value: 'dye', icon: 'sail', desc: '미리 보고 고릅니다 · 배마다 저장됩니다' },
         { label: '삭구 개량 (맞바람)', right: rigLabel(sh), value: 'rig', icon: 'gear' },
         { label: '포문 증설', right: sh.ports + '/' + t.ports + '문', value: 'port', icon: 'plus', disabled: sh.ports >= t.ports },
         { label: '선수상', right: sh.fig ? G.FIGUREHEAD[sh.fig].name : '없음', value: 'fig', icon: 'feather', thumb: G.Img.figureheadSrc(sh.fig), desc: sh.fig && G.FigFx ? G.FigFx.short(G.FIGUREHEAD[sh.fig]) : '' },
@@ -349,6 +360,7 @@
       else if (v === 'store') await refitStore(c, sh);
       else if (v === 'gun') await refitGuns(c, sh);
       else if (v === 'sail') await refitSails(c, sh);
+      else if (v === 'dye') await Y.dyeSails(c, sh);
       else if (v === 'rig') await refitRig(c, sh);
       else if (v === 'port') await refitPorts(c, sh);
       else if (v === 'fig') await refitFig(c, sh);
@@ -357,6 +369,43 @@
     }
   };
   /* 「개조할 배」 목록의 한 줄 — 수첩 「함대」 표(js/ui/info.js PAGES.fleet)와 같은 칸에 삭구를 더했다. 둘째 줄은 배의 특징과 맡긴 곳·창고 */
+  // 색을 고르는 동안에는 미리보기만 바꾼다. 적용할 때 소유권·잔액을 다시 확인한다.
+  Y.dyeSails = async function (c, sh) {
+    var s = S(), owned = function () { return s.fleet.ships.concat(C.B.harbor.moored(c)).indexOf(sh) >= 0 && !sh.loan; };
+    if (!owned()) return;
+    var current = A.validSailColor(sh.sailColor) ? sh.sailColor.toLowerCase() : null, picked = current;
+    var cost = Math.max(1, sh.sails.length) * G.BALANCE.sailDye.pricePerMast;
+    var palette = G.FX.sailColors;
+    var win = UI.window({ title: sh.name + '호 — 돛 색깔', icon: 'sail', width: 660,
+      html: '<p>색을 고르면 이 배의 돛에 미리 보입니다. 적용 비용 ' + U.num(cost) + '닢 · 소지금 ' + U.num(s.player.gold) + '닢</p>' +
+        '<canvas class="sail-dye-preview" width="580" height="320" style="display:block;width:100%;height:auto" aria-label="돛 색깔 미리보기"></canvas>' +
+        '<div class="sail-dye-colors" style="display:flex;flex-wrap:wrap;gap:8px;margin:12px 0">' + palette.map(function (p, i) {
+          return '<button type="button" class="btn" data-dye="' + i + '" aria-pressed="false"><span style="display:inline-block;width:15px;height:15px;vertical-align:middle;border:1px solid currentColor;background:' + (p.color || '#e4d6b8') + '"></span> ' + p.name + '</button>';
+        }).join('') + '</div><label>직접 고르기 <input class="sail-dye-custom" type="color" value="' + (current || '#f1e6cc') + '"></label> <b class="sail-dye-name"></b>',
+      buttons: [{ label: '이 색으로 적용', value: 'apply', onClick: function () {
+        if (picked !== current && s.player.gold < cost) { UI.toast('염색할 금화가 모자랍니다.', 'coin'); return false; }
+      } }, { label: '그만둔다', value: null, cls: 'navy' }],
+      onBuild: function (el) {
+        var cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), custom = el.querySelector('input');
+        function preview() {
+          ctx.fillStyle = '#193b4b'; ctx.fillRect(0, 0, cv.width, cv.height);
+          var look = A.shipLook(sh.type, { sails: sh.sails, sailColor: picked, flag: '#315c99', rig: { fill: .9, brace: .15, lee: 1 } });
+          if (!G.Ship3D || !G.Ship3D.draw(ctx, cv.width / 2, cv.height * .88, .55, 200, look, 1.25)) {
+            A.shipSide(ctx, cv.width / 2, cv.height * .78, 1.35, look, U.makeRng(1), 1);
+          }
+          el.querySelector('.sail-dye-name').textContent = A.sailColorName(picked);
+          U.$$('[data-dye]', el).forEach(function (b) { var on = palette[+b.dataset.dye].color === picked; b.setAttribute('aria-pressed', String(on)); b.style.outline = on ? '2px solid currentColor' : ''; });
+        }
+        U.$$('[data-dye]', el).forEach(function (b) { b.onclick = function () { picked = palette[+b.dataset.dye].color; if (picked) custom.value = picked; preview(); }; });
+        custom.oninput = function () { if (A.validSailColor(custom.value)) { picked = custom.value.toLowerCase(); preview(); } };
+        preview();
+      } });
+    if ((await win.result) !== 'apply' || picked === current || !owned() || s.player.gold < cost) return;
+    s.player.gold -= cost;
+    if (picked) sh.sailColor = picked; else delete sh.sailColor;
+    G.State.log(sh.name + '호의 돛을 ' + A.sailColorName(picked) + '으로 바꾸었다. (' + U.num(cost) + '닢)');
+    UI.toast(sh.name + '호 — 돛 색깔: ' + A.sailColorName(picked), 'sail');
+  };
   var YHEAD = '<div class="yhead"><span>선명</span><span>선종</span><span>선장</span><span>목재</span><span class="n">내구력</span><span class="n">적재량</span><span>대포</span><span>돛</span><span>삭구</span><span>선수상</span></div>';
   var SAIL_MARK = { sq: '□', lat: '△', bat: '▤' };
   function shipRow(sh, s, list) {
@@ -366,6 +415,7 @@
     var sailTitle = sh.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k] || k; }).join(' · ');
     var hurt = sh.hp < sh.maxHp;
     var extra = [];
+    if (sh.sailColor) extra.push('돛 색깔: ' + A.sailColorName(sh.sailColor));
     if (sh.ports < t.ports) extra.push('포문 ' + sh.ports + '/' + t.ports + '문 (늘릴 수 있음)');
     if (G.Cabins && G.Cabins.storeCount && sh !== s.fleet.ships[0] && G.Cabins.storeCount(sh)) extra.push('선실 창고 ' + G.Cabins.storeCount(sh) + '/' + G.Cabins.slots(sh) + '칸');
     if (w) extra.push(w.name + ' — ' + SH().woodLine(w));

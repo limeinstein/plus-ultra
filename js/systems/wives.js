@@ -116,6 +116,7 @@
   function wedLog(name) { var l = W.list(), w = l[l.length - 1]; G.State.log(name + U.jx(name, '을/를') + ' ' + (w ? W.ordinal(w) : '둘째 부인') + '으로 맞았다.'); }   // 막 맞은 부인 (목록 끝)
   /** 여급에게 청혼 (본처가 있을 때) — 그 도시에 집이 생긴다. true = 결혼함 */
   W.proposeMaid = async function (c, m, say) {
+    if (G.R.heroFemale()) return false;   // 여성 제독은 청혼하지 않는다 (2026-11-23)
     var p = P();
     if (W.of(m.id)) { UI.toast('이미 부인입니다.', 'ring'); return false; }
     if (!W.canMarry()) { full(); return false; }
@@ -138,6 +139,7 @@
   };
   /** 부하에게 청혼 (본처가 있을 때): 고향으로 데려다주거나 함께 항해한다. true = 결혼함 */
   W.proposeMate = async function (d, m, say) {
+    if (G.R.heroFemale()) return false;   // 여성 제독은 청혼하지 않는다 (2026-11-23)
     var p = P(), home = metCity(m), hc = G.CITY_DATA[home];
     if (W.of(d.id)) { UI.toast('이미 부인입니다.', 'ring'); return false; }
     if (!W.canMarry()) { full(); return false; }
@@ -304,7 +306,7 @@
       await UI.alert(W.name(w) + U.jx(W.name(w), '이/가') + ' 아이를 가졌다. ' + Math.max(1, Math.round((w.preg.due - s.day) / 30)) + '달쯤 뒤에 태어난다.', '기쁜 소식');
     }
     var md = G.MATE[w.id], tooOld = (md && (md.old || (md.bornY && s.date.y - md.bornY > 45))) || (G.Family.momAge && G.Family.momAge(w.id) > ((fc.inherit || {}).momMax || 45));   // 어머니 나이 (family.js F.momAge)
-    if (!w.preg && !tooOld && W.canConceive(W.momKey(w)) && (w.lastBirth == null || s.day - w.lastBirth >= (fc.gapDays || 300)) && (w.tryDay == null || s.day - w.tryDay >= (rest ? 3 : 20))) {
+    if (!w.preg && !tooOld && !G.R.heroFemale() && W.canConceive(W.momKey(w)) && (w.lastBirth == null || s.day - w.lastBirth >= (fc.gapDays || 300)) && (w.tryDay == null || s.day - w.tryDay >= (rest ? 3 : 20))) {
       w.tryDay = s.day;
       if (U.chance((cfg().conceive || 0.3) * (rest ? 1.2 : 1))) w.preg = W.newPreg(W.momKey(w), s.day, fc.gestation || 266);
     }

@@ -16,7 +16,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (/^ASKS/.test(m.text())) console.log('    ' + m.text()); });
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_|Failed to load|net::/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   try {
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
@@ -158,5 +158,5 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(!errors.length, '콘솔 오류 0 ' + errors.slice(0, 3).join(' | '));
     console.log('통과');
   } catch (e) { console.error('✗ ' + e.message); process.exitCode = 1; }
-  await browser.close();
+  finally { await browser.close(); }
 })();

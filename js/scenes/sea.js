@@ -24,6 +24,7 @@
     if (!st.fx && G.SeaFX) st.fx = G.SeaFX.create();
     if (!st.pose) st.pose = { roll: 0, pitch: 0, heave: 0 };
     if (G.Img.prefetchCrew) G.Img.prefetchCrew();     // 바다에서 말을 거는 동료들의 얼굴
+    if (arg.depart != null && G.DiscoveryGuides) G.DiscoveryGuides.depart();
     if (arg.depart != null) {
       var c = G.CITY_DATA[arg.depart];
       var dock = c.dock || [c.lat, c.lon];
@@ -32,7 +33,7 @@
       s.fleet.daysOut = 0;
       s.fleet.scurvy = Math.min(s.fleet.scurvy || 0, 10);     // 항구에서 신선한 먹을거리를 싣고 나간다
       s.sailNo = (s.sailNo || 0) + 1;                       // 출항 횟수 — 항해사에게 들을 이야기가 다시 생긴다 (js/city/tavern.js T.mateInfo)
-      s.voyage = { from: c.id, found0: s.stats.found, known0: s.known.length, marks0: Object.keys(s.marks || {}).length, wins0: s.stats.wins, gold0: s.player.gold };
+      s.voyage = { from: c.id, startDay: s.day, found0: s.stats.found, known0: s.known.length, marks0: Object.keys(s.marks || {}).length, wins0: s.stats.wins, gold0: s.player.gold };
       s.flags.fromEurope = c.region <= 3 && c.lon < 20;
       if (c.region === 10) s.flags.fromEurope = false;
       st.lastPort = c.id;
@@ -2271,7 +2272,7 @@
       var lenS = si === 0 ? SP : FP;
       // 기함·동행선·호위 상선 각각의 실제 자리에 독립된 물길을 남긴다.
       shipWater(ctx,'fleet:'+si,sh.type,l.lon,l.lat,bx,by,ha,lenS*sv.squash,shipSpeed(),si===0);
-      var lk = A.shipLook(sh.type, { sails: sh.sails, flag: sh.escort ? '#c9a030' : '#1d3f7a' });   // 호위하는 상선은 상선의 노란 깃발
+      var lk = A.shipLook(sh.type, { sails: sh.sails, sailColor: sh.sailColor, flag: sh.escort ? '#c9a030' : '#1d3f7a' });   // 호위하는 상선은 상선의 노란 깃발
       var ps = st.pose || {}, ph = si * 1.7, RF = si && st.rideF && st.rideF[si], RDm = G.FX.ride || {};
       if (RF) lk.pose = { roll: U.clamp(RF.roll, -RDm.maxRoll, RDm.maxRoll), pitch: U.clamp(RF.pitch, -RDm.maxPitch, RDm.maxPitch), heave: U.clamp(RF.heave, -RDm.maxHeave, RDm.maxHeave) };
       else lk.pose = { roll: (ps.roll || 0) * (si ? 0.9 : 1), pitch: (ps.pitch || 0) + (si ? Math.sin(st.t * 1.1 + ph) * 0.01 : 0), heave: (ps.heave || 0) * (si ? Math.cos(ph) : 1) };

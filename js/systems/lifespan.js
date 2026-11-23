@@ -16,7 +16,10 @@
   function S() { return G.Game.state; }
   function K() { return (G.BALANCE && G.BALANCE.life) || { maxAge: 80, warnFrom: 75, giftLoyal: 90, giftLoyalUp: 2 }; }
   function st() { var s = S(); return s.life || (s.life = {}); }
-  LF.maxAge = function () { return K().maxAge || 80; };
+  /** 이야기 모드에서 엔딩 전 (뒤를 이을 수 없다 — js/systems/story.js ST.noHeirs) */
+  function storyLock() { return !!(G.Story && G.Story.noHeirs && G.Story.noHeirs()); }
+  LF.storyLock = storyLock;
+  LF.maxAge = function () { return storyLock() ? (K().storyMaxAge || 100) : (K().maxAge || 80); };
 
   /** 날마다 (js/systems/world.js) — 생일이면 선물을 예약하고, 수명이 다했으면 표시한다. 알림 목록을 돌려준다 */
   LF.daily = function () {
@@ -25,7 +28,8 @@
     var age = R.age(), bday = s.date.m === s.player.born.m && s.date.d === s.player.born.d;
     if (bday) {
       if (T.bdayDone !== s.date.y && LF.givers().length) T.bday = s.date.y;
-      if (age >= (k.warnFrom || 75) && age < LF.maxAge()) out.push({ icon: 'hourglass', text: R.fullName() + '도 어느덧 ' + age + '세. 남은 날이 많지 않다는 것을 스스로도 안다' + (G.Family && G.Family.heirs && G.Family.heirs().length ? '.' : ' — 뒤를 이을 아들이 아직 없다.'), lifeWarn: true });
+      if (storyLock()) { if ((k.storyWarnAt || [80, 90]).indexOf(age) >= 0 && age < LF.maxAge()) out.push({ icon: 'hourglass', text: R.fullName() + '도 어느덧 ' + age + '세. 앞으로 남은 시간이 얼마 남지 않았다.', lifeWarn: true }); }
+      else if (age >= (k.warnFrom || 75) && age < LF.maxAge()) out.push({ icon: 'hourglass', text: R.fullName() + '도 어느덧 ' + age + '세. 남은 날이 많지 않다는 것을 스스로도 안다' + (G.Family && G.Family.heirs && G.Family.heirs().length ? '.' : ' — 뒤를 이을 아이가 아직 없다.'), lifeWarn: true });
     }
     if (!T.end && LF.dying !== s && age >= LF.maxAge()) { T.end = age; G.State.log(R.fullName() + U.j(R.fullName(), '이/가').slice(R.fullName().length) + ' ' + age + '세가 되었다.'); }
     return out;
@@ -186,9 +190,14 @@
       : s.loc.city === seat ? cc.name + '의 ' + (cc.colony != null ? '총독 관저' : '자택') + ' 침상에서'   // 가족이 사는 도시에서는 집에서 (2026-10-26 — 고향에서도 「여관 방」이던 것)
       : cc.name + '의 여관 방에서';
     G.State.log(name + U.j(name, '이/가').slice(name.length) + ' ' + age + '세로 세상을 떠났다.');
+    if (storyLock()) {   // 이야기 모드 (엔딩 전): 뒤를 이을 사람이 없다 — 이야기가 여기서 끝난다
+      await UI.alert(age + '세 생일이 지난 어느 밤, ' + name + U.jx(name, '은/는') + ' ' + where + ' 조용히 눈을 감았다.<br>' +
+        G.Story.kin() + '를 찾는 여정은 끝내 마치지 못했다.<br><br><span class="warn-text">이야기가 여기서 끝난다.</span>', '세월');
+      return G.Ending.show('death');
+    }
     await UI.alert(age + '세 생일이 지난 어느 밤, ' + name + U.jx(name, '은/는') + ' ' + where + ' 조용히 눈을 감았다.<br>' +
       '평생을 바다와 함께한 제독이었다. 곁을 지키던 이들이 마지막으로 들은 말은 바람과 물때에 관한 것이었다고 한다.<br><br>' +
-      (heirs.length ? '<span class="muted">이제 뜻을 이을 아들이 나설 차례다.</span>' : G.Family.minorSon && G.Family.minorSon() ? '<span class="muted">뒤를 이을 맏아들은 아직 어리다 — 그 아이를 기다릴지, 성인 친족에게 맡길지 정할 수 있다.</span>' : '<span class="warn-text">성인 친족에게 함대와 항해 기록을 맡겨 가문의 모험을 이어 갈 수 있다.</span>'), '세월');
+      (heirs.length ? '<span class="muted">이제 뜻을 이을 아이가 나설 차례다.</span>' : G.Family.minorSon && G.Family.minorSon() ? '<span class="muted">뒤를 이을 맏아들은 아직 어리다 — 그 아이를 기다릴지, 성인 친족에게 맡길지 정할 수 있다.</span>' : '<span class="warn-text">성인 친족에게 함대와 항해 기록을 맡겨 가문의 모험을 이어 갈 수 있다.</span>'), '세월');
     await G.Family.retire(true);
   };
 })(window.G = window.G || {});

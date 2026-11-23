@@ -116,6 +116,13 @@ if os.path.isfile(plant_native_overrides):
         PREFERRED_FILES.update(json.load(plant_native_file))
 
 
+# 제독의 젊은·중년·노년 교체본. 원본을 보존하고 목록·웹 빌드에도 같은 연결을 쓴다.
+player_age_overrides = os.path.join(TOOLS, 'player_portrait_ages_20261123', 'asset-overrides.json')
+if os.path.isfile(player_age_overrides):
+    with open(player_age_overrides, encoding='utf-8') as player_age_file:
+        PREFERRED_FILES.update(json.load(player_age_file))
+
+
 def read(rel):
     with open(os.path.join(ROOT, rel), encoding='utf-8') as f:
         return f.read()
@@ -305,6 +312,14 @@ def game_data():
     if os.path.exists(os.path.join(ROOT, 'js/data/coffee.js')):
         coffee = read('js/data/coffee.js')
         d['drinks'] = [{'id': x[0], 'name': x[1]} for x in re.findall(r"\['([^']+)', '([^']+)', '[^']+', '[^']+', \d\]", coffee)]
+    # 원고에서 생성한 새 발견과 지역 길잡이도 그림 점검 대상에 포함한다.
+    story_mapping = os.path.join(TOOLS, 'discovery_stories_20261123', 'mapping.json')
+    if os.path.isfile(story_mapping):
+        with open(story_mapping, encoding='utf-8') as source:
+            d['discoveries'] += [{'id': row['definition']['id'], 'name': row['definition']['name'], 'cat': row['definition']['cat']} for row in json.load(source) if row.get('new')]
+    if os.path.isfile(os.path.join(ROOT, 'js/data/discovery_guides.js')):
+        guide_data = read('js/data/discovery_guides.js')
+        d['mates'] += [{'id': ident, 'name': name, 'g': 'm'} for ident, name in re.findall(r"\{ id: '([^']+)', key: '[^']+', name: '([^']+)'", guide_data)]
     return d
 
 
@@ -520,9 +535,6 @@ def valid_keys(d):
             k['sprites/' + sid] = '육상 탐험 · 탐험대 8방향 (%s)' % sid[6:]
         else:
             k['sprites/' + sid] = names.get(sid, '스프라이트 · ' + sid) + ' 스프라이트 시트'
-    k['ui/notebook/folio'] = '항해 수첩 · 가죽 제본 양피지'
-    for name in ['atlas-frame','parchment-panel','button-navy-ornate','button-paper-ornate','map-world','map-eu','map-ea']:
-        k['ui/storyselect/' + name] = '고지도 이야기 선택 · ' + name
     return k
 
 
@@ -560,7 +572,7 @@ def write_manifest(found):
 
 def is_valid(key, keys):
     family_age = re.match(r'^portraits/family/(?:[a-z0-9_]+/)?(?:son|daughter)_age(?:5|10|15|20|40)(?:_v[1-5])?(?:_half)?$', key)
-    return key in keys or family_age or key.startswith(('portraits/player/', 'portraits/player-aged/', 'portraits/courtiers/', 'portraits/building-managers/', 'portraits/gardeners/', 'interiors/royal-gardens/', 'landmarks/', 'map-discoveries/', 'characters/',
+    return key in keys or family_age or key.startswith(('portraits/player/', 'portraits/player-aged/', 'portraits/player-elderly/', 'portraits/player-ages-20261123/', 'portraits/courtiers/', 'portraits/building-managers/', 'portraits/gardeners/', 'interiors/royal-gardens/', 'landmarks/', 'map-discoveries/', 'characters/',
                                           'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'figureheads/', 'relics/', 'relic-kinds/',
                                           'discovery-ends/', 'discovery-sheets/', 'duel/', 'street-folk/', 'npc-walk/', 'guide/', 'masterworks/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 
@@ -569,7 +581,7 @@ def report(found, dups, keys):
     groups = [('타이틀', 'title'), ('거리 배경', 'backgrounds/'), ('거리 배경(공통)', 'bg-styles/'), ('건물 겉모습', 'exteriors/'), ('지역별 건물', 'exterior-styles/'),
               ('거리 볼거리', 'landmarks/'), ('지도 유적', 'map-discoveries/'), ('제독 캐릭터', 'characters/'), ('도시 풍경', 'cities/'), ('양식 공통 풍경', 'city-styles/'), ('건물 내부', 'interiors/'),
               ('마을 사람', 'portraits/npc/'), ('시설 관리자', 'portraits/building-managers/'), ('왕실 정원사', 'portraits/gardeners/'), ('왕실 정원 내부', 'interiors/royal-gardens/'), ('거리 대화 NPC', 'portraits/street-folk/'), ('동료', 'portraits/mates/'), ('여급', 'portraits/maids/'), ('지역별 여급', 'maid-styles/'), ('후원자', 'portraits/sponsors/'), ('왕실 신하', 'portraits/courtiers/'),
-              ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40대)', 'portraits/player-aged/'), ('자녀', 'portraits/family/'),
+              ('경쟁자', 'portraits/rivals/'), ('제독(주인공)', 'portraits/player/'), ('제독(40세 중년)', 'portraits/player-aged/'), ('제독(70세 노년)', 'portraits/player-elderly/'), ('자녀', 'portraits/family/'),
               ('발견물', 'discoveries/'), ('발견물 분류 공통', 'discovery-cats/'), ('일반 소지품', 'items/'), ('교역품', 'goods/'), ('유물', 'relics/'), ('유적 GIF 마지막 장면', 'discovery-ends/'), ('발견 장면 판', 'discovery-sheets/'), ('배', 'ships/'), ('항해 배', 'ships-nav/'), ('기함 선실', 'cabins/'),
               ('항해 효과', 'effects/'), ('결과 연출', 'outcomes/'), ('이야기 사진', 'story/'), ('명작', 'masterworks/'), ('육상전 배경', 'landwar/backgrounds/'), ('일기토 그림', 'duel/'), ('거리 길바닥', 'street-ground/'), ('거리 보행 NPC', 'street-folk/'), ('보행 원본', 'npc-walk/'), ('미니게임', 'minigames/'), ('가이드북 그림', 'guide/')]
     groups.append(('해적 수배서', 'wanted/'))

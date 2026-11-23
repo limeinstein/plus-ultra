@@ -17,7 +17,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); passed++; console.log('  ✓
   const page = await browser.newPage({ viewport: { width: 960, height: 540 } });
   const errors = [];
   page.on('pageerror', e => errors.push('PAGEERR ' + e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|ERR_NAME|Failed to load/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   await page.addInitScript(() => {
     // 시험 도우미. 그림 칠하기(rAF)는 시험이 박자를 정한다 — 도시에서는 제 박자로, 바다·뭍·해전에서는 드물게(느린 swiftshader)
     const TT = window.TT = { log: [], raf: [], slow: false, n: 0 };

@@ -265,6 +265,7 @@
     // shipPrices: 배 종류별 값 덮어쓰기 {id: 값}. 0.306에서 중대형 배를 2.5~4배로 올렸다가 0.310에서 되돌렸다 —
     //   돈이 곧 발견 경쟁의 시간이라 새로 시작한 제독만 묶였다(베타 피드백 #138·#139). 비워 두면 js/data/ships.js의 값.
     shipPrices: {},
+    sailDye: { pricePerMast: 120 }, // 조선소 돛 염색: 돛대 하나당 값, 원래 색 복원도 같은 값
     commerce: {
       // 출자 문턱: 0.310에서 0.305 값으로 되돌렸다. 가까운 희귀품 반복(카사블랑카 용연향)은 rareInvestK(희귀품을 여는 등급 ×2.5)와 재고 한도가 막는다.
       investLevels: [0, 4000, 12000, 30000, 70000, 150000], oldLevels: [0, 4000, 12000, 30000, 70000, 150000],
@@ -677,7 +678,8 @@
     // 제독의 수명·생일 선물 (js/systems/lifespan.js): maxAge세 생일에 세상을 떠난다(아들이 있으면 뒤를 잇는다). warnFrom세부터 생일마다 귀띔.
     //   생일에 충성 giftLoyal 이상인 부하 가운데 가장 충성스러운 한 사람이 특기에 맞는 선물 하나(고맙다는 말에 충성 +giftLoyalUp),
     //   함께 배에 탄 아내·견습 아이도 선물 (아이와의 사이 +kidBond)
-    life: { maxAge: 80, warnFrom: 75, giftLoyal: 90, giftLoyalUp: 2, kidBond: 3 },
+    life: { maxAge: 80, warnFrom: 75, giftLoyal: 90, giftLoyalUp: 2, kidBond: 3,
+      storyMaxAge: 100, storyWarnAt: [80, 90] },   // 이야기 모드(엔딩 전): 뒤를 이을 수 없다 — 80·90세 생일에 알리고 100세에 이야기가 끝난다 (2026-11-23)
     // 해적의 소굴 (js/systems/pirate_lair.js · 자료 js/data/pirate_lairs.js — 2026-11-06 사용자 요청)
     //   kills: 한 바다에서 이름난 해적을 몇 명(서로 다른 사람) 무찌르면 소굴이 드러나나 · chiefs: 소굴을 지키는 두목 수(차례로 무찌른다)
     //   near: 소굴 앞바다(배를 대는 곳에서 °) · spawn: 두목 함대가 나타나는 거리(°) · cool: 두목 함대를 놓치거나 졌을 때 다시 나올 때까지(일)
@@ -818,7 +820,7 @@
     testChar: { stat: 99, luck: 99, gold: 999999999, look: 'ganghui', ships: ['geobukseon', 'galleon'] },   // look: 얼굴·반신상·걷는 그림·일기토 시트 이름 · gold: 소지금 최대(9억 9999만 9999닢)
     // 여관 허드렛일: 한 번에 최대 maxDays일. 하루에 명성이 famePerDay씩 내려가고(제독이 허드렛일을…), 그 고장 말을 익힌다 —
     // 말 단계(모름→기초→보통→능숙)마다 일한 날 langDays[지금 단계]일이 쌓이면 한 단계 오른다(지력이 높으면 빨리: 지력 50 기준)
-    innWork: { maxDays: 90, restNights: 10, famePerDay: 1, langDays: [40, 80, 120] },   // 석 달을 넘겨 일할 수 없다 — 여관에서 열흘 넘게 묵으면 다시 석 달 (2026-10-20)
+    innWork: { maxDays: 90, restNights: 10, famePerDay: 1, langDays: [40, 80, 120], reliefGold: 3000 },   // reliefGold: 돈이 0이 되면 (최저가 배 1척 +) 이만큼 모일 때까지 날수 제한 없이 일한다 (2026-11-23)   // 석 달을 넘겨 일할 수 없다 — 여관에서 열흘 넘게 묵으면 다시 석 달 (2026-10-20)
     // 식당 한 끼: 값 = base + 도시 등급×size + 음식 등급×tier, 하루 한 번 피로·체력을 회복 (js/city/restaurant.js)
     //   minSize = 식당이 서는 가장 작은 도시 등급 (그보다 작아도 이름난 음식이 있으면 선다 — js/data/cuisine_place.js)
     restaurant: { base: 5, size: 3, tier: 4, rest: [0, 6, 8, 10], hp: [0, 1, 2, 3], minSize: 2, disc: [0, 2, 3, 4], so: [0, 1, 1, 2], first: { so: 4, rest: 4, disc: 2 } },   // disc: 규율이 오르는 만큼 · so: 사교 명성이 살짝(사교 배수 ×3 전) (음식 등급별, 2026-10-17)

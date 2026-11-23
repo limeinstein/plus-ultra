@@ -242,14 +242,21 @@
   a('동료', 'family_cruise', '가족 유람단', '동승 가족이 한 명 이상이고 동료·동승자가 모두 가족인 편성으로 ' + VK.familyDays + '일(3개월) 항해했다. 항구 체류일은 제외하며, 가족 외 동료와 항해하면 연속 기록이 초기화된다.',
     { voyageRule: 'family' }, 0, 0, '가족 유람단');
   a('동료', 'love_impossible', '사랑은 불가능의 영역', '제독 외 동료·동승자가 한 명 이상이며 모두 현재 아내인 배로 출항하거나 항해했다. 집에 남은 아내는 제외한다.',
-    { voyageRule: 'wives' }, 0, 0, '사랑은 불가능의 영역');
+    { voyageRule: 'wives', sex: 'm' }, 0, 0, '사랑은 불가능의 영역');
+  // sex: 그 성별의 제독에게만 보이고 셈하는 업적 (js/systems/achieve.js AC.list — 2026-11-23). 여성 제독은 남편으로 센다 (js/systems/husbands.js)
+  a('동료', 'ship_harbor', '남자는 배 여자는 항구', '제독 외 동료·동승자가 한 명 이상이며 모두 현재 남편인 배로 출항하거나 항해했다.',
+    { voyageRule: 'husbands', sex: 'f' }, 0, 0, '남자는 배 여자는 항구');
   a('조합', 'around_world_80', '80일간의 세계일주', '모항에서 출항해 지구를 한 바퀴 돌고 ' + VK.circDays + '일 이내에 같은 모항으로 귀환했다. 중간 기항일도 소요 일수에 포함한다.',
     { voyageRule: 'circ' }, 0, 0, '80일간의 세계일주');
   var MK = G.BALANCE.marriageAchievements, wifeCap = G.BALANCE.wives.maxSpouses;
   a('동료', 'casanova', '카사노바', '남성 제독이 만 ' + MK.youngMin + '~' + MK.youngMax + '세에 현재 아내 전원과 혼인하고, 첫 혼인일부터 ' + MK.years + '년 이내에 본처 포함 아내 정원 ' + wifeCap + '명을 채웠다.',
-    { marriageRule: 'young' }, 0, 0, '카사노바');
+    { marriageRule: 'young', sex: 'm' }, 0, 0, '카사노바');
+  a('동료', 'femme_fatale', '팜므파탈', '여성 제독이 만 ' + MK.youngMin + '~' + MK.youngMax + '세에 현재 남편 전원과 혼인하고, 첫 혼인일부터 ' + MK.years + '년 이내에 남편 정원 ' + wifeCap + '명을 채웠다.',
+    { marriageRule: 'young', sex: 'f' }, 0, 0, '팜므파탈');
   a('동료', 'uijawang', '의자왕', '남성 제독이 만 ' + MK.elderMin + '세 이후에 현재 아내 전원과 혼인하고, 첫 혼인일부터 ' + MK.years + '년 이내에 본처 포함 아내 정원 ' + wifeCap + '명을 채웠다.',
-    { marriageRule: 'elder' }, 0, 0, '의자왕');
+    { marriageRule: 'elder', sex: 'm' }, 0, 0, '의자왕');
+  a('동료', 'cheukcheon', '측천무후', '여성 제독이 만 ' + MK.elderMin + '세 이후에 현재 남편 전원과 혼인하고, 첫 혼인일부터 ' + MK.years + '년 이내에 남편 정원 ' + wifeCap + '명을 채웠다.',
+    { marriageRule: 'elder', sex: 'f' }, 0, 0, '측천무후');
   var LK = G.BALANCE.liberatorAchievement;
   a('동료', 'liberator', '해방자', '현재 동료 항해사가 한 명 이상이며 모두 아프리카 흑인 항해사다. 제독과 일반 선원 수는 제외한다.',
     { crewComposition: 'blackAfrican', notoriety: LK.notoriety }, LK.fame, 0);
@@ -260,9 +267,9 @@
   a('동료', 'onceupon', 'Once Upon a Time', '신데렐라·백설공주·잠자는 숲속의 공주·인어공주 — 옛이야기의 네 아가씨를 모두 배에 태웠다.',
     { crew: ['cinderella', 'snow_white', 'sleeping_beauty', 'little_mermaid'] }, 600, 30000, '옛이야기의 제독');
   a('동료', 'happily', 'Happily Ever After', '옛이야기의 네 아가씨와 모두 혼인했다. 그리고 오래오래 행복하게 살았답니다.',
-    { wed: ['cinderella', 'snow_white', 'sleeping_beauty', 'little_mermaid'] }, 800, 50000, '동화의 끝');
+    { wed: ['cinderella', 'snow_white', 'sleeping_beauty', 'little_mermaid'], sex: 'm' }, 800, 50000, '동화의 끝');   // 여성 제독의 업적 목록에서는 빠진다
   a('동료', 'dreamcome', 'Dream Come True', '옛이야기의 네 공주와 본가에서 한 지붕 아래 함께 산다. 공주 출신이라 신분을 따지지 않아 아무도 다투지 않는다.',
-    { custom: 'fairyhome' }, 800, 50000, '꿈이 이루어진 집');   // js/systems/fairy_home.js
+    { custom: 'fairyhome', sex: 'm' }, 800, 50000, '꿈이 이루어진 집');   // js/systems/fairy_home.js
   // ------------------------------------------------------------------ 해적 (2026-11-06) — js/systems/pirate_lair.js · js/data/pirate_lairs.js
   a('해적', 'pirateking', '해적왕', '일곱 바다의 해적 소굴을 모두 손에 넣었다 — 지중해·대서양·북해·카리브·인도양·동남아시아·동아시아.',
     { custom: 'lairs' }, 1500, 150000, '해적왕');

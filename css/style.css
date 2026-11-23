@@ -269,6 +269,10 @@ body { font-family: var(--serif); font-weight: var(--body-weight, 400); color: v
 /* 제독 만들기: 생김새 이름 */
 .create .look-name { margin-top: 6px; font-size: 16px; color: var(--ink); line-height: 1.35; }
 .create .look-name small { display: block; font-size: 13px; }
+/* 제독 만들기 — 제목 줄 오른쪽의 성별 단추 (js/scenes/create.js) */
+.create .cr-head { position: relative; }
+.create .cr-head .cr-sex { position: absolute; right: 0; top: -4px; gap: 4px; flex-wrap: nowrap; }
+.create .cr-head .cr-sex .opt { padding: 3px 12px; font-size: 16px; }
 /* 아이콘 자리에 그림 (G.icon({src})) — 알림·바다 소식의 얼굴·물건 */
 img.ic.ic-pic { width: 34px; height: 34px; object-fit: contain; border-radius: 6px; background: radial-gradient(circle, rgba(255,248,224,.9), rgba(180,143,87,.35)); flex: 0 0 auto; }
 .toast img.ic.ic-pic { width: 44px; height: 44px; flex: 0 0 44px; }

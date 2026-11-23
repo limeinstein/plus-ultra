@@ -159,6 +159,8 @@
       if (G.JHook && G.JHook.active()) { try { await G.JHook.arrive(c, arg); } catch (e) { console.error(e); } }
       if (G.GoldSea && G.GoldSea.active()) { try { await G.GoldSea.arrive(c, arg); } catch (e) { console.error(e); } }   // 이야기 모드 「황금의 바다」 (js/systems/gold.js)   // 이야기 모드 「해적여제」 (js/systems/jhook.js)   // 이야기 모드 「바닷길 노래」: 프롤로그·도시에서 일어나는 사건 (js/systems/song.js)
       if (arg.arrive) await C.arrival(c, arg);
+      if (!arg.load && G.DiscStories) await G.DiscStories.arrive(c);
+      if (!arg.load && G.DiscoveryGuides) await G.DiscoveryGuides.arrive(c);
       if (G.Strand && s.loc.via === 'sea' && !arg.load) { var sfBack = await G.Strand.atCity(c); if (sfBack) { await C.mate(sfBack); G.Game.refreshHud(); } }   // 이 항구에 남겨 둔 배를 되찾는다
       else if (G.Strand && s.loc.via === 'land' && !arg.load && G.Strand.offerByLand) { if (await G.Strand.offerByLand(c)) G.Game.cityHud(); }   // 뭍길로 왔어도 이 항구에 남겨 둔 배에 오를 수 있다 (제보 2026-11-06)
       if (arg.load) { UI.toast(U.fmtDate(s.date) + ' — ' + c.name, 'book'); }
@@ -223,6 +225,7 @@
       if (G.EIndia && G.EIndia.pending()) await G.EIndia.check();   // 동인도 회사 — 런던·암스테르담의 설립과 수왈리·자야카르타·반다·암보이나의 위기 (js/systems/eastindia.js)
       if (G.ColonyCo && G.ColonyCo.pending()) await G.ColonyCo.check();   // 식민지 경쟁의 회사들 — 서인도 회사·프랑스 동인도 회사·신스웨덴·다리엔 청약 (js/systems/colonyco.js)
       if (G.Rovers && G.Rovers.pending()) await G.Rovers.check();   // 메이플라워(물자·첫 겨울·왐파노아그·추수 잔치) · 한양의 박연 (js/systems/rovers.js)
+      if (G.Husbands && G.Husbands.pending()) await G.Husbands.check();   // 여성 제독의 남편들 — 가끔 서로 싸워 다친다 (js/systems/husbands.js)
       if (G.WifeFeud && G.WifeFeud.pending()) await G.WifeFeud.check();   // 두 부인이 한 도시에 — 질투와 부부싸움 (js/systems/wifefeud.js)
       if (G.SEAsia && G.SEAsia.pending()) await G.SEAsia.check();   // 16세기 동남아 — 바인나웅 · 란쌍 · 우르다네타 · 아유타야 함락 (js/systems/seasia16.js)
       if (G.ZhengHe && G.ZhengHe.pending()) await G.ZhengHe.check();   // 정화의 보선 — 아프리카 항구의 소문 · 이긴 뒤의 행선 패 (js/systems/zhenghe.js)

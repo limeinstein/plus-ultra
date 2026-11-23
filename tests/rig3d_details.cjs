@@ -1,5 +1,5 @@
 /* 범장 교정: 36종의 실제 천-선루 간섭, 망루 구조, 부착점, 확대 결과 검사. */
-const assert=require('assert'),fs=require('fs'),path=require('path'),{pathToFileURL}=require('url'),{chromium}=require('playwright');
+const assert=require('assert'),fs=require('fs'),path=require('path'),{pathToFileURL}=require('url');let pw;try{pw=require('playwright');}catch(_){pw=require('../tools/procedural_art/node_modules/playwright-core');}const {chromium}=pw;
 const ROOT=path.resolve(__dirname,'..'),GPU=process.env.SHIP3D_GPU!=='0',OUT=path.join(ROOT,'artifacts/rig3d-20261031',GPU?'gpu':'software');fs.mkdirSync(OUT,{recursive:true});
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:GPU?['--use-angle=d3d11','--enable-gpu','--ignore-gpu-blocklist']:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--no-sandbox']});
@@ -9,7 +9,7 @@ const ROOT=path.resolve(__dirname,'..'),GPU=process.env.SHIP3D_GPU!=='0',OUT=pat
   await page.goto(pathToFileURL(path.join(ROOT,'test_ships_3d.html')).href);
   const result=await page.evaluate(()=>{
    const T=G.Three,report=[],images=[],before=JSON.stringify(G.SHIP_TYPES),models=G.ShipModels.ids;
-   if(models.length!==36||Object.keys(G.FX.shipRig.profiles).length!==36)throw new Error('36종 범장 누락');
+   if(models.length!==G.SHIP_TYPES.length||Object.keys(G.FX.shipRig.profiles).length!==G.SHIP_TYPES.length)throw new Error('36종 범장 누락');
    function release(root){const geos=new Set(),mats=new Set(),tex=new Set();root.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)mats.add(o.material);});for(const m of mats){for(const k of ['map','bumpMap'])if(m[k])tex.add(m[k]);m.dispose();}geos.forEach(g=>g.dispose());tex.forEach(t=>t.dispose());}
    for(const id of models){
     const ship=G.ShipModels.create(T,id),all=new T.Group();all.add(ship.buildHull());const rig=G.ShipModels.makeRig(ship,T,g=>g,G.FX.ship3d);all.add(rig.root);

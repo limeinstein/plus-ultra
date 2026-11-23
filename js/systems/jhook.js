@@ -64,7 +64,11 @@
     return { name: k };
   }
   JH.who = who;
-  function fmt(t) { var c = curCity(); return String(t).replace(/\{city\}/g, c ? c.name : '항구').replace(/\{name\}/g, S().player.given || S().player.name); }
+  function fmt(t) {
+    var c = curCity(), d = S().date;
+    if (/\{year\}|\{monthNum\}/.test(t)) t = G.StoryText.format(t, { year: d.y, monthNum: d.m, month: G.T(d.m + '월') });
+    return String(t).replace(/\{city\}/g, c ? c.name : '항구').replace(/\{name\}/g, S().player.given || S().player.name);
+  }
   function speakerOf(l) { return Array.isArray(l) ? String(l[0]).replace(/^\?/, '') : l && l.ask ? (l.by || 'P') : null; }
   function partnerKey(lines, i) {
     var j, k;
@@ -191,7 +195,7 @@
     if (at === 'city' && !whereOk(b, ctx.city)) return false;
     if (b.box) { var l = s.loc, x = b.box; if (l.mode !== 'sea' || l.lon < x[0] || l.lon > x[1] || l.lat < x[2] || l.lat > x[3]) return false; }
     if (b.near && !near(b.near)) return false;
-    if (b.battles && !((s.stats.battles || 0) > (t.battleMark || 0))) return false;
+    if (b.battles && !G.StoryBattle.won('jhook', b)) return false;
     return true;
   }
   function beatOf(id) { return (D.beats || []).filter(function (b) { return b.id === id; })[0]; }
@@ -238,6 +242,7 @@
     var s = S(), t = T();
     t.battleMark = s.stats.battles || 0;
     var npc = { id: 'jh_' + (o.label || 'enemy'), kind: o.kind || 'pirate', n: o.n || 1, K: 1, zone: G.Ships && G.Ships.zone ? G.Ships.zone(s.loc.lon, s.loc.lat) : 'west', hostile: true, label: o.label, names: o.names, nation: o.nation };
+    G.StoryBattle.start('jhook', o, npc);
     await UI.fade(function () { G.Game.go('battle', { npc: npc }); });
   }
   JH.arrive = async function (c, arg) {
@@ -252,6 +257,7 @@
     return true;
   };
   JH.seaPending = function () {
+    G.StoryBattle.recover('jhook');
     var t = T(), s = S(); if (!t || !t.prologue || JH._busy || !s || s.loc.mode !== 'sea') return false;
     return (D.beats || []).some(function (b) { return ready(b, 'sea'); });
   };
@@ -271,6 +277,7 @@
 
   // ================================================================ 지금 할 일 · 수첩
   JH.guide = function () {
+    G.StoryBattle.recover('jhook');
     var t = T(); if (!t || !t.prologue || t.finale) return '';
     var b = (D.beats || []).filter(function (x) { return x.guide && !done(x.id) && (!x.after || x.after.every(done)); })[0];
     if (!b) return '';

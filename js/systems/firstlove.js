@@ -22,7 +22,7 @@
   // ---------------------------------------------------------------- 누구
   /** 지금 제독의 소꿉친구인가 */
   FL.isMine = function (d) {
-    var p = S().player; if (!d || d.kin !== 'friend' || d.g !== 'f') return false;
+    var p = S().player; if (!d || d.kin !== 'friend' || d.g !== 'f' || G.R.heroFemale(p)) return false;   // 여성 제독에게는 첫사랑의 혼례가 없다 (2026-11-23)
     var me = [p.given, p.name].filter(Boolean);
     if (d.kinOf) return me.indexOf(d.kinOf) >= 0;
     return me.some(function (n) { return String(d.desc || '').indexOf(n + '의 소꿉친구') === 0; });

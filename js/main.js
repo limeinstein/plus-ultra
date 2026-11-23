@@ -239,6 +239,8 @@
     if (!pausedScene && G.Birds) { try { G.Birds.update(dt); } catch (e) { console.error(e); } }
     if (G.EraEnd && Game.state) { try { G.EraEnd.tick(); } catch (e) { console.error(e); } }   // 1700년 1월 1일 대항해시대의 끝 — 수명·이별보다 먼저 (js/systems/eraend.js)
     if (G.Life && Game.state) { try { G.Life.tick(); } catch (e) { console.error(e); } }
+    if (G.DiscoveryGuides && Game.state) { try { G.DiscoveryGuides.tick(); } catch (e) { console.error(e); } }
+    if (G.Mother && Game.state) { try { G.Mother.tick(); } catch (e) { console.error(e); } }   // 여성 제독: 산실로 옮기기 · 해산 (js/systems/motherhood.js)
     if (G.MateLeave && Game.state) { try { G.MateLeave.tick(); } catch (e) { console.error(e); } }
     if (G.FirstLove && Game.state) { try { G.FirstLove.tick(); } catch (e) { console.error(e); } }   // 소꿉친구는 첫사랑이었다 — 첫 항해·비밀·데이트·청혼 (js/systems/firstlove.js)   // 오래 함께한 부하와의 이별 (js/systems/mateleave.js)   // 생일 선물·수명이 다한 날 (js/systems/lifespan.js)
     if (G.Coven && Game.state) { try { G.Coven.tick(); } catch (e) { console.error(e); } }

@@ -1,6 +1,6 @@
 /* 36종 미술·동작·자원·실제 항해를 file://에서 검사하고 전체 검토 그림을 남긴다. */
 const assert=require('assert'),fs=require('fs'),path=require('path'),{pathToFileURL}=require('url');
-const {chromium}=require('playwright');
+let pw;try{pw=require('playwright');}catch(_){pw=require('../tools/procedural_art/node_modules/playwright-core');}const {chromium}=pw;
 const ROOT=path.resolve(__dirname,'..'),GPU=process.env.SHIP3D_GPU==='1',FAST=process.env.SHIP3D_SKIP_SEA==='1';
 const OUT=path.join(ROOT,process.env.SHIP3D_ARTIFACTS||'artifacts/fleet3d-polish2-20261031',GPU?'gpu':'software');fs.mkdirSync(OUT,{recursive:true});
 (async()=>{
@@ -15,7 +15,7 @@ const OUT=path.join(ROOT,process.env.SHIP3D_ARTIFACTS||'artifacts/fleet3d-polish
     await page.goto(pathToFileURL(path.join(ROOT,'test_ships_3d.html')).href);assert.deepStrictEqual(errors,[]);
     await page.waitForFunction(()=>G.Ship3D&&(G.Ship3D.stats().ready||G.Ship3D.stats().failure),null,{polling:100,timeout:60000});
     const ids=await page.evaluate(()=>G.SHIP_TYPES.map(s=>s.id));
-    assert.strictEqual(ids.length,36);assert.deepStrictEqual(await page.evaluate(()=>G.ShipModels.ids.slice().sort()),ids.slice().sort());
+    assert.strictEqual(ids.length,45);assert.deepStrictEqual(await page.evaluate(()=>G.ShipModels.ids.slice().sort()),ids.slice().sort());
     assert.deepStrictEqual(await page.evaluate(()=>Object.keys(G.FX.shipArt.profiles).sort()),ids.slice().sort());
     report.renderer=await page.evaluate(()=>{const gl=window.__shipGL,e=gl.getExtension('WEBGL_debug_renderer_info');return gl.getParameter(e?e.UNMASKED_RENDERER_WEBGL:gl.RENDERER);});
     report.sailAttachment=await page.evaluate(()=>{
@@ -59,12 +59,12 @@ const OUT=path.join(ROOT,process.env.SHIP3D_ARTIFACTS||'artifacts/fleet3d-polish
       assert.strictEqual(new Set(row.dirs.map(x=>x.hash)).size,7,id+' 방향 변화');assert(row.dirs.every(x=>x.count>700),id+' 빈 선박');
       assert.strictEqual(new Set(row.folds).size,3,id+' 돛 전개/접기');assert(row.oarChange,id+' 노 동작');assert.strictEqual(row.edge,0,id+' 렌더 타깃 잘림');
       assert.strictEqual(row.before.geometries,row.after.geometries,id+' 모형 증가');assert.strictEqual(row.before.textures,row.after.textures,id+' 재질 증가');
-      report.ships.push(row);if(report.ships.length%6===0)console.log(`${report.ships.length}/36종 방향·돛·노·자원 확인`);
+      report.ships.push(row);if(report.ships.length%6===0)console.log(`${report.ships.length}/${ids.length}종 방향·돛·노·자원 확인`);
     }
     assert.strictEqual(await page.evaluate(()=>JSON.stringify(G.SHIP_TYPES)),before);
     report.contexts=await page.evaluate(()=>window.__shipContexts);assert.strictEqual(report.contexts,1,'선종 변경 때 장치 증가');
     // 아홉 척씩 크게 그려 종별 구조와 디테일을 육안으로 확인한다.
-    for(let section=0;section<4;section++){
+    for(let section=0;section<Math.ceil(ids.length/9);section++){
       const data=await page.evaluate(({ids,section})=>{
         const cv=document.createElement('canvas');cv.width=1800;cv.height=1350;const ctx=cv.getContext('2d');
         ids.slice(section*9,section*9+9).forEach((id,i)=>{
@@ -118,7 +118,7 @@ const OUT=path.join(ROOT,process.env.SHIP3D_ARTIFACTS||'artifacts/fleet3d-polish
       assert(await page.evaluate(()=>{G.Scenes.sea.exit('city');return!G.Ship3D.stats().ready;}));
     }
     report.errors=errors;assert.deepStrictEqual(errors,[]);fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify(report,null,2));
-    console.log(JSON.stringify(report.benchmarks));console.log(`OK · 36종 검사 · 콘솔 오류 0${FAST?' · 항해 검사는 생략':''}`);
+    console.log(JSON.stringify(report.benchmarks));console.log(`OK · 45종 검사 · 콘솔 오류 0${FAST?' · 항해 검사는 생략':''}`);
   }catch(e){fs.writeFileSync(path.join(OUT,'failure.json'),JSON.stringify({...report,errors,error:e.stack||String(e)},null,2));throw e;}
   finally{await browser.close();}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1;});

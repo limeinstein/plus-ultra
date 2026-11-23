@@ -6,7 +6,6 @@ const {chromium}=require('playwright');
  const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||undefined,args:['--allow-file-access-from-files','--no-sandbox','--use-gl=swiftshader','--enable-unsafe-swiftshader']});
  try{
   const p=await browser.newPage({viewport:{width:960,height:540}}),errors=[];
-  await p.route(/fonts\.(googleapis|gstatic)\.com/,r=>r.fulfill({contentType:'text/css',body:''}));
   p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   await p.goto(process.env.WEB_BASE?new URL('index.html',process.env.WEB_BASE).href:pathToFileURL(path.resolve(__dirname,'../index.html')).href);
   await p.waitForFunction(()=>window.G&&G.FamVoice&&G.DiscVoice&&G.I18N&&G.Game.sceneName==='title',null,{timeout:120000});

@@ -47,13 +47,13 @@
   function avail(id, y) { var t = G.SHIP[id]; return t && (!t.from || y >= t.from); }
   // 약한 배부터 강한 배 순서 — 명성이 높을수록 뒤쪽 배가 나온다
   var POOLS = {
-    atl:   { pirate: ['caravel', 'caravel', 'lcaravel', 'carrack', 'lcarrack'], navy: ['carrack', 'lcarrack', 'hcarrack', 'galleon'], merchant: ['cog', 'carrack', 'lcarrack', 'caravel'] },
-    north: { pirate: ['cog', 'caravel', 'pinnace', 'hulk', 'carrack'], navy: ['carrack', 'lcarrack', 'hcarrack', 'galleon'], merchant: ['cog', 'hulk', 'carrack', 'fluyt'] },
+    atl:   { pirate: ['caravel', 'sloop', 'lcaravel', 'carrack', 'lcarrack'], navy: ['carrack', 'lcarrack', 'hcarrack', 'galleon', 'shipline'], merchant: ['cog', 'ketch', 'carrack', 'lcarrack', 'caravel', 'eastindiaman'] },
+    north: { pirate: ['cog', 'caravel', 'pinnace', 'hulk', 'carrack'], navy: ['carrack', 'lcarrack', 'hcarrack', 'galleon', 'shipline'], merchant: ['cog', 'koch', 'ketch', 'hulk', 'carrack', 'fluyt', 'eastindiaman'] },
     med:   { pirate: ['fusta', 'fusta', 'galley', 'xebec', 'galley'], navy: ['galley', 'greatgalley', 'carrack', 'galleass', 'lcarrack'], merchant: ['tartane', 'carrack', 'greatgalley', 'cog'] },
-    ind:   { pirate: ['parau', 'sambuk', 'dhow', 'fusta', 'baghlah'], navy: ['dhow', 'baghlah', 'galley', 'baghlah'], merchant: ['sambuk', 'dhow', 'baghlah', 'jong'] },
-    sea:   { pirate: ['korakora', 'parau', 'junk', 'junk', 'jong'], navy: ['junk', 'jong', 'ljunk'], merchant: ['junk', 'jong', 'dhow', 'ljunk'] },
-    east:  { pirate: ['kobaya', 'kobaya', 'sekibune', 'junk', 'atakebune'], navy: ['junk', 'ljunk', 'ljunk'], merchant: ['shachuan', 'junk', 'ljunk', 'maengseon'] },
-    amer:  { pirate: ['caravel', 'pinnace', 'lcaravel', 'carrack', 'galleon'], navy: ['carrack', 'galleon', 'lgalleon'], merchant: ['caravel', 'carrack', 'galleon', 'lgalleon'] }
+    ind:   { pirate: ['parau', 'sambuk', 'dhow', 'fusta', 'baghlah', 'ghurab'], navy: ['dhow', 'baghlah', 'galley', 'baghlah', 'ghurab'], merchant: ['sambuk', 'dhow', 'baghlah', 'jong'] },
+    sea:   { pirate: ['korakora', 'parau', 'junk', 'junk', 'jong'], navy: ['junk', 'jong', 'ljunk'], merchant: ['junk', 'padewakang', 'jong', 'dhow', 'ljunk'] },
+    east:  { pirate: ['kobaya', 'kobaya', 'sekibune', 'junk', 'atakebune'], navy: ['junk', 'ljunk', 'ljunk'], merchant: ['shachuan', 'bezaisen', 'jounseon', 'junk', 'ljunk', 'maengseon'] },
+    amer:  { pirate: ['caravel', 'pinnace', 'sloop', 'lcaravel', 'carrack', 'galleon'], navy: ['carrack', 'galleon', 'lgalleon', 'shipline'], merchant: ['caravel', 'ketch', 'carrack', 'galleon', 'lgalleon'] }
   };
   var NAVY_POOL = {
     '명': ['junk', 'ljunk', 'ljunk', 'ljunk'],

@@ -74,6 +74,15 @@
           rod(lower,[c.sailOffset,yB,-spB],[c.sailOffset,yB,spB],.42,C.spar).userData.rigYardSpar=true;g.add(lower);}
       });
     };
+    // 종범장: 사다리꼴 천의 위·아래 활대가 함께 움직인다. 성능 자료의 lat와 외형을 구분한다.
+    ship.gaff=function(g,mx,mh,H0,st,i){
+      var m=plan[i],w=Math.min(s.W*m[4],s.L*(i?.35:.53)),bottom=base(mx,w*.25),top=H0+mh,dh=top-bottom;
+      var a=[0,bottom+dh*.69],b=[-w*.73,bottom+dh*.96],d=[0,bottom],e=[-w,bottom+dh*.06];
+      var group=new T.Group();group.position.x=mx;group.userData.rigClearance=bottom;g.add(group);
+      grid(group,20,16,function(u,v){return[mix(mix(a[0],b[0],u),mix(d[0],e[0],u),v),mix(mix(a[1],b[1],u),mix(d[1],e[1],u),v),.8];},ship.artCloth('gaff'));
+      rod(group,[d[0],d[1],.8],[e[0],e[1],.8],.42,C.spar);
+      rod(group,[a[0],a[1],.8],[b[0],b[1],.8],.38,C.spar);
+    };
     var lateen=ship.lateen;
     ship.lateen=function(g,mx,mh,H0,st,i){
       lateen.apply(this,arguments);var group=g.children[g.children.length-1],material=reset(group),m=plan[i];
@@ -161,6 +170,7 @@
           [-1,1].forEach(function(side){rod(g,[mx,top-3,0],[mx-s.L*.09,foot+1,side*s.W*.37],.13,C.rope);});
         }
         if(style==='sq'||style==='jp')ship.squareSails(g,mx,mh,s.H,top,i,plan.length,st,style,false,raft);
+        else if(style==='gaff')ship.gaff(g,mx,mh,s.H,st,i);
         else if(style==='lat')ship.lateen(g,mx,mh,s.H,st,i);
         else if(style==='tanja')ship.tanja(g,mx,mh,s.H,st);
         else ship.batten(g,mx,mh,s.H,st,style==='kr'?'kr':'bat',i);
@@ -174,7 +184,7 @@
         rod(yard,[0,y+.5,-span*1.08],[0,y+.5,span*1.08],.42,C.spar).userData.rigYardSpar=true;
         [-1,1].forEach(function(side){rod(yard,[0,y+3,0],[0,y+.5,side*span],.10,C.rope);});
       }
-      if(ship.sprit&&['tartane','xebec'].indexOf(s.id)>=0){
+      if(ship.sprit&&['tartane','xebec','sloop','ketch'].indexOf(s.id)>=0){
         var b=ship.sprit.b,mx=s.masts[0],top=s.H+s.heights[0],bottom=base(mx,2);
         ship.triSurface(g,b,[mx,top*.84,0],[mx+3,bottom,0],s.W*.1,0,mx,ship.artCloth('lat'));
         g.children[g.children.length-1].userData.rigFixed=true;

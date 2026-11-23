@@ -44,7 +44,7 @@
   };
   V.unique = function (d) { return !!(d && own(d.id)); };
   function band(m, hi, lo) { var l = m && m.loyal != null ? m.loyal : 70; return l >= hi ? 'hi' : l < lo ? 'low' : 'mid'; }
-  function noLove(d) { return !d || d.g !== 'f' || d.minor || d.sib; }
+  function noLove(d) { return !d || d.g !== 'f' || d.minor || d.sib || !!(G.R && G.R.heroFemale && G.R.heroFemale()); }   // 여성 제독과 여성 부하 사이에는 애정선이 없다 (2026-11-23)
   /** 마주 앉았을 때 첫마디 (충성 85↑ / 45↓) */
   V.greet = function (d, m) {
     var v = V.of(d), g = v.greet; if (!g) return null;

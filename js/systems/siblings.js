@@ -36,7 +36,7 @@
   SB.ofMate = function (id) { return SB.all().filter(function (k) { return k.mateId === id; })[0] || null; };
 
   // ---------------------------------------------------------------- 글
-  function sexOf(p) { return p && (p.g === 'f' || (p.heir && p.heir.sex === 'f')) ? 'f' : 'm'; }
+  function sexOf(p) { return p ? G.R.heroSex(p) : 'm'; }   // 성별은 R.heroSex 한 곳에서
   function bornN(x) { return x && x.born ? x.born.y * 10000 + (x.born.m || 1) * 100 + (x.born.d || 1) : 0; }
   /** 새 제독보다 먼저 태어난 형제인가 (막내가 뒤를 이으면 위의 아이들은 형·누나다 — 2026-10-23 사용자 요청) */
   SB.elder = function (k) { var p = S().player, a = bornN(k), b = bornN(p); return !!(a && b && a < b); };
@@ -316,7 +316,7 @@
     var paid = v === 'rich' ? rich : v === 'fair' ? fair : 0;
     p.gold -= paid;
     await lines(W[v + 'Say'], k);
-    var pc = pic(p.g === 'f' ? 'family-events/33_daughter_wedding_sister_pov' : 'family-events/32_daughter_wedding_brother_pov', E.title);
+    var pc = pic(sexOf(p) === 'f' ? 'family-events/33_daughter_wedding_sister_pov' : 'family-events/32_daughter_wedding_brother_pov', E.title);
     try { await lines(W.wedding, k); } finally { if (pc) await pc.stop(); }
     await card(k, E.title, E.ending.map(function (t) { return U.esc(fill(t, k)); }).join('<br>'));
     await UI.say(fill(W.letter.join('\n'), k), SB.speaker(k));

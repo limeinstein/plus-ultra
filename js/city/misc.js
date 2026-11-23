@@ -24,7 +24,7 @@
       { label: '항해사를 찾는다', icon: 'people', sub: (function () { var n = C.B.tavern.candidates(c).length; return n ? n + '명' : '없다'; })(), onClick: function () { return C.B.tavern.hire(c, innWife()); } },
       { label: '부하편성', icon: 'people', sub: S().mates.length + '명', onClick: function () { return C.B.tavern.organize(); } },
       G.MateTalk ? G.MateTalk.menuItem(c) : null,
-      { label: '허드렛일', icon: 'tools', sub: (function () { var L = INN.workLeft(), j = S().player.innJob; return L <= 0 ? '쉬어야 함 (숙박 ' + Math.max(1, innCfg().restNights - ((j && j.rest) || 0)) + '밤)' : j && j.used ? '남은 ' + L + '일' : ''; })(), onClick: function () { return INN.work(c); } },
+      { label: '허드렛일', icon: 'tools', sub: (function () { var L = INN.workLeft(), j = S().player.innJob; if (INN.relief(c)) return '궁핍 — 날수 제한 없음'; return L <= 0 ? '쉬어야 함 (숙박 ' + Math.max(1, innCfg().restNights - ((j && j.rest) || 0)) + '밤)' : j && j.used ? '남은 ' + L + '일' : ''; })(), onClick: function () { return INN.work(c); } },
       { label: '기능', icon: 'gear', sub: INN.canSave(c) ? '저장 가능' : '', onClick: function () { return INN.func(c); } }
     ];
   };
@@ -52,7 +52,24 @@
   /* 허드렛일: 모두 합쳐 석 달(G.BALANCE.innWork.maxDays 90일)을 넘겨 일할 수 없다. 여관에서 열흘(restNights) 넘게 묵으면 다시 석 달.
      (어느 도시의 여관이든 합친다 · 묵은 밤도 여러 번에 걸쳐 합친다 · s.player.innJob = {used: 일한 날, rest: 그 뒤 묵은 밤})
      일한 날만큼 명성이 내려가고(하루 1), 부엌·장터에서 그 고장 사람들과 지내며 그 고장 말을 익힌다 (s.player.lgWork[말] = 쌓인 날) */
-  function innCfg() { var k = (G.BALANCE && G.BALANCE.innWork) || {}; return { maxDays: k.maxDays || 90, restNights: k.restNights || 10, famePerDay: k.famePerDay == null ? 1 : k.famePerDay, langDays: k.langDays || [40, 80, 120] }; }
+  function innCfg() { var k = (G.BALANCE && G.BALANCE.innWork) || {}; return { maxDays: k.maxDays || 90, restNights: k.restNights || 10, famePerDay: k.famePerDay == null ? 1 : k.famePerDay, langDays: k.langDays || [40, 80, 120], reliefGold: k.reliefGold || 3000 }; }
+  /* 궁핍 구제 (2026-11-23 사용자 요청): 해적·몸값·급료 등으로 소지금이 0이 되면, 최저가 배 1척 값(배가 없을 때)과 금화 reliefGold(3000)닢이
+     모일 때까지 허드렛일에 석 달 제한이 없다 (s.player.innRelief = 1 — 목표에 이르면 지운다). 일하는 날만큼 시간이 흐른다. */
+  function cheapestShip(c) {
+    var Y = C.B.shipyard, best = null;
+    try { if (Y && R.facilities(c).shipyard) Y.types(c).forEach(function (t) { if (Y.locked && Y.locked(c, t)) return; var v = Y.priceOf(c, t); if (v > 0 && (best == null || v < best)) best = v; }); } catch (e) { /* 조선소 없음 */ }
+    if (best == null) for (var id in G.SHIP) { var d = G.SHIP[id], v2 = d && (d.price || d.cost); if (v2 > 0 && (!d.from || S().date.y >= d.from) && (best == null || v2 < best)) best = v2; }
+    return best || 0;
+  }
+  /** 구제가 끝나는 소지금: 배가 없으면 최저가 배 1척 값 + reliefGold, 있으면 reliefGold */
+  INN.reliefTarget = function (c) { var s = S(); return innCfg().reliefGold + (s.fleet.ships.length ? 0 : cheapestShip(c || G.CITY_DATA[s.loc.city] || {})); };
+  /** 지금 궁핍 구제 중인가 — 소지금이 0이면 시작, 목표에 이르면 끝 */
+  INN.relief = function (c) {
+    var p = S().player;
+    if (!p.innRelief && (p.gold || 0) <= 0) p.innRelief = 1;
+    if (p.innRelief && (p.gold || 0) >= INN.reliefTarget(c)) delete p.innRelief;
+    return !!p.innRelief;
+  };
   function innJob() { var p = S().player; return p.innJob || (p.innJob = { used: 0, rest: 0 }); }
   /** 이번에 더 일할 수 있는 날 */
   INN.workLeft = function () { return Math.max(0, innCfg().maxDays - (innJob().used || 0)); };
@@ -67,7 +84,8 @@
   INN.work = async function (c) {
     var s = S(), w = innWife(), K = innCfg(), li = c.lang, lname = li != null ? G.LANGS[li] : null;
     var lv0 = li != null ? (s.player.lg[li] || 0) : 3;
-    var j = innJob(), left = INN.workLeft();
+    var j = innJob(), left = INN.workLeft(), relief = INN.relief(c), dailyPay = (8 + c.size * 4) * (0.8 + R.stat('str') / 150);
+    if (relief) return reliefWork(c, w, K, j, dailyPay, li, lname, lv0);
     if (left <= 0) {
       await C.say(w, innLine('어머, 얼굴이 많이 상하셨어요. 벌써 석 달이나 쉬지 않고 일하셨잖아요. 그러다 쓰러지세요.\f여관에서 푹 쉬고 오세요. 열흘은 묵으셔야 해요. 그다음에 다시 일손을 부탁드릴게요.',
         '이런, 얼굴이 많이 상하셨습니다. 벌써 석 달이나 쉬지 않고 일하셨지요. 그러다 쓰러지십니다.\f여관에서 푹 쉬고 오십시오. 열흘은 묵으셔야 합니다. 그다음에 다시 일손을 부탁드리지요.') +
@@ -81,7 +99,7 @@
       quick: [{ label: '열흘', value: Math.min(10, left) }, { label: '남은 날 모두', value: left }], info: function (d) { return '명성 −' + U.num(d * K.famePerDay); } });
     if (!v) return;
     v = Math.min(left, v);
-    var day0 = s.day, dailyPay = (8 + c.size * 4) * (0.8 + R.stat('str') / 150);
+    var day0 = s.day;
     await UI.fade(function () { G.Game.passDays(v); });
     if (S() !== s) return;
     v = Math.max(0, Math.min(v, s.day - day0));
@@ -110,6 +128,39 @@
       '수고하셨습니다. 약속한 품삯입니다. (금화 ' + U.num(pay) + '닢)\f바다의 사나이가 이런 일까지 하시다니... 힘내십시오!') + (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다.)' : '') + learned +
       (after > 0 ? '\f(석 달 가운데 남은 날: ' + after + '일)' : '\f(석 달을 꼬박 일했다 — 여관에서 ' + K.restNights + '밤 넘게 묵어야 다시 일할 수 있다)'));
   };
+  /** 궁핍 구제 중의 허드렛일 — 석 달 제한·쉬어야 하는 밤이 없다. 목표 금액까지 일하는 날을 고를 수 있다 */
+  async function reliefWork(c, w, K, j, dailyPay, li, lname, lv0) {
+    var s = S(), target = INN.reliefTarget(c), need = Math.max(1, Math.ceil((target - s.player.gold) / Math.max(1, dailyPay))), noShip = !s.fleet.ships.length;
+    var goal = noShip ? '가장 싼 배 한 척 값과 금화 ' + U.num(K.reliefGold) + '닢' : '금화 ' + U.num(K.reliefGold) + '닢';
+    var v = await C.ask(w, innLine('사정이 어려우시다고 들었어요. 형편이 나아질 때까지 얼마든지 일하세요. 품삯은 꼬박꼬박 드릴게요.', '사정이 딱하시다고 들었습니다. 형편이 나아질 때까지 얼마든지 일하십시오. 품삯은 꼬박꼬박 드리지요.') +
+      '\n(궁핍 — ' + goal + '이 모일 때까지 날수 제한 없이 일할 수 있다 · 지금 ' + U.num(s.player.gold) + ' / ' + U.num(target) + '닢 · 하루 품삯 약 ' + U.num(Math.round(dailyPay)) + '닢)',
+      [{ label: '목표 금액이 모일 때까지 일한다 (약 ' + need + '일)', value: need }, { label: '열흘 일한다 (10일)', value: 10 }, { label: '한 달 일한다 (30일)', value: 30 }, { label: '날수를 정한다', value: -1 }, { label: '그만둔다', value: 0 }]);
+    if (v === -1) v = await UI.number({ title: '허드렛일', text: innLine('며칠 일하시겠어요?', '며칠 일하시겠습니까?') + ' (목표까지 약 ' + need + '일)', min: 1, max: Math.max(need, 3650),
+      quick: [{ label: '열흘', value: 10 }, { label: '목표까지', value: need }], info: function (d) { return '품삯 약 ' + U.num(Math.round(d * dailyPay)) + '닢 · 명성 −' + U.num(d * K.famePerDay); } });
+    if (!v) return;
+    var day0 = s.day;
+    await UI.fade(function () { G.Game.passDays(v); });   // 일하는 날만큼 시간이 흐른다
+    if (S() !== s) return;
+    v = Math.max(0, Math.min(v, s.day - day0));
+    if (!v) return;
+    var pay = Math.round(v * dailyPay);
+    s.player.gold += pay; s.fleet.fatigue = Math.max(0, s.fleet.fatigue - 20);
+    var lost = -G.Fame.add('so', -v * K.famePerDay);
+    if (!(s.life && s.life.end) && li != null && lv0 < 3) {   // 말 익히기 (보통 허드렛일과 같다)
+      var lw = s.player.lgWork || (s.player.lgWork = {}), lv = lv0; lw[li] = (lw[li] || 0) + v * (0.6 + (R.stat('int') || 50) / 125);
+      while (lv < 3 && lw[li] >= K.langDays[lv]) { lw[li] -= K.langDays[lv]; lv++; }
+      if (lv >= 3) lw[li] = 0;
+      s.player.lg[li] = lv;
+    }
+    G.Game.refreshHud();
+    if (s.life && s.life.end) return;
+    var done = !INN.relief(c);
+    G.State.log(c.name + '의 여관에서 ' + v + '일 허드렛일을 했다. (품삯 금화 ' + U.num(pay) + '닢)');
+    await C.say(w, innLine('수고하셨어요. 이게 약속한 돈이에요. (금화 ' + U.num(pay) + '닢)', '수고하셨습니다. 약속한 품삯입니다. (금화 ' + U.num(pay) + '닢)') +
+      (lost ? '\f(허드렛일을 한다는 소문이 돌아 명성이 ' + U.num(lost) + ' 내려갔다)' : '') +
+      (done ? '\f이제 다시 바다로 나설 밑천이 생겼다. (궁핍 구제가 끝났다 — 허드렛일은 다시 석 달까지)' : '\f(목표까지 금화 ' + U.num(Math.max(0, INN.reliefTarget(c) - s.player.gold)) + '닢 남았다)'));
+    if (done) { j.used = 0; j.rest = 0; }
+  }
   INN.func = async function (c) {
     var v = await UI.choose('기능', [
       { label: '항해 일지 기록 (저장)', value: 'save', icon: 'save', disabled: !INN.canSave(c), right: INN.canSave(c) ? '' : '모국의 여관에서만' },
@@ -1007,9 +1058,11 @@
     else if (s.player.wife && s.player.wifeAboard) await UI.say(away0 >= 30 ? U.pick(['드디어 우리 집이에요. …' + away0 + '일 만이네요. 같이 문을 여니까 기분이 이상해요.', '집 냄새예요! 바다 냄새만 맡다가 오니까 눈물이 날 것 같아요.', '당신이랑 같이 돌아오니까, 이번엔 기다린 사람이 없네요. 그게 좋아요.']) : U.pick(['잠깐 들렀다 가요. 창은 열어 둘게요.', '짐 좀 풀고 가요. 다음 항해 준비는 같이 해요.']), G.Family.wifeSpeaker());
     else if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
     if (story) { try { var intro = await G.Story.motherGreet(c); await G.Story.allowance(c); if (G.Story.grandmaVisit && !(G.Story.heirMode && G.Story.heirMode() && intro === 'intro')) await G.Story.grandmaVisit(c); } catch (e) { console.error(e); } }   // 어머니가 맞고, 빈손이면 비상금, 대를 이은 뒤면 할머니가 가끔 들른다
-    else if (!s.player.wife) await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});
+    else if (!s.player.wife && !(G.Husbands && await G.Husbands.homeGreet())) await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});   // 여성 제독은 남편들과 함께 돌아온다 (js/systems/husbands.js)
     if (s.player.wife && G.FamEv) { try { await G.FamEv.homeReturn(); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
+    if (G.Mother) G.Mother.homeVisit();                                           // 여성 제독: 집에 들르면 아이들과 가까워진다 (js/systems/motherhood.js)
+    if (G.DiscStories) await G.DiscStories.home(c, false);
     if (G.HomeLife) await G.HomeLife.happen();                                    // 가끔 아이와 얽힌 일이 생긴다 (homelife.js)
     if (G.HeirPlan) { try { await G.HeirPlan.homeEvents(c); } catch (e) { console.error(e); } }
     if (G.Ball) { try { await G.Ball.homeHint(c); } catch (e) { console.error(e); } }

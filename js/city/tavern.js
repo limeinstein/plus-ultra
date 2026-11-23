@@ -887,19 +887,20 @@
     if (s.player.wife === m.id) { await say('어머, 당신! 여기서 뭐 해요? 집에서 기다릴게요.', 'happy'); return; }
     if (G.Wives && G.Wives.of(m.id)) { await say('어머, 당신! 옛 일터에 잠깐 들렀어요. 집으로 와요, 기다릴게요.', 'happy'); return; }
     var greet = st.aff < 20 ? '어서 오세요. 처음 뵙는 분이네요.' : st.aff < 50 ? '어머, 또 오셨네요!' : st.aff < 80 ? '와 주셨군요! 기다리고 있었어요.' : '당신 얼굴을 보니 정말 기뻐요.';
+    if (G.R.heroFemale() && st.aff >= 80) greet = '제독님 오셨군요! 귀에 담아 둔 이야기가 있어요.';   // 여성 제독에게 여급은 정보원이다 (2026-11-23)
     await say(greet, st.aff >= 50 ? 'happy' : 'warm');
     // 이 술집을 혼인으로 떠난 부인의 안부 — 한 번 들른 사이 한 번 (js/systems/maidswap.js)
     var sisW = G.MaidSwap && G.MaidSwap.prevWife ? G.MaidSwap.prevWife(c.id) : null, cuS = C.current();
     if (sisW && cuS && !cuS.sisAsked) { cuS.sisAsked = 1; await say(G.MaidSwap.sisLine(c), 'warm'); }
     if (G.MateKnow) { try { await G.MateKnow.deliver(c, m, say); } catch (e) { console.error(e); } }   // 부탁한 항해사의 행방 — 날이 찼으면 (js/systems/mateknow.js)
     for (;;) {
-      var v = await ask(m.name + ' — 호감 ' + heart(st.aff), [
+      var v = await ask(m.name + (G.R.heroFemale() ? ' — 친분 ' : ' — 호감 ') + heart(st.aff), [
         { label: '한잔 산다', value: 'drink' }, { label: '이야기한다', value: 'talk' }, { label: '선물한다', value: 'gift' },
         (function () { var cd = G.FamEv ? G.FamEv.canDate(m.id) : null; return cd ? { label: '함께 시간을 보낸다' + (cd.ok ? '' : ' (' + cd.why + ')'), value: 'date', dis: !cd.ok } : null; })(),
         G.MaidTip ? { label: '사례하고 소식을 묻는다' + (G.MaidTip.canAsk(st) ? '' : ' (호감이 더 있어야)'), value: 'tip', dis: !G.MaidTip.canAsk(st) } : null,
         G.MateKnow ? { label: '항해사의 행방을 부탁한다' + (G.MateKnow.seekSub(m) ? ' (' + G.MateKnow.seekSub(m) + ')' : ''), value: 'seek' } : null,   // 만났거나 인연이 있던 항해사 — 20일쯤 (js/systems/mateknow.js)   // 상선대·군함대·해적·철새의 행방 (js/systems/maidtip.js)
         sisW ? { label: sisW.name + '의 안부를 전한다', value: 'sis' } : null,
-        { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }].filter(Boolean));
+        G.R.heroFemale() ? null : { label: '청혼한다', value: 'wed', dis: !(st.aff >= 90) }, { label: '돌아간다', value: null }].filter(Boolean));   // 여성 제독은 여급에게 청혼하지 않는다 (2026-11-23)
       if (!v) return;
       if (v === 'tip') { await G.MaidTip.ask(c, m, st, say); continue; }
       if (v === 'sis') { await G.MaidSwap.sisTalk(c, m, st, say); continue; }
@@ -914,7 +915,8 @@
         st.aff = Math.min(100, st.aff + gain);
         await say(U.pick(['고마워요! 건배!', '어머, 저한테요? 잘 마실게요.', '당신이랑 마시니까 더 맛있네요.']), 'happy');
       } else if (v === 'talk') {
-        if (st.aff < 30) await say('저는 ' + like.name + ' 남자가 좋아요. ' + (m.like === 'generous' ? '역시 남자는 통이 커야죠.' : '그런 사람이 이상형이에요.'), 'warm');
+        if (st.aff < 30) await say(G.R.heroFemale() ? '손님들 이야기는 제가 다 듣고 있어요. 자주 들러 주시면 귀한 소식부터 알려 드릴게요.'
+          : '저는 ' + like.name + ' 남자가 좋아요. ' + (m.like === 'generous' ? '역시 남자는 통이 커야죠.' : '그런 사람이 이상형이에요.'), 'warm');
         else {
           var d = U.chance(0.5) ? T.rumour(c, { stack: true }) : null;
           if (d) { var kn2 = G.Disc.hasHint(d.id); await say((kn2 ? '그 이야기, 여기 손님들도 똑같이 하던데요. ' : '손님들이 이런 이야기를 하더라고요. ') + G.Disc.hintText(d), 'warm'); G.Disc.noteHint(d, 'tavern:' + c.id); }
@@ -931,6 +933,7 @@
         await say(U.pick(['어머, 이렇게 고운 걸 저에게요? 정말 고마워요!', '예뻐라! 소중히 간직할게요.']), 'happy');
       } else if (v === 'wed') {
         if (!R.hasItem('ring')) { UI.toast('청혼하려면 약속 반지가 필요합니다.', 'ring'); continue; }
+        if (G.R.heroFemale()) continue;
         if (s.player.wife) { if (G.Wives) { if (await G.Wives.proposeMaid(c, m, say)) return; continue; } UI.toast('이미 결혼했습니다.', 'ring'); continue; }   // 본처가 있으면 둘째 부인으로
         var ok = await UI.confirm(m.name + '에게 청혼하겠습니까?', '청혼한다', '그만둔다');
         if (!ok) continue;

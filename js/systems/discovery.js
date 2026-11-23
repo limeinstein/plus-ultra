@@ -106,7 +106,12 @@
   D.rumourW = function (d, src) { return !S().hints[d.id] ? 1 : D.canStack(d.id, src) ? CS().stackW : 0; };
   /** 세워진 건물인가 (불가사의의 built 해) */
   /** 앞 고리를 모두 찾았는가 (꼬리에 꼬리를 무는 발견 — 열리기 전에는 그 자리에 가도 찾지 못한다) */
-  D.needMet = function (d) { return !d || ((!d.need || d.need.every(function (id) { return D.foundByMe(id); })) && (!d.needRelic || D.hasRelic(d.needRelic))); };
+  D.equinoxMet = function (d) {
+    if (!d || !d.needEquinox) return true;
+    var s = S(), q = G.BALANCE.discStory.equinox;
+    return !!(s && s.date && q.months.indexOf(s.date.m)>=0 && Math.abs(s.date.d-q.day)<=q.range);
+  };
+  D.needMet = function (d) { return !d || ((!d.need || d.need.every(function (id) { return D.foundByMe(id); })) && (!d.needRelic || D.hasRelic(d.needRelic)) && D.equinoxMet(d)); };
   /** 그 유물을 손에 넣은 적이 있는가 — 소지품·자택 보관함에 있거나, 발견 때 챙겼던 기록 (팔거나 기증해도 남는다) */
   D.hasRelic = function (rid) {
     var s = S(); if (!s || !rid) return false;
@@ -320,6 +325,7 @@
 
   /** player discovers d (object). returns promise after showing the event */
   D.find = async function (d, how) {
+    if (d.needEquinox && !D.needMet(d)) return false;
     if (G.VoyagePlans) G.VoyagePlans.state();
     var s = S();
     var st = s.disc[d.id] || (s.disc[d.id] = {});
@@ -407,7 +413,7 @@
       if (!mir) UI.toast('증거 등급 「' + gNow.name + '」 — ' + GT[gNow.key], gNow.key === 'word' || gNow.key === 'sketch' ? 'scroll' : 'seal', 5200);   // 신기루는 등급을 알리지 않는다
     }
     // 동물·식물: 부하들이 한마디씩 주고받는다 (말투별 — js/systems/banter.js)
-    if (G.Banter && d.cat === 'creature') { try { await G.Banter.play(d); } catch (e) { console.error(e); } }
+    if (G.Banter && d.cat === 'creature' && !(G.DiscStories && G.DiscStories.enabled() && G.DiscStories.has(d))) { try { await G.Banter.play(d); } catch (e) { console.error(e); } }
     if (rel.length && !s.flags.relicTip) {
       s.flags.relicTip = 1;
       await UI.say(U.pick(['제독, 이걸 보십시오. 이만한 물건이 있으면 누구도 우리 말을 의심하지 못할 겁니다. 후원자께 바칠지, 우리가 지니고 있다가 팔지는 제독께서 정하십시오.', '이건 잘 싸 두겠습니다, 제독. 궁정에 내놓으면 더할 나위 없는 증거가 되겠지만, 시장에 내놓아도 값이 꽤 나갈 겁니다.']), G.Scenes.mateSpeaker(R.skill('hist') ? 'surveyor' : 'first'));

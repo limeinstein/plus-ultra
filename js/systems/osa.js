@@ -32,7 +32,7 @@
   O.state = st;
   function P() { return S().player; }
   function gen() { return P().generation || 1; }
-  O.heirFemale = function () { var p = P(); return p.g === 'f' || !!(p.heir && p.heir.sex === 'f'); };
+  O.heirFemale = function () { return G.R.heroFemale(P()); };   // 성별은 R.heroSex 한 곳에서
   function age() { var p = P(), s = S(); return p.born ? s.date.y - p.born.y : 25; }
   function def() { var o = st(); return o.id ? G.MATE[o.id] || (S().osaDefs || {})[o.id] : null; }
   O.def = def;

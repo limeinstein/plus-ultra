@@ -430,7 +430,7 @@
     // 오스만이 다스리는 발칸·레반트
     72: 'ottoman', 73: 'ottoman', 76: 'ottoman', 112: 'ottoman', 113: 'ottoman', 114: 'ottoman',
     115: 'ottoman', 116: 'ottoman', 117: 'ottoman', 118: 'ottoman', 119: 'ottoman', 120: 'ottoman',
-    121: 'ottoman',
+    121: 'ottoman', 
     // 베네치아가 쥔 섬
     74: 'italy', 75: 'italy',
     // 섬 동남아시아·열대 아메리카는 대나무 고상가옥
@@ -552,19 +552,28 @@
     admiral: '기본 제독', ganghui: '중세의 연금술사', navigator_white: '하얀 남방의 항해사', armored_navigator: '철갑 항해사',
     sea_dog: '망원경을 든 뱃사람', muscle_swordsman: '근육질 검사', hat_spinner: '모자를 돌리는 항해사',
     charismatic_admiral: '카리스마 제독', battle_vanguard: '돌격대장', noble_scholar: '귀족 학자 제독',
-    casanova: '카사노바', army_officer: '정규군 장교', sky_adventurer: '가죽옷 모험가', blackcoat_captain: '검은 코트의 선장'
+    casanova: '카사노바', army_officer: '정규군 장교', sky_adventurer: '가죽옷 모험가', blackcoat_captain: '검은 코트의 선장',
+    jessica: '붉은 외투의 선장', soyoung: '꽃 댕기의 항해사'   // 여성 생김새 (I.HERO_SEX)
     // 이름 있는 인물 16명(레오나르두 드 발렌사 …)은 20대·40대 얼굴이 없어 항구의 부하 후보로 옮겼다 (js/data/storycrew.js)
   };
   I.heroName = function (id) { return I.HERO_NAMES[id] || id; };
-  /** 제독이 40세 이상이면 수염 난 그림을 쓴다. 만들기 화면은 age를 직접 넘긴다. */
-  I.heroOld = function (p, age) {
+  /** 생김새의 성별 — 여성 생김새는 여기 적거나 파일 이름을 _f 로 끝낸다 (portraits/player/<이름>_f). 그 밖은 남성.
+      제독 만들기는 고른 성별의 생김새만 보여 준다 (I.heroFaces) */
+  I.HERO_SEX = { jessica: 'f', soyoung: 'f' };
+  I.heroLookSex = function (id) { id = String(id || ''); return I.HERO_SEX[id] || (/_f$/.test(id) ? 'f' : 'm'); };
+  /** 얼굴상·무릎상이 함께 보는 나이 단계. 만들기 화면은 age를 직접 넘긴다. */
+  I.heroAgeStage = function (p, age) {
     if (age == null) {
       var s = G.Game && G.Game.state;
       if (!p) p = s && s.player;
       age = s && p === s.player && G.R && G.R.age ? G.R.age() : null;
     }
-    return age != null && age >= 40;
+    var ages = (G.FX && G.FX.heroPortraitAge) || { middle: 40, elderly: 70 };
+    if (age != null && age >= ages.elderly) return 'elderly';
+    return age != null && age >= ages.middle ? 'middle' : 'young';
   };
+  /** 옛 호출 호환: 중년·노년 모두 젊은 얼굴을 벗어난 단계다. */
+  I.heroOld = function (p, age) { return I.heroAgeStage(p, age) !== 'young'; };
   /** 뒤를 이은 자녀(2대부터)의 가족 그림 정보 {sex, folder, variant} — 저장된 player.heir, 옛 저장은 초상에 붙은 가족 그림 이름에서 알아낸다. 1대 제독은 null */
   I.heirKid = function (p) {
     if (!p) { var s = G.Game && G.Game.state; p = s && s.player; }
@@ -605,11 +614,13 @@
     var key = 'portraits/family/' + folder + '/' + (sex === 'f' ? 'daughter' : 'son') + '_age' + stage + (half ? '_half' : '');
     return I.has(key) ? key : null;
   };
-  /** 대화창 얼굴: 뒤를 이은 자녀는 15세·20세·40세 가족 그림을 나이에 맞게 쓴다. */
+  /** 대화창 얼굴: 40세 중년·70세 노년. 뒤를 이은 자녀는 자기 가족 그림을 쓴다. */
   K.heroPortrait = function (p, age) {
-    var id = I.heroLook(p), young = FACE + id, old = 'portraits/player-aged/' + id;
+    var id = I.heroLook(p), young = FACE + id, middle = 'portraits/player-aged/' + id;
     var hc = heirChain(p, false, age); if (hc) return hc.concat([young]);
-    return I.heroOld(p, age) ? [old, young] : [young];
+    var stage = I.heroAgeStage(p, age);
+    if (stage === 'elderly') return ['portraits/player-elderly/' + id, middle, young];
+    return stage === 'middle' ? [middle, young] : [young];
   };
   /** the admiral walking along the street (drawn only when the file exists) */
   K.hero = function () { return ['characters/player']; };
@@ -628,12 +639,14 @@
     var id = I.heroLook();
     return ['characters/' + id + '/motion/' + kind];
   };
-  /** 수첩에서 보는 무릎상. 40세부터 수염 난 그림이 있으면 자동으로 바꾼다. */
-  K.heroHalf = function () {
-    var id = I.heroLook(), young = id === 'admiral' ? 'characters/player_half' : 'characters/player_half_' + id;
-    var old = id === 'admiral' ? 'characters/player_half_old' : 'characters/player_half_' + id + '_old';
-    var hc = heirChain(null, true); if (hc) return hc.concat([young]);   // 뒤를 이은 자녀의 전신상
-    return I.heroOld() ? [old, young] : [young];
+  /** 대화·수첩 무릎상. 얼굴과 같은 기준으로 40세 중년·70세 노년을 고른다. */
+  K.heroHalf = function (p, age) {
+    var id = I.heroLook(p), young = id === 'admiral' ? 'characters/player_half' : 'characters/player_half_' + id;
+    var middle = id === 'admiral' ? 'characters/player_half_old' : 'characters/player_half_' + id + '_old';
+    var hc = heirChain(p, true, age); if (hc) return hc.concat([young]);   // 뒤를 이은 자녀의 전신상
+    var stage = I.heroAgeStage(p, age);
+    if (stage === 'elderly') return [young + '_elderly', middle, young];
+    return stage === 'middle' ? [middle, young] : [young];
   };
   /** 일기토에서 제독의 전투원 시트 (duel/fighters/<이름>, 없으면 main_admiral) */
   K.heroDuel = function () { var id = I.heroLook(); return (id === 'admiral' ? [] : ['duel/fighters/' + id]).concat(['duel/fighters/main_admiral']); };
@@ -915,11 +928,12 @@
   /** 경쟁자 전용 그림이 먼저, 없을 때 같은 인물의 동료 그림을 잇는다. */
   K.rivalHalf = function (name) { return K.halfOf(K.rival(name)); };
   /** 제독 만들기에서 고를 수 있는 얼굴: 20대(portraits/player/)와 40대(portraits/player-aged/) 그림이 모두 있는 것만. 40대 그림이 하나도 없으면 있는 대로 */
-  I.heroFaces = function () {
-    var all = I.list('portraits/player/'), both = all.filter(function (k) { return I.has('portraits/player-aged/' + k.slice('portraits/player/'.length)); });
+  I.heroFaces = function (sex) {   // sex 'f' = 여성 생김새, 그 밖(없음 포함) = 남성 생김새
+    var want = sex === 'f' ? 'f' : 'm';
+    var all = I.list('portraits/player/').filter(function (k) { return I.heroLookSex(k.slice('portraits/player/'.length)) === want; }), both = all.filter(function (k) { return I.has('portraits/player-aged/' + k.slice('portraits/player/'.length)); });
     return both.length ? both : all;
   };
-  K.player = function (face) { var l = I.heroFaces(); return l.length ? [l[((face || 0) % l.length + l.length) % l.length]] : []; };
+  K.player = function (face, sex) { var l = I.heroFaces(sex); return l.length ? [l[((face || 0) % l.length + l.length) % l.length]] : []; };
   /** 아이 그림: 저장된 자녀 외형 변형(son_age10_v1…v5, daughter_age10_v1…v5)을 먼저 고른다.
       변형이 없으면 portraits/family/<고장·제독 생김새>/son_age10(_half) → 기본 나이 그림 → 자녀 기본 그림.
       half = 무릎상(대화창 위에 서는 모습). 고르는 규칙은 js/systems/homelife.js (G.FAMILY_LOOK) */

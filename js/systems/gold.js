@@ -64,7 +64,13 @@
     return { name: k };
   }
   JH.who = who;
-  function fmt(t) { var c = curCity(); return String(t).replace(/\{city\}/g, c ? c.name : '항구').replace(/\{name\}/g, S().player.given || S().player.name); }
+  function fmt(t) {
+    var c = curCity(), s = S(), d = s.date;
+    if (/\{year\}|\{age\}|\{elapsed\}/.test(t)) t = G.StoryText.format(t, {
+      year: d.y, age: R.age(), elapsed: d.y - D.start.y - (d.m < D.start.m || (d.m === D.start.m && d.d < D.start.d) ? 1 : 0)
+    });
+    return String(t).replace(/\{city\}/g, c ? c.name : '항구').replace(/\{name\}/g, s.player.given || s.player.name);
+  }
   function speakerOf(l) { return Array.isArray(l) ? String(l[0]).replace(/^\?/, '') : l && l.ask ? (l.by || 'P') : null; }
   function partnerKey(lines, i) {
     var j, k;
@@ -192,11 +198,11 @@
     if (b.after && !b.after.every(done)) return false;
     if (b.gap && b.after && b.after.length) { var last = Math.max.apply(null, b.after.map(doneDay)); if (today() - last < b.gap) return false; }
     if (b.date && s.date.y * 12 + s.date.m < b.date[0] * 12 + b.date[1]) return false;
-    if (b.worthGoal && JH.worth() < D.worthGoal) return false;
     if (at === 'city' && !whereOk(b, ctx.city)) return false;
     if (b.box) { var l = s.loc, x = b.box; if (l.mode !== 'sea' || l.lon < x[0] || l.lon > x[1] || l.lat < x[2] || l.lat > x[3]) return false; }
     if (b.near && !near(b.near)) return false;
-    if (b.battles && !((s.stats.battles || 0) > (t.battleMark || 0))) return false;
+    if (b.battles && !G.StoryBattle.won('gold', b)) return false;
+    if (b.then && b.then.finale && JH.worth() < D.worthGoal) return false;
     if (b.deal && !(s.bigDeal && s.bigDeal[b.deal])) return false;
     if (b.king && !(G.Achieve && G.Achieve.done && G.Achieve.done('tradeking'))) return false;
     return true;
@@ -267,6 +273,7 @@
     var s = S(), t = T();
     t.battleMark = s.stats.battles || 0;
     var npc = { id: 'gs_' + (o.label || 'enemy'), kind: o.kind || 'pirate', n: o.n || 1, K: 1, zone: G.Ships && G.Ships.zone ? G.Ships.zone(s.loc.lon, s.loc.lat) : 'west', hostile: true, label: o.label, names: o.names, nation: o.nation };
+    G.StoryBattle.start('gold', o, npc);
     await UI.fade(function () { G.Game.go('battle', { npc: npc }); });
   }
   JH.arrive = async function (c, arg) {
@@ -281,6 +288,7 @@
     return true;
   };
   JH.seaPending = function () {
+    G.StoryBattle.recover('gold');
     var t = T(), s = S(); if (!t || !t.prologue || JH._busy || !s || s.loc.mode !== 'sea') return false;
     return (D.beats || []).some(function (b) { return ready(b, 'sea'); });
   };
@@ -292,7 +300,7 @@
   };
   async function finale() {
     var t = T(); t.finale = today();
-    var html = '<div style="font-size:19px;line-height:1.7"><b>「' + U.esc(D.title) + '」 — 끝</b><br>' + U.esc(D.ending) +
+    var html = '<div style="font-size:19px;line-height:1.7"><b>「' + U.esc(D.title) + '」 — 끝</b><br>' + U.esc(fmt(D.ending)) +
       '<div class="sep"></div><span class="muted">걸린 날: ' + U.num(today() - (t.startDay || today())) + '일 · 동료 ' + S().mates.length + '명 · 바다가 부른 이름: ' + U.esc((t.titles || []).join(' · ')) + '</span>' +
       '<div class="sep"></div>이야기는 여기서 한 매듭을 짓습니다. 항해는 그대로 이어집니다.</div>';
     await UI.window({ title: D.short, icon: 'laurel', width: 680, html: html, buttons: [{ label: '항해를 이어 간다', value: 'ok', cls: 'navy' }] }).result;
@@ -303,11 +311,12 @@
   function openBeats() { return (D.beats || []).filter(function (x) { return x.guide && !done(x.id) && (!x.after || x.after.every(done)); }); }
   function guideText(b) {
     var g = U.esc(b.guide);
-    if (b.worthGoal && JH.worth() < D.worthGoal) g += ' <span class="muted">(' + U.num(JH.worth()) + ' / ' + U.num(D.worthGoal) + '닢)</span>';
+    if (b.then && b.then.finale && JH.worth() < D.worthGoal) g += ' — ' + (G.T ? G.T('순자산 {goal}닢을 모은 뒤 돌아온다 (현재 {worth}닢).', { goal: U.num(D.worthGoal), worth: U.num(JH.worth()) }) : '순자산 ' + U.num(D.worthGoal) + '닢을 모은 뒤 돌아온다.');
     if (b.date && S().date.y * 12 + S().date.m < b.date[0] * 12 + b.date[1]) g += ' <span class="muted">(' + b.date[0] + '년 ' + b.date[1] + '월 무렵)</span>';
     return g;
   }
   JH.guide = function () {
+    G.StoryBattle.recover('gold');
     var t = T(); if (!t || !t.prologue || t.finale) return '';
     var b = openBeats().filter(function (x) { return !x.deal; })[0];
     return b ? guideText(b) : '';

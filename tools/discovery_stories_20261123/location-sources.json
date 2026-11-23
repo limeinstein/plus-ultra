@@ -1,0 +1,3469 @@
+[
+  {
+    "no": 83,
+    "name": "랄리벨라 암굴 교회",
+    "query": "랄리벨라",
+    "title": "랄리벨라",
+    "entity": "Q207590",
+    "coordinates": [
+      {
+        "latitude": 12.035561,
+        "longitude": 39.046203,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q207590",
+    "revision": null
+  },
+  {
+    "no": 85,
+    "name": "팀북투",
+    "query": "팀북투",
+    "title": "팀북투",
+    "entity": "Q9427",
+    "coordinates": [
+      {
+        "latitude": 16.773333055556,
+        "longitude": -2.9994438888889,
+        "altitude": null,
+        "precision": 2.7777777777778e-07,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 16.77348,
+        "longitude": -3.00742,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q9427",
+    "revision": null
+  },
+  {
+    "no": 96,
+    "name": "폼페이",
+    "query": "폼페이",
+    "title": "폼페이",
+    "entity": "Q43332",
+    "coordinates": [
+      {
+        "latitude": 40.75055555555556,
+        "longitude": 14.489722222222222,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q43332",
+    "revision": null
+  },
+  {
+    "no": 97,
+    "name": "바미안 석불",
+    "query": "바미안 석불",
+    "title": "바미안 석불",
+    "entity": "Q484458",
+    "coordinates": [
+      {
+        "latitude": 34.832041666667,
+        "longitude": 67.826802777778,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q484458",
+    "revision": null
+  },
+  {
+    "no": 98,
+    "name": "둔황 막고굴",
+    "query": "막고굴",
+    "title": "막고굴",
+    "entity": "Q43286",
+    "coordinates": [
+      {
+        "latitude": 40.037222222222,
+        "longitude": 94.804166666667,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q43286",
+    "revision": null
+  },
+  {
+    "no": 183,
+    "name": "오랑우탄",
+    "query": "오랑우탄",
+    "title": "오랑우탄",
+    "entity": "Q41050",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q41050",
+    "revision": null
+  },
+  {
+    "no": 191,
+    "name": "도도",
+    "query": "도도",
+    "title": "도도",
+    "entity": "Q43502",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q43502",
+    "revision": null
+  },
+  {
+    "no": 201,
+    "name": "스텔러 바다소",
+    "query": "코만도르스키예 제도",
+    "title": "코만도르스키예 제도",
+    "entity": "Q208268",
+    "coordinates": [
+      {
+        "latitude": 55,
+        "longitude": 166.4,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q208268",
+    "revision": null
+  },
+  {
+    "no": 202,
+    "name": "범고래",
+    "query": "범고래",
+    "title": "범고래",
+    "entity": "Q26843",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q26843",
+    "revision": null
+  },
+  {
+    "no": 203,
+    "name": "바다거북",
+    "query": "바다거북",
+    "title": "바다거북",
+    "entity": "Q199458",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q199458",
+    "revision": null
+  },
+  {
+    "no": 204,
+    "name": "고래상어",
+    "query": "고래상어",
+    "title": "고래상어",
+    "entity": "Q80378",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q80378",
+    "revision": null
+  },
+  {
+    "no": 255,
+    "name": "머리 없는 사람들 (블레미에스)",
+    "query": "누비아",
+    "title": "누비아",
+    "entity": "Q135028",
+    "coordinates": [
+      {
+        "latitude": 18.9508,
+        "longitude": 32.2558,
+        "altitude": null,
+        "precision": 0.0094979634207008,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q135028",
+    "revision": null
+  },
+  {
+    "no": 265,
+    "name": "베두인",
+    "query": "아라비아반도",
+    "title": "아라비아반도",
+    "entity": "Q31945",
+    "coordinates": [
+      {
+        "latitude": 23,
+        "longitude": 46,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q31945",
+    "revision": null
+  },
+  {
+    "no": 269,
+    "name": "류큐 사람들",
+    "query": "슈리성",
+    "title": "슈리성",
+    "entity": "Q907052",
+    "coordinates": [
+      {
+        "latitude": 26.217030555556,
+        "longitude": 127.719475,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q907052",
+    "revision": null
+  },
+  {
+    "no": 272,
+    "name": "타이노",
+    "query": "히스파니올라섬",
+    "title": "히스파니올라섬",
+    "entity": "Q25277",
+    "coordinates": [
+      {
+        "latitude": 19,
+        "longitude": -71,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q25277",
+    "revision": null
+  },
+  {
+    "no": 273,
+    "name": "과라니",
+    "query": "파라과이강",
+    "title": "파라과이강",
+    "entity": "Q179396",
+    "coordinates": [
+      {
+        "latitude": -27.290027966206,
+        "longitude": -58.60725402832,
+        "altitude": null,
+        "precision": 0.000277778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q179396",
+    "revision": null
+  },
+  {
+    "no": 274,
+    "name": "아마존의 여전사들",
+    "query": "아마존강",
+    "title": "아마존강",
+    "entity": "Q3783",
+    "coordinates": [
+      {
+        "latitude": -4.44836,
+        "longitude": -73.4559,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 0.7077777777777778,
+        "longitude": -50.089444444444446,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3783",
+    "revision": null
+  },
+  {
+    "no": 275,
+    "name": "소그드 상인의 대상",
+    "query": "사마르칸트",
+    "title": "사마르칸트",
+    "entity": "Q5753",
+    "coordinates": [
+      {
+        "latitude": 39.65472222222222,
+        "longitude": 66.97583333333333,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5753",
+    "revision": null
+  },
+  {
+    "no": 282,
+    "name": "사탕수수 (설탕)",
+    "query": "히스파니올라섬",
+    "title": "히스파니올라섬",
+    "entity": "Q25277",
+    "coordinates": [
+      {
+        "latitude": 19,
+        "longitude": -71,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q25277",
+    "revision": null
+  },
+  {
+    "no": 287,
+    "name": "고추",
+    "query": "베라크루스",
+    "title": "베라크루스",
+    "entity": "Q173270",
+    "coordinates": [
+      {
+        "latitude": 19.190277777778,
+        "longitude": -96.153333333333,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q173270",
+    "revision": null
+  },
+  {
+    "no": 291,
+    "name": "목화",
+    "query": "구자라트주",
+    "title": "구자라트주",
+    "entity": "Q1061",
+    "coordinates": [
+      {
+        "latitude": 23.156444444444446,
+        "longitude": 71.838,
+        "altitude": null,
+        "precision": 2.777777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1061",
+    "revision": null
+  },
+  {
+    "no": 292,
+    "name": "쪽 (인디고)",
+    "query": "벵골",
+    "title": "벵골",
+    "entity": "Q80338",
+    "coordinates": [
+      {
+        "latitude": 23.9888,
+        "longitude": 88.7311,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q80338",
+    "revision": null
+  },
+  {
+    "no": 295,
+    "name": "호박 (앰버)",
+    "query": "발트해",
+    "title": "발트해",
+    "entity": "Q545",
+    "coordinates": [
+      {
+        "latitude": 58,
+        "longitude": 20,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q545",
+    "revision": null
+  },
+  {
+    "no": 297,
+    "name": "연꽃",
+    "query": "갠지스강",
+    "title": "갠지스강",
+    "entity": "Q5089",
+    "coordinates": [
+      {
+        "latitude": 22,
+        "longitude": 90.9,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 30.145,
+        "longitude": 78.5975,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5089",
+    "revision": null
+  },
+  {
+    "no": 301,
+    "name": "레기스탄 광장 (사마르칸트)",
+    "query": "레기스탄",
+    "title": "레기스탄",
+    "entity": "Q1373583",
+    "coordinates": [
+      {
+        "latitude": 39.654722222222,
+        "longitude": 66.975555555556,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1373583",
+    "revision": null
+  },
+  {
+    "no": 303,
+    "name": "이맘 광장 (이스파한)",
+    "query": "이맘 광장",
+    "title": "이맘 광장",
+    "entity": "Q4519",
+    "coordinates": [
+      {
+        "latitude": 32.65822222222222,
+        "longitude": 51.67733333333334,
+        "altitude": null,
+        "precision": 2.777777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4519",
+    "revision": null
+  },
+  {
+    "no": 308,
+    "name": "팔미라",
+    "query": "팔미라",
+    "title": "팔미라",
+    "entity": "Q5747",
+    "coordinates": [
+      {
+        "latitude": 34.550381,
+        "longitude": 38.269791,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 34.56,
+        "longitude": 38.267222,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5747",
+    "revision": null
+  },
+  {
+    "no": 309,
+    "name": "통곡의 벽 (예루살렘)",
+    "query": "통곡의 벽",
+    "title": "통곡의 벽",
+    "entity": "Q134821",
+    "coordinates": [
+      {
+        "latitude": 31.776947222222223,
+        "longitude": 35.23425,
+        "altitude": null,
+        "precision": 2.777777777777778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q134821",
+    "revision": null
+  },
+  {
+    "no": 313,
+    "name": "코르도바 메스키타",
+    "query": "코르도바 메스키타",
+    "title": "메스키타",
+    "entity": "Q33200",
+    "coordinates": [
+      {
+        "latitude": 37.8788654292767,
+        "longitude": -4.77934163461387,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 37.879194444444444,
+        "longitude": -4.779722222222222,
+        "altitude": null,
+        "precision": 2.777777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q33200",
+    "revision": null
+  },
+  {
+    "no": 314,
+    "name": "아헨 대성당",
+    "query": "아헨 대성당",
+    "title": "아헨 대성당",
+    "entity": "Q5908",
+    "coordinates": [
+      {
+        "latitude": 50.77475,
+        "longitude": 6.0839222222222,
+        "altitude": null,
+        "precision": 2.778e-07,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5908",
+    "revision": null
+  },
+  {
+    "no": 315,
+    "name": "쾰른 대성당",
+    "query": "쾰른 대성당",
+    "title": "쾰른 대성당",
+    "entity": "Q4176",
+    "coordinates": [
+      {
+        "latitude": 50.94138888888889,
+        "longitude": 6.958333333333333,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4176",
+    "revision": null
+  },
+  {
+    "no": 319,
+    "name": "카르카손",
+    "query": "카르카손",
+    "title": "카르카손",
+    "entity": "Q6582",
+    "coordinates": [
+      {
+        "latitude": 43.215833333333,
+        "longitude": 2.3513888888889,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q6582",
+    "revision": null
+  },
+  {
+    "no": 325,
+    "name": "리알토 다리 (베네치아)",
+    "query": "리알토 다리",
+    "title": "리알토 다리",
+    "entity": "Q52505",
+    "coordinates": [
+      {
+        "latitude": 45.438008,
+        "longitude": 12.335639,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q52505",
+    "revision": null
+  },
+  {
+    "no": 329,
+    "name": "이쓰쿠시마 신사",
+    "query": "이쓰쿠시마 신사",
+    "title": "이쓰쿠시마 신사",
+    "entity": "Q191763",
+    "coordinates": [
+      {
+        "latitude": 34.29577,
+        "longitude": 132.320105,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q191763",
+    "revision": null
+  },
+  {
+    "no": 331,
+    "name": "첨성대",
+    "query": "첨성대",
+    "title": "첨성대",
+    "entity": "Q562765",
+    "coordinates": [
+      {
+        "latitude": 35.834722222222,
+        "longitude": 129.219,
+        "altitude": null,
+        "precision": 2.7777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q562765",
+    "revision": null
+  },
+  {
+    "no": 333,
+    "name": "광개토대왕비",
+    "query": "광개토대왕비",
+    "title": "광개토대왕릉비",
+    "entity": "Q701096",
+    "coordinates": [
+      {
+        "latitude": 41.144877,
+        "longitude": 126.214212,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q701096",
+    "revision": null
+  },
+  {
+    "no": 334,
+    "name": "고구려 고분 벽화",
+    "query": "고구려 고분군",
+    "title": "고구려 고분군",
+    "entity": "Q277525",
+    "coordinates": [
+      {
+        "latitude": 38.863055555556,
+        "longitude": 125.415,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q277525",
+    "revision": null
+  },
+  {
+    "no": 336,
+    "name": "낙산대불",
+    "query": "낙산대불",
+    "title": "러산 대불",
+    "entity": "Q205131",
+    "coordinates": [
+      {
+        "latitude": 29.546944444444,
+        "longitude": 103.76925,
+        "altitude": null,
+        "precision": 2.7777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q205131",
+    "revision": null
+  },
+  {
+    "no": 342,
+    "name": "바간",
+    "query": "바간",
+    "title": "바간",
+    "entity": "Q29317",
+    "coordinates": [
+      {
+        "latitude": 21.1725,
+        "longitude": 94.86,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q29317",
+    "revision": null
+  },
+  {
+    "no": 351,
+    "name": "툴룸",
+    "query": "툴룸",
+    "title": "툴룸",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 355,
+    "name": "몬테 알반",
+    "query": "몬테 알반",
+    "title": "몬테 알반",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 356,
+    "name": "촐룰라 대피라미드",
+    "query": "촐룰라 대피라미드",
+    "title": "촐룰라 대피라미드",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 358,
+    "name": "찬찬",
+    "query": "찬찬",
+    "title": "찬찬",
+    "entity": "Q277540",
+    "coordinates": [
+      {
+        "latitude": -8.1105555555556,
+        "longitude": -79.075,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q277540",
+    "revision": null
+  },
+  {
+    "no": 367,
+    "name": "킬와 키시와니",
+    "query": "킬와 키시와니",
+    "title": "킬와 키시와니",
+    "entity": "Q1741475",
+    "coordinates": [
+      {
+        "latitude": -8.98173,
+        "longitude": 39.51722,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1741475",
+    "revision": null
+  },
+  {
+    "no": 369,
+    "name": "렙티스 마그나",
+    "query": "렙티스 마그나",
+    "title": "렙티스 마그나",
+    "entity": "Q191504",
+    "coordinates": [
+      {
+        "latitude": 32.638331884068016,
+        "longitude": 14.29049645909896,
+        "altitude": null,
+        "precision": 1e-08,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 32.636748,
+        "longitude": 14.2922,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q191504",
+    "revision": null
+  },
+  {
+    "no": 371,
+    "name": "페스 메디나",
+    "query": "페스",
+    "title": "페스",
+    "entity": "Q80985",
+    "coordinates": [
+      {
+        "latitude": 34.04333333333334,
+        "longitude": -5.003333333333333,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q80985",
+    "revision": null
+  },
+  {
+    "no": 372,
+    "name": "마라케시 쿠투비아",
+    "query": "쿠투비아 모스크",
+    "title": "쿠투비아 모스크",
+    "entity": "Q1137533",
+    "coordinates": [
+      {
+        "latitude": 31.624124,
+        "longitude": -7.993541,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1137533",
+    "revision": null
+  },
+  {
+    "no": 373,
+    "name": "곤다르",
+    "query": "곤다르",
+    "title": "곤다르",
+    "entity": "Q218861",
+    "coordinates": [
+      {
+        "latitude": 12.6,
+        "longitude": 37.466666666667,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q218861",
+    "revision": null
+  },
+  {
+    "no": 377,
+    "name": "구채구",
+    "query": "구채구",
+    "title": "주자이거우 풍경구",
+    "entity": "Q4111",
+    "coordinates": [
+      {
+        "latitude": 33.2,
+        "longitude": 103.9,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4111",
+    "revision": null
+  },
+  {
+    "no": 378,
+    "name": "백두산 천지",
+    "query": "천지",
+    "title": "천지",
+    "entity": "Q714023",
+    "coordinates": [
+      {
+        "latitude": 42.006,
+        "longitude": 128.057,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q714023",
+    "revision": null
+  },
+  {
+    "no": 379,
+    "name": "금강산",
+    "query": "금강산",
+    "title": "금강산",
+    "entity": "Q495501",
+    "coordinates": [
+      {
+        "latitude": 38.656763888889,
+        "longitude": 128.10490277778,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q495501",
+    "revision": null
+  },
+  {
+    "no": 380,
+    "name": "한라산",
+    "query": "한라산",
+    "title": "한라산",
+    "entity": "Q494645",
+    "coordinates": [
+      {
+        "latitude": 33.35,
+        "longitude": 126.51666666667,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q494645",
+    "revision": null
+  },
+  {
+    "no": 381,
+    "name": "아소산",
+    "query": "아소산",
+    "title": "아소산",
+    "entity": "Q733710",
+    "coordinates": [
+      {
+        "latitude": 32.885,
+        "longitude": 131.10416666667,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q733710",
+    "revision": null
+  },
+  {
+    "no": 385,
+    "name": "나미브 사막",
+    "query": "나미브 사막",
+    "title": "나미브 사막",
+    "entity": "Q131377",
+    "coordinates": [
+      {
+        "latitude": -23,
+        "longitude": 15,
+        "altitude": null,
+        "precision": 0.0166667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q131377",
+    "revision": null
+  },
+  {
+    "no": 386,
+    "name": "오카방고 삼각주",
+    "query": "오카방고 삼각주",
+    "title": "오카방고 삼각주",
+    "entity": "Q650872",
+    "coordinates": [
+      {
+        "latitude": -19.4,
+        "longitude": 22.9,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q650872",
+    "revision": null
+  },
+  {
+    "no": 387,
+    "name": "응고롱고로",
+    "query": "응고롱고로",
+    "title": "응고롱고로",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 388,
+    "name": "빅토리아 폭포",
+    "query": "빅토리아 폭포",
+    "title": "빅토리아 폭포",
+    "entity": "Q43278",
+    "coordinates": [
+      {
+        "latitude": -17.924777777778,
+        "longitude": 25.858055555556,
+        "altitude": null,
+        "precision": 2.7777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q43278",
+    "revision": null
+  },
+  {
+    "no": 389,
+    "name": "테이블 마운틴",
+    "query": "테이블 마운틴",
+    "title": "테이블산",
+    "entity": "Q213360",
+    "coordinates": [
+      {
+        "latitude": -33.96216,
+        "longitude": 18.41352,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q213360",
+    "revision": null
+  },
+  {
+    "no": 391,
+    "name": "소코트라 용혈수",
+    "query": "소코트라섬",
+    "title": "소코트라섬",
+    "entity": "Q82859",
+    "coordinates": [
+      {
+        "latitude": 12.51,
+        "longitude": 53.92,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q82859",
+    "revision": null
+  },
+  {
+    "no": 394,
+    "name": "포로로카 (아마존 해일)",
+    "query": "아마존강",
+    "title": "아마존강",
+    "entity": "Q3783",
+    "coordinates": [
+      {
+        "latitude": -4.44836,
+        "longitude": -73.4559,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 0.7077777777777778,
+        "longitude": -50.089444444444446,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3783",
+    "revision": null
+  },
+  {
+    "no": 396,
+    "name": "가이랑에르 피오르",
+    "query": "게이랑에르 피오르",
+    "title": "게이랑에르 피오르",
+    "entity": "Q193989",
+    "coordinates": [
+      {
+        "latitude": 62.094444444444,
+        "longitude": 7.0805555555556,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q193989",
+    "revision": null
+  },
+  {
+    "no": 397,
+    "name": "자이언츠 코즈웨이",
+    "query": "자이언츠 코즈웨이",
+    "title": "자이언트 코즈웨이",
+    "entity": "Q106187",
+    "coordinates": [
+      {
+        "latitude": 55.240833333333,
+        "longitude": -6.5116666666667,
+        "altitude": null,
+        "precision": 2.778e-07,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q106187",
+    "revision": null
+  },
+  {
+    "no": 398,
+    "name": "에트나",
+    "query": "에트나산",
+    "title": "에트나산",
+    "entity": "Q16990",
+    "coordinates": [
+      {
+        "latitude": 37.7508345148182,
+        "longitude": 14.993220288812111,
+        "altitude": null,
+        "precision": 1e-08,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q16990",
+    "revision": null
+  },
+  {
+    "no": 399,
+    "name": "스트롬볼리",
+    "query": "스트롬볼리섬",
+    "title": "스트롬볼리섬",
+    "entity": "Q131148",
+    "coordinates": [
+      {
+        "latitude": 38.804,
+        "longitude": 15.2233,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q131148",
+    "revision": null
+  },
+  {
+    "no": 400,
+    "name": "몽블랑",
+    "query": "몽블랑산",
+    "title": "몽블랑산",
+    "entity": "Q583",
+    "coordinates": [
+      {
+        "latitude": 45.83277777777778,
+        "longitude": 6.865,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q583",
+    "revision": null
+  },
+  {
+    "no": 405,
+    "name": "호르무즈 해협",
+    "query": "호르무즈 해협",
+    "title": "호르무즈 해협",
+    "entity": "Q79883",
+    "coordinates": [
+      {
+        "latitude": 26.6,
+        "longitude": 56.5,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q79883",
+    "revision": null
+  },
+  {
+    "no": 406,
+    "name": "보스포루스 해협",
+    "query": "보스포루스 해협",
+    "title": "보스포루스 해협",
+    "entity": "Q35958",
+    "coordinates": [
+      {
+        "latitude": 41.12,
+        "longitude": 29.08,
+        "altitude": null,
+        "precision": 0.000277778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q35958",
+    "revision": null
+  },
+  {
+    "no": 407,
+    "name": "적도 (적도제)",
+    "query": "기니만",
+    "title": "기니만",
+    "entity": "Q41430",
+    "coordinates": [
+      {
+        "latitude": 1,
+        "longitude": 4,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q41430",
+    "revision": null
+  },
+  {
+    "no": 408,
+    "name": "카나리아 제도",
+    "query": "카나리아 제도",
+    "title": "카나리아 제도",
+    "entity": "Q5813",
+    "coordinates": [
+      {
+        "latitude": 28,
+        "longitude": -15.75,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5813",
+    "revision": null
+  },
+  {
+    "no": 411,
+    "name": "카보베르데",
+    "query": "카보베르데",
+    "title": "카보베르데",
+    "entity": "Q1011",
+    "coordinates": [
+      {
+        "latitude": 15.3,
+        "longitude": -23.7,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1011",
+    "revision": null
+  },
+  {
+    "no": 412,
+    "name": "세인트헬레나",
+    "query": "세인트헬레나",
+    "title": "세인트헬레나",
+    "entity": "Q34497",
+    "coordinates": [
+      {
+        "latitude": -15.965,
+        "longitude": -5.715,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q34497",
+    "revision": null
+  },
+  {
+    "no": 415,
+    "name": "마카오",
+    "query": "마카오",
+    "title": "마카오",
+    "entity": "Q14773",
+    "coordinates": [
+      {
+        "latitude": 22.19,
+        "longitude": 113.53805555555556,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q14773",
+    "revision": null
+  },
+  {
+    "no": 416,
+    "name": "데지마",
+    "query": "데지마",
+    "title": "데지마",
+    "entity": "Q640267",
+    "coordinates": [
+      {
+        "latitude": 32.74352,
+        "longitude": 129.87302,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q640267",
+    "revision": null
+  },
+  {
+    "no": 417,
+    "name": "베네치아 석호",
+    "query": "베네치아 석호",
+    "title": "베네치아 석호",
+    "entity": "Q76925",
+    "coordinates": [
+      {
+        "latitude": 45.413055555556,
+        "longitude": 12.297222222222,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q76925",
+    "revision": null
+  },
+  {
+    "no": 418,
+    "name": "적도 무풍대",
+    "query": "기니만",
+    "title": "기니만",
+    "entity": "Q41430",
+    "coordinates": [
+      {
+        "latitude": 1,
+        "longitude": 4,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q41430",
+    "revision": null
+  },
+  {
+    "no": 423,
+    "name": "계절풍 바다",
+    "query": "아라비아해",
+    "title": "아라비아해",
+    "entity": "Q58705",
+    "coordinates": [
+      {
+        "latitude": 16,
+        "longitude": 64,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q58705",
+    "revision": null
+  },
+  {
+    "no": 424,
+    "name": "바레인 진주 바다",
+    "query": "바레인",
+    "title": "바레인",
+    "entity": "Q398",
+    "coordinates": [
+      {
+        "latitude": 26.0675,
+        "longitude": 50.551111,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q398",
+    "revision": null
+  },
+  {
+    "no": 427,
+    "name": "켈스의 서",
+    "query": "켈스의 서",
+    "title": "켈스의 서",
+    "entity": "Q204221",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q204221",
+    "revision": null
+  },
+  {
+    "no": 429,
+    "name": "우르의 깃발",
+    "query": "우르",
+    "title": "우르",
+    "entity": "Q5699",
+    "coordinates": [
+      {
+        "latitude": 30.962222,
+        "longitude": 46.104444,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5699",
+    "revision": null
+  },
+  {
+    "no": 431,
+    "name": "프리아모스의 보물",
+    "query": "트로이아",
+    "title": "트로이",
+    "entity": "Q22647",
+    "coordinates": [
+      {
+        "latitude": 39.9575,
+        "longitude": 26.238888888889,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 39.9575,
+        "longitude": 26.238889,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q22647",
+    "revision": null
+  },
+  {
+    "no": 432,
+    "name": "크로이소스 금화",
+    "query": "사르디스",
+    "title": "사르디스",
+    "entity": "Q232615",
+    "coordinates": [
+      {
+        "latitude": 38.488333,
+        "longitude": 28.040278,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 38.488314,
+        "longitude": 28.040286,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q232615",
+    "revision": null
+  },
+  {
+    "no": 433,
+    "name": "야타의 거울",
+    "query": "이세 신궁",
+    "title": "이세 신궁",
+    "entity": "Q687168",
+    "coordinates": [
+      {
+        "latitude": 34.455,
+        "longitude": 136.72583333333,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q687168",
+    "revision": null
+  },
+  {
+    "no": 434,
+    "name": "쿠사나기 검",
+    "query": "아쓰타 신궁",
+    "title": "아쓰타 신궁",
+    "entity": "Q482065",
+    "coordinates": [
+      {
+        "latitude": 35.126509,
+        "longitude": 136.908698,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q482065",
+    "revision": null
+  },
+  {
+    "no": 435,
+    "name": "칠지도",
+    "query": "이소노카미 신궁",
+    "title": "이소노카미진구 신궁",
+    "entity": "Q708859",
+    "coordinates": [
+      {
+        "latitude": 34.597875,
+        "longitude": 135.851673,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q708859",
+    "revision": null
+  },
+  {
+    "no": 436,
+    "name": "무령왕 금관 꾸미개",
+    "query": "무령왕릉",
+    "title": "무령왕릉",
+    "entity": "Q7818619",
+    "coordinates": [
+      {
+        "latitude": 36.46055556,
+        "longitude": 127.11277778,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q7818619",
+    "revision": null
+  },
+  {
+    "no": 437,
+    "name": "무구정광대다라니경",
+    "query": "불국사",
+    "title": "불국사",
+    "entity": "Q408318",
+    "coordinates": [
+      {
+        "latitude": 35.79,
+        "longitude": 129.33222222222,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q408318",
+    "revision": null
+  },
+  {
+    "no": 438,
+    "name": "직지",
+    "query": "흥덕사지",
+    "title": "청주 흥덕사지",
+    "entity": "Q12485627",
+    "coordinates": [
+      {
+        "latitude": 36.64388888888889,
+        "longitude": 127.47194444444445,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q12485627",
+    "revision": null
+  },
+  {
+    "no": 439,
+    "name": "정창원 보물",
+    "query": "쇼소인",
+    "title": "쇼소인",
+    "entity": "Q2379007",
+    "coordinates": [
+      {
+        "latitude": 34.69194444,
+        "longitude": 135.83861111,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q2379007",
+    "revision": null
+  },
+  {
+    "no": 440,
+    "name": "영락대전",
+    "query": "베이징시",
+    "title": "베이징시",
+    "entity": "Q956",
+    "coordinates": [
+      {
+        "latitude": 39.90403,
+        "longitude": 116.407526,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q956",
+    "revision": null
+  },
+  {
+    "no": 441,
+    "name": "바이외 태피스트리",
+    "query": "바이외 태피스트리",
+    "title": "바이외 태피스트리",
+    "entity": "Q187483",
+    "coordinates": [
+      {
+        "latitude": 49.27436,
+        "longitude": -0.70029,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q187483",
+    "revision": null
+  },
+  {
+    "no": 443,
+    "name": "마그나 카르타",
+    "query": "마그나 카르타",
+    "title": "마그나 카르타",
+    "entity": "Q12519",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q12519",
+    "revision": null
+  },
+  {
+    "no": 444,
+    "name": "구텐베르크 성경",
+    "query": "구텐베르크 성경",
+    "title": "구텐베르크 성경",
+    "entity": "Q158075",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q158075",
+    "revision": null
+  },
+  {
+    "no": 445,
+    "name": "샤를마뉴의 칼 주아외즈",
+    "query": "주아외즈",
+    "title": "주아외즈",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 446,
+    "name": "롤랑의 뿔피리",
+    "query": "롤랑의 뿔피리",
+    "title": "롤랑의 뿔피리",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 447,
+    "name": "엘 시드의 칼 티소나",
+    "query": "엘 시드의 칼 티소나",
+    "title": "엘 시드의 칼 티소나",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 448,
+    "name": "아스텍 흑요석 거울",
+    "query": "테스카틀리포카",
+    "title": "테스카틀리포카",
+    "entity": "Q756797",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q756797",
+    "revision": null
+  },
+  {
+    "no": 449,
+    "name": "토프카프 단검",
+    "query": "톱카프 궁전",
+    "title": "톱카프 궁전",
+    "entity": "Q170495",
+    "coordinates": [
+      {
+        "latitude": 41.013,
+        "longitude": 28.984,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q170495",
+    "revision": null
+  },
+  {
+    "no": 450,
+    "name": "오를로프 다이아몬드",
+    "query": "오를로프 다이아몬드",
+    "title": "오를로프 다이아몬드",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 451,
+    "name": "레오나르도의 수첩",
+    "query": "빈저성",
+    "title": "빈저성",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 452,
+    "name": "비트루비우스 인간",
+    "query": "비트루비우스 인간",
+    "title": "비트루비우스 인간",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 453,
+    "name": "메르카토르 지구의",
+    "query": "메르카토르 지구의",
+    "title": "메르카토르 지구의",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 454,
+    "name": "아스트롤라베",
+    "query": "아스트롤라베",
+    "title": "성반 (천문학)",
+    "entity": "Q164992",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q164992",
+    "revision": null
+  },
+  {
+    "no": 456,
+    "name": "혼천의",
+    "query": "베이징 고관상대",
+    "title": "베이징 고관상대",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 457,
+    "name": "앙부일구",
+    "query": "앙부일구",
+    "title": "앙부일구",
+    "entity": "Q31179914",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q31179914",
+    "revision": null
+  },
+  {
+    "no": 458,
+    "name": "측우기",
+    "query": "측우기",
+    "title": "측우기",
+    "entity": "Q5094226",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q5094226",
+    "revision": null
+  },
+  {
+    "no": 459,
+    "name": "자격루",
+    "query": "자격루",
+    "title": "자격루",
+    "entity": "Q485682",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q485682",
+    "revision": null
+  },
+  {
+    "no": 460,
+    "name": "울루그 벡 천문대",
+    "query": "울루그베그 천문대",
+    "title": "울루그베그 천문대",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 461,
+    "name": "잔타르 만타르",
+    "query": "잔타르 만타르 (자이푸르)",
+    "title": "잔타르 만타르 (자이푸르)",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 462,
+    "name": "프라하 천문시계",
+    "query": "프라하 천문시계",
+    "title": "프라하 천문시계",
+    "entity": "Q729370",
+    "coordinates": [
+      {
+        "latitude": 50.08699,
+        "longitude": 14.4207,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q729370",
+    "revision": null
+  },
+  {
+    "no": 463,
+    "name": "『회전에 관하여』",
+    "query": "천체의 회전에 관하여",
+    "title": "천구의 회전에 관하여",
+    "entity": "Q845981",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q845981",
+    "revision": null
+  },
+  {
+    "no": 464,
+    "name": "갈릴레오의 망원경",
+    "query": "피렌체",
+    "title": "피렌체",
+    "entity": "Q2044",
+    "coordinates": [
+      {
+        "latitude": 43.771388888889,
+        "longitude": 11.254166666667,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q2044",
+    "revision": null
+  },
+  {
+    "no": 465,
+    "name": "스트라디바리 바이올린",
+    "query": "스트라디바리 바이올린",
+    "title": "스트라디바리 바이올린",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 466,
+    "name": "곤여만국전도",
+    "query": "곤여만국전도",
+    "title": "곤여만국전도",
+    "entity": "Q485541",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q485541",
+    "revision": null
+  },
+  {
+    "no": 467,
+    "name": "혼일강리역대국도지도 (강리도)",
+    "query": "혼일강리역대국도지도",
+    "title": "혼일강리역대국도지도",
+    "entity": "Q126951",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q126951",
+    "revision": null
+  },
+  {
+    "no": 468,
+    "name": "카탈루냐 지도첩",
+    "query": "카탈루냐 지도첩",
+    "title": "카탈루냐 지도첩",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 469,
+    "name": "발트제뮐러 지도",
+    "query": "발트제뮐러 지도",
+    "title": "발트제뮐러 지도",
+    "entity": "Q195801",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q195801",
+    "revision": null
+  },
+  {
+    "no": 470,
+    "name": "쿠빌라이의 패자",
+    "query": "상도 (원나라)",
+    "title": "상도 (지명)",
+    "entity": "Q471765",
+    "coordinates": [
+      {
+        "latitude": 42.358021111111114,
+        "longitude": 116.18515888888889,
+        "altitude": null,
+        "precision": 2.77778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q471765",
+    "revision": null
+  },
+  {
+    "no": 471,
+    "name": "지남차",
+    "query": "지남차",
+    "title": "지남차",
+    "entity": "Q1780829",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q1780829",
+    "revision": null
+  },
+  {
+    "no": 472,
+    "name": "난중일기",
+    "query": "한산도",
+    "title": "한산도",
+    "entity": "Q485029",
+    "coordinates": [
+      {
+        "latitude": 34.7818,
+        "longitude": 128.485,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q485029",
+    "revision": null
+  },
+  {
+    "no": 473,
+    "name": "거북선",
+    "query": "여수시",
+    "title": "여수시",
+    "entity": "Q42125",
+    "coordinates": [
+      {
+        "latitude": 34.760689,
+        "longitude": 127.662163,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q42125",
+    "revision": null
+  },
+  {
+    "no": 474,
+    "name": "무라노 유리",
+    "query": "무라노",
+    "title": "무라노",
+    "entity": "Q52437",
+    "coordinates": [
+      {
+        "latitude": 45.4575,
+        "longitude": 12.35361111111111,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q52437",
+    "revision": null
+  },
+  {
+    "no": 475,
+    "name": "아르다빌 양탄자",
+    "query": "아르다빌",
+    "title": "아르다빌",
+    "entity": "Q180103",
+    "coordinates": [
+      {
+        "latitude": 38.25,
+        "longitude": 48.3,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q180103",
+    "revision": null
+  },
+  {
+    "no": 487,
+    "name": "금강앵무 (마코앵무)",
+    "query": "마코앵무",
+    "title": "마코앵무",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 494,
+    "name": "낙타",
+    "query": "단봉낙타",
+    "title": "단봉낙타",
+    "entity": "Q71516",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q71516",
+    "revision": null
+  },
+  {
+    "no": 498,
+    "name": "태즈메이니아 데빌",
+    "query": "태즈메이니아주",
+    "title": "태즈메이니아주",
+    "entity": "Q34366",
+    "coordinates": [
+      {
+        "latitude": -42,
+        "longitude": 147,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q34366",
+    "revision": null
+  },
+  {
+    "no": 500,
+    "name": "모아",
+    "query": "뉴질랜드",
+    "title": "뉴질랜드",
+    "entity": "Q664",
+    "coordinates": [
+      {
+        "latitude": -41.2,
+        "longitude": 174,
+        "altitude": null,
+        "precision": 0.1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q664",
+    "revision": null
+  },
+  {
+    "no": 501,
+    "name": "해마",
+    "query": "해마",
+    "title": "해마",
+    "entity": "Q343705",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q343705",
+    "revision": null
+  },
+  {
+    "no": 502,
+    "name": "문어",
+    "query": "문어",
+    "title": "문어",
+    "entity": "Q912404",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q912404",
+    "revision": null
+  },
+  {
+    "no": 503,
+    "name": "고깔해파리",
+    "query": "고깔해파리",
+    "title": "작은부레관해파리",
+    "entity": "Q202526",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q202526",
+    "revision": null
+  },
+  {
+    "no": 504,
+    "name": "대왕조개",
+    "query": "대왕조개",
+    "title": "대왕조개",
+    "entity": "Q2387255",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q2387255",
+    "revision": null
+  },
+  {
+    "no": 506,
+    "name": "백상아리",
+    "query": "백상아리",
+    "title": "백상아리",
+    "entity": "Q129026",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q129026",
+    "revision": null
+  },
+  {
+    "no": 511,
+    "name": "앵무조개",
+    "query": "앵무조개",
+    "title": "앵무조개",
+    "entity": "Q223939",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q223939",
+    "revision": null
+  },
+  {
+    "no": 512,
+    "name": "투구게",
+    "query": "투구게",
+    "title": "투구게과",
+    "entity": "Q1329239",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q1329239",
+    "revision": null
+  },
+  {
+    "no": 515,
+    "name": "장수풍뎅이",
+    "query": "장수풍뎅이",
+    "title": "장수풍뎅이",
+    "entity": "Q1334311",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q1334311",
+    "revision": null
+  },
+  {
+    "no": 517,
+    "name": "메뚜기 떼",
+    "query": "사헬",
+    "title": "사헬",
+    "entity": "Q66065",
+    "coordinates": [
+      {
+        "latitude": 14.474672,
+        "longitude": 13.511696,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q66065",
+    "revision": null
+  },
+  {
+    "no": 518,
+    "name": "잎꾼개미",
+    "query": "아마존 분지",
+    "title": "아마존 분지",
+    "entity": "Q244451",
+    "coordinates": [
+      {
+        "latitude": -3,
+        "longitude": -60,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q244451",
+    "revision": null
+  },
+  {
+    "no": 521,
+    "name": "대나무 꽃",
+    "query": "사가노",
+    "title": "사가노",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 527,
+    "name": "해태 석상",
+    "query": "경복궁",
+    "title": "경복궁",
+    "entity": "Q482485",
+    "coordinates": [
+      {
+        "latitude": 37.5798841,
+        "longitude": 126.9767996,
+        "altitude": null,
+        "precision": 2.77778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q482485",
+    "revision": null
+  },
+  {
+    "no": 528,
+    "name": "불가사리",
+    "query": "개성시",
+    "title": "개성시",
+    "entity": "Q109079",
+    "coordinates": [
+      {
+        "latitude": 37.971666666666664,
+        "longitude": 126.55277777777778,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q109079",
+    "revision": null
+  },
+  {
+    "no": 529,
+    "name": "가릉빈가",
+    "query": "불국사",
+    "title": "불국사",
+    "entity": "Q408318",
+    "coordinates": [
+      {
+        "latitude": 35.79,
+        "longitude": 129.33222222222,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q408318",
+    "revision": null
+  },
+  {
+    "no": 530,
+    "name": "이무기 연못",
+    "query": "한국",
+    "title": "한국",
+    "entity": "Q18097",
+    "coordinates": [
+      {
+        "latitude": 38.316666666667,
+        "longitude": 127.23333333333,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q18097",
+    "revision": null
+  },
+  {
+    "no": 531,
+    "name": "강시",
+    "query": "후난성",
+    "title": "후난성",
+    "entity": "Q45761",
+    "coordinates": [
+      {
+        "latitude": 27.6,
+        "longitude": 111.8,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q45761",
+    "revision": null
+  },
+  {
+    "no": 532,
+    "name": "뇌봉탑의 백사",
+    "query": "뇌봉탑",
+    "title": "뇌봉탑",
+    "entity": "Q1155765",
+    "coordinates": [
+      {
+        "latitude": 30.23388889,
+        "longitude": 120.145,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1155765",
+    "revision": null
+  },
+  {
+    "no": 533,
+    "name": "화과산 수렴동",
+    "query": "화과산",
+    "title": "화과산",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 534,
+    "name": "갓파 늪",
+    "query": "도노시",
+    "title": "도노시",
+    "entity": "Q646766",
+    "coordinates": [
+      {
+        "latitude": 39.332027777777775,
+        "longitude": 141.5328888888889,
+        "altitude": null,
+        "precision": 2.777777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q646766",
+    "revision": null
+  },
+  {
+    "no": 535,
+    "name": "텐구 산",
+    "query": "구라마산",
+    "title": "구라마산",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 536,
+    "name": "야마타노오로치 강",
+    "query": "히이강",
+    "title": "히이강",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 537,
+    "name": "라마수",
+    "query": "두르샤루킨",
+    "title": "두르샤루킨",
+    "entity": "Q253208",
+    "coordinates": [
+      {
+        "latitude": 36.50953,
+        "longitude": 43.22931,
+        "altitude": null,
+        "precision": 2.77777777778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q253208",
+    "revision": null
+  },
+  {
+    "no": 538,
+    "name": "그리핀 둥지",
+    "query": "알타이산맥",
+    "title": "알타이산맥",
+    "entity": "Q5955",
+    "coordinates": [
+      {
+        "latitude": 49,
+        "longitude": 89,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5955",
+    "revision": null
+  },
+  {
+    "no": 539,
+    "name": "바실리스크 우물",
+    "query": "빈",
+    "title": "빈",
+    "entity": "Q1741",
+    "coordinates": [
+      {
+        "latitude": 48.208333333333336,
+        "longitude": 16.3725,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1741",
+    "revision": null
+  },
+  {
+    "no": 540,
+    "name": "세이렌 바위",
+    "query": "리 갈리",
+    "title": "리 갈리",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 541,
+    "name": "스킬라와 카리브디스",
+    "query": "메시나 해협",
+    "title": "메시나 해협",
+    "entity": "Q134705",
+    "coordinates": [
+      {
+        "latitude": 38.245833333333,
+        "longitude": 15.6325,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q134705",
+    "revision": null
+  },
+  {
+    "no": 542,
+    "name": "프라하 골렘",
+    "query": "구신 시나고그",
+    "title": "구신 시나고그",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 543,
+    "name": "브란 성",
+    "query": "브란성",
+    "title": "브란성",
+    "entity": "Q390275",
+    "coordinates": [
+      {
+        "latitude": 45.515,
+        "longitude": 25.3671,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q390275",
+    "revision": null
+  },
+  {
+    "no": 544,
+    "name": "제보당의 짐승",
+    "query": "제보당",
+    "title": "제보당",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 545,
+    "name": "웬디고 숲",
+    "query": "온타리오주",
+    "title": "온타리오주",
+    "entity": "Q1904",
+    "coordinates": [
+      {
+        "latitude": 50,
+        "longitude": -85,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1904",
+    "revision": null
+  },
+  {
+    "no": 546,
+    "name": "무지개뱀 웅덩이",
+    "query": "카카두 국립공원",
+    "title": "카카두 국립공원",
+    "entity": "Q189657",
+    "coordinates": [
+      {
+        "latitude": -13.005471,
+        "longitude": 132.519512,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q189657",
+    "revision": null
+  },
+  {
+    "no": 547,
+    "name": "타니와 바다 동굴",
+    "query": "로토루아",
+    "title": "로토루아",
+    "entity": "Q208948",
+    "coordinates": [
+      {
+        "latitude": -38.137777777778,
+        "longitude": 176.25138888889,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q208948",
+    "revision": null
+  },
+  {
+    "no": 549,
+    "name": "플라잉 더치맨",
+    "query": "희망봉",
+    "title": "희망봉",
+    "entity": "Q4092",
+    "coordinates": [
+      {
+        "latitude": -34.358055555556,
+        "longitude": 18.471944444444,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4092",
+    "revision": null
+  },
+  {
+    "no": 550,
+    "name": "바바야가의 오두막",
+    "query": "러시아",
+    "title": "러시아",
+    "entity": "Q159",
+    "coordinates": [
+      {
+        "latitude": 66.41666666666667,
+        "longitude": 94.25,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q159",
+    "revision": null
+  },
+  {
+    "no": 551,
+    "name": "사무라이 도장",
+    "query": "에도",
+    "title": "에도",
+    "entity": "Q215646",
+    "coordinates": [
+      {
+        "latitude": 35.68388888888889,
+        "longitude": 139.77444444444444,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q215646",
+    "revision": null
+  },
+  {
+    "no": 552,
+    "name": "이가 닌자 마을",
+    "query": "이가시",
+    "title": "이가시",
+    "entity": "Q460820",
+    "coordinates": [
+      {
+        "latitude": 34.74986111111111,
+        "longitude": 136.14227777777776,
+        "altitude": null,
+        "precision": 2.777777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q460820",
+    "revision": null
+  },
+  {
+    "no": 553,
+    "name": "조선 통신사 행렬",
+    "query": "부산광역시",
+    "title": "부산광역시",
+    "entity": "Q16520",
+    "coordinates": [
+      {
+        "latitude": 35.18,
+        "longitude": 129.075,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q16520",
+    "revision": null
+  },
+  {
+    "no": 557,
+    "name": "셰르파 마을",
+    "query": "남체바자르",
+    "title": "남체바자르",
+    "entity": "Q376123",
+    "coordinates": [
+      {
+        "latitude": 27.804444444444,
+        "longitude": 86.71,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q376123",
+    "revision": null
+  },
+  {
+    "no": 558,
+    "name": "라지푸트 요새",
+    "query": "치토르가르",
+    "title": "치토르가르",
+    "entity": "Q41827",
+    "coordinates": [
+      {
+        "latitude": 24.889444444444,
+        "longitude": 74.623888888889,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q41827",
+    "revision": null
+  },
+  {
+    "no": 559,
+    "name": "타밀 진주 잠수부",
+    "query": "만나르만",
+    "title": "만나르만",
+    "entity": "Q622811",
+    "coordinates": [
+      {
+        "latitude": 8.414167,
+        "longitude": 78.989444,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q622811",
+    "revision": null
+  },
+  {
+    "no": 560,
+    "name": "스와힐리 상인",
+    "query": "몸바사",
+    "title": "몸바사",
+    "entity": "Q225641",
+    "coordinates": [
+      {
+        "latitude": -4.05,
+        "longitude": 39.666666666667,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q225641",
+    "revision": null
+  },
+  {
+    "no": 564,
+    "name": "로마니 야영지",
+    "query": "헝가리",
+    "title": "헝가리",
+    "entity": "Q28",
+    "coordinates": [
+      {
+        "latitude": 47,
+        "longitude": 19,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q28",
+    "revision": null
+  },
+  {
+    "no": 565,
+    "name": "바스크 고래잡이",
+    "query": "비스케이만",
+    "title": "비스케이만",
+    "entity": "Q41573",
+    "coordinates": [
+      {
+        "latitude": 45.5,
+        "longitude": -4.4,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q41573",
+    "revision": null
+  },
+  {
+    "no": 566,
+    "name": "코사크 마을",
+    "query": "호르티차섬",
+    "title": "호르티차섬",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 567,
+    "name": "나바호 호건",
+    "query": "나바호족",
+    "title": "나바호족",
+    "entity": "Q108266",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q108266",
+    "revision": null
+  },
+  {
+    "no": 569,
+    "name": "마푸체 땅",
+    "query": "비오비오강",
+    "title": "비오비오강",
+    "entity": "Q93360",
+    "coordinates": [
+      {
+        "latitude": -36.8194,
+        "longitude": -73.1644,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": -38.688888888889,
+        "longitude": -71.2575,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q93360",
+    "revision": null
+  },
+  {
+    "no": 570,
+    "name": "우로스 갈대섬",
+    "query": "티티카카호",
+    "title": "티티카카호",
+    "entity": "Q35342",
+    "coordinates": [
+      {
+        "latitude": -15.825,
+        "longitude": -69.325,
+        "altitude": null,
+        "precision": 0.0166667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q35342",
+    "revision": null
+  },
+  {
+    "no": 571,
+    "name": "퀘추아 장터",
+    "query": "쿠스코",
+    "title": "쿠스코",
+    "entity": "Q5582862",
+    "coordinates": [
+      {
+        "latitude": -13.516944444444444,
+        "longitude": -71.9786111111111,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5582862",
+    "revision": null
+  },
+  {
+    "no": 572,
+    "name": "피지 마을",
+    "query": "피지",
+    "title": "피지",
+    "entity": "Q712",
+    "coordinates": [
+      {
+        "latitude": -18,
+        "longitude": 178,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q712",
+    "revision": null
+  },
+  {
+    "no": 576,
+    "name": "가나 금",
+    "query": "가나 제국",
+    "title": "와가두",
+    "entity": "Q206789",
+    "coordinates": [
+      {
+        "latitude": 15.66666667,
+        "longitude": -8,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q206789",
+    "revision": null
+  },
+  {
+    "no": 577,
+    "name": "타가자 소금",
+    "query": "타가자",
+    "title": "타가자",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 578,
+    "name": "다마스쿠스 강철",
+    "query": "다마스쿠스",
+    "title": "다마스쿠스",
+    "entity": "Q3766",
+    "coordinates": [
+      {
+        "latitude": 33.513055555556,
+        "longitude": 36.291944444444,
+        "altitude": null,
+        "precision": 0.0166667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 33.513,
+        "longitude": 36.292,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3766",
+    "revision": null
+  },
+  {
+    "no": 579,
+    "name": "콘월 주석",
+    "query": "콘월주",
+    "title": "콘월주",
+    "entity": "Q23148",
+    "coordinates": [
+      {
+        "latitude": 50.3,
+        "longitude": -4.9,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q23148",
+    "revision": null
+  },
+  {
+    "no": 580,
+    "name": "알마덴 수은",
+    "query": "알마덴",
+    "title": "알마덴",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 581,
+    "name": "유황",
+    "query": "이젠산",
+    "title": "이젠산",
+    "entity": "Q548489",
+    "coordinates": [
+      {
+        "latitude": -8.058,
+        "longitude": 114.242,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q548489",
+    "revision": null
+  },
+  {
+    "no": 582,
+    "name": "장뇌",
+    "query": "보르네오섬",
+    "title": "보르네오섬",
+    "entity": "Q36117",
+    "coordinates": [
+      {
+        "latitude": -1,
+        "longitude": 114,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q36117",
+    "revision": null
+  },
+  {
+    "no": 583,
+    "name": "침향",
+    "query": "참파",
+    "title": "참파",
+    "entity": "Q216786",
+    "coordinates": [
+      {
+        "latitude": 14,
+        "longitude": 108,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q216786",
+    "revision": null
+  },
+  {
+    "no": 586,
+    "name": "몰약",
+    "query": "소말리아",
+    "title": "소말리아",
+    "entity": "Q1045",
+    "coordinates": [
+      {
+        "latitude": 6,
+        "longitude": 47,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1045",
+    "revision": null
+  },
+  {
+    "no": 589,
+    "name": "제비집",
+    "query": "니아 동굴",
+    "title": "니아 동굴",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 590,
+    "name": "고려 인삼",
+    "query": "금강산",
+    "title": "금강산",
+    "entity": "Q495501",
+    "coordinates": [
+      {
+        "latitude": 38.656763888889,
+        "longitude": 128.10490277778,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q495501",
+    "revision": null
+  },
+  {
+    "no": 591,
+    "name": "대황",
+    "query": "간쑤성",
+    "title": "간쑤성",
+    "entity": "Q42392",
+    "coordinates": [
+      {
+        "latitude": 38,
+        "longitude": 102,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q42392",
+    "revision": null
+  },
+  {
+    "no": 593,
+    "name": "사프란",
+    "query": "라만차",
+    "title": "라만차",
+    "entity": "Q844209",
+    "coordinates": [
+      {
+        "latitude": 39.4011,
+        "longitude": -3.015,
+        "altitude": null,
+        "precision": 0.11625345160144,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q844209",
+    "revision": null
+  },
+  {
+    "no": 594,
+    "name": "바닐라",
+    "query": "베라크루스",
+    "title": "베라크루스",
+    "entity": "Q173270",
+    "coordinates": [
+      {
+        "latitude": 19.190277777778,
+        "longitude": -96.153333333333,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q173270",
+    "revision": null
+  },
+  {
+    "no": 595,
+    "name": "코치닐",
+    "query": "오아하카주",
+    "title": "오아하카주",
+    "entity": "Q34110",
+    "coordinates": [
+      {
+        "latitude": 17.055,
+        "longitude": -96.65388888888889,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q34110",
+    "revision": null
+  },
+  {
+    "no": 597,
+    "name": "마데이라 포도주",
+    "query": "마데이라 제도",
+    "title": "마데이라 제도",
+    "entity": "Q26253",
+    "coordinates": [
+      {
+        "latitude": 32.75,
+        "longitude": -17,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q26253",
+    "revision": null
+  },
+  {
+    "no": 598,
+    "name": "카스티야 양모",
+    "query": "카스티야",
+    "title": "카스티야",
+    "entity": "Q173063",
+    "coordinates": [
+      {
+        "latitude": 42.35,
+        "longitude": -3.81666667,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q173063",
+    "revision": null
+  },
+  {
+    "no": 600,
+    "name": "사고야자",
+    "query": "말루쿠 제도",
+    "title": "말루쿠 제도",
+    "entity": "Q3827",
+    "coordinates": [
+      {
+        "latitude": -2,
+        "longitude": 128,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3827",
+    "revision": null
+  },
+  {
+    "no": 601,
+    "name": "산살바도르",
+    "query": "산살바도르섬",
+    "title": "산살바도르섬",
+    "entity": "Q845540",
+    "coordinates": [
+      {
+        "latitude": 24.035,
+        "longitude": -74.4975,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q845540",
+    "revision": null
+  },
+  {
+    "no": 603,
+    "name": "남쪽 바다",
+    "query": "다리엔주",
+    "title": "다리엔주",
+    "entity": "Q688660",
+    "coordinates": [
+      {
+        "latitude": 8.4083333333333,
+        "longitude": -77.915,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q688660",
+    "revision": null
+  },
+  {
+    "no": 604,
+    "name": "괌",
+    "query": "괌",
+    "title": "괌",
+    "entity": "Q16635",
+    "coordinates": [
+      {
+        "latitude": 13.5,
+        "longitude": 144.8,
+        "altitude": null,
+        "precision": 0.0166667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q16635",
+    "revision": null
+  },
+  {
+    "no": 605,
+    "name": "티도레",
+    "query": "티도레섬",
+    "title": "티도레섬",
+    "entity": "Q12506955",
+    "coordinates": [
+      {
+        "latitude": 0.686389,
+        "longitude": 127.410831,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q12506955",
+    "revision": null
+  },
+  {
+    "no": 606,
+    "name": "산루카르",
+    "query": "산루카르데바라메다",
+    "title": "산루카르데바라메다",
+    "entity": "Q210887",
+    "coordinates": [
+      {
+        "latitude": 36.778888888889,
+        "longitude": -6.3538888888889,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q210887",
+    "revision": null
+  },
+  {
+    "no": 607,
+    "name": "몬테 파스코알",
+    "query": "파스코알산",
+    "title": "파스코알산",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 608,
+    "name": "마르 둘세",
+    "query": "아마존강",
+    "title": "아마존강",
+    "entity": "Q3783",
+    "coordinates": [
+      {
+        "latitude": -4.44836,
+        "longitude": -73.4559,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 0.7077777777777778,
+        "longitude": -50.089444444444446,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3783",
+    "revision": null
+  },
+  {
+    "no": 609,
+    "name": "리오 데 라 플라타",
+    "query": "라플라타강",
+    "title": "라플라타강",
+    "entity": "Q35827",
+    "coordinates": [
+      {
+        "latitude": -34.883055555556,
+        "longitude": -56.713611111111,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q35827",
+    "revision": null
+  },
+  {
+    "no": 610,
+    "name": "오슐라가",
+    "query": "몬트리올",
+    "title": "몬트리올",
+    "entity": "Q340",
+    "coordinates": [
+      {
+        "latitude": 45.5033426,
+        "longitude": -73.5868411,
+        "altitude": null,
+        "precision": 1e-07,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q340",
+    "revision": null
+  },
+  {
+    "no": 611,
+    "name": "미시시피",
+    "query": "미시시피강",
+    "title": "미시시피강",
+    "entity": "Q1497",
+    "coordinates": [
+      {
+        "latitude": 47.2397,
+        "longitude": -95.2075,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 29.1536,
+        "longitude": -89.2508,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1497",
+    "revision": null
+  },
+  {
+    "no": 613,
+    "name": "황금 해안 (엘미나)",
+    "query": "엘미나",
+    "title": "엘미나",
+    "entity": "Q968662",
+    "coordinates": [
+      {
+        "latitude": 5.0833333333333,
+        "longitude": -1.35,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 5.0847,
+        "longitude": -1.35093,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q968662",
+    "revision": null
+  },
+  {
+    "no": 614,
+    "name": "푸른 나일의 샘",
+    "query": "기슈아바이",
+    "title": "기슈아바이",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 615,
+    "name": "콩고 강 어귀",
+    "query": "콩고강",
+    "title": "콩고강",
+    "entity": "Q3503",
+    "coordinates": [
+      {
+        "latitude": -6.075,
+        "longitude": 12.45,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3503",
+    "revision": null
+  },
+  {
+    "no": 616,
+    "name": "마다가스카르",
+    "query": "마다가스카르",
+    "title": "마다가스카르",
+    "entity": "Q1019",
+    "coordinates": [
+      {
+        "latitude": -20,
+        "longitude": 47,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1019",
+    "revision": null
+  },
+  {
+    "no": 617,
+    "name": "다네가시마",
+    "query": "다네가시마섬",
+    "title": "다네가섬",
+    "entity": "Q696228",
+    "coordinates": [
+      {
+        "latitude": 30.573888888889,
+        "longitude": 130.98111111111,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q696228",
+    "revision": null
+  },
+  {
+    "no": 620,
+    "name": "동쪽 끝 곶",
+    "query": "데즈뇨프곶",
+    "title": "데즈뇨프곶",
+    "entity": "Q650495",
+    "coordinates": [
+      {
+        "latitude": 66.079166666667,
+        "longitude": -169.65194444444,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q650495",
+    "revision": null
+  },
+  {
+    "no": 621,
+    "name": "안전한 집",
+    "query": "노바야제믈랴 제도",
+    "title": "노바야제믈랴 제도",
+    "entity": "Q80413",
+    "coordinates": [
+      {
+        "latitude": 73.9525,
+        "longitude": 56.348611,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q80413",
+    "revision": null
+  },
+  {
+    "no": 622,
+    "name": "리마사와",
+    "query": "리마사와",
+    "title": "리마사와",
+    "entity": null,
+    "coordinates": [],
+    "source": null,
+    "revision": null
+  },
+  {
+    "no": 623,
+    "name": "솔로몬 제도",
+    "query": "솔로몬 제도",
+    "title": "솔로몬 제도",
+    "entity": "Q685",
+    "coordinates": [
+      {
+        "latitude": -9.4666666666667,
+        "longitude": 159.81666666667,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q685",
+    "revision": null
+  },
+  {
+    "no": 624,
+    "name": "아카풀코",
+    "query": "아카풀코",
+    "title": "아카풀코",
+    "entity": "Q81398",
+    "coordinates": [
+      {
+        "latitude": 16.8628695,
+        "longitude": -99.8870087,
+        "altitude": null,
+        "precision": 1e-07,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 16.86336,
+        "longitude": -99.8901,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q81398",
+    "revision": null
+  }
+]

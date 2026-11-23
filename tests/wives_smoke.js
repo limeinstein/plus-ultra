@@ -133,7 +133,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.kidName && r.kidName.length, '그 집에서 이름 짓기: ' + r.kidName);
     ok(r.total === 5 && r.noMore, '부인 한 사람의 아이는 5명까지 (더 생기지 않음)');
     ok(r.sentHouse === -1 && r.atHome && r.homeNews.length, '아이를 본국 자택으로 — ' + r.homeNews[0]);
-    ok(r.heirs.length && r.heirs.every(x => x === 'm'), '후계자는 아들만 (' + r.heirs.join(',') + ')');
+    ok(r.heirs.length && r.heirs.some(x => x === 'm') && r.heirs.some(x => x === 'f'), '후계자는 어른이 된 아들과 시집가지 않은 딸 (' + r.heirs.join(',') + ') — 2026-11-23부터 딸도 잇는다');
     ok(r.cap.count === 12 && r.cap.max === 12 && !r.cap.maid && !r.cap.mate && r.cap.after === 12 && r.cap.rings === 2,
       '배우자는 본처 포함 12명까지 — 여급·부하 청혼을 막고 반지는 쓰지 않음');
 

@@ -36,6 +36,15 @@ CONTACT = ROOT / "docs" / "art" / "ships-nav-contact.png"
 # 장식이 아니라 실제 판독성에 영향을 주는 선종별 구조 차이. 값이 없는 항목은
 # 아래 공통 규칙을 따른다. form: 선체 평면형, stern/bow: 상부구조, rig: 범장 세부.
 P = {
+    "shipline": dict(scale=1.10, beam=1.04, free=1.38, form="fine", stern="gallery", bow="beak", rig="galleon", guns=9, gunTiers=2),
+    "sloop": dict(scale=.80, beam=.78, free=.65, form="fine", stern="quarter", bow="beak", rig="sloop", guns=2),
+    "eastindiaman": dict(scale=1.10, beam=1.14, free=1.20, form="round", stern="gallery", bow="beak", rig="galleon", guns=5),
+    "ketch": dict(scale=.86, beam=.98, free=.77, form="round", stern="quarter", rig="ketch", guns=2),
+    "koch": dict(scale=.88, beam=1.24, free=.92, form="round", stern="quarter", rig="koch", clinker=1),
+    "jounseon": dict(scale=1.02, beam=1.16, free=.88, form="box", stern="open", bow="flat", rig="korean", oars=5),
+    "bezaisen": dict(scale=1.00, beam=1.23, free=1.03, form="junk", stern="open", bow="raked", rig="japanese"),
+    "padewakang": dict(scale=.98, beam=.95, free=.86, form="jong", stern="quarter", bow="raked", rig="jong", guns=2),
+    "ghurab": dict(scale=1.00, beam=.94, free=.78, form="dhow", stern="quarter", bow="raked", rig="dhow", guns=4, oars=6),
     "barca":       dict(scale=.76, beam=.76, free=.62, form="open", stern="open", rig="single", rail=0),
     "cog":         dict(scale=.84, beam=1.22, free=1.18, form="bluff", stern="castle", rig="cog", clinker=1),
     "hulk":        dict(scale=.96, beam=1.22, free=1.28, form="round", stern="castle", bow="castle", rig="hulk", clinker=1),
@@ -96,8 +105,11 @@ def ships():
             "sails": re.findall(r"'(sq|lat|bat)'", sm.group(1) if sm else ""),
             "traits": re.findall(r"'(\w+)'", tr.group(1) if tr else ""),
         })
-    if len(out) != 36:
-        raise RuntimeError(f"선박 36종을 기대했지만 {len(out)}종을 읽었습니다")
+    if not out or len(out) != len({s["id"] for s in out}):
+        raise RuntimeError("선박 목록이 비었거나 ID가 겹칩니다")
+    missing = {s["id"] for s in out} - P.keys()
+    if missing:
+        raise RuntimeError(f"선체 치수 누락: {sorted(missing)}")
     return out
 
 

@@ -145,6 +145,11 @@
     fp.needsUpdate=true;r.flag.geometry.computeVertexNormals();r.flag.visible=spec.flag!==null;r.flag.material.color.set(spec.flag||'#315c99').convertSRGBToLinear();
     // 같은 선종의 해적선과 아군을 번갈아 그려도 돛 색이 서로 묻지 않는다.
     r.tint.set(spec.sailTint||'#ffffff').convertSRGBToLinear();
+    if(G.Art.validSailColor(spec.sailColor)){
+      // 염색은 천 바탕색을 치환한다. 솔기·직조·때는 원래 지도를 그대로 쓴다.
+      var p=r.ship.artProfile,base=r.ship.dyeBase||(r.ship.dyeBase=new G.Three.Color(p.sail||G.FX.shipArt.families[p.family].sail).convertSRGBToLinear());
+      r.tint.set(spec.sailColor).convertSRGBToLinear();r.tint.r/=Math.max(.001,base.r);r.tint.g/=Math.max(.001,base.g);r.tint.b/=Math.max(.001,base.b);
+    }
     r.rig.sails.forEach(function(a){var m=a.mesh.material;if(!m.userData.shipBaseColor)m.userData.shipBaseColor=m.color.clone();m.color.copy(m.userData.shipBaseColor).multiply(r.tint);});
     var pose=spec.pose||{};r.body.rotation.set(clamp(pose.roll||0,-.3,.3),0,clamp(pose.pitch||0,-.16,.16));r.body.position.y=clamp(pose.heave||0,-.1,.1)*c.heave;
     var light=spec.light||{},cloud=clamp(light.cloud||0,0,1),dusk=clamp(light.dusk||0,0,1);

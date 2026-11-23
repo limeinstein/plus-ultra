@@ -9,7 +9,7 @@
   function lang(m, k) { return R.mateLang(m, +k); }
   function raw(m, k) { return G.Cabins ? G.Cabins.rawSkill(m, k) : ((m.sk || {})[k] == null ? (data(m).sk || {})[k] || 0 : m.sk[k]); }
   function affection(m, d) {
-    if (d.sib || d.minor || d.wed) return '<span class="mb-empty">—</span>';
+    if (d.sib || d.minor || d.wed || (d.g === 'f' && G.R.heroFemale())) return '<span class="mb-empty">—</span>';   // 여성 제독과 여성 부하 사이에는 애정선이 없다
     var n = U.clamp(Math.round(m.aff || 0), 0, 100), hearts = '';
     for (var i = 0; i < 5; i++) hearts += '<span class="mb-heart" aria-hidden="true">♡<i style="width:' + U.clamp(n * 5 - i * 100, 0, 100) + '%">♥</i></span>';
     return '<span class="mb-hearts" role="img" aria-label="애정 ' + n + ' / 100" title="애정 ' + n + ' / 100">' + hearts + '</span>';

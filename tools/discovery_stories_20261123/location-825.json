@@ -1,0 +1,2097 @@
+[
+  {
+    "no": 629,
+    "query": "Taklamakan Desert",
+    "entity": "Q132956",
+    "coordinates": [
+      {
+        "latitude": 38.9,
+        "longitude": 82.2,
+        "altitude": null,
+        "precision": 0.0166667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q132956"
+  },
+  {
+    "no": 631,
+    "query": "Pamir Mountains",
+    "entity": "Q161750",
+    "coordinates": [
+      {
+        "latitude": 39.00194444444445,
+        "longitude": 71.99975,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q161750"
+  },
+  {
+    "no": 632,
+    "query": "Caspian Sea",
+    "entity": "Q5484",
+    "coordinates": [
+      {
+        "latitude": 42,
+        "longitude": 50.5,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5484"
+  },
+  {
+    "no": 633,
+    "query": "Aral Sea",
+    "entity": "Q35883",
+    "coordinates": [
+      {
+        "latitude": 45,
+        "longitude": 60,
+        "altitude": null,
+        "precision": 0.000277778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q35883"
+  },
+  {
+    "no": 635,
+    "query": "Mount Ararat",
+    "entity": "Q72303",
+    "coordinates": [
+      {
+        "latitude": 39.70194444444444,
+        "longitude": 44.29833333333333,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q72303"
+  },
+  {
+    "no": 636,
+    "query": "Sea of Galilee",
+    "entity": "Q126982",
+    "coordinates": [
+      {
+        "latitude": 32.818906,
+        "longitude": 35.590033,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q126982"
+  },
+  {
+    "no": 640,
+    "query": "Sudd",
+    "entity": "Q654544",
+    "coordinates": [
+      {
+        "latitude": 8,
+        "longitude": 31,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q654544"
+  },
+  {
+    "no": 641,
+    "query": "Lake Chad",
+    "entity": "Q125309",
+    "coordinates": [
+      {
+        "latitude": 13.097886246756108,
+        "longitude": 14.533807443844074,
+        "altitude": null,
+        "precision": 1e-08,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q125309"
+  },
+  {
+    "no": 642,
+    "query": "Ituri Rainforest",
+    "entity": "Q847368",
+    "coordinates": [
+      {
+        "latitude": 1.55712,
+        "longitude": 28.4491,
+        "altitude": null,
+        "precision": 0.089864712612913,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q847368"
+  },
+  {
+    "no": 643,
+    "query": "Rwenzori Mountains",
+    "entity": "Q106540",
+    "coordinates": [
+      {
+        "latitude": 0.38583333333333,
+        "longitude": 29.871666666667,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q106540"
+  },
+  {
+    "no": 644,
+    "query": "Danakil Depression",
+    "entity": "Q14213070",
+    "coordinates": [
+      {
+        "latitude": 14.2417,
+        "longitude": 40.3,
+        "altitude": null,
+        "precision": 2.77777777778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q14213070"
+  },
+  {
+    "no": 645,
+    "query": "Tsingy de Bemaraha Strict Nature Reserve",
+    "entity": "Q1405154",
+    "coordinates": [
+      {
+        "latitude": -18.66667,
+        "longitude": 44.75,
+        "altitude": null,
+        "precision": 2.7777777777778e-07,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": -18.66667,
+        "longitude": 44.75139,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1405154"
+  },
+  {
+    "no": 646,
+    "query": "Drakensberg",
+    "entity": "Q183295",
+    "coordinates": [
+      {
+        "latitude": -29.366666666667,
+        "longitude": 29.533333333333,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q183295"
+  },
+  {
+    "no": 647,
+    "query": "Mount Elbrus",
+    "entity": "Q43105",
+    "coordinates": [
+      {
+        "latitude": 43.35254,
+        "longitude": 42.437875,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q43105"
+  },
+  {
+    "no": 648,
+    "query": "Dolomites",
+    "entity": "Q1283",
+    "coordinates": [
+      {
+        "latitude": 46.613056,
+        "longitude": 12.163056,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1283"
+  },
+  {
+    "no": 649,
+    "query": "Eiger",
+    "entity": "Q4425",
+    "coordinates": [
+      {
+        "latitude": 46.577607529,
+        "longitude": 8.005286822,
+        "altitude": null,
+        "precision": 1e-08,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4425"
+  },
+  {
+    "no": 650,
+    "query": "Plitvice Lakes National Park",
+    "entity": "Q189849",
+    "coordinates": [
+      {
+        "latitude": 44.880445,
+        "longitude": 15.616035,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q189849"
+  },
+  {
+    "no": 652,
+    "query": "Grand Harbour",
+    "entity": "Q220899",
+    "coordinates": [
+      {
+        "latitude": 35.895,
+        "longitude": 14.520556,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 35.8922,
+        "longitude": 14.5128,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q220899"
+  },
+  {
+    "no": 653,
+    "query": "Kalymnos",
+    "entity": "Q527809",
+    "coordinates": [
+      {
+        "latitude": 36.995916666667,
+        "longitude": 26.994966666667,
+        "altitude": null,
+        "precision": 2.7777777777778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q527809"
+  },
+  {
+    "no": 655,
+    "query": "Baltic Sea",
+    "entity": "Q545",
+    "coordinates": [
+      {
+        "latitude": 58,
+        "longitude": 20,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q545"
+  },
+  {
+    "no": 656,
+    "query": "Dogger Bank",
+    "entity": "Q465816",
+    "coordinates": [
+      {
+        "latitude": 55.25,
+        "longitude": 3.5,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q465816"
+  },
+  {
+    "no": 658,
+    "query": "Faroe Islands",
+    "entity": "Q4628",
+    "coordinates": [
+      {
+        "latitude": 61.969944444444,
+        "longitude": -6.8444805555556,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4628"
+  },
+  {
+    "no": 659,
+    "query": "Þingvellir",
+    "entity": "Q107370",
+    "coordinates": [
+      {
+        "latitude": 64.258055555556,
+        "longitude": -21.125,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q107370"
+  },
+  {
+    "no": 660,
+    "query": "Svalbard",
+    "entity": "Q25231",
+    "coordinates": [
+      {
+        "latitude": 78.15706,
+        "longitude": 15.86426,
+        "altitude": null,
+        "precision": 0.043771233764916,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q25231"
+  },
+  {
+    "no": 661,
+    "query": "Tortuga (Haiti)",
+    "entity": "Q208345",
+    "coordinates": [
+      {
+        "latitude": 20.039722222222,
+        "longitude": -72.79,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q208345"
+  },
+  {
+    "no": 662,
+    "query": "Port Royal",
+    "entity": "Q685357",
+    "coordinates": [
+      {
+        "latitude": 17.9375,
+        "longitude": -76.841388888889,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q685357"
+  },
+  {
+    "no": 663,
+    "query": "Pitch Lake",
+    "entity": "Q717351",
+    "coordinates": [
+      {
+        "latitude": 10.2325,
+        "longitude": -61.62805556,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q717351"
+  },
+  {
+    "no": 665,
+    "query": "Mauna Kea",
+    "entity": "Q131230",
+    "coordinates": [
+      {
+        "latitude": 19.820555555555554,
+        "longitude": -155.46805555555557,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q131230"
+  },
+  {
+    "no": 666,
+    "query": "Marshall Islands",
+    "entity": "Q709",
+    "coordinates": [
+      {
+        "latitude": 9.82,
+        "longitude": 169.29,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q709"
+  },
+  {
+    "no": 667,
+    "query": "Naruto whirlpools",
+    "entity": "Q1350120",
+    "coordinates": [
+      {
+        "latitude": 34.238333333333,
+        "longitude": 134.65138888889,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1350120"
+  },
+  {
+    "no": 668,
+    "query": "Tsushima Island",
+    "entity": "Q52051",
+    "coordinates": [
+      {
+        "latitude": 34.416666666667,
+        "longitude": 129.33333333333,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q52051"
+  },
+  {
+    "no": 669,
+    "query": "Kuril Islands",
+    "entity": "Q80389",
+    "coordinates": [
+      {
+        "latitude": 47,
+        "longitude": 152.1,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q80389"
+  },
+  {
+    "no": 670,
+    "query": "Puerto Princesa Subterranean River National Park",
+    "entity": "Q824602",
+    "coordinates": [
+      {
+        "latitude": 10.166666666666666,
+        "longitude": 118.91666666666667,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q824602"
+  },
+  {
+    "no": 671,
+    "query": "Jatiluwih",
+    "entity": "Q11505",
+    "coordinates": [
+      {
+        "latitude": -8.5511472222222,
+        "longitude": 115.12161388889,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q11505"
+  },
+  {
+    "no": 673,
+    "query": "Cartagena, Colombia",
+    "entity": "Q657461",
+    "coordinates": [
+      {
+        "latitude": 10.423611111111,
+        "longitude": -75.525277777778,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q657461"
+  },
+  {
+    "no": 674,
+    "query": "Havana",
+    "entity": "Q1563",
+    "coordinates": [
+      {
+        "latitude": 23.136666666667,
+        "longitude": -82.358888888889,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1563"
+  },
+  {
+    "no": 675,
+    "query": "Veracruz (city)",
+    "entity": "Q173270",
+    "coordinates": [
+      {
+        "latitude": 19.190277777778,
+        "longitude": -96.153333333333,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q173270"
+  },
+  {
+    "no": 676,
+    "query": "Ancient Theatre of Epidaurus",
+    "entity": "Q608198",
+    "coordinates": [
+      {
+        "latitude": 37.596111111111,
+        "longitude": 23.079166666667,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q608198"
+  },
+  {
+    "no": 677,
+    "query": "Pantheon, Rome",
+    "entity": "Q99309",
+    "coordinates": [
+      {
+        "latitude": 41.89861111111111,
+        "longitude": 12.476944444444445,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q99309"
+  },
+  {
+    "no": 678,
+    "query": "Pont du Gard",
+    "entity": "Q189764",
+    "coordinates": [
+      {
+        "latitude": 43.9473,
+        "longitude": 4.5355,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q189764"
+  },
+  {
+    "no": 679,
+    "query": "Aqueduct of Segovia",
+    "entity": "Q244947",
+    "coordinates": [
+      {
+        "latitude": 40.94788888888889,
+        "longitude": -4.117805555555556,
+        "altitude": null,
+        "precision": 2.777777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q244947"
+  },
+  {
+    "no": 680,
+    "query": "Hadrian’s Wall",
+    "entity": "Q57357",
+    "coordinates": [
+      {
+        "latitude": 55.024166666667,
+        "longitude": -2.2925,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q57357"
+  },
+  {
+    "no": 681,
+    "query": "Roman Baths (Bath)",
+    "entity": "Q2540426",
+    "coordinates": [
+      {
+        "latitude": 51.3809,
+        "longitude": -2.3595,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 51.381,
+        "longitude": -2.35949,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q2540426"
+  },
+  {
+    "no": 686,
+    "query": "Palais des Papes",
+    "entity": "Q143463",
+    "coordinates": [
+      {
+        "latitude": 43.9508,
+        "longitude": 4.8075,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q143463"
+  },
+  {
+    "no": 687,
+    "query": "Wieliczka Salt Mine",
+    "entity": "Q454019",
+    "coordinates": [
+      {
+        "latitude": 49.983053,
+        "longitude": 20.055655,
+        "altitude": null,
+        "precision": 0.000277778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q454019"
+  },
+  {
+    "no": 688,
+    "query": "Kyiv Pechersk Lavra",
+    "entity": "Q242711",
+    "coordinates": [
+      {
+        "latitude": 50.434148,
+        "longitude": 30.558323,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q242711"
+  },
+  {
+    "no": 689,
+    "query": "Mount Athos",
+    "entity": "Q130321",
+    "coordinates": [
+      {
+        "latitude": 40.15833333333333,
+        "longitude": 24.327222222222222,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q130321"
+  },
+  {
+    "no": 690,
+    "query": "Meteora",
+    "entity": "Q3125051",
+    "coordinates": [
+      {
+        "latitude": 39.7125,
+        "longitude": 21.626666666666665,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3125051"
+  },
+  {
+    "no": 692,
+    "query": "Basilica of San Vitale",
+    "entity": "Q721817",
+    "coordinates": [
+      {
+        "latitude": 44.42055555555555,
+        "longitude": 12.196388888888889,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q721817"
+  },
+  {
+    "no": 693,
+    "query": "San Gimignano",
+    "entity": "Q91413",
+    "coordinates": [
+      {
+        "latitude": 43.467719,
+        "longitude": 11.043221,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q91413"
+  },
+  {
+    "no": 694,
+    "query": "Alberobello",
+    "entity": "Q51812",
+    "coordinates": [
+      {
+        "latitude": 40.784061111111,
+        "longitude": 17.237461111111,
+        "altitude": null,
+        "precision": 2.77777777778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q51812"
+  },
+  {
+    "no": 695,
+    "query": "Santa Maria de Montserrat Abbey",
+    "entity": "Q771935",
+    "coordinates": [
+      {
+        "latitude": 41.593194,
+        "longitude": 1.837139,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q771935"
+  },
+  {
+    "no": 696,
+    "query": "Toledo, Spain",
+    "entity": "Q5836",
+    "coordinates": [
+      {
+        "latitude": 39.866666666667,
+        "longitude": -4.0333333333333,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5836"
+  },
+  {
+    "no": 699,
+    "query": "Batalha Monastery",
+    "entity": "Q174779",
+    "coordinates": [
+      {
+        "latitude": 39.659166666667,
+        "longitude": -8.8261111111111,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q174779"
+  },
+  {
+    "no": 700,
+    "query": "Holstentor",
+    "entity": "Q321229",
+    "coordinates": [
+      {
+        "latitude": 53.8662,
+        "longitude": 10.6797,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q321229"
+  },
+  {
+    "no": 704,
+    "query": "Fatehpur Sikri",
+    "entity": "Q179046",
+    "coordinates": [
+      {
+        "latitude": 27.091111111111,
+        "longitude": 77.661111111111,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q179046"
+  },
+  {
+    "no": 707,
+    "query": "Dambulla cave temple",
+    "entity": "Q45690",
+    "coordinates": [
+      {
+        "latitude": 7.856563,
+        "longitude": 80.6483403,
+        "altitude": null,
+        "precision": 1e-08,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 7.85666667,
+        "longitude": 80.64916667,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q45690"
+  },
+  {
+    "no": 708,
+    "query": "Polonnaruwa",
+    "entity": "Q394443",
+    "coordinates": [
+      {
+        "latitude": 7.9333333333333,
+        "longitude": 81,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q394443"
+  },
+  {
+    "no": 711,
+    "query": "Luang Prabang",
+    "entity": "Q190165",
+    "coordinates": [
+      {
+        "latitude": 19.89,
+        "longitude": 102.13472222222222,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q190165"
+  },
+  {
+    "no": 713,
+    "query": "Hōryū-ji",
+    "entity": "Q261932",
+    "coordinates": [
+      {
+        "latitude": 34.614444444444445,
+        "longitude": 135.73416666666665,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q261932"
+  },
+  {
+    "no": 714,
+    "query": "Kiyomizu-dera",
+    "entity": "Q221716",
+    "coordinates": [
+      {
+        "latitude": 34.994830555556,
+        "longitude": 135.78500277778,
+        "altitude": null,
+        "precision": 2.7777777777778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q221716"
+  },
+  {
+    "no": 715,
+    "query": "Nikkō Tōshō-gū",
+    "entity": "Q696641",
+    "coordinates": [
+      {
+        "latitude": 36.759166666667,
+        "longitude": 139.59861111111,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q696641"
+  },
+  {
+    "no": 716,
+    "query": "Changdeokgung",
+    "entity": "Q477157",
+    "coordinates": [
+      {
+        "latitude": 37.579444444444,
+        "longitude": 126.99166666667,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q477157"
+  },
+  {
+    "no": 719,
+    "query": "White Horse Temple",
+    "entity": "Q1264618",
+    "coordinates": [
+      {
+        "latitude": 34.723888888889,
+        "longitude": 112.59972222222,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1264618"
+  },
+  {
+    "no": 720,
+    "query": "Humble Administrator’s Garden",
+    "entity": null,
+    "coordinates": [],
+    "source": null
+  },
+  {
+    "no": 721,
+    "query": "Lamu",
+    "entity": "Q272799",
+    "coordinates": [
+      {
+        "latitude": -2.2686111111111,
+        "longitude": 40.900277777778,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q272799"
+  },
+  {
+    "no": 722,
+    "query": "Fort Jesus",
+    "entity": "Q379080",
+    "coordinates": [
+      {
+        "latitude": -4.0711666666667,
+        "longitude": 39.682055555556,
+        "altitude": null,
+        "precision": 1e-07,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q379080"
+  },
+  {
+    "no": 724,
+    "query": "El Tajín",
+    "entity": "Q753895",
+    "coordinates": [
+      {
+        "latitude": 20.448058333333,
+        "longitude": -97.378241666667,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q753895"
+  },
+  {
+    "no": 726,
+    "query": "Takht-i Sangin",
+    "entity": "Q6554804",
+    "coordinates": [
+      {
+        "latitude": 37.0989,
+        "longitude": 68.285,
+        "altitude": null,
+        "precision": 0.011262792649748,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q6554804"
+  },
+  {
+    "no": 727,
+    "query": "Tillya Tepe",
+    "entity": "Q1144126",
+    "coordinates": [
+      {
+        "latitude": 36.7,
+        "longitude": 65.787,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1144126"
+  },
+  {
+    "no": 728,
+    "query": "Solokha",
+    "entity": "Q846027",
+    "coordinates": [
+      {
+        "latitude": 47.3265,
+        "longitude": 34.33915,
+        "altitude": null,
+        "precision": 0.013966301478433,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q846027"
+  },
+  {
+    "no": 729,
+    "query": "Athens",
+    "entity": "Q1524",
+    "coordinates": [
+      {
+        "latitude": 37.98416666666667,
+        "longitude": 23.728055555555557,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1524"
+  },
+  {
+    "no": 730,
+    "query": "Istanbul",
+    "entity": "Q406",
+    "coordinates": [
+      {
+        "latitude": 41.01,
+        "longitude": 28.960277777778,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q406"
+  },
+  {
+    "no": 731,
+    "query": "Vladimir, Russia",
+    "entity": "Q2684",
+    "coordinates": [
+      {
+        "latitude": 56.12861111111111,
+        "longitude": 40.405833333333334,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q2684"
+  },
+  {
+    "no": 732,
+    "query": "Sainte-Chapelle",
+    "entity": "Q193193",
+    "coordinates": [
+      {
+        "latitude": 48.855369,
+        "longitude": 2.345028,
+        "altitude": null,
+        "precision": 2.7777777777778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q193193"
+  },
+  {
+    "no": 733,
+    "query": "Turin Cathedral",
+    "entity": "Q958699",
+    "coordinates": [
+      {
+        "latitude": 45.07332,
+        "longitude": 7.685435,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q958699"
+  },
+  {
+    "no": 734,
+    "query": "Church of Our Lady Mary of Zion",
+    "entity": "Q1150986",
+    "coordinates": [
+      {
+        "latitude": 14.130277777778,
+        "longitude": 38.719444444444,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1150986"
+  },
+  {
+    "no": 736,
+    "query": "Templo Mayor",
+    "entity": "Q774021",
+    "coordinates": [
+      {
+        "latitude": 19.435,
+        "longitude": -99.131389,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q774021"
+  },
+  {
+    "no": 737,
+    "query": "Cusco",
+    "entity": "Q5582862",
+    "coordinates": [
+      {
+        "latitude": -13.516944444444444,
+        "longitude": -71.9786111111111,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5582862"
+  },
+  {
+    "no": 739,
+    "query": "Hwangnamdaechong",
+    "entity": null,
+    "coordinates": [],
+    "source": null
+  },
+  {
+    "no": 740,
+    "query": "Gimhae",
+    "entity": "Q42082",
+    "coordinates": [
+      {
+        "latitude": 35.234166666667,
+        "longitude": 128.88111111111,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q42082"
+  },
+  {
+    "no": 741,
+    "query": "Dingling (Ming dynasty tomb)",
+    "entity": null,
+    "coordinates": [],
+    "source": null
+  },
+  {
+    "no": 742,
+    "query": "Agra Fort",
+    "entity": "Q171857",
+    "coordinates": [
+      {
+        "latitude": 27.179583333333,
+        "longitude": 78.021297222222,
+        "altitude": null,
+        "precision": 2.7777777777778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q171857"
+  },
+  {
+    "no": 743,
+    "query": "Topkapı Palace",
+    "entity": "Q170495",
+    "coordinates": [
+      {
+        "latitude": 41.013,
+        "longitude": 28.984,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q170495"
+  },
+  {
+    "no": 744,
+    "query": "Gur-e-Amir",
+    "entity": "Q1256223",
+    "coordinates": [
+      {
+        "latitude": 39.648333333333,
+        "longitude": 66.968888888889,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1256223"
+  },
+  {
+    "no": 745,
+    "query": "Scone Palace",
+    "entity": "Q1269394",
+    "coordinates": [
+      {
+        "latitude": 56.4226064102733,
+        "longitude": -3.43814315642953,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1269394"
+  },
+  {
+    "no": 746,
+    "query": "Hill of Tara",
+    "entity": "Q543155",
+    "coordinates": [
+      {
+        "latitude": 53.5775,
+        "longitude": -6.6119444444444,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q543155"
+  },
+  {
+    "no": 747,
+    "query": "Sutton Hoo",
+    "entity": "Q503256",
+    "coordinates": [
+      {
+        "latitude": 52.08972222222222,
+        "longitude": 1.3388888888888888,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q503256"
+  },
+  {
+    "no": 749,
+    "query": "Mildenhall, Suffolk",
+    "entity": "Q1016878",
+    "coordinates": [
+      {
+        "latitude": 52.344611111111,
+        "longitude": 0.5089,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1016878"
+  },
+  {
+    "no": 750,
+    "query": "Spillings Hoard",
+    "entity": "Q1630184",
+    "coordinates": [
+      {
+        "latitude": 57.723347,
+        "longitude": 18.778404,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1630184"
+  },
+  {
+    "no": 751,
+    "query": "Venice",
+    "entity": "Q641",
+    "coordinates": [
+      {
+        "latitude": 45.439722222222,
+        "longitude": 12.331944444444,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q641"
+  },
+  {
+    "no": 752,
+    "query": "Fez, Morocco",
+    "entity": "Q80985",
+    "coordinates": [
+      {
+        "latitude": 34.04333333333334,
+        "longitude": -5.003333333333333,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q80985"
+  },
+  {
+    "no": 753,
+    "query": "Baghdad",
+    "entity": "Q1530",
+    "coordinates": [
+      {
+        "latitude": 33.31527777777778,
+        "longitude": 44.36611111111111,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1530"
+  },
+  {
+    "no": 754,
+    "query": "Florence",
+    "entity": "Q2044",
+    "coordinates": [
+      {
+        "latitude": 43.771388888889,
+        "longitude": 11.254166666667,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q2044"
+  },
+  {
+    "no": 755,
+    "query": "Florence",
+    "entity": "Q2044",
+    "coordinates": [
+      {
+        "latitude": 43.771388888889,
+        "longitude": 11.254166666667,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q2044"
+  },
+  {
+    "no": 756,
+    "query": "Canterbury",
+    "entity": "Q29303",
+    "coordinates": [
+      {
+        "latitude": 51.278333333333,
+        "longitude": 1.0775,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q29303"
+  },
+  {
+    "no": 757,
+    "query": "Madrid",
+    "entity": "Q2807",
+    "coordinates": [
+      {
+        "latitude": 40.41694444444445,
+        "longitude": -3.703333333333333,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q2807"
+  },
+  {
+    "no": 758,
+    "query": "Lisbon",
+    "entity": "Q597",
+    "coordinates": [
+      {
+        "latitude": 38.708042,
+        "longitude": -9.139016,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q597"
+  },
+  {
+    "no": 759,
+    "query": "Nanjing",
+    "entity": "Q16666",
+    "coordinates": [
+      {
+        "latitude": 32.060833333333335,
+        "longitude": 118.77888888888889,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q16666"
+  },
+  {
+    "no": 760,
+    "query": "Huai’an",
+    "entity": null,
+    "coordinates": [],
+    "source": null
+  },
+  {
+    "no": 761,
+    "query": "Kyoto",
+    "entity": "Q34600",
+    "coordinates": [
+      {
+        "latitude": 35.01161111111111,
+        "longitude": 135.76811111111112,
+        "altitude": null,
+        "precision": 2.777777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q34600"
+  },
+  {
+    "no": 762,
+    "query": "Seoul",
+    "entity": "Q8684",
+    "coordinates": [
+      {
+        "latitude": 37.56,
+        "longitude": 126.99,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q8684"
+  },
+  {
+    "no": 763,
+    "query": "Nanjing",
+    "entity": "Q16666",
+    "coordinates": [
+      {
+        "latitude": 32.060833333333335,
+        "longitude": 118.77888888888889,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q16666"
+  },
+  {
+    "no": 764,
+    "query": "Nanchang",
+    "entity": "Q171943",
+    "coordinates": [
+      {
+        "latitude": 28.684167,
+        "longitude": 115.887222,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q171943"
+  },
+  {
+    "no": 765,
+    "query": "Beijing",
+    "entity": "Q956",
+    "coordinates": [
+      {
+        "latitude": 39.90403,
+        "longitude": 116.407526,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q956"
+  },
+  {
+    "no": 766,
+    "query": "Alexandria",
+    "entity": "Q87",
+    "coordinates": [
+      {
+        "latitude": 31.1975,
+        "longitude": 29.8925,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q87"
+  },
+  {
+    "no": 767,
+    "query": "Bukhara",
+    "entity": "Q5764",
+    "coordinates": [
+      {
+        "latitude": 39.774722222222,
+        "longitude": 64.428611111111,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5764"
+  },
+  {
+    "no": 768,
+    "query": "Tunis",
+    "entity": "Q3572",
+    "coordinates": [
+      {
+        "latitude": 36.800833333333,
+        "longitude": 10.18,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3572"
+  },
+  {
+    "no": 769,
+    "query": "Seoul",
+    "entity": "Q8684",
+    "coordinates": [
+      {
+        "latitude": 37.56,
+        "longitude": 126.99,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q8684"
+  },
+  {
+    "no": 770,
+    "query": "Seoul",
+    "entity": "Q8684",
+    "coordinates": [
+      {
+        "latitude": 37.56,
+        "longitude": 126.99,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q8684"
+  },
+  {
+    "no": 771,
+    "query": "Dunhuang",
+    "entity": "Q319114",
+    "coordinates": [
+      {
+        "latitude": 40.14111111111111,
+        "longitude": 94.66388888888889,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q319114"
+  },
+  {
+    "no": 772,
+    "query": "Kairouan",
+    "entity": "Q179570",
+    "coordinates": [
+      {
+        "latitude": 35.68333333333333,
+        "longitude": 10.1,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q179570"
+  },
+  {
+    "no": 773,
+    "query": "London",
+    "entity": "Q84",
+    "coordinates": [
+      {
+        "latitude": 51.507222222222,
+        "longitude": -0.1275,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q84"
+  },
+  {
+    "no": 774,
+    "query": "Basel",
+    "entity": "Q78",
+    "coordinates": [
+      {
+        "latitude": 47.558055555555555,
+        "longitude": 7.587777777777777,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q78"
+  },
+  {
+    "no": 775,
+    "query": "Florence",
+    "entity": "Q2044",
+    "coordinates": [
+      {
+        "latitude": 43.771388888889,
+        "longitude": 11.254166666667,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q2044"
+  },
+  {
+    "no": 777,
+    "query": "Svalbard",
+    "entity": "Q25231",
+    "coordinates": [
+      {
+        "latitude": 78.15706,
+        "longitude": 15.86426,
+        "altitude": null,
+        "precision": 0.043771233764916,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q25231"
+  },
+  {
+    "no": 779,
+    "query": "Ghana",
+    "entity": "Q117",
+    "coordinates": [
+      {
+        "latitude": 7.9465,
+        "longitude": -1.0232,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q117"
+  },
+  {
+    "no": 783,
+    "query": "Madagascar",
+    "entity": "Q1019",
+    "coordinates": [
+      {
+        "latitude": -20,
+        "longitude": 47,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1019"
+  },
+  {
+    "no": 788,
+    "query": "Faroe Islands",
+    "entity": "Q4628",
+    "coordinates": [
+      {
+        "latitude": 61.969944444444,
+        "longitude": -6.8444805555556,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4628"
+  },
+  {
+    "no": 789,
+    "query": "Danube Delta",
+    "entity": "Q184429",
+    "coordinates": [
+      {
+        "latitude": 45.2,
+        "longitude": 29.5,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q184429"
+  },
+  {
+    "no": 792,
+    "query": "Black Forest",
+    "entity": "Q4204",
+    "coordinates": [
+      {
+        "latitude": 48.3,
+        "longitude": 8.15,
+        "altitude": null,
+        "precision": 0.0166667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4204"
+  },
+  {
+    "no": 793,
+    "query": "Venice",
+    "entity": "Q641",
+    "coordinates": [
+      {
+        "latitude": 45.439722222222,
+        "longitude": 12.331944444444,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q641"
+  },
+  {
+    "no": 795,
+    "query": "Amazon rainforest",
+    "entity": "Q177567",
+    "coordinates": [
+      {
+        "latitude": -3.16,
+        "longitude": -60.03,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q177567"
+  },
+  {
+    "no": 801,
+    "query": "South Atlantic Ocean",
+    "entity": "Q97",
+    "coordinates": [
+      {
+        "latitude": 0,
+        "longitude": -30,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q97"
+  },
+  {
+    "no": 802,
+    "query": "Azores",
+    "entity": "Q25263",
+    "coordinates": [
+      {
+        "latitude": 38.624,
+        "longitude": -28.031,
+        "altitude": null,
+        "precision": 2.777777777777778e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q25263"
+  },
+  {
+    "no": 803,
+    "query": "Mediterranean Sea",
+    "entity": "Q4918",
+    "coordinates": [
+      {
+        "latitude": 38,
+        "longitude": 17,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4918"
+  },
+  {
+    "no": 804,
+    "query": "Aegean Sea",
+    "entity": "Q34575",
+    "coordinates": [
+      {
+        "latitude": 38.5,
+        "longitude": 25.3,
+        "altitude": null,
+        "precision": 0.1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q34575"
+  },
+  {
+    "no": 805,
+    "query": "Mangrove",
+    "entity": "Q19756",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q19756"
+  },
+  {
+    "no": 806,
+    "query": "River Tweed",
+    "entity": "Q503262",
+    "coordinates": [
+      {
+        "latitude": 55.764164,
+        "longitude": -1.986574,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q503262"
+  },
+  {
+    "no": 807,
+    "query": "Sargasso Sea",
+    "entity": "Q169274",
+    "coordinates": [
+      {
+        "latitude": 27.5,
+        "longitude": -50,
+        "altitude": null,
+        "precision": 0.1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q169274"
+  },
+  {
+    "no": 808,
+    "query": "Great Barrier Reef",
+    "entity": "Q7343",
+    "coordinates": [
+      {
+        "latitude": -16.4,
+        "longitude": 145.8,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q7343"
+  },
+  {
+    "no": 809,
+    "query": "Bali",
+    "entity": "Q3125978",
+    "coordinates": [
+      {
+        "latitude": -8.5,
+        "longitude": 115,
+        "altitude": null,
+        "precision": 0.0166667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3125978"
+  },
+  {
+    "no": 811,
+    "query": "Suzhou",
+    "entity": "Q42622",
+    "coordinates": [
+      {
+        "latitude": 31.3,
+        "longitude": 120.61944444444444,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q42622"
+  },
+  {
+    "no": 812,
+    "query": "Nile Delta",
+    "entity": "Q179528",
+    "coordinates": [
+      {
+        "latitude": 30.9,
+        "longitude": 31.11666667,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q179528"
+  },
+  {
+    "no": 815,
+    "query": "Sahara",
+    "entity": "Q6583",
+    "coordinates": [
+      {
+        "latitude": 23.079722222222223,
+        "longitude": 12.612222222222222,
+        "altitude": null,
+        "precision": 0.0166667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q6583"
+  },
+  {
+    "no": 819,
+    "query": "Crete",
+    "entity": "Q34374",
+    "coordinates": [
+      {
+        "latitude": 35.309722222222,
+        "longitude": 24.893333333333,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q34374"
+  },
+  {
+    "no": 820,
+    "query": "Ancient Bristlecone Pine Forest",
+    "entity": "Q4752802",
+    "coordinates": [
+      {
+        "latitude": 37.38567222,
+        "longitude": -118.17886389,
+        "altitude": null,
+        "precision": 2.77777777778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q4752802"
+  },
+  {
+    "no": 822,
+    "query": "Sumatra",
+    "entity": "Q3492",
+    "coordinates": [
+      {
+        "latitude": -0.298888888888889,
+        "longitude": 101.270830555556,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q3492"
+  },
+  {
+    "no": 824,
+    "query": "Mount Carmel",
+    "entity": "Q185318",
+    "coordinates": [
+      {
+        "latitude": 32.6725,
+        "longitude": 35.023333,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 32.72062,
+        "longitude": 35.03145,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q185318"
+  },
+  {
+    "no": 825,
+    "query": "Brittany",
+    "entity": "Q327",
+    "coordinates": [
+      {
+        "latitude": 48,
+        "longitude": -3,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q327"
+  }
+]

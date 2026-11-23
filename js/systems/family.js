@@ -124,7 +124,7 @@
      오래 떨어져 지내면 서먹해진다. 사이가 좋을수록 뒤를 이을 때 명성·특기를 많이 물려받는다. */
   F.bond = function (k) { return k.bond == null ? 50 : k.bond; };
   F.addBond = function (k, n) { k.bond = Math.max(0, Math.min(100, F.bond(k) + n)); return k.bond; };
-  F.bondWord = function (k) { var b = F.bond(k); return b >= 85 ? '아버지를 존경함' : b >= 65 ? '아버지를 따름' : b >= 40 ? '보통' : b >= 20 ? '서먹함' : '마음을 닫음'; };
+  F.bondWord = function (k) { var b = F.bond(k); var pw = G.R.heroParent(); return b >= 85 ? pw + '를 존경함' : b >= 65 ? pw + '를 따름' : b >= 40 ? '보통' : b >= 20 ? '서먹함' : '마음을 닫음'; };
   F.bondHearts = function (k) { var b = F.bond(k), n = Math.round(b / 20); return '<span class="kid-bond" title="' + F.bondWord(k) + ' (' + b + ')">' + '♥'.repeat(n) + '<span class="muted">' + '♡'.repeat(5 - n) + '</span></span>'; };
   function atHome() { var s = S(); return s.loc && s.loc.mode === 'city' && s.loc.city === (G.R.seat ? G.R.seat() : s.player.home); }   // 가족이 사는 도시 (총독 관저로 옮겼으면 그 개척 도시 — js/systems/colony.js)
   F.atHome = atHome;
@@ -182,7 +182,7 @@
     var K = IK(), st = {}, pen = F.agePenalty(g), faSum = 0;
     var gift = U.chance(K.gift) ? U.pick(STK) : null, flaw = U.chance(K.gift) ? U.pick(STK.filter(function (x) { return x !== gift; })) : null;
     STK.forEach(function (k) {
-      var w = U.rf(K.faW[0], K.faW[1]); faSum += w;
+      var fw = g.faW || K.faW, w = U.rf(fw[0], fw[1]); faSum += w;   // 여성 제독의 아이는 어머니(제독) 쪽 비중이 크다 (g.faW — js/systems/motherhood.js)
       var v = w * g.fa[k] + (1 - w) * g.mo[k];
       v += (U.rand() + U.rand() + U.rand() - 1.5) * K.noise * 2;
       v += (K.mean - v) * K.pull;
@@ -376,7 +376,8 @@
     var today = s.day, room = G.Wives && G.Wives.canConceive ? G.Wives.canConceive('main') : p.kids.length + (p.preg ? 1 : 0) < (c.perMother || 5), wm = F.wifeMate();
     var tooOld = (wm && (wm.old || (wm.bornY && s.date.y - wm.bornY > 45))) || F.momAge(p.wife) > (IK().momMax || 45);   // 늙은 마녀·나이 든 아내 — 여급·아가씨도 어머니 나이(F.momAge)로 (2026-11-08)
     var cold = G.Wives && G.Wives.isWifeCold && G.Wives.isWifeCold();   // 숨은 거처를 들킨 뒤 한동안 (wives.js W.lodgeCaught)
-    if (!p.preg && !tooOld && !cold && room && (p.lastBirth == null || today - p.lastBirth >= (c.gapDays || 300)) &&
+    // 여성 제독의 「아내」에게는 아이가 생기지 않는다 — 옛 저장에 남은 혼인만 해당 (2026-11-23)
+    if (!p.preg && !tooOld && !cold && room && !G.R.heroFemale(p) && (p.lastBirth == null || today - p.lastBirth >= (c.gapDays || 300)) &&
         (p.tryDay == null || today - p.tryDay >= (rest ? 3 : 20))) {
       p.tryDay = today;
       if (U.chance((c.conceive || 0.35) * (rest ? 1.2 : 1))) p.preg = G.Wives && G.Wives.newPreg ? G.Wives.newPreg('main', today, c.gestation || 266) : { since: today, due: today + (c.gestation || 266), told: false };
@@ -519,7 +520,7 @@
     if (U.chance(0.3)) { var k = U.pick(kids); await UI.say(U.pick(['앗, 아버지! 지금 여관 아주머니가 과자 주셨어요.', '아버지는 이 여관에 머문 적 있어요?']), G.HomeLife ? G.HomeLife.speaker(k) : { name: k.name, portrait: F.kidSpec(k), lang: 3 }); }
   };
 
-  /** 뒤를 이을 수 있는 아이: 어른이 된 아들 (딸은 뒤를 잇지 않는다) */
+  /** 뒤를 이을 수 있는 아이: 어른이 된 아들과 시집가지 않은 딸 (2026-11-23 — 예전에는 아들만). 양자(F.kinHeir)는 남자 */
   /** 집안의 항해 일지로 기초를 배운다. 직접 교육한 능력은 이 기본 보장에 더해진다. */
   F.prepareHeir = function (k) {
     var c = G.BALANCE.voyagePlans, p = S().player;
@@ -540,9 +541,14 @@
       born: { y: S().date.y - c.heirAge, m: S().date.m, d: S().date.d }, st: {}, sk: {}, lg: [], edu: {}, bond: 50, met: true };
     p.kinHeir = k; return F.prepareHeir(k);
   };
-  F.heirs = function () { var ad = cfg().adult || 16; return S().player.kids.filter(function (k) { return !k.unnamed && !k.lost && k.sex !== 'f' && F.kidAge(k) >= ad; }); };
+  F.heirs = function () { var ad = cfg().adult || 16; return S().player.kids.filter(function (k) { return !k.unnamed && !k.lost && (k.sex !== 'f' || !k.married) && F.kidAge(k) >= ad; }); };
 
   F.retire = async function (forced) {
+    // 이야기 모드는 엔딩 전까지 후손에게 넘길 수 없다 (2026-11-23): 스스로 물러날 수 없고, 쓰러지면 이야기가 끝난다
+    if (G.Story && G.Story.noHeirs && G.Story.noHeirs()) {
+      if (!forced) { await UI.alert(G.Story.kin() + '를 찾는 여정을 끝내기 전에는 제독의 자리를 물려줄 수 없다.', '은퇴'); return; }
+      return G.Ending.show('death');
+    }
     var s = S(), p = s.player;
     // 후원 계약이 끝나지 않았으면 물러날 수 없다 (계약 중에는 세대교체 불가)
     if (!forced && s.contract) {
@@ -557,14 +563,14 @@
     }
     var young = F.heirs().length ? null : F.minorSon();
     if (!forced) {
-      var ok = await UI.confirm('제독의 자리에서 물러나 은퇴하겠습니까?' + (F.heirs().length ? '<br>어른이 된 아들에게 뒤를 잇게 할 수 있습니다.'
-        : young ? '<br>맏아들 ' + F.kidName(young) + U.jx(F.kidName(young), '은/는') + ' 아직 ' + F.kidAge(young) + '세입니다. 열여섯 살이 될 때까지 약 ' + F.waitText(young) + ' 세월이 흐른 뒤, 그날 뒤를 잇습니다.'
+      var ok = await UI.confirm('제독의 자리에서 물러나 은퇴하겠습니까?' + (F.heirs().length ? '<br>어른이 된 자녀에게 뒤를 잇게 할 수 있습니다.'
+        : young ? '<br>' + (young.sex === 'f' ? '맏딸 ' : '맏아들 ') + F.kidName(young) + U.jx(F.kidName(young), '은/는') + ' 아직 ' + F.kidAge(young) + '세입니다. 열여섯 살이 될 때까지 약 ' + F.waitText(young) + ' 세월이 흐른 뒤, 그날 뒤를 잇습니다.'
         : '<br>성인 친족에게 가문의 함대와 항해 기록을 맡겨 계속할 수도 있습니다.'), '은퇴한다', '그만둔다');
       if (!ok) return;
     }
     var heirs = F.heirs();
     if (heirs.length) {
-      var i = heirs.length > 1 ? await UI.choose('뒤를 이을 아들', heirs.map(function (k, j) { return { label: k.name, right: F.kidAge(k) + '세 · ' + F.bondWord(k) + (G.KidCrew ? G.KidCrew.heirNote(k) : ''), value: j }; }), { width: 520, cancel: false }) : 0;
+      var i = heirs.length > 1 ? await UI.choose('뒤를 이을 아이', heirs.map(function (k, j) { return { label: k.name, right: (k.sex === 'f' ? '딸 · ' : '아들 · ') + F.kidAge(k) + '세 · ' + F.bondWord(k) + (G.KidCrew ? G.KidCrew.heirNote(k) : ''), value: j }; }), { width: 520, cancel: false }) : 0;
       if (i == null) i = 0;
       return F.succeed(heirs[i], forced);
     }
@@ -576,7 +582,7 @@
   F.continueFamily = async function (young, forced) {
     var next = await UI.choose('가문의 항해를 이어 갈 사람', [
       { label: '성인 친족을 양자로 맞아 함대와 항해 기록을 맡긴다', value: 'kin' },
-      young ? { label: '어린 아들이 자랄 때까지 기다린다 (' + F.waitText(young) + ')', value: 'wait' } : null,
+      young ? { label: (young.sex === 'f' ? '어린 딸' : '어린 아들') + '이 자랄 때까지 기다린다 (' + F.waitText(young) + ')', value: 'wait' } : null,
       { label: '이 제독의 이야기로 마친다', value: 'end' }
     ].filter(Boolean), { width: 620, cancel: false });
     if (next === 'end') return G.Ending.show(forced ? 'death' : 'retire');
@@ -592,7 +598,7 @@
      · 아들이 하나도 없으면 성인 친족을 양자로 맞아 계속할 수 있다. */
   F.minorSon = function () {
     var ad = cfg().adult || 16;
-    return S().player.kids.filter(function (k) { return !k.lost && k.sex !== 'f' && (k.unnamed || F.kidAge(k) < ad); })
+    return S().player.kids.filter(function (k) { return !k.lost && (k.sex !== 'f' || !k.married) && (k.unnamed || F.kidAge(k) < ad); })
       .sort(function (a, b) { return U.dayIndex(a.born) - U.dayIndex(b.born); })[0] || null;
   };
   /** 아이가 열여섯 살이 되는 날까지 남은 날 */
@@ -603,7 +609,7 @@
     if (k.unnamed) {   // 이름을 짓지 못한 갓난아기 — 집안 어른들이 이름을 지어 둔다
       var pool = F.names(k.sex).filter(function (n) { return n !== F.given(p) && !p.kids.some(function (o) { return !o.unnamed && F.given(o) === n; }); });
       F.setKidName(k, pool[0] || F.names(k.sex)[0]); k.met = true;   // 성은 아버지를 따른다 (성을 모르는 옛 일지는 대를 이을 때 묻고 붙인다)
-      G.State.log('아들에게 「' + k.name + '」' + U.jx(k.name, '이라는/라는') + ' 이름이 지어졌다.');
+      G.State.log((k.sex === 'f' ? '딸' : '아들') + '에게 「' + k.name + '」' + U.jx(k.name, '이라는/라는') + ' 이름이 지어졌다.');
     }
     var old = p.name, home = G.CITY_DATA[p.home] ? p.home : (s.loc.city != null ? s.loc.city : 0), hc = G.CITY_DATA[home];
     var wait = F.waitText(k), age0 = F.kidAge(k), from = U.clone ? U.clone(s.date) : { y: s.date.y, m: s.date.m, d: s.date.d };
@@ -701,8 +707,8 @@
   /** 세대 교체 장면 — 아들은 첫 지휘, 딸은 아버지에게서 해도를 물려받는다. */
   F.successorEvent = function (k) {
     return k && k.sex === 'f'
-      ? { img: 'family-events/34_adult_daughter_chart_gift', title: '물려받은 해도', text: '아버지는 오래 품어 온 해도와 항해 일지를 딸의 손에 건넸다.' }
-      : { img: 'family-events/35_adult_son_first_command', title: '첫 지휘', text: '아버지는 나침반과 함대의 지휘권을 아들의 손에 맡겼다.' };
+      ? { img: 'family-events/34_adult_daughter_chart_gift', title: '물려받은 해도', text: G.R.heroParent() + '는 오래 품어 온 해도와 항해 일지를 딸의 손에 건넸다.' }
+      : { img: 'family-events/35_adult_son_first_command', title: '첫 지휘', text: G.R.heroParent() + '는 나침반과 함대의 지휘권을 아들의 손에 맡겼다.' };
   };
 
   F.succeed = async function (k, forced) {
@@ -716,21 +722,22 @@
     var bd = F.bond(k), sea = k.sea || 0, c = cfg();
     var fameK = Math.max(G.BALANCE.voyagePlans.inheritFame, Math.min(0.8, 0.4 + 0.3 * bd / 100 + (sea >= 12 ? 0.05 : 0))), skK = Math.max(G.BALANCE.voyagePlans.inheritSkill, bd >= 70 ? 0.75 : bd >= 40 ? 0.5 : 0.35);
     // 아버지의 아내들은 모두 아버지를 따라간다 — 배에 타 있던 부하 출신 아내도 함대에서 내리고, 여급 출신 아내의 술집에는 새 여급이 (js/systems/maidswap.js)
-    var wifeIds = (p.wife ? [p.wife] : []).concat((p.wives2 || []).map(function (w) { return w.id; }));
+    var wifeIds = (p.wife ? [p.wife] : []).concat((p.wives2 || []).map(function (w) { return w.id; })).concat(G.Husbands ? G.Husbands.retire(p) : []);   // 어머니의 남자들(남편)도 어머니를 따라간다 (js/systems/husbands.js)
     var leftW = G.MaidSwap ? G.MaidSwap.retire(wifeIds) : [];
     // 이야기 모드: 본처(1부인)는 고향 집에 남아 새 제독의 어머니로 집을 지킨다 (js/systems/story.js — 2026-10-30)
     var stayMain = s.story && p.wife && G.Wives ? G.Wives.name(p.wife) : null, homeC = G.CITY_DATA[p.home];
     var goneW = stayMain ? leftW.filter(function (x) { return x.name !== stayMain; }) : leftW;
-    var wifeNote = (goneW.length ? '<br>' + goneW.map(function (x) { return x.name; }).join('·') + U.jx(goneW[goneW.length - 1].name, '은/는') + (forced ? ' ' + old + '의 장례를 치른 뒤 함대를 떠나 그를 기리며 조용히 살기로 했다.' : ' 은퇴한 ' + old + U.jx(old, '을/를') + ' 따라 함께 떠났다.') : '') +
+    var wifeNote = (goneW.length ? '<br>' + goneW.map(function (x) { return x.name; }).join('·') + U.jx(goneW[goneW.length - 1].name, '은/는') + (forced ? ' ' + old + '의 장례를 치른 뒤 함대를 떠나 ' + (G.R.heroFemale(p) ? '그녀를' : '그를') + ' 기리며 조용히 살기로 했다.' : ' 은퇴한 ' + old + U.jx(old, '을/를') + ' 따라 함께 떠났다.') : '') +
       (stayMain ? '<br>' + stayMain + U.jx(stayMain, '은/는') + ' ' + (homeC ? homeC.name + '의 ' : '') + '집에 남아 ' + k.name + '의 어머니로 집을 지킨다.' : '');
-    var said = bd >= 65 ? '「아버지께 배운 모든 것을 바다에서 증명하겠습니다.」' : bd >= 30 ? '「아버지의 이름에 부끄럽지 않게 하겠습니다.」' : '「…이제 제 방식대로 하겠습니다.」';
+    var PW = G.R.heroParent(p);   // 물러나는 제독이 여성이면 「어머니」
+    var said = bd >= 65 ? '「' + PW + '께 배운 모든 것을 바다에서 증명하겠습니다.」' : bd >= 30 ? '「' + PW + '의 이름에 부끄럽지 않게 하겠습니다.」' : '「…이제 제 방식대로 하겠습니다.」';
     var sev = F.successorEvent(k), spic = null;
     if (G.FamEv && G.FamEv.showPic) {
       try { spic = G.FamEv.showPic({ img: sev.img, title: sev.title, noStand: true }); } catch (e) { spic = null; }
     }
     try {
       await UI.alert(old + '의 모험은 여기서 막을 내린다.<br>' + U.esc(sev.text) + '<br>그리고 그 뜻은 ' + k.name + '에게 이어진다...<br><br>' + k.name + ': ' + said +
-        '<br><br><span class="muted">아버지와의 사이: ' + F.bondWord(k) + ' (' + bd + ')' + (sea ? ' · 견습 ' + sea + '달' : '') + ' — 명성의 ' + Math.round(fameK * 100) + '%, 특기의 ' + Math.round(skK * 100) + '%를 물려받는다.' +
+        '<br><br><span class="muted">' + PW + '와의 사이: ' + F.bondWord(k) + ' (' + bd + ')' + (sea ? ' · 견습 ' + sea + '달' : '') + ' — 명성의 ' + Math.round(fameK * 100) + '%, 특기의 ' + Math.round(skK * 100) + '%를 물려받는다.' +
         '<br>후원자들은 새 제독을 아직 잘 모른다 — 쌓아 온 신뢰는 30%만 이어진다.' + wifeNote +
         ((p.storage || []).length ? '<br>자택 보관함은 비워진다 — 물려줄 물건은 다음 창에서 고른다.' : '') + '</span>', sev.title);
     } finally {
@@ -750,10 +757,11 @@
     // 새 제독의 모습: 아버지의 생김새(걷는 그림·일기토·스무 살 뒤의 얼굴)를 잇고, 아이 때의 그림 폴더를 기억한다 (G.Img.heirKid — 얼굴·전신상)
     var heirLook = G.Img.heroLook ? G.Img.heroLook(p) : (p.look || 'admiral');
     var heirArt = { sex: k.sex === 'f' ? 'f' : 'm', folder: (G.HomeLife ? G.HomeLife.folder(k) : '') || '' };
+    if (heirArt.sex !== 'f' && G.R.heroFemale(p)) heirLook = 'admiral';   // 여성 제독의 뒤를 남자가 이으면 어머니의 생김새(걷는 그림·일기토) 대신 기본 제독
     heirArt.variant = G.HomeLife && G.HomeLife.variant ? G.HomeLife.variant(k) : +(k.portraitVariant || 0);
     if (G.HomeLife) heirArt.artFamily = G.HomeLife.portraitFamily(k);
     s.player = {
-      look: heirLook, heir: heirArt,
+      look: heirLook, heir: heirArt, g: heirArt.sex,   // 성별 — R.heroSex가 본다 (2026-11-23)
       name: F.fullName(F.given(k), k.surname != null ? k.surname : sur), given: F.given(k), surname: k.surname != null ? k.surname : sur,   // 아버지의 성을 이어 간다
       nation: p.nation, job: p.job, born: k.born, st: { str: cl(kst.str), int: cl(kst.int), mar: cl(kst.mar), cha: cl(kst.cha) },
       luck: U.ri(30, 70), sk: sk, lg: lg, fame: Math.round(p.fame * fameK), fameBy: p.fameBy ? U.clone(p.fameBy) : undefined,   // 갈래의 비율은 그대로 (G.Fame.sync가 줄어든 합에 맞춘다)

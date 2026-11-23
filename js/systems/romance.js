@@ -115,7 +115,7 @@
     var busy = {};
     Object.keys(ps).forEach(function (k) { var p = ps[k]; if (p.stage !== 'none') { busy[p.m] = 1; busy[p.f] = 1; } });
     if (G.Gyeonwoo && G.Gyeonwoo.pairOf && G.Gyeonwoo.pairOf('gyeonwoo')) { busy.gyeonwoo = 1; busy.jiknyeo = 1; }
-    var males = Object.keys(here).filter(function (id) { return sexOf(id) === 'm' && !busy[id] && !G.MATE[id].minor && !G.MATE[id].wed && RM.veteran(id); });   // 아이(피터 팬 같은 소년)는 빼고 (QA 2026-10-23)
+    var males = Object.keys(here).filter(function (id) { return sexOf(id) === 'm' && !busy[id] && !G.MATE[id].minor && !G.MATE[id].wed && !(G.Husbands && G.Husbands.is(id)) && RM.veteran(id); });   // 아이(피터 팬 같은 소년)는 빼고 (QA 2026-10-23)
     // 등용 순(배에 오른 순서)대로 먼저 맺어지지 않게: 날마다 여자 부하의 차례를 섞고, 끌리는 남자도 궁합만큼의 확률로 고른다
     //   (이미 끌림이 쌓인 짝이 있으면 그 짝을 이어 간다 — 날마다 상대가 바뀌지 않게)
     var fems = U.shuffle(Object.keys(here).filter(function (id) { return sexOf(id) === 'f' && !busy[id] && !G.MATE[id].minor && !G.MATE[id].wed && s.player.wife !== id && RM.veteran(id); }));
@@ -184,25 +184,28 @@
     await narr(p, Ln.res[v] || Ln.res.pass);
   };
   EV.confess = async function (p) {
-    var Ln = L().advice, b = K(), fr = mateRow(p.f);
-    await narr(p, Ln.n); await sayM(p, Ln.m);
-    // 제독이 호감을 쌓던 여자 부하라면 먼저 묻는다
+    var Ln = L().advice, b = K();
+    // 여성 제독이면 반대로 — 여자 부하가 찾아와 그 남자 부하가 어떠냐고 묻는다 (2026-11-23). asker: 찾아온 사람 · other: 그 상대
+    var A = G.R.heroFemale() && Ln.fAsk ? Ln.fAsk : null, asker = A ? p.f : p.m, other = A ? p.m : p.f, fr = mateRow(other);
+    if (A) { await narr(p, A.n); await sayF(p, A.f); } else { await narr(p, Ln.n); await sayM(p, Ln.m); }
+    // 제독이 호감을 쌓던 이성 부하라면 먼저 묻는다
     if (fr && (fr.aff || 0) >= 40) {
-      await UI.say(fill(Ln.jealous.m, p), speaker(p.m, null));
-      var j = await choose(p, Ln.jealous.ch);
+      await UI.say(fill(A ? A.jealous.f : Ln.jealous.m, p), speaker(asker, null));
+      var j = await choose(p, (A || Ln).jealous.ch);
       if (j === 'mine') {
-        p.heat = Math.max(0, p.heat - 40); p.stage = 'cold'; p.cd = S().day + b.coldDays; loyal(p.m, -10); fr.aff = Math.min(100, (fr.aff || 0) + 5);
-        await narr(p, Ln.res.mine); log(G.MATE[p.m].name + U.jx(G.MATE[p.m].name, '이/가') + ' ' + G.MATE[p.f].name + '에 대한 마음을 접었다 (제독 때문에).'); return;
+        p.heat = Math.max(0, p.heat - 40); p.stage = 'cold'; p.cd = S().day + b.coldDays; loyal(asker, -10); fr.aff = Math.min(100, (fr.aff || 0) + 5);
+        await narr(p, (A || Ln).res.mine); log(G.MATE[asker].name + U.jx(G.MATE[asker].name, '이/가') + ' ' + G.MATE[other].name + '에 대한 마음을 접었다 (제독 때문에).'); return;
       }
       fr.aff = Math.floor((fr.aff || 0) / 2);
     }
     var v = await choose(p, Ln.ch, { gift: U.num(b.giftCost) });
-    if (v === 'scold') { p.heat = Math.max(0, p.heat - 10); loyal(p.m, -3); await narr(p, Ln.res.scold); return; }
+    if (v === 'scold') { p.heat = Math.max(0, p.heat - 10); loyal(asker, -3); await narr(p, (A || Ln).res.scold); return; }
     if (v === 'gift') {
       var s = S();
       if (s.player.gold < b.giftCost) { UI.toast('금화가 모자랍니다.', 'coin'); }
-      else { s.player.gold -= b.giftCost; loyal(p.f, 5); G.Game.refreshHud(); }
+      else { s.player.gold -= b.giftCost; loyal(other, 5); G.Game.refreshHud(); }
     }
+    if (A) await narr(p, A.bridge);
     var C2 = L().confess;
     await narr(p, C2.n); await sayM(p, C2.m); await sayF(p, C2.f);
     p.stage = 'lover'; p.since = S().day; p.heat = Math.max(p.heat, b.steps.confess + 10); loyal(p.m, 5); loyal(p.f, 5);

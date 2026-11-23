@@ -70,4 +70,40 @@
   /** 간행 전에 필사본으로 먼저 도는 책인가 */
   G.bookEarly = function (b) { return !!(b && earlyBooks()[b.id]); };
   G.bookEarlyList = function () { var m = earlyBooks(); return (G.BOOKS || []).filter(function (b) { return m[b.id]; }); };
+
+  /* 간행 전에 도는 필사본은 지은이를 밝히지 않는다 (2026-11-23 — 1580년에 「제임스 쿡 『태평양 항해기』」가 돌던 것)
+     간행 해(b.y)가 되기 전에는 b.title·b.author·b.authorShort가 「이름 모를 항해자」 같은 말로 보이고,
+     발견물 단서 글(G.Disc.hintText) 속 지은이 이름도 같은 말로 바꾼다. 간행 해부터는 원래대로. */
+  var ANON = { nav: '이름 모를 항해자', sci: '이름 모를 박물학자', hist: '이름 모를 학자' }, veiled = [];
+  function anonNow(b) { var s = G.Game && G.Game.state; return !!(s && s.date && earlyBooks()[b.id] && s.date.y < (b.y || 0)); }
+  G.bookAnon = anonNow;
+  G.bookAnonAuthor = function (b) { return ANON[b.sk] || '이름 모를 학자'; };
+  /** 단서 글 속의 지은이 이름을 가린다 (아직 간행되지 않은 필사본만) */
+  G.bookVeilText = function (t) {
+    if (!t || !veiled.length) return t;
+    veiled.forEach(function (x) {
+      if (!anonNow(x.b)) return;
+      var a = G.bookAnonAuthor(x.b);
+      x.names.forEach(function (n) { if (!n) return; t = t.split(n + ' 선장의 ').join(a + '의 ').split(n + '의 ').join(a + '의 ').split(n + ' 『').join(a + ' 『'); });
+    });
+    return t;
+  };
+  function veil() {
+    Object.keys(earlyBooks()).forEach(function (id) {
+      var b = (G.BOOKS || []).filter(function (x) { return x.id === id; })[0]; if (!b || b.__veil) return;
+      var names = [b.author, b.authorShort].filter(Boolean).sort(function (p, q) { return q.length - p.length; });
+      veiled.push({ b: b, names: names });
+      ['title', 'author', 'authorShort'].forEach(function (k) {
+        var v = b[k];
+        Object.defineProperty(b, k, { configurable: true, enumerable: true,
+          get: function () { if (!anonNow(b)) return v; var a = G.bookAnonAuthor(b); return k === 'title' ? a + ' ' + (b.name || '') : a; },
+          set: function (x) { v = x; } });
+      });
+      Object.defineProperty(b, '__veil', { value: true });
+    });
+    var D = G.Disc;
+    if (D && D.hintText && !D.hintText.__veil) { var h0 = D.hintText; D.hintText = function (d) { return G.bookVeilText(h0.apply(this, arguments)); }; D.hintText.__veil = true; }
+  }
+  G.bookVeil = veil;
+  if (typeof document !== 'undefined' && document.readyState === 'loading') document.addEventListener('DOMContentLoaded', veil); else setTimeout(veil, 0);
 })(window.G = window.G || {});

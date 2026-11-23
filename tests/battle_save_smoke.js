@@ -14,7 +14,6 @@ function ok(value, text) { if (!value) throw new Error(text); console.log('  ✓
   const errors = [], page = await browser.newPage({ viewport: { width: 960, height: 540 } });
   page.on('pageerror', e => errors.push(e.stack));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-  await page.route('https://fonts.googleapis.com/**', route => route.fulfill({ body: '', contentType: 'text/css' }));
   await page.addInitScript(() => {
     // 게임 시간만 직접 움직인다. 불러오기·그림 준비가 쓰는 프레임은 그대로 둔다.
     const raf = window.requestAnimationFrame;

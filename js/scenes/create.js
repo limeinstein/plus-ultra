@@ -9,6 +9,12 @@
     PT: ['주앙 다 시우바', '디오구 페헤이라', '페르낭 소아르스', '가브리엘 코스타', '루이스 멘드스', '안토니우 카르발류'],
     ES: ['디에고 로드리게스', '라몬 데 에레라', '후안 데 메디나', '알론소 페레스', '가르시아 데 로하스', '페드로 데 에스피노사']
   };
+  /* 여성 제독의 이름 (성은 같은 나라 집안의 것) */
+  var NAMES_F = {
+    PT: ['이네스 다 시우바', '베아트리스 페헤이라', '카타리나 소아르스', '레오노르 코스타', '필리파 멘드스', '마리아나 카르발류'],
+    ES: ['이사벨 로드리게스', '카탈리나 데 에레라', '후아나 데 메디나', '베아트리스 페레스', '엘비라 데 로하스', '레오노르 데 에스피노사']
+  };
+  function names(nat) { return (p && p.g === 'f' ? NAMES_F : NAMES)[nat || p.nation] || NAMES.PT; }
   var p;
 
   /* 이름과 성 — 한국식(성 한 글자이거나 남궁·제갈 같은 두 글자 성 + 한글 이름)이면 「성이름」, 그 밖은 「이름 성」으로 붙여 부른다 */
@@ -101,7 +107,7 @@
     starting = false;
     UI.hud.hide();
     G.Game.showLayers(false, false, true);
-    p = { name: '', given: '', surname: '', nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, diff: 'normal', face: 1,
+    p = { name: '', given: '', surname: '', nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, diff: 'normal', face: 1, g: 'm',
       skipIntro: G.State.introSeen() || !!(G.Game.state && G.Game.state.flags && G.Game.state.flags.prologue) };
     setName(U.pick(NAMES.PT));
     reset(false);
@@ -115,7 +121,8 @@
     var h = '';
     // column 1
     h += '<div class="col" style="width:330px"><div class="sect parch ornament-corners" style="flex:1">' +
-      '<h4>제독</h4><div style="display:flex;justify-content:center;margin:6px 0 10px"><div class="wood" style="padding:8px" id="pv"></div></div>' +
+      '<div class="cr-head"><h4>제독</h4><div class="opt-row cr-sex">' + opt('sex', 'm', '남성', p.g !== 'f') + opt('sex', 'f', '여성', p.g === 'f') + '</div></div>' +   // 성별 — 제목 줄 오른쪽 (칸 높이를 늘리지 않는다)
+      '<div style="display:flex;justify-content:center;margin:6px 0 10px"><div class="wood" style="padding:8px" id="pv"></div></div>' +
       '<div class="center" style="margin-bottom:12px"><button class="btn small" id="faceprev" title="앞의 얼굴">◀ 앞 얼굴</button> <button class="btn small" id="face" title="다음 얼굴">다음 얼굴 ▶</button>' + lookLine() + '</div>' +
       '<div class="flex" style="gap:8px;align-items:flex-end"><div style="flex:1.15;min-width:0"><label>이름</label><input type="text" id="nm" maxlength="12" style="width:100%" value="' + U.esc(p.given) + '"></div>' +
       '<div style="flex:1;min-width:0"><label>성</label><input type="text" id="sn" maxlength="12" style="width:100%" value="' + U.esc(p.surname) + '"></div>' +
@@ -170,7 +177,7 @@
     pv.appendChild(A.portraitCanvas(playerSpec(), 200));
     // events
     // 얼굴 고르기: ◀·▶ 모두 끝에 닿으면 반대쪽 끝으로 돌아간다 (마지막 다음은 처음, 처음 앞은 마지막) — 2026-10-17
-    function stepFace(d) { var n = Math.max(1, G.Img.heroFaces().length); p.face = (((p.face || 0) + d) % n + n) % n; render(); }
+    function stepFace(d) { var n = Math.max(1, G.Img.heroFaces(p.g).length); p.face = (((p.face || 0) + d) % n + n) % n; render(); }
     box.querySelector('#face').onclick = function () { stepFace(1); };
     box.querySelector('#faceprev').onclick = function () { stepFace(-1); };
     var fullEl = box.querySelector('#fullnm b');
@@ -183,7 +190,7 @@
         if (e.key === 'Enter') { onName(); if (isTestName()) { e.preventDefault(); startTest(); } }
       };
     });
-    box.querySelector('#rn').onclick = function () { setName(U.pick(NAMES[p.nation])); render(); };
+    box.querySelector('#rn').onclick = function () { setName(U.pick(names())); render(); };
     box.querySelector('#skipintro').onchange = function (e) { p.skipIntro = e.target.checked; };
     box.querySelector('#bm').onchange = function (e) { p.birth.m = +e.target.value; p.birth.d = Math.min(p.birth.d, U.daysInMonth(1460, p.birth.m)); rollStats(); render(); };
     box.querySelector('#bd').onchange = function (e) { p.birth.d = +e.target.value; rollStats(); render(); };
@@ -193,7 +200,8 @@
     U.$$('[data-g]', box).forEach(function (el) {
       el.onclick = function () {
         var g = el.dataset.g, v = el.dataset.v;
-        if (g === 'nat') { if (p.nation !== v) { p.nation = v; setName(U.pick(NAMES[v])); reset(true); } }
+        if (g === 'nat') { if (p.nation !== v) { p.nation = v; setName(U.pick(names(v))); reset(true); } }
+        else if (g === 'sex') { if ((p.g === 'f' ? 'f' : 'm') !== v) { p.g = v; p.face = 0; setName(U.pick(names())); } }   // 성별: 얼굴 목록과 이름을 그 성별 것으로 (능력·특기는 그대로)
         else if (g === 'job') { p.job = v; reset(false); }
         else if (g === 'diff') p.diff = v;
         render();
@@ -250,22 +258,20 @@
   function mOpts() { var s = ''; for (var m = 1; m <= 12; m++) s += '<option value="' + m + '"' + (m === p.birth.m ? ' selected' : '') + '>' + m + '</option>'; return s; }
   function dOpts() { var s = ''; for (var d = 1; d <= U.daysInMonth(1460, p.birth.m); d++) s += '<option value="' + d + '"' + (d === p.birth.d ? ' selected' : '') + '>' + d + '</option>'; return s; }
   function playerSpec() {
-    var sp = A.portraitSpec({ seed: 'player' + p.face + p.nation, culture: 'med', g: 'm', age: p.age > 34 ? 'mid' : 'young', cloth: ['#1e3552', '#5a1e1e', '#2a3a2a', '#3a2a4a'][p.face % 4], beard: p.face % 3 });
-    var face = G.Img.chain.player(p.face);
-    if (face.length && p.age >= 40) {
-      var id = face[0].slice('portraits/player/'.length), old = 'portraits/player-aged/' + id;
-      if (G.Img.has(old)) face = [old].concat(face);
-    }
+    var sp = A.portraitSpec({ seed: 'player' + p.face + p.nation, culture: 'med', g: p.g === 'f' ? 'f' : 'm', age: p.age > 34 ? 'mid' : 'young', cloth: ['#1e3552', '#5a1e1e', '#2a3a2a', '#3a2a4a'][p.face % 4], beard: p.g === 'f' ? 0 : p.face % 3 });
+    var face = G.Img.chain.player(p.face, p.g);
+    if (face.length) face = G.Img.chain.heroPortrait({ look: face[0].slice('portraits/player/'.length) }, p.age);
     return A.withImg(sp, face);
   }
   C.playerSpec = playerSpec;
   /** 고른 얼굴의 생김새 이름 — 그 얼굴로 거리를 걷고(characters/<이름>/walk_*) 일기토도 그 모습(duel/fighters/<이름>), 40세부터 수염 난 모습 */
   function lookLine() {
-    var faces = G.Img.heroFaces();
+    var faces = G.Img.heroFaces(p.g);
     if (!faces.length) return '';
     var i = ((p.face % faces.length) + faces.length) % faces.length, id = faces[i].slice('portraits/player/'.length);
     return '<div class="look-name"><b>' + U.esc(G.Img.heroName(id)) + '</b> <span class="muted">' + (i + 1) + '/' + faces.length + '</span>' +
-      '<small class="muted">' + (p.age >= 40 ? '40대 모습 — 수염이 난 얼굴' : '마흔이 되면 수염 난 40대 모습으로 바뀝니다') + '</small></div>';
+      (p.g === 'f' ? (G.Img.has('portraits/player-aged/' + id) ? '<small class="muted">' + (p.age >= 40 ? '40대 모습' : '마흔이 되면 40대 모습으로 바뀝니다') + '</small>' : '')   // 여성 생김새는 40대 그림이 있을 때만 알린다
+        : '<small class="muted">' + (p.age >= 40 ? '40대 모습 — 수염이 난 얼굴' : '마흔이 되면 수염 난 40대 모습으로 바뀝니다') + '</small>') + '</div>';
   }
 
   // ---------------------------------------------------------------- 테스트용 캐릭터
@@ -280,7 +286,8 @@
     p.st = {}; G.STATS.forEach(function (s) { p.st[s.id] = T.stat; });
     p.sk = {}; G.SKILLS.forEach(function (s) { p.sk[s.id] = 3; });
     p.lg = G.LANGS.map(function () { return 3; });
-    var fi = T.look ? G.Img.heroFaces().indexOf('portraits/player/' + T.look) : -1;
+    p.g = T.look ? G.Img.heroLookSex(T.look) : 'm';   // 테스트용 캐릭터는 그 생김새의 성별로
+    var fi = T.look ? G.Img.heroFaces(p.g).indexOf('portraits/player/' + T.look) : -1;
     if (fi >= 0) p.face = fi;      // 이강희 얼굴 그림 → 반신상·일기토 시트도 이강희 것
     var fleet = (T.ships || []).map(function (id) { return G.SHIP[id] ? G.SHIP[id].name : ''; }).filter(Boolean);
     UI.toast('테스트용 캐릭터: 모든 능력 만렙, 소지금 ' + T.gold.toLocaleString() + '닢' + (fleet.length ? ', 첫 함대 ' + fleet.join('·') : ''), 'info');
@@ -302,12 +309,12 @@
     }
     await G.Game.ensureGeo();
     var T = test ? G.BALANCE.testChar : null;
-    var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000, ships: T ? T.ships : null });
+    var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, g: p.g, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000, ships: T ? T.ships : null });
     if (T) S.player.luck = T.luck;
     S.player.given = p.given; S.player.surname = p.surname;      // 부를 때는 S.player.name(붙인 이름)을 그대로 쓴다
     S.player.portrait = playerSpec();
     // 고른 얼굴 그림을 초상에 못 박아 둔다(얼굴 그림이 늘어 순서가 바뀌어도 그대로) — 그 이름이 제독의 생김새
-    var faceKey = G.Img.chain.player(p.face);
+    var faceKey = G.Img.chain.player(p.face, p.g);
     A.withImg(S.player.portrait, faceKey);
     S.player.look = faceKey.length ? faceKey[0].slice('portraits/player/'.length) : 'admiral';
     G.Game.state = S;

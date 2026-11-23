@@ -10,7 +10,7 @@
 
   // 회차 규칙(diff·speed)은 저장에, 개인 취향은 이 기기에 따로 둔다. 옛 저장에는 새 필드가 필요 없다.
   var PREF_KEY = 'plusultra_preferences', prefs = null;
-  var prefBools = ['autosave', 'shake', 'banter', 'mouseFollow', 'noticeHideLine', 'statusOpen', 'saveFile'];   // saveFile: 여관 일지를 파일로도 (2026-11-07)   // 알림·상태판 설정 (js/ui/ui.js — 2026-11-01)
+  var prefBools = ['autosave', 'shake', 'banter', 'discoveryLetters', 'mouseFollow', 'noticeHideLine', 'statusOpen', 'saveFile'];   // saveFile: 여관 일지를 파일로도 (2026-11-07)   // 알림·상태판 설정 (js/ui/ui.js — 2026-11-01)
   var prefEnums = { musicSrc: ['base', 'ost'], keyMode: ['dir', 'helm'], ctrlSens: ['slow', 'normal', 'fast'], portAsk: ['notify', 'stop', 'ask'], tackMode: ['off', 'open', 'on'], noticeSize: ['normal', 'small'], noticePos: ['auto', 'top', 'bottom'] };
   function readPrefs() {
     if (prefs) return prefs;
@@ -43,7 +43,7 @@
   ST.introSeen = function () { return lsGet('plusultra_intro_seen') === '1'; };
   ST.markIntroSeen = function () { lsSet('plusultra_intro_seen', '1'); };
 
-  /** params: {name, nation, job, age, birth:{m,d}, st:{...}, sk:{...}, lg:[...], diff} */
+  /** params: {name, nation, job, age, birth:{m,d}, st:{...}, sk:{...}, lg:[...], diff, g: 'm'|'f' (없으면 남성)} */
   ST.newGame = function (p) {
     var home = p.nation === 'PT' ? 0 : 7;
     var S = {
@@ -57,6 +57,7 @@
         // 제독 만들기에서 따로 받은 이름·성을 저장한다. 이 값이 빠지면 한국식 이름은 첫 출산/승계 때 성을 다시 물어보게 된다.
         // 테스트·옛 호출부처럼 name만 넘긴 새 게임은 성 없는 이름으로 시작하고, 실제 옛 저장은 Family.fixNames/askSurname가 보정한다.
         given: p.given != null ? p.given : p.name, surname: p.surname != null ? p.surname : '',
+        g: p.g === 'f' ? 'f' : 'm',   // 성별 — 가리는 곳은 R.heroSex (옛 저장에는 없다 = 남성)
         nation: p.nation, job: p.job, born: { y: 1480 - p.age, m: p.birth.m, d: p.birth.d },
         st: p.st, luck: U.ri(30, 70), sk: p.sk, lg: p.lg,
         fame: 0, notoriety: 0, gold: p.gold || 3000, bank: 0, items: [], equip: { weapon: 'rapier', armor: null },

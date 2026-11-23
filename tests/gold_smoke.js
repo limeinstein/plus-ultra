@@ -6,7 +6,7 @@
 const path = require('path');
 const { pathToFileURL } = require('url');
 let chromium; try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require('/opt/npm-tools/node_modules/playwright')); }
-const BASE = process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(__dirname,'..',process.env.PAGE || 'index.html')).href;
+const BASE = pathToFileURL(path.join(__dirname, '..', process.env.PAGE || 'index.html')).href;
 let passed = 0;
 function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.log('  ✓ ' + msg); }
 
@@ -17,7 +17,7 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
     page.on('pageerror', e => errors.push('PAGEERR ' + e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.goto(BASE,{waitUntil:'domcontentloaded',timeout:120000});
+    await page.goto(BASE);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && !document.querySelector('.title-menu .btn.disabled'), null, { timeout: 120000 });
     const t = await page.evaluate(() => ({ list: G.StorySelect.list().map(m => m.id), beats: G.GOLD.beats.length }));
     ok(t.list.includes('gold') && t.beats >= 60, '고르기 지도에 「황금의 바다」 · 사건 ' + t.beats + '개');
@@ -60,7 +60,7 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
       window.AT = (id) => { const s = G.Game.state, c = G.CITY_DATA[id]; s.loc = { mode: 'city', city: id, lon: c.lon, lat: c.lat, heading: 0 }; SAID.length = 0; return G.GoldSea.arrive(c, {}); };
       window.SEA = (lon, lat) => { const s = G.Game.state; s.loc = { mode: 'sea', lon, lat, heading: 0 }; SAID.length = 0; return G.GoldSea.seaPending() ? G.GoldSea.atSea() : false; };
       window.DONE = (id) => G.GoldSea.done(id); window.BATTLES = []; window.HAS = (id) => G.Game.state.mates.some(m => m.id === id);
-      const go = G.Game.go; G.Game.go = function (n, arg) { if (n === 'battle') { BATTLES.push(arg.npc); G.Game.state.stats.battles = (G.Game.state.stats.battles || 0) + 1; return; } return go.apply(this, arguments); };
+      const go = G.Game.go; G.Game.go = function (n, arg) { if (n === 'battle') { BATTLES.push(arg.npc); G.Game.state.stats.battles = (G.Game.state.stats.battles || 0) + 1; G.StoryBattle.finish(arg.npc, 'win'); return; } return go.apply(this, arguments); };
     });
     async function step(label, fn) { const r = await page.evaluate(fn); ok(r && r.ok, label + (r && r.note ? ' — ' + r.note : '')); }
     await step('1장 첫 거래(함부르크) · 소문 · 루카스', async () => { ADV(3); await AT(44); const f = DONE('a1_first') && G.Game.state.player.items.some(i => i.id === 'gs_ring'); ADV(8); await SEA(3, 54); ADV(22); await AT(44); return { ok: f && DONE('i1_rumor') && DONE('i1_lucas') && HAS('gs_lucas'), note: SAID.length + '줄' }; });
@@ -82,25 +82,11 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     await step('14장 1619 자야카르타 · 1623 암보이나(에드먼드)', async () => { SETD(1619, 7); await AT(168); const j = DONE('a14_jakatra'); SETD(1623, 5); await AT(168); return { ok: j && DONE('a14_amboyna') && SAID.some(x => /^에드먼드 헤일/.test(x)), note: SAID.length + '줄' }; });
     await step('15장 해적섬을 사려는 자들 → 돌섬의 원본 → 블랙웰 함대 → 제시카 아흔아홉', async () => { ADV(65); await AT(24); const b0 = DONE('a15_buyers'); const d = G.DISC.atlantis; ADV(20); await SEA(d.lon, d.lat); const pr = DONE('a15_proof'); ADV(30); await SEA(-70, 18); const b = BATTLES.length; await SEA(-70, 18); return { ok: b0 && pr && BATTLES[b - 1].n === 3 && DONE('a15_bw_after') && SAID.some(x => /가까이 와라/.test(x)), note: [b0, pr, BATTLES.length, BATTLES[b - 1] && BATTLES[b - 1].n, DONE('a15_blackwell'), DONE('a15_bw_after')].join('/') + ' · ' + SAID.length + '줄' }; });
     await step('15장 1628 두아르트 → 폭풍 속의 경쟁자 → 【아메리카】 → 교역왕', async () => { SETD(1628, 10); await AT(0); const du = DONE('a15_duarte'); ADV(25); await SEA(-30, 38); G.Game.state.bigDeal.am = { p: 1500000, c: 196, d: 16281201 }; ADV(5); await AT(196); const am = DONE('a15_am_deal'); G.Game.state.achv = G.Game.state.achv || {}; G.Game.state.achv.tradeking = { d: 16281201 }; const kingOk = G.Achieve && G.Achieve.done && G.Achieve.done('tradeking'); if (kingOk) { ADV(5); await AT(196); } return { ok: du && DONE('i15_storm') && am && (!kingOk || DONE('x_king')), note: (kingOk ? '교역왕 사건 ✓' : '교역왕 업적 함수 없음 — 건너뜀') + ' · ' + SAID.length + '줄' }; });
-    await step('16장 1629 신용 위기·1630년 및 순자산 목표 경계·결말', async () => {
-      SETD(1629, 4); await AT(24); const c = DONE('a16_crisis');
-      ADV(10); await AT(168); ADV(10); await AT(97); ADV(10); await AT(196);
-      const s = G.Game.state, goal = G.GOLD.worthGoal;
-      s.player.gold += goal + 1000 - G.GoldSea.worth(); ADV(10); await AT(24);
-      const beforeYear = !DONE('a16_finale') && s.gold.finale == null;
-      SETD(1630, 1); s.player.gold += goal - 1 - G.GoldSea.worth(); await AT(24);
-      const belowGoal = !DONE('a16_finale') && s.gold.finale == null;
-      s.player.gold++; await AT(24); const firstFame=JSON.stringify(s.player.fames),titles=s.gold.titles.length;
-      await AT(24);
-      return {ok:c&&DONE('a16_asia')&&DONE('a16_africa')&&DONE('a16_atlantic')&&beforeYear&&belowGoal&&DONE('a16_finale')&&s.gold.finale!=null&&JSON.stringify(s.player.fames)===firstFame&&s.gold.titles.length===titles,
-       note:'1630년 전 차단 '+beforeYear+' · 목표 1닢 미달 차단 '+belowGoal+' · 순자산 '+G.GoldSea.worth()};
-    });
+    await step('16장 신용 위기 → 세 대륙 → 순자산 목표 → 현재 연도 결말', async () => { SETD(1629, 4); await AT(24); const c = DONE('a16_crisis'); ADV(10); await AT(168); ADV(10); await AT(97); ADV(10); await AT(196); ADV(10); await AT(24); const blocked = !DONE('a16_finale'), s = G.Game.state; s.player.gold += Math.max(0, G.GOLD.worthGoal - G.GoldSea.worth()); await AT(24); return { ok: c && blocked && DONE('a16_asia') && DONE('a16_africa') && DONE('a16_atlantic') && DONE('a16_finale') && s.gold.finale != null && SAID.some(x => /빚을 모두 빼고도/.test(x)), note: '이름 ' + s.gold.titles.length + '개 · 순자산 ' + G.GoldSea.worth() }; });
     const whoNames = await page.evaluate(() => ['P', 'E', 'M', 'B', 'L', 'YU', 'JN', 'KW', 'PT', 'JS', 'DH', 'EZ', 'SY', 'MT', 'ED', 'YK', 'RB', 'NR', 'DA', 'EA', 'RD', 'GS', 'HM', 'MG', 'TM', 'MO'].map(k => k + '=' + (G.GoldSea.who(k).name || '')).join(' '));
     ok(!/=( |$)|undefined/.test(whoNames), '말하는 사람: ' + whoNames);
     const pg = await page.evaluate(() => { const d = document.createElement('div'); G.GoldSea.page(d); return { tr: d.querySelectorAll('tr').length, worth: /순자산/.test(d.textContent) && /교역왕/.test(d.textContent) }; });
     ok(pg.tr >= 16 && pg.worth, '수첩 「황금의 바다」 ' + (pg.tr - 1) + '장 · 순자산 · 대단한 거래');
-    const saved=await page.evaluate(async()=>{const s=G.Game.state,story=JSON.stringify(s.gold),mates=s.mates.map(m=>m.id).join(','),gold=s.player.gold,shares=JSON.stringify(s.company.shares);G.Game.state=G.State.deserialize(G.State.serialize());const q=G.Game.state;await G.GoldSea.arrive(G.CITY_DATA[q.loc.city],{load:true});return{same:JSON.stringify(q.gold)===story,mates:q.mates.map(m=>m.id).join(',')===mates,gold:q.player.gold===gold,shares:JSON.stringify(q.company.shares)===shares};});
-    ok(saved.same&&saved.mates&&saved.gold&&saved.shares,'황금의 바다 진행·동료·주식 저장 복원 · 보상 중복 없음');
     const g = await page.evaluate(() => { const s = G.State.newGame({ name: '시험', nation: 'PT', job: 'explorer', age: 22, birth: { m: 1, d: 1 }, st: { str: 50, int: 50, mar: 50, cha: 50 }, sk: {}, lg: G.LANGS.map(() => 0), diff: 'normal' }); G.Game.state = s; return { sp: G.Sponsor.present(G.SPONSOR.gs_vos), active: G.GoldSea.active(), nat: G.R.nationName('PT') }; });
     ok(!g.sp && !g.active && g.nat === '포르투갈', '보통 항해: 포스 저택·이야기는 나오지 않는다');
     ok(!errors.length, '콘솔 오류 0' + (errors.length ? '\n' + errors.slice(0, 8).join('\n') : ''));

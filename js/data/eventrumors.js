@@ -23,7 +23,7 @@
   function SPR(id) { return G.SPONSOR && G.SPONSOR[id]; }
   function present(id) { var sp = SPR(id); return !!(sp && G.Sponsor && G.Sponsor.present(sp)); }
   function holder(id) { var sp = SPR(id); return (sp && G.Sponsor && G.Sponsor.holder(sp)) || ''; }
-  function female(s) { var p = s.player || {}; return p.g === 'f' || !!(p.heir && p.heir.sex === 'f'); }
+  function female(s) { return G.R.heroFemale(s.player || {}); }   // 성별은 R.heroSex 한 곳에서 (js/core/rules.js)
   G.EVENT_RUMORS = [
     // ───────────── 옛이야기의 아가씨들 (js/systems/fairytales.js — G.Tale.ready: 배에 없고 · 떠나지 않았고 · 혼인하지 않았다)
     { id: 'cinderella', near: [P.paris], r: 7, own: FR, mates: ['cinderella'], text: [
@@ -35,7 +35,12 @@
       { y: '숲에서 사냥꾼에게 쫓기는 아가씨가 있대요. 사내 일곱이 함께 다니는 무리 앞에만 나타난다나 봐요.',
         o: '숲에서 사냥꾼에게 쫓기는 아가씨가 있다더군. 사내 일곱이 함께 다니는 무리 앞에만 나타난다나.' },
       { y: '프랑스 숲 깊은 곳에 왕비의 미움을 산 아가씨가 숨어 산대요. 사내 일곱이 한 무리여야 만날 수 있다던가요.',
-        o: '프랑스 숲 깊은 곳에 왕비의 미움을 산 아가씨가 숨어 산다더군. 사내 일곱이 한 무리여야 만난다던가.' }] },
+        o: '프랑스 숲 깊은 곳에 왕비의 미움을 산 아가씨가 숨어 산다더군. 사내 일곱이 한 무리여야 만난다던가.' }],
+      textF: [   // 여성 제독: 여자 일곱 (js/systems/fairytales.js T.snowOk)
+      { y: '숲에서 사냥꾼에게 쫓기는 아가씨가 있대요. 여자 일곱이 함께 다니는 무리 앞에만 나타난다나 봐요.',
+        o: '숲에서 사냥꾼에게 쫓기는 아가씨가 있다더군. 여자 일곱이 함께 다니는 무리 앞에만 나타난다나.' },
+      { y: '프랑스 숲 깊은 곳에 왕비의 미움을 산 아가씨가 숨어 산대요. 사내가 섞인 무리는 피하고, 여자 일곱이 한 무리여야 만날 수 있다던가요.',
+        o: '프랑스 숲 깊은 곳에 왕비의 미움을 산 아가씨가 숨어 산다더군. 여자 일곱이 한 무리여야 만난다던가.' }] },
     { id: 'sleeping_beauty', near: [P.germany], r: 7, own: DE, mates: ['sleeping_beauty'], text: [
       { y: '독일 땅 숲 깊숙이 가시덤불에 덮인 성이 있대요. 거기 잠든 처녀를 깨우려면 용을 본 사람과 병을 고치는 사람이 함께 가야 한다나 봐요.',
         o: '독일 땅 숲 깊숙이 가시덤불에 덮인 성이 있다네. 거기 잠든 처녀를 깨우려면 용을 본 사람과 병을 고치는 사람이 함께 가야 한다는군.' },

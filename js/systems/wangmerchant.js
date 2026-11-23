@@ -183,7 +183,7 @@
   };
   WM.meet = async function () {
     var s = S(), o = st(), k = K(), first = !o.met, pc = null;
-    o.met = (o.met || 0) + 1; o.cool = s.day + k.cool;
+    o.met = (o.met || 0) + 1; o.cool = s.day + k.cool; o.lastMet = s.day; // 지나의 그날 발견 한마디 (없던 옛 저장은 다음 실제 만남부터)
     if (G.Pace) G.Pace.mark('wangMerch');
     var stock = {}; k.goods.forEach(function (id) { stock[id] = U.ri(k.stock[0], k.stock[1]); });
     try {

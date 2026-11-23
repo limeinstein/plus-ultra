@@ -114,8 +114,8 @@
       if(f==='west')western(details);
       if(f==='dhow'){if(s.id==='baghlah')gallery(details);var y=h.sheer(1),x=h.X(1,y);curve(details,[[x-.6,y,0],[x+1.5,y+2.5,0],[x+1.3,y+4,0],[x+.3,y+4.4,0]],.45,M.dark,'stem-head');[y+1,y+1.65].forEach(function(yy){loop(details,[x+.45,yy,0],.66,'y','stem-binding');});}
       if(f==='junk')sternStage(details);
-      if(['galley','korean','japanese','outrigger'].indexOf(f)>=0)oarStation(details);
-      if(f==='japanese'||s.id==='panokseon'||s.id==='maengseon')bulwarks(details);
+      if(s.id!=='bezaisen'&&['galley','korean','japanese','outrigger'].indexOf(f)>=0)oarStation(details);
+      if((f==='japanese'&&s.id!=='bezaisen')||s.id==='panokseon'||s.id==='maengseon')bulwarks(details);
       if(['jong','outrigger','raft'].indexOf(f)>=0)lashings(details);
       return g;
     };return ship;

@@ -608,20 +608,26 @@
   // ---------------------------------------------------------------- ship picture
   A.shipCard = function (typeId, w, h, seed, spec) {
     var chain = G.Img.chain.ship(typeId);
-    if (G.Img.pick(chain)) return G.Img.make(chain, w, h, function () { return paintShipCard(typeId, w, h, seed, spec); });
+    if (!(spec && spec.sailColor) && G.Img.pick(chain)) return G.Img.make(chain, w, h, function () { return paintShipCard(typeId, w, h, seed, spec); });
     return paintShipCard(typeId, w, h, seed, spec);
   };
   function paintShipCard(typeId, w, h, seed, spec) {
     var cv = A.canvas(w, h), ctx = cv.getContext('2d'), rng = U.makeRng(U.strHash(String(seed || typeId)));
     var g = ctx.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#cfd9df'); g.addColorStop(0.62, '#f2e2c0'); g.addColorStop(0.63, '#5d86a6'); g.addColorStop(1, '#27506e');
     ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
-    var t = G.SHIP[typeId], look = A.shipLook ? A.shipLook(typeId, spec && spec.sails ? { sails: spec.sails } : null) : { sails: t.sails, hull: '#3a2416', cross: true, flag: '#1d3f7a' };
+    var t = G.SHIP[typeId], look = A.shipLook ? A.shipLook(typeId, spec || null) : { sails: t.sails, hull: '#3a2416', cross: true, flag: '#1d3f7a' };
     // 그림 폭(배 좌표) — 카드에 꼭 맞게 줄이고, 작은 배는 조금 더 작게
     var n = look.sails.length, ht = look.hullType;
     var span = ht === 'galley' ? 270 + (look.big ? 40 : 0) : ht === 'dhow' || ht === 'jong' ? 170 + n * 24 : ht === 'junk' ? 190 + n * 22 : ht === 'kr' ? 180 : ht === 'panok' ? 220 : ht === 'turtle' ? 240 : ht === 'jp' ? (look.big ? 210 : 170) : ht === 'atake' ? 230 : ht === 'raft' ? 140 : ht === 'outrigger' ? 200 : 175 + n * 18;
     var fit = Math.min(w * 0.94 / span, h * 0.72 / 118);
     var scale = fit * U.clamp(0.66 + t.cap / 1500, 0.7, 1);
-    A.shipSide(ctx, w * 0.5, h * 0.72, scale, look, rng, 1);
+    var drawn = false;
+    if (G.Ship3D && (t.from >= 1600 || look.sailColor)) {
+      var model = G.FX.shipRig.profiles[typeId], tallest = Math.max.apply(null, model.map(function (m) { return m[1]; }));
+      var len = Math.min(w * .70, h * .76 / (tallest + .22));
+      drawn = G.Ship3D.draw(ctx, w * .5, h * .88, .55, len, look, 1.25);
+    }
+    if (!drawn) A.shipSide(ctx, w * 0.5, h * 0.72, scale, look, rng, 1);
     ctx.fillStyle = 'rgba(255,255,255,.25)'; for (var i = 0; i < 20; i++) ctx.fillRect(rng() * w, h * 0.66 + rng() * h * 0.3, 8 + rng() * 16, 1);
     return cv;
   }

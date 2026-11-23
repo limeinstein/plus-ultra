@@ -24,10 +24,10 @@
   };
 
   function S() { return G.Game && G.Game.state; }
-  /** 지금 제독이 여자인가 (뒤를 이은 딸) */
+  /** 지금 제독이 여자인가 — R.heroSex (만들기에서 고른 성별·이야기 모드·뒤를 이은 딸) */
   function female() {
     var I = G.Img, s = S(), p = s && s.player; if (!p) return false;
-    if (p.sex) return p.sex === 'f';
+    if (G.R && G.R.heroFemale) return G.R.heroFemale(p);
     var hk = I && I.heirKid ? I.heirKid(p) : null;
     return !!(hk && hk.sex === 'f');
   }

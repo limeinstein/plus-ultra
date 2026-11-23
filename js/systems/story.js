@@ -28,6 +28,8 @@
   ST._dnDay = dnDay;   // 시험용
   function inCity() { var s = S(); return G.Game.sceneName === 'city' && s && s.loc.mode === 'city'; }
   ST.active = function () { return !!T(); };
+  /** 이야기 모드에서 아직 엔딩(아버지를 만남)을 보지 못했다 — 이 동안은 뒤를 이을 수 없다 (은퇴·수명·쓰러짐 → 이야기가 끝난다, 2026-11-23) */
+  ST.noHeirs = function () { var t = T(); return !!t && t.end !== 'done'; };
   ST.isTrace = function (id) { return D.traces.some(function (t) { return t[0] === id; }); };
   /** 아버지 / 할아버지 (대를 이었을 때) */
   ST.kin = function () { var s = S(), g = s && s.player.generation || 1; return g >= 3 ? '증조할아버지' : g === 2 ? '할아버지' : '아버지'; };

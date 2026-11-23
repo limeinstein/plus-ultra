@@ -135,6 +135,47 @@
   R.stat = function (k) { var v = R.S().player.st[k]; return v == null ? v : v + R.statBonus(k); };
   R.age = function () { var S = R.S(); return S.date.y - S.player.born.y - ((S.date.m < S.player.born.m || (S.date.m === S.player.born.m && S.date.d < S.player.born.d)) ? 1 : 0); };
   R.fullName = function () { return R.S().player.name; };
+  /** 제독의 성별 'f' | 'm' — 성별은 여기 한 곳에서만 가린다 (2026-11-23).
+      ① 뒤를 이은 자녀의 player.heir.sex (세대 교체가 적는다 — 그 제독이 아들인지 딸인지) ② player.g (제독 만들기·이야기 모드·세대 교체가 적는다)
+      ③ player.sex (예전 결과 연출이 보던 자리) ④ 더 옛 저장의 후계자는 초상에 붙은 가족 그림에서 (G.Img.heirKid) ⑤ 그 밖(옛 저장)은 남성.
+      p를 넘기지 않으면 지금 제독. */
+  R.heroSex = function (p) {
+    if (!p) { var S = G.Game && G.Game.state; p = S && S.player; }
+    if (!p) return 'm';
+    if (p.heir && (p.heir.sex === 'f' || p.heir.sex === 'm')) return p.heir.sex;
+    if (p.g === 'f' || p.g === 'm') return p.g;
+    if (p.sex === 'f' || p.sex === 'm') return p.sex;
+    var hk = G.Img && G.Img.heirKid ? G.Img.heirKid(p) : null;
+    return hk && hk.sex === 'f' ? 'f' : 'm';
+  };
+  R.heroFemale = function (p) { return R.heroSex(p) === 'f'; };
+  /* ── 여성 제독을 부르는 말 (2026-11-23 사용자 결정): 나리 → 아씨 · 도련님 → 아가씨 · 형님 → 누님. 작위가 있으면 예전처럼 「○○ 각하」.
+     한국어 화면에서만 바꾼다 (다른 언어는 번역 원본을 고칠 때 — tools/i18n) */
+  R.HERO_CALLS = { '나리': '아씨', '도련님': '아가씨', '형님': '누님' };
+  function koText() { return !G.I18N || !G.I18N.isKo || G.I18N.isKo(); }
+  R.heroCall = function (w) { return koText() && R.heroFemale() ? (R.HERO_CALLS[w] || w) : w; };
+  /** 제독의 아이가 제독을 부르는 말: 아버지 | 어머니 */
+  R.heroParent = function (p) { return R.heroFemale(p) ? '어머니' : '아버지'; };
+  /** 이 사람은 제독을 이렇게 부른다 (동료·사건 인물의 ID → 낱말들) — 여성 제독이면 그 사람의 말에서 바꾼다 (R.heroSay) */
+  R.HERO_CALL_BY = { d_artagnan: ['나리'], md_kien: ['형님'], felipillo: ['나리'], imjin_peddler: ['나리'] };
+  var PARENT_SWAP = [['아버지', '어머니'], ['아버님', '어머님'], ['아빠', '엄마']];
+  /** 대화창의 글을 여성 제독에게 맞춘다 (js/ui/ui.js UI.say):
+      「제독 나리」「선장 나리」「바다의 나리」 → 아씨 · 그 사람이 제독을 부르는 말(R.HERO_CALL_BY) · 제독의 아이가 하는 말은 아버지 ↔ 어머니 */
+  R.heroSay = function (text, who) {
+    if (typeof text !== 'string' || !koText() || !R.heroFemale() || (who && who.heroSpeechAdapted)) return text;
+    var t = text.replace(/(제독|선장|바다의) 나리/g, '$1 아씨'), nm = who && who.name, S = G.Game && G.Game.state;
+    if (!nm || !S) return t;
+    Object.keys(R.HERO_CALL_BY).forEach(function (id) {
+      var d = (G.MATE && G.MATE[id]) || (G.HIST_FIG && G.HIST_FIG[id]);
+      if (d && d.name === nm) R.HERO_CALL_BY[id].forEach(function (w) { t = t.split(w).join(R.HERO_CALLS[w] || w); });
+    });
+    var kids = (S.player && S.player.kids) || [];
+    if (kids.some(function (k) { return k && !k.unnamed && (k.name === nm || k.given === nm); })) {
+      PARENT_SWAP.forEach(function (pr, i) { t = t.split(pr[0]).join('\u0001' + i).split(pr[1]).join(pr[0]).split('\u0001' + i).join(pr[1]); });
+      t = t.split('아빠 치마').join('유모 치마');
+    }
+    return t;
+  };
   R.nationName = function (n) { return n === 'PT' ? '포르투갈' : n === 'ES' ? '에스파냐' : n; };
   R.nativeLang = function (n) { return n === 'PT' ? 1 : 0; };
   R.isHomeNation = function (c) {

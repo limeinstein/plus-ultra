@@ -48,9 +48,10 @@
   BL.cost = function () { var k = K(); return k.cost[0] + k.cost[1] * rankN(); };
   BL.left = function () { var b = st(), s = S(); return b.last == null ? 0 : Math.max(0, b.last + K().gap - s.day); };
   function callName() { var t = BL.best(); return t && t.call ? t.call + '님' : '제독님'; }
-  function male() { var p = S().player; return p.g !== 'f' && !(p.heir && p.heir.sex === 'f'); }   // 뒤를 이은 딸 제독은 p.g 가 비어 있다 (princess.js와 같게)
+  function male() { return !G.R.heroFemale(); }   // 성별은 R.heroSex 한 곳에서 (뒤를 이은 딸·옛 저장 포함 — js/core/rules.js)
   function single() { var p = S().player; return !p.wife && male(); }
-  function playerCanWed() { return male() && (!S().player.wife || (G.Wives && G.Wives.canMarry())); }
+  function playerCanWed() { return male() ? (!S().player.wife || (G.Wives && G.Wives.canMarry())) : !!(G.Husbands && G.Husbands.canMarry()); }   // 여성 제독: 남편 자리가 남았나 (js/systems/husbands.js)
+  function GL() { return G.BALL_GENT_LINES || {}; }   // 귀공자에게 쓰는 공용 대사 (js/data/ballgents.js)
   function age(k) { return G.Family.kidAge(k); }
   /** 꼬실 수 있는 아들: 다 자랐고, 신부가 없다 */
   BL.sons = function () {
@@ -68,15 +69,17 @@
   function fill(t, x) {
     var s = S(), o = { P: s.player.name, call: callName() };
     for (var key in x || {}) o[key] = x[key];
-    return String(t).replace(/\{([A-Za-z]+)([^}]*)\}/g, function (all, key, pair) {
+    if (!male()) t = String(t).replace(/아버지/g, '어머니');   // 무도회 글의 「아버지」는 집주인(제독)이다
+    return String(t).replace(/\{([A-Za-z]+)\}\{\1([^}A-Za-z][^}]*)\}/g, '{$1$2}')   // 「{name}{name이/가}」로 적힌 줄에서 이름이 두 번 나오던 것 (2026-11-23)
+      .replace(/\{([A-Za-z]+)([^}]*)\}/g, function (all, key, pair) {
       if (o[key] == null) return all;
       var w = String(o[key]); return pair ? U.j(w, pair) : w;
     });
   }
   BL.fill = fill;
   function ladySp(l, emo) {
-    var A = G.Art, key = 'portraits/maids/' + l.id, pk = 'portraits/princesses/court_princess_' + l.pic;
-    var sp = { name: l.name, portrait: A.withImg(A.npcSpec('ball:' + l.id, 'noble', l.style, 'f'), [key, pk]), half: [key + '_half', pk + '_half'], lang: 3, special: true, emotion: emo || null };
+    var A = G.Art, man = l.g === 'm', key = (man ? 'portraits/mates/' : 'portraits/maids/') + l.id, pk = man ? key : 'portraits/princesses/court_princess_' + l.pic;   // 귀공자(여성 제독의 손님)는 동료 그림 자리
+    var sp = { name: l.name, portrait: A.withImg(A.npcSpec('ball:' + l.id, 'noble', l.style, man ? 'm' : 'f'), [key, pk]), half: [key + '_half', pk + '_half'], lang: 3, special: true, emotion: emo || null };
     var T = G.Scenes.city && G.Scenes.city.B.tavern;
     return T && T.duo ? T.duo(sp, emo || 'warm') : sp;
   }
@@ -119,7 +122,7 @@
   // ---------------------------------------------------------------- 손님
   function free(l) { var r = rec(l.id); return !r.wed; }
   function pickGuests(n) {
-    var pool = G.BALL_LADIES.filter(free), out = [];
+    var pool = (male() ? G.BALL_LADIES : (G.BALL_GENTS || [])).filter(free), out = [];   // 여성 제독의 무도회에는 귀공자들이 온다 (js/data/ballgents.js)
     while (out.length < n && pool.length) {
       var tot = 0, w = pool.map(function (l) { var r = rec(l.id), x = 1 + (r.aff > 0 ? 1.5 : 0) + (r.envy > 0 ? 0.8 : 0); tot += x; return x; });
       var roll = U.rand() * tot, i = 0;
@@ -162,7 +165,7 @@
       if (left > 0) { UI().toast('지난 무도회의 소문이 아직 가라앉지 않았습니다. ' + left + '일 뒤에 다시 열 수 있습니다.', 'note', 4200); return false; }
       var cost = BL.cost();
       if (s.player.gold < cost) { await say('{call}, 무도회를 열려면 금화 ' + U.num(cost) + '닢이 듭니다. 지금은 모자랍니다.', butler()); return false; }
-      if (!(await UI().confirm('무도회를 엽니다. 금화 ' + U.num(cost) + '닢이 들고 하루가 지납니다.<br><small class="muted">다른 나라의 공주와 귀족 아가씨들이 옵니다. 초대하지 않은 손님이 올지도 모릅니다.</small>', '연다', '그만둔다'))) return false;
+      if (!(await UI().confirm('무도회를 엽니다. 금화 ' + U.num(cost) + '닢이 들고 하루가 지납니다.<br><small class="muted">' + (male() ? '다른 나라의 공주와 귀족 아가씨들이 옵니다.' : '다른 나라의 왕자와 귀공자들이 옵니다.') + ' 초대하지 않은 손님이 올지도 모릅니다.</small>', '연다', '그만둔다'))) return false;
       s.player.gold -= cost;
     }
     b.n = (b.n || 0) + 1; b.last = s.day;
@@ -228,11 +231,11 @@
     await sayAll(belle ? Ln.debutBelle : score >= k.belle - 15 ? Ln.debutGood : Ln.debutPlain, {}, x);
     // 시샘하는 아가씨 — 뒷말·고자질을 하는 사람이 먼저
     var jl = ctx.guests.filter(function (l) { return l.scheme === 'gossip' || l.scheme === 'politics'; })[0];
-    if (jl && belle) { await say(Ln.debutEnvy, ladySp(jl, 'angry'), x); rec(jl.id).envy += 1; }
+    if (jl && belle && jl.g !== 'm') { await say(Ln.debutEnvy, ladySp(jl, 'angry'), x); rec(jl.id).envy += 1; }
     kid.debut = { y: S().date.y, belle: belle, score: score };
     G.Family.addBond(kid, 5);
     await say(Ln.kidThanks, kidSp(kid));
-    ctx.out.push(nm + '의 데뷔 — ' + (belle ? '「사교계의 꽃」 (열여덟 살 혼례에서 왕궁의 청혼이 쉬워진다)' : '무사히 마쳤다') + ' · 점수 ' + score + ' · 아버지와의 사이 +5');
+    ctx.out.push(nm + '의 데뷔 — ' + (belle ? '「사교계의 꽃」 (열여덟 살 혼례에서 왕궁의 청혼이 쉬워진다)' : '무사히 마쳤다') + ' · 점수 ' + score + ' · ' + G.R.heroParent() + '와의 사이 +5');
   }
 
   // ---------------------------------------------------------------- ③ 아가씨가 다가온다
@@ -246,7 +249,7 @@
   BL.gainOf = gainOf;
   async function spotlight(ctx) {
     var s = S(), Ln = L(), k = K(), guests = ctx.guests; if (!guests.length) return;
-    var sons = BL.sons(), canP = playerCanWed();
+    var sons = male() ? BL.sons() : [], canP = playerCanWed();   // 귀공자는 제독에게만 다가온다
     if (!canP && !sons.length) return;   // 꼬실 사람이 없다 (여자 제독에 다 자란 아들이 없음 · 배우자 자리가 가득)
     // 호감이 쌓인 아가씨가 먼저 다가온다
     var by = guests.slice().sort(function (a, b) { return rec(b.id).aff - rec(a.id).aff; });
@@ -265,7 +268,7 @@
     opts.push({ label: Ln.stepBack, value: 'back' });
     var v = await UI().ask(fill(Ln.approachAsk, { name: l.short }), opts, {});
     if (S() !== s) return;
-    if (v === 'back' || v == null) { r.aff = Math.max(0, r.aff - 3); await say(Ln.stepBackLine, ladySp(l, 'sad')); return; }
+    if (v === 'back' || v == null) { r.aff = Math.max(0, r.aff - 3); await say(l.g === 'm' ? GL().stepBackLine : Ln.stepBackLine, ladySp(l, 'sad')); return; }
     if (v === 'son') {
       tgt = 's'; son = sons[0]; x.son = son.name;
       await say(l.lines.flirtS, ladySp(l, 'warm'), x);
@@ -308,7 +311,7 @@
     if (v === 'soothe') {
       r.envy = 0; r.aff = Math.min(k.affWed, r.aff + 6);
       if (rv && free(rv)) rec(rv.id).aff = Math.max(0, rec(rv.id).aff - 4);
-      await say(Ln.sootheLine, ladySp(l, 'shy'));
+      await say(l.g === 'm' ? GL().sootheLine : Ln.sootheLine, ladySp(l, 'shy'));
       ctx.out.push(l.short + U.jx(l.short, '을/를') + ' 달랬다 — 호감 +6' + (rv ? ' · ' + rv.short + '의 호감 −4' : ''));
       return;
     }
@@ -411,7 +414,12 @@
   async function wed(l, son, ctx) {
     var s = S(), p = s.player, k = K(), Ln = L(), r = rec(l.id), x = { name: l.short, city: (G.CITY_DATA[l.city] || {}).name || '' };
     var dowry = k.dowry[l.rank] || 0;
-    if (son) {
+    if (l.g === 'm') {   // 여성 제독: 귀공자는 남편이 되어 부하로 배에 오른다 (js/systems/husbands.js H.wedGuest)
+      var hno = G.Husbands.wedGuest(l.id), hord = G.Husbands.count() > 1 ? G.Husbands.ordinal(hno) : '남편';
+      r.wed = 'p';
+      G.State.log(fill(GL().wedLog, { name: l.name, ord: hord }));
+      ctx.out.push(fill(GL().wedOut, { name: l.name }));
+    } else if (son) {
       son.bride = { id: l.id, y: s.date.y };
       r.wed = 's';
       G.State.log(son.name + U.jx(son.name, '이/가') + ' 무도회에서 만난 ' + l.name + U.jx(l.name, '과/와') + ' 혼약했다. 그가 뒤를 이으면 아내로 맞는다.');
@@ -441,7 +449,7 @@
     var rv = l.rival && G.BALL_LADY[l.rival];
     if (rv && free(rv)) {
       rec(rv.id).envy = 0;
-      await say(Ln.rivalWed, {}, { name: rv.short });
+      await say(l.g === 'm' ? GL().rivalWed : Ln.rivalWed, {}, { name: rv.short });
       trust(rv.realm, k.trust.rivalWed, ctx.out);
     }
     if (!son && G.Achieve && G.Achieve.afterWed) { try { await G.Achieve.afterWed(l.id); } catch (e) { console.error(e); } }

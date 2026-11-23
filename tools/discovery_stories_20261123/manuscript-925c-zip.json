@@ -1,0 +1,221 @@
+{
+  "sha256": "9e2f6eba0e558670398fd9507c94a20e515909cb5d0d1c2d3d6bab0aacfabbf7",
+  "entries": [
+    {
+      "name": "discstory/",
+      "bytes": 0
+    },
+    {
+      "name": "discstory/00_배역사전_고르기규칙.md",
+      "bytes": 18662
+    },
+    {
+      "name": "discstory/01_02_정리_1권2권_대응4.md",
+      "bytes": 6646
+    },
+    {
+      "name": "discstory/03권_자연1.md",
+      "bytes": 46195
+    },
+    {
+      "name": "discstory/04권_자연2_바다.md",
+      "bytes": 46232
+    },
+    {
+      "name": "discstory/05권_유적1.md",
+      "bytes": 49909
+    },
+    {
+      "name": "discstory/06권_유적2.md",
+      "bytes": 49959
+    },
+    {
+      "name": "discstory/07권_보물1.md",
+      "bytes": 42923
+    },
+    {
+      "name": "discstory/08권_보물2_예술.md",
+      "bytes": 43947
+    },
+    {
+      "name": "discstory/09권_예술3_전설의땅.md",
+      "bytes": 43612
+    },
+    {
+      "name": "discstory/10권_생물1_뭍과하늘.md",
+      "bytes": 41523
+    },
+    {
+      "name": "discstory/11권_생물2_물.md",
+      "bytes": 42297
+    },
+    {
+      "name": "discstory/12권_전설의짐승.md",
+      "bytes": 43778
+    },
+    {
+      "name": "discstory/13권_사람들.md",
+      "bytes": 45761
+    },
+    {
+      "name": "discstory/14권_교역품_식물.md",
+      "bytes": 45421
+    },
+    {
+      "name": "discstory/15_보충_관계인물_라이벌동료.md",
+      "bytes": 21892
+    },
+    {
+      "name": "discstory/16_보충_부관_314.md",
+      "bytes": 59302
+    },
+    {
+      "name": "discstory/17_보충_가족_314.md",
+      "bytes": 42862
+    },
+    {
+      "name": "discstory/18_보충_모자란배역_당찬.md",
+      "bytes": 7075
+    },
+    {
+      "name": "discstory/19권_유적3_유럽중근동.md",
+      "bytes": 44522
+    },
+    {
+      "name": "discstory/20권_유적4_아시아.md",
+      "bytes": 46276
+    },
+    {
+      "name": "discstory/21권_유적5_아메리카아프리카오세아니아.md",
+      "bytes": 44529
+    },
+    {
+      "name": "discstory/22권_자연3.md",
+      "bytes": 46353
+    },
+    {
+      "name": "discstory/23권_바다와길목.md",
+      "bytes": 52790
+    },
+    {
+      "name": "discstory/24권_보물4.md",
+      "bytes": 50322
+    },
+    {
+      "name": "discstory/25권_과학과지도.md",
+      "bytes": 53306
+    },
+    {
+      "name": "discstory/26권_생물3.md",
+      "bytes": 46951
+    },
+    {
+      "name": "discstory/27권_생물4.md",
+      "bytes": 47592
+    },
+    {
+      "name": "discstory/28권_전설2.md",
+      "bytes": 53492
+    },
+    {
+      "name": "discstory/29권_사람들2.md",
+      "bytes": 53307
+    },
+    {
+      "name": "discstory/30권_교역품2.md",
+      "bytes": 53613
+    },
+    {
+      "name": "discstory/31_보충_당찬남장_301-600.md",
+      "bytes": 11883
+    },
+    {
+      "name": "discstory/32권_지리상의발견_합창.md",
+      "bytes": 62349
+    },
+    {
+      "name": "discstory/33_보충_합창_기존지리발견.md",
+      "bytes": 33021
+    },
+    {
+      "name": "discstory/34권_자연4.md",
+      "bytes": 46334
+    },
+    {
+      "name": "discstory/35권_바다와섬2.md",
+      "bytes": 49535
+    },
+    {
+      "name": "discstory/36권_유적6_유럽.md",
+      "bytes": 50161
+    },
+    {
+      "name": "discstory/37권_유적7_아시아아프리카아메리카.md",
+      "bytes": 50282
+    },
+    {
+      "name": "discstory/38권_보물5.md",
+      "bytes": 50716
+    },
+    {
+      "name": "discstory/39권_책과그림.md",
+      "bytes": 53691
+    },
+    {
+      "name": "discstory/40권_생물5.md",
+      "bytes": 46373
+    },
+    {
+      "name": "discstory/41권_생물6.md",
+      "bytes": 47598
+    },
+    {
+      "name": "discstory/42권_전설3.md",
+      "bytes": 50392
+    },
+    {
+      "name": "discstory/43권_사람들3.md",
+      "bytes": 51462
+    },
+    {
+      "name": "discstory/44권_교역품3.md",
+      "bytes": 52844
+    },
+    {
+      "name": "discstory/45권_지리상의발견2_합창.md",
+      "bytes": 58018
+    },
+    {
+      "name": "discstory/46권_다시옴_합창1.md",
+      "bytes": 51289
+    },
+    {
+      "name": "discstory/47권_다시옴_합창2.md",
+      "bytes": 51689
+    },
+    {
+      "name": "discstory/48_보충_남편_135.md",
+      "bytes": 21772
+    },
+    {
+      "name": "discstory/96_사건인물_텐징_카이타우_아비시니아수도사.md",
+      "bytes": 7443
+    },
+    {
+      "name": "discstory/98_다음목록_626-925.md",
+      "bytes": 8573
+    },
+    {
+      "name": "discstory/99_남은목록_351-600.md",
+      "bytes": 9031
+    },
+    {
+      "name": "PLUS_ULTRA_발견물_이야기_시나리오_1권.md",
+      "bytes": 46753
+    },
+    {
+      "name": "PLUS_ULTRA_발견물_이야기_시나리오_2권_유적.md",
+      "bytes": 47868
+    }
+  ]
+}

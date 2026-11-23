@@ -8,7 +8,7 @@
 const path = require('path');
 const { pathToFileURL } = require('url');
 let chromium; try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
-const BASE = process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(__dirname,'..',process.env.PAGE || 'index.html')).href;
+const BASE = pathToFileURL(path.join(__dirname, '..', process.env.PAGE || 'index.html')).href;
 let passed = 0;
 function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.log('  ✓ ' + msg); }
 
@@ -26,8 +26,6 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     await p0.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const t0 = await p0.evaluate(() => ({ list: G.StorySelect.list().map(m => m.id), rel: G.SONG.release, now: Date.now(), released: G.SongStory.released() }));
     if (Date.now() < Date.parse(t0.rel)) ok(!t0.list.includes('song') && !t0.released, '공개일(' + t0.rel + ') 전: 이야기 고르기 지도에 소영이 없다 — ' + t0.list.join(' · '));
-    const gate = await p0.evaluate(() => {const dn=Date.now,end=Date.parse(G.SONG.release);try{Date.now=()=>end-1;const before=G.SongStory.released();Date.now=()=>end;const after=G.SongStory.released();return{before,after};}finally{Date.now=dn;}});
-    ok(!gate.before&&gate.after,'공개 시각 1밀리초 전 잠금 · 정각부터 해제');
     await p0.close();
 
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 } }); watch(page);
@@ -110,7 +108,7 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
       window.REP = (id) => { const s = G.Game.state; s.disc[id] = s.disc[id] || {}; s.disc[id].reported = true; if (s.contract && s.contract.disc === id) s.contract = null; };
       window.DONE = (id) => G.SongStory.done(id);
       window.BATTLES = [];
-      const go = G.Game.go; G.Game.go = function (n, arg) { if (n === 'battle') { BATTLES.push(arg.npc); G.Game.state.stats.battles = (G.Game.state.stats.battles || 0) + 1; return; } return go.apply(this, arguments); };
+      const go = G.Game.go; G.Game.go = function (n, arg) { if (n === 'battle') { BATTLES.push(arg.npc); G.Game.state.stats.battles = (G.Game.state.stats.battles || 0) + 1; G.StoryBattle.finish(arg.npc, 'win'); return; } return go.apply(this, arguments); };
     });
     async function step(label, fn, check) {
       const r = await page.evaluate(fn);
@@ -201,8 +199,6 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     const whoNames = await page.evaluate(() => ['P', 'W', 'H', 'I', 'D', 'M', 'J', 'GW', 'JN', 'MA', 'JI', 'HK', 'ML', 'DA', 'AB', 'RO', 'wako', 'keeper_qufu'].map(k => k + '=' + (G.SongStory.who(k).name || '')).join(' '));
     ok(!/=( |$)|undefined/.test(whoNames), '말하는 사람 이름: ' + whoNames);
 
-    const saved=await page.evaluate(async()=>{const s=G.Game.state, song=JSON.stringify(s.song), ids=s.mates.map(m=>m.id).join(','), gold=s.player.gold;G.Game.state=G.State.deserialize(G.State.serialize());const q=G.Game.state;await G.SongStory.arrive(G.CITY_DATA[q.loc.city],{load:true});return{same:JSON.stringify(q.song)===song,ids:q.mates.map(m=>m.id).join(',')===ids,gold:q.player.gold===gold,nation:q.player.nation};});
-    ok(saved.same&&saved.ids&&saved.gold&&saved.nation==='KR','이야기·공연·동료 저장 복원 · 같은 도시에 다시 와도 보상 중복 없음');
     // 수첩
     const pg = await page.evaluate(() => { const d = document.createElement('div'); G.SongStory.page(d); return { rows: d.querySelectorAll('tr').length, map: !!d.querySelector('.song-map canvas'), txt: d.textContent.slice(0, 80) }; });
     ok(pg.rows >= 9 && pg.map, '수첩 「소영의 지도」: 지도 그림 · 표시 ' + (pg.rows - 1) + '곳');

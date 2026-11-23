@@ -8,7 +8,6 @@ const ROOT=path.resolve(__dirname,'..');
  try{
   const p=await browser.newPage({viewport:{width:960,height:540}}),errors=[];
   p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-  await p.route(/fonts\.(googleapis|gstatic)\.com/,r=>r.fulfill({contentType:'text/css',body:''}));
   const base=process.env.WEB_BASE||pathToFileURL(ROOT+path.sep).href;
   await p.goto(new URL('index.html',base).href,{waitUntil:'domcontentloaded',timeout:120000});
   await p.waitForFunction(()=>window.G&&G.Game&&G.Game.sceneName==='title'&&!G.Scenes.title.bootPending,null,{timeout:120000});

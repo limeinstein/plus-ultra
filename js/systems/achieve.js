@@ -52,10 +52,10 @@
   }
   AC.recordMarriage = function (id) {
     var s = S(), p = s && s.player;
-    if (!p || !id || !(p.wife === id || (p.wives2 || []).some(function (w) { return w && w.id === id; }))) return;
+    if (!p || !id || !(p.wife === id || (p.wives2 || []).some(function (w) { return w && w.id === id; }) || (G.Husbands && G.Husbands.is(id)))) return;
     (p.marriageDates || (p.marriageDates = {}))[id] = U.dateNum(s.date);
   };
-  AC.marriageProgress = function (kind) {
+  AC.marriageProgress = function (kind, sex) {   // sex 'f' = 여성 제독의 업적 (남편으로 센다)
     var s = S(), p = s.player, k = G.BALANCE.marriageAchievements, ids = [], dates = [], eligible = 0;
     function add(id, w) {
       if (!id || ids.indexOf(id) >= 0) return;
@@ -67,9 +67,10 @@
       dates.push(d);
       var age = d.y - p.born.y - ((d.m < p.born.m || (d.m === p.born.m && d.d < p.born.d)) ? 1 : 0);
       var def = (G.MATE || {})[id] || (G.MAID || {})[id];
-      if ((!def || def.g !== 'm') && (kind === 'young' ? age >= k.youngMin && age <= k.youngMax : age >= k.elderMin)) eligible++;
+      if ((!def || (sex === 'f' ? def.g !== 'f' : def.g !== 'm')) && (kind === 'young' ? age >= k.youngMin && age <= k.youngMax : age >= k.elderMin)) eligible++;
     }
-    add(p.wife); (p.wives2 || []).forEach(function (w) { if (w) add(w.id, w); });
+    if (sex === 'f') (G.Husbands ? G.Husbands.list() : []).forEach(function (h) { add(h.id, h); });   // 팜므파탈·측천무후
+    else { add(p.wife); (p.wives2 || []).forEach(function (w) { if (w) add(w.id, w); }); }
     var cap = G.Wives ? G.Wives.maxSpouses() : G.BALANCE.wives.maxSpouses, n = Math.max(cap, ids.length), inTime = false;
     if (ids.length >= cap && dates.length === ids.length) {
       dates.sort(function (a, b) { return U.dateNum(a) - U.dateNum(b); });
@@ -77,8 +78,8 @@
       inTime = U.dateNum(last) <= U.dateNum({ y: y, m: first.m, d: Math.min(first.d, U.daysInMonth(y, first.m)) });
     }
     return [
-      { label: '남성 제독', count: p.g !== 'f' && !(p.heir && p.heir.sex === 'f') ? 1 : 0, n: 1 },
-      { label: '현재 아내 (본처 포함)', count: ids.length, n: n },
+      { label: sex === 'f' ? '여성 제독' : '남성 제독', count: G.R.heroFemale(p) === (sex === 'f') ? 1 : 0, n: 1 },
+      { label: sex === 'f' ? '현재 남편' : '현재 아내 (본처 포함)', count: ids.length, n: n },
       { label: '혼인 당시 ' + (kind === 'young' ? '만 ' + k.youngMin + '~' + k.youngMax + '세' : '만 ' + k.elderMin + '세 이상') + ' · 날짜 확인', count: eligible, n: n },
       { label: '첫 혼인일부터 ' + k.years + '년 이내', count: inTime ? 1 : 0, n: 1 }
     ];
@@ -92,11 +93,11 @@
     (p.wives2 || []).forEach(function (w) { if (w && w.id) wives[w.id] = true; });
     (p.kids || []).concat(p.siblings || []).forEach(function (k) { if (k && k.mateId) kin[k.mateId] = true; });
     function isWife(id) { var d = (G.MATE || {})[id] || (G.MAID || {})[id]; return !!wives[id] && (!d || d.g !== 'm'); }
-    function add(id, family, wife) { if (!used[id]) { used[id] = true; rows.push({ id: id, family: !!family, wife: !!wife }); } }
+    function add(id, family, wife) { if (!used[id]) { used[id] = true; rows.push({ id: id, family: !!family, wife: !!wife, husband: !!(G.Husbands && G.Husbands.is(id)) }); } }
     (s.mates || []).forEach(function (m) {
       if (!m || !m.id) { add('missing:' + rows.length, false, false); return; }
       var d = (G.MATE || {})[m.id];
-      add(m.id, wives[m.id] || kin[m.id] || !!(d && (d.kin === 'cousin' || d.kin === 'uncle')), isWife(m.id));
+      add(m.id, wives[m.id] || kin[m.id] || !!(G.Husbands && G.Husbands.is(m.id)) || !!(d && (d.kin === 'cousin' || d.kin === 'uncle')), isWife(m.id));
     });
     if (p.wife && p.wifeAboard) add(p.wife, true, isWife(p.wife));
     (p.wives2 || []).forEach(function (w) {
@@ -114,6 +115,7 @@
     v.lastDay = s.day;
     if (!partyAll(rows, 'family')) v.familyDays = 0;
     if (partyAll(rows, 'wife')) v.wivesOnly = true;
+    if (partyAll(rows, 'husband')) v.husbandsOnly = true;
     return AC.onVoyageAwards();
   };
   AC.trackVoyageDay = function () {
@@ -126,6 +128,7 @@
       v.familyBest = Math.max(v.familyBest || 0, v.familyDays);
     }
     if (sea && partyAll(rows, 'wife')) v.wivesOnly = true;
+    if (sea && partyAll(rows, 'husband')) v.husbandsOnly = true;
     v.lastDay = s.day;
   };
   AC.onCircumReturn = function (c) {
@@ -180,10 +183,18 @@
     return got;
   };
 
-  AC.list = function () { return G.ACHIEVEMENTS || []; };
+  /** 지금 제독이 딸 수 있는 업적 — sex('m'|'f')가 적힌 업적은 그 성별의 제독에게만 보이고 셈한다 (2026-11-23).
+      여성 제독의 목록에는 카사노바·의자왕·사랑은 불가능의 영역·Happily Ever After·Dream Come True가 없고,
+      대신 팜므파탈·측천무후·남자는 배 여자는 항구가 있다. 게임 밖(도감)에서는 모두 */
+  AC.list = function () {
+    var all = G.ACHIEVEMENTS || [], s = G.Game && G.Game.state;
+    if (!s || !s.player || !G.R || !G.R.heroSex) return all;
+    var sex = G.R.heroSex(s.player);
+    return all.filter(function (a) { return !a.sex || a.sex === sex; });
+  };
   /** 재산 = 소지금 + 금고 예금 (재산 업적 goldRule) */
   AC.wealth = function () { var p = (S() && S().player) || {}; return Math.max(0, (p.gold || 0) + (p.bank || 0)); };
-  AC.get = function (id) { return AC.list().filter(function (a) { return a.id === id; })[0] || null; };
+  AC.get = function (id) { return (G.ACHIEVEMENTS || []).filter(function (a) { return a.id === id; })[0] || null; };   // 지난 대에 이룬 다른 성별의 업적도 찾는다
   AC.done = function (id) { return !!store()[id]; };
   /** 현재 자료에서 종류별 목록을 만든다. 경쟁자의 발견·시대·단서 유무로 분모를 줄이지 않는다. */
   AC.collectionPool = function (type) {
@@ -230,10 +241,11 @@
       rows.push({ label: '현재 동료 중 아프리카 흑인 항해사', count: eligible.length, n: Math.max(G.BALANCE.liberatorAchievement.minCrew, current.length) });
     }
     if (a.wed) { var we = wedEver(), wd = a.wed.filter(function (id) { return !!we[id]; }); rows.push({ crew: true, wed: true, ids: a.wed, got: wd, count: wd.length, n: a.n || a.wed.length }); }
-    if (a.marriageRule) rows = rows.concat(AC.marriageProgress(a.marriageRule));
+    if (a.marriageRule) rows = rows.concat(AC.marriageProgress(a.marriageRule, a.sex));
     if (a.voyageRule) {
       var v = voyageRecord(), vk = G.BALANCE.voyageAchievements;
       if (a.voyageRule === 'family') rows.push({ label: '가족만 탄 편성의 연속 항해일 (기항일 제외)', count: v.familyBest || 0, n: vk.familyDays });
+      else if (a.voyageRule === 'husbands') rows.push({ label: '현재 남편만 동승한 배로 실제 출항·항해', count: v.husbandsOnly ? 1 : 0, n: 1 });
       else if (a.voyageRule === 'wives') rows.push({ label: '현재 아내만 동승한 배로 실제 출항·항해', count: v.wivesOnly ? 1 : 0, n: 1 });
       else if (a.voyageRule === 'circ') rows.push({ label: '출항일이 기록된 ' + vk.circDays + '일 이내 세계일주·모항 귀환', count: v.circDays > 0 && v.circDays <= vk.circDays ? 1 : 0, n: 1 });
     }

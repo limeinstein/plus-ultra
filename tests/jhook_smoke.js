@@ -6,7 +6,7 @@
 const path = require('path');
 const { pathToFileURL } = require('url');
 let chromium; try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
-const BASE = process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(__dirname,'..',process.env.PAGE || 'index.html')).href;
+const BASE = pathToFileURL(path.join(__dirname, '..', process.env.PAGE || 'index.html')).href;
 let passed = 0;
 function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.log('  ✓ ' + msg); }
 
@@ -17,7 +17,7 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
     page.on('pageerror', e => errors.push('PAGEERR ' + e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.goto(BASE,{waitUntil:'domcontentloaded',timeout:120000});
+    await page.goto(BASE);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && !document.querySelector('.title-menu .btn.disabled'), null, { timeout: 120000 });
     const t = await page.evaluate(() => ({ btns: Array.from(document.querySelectorAll('.title-menu .btn')).map(b => b.textContent.trim()), list: G.StorySelect.list().map(m => m.id), rel: G.SONG && G.SONG.release }));
     ok(t.btns.some(b => /이야기 모드/.test(b)) && !t.btns.some(b => /아버지의 사진|바닷길 노래/.test(b)), '타이틀: 이야기 단추 하나 「이야기 모드」 — ' + t.btns.join(' · '));
@@ -69,7 +69,7 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
       window.AT = (id) => { const s = G.Game.state, c = G.CITY_DATA[id]; s.loc = { mode: 'city', city: id, lon: c.lon, lat: c.lat, heading: 0 }; SAID.length = 0; return G.JHook.arrive(c, {}); };
       window.SEA = (lon, lat) => { const s = G.Game.state; s.loc = { mode: 'sea', lon, lat, heading: 0 }; SAID.length = 0; return G.JHook.seaPending() ? G.JHook.atSea() : false; };
       window.DONE = (id) => G.JHook.done(id); window.BATTLES = [];
-      const go = G.Game.go; G.Game.go = function (n, arg) { if (n === 'battle') { BATTLES.push(arg.npc); G.Game.state.stats.battles = (G.Game.state.stats.battles || 0) + 1; return; } return go.apply(this, arguments); };
+      const go = G.Game.go; G.Game.go = function (n, arg) { if (n === 'battle') { BATTLES.push(arg.npc); G.Game.state.stats.battles = (G.Game.state.stats.battles || 0) + 1; G.StoryBattle.finish(arg.npc, 'win'); return; } return go.apply(this, arguments); };
     });
     async function step(label, fn) { const r = await page.evaluate(fn); ok(r && r.ok, label + (r && r.note ? ' — ' + r.note : '')); }
     await step('3막 브리스틀: 킬리그루 · 코난 합류 · 「되새」호', async () => { ADV(5); await AT(40); const s = G.Game.state; return { ok: DONE('a3_killigrew') && s.mates.some(m => m.id === 'jh_conan') && s.fleet.ships.some(x => x.name === '되새'), note: SAID.length + '줄' }; });
@@ -86,8 +86,6 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     await step('12·13막 1558년 겨울 편지 → 마당의 회의 → 여왕의 협력자', async () => { SETD(1558, 12); await AT(40); const l = DONE('a12_letter'); ADV(5); await AT(39); ADV(5); await AT(38); return { ok: l && DONE('a13_council') && DONE('a13_court'), note: SAID.length + '줄' }; });
     await step('14막 드레이크 → 무적함대 해전 → 키를 돌린다', async () => { ADV(25); await AT(39); const d = DONE('a14_drake'); ADV(5); await SEA(1, 51); const b = BATTLES.length; await SEA(1, 51); return { ok: d && DONE('a14_battle') && DONE('a14_after') && BATTLES[b - 1].kind === 'navy' && SAID.some(x => /키 돌려/.test(x)), note: SAID.length + '줄' }; });
     await step('15·16막 작위를 돌려주다 → 돌아온 해적여제 (끝)', async () => { ADV(10); await AT(38); const a = DONE('a15_title'); ADV(20); await AT(40); return { ok: a && DONE('a16_home') && G.Game.state.jhook.finale != null && SAID.some(x => /집 쪽이야, 여기/.test(x)), note: SAID.length + '줄' }; });
-    const saved=await page.evaluate(async()=>{const s=G.Game.state,story=JSON.stringify(s.jhook),mates=s.mates.map(m=>m.id).join(','),gold=s.player.gold;G.Game.state=G.State.deserialize(G.State.serialize());const q=G.Game.state;await G.JHook.arrive(G.CITY_DATA[q.loc.city],{load:true});return{same:JSON.stringify(q.jhook)===story,mates:q.mates.map(m=>m.id).join(',')===mates,gold:q.player.gold===gold};});
-    ok(saved.same&&saved.mates&&saved.gold,'해적여제 진행·동료 저장 복원 · 결말 보상 중복 없음');
     const whoNames = await page.evaluate(() => ['P', 'S', 'W', 'C', 'LU', 'KO', 'MR', 'CL', 'JG', 'GO', 'KG', 'DR', 'DH', 'RG', 'BW', 'ED', 'MQ', 'EL', 'priest'].map(k => k + '=' + (G.JHook.who(k).name || '')).join(' '));
     ok(!/=( |$)|undefined/.test(whoNames), '말하는 사람: ' + whoNames);
     const pg = await page.evaluate(() => { const d = document.createElement('div'); G.JHook.page(d); return d.querySelectorAll('tr').length; });

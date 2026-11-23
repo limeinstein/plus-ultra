@@ -4,6 +4,12 @@
   'use strict';
   var A = G.Art;
 
+  A.validSailColor = function (v) { return typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v); };
+  A.sailColorName = function (v) {
+    if (!A.validSailColor(v)) return '원래 색';
+    var p = G.FX.sailColors.filter(function (x) { return x.color && x.color.toLowerCase() === v.toLowerCase(); })[0];
+    return p ? p.name : '직접 고른 색';
+  };
   /** 배 종류에 맞는 그림 설정 (over로 덮어쓴다) */
   A.shipLook = function (typeId, over) {
     var t = G.SHIP[typeId] || {}, c = t.cult || 'eu', h = t.hull || 'west';
@@ -16,7 +22,9 @@
     if (h === 'raft') { k.hull = '#a88a5a'; k.sail = '#e3d4a8'; k.flag = null; }
     if (h === 'outrigger') { k.hull = '#5a3a22'; k.sail = '#cdb27a'; k.flag = '#c9a030'; }
     if (h === 'galley') k.hull = '#4a2e1c';
-    return Object.assign(k, over || {});
+    Object.assign(k, over || {});
+    if (A.validSailColor(k.sailColor)) { k.sail = k.sailColor; k.sailTint = k.sailColor; }
+    return k;
   };
 
   // 이름난 해적·현상수배범·소굴 두목 모두 같은 경로로 도색한다.

@@ -694,7 +694,11 @@
       if (m.loyal <= 0) { s.leaving = s.leaving || []; if (s.leaving.indexOf(m.id) < 0) s.leaving.push(m.id); }
     });
     if (paid) { var w = CB.wageWarning(); if (w) out.push({ icon: 'coin', text: (R().purser() ? '경리' : '부관') + ': 동료·선원 급료가 한 달 ' + U.num(w.wage) + '닢 — 소지금으로 ' + Math.max(0, w.months) + '달 버틴다. 예금은 금고에서 미리 찾아야 한다.' }); }
-    var low = s.mates.filter(function (m) { return m.loyal != null && m.loyal > 0 && m.loyal <= (b.low == null ? 40 : b.low); });
+    // 충성이 낮아 건성으로 일한다는 말은 사람마다 한 번만 — 충성이 다시 오르면 잊는다 (2026-11-23: 급료가 밀리면 달마다 뜨던 것)
+    var lowLim = b.low == null ? 40 : b.low;
+    s.mates.forEach(function (m) { if (m.lowNote && (m.loyal == null || m.loyal > lowLim)) delete m.lowNote; });
+    var low = s.mates.filter(function (m) { return m.loyal != null && m.loyal > 0 && m.loyal <= lowLim && !m.lowNote; });
+    low.forEach(function (m) { m.lowNote = 1; });
     if (low.length) out.push({ icon: 'people', text: low.map(function (m) { return G.MATE[m.id].name; }).join('·') + '의 충성이 낮아 일을 건성으로 한다.' });
     return out;
   };

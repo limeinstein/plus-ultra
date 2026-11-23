@@ -109,7 +109,7 @@
   T.glass = function () { var c = S().fleet.cargo || {}; return c.glass ? c.glass.q || 0 : 0; };
   function takeGlass() { var c = S().fleet.cargo; if (!c.glass) return false; c.glass.q -= 1; if (c.glass.q <= 0) delete c.glass; return true; }
   T.cinderellaOk = function () { return R.skillRead('craft') >= 1 && T.glass() >= 1; };
-  T.snowOk = function () { var m = S().mates; return m.length === 6 && m.every(function (x) { var d = G.MATE[x.id]; return d && d.g !== 'f'; }); };
+  T.snowOk = function () { var m = S().mates, she = G.R.heroFemale(); return m.length === 6 && m.every(function (x) { var d = G.MATE[x.id]; return d && (d.g === 'f') === she; }); };   // 여성 제독이면 여자 부하만 여섯 (제독까지 여자 일곱 — 2026-11-23)
   T.beautyOk = function () { return R.skillRead('med') >= 1 && DRAGONS.some(function (id) { return G.Disc.foundByMe(id); }); };
 
   // ---------------------------------------------------------------- 들이기 (품삯은 이야기 동료 규칙 G.taleWage — 특기가 많은 신데렐라·백설공주·인어공주는 받고, 잠자는 숲속의 공주는 받지 않는다)
@@ -179,7 +179,7 @@
     G.Fame.add('bt', 2);
     await say(id, '고맙습니다… 정말로요.', 'happy');
     var n = S().mates.length;
-    await narrate('그녀는 일행을 하나하나 세어 본다. 제독, 그리고 남자 부하 ' + n + '명.');
+    await narrate('그녀는 일행을 하나하나 세어 본다. 제독, 그리고 ' + (G.R.heroFemale() ? '여자' : '남자') + ' 부하 ' + n + '명.');
     await say(id, '하나, 둘, 셋… 일곱. 일곱 사람이네요! 숲속 오두막의 아저씨들도 일곱이었어요.\f저, 요리도 하고 빨래도 하고, 아픈 사람도 돌볼 줄 알아요. 품삯은 일한 만큼만 주세요. 그보다 왕비님의 거울이 볼 수 없는 먼 바다로— 저를 데려가 주세요.', 'happy');
     if (!(await ask('백설공주가 항해사로 함께 가겠다고 한다. (' + G.wageNote(id) + ')', '배에 태운다', '안전한 마을까지만 데려다준다'))) {
       await say(id, '…네. 그래도 구해 주신 은혜는 잊지 않을게요.'); cool(id); return false;
@@ -271,7 +271,8 @@
     if (!c) return;
     var o = owner(c);
     if (o === '프랑스' && T.ready('cinderella')) await hint('cin', '요즘 이 근처 숲에 재투성이 아가씨가 깨진 유리 구두를 들고 앉아 운다더군. 유리를 다룰 줄 아는 사람을 찾는다나. 유리야 시장에서 팔지만, 그걸 구두로 만드는 솜씨가 문제지.');
-    else if (o === '프랑스' && T.ready('snow_white')) await hint('snow', '숲에 들어갈 거면 조심하게. 왕비의 사냥꾼이 웬 아가씨를 쫓아다닌다더군. 그 아가씨는 일곱 사내가 사는 오두막을 찾는다던데… 사내 일곱이 함께 다니는 무리라면 반가워할지도.');
+    else if (o === '프랑스' && T.ready('snow_white')) await hint('snow', G.R.heroFemale() ? '숲에 들어갈 거면 조심하게. 왕비의 사냥꾼이 웬 아가씨를 쫓아다닌다더군. 사내라면 질겁하고 달아난다던데… 여자 일곱이 함께 다니는 무리라면 마음을 놓을지도.'
+      : '숲에 들어갈 거면 조심하게. 왕비의 사냥꾼이 웬 아가씨를 쫓아다닌다더군. 그 아가씨는 일곱 사내가 사는 오두막을 찾는다던데… 사내 일곱이 함께 다니는 무리라면 반가워할지도.');
     if (GERMAN[o] && T.ready('sleeping_beauty')) await hint('beauty', '이 고장 숲 깊은 곳에 가시덤불로 뒤덮인 탑이 있다네. 용을 본 사람 앞에서만 덤불이 길을 연다는 옛말이 있지. 그 안에 잠든 공주가 다쳐 있다는데, 의원 없이 가 봐야 소용없다더군.');
     if (o === '덴마크' && T.ready('little_mermaid')) await hint('mermaid', '섬에서 사냥하다 보면 물가에서 걸음마 하듯 걷는 아가씨를 본다는 사람들이 있어. 말은 한마디도 못 해서 손짓 발짓으로만 뜻을 전하는데, 바다 일은 늙은 뱃사람보다 잘 안다더군.');
   };

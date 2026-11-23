@@ -11,6 +11,7 @@
 
   W.daily = function () {
     var s = S(), out = [];
+    if (s.player && (s.player.gold || 0) <= 0 && !s.player.innRelief) s.player.innRelief = 1;   // 소지금이 바닥났다 — 여관 허드렛일 궁핍 구제 (js/city/misc.js INN.relief)
     if (G.VoyagePlans) out = out.concat(G.VoyagePlans.daily());
     if (s.pendingNotice && s.pendingNotice.length) { s.pendingNotice.forEach(function (t) { out.push({ icon: 'coin', text: t }); }); delete s.pendingNotice; }   // 불러올 때 생긴 안내 (배값 차액 등 — R.refundShipOverprice)
     // history
@@ -91,7 +92,7 @@
         s.flags.aged40 = 1;
         var fk = G.Img && G.Img.pick(G.Img.chain.heroPortrait(s.player));
         out.push({ icon: fk ? { src: G.Img.src(fk), icon: 'star' } : 'star', text: '오늘은 ' + R.fullName() + '의 ' + age + '번째 생일이다. 거울 속 얼굴에 어느새 세월이 내려앉았다.', birthday: true, aged: true });
-        G.State.log(R.fullName() + '이(가) ' + age + '세가 되었다.');
+        G.State.log(R.fullName() + U.j(R.fullName(), '이/가').slice(R.fullName().length) + ' ' + age + '세가 되었다.');
       } else out.push({ icon: 'star', text: '오늘은 ' + R.fullName() + '의 ' + age + '번째 생일이다.', birthday: true });
     }
     // 수명(최대 80세)과 생일 선물 (js/systems/lifespan.js — 창은 main.js loop에서 G.Life.tick)
@@ -111,6 +112,7 @@
     if (G.Treaty) out = out.concat(G.Treaty.daily());   // 토르데시야스·사라고사 조약의 날, 바다에서 경계선 넘기 (js/systems/treaty.js)   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)   // 유럽 시장의 소식·세상의 유행 (js/systems/era.js)
     if (G.Fad) out = out.concat(G.Fad.daily());             // 끝난 유행을 거둔다
     if (G.Family && G.Family.daily) out = out.concat(G.Family.daily());
+    if (G.Mother) out = out.concat(G.Mother.daily());       // 여성 제독의 임신·해산 — 창은 main.js loop에서 G.Mother.tick (js/systems/motherhood.js)
     if (G.KidCrew) out = out.concat(G.KidCrew.daily());     // 어른이 된 자식 항해사 — 배운 것 옮겨 적기 · 견습이 어른이 되면 정식 항해사 (js/systems/kidcrew.js)
     if (G.HomeLife) out = out.concat(G.HomeLife.daily());   // 먼 바다에서 추억의 물건을 꺼내 본다
     if (G.Escort) out = out.concat(G.Escort.daily());       // 상선 호위의 기한
@@ -135,7 +137,7 @@
     if (G.MateLeave) out = out.concat(G.MateLeave.newMonth());               // 오래 함께한 부하와의 이별 (js/systems/mateleave.js)
     // wages for companions — 같은 부하가 두 줄이면 먼저 하나로 (두 번 치르지 않게, R.dedupeMates)
     if (R && R.dedupeMates) R.dedupeMates();
-    var wage = 0, paid = true, laidUp = !!s.regency;   // 어린 맏아들을 기다리는 동안(js/systems/family.js F.regency): 함대는 닻을 내리고 급료·선실 충성은 멈춘다
+    var wage = 0, paid = true, unpaidCrew = false, laidUp = !!s.regency;   // 어린 맏아들을 기다리는 동안(js/systems/family.js F.regency): 함대는 닻을 내리고 급료·선실 충성은 멈춘다
     if (!laidUp) s.mates.forEach(function (m) { wage += R.mateWage(m.id); });
     if (G.Cabins && !laidUp) wage = G.Cabins.wages();        // 회계실이 있으면 조금 덜 든다
     if (wage > 0) {
@@ -144,7 +146,6 @@
         // unpaid: loyalty drops
         paid = false;
         s.mates.forEach(function (m) { R.setLoyal(m, (m.loyal == null ? 70 : m.loyal) - 20); });
-        out.push({ icon: 'coin', text: '동료들의 급료(' + U.num(wage) + '닢)를 지불하지 못했다! 불만이 쌓이고 있다.' });
         // 충성이 바닥난 사람은 곧 떠나겠다고 나선다 — 붙잡을 수 있다 (G.Cabins.monthly → farewell)
       }
     }
@@ -157,9 +158,13 @@
         s.player.gold = 0;
         s.fleet.discipline = Math.max(0, (s.fleet.discipline || 0) - (CWB.unpaidDiscipline || 15));
         s.fleet.fatigue = Math.min(100, (s.fleet.fatigue || 0) + (CWB.unpaidFatigue || 8));
-        out.push({ icon: 'coin', text: '선원들의 급료(' + U.num(cw) + '닢)를 다 치르지 못했다! 갑판에 불평이 번진다.' });
+        unpaidCrew = true;
       }
     }
+    // 급료를 못 치른 달: 알림은 한 번만 — 다시 다 치를 때까지 같은 말을 달마다 띄우지 않는다 (2026-11-23)
+    if (!paid || unpaidCrew) {
+      if (!s.flags.wageUnpaid) { s.flags.wageUnpaid = 1; out.push({ icon: 'coin', text: '소지금이 바닥나 급료를 치르지 못했다! 급료가 밀리는 동안 동료들의 충성이 달마다 떨어지고, 선원들 사이에 불평이 번진다.' }); }
+    } else if (s.flags.wageUnpaid) delete s.flags.wageUnpaid;
     if (G.Cabins && !laidUp) out = out.concat(G.Cabins.monthly(paid));
     // 항해사들이 이웃 도시로 옮기거나 머문다
     if (G.MateMove) G.MateMove.month();
@@ -190,7 +195,7 @@
     });
     // 늦게 나온 책의 필사본이 한꺼번에 돌기 시작하는 해 — 책마다 알리면 너무 많아 한 줄로 (js/data/clues.js G.bookEarlyList)
     var eb = G.bookEarlyList ? G.bookEarlyList() : [], ek = (G.BALANCE && G.BALANCE.bookEarly) || {};
-    if (eb.length && s.date.y === ek.from) out.push({ icon: 'book', history: true, text: '먼 땅의 옛 유적과 짐승을 적은 초고 필사본 ' + eb.length + '권이 학자들 사이에 돌기 시작했다. 여러 도서관에 들어왔다고 한다 (예: ' + eb.slice(0, 2).map(function (b) { return b.title; }).join(', ') + ').' });
+    if (eb.length && s.date.y === ek.from) out.push({ icon: 'book', history: true, text: '먼 땅의 옛 유적과 짐승을 적은 지은이 모를 초고 필사본 ' + eb.length + '권이 학자들 사이에 돌기 시작했다. 여러 도서관에 들어왔다고 한다.' });
     // 새로 세워진 도시·사라진 마을 (cities.js 의 founded / until): 개척 도시가 역사 연도에 맞춰 열린다
     var born = [], gone = [];
     G.CITY_DATA.forEach(function (c) {

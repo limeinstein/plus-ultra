@@ -126,7 +126,7 @@
     var task = CT.task && CT.task(), envoy = task && (task.kind === 'letter' || task.kind === 'envoy') && !task.stage && G.COURT.bySponsor && G.COURT.realms[G.COURT.bySponsor[task.to]] === realm ? task : null;
     var rank = CT.rank(realm), t = rank > 0 ? CT.title(realm) : null;
     if (!t && !envoy) return null;
-    var isl = realm.kind === 'is', adr = CT.address(c) || '나리', ruler = (G.SPONSOR[realm.sponsors[0]] || {}).title || '군주';
+    var isl = realm.kind === 'is', adr = CT.address(c) || G.R.heroCall('나리'), ruler = (G.SPONSOR[realm.sponsors[0]] || {}).title || '군주';
     var text;
     if (t) {
       var nm = CT.fullName(t, true);

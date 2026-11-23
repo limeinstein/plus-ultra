@@ -23,11 +23,11 @@ def main():
     wrapped = "/* 로컬 three.js r147, MIT. 전역은 G.Three 하나로 묶는다. */\n"
     wrapped += "(function(G){var __galleonThreeNamespace=G,exports={},module={exports:exports};\n" + source
     wrapped += "\nG.Three=exports;})(window.G=window.G||{});\n"
-    (vendor / 'three-r147.js').write_text(wrapped, encoding='utf-8')
-    (vendor / 'THREE-LICENSE.txt').write_text((THREE / 'LICENSE').read_text(encoding='utf-8'), encoding='utf-8')
+    (vendor / 'three-r147.js').write_text(wrapped, encoding='utf-8', newline='\n')
+    (vendor / 'THREE-LICENSE.txt').write_text((THREE / 'LICENSE').read_text(encoding='utf-8'), encoding='utf-8', newline='\n')
     source = "/* build_runtime.py 생성물. 수정 원본: tools/ship3d/의 모델·재질·미술·모션 파일. */\n"
     source += "(function(G){'use strict';var window={};\n"
-    for name in ['ship3d_tex.js', 'ship3d_models.js', 'ship_detail_materials.js', 'galleon_detail.js', 'fleet_detail.js', 'ship_finish.js', 'turtle_detail.js', 'fleet_craft.js', 'rig_detail.js', 'runtime_rig.js']:
+    for name in ['ship3d_tex.js', 'ship3d_models.js', 'ship_detail_materials.js', 'galleon_detail.js', 'fleet_detail.js', 'ship_finish.js', 'turtle_detail.js', 'fleet_craft.js', 'rig_detail.js', 'regional_detail.js', 'runtime_rig.js']:
         source += (HERE / name).read_text(encoding='utf-8') + '\n'
     items = specs()
     if len(items) != len({s['id'] for s in items}):
@@ -45,11 +45,11 @@ def main():
         if(id==='galleon'||id==='lgalleon')ship=window.GalleonDetail.enrich(ship,T,Object.assign({},G.FX.ship3d,{art:look}));
         else ship=window.FleetDetail.enrich(ship,T,look,p);
         if(id==='geobukseon')window.TurtleDetail.enrich(ship,T,G.FX.turtle3d);
-        ship=window.ShipFinish.enrich(ship,T,p);window.FleetCraft.enrich(ship,T,p);window.RigDetail.enrich(ship,T);ship.artProfile=p;return ship;
+        ship=window.ShipFinish.enrich(ship,T,p);window.FleetCraft.enrich(ship,T,p);window.RigDetail.enrich(ship,T);window.RegionalDetail.enrich(ship,T);ship.artProfile=p;return ship;
       },makeRig:function(ship,T,batch,cfg){return window.RuntimeRig.make(ship,T,batch,cfg);}
     };})(window.G=window.G||{});\n'''
-    (ROOT / 'js/art/ship-models.js').write_text(source, encoding='utf-8')
-    (ROOT / 'js/art/galleon-model.js').write_text("/* 이전 갤리온 비교 화면용 호환 이름. */\n(function(G){'use strict';G.GalleonModel={create:function(T){return G.ShipModels.create(T,'galleon');}};})(window.G=window.G||{});\n", encoding='utf-8')
+    (ROOT / 'js/art/ship-models.js').write_text(source, encoding='utf-8', newline='\n')
+    (ROOT / 'js/art/galleon-model.js').write_text("/* 이전 갤리온 비교 화면용 호환 이름. */\n(function(G){'use strict';G.GalleonModel={create:function(T){return G.ShipModels.create(T,'galleon');}};})(window.G=window.G||{});\n", encoding='utf-8', newline='\n')
     print(f'{len(items)}종 선박 모형·미술·동작과 three r147 생성 완료')
 
 

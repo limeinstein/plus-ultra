@@ -320,6 +320,7 @@
   };
   /** 술집: 여급과 함께 시간을 보낸다 (js/city/tavern.js 여급 메뉴) — 할 수 있나 */
   FE.canDate = function (mid) {
+    if (G.R.heroFemale()) return null;   // 여성 제독은 여급과 「함께 시간을 보낸다」(애인 장면)가 없다 — 메뉴에서 빠진다 (2026-11-23)
     var s = S(), st = s.maids && s.maids[mid], k = K(), d = mem().dates[mid];
     if (!st || (st.aff || 0) < (k.dateAff == null ? 40 : k.dateAff)) return { ok: false, why: '조금 더 가까워지면' };
     if (d != null && s.day - d < (k.dateGap == null ? 7 : k.dateGap)) return { ok: false, why: (k.dateGap || 7) - (s.day - d) + '일 뒤에' };

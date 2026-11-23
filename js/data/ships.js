@@ -1,5 +1,5 @@
 /* 배의 종류·특성·목재.
-   배 종류는 1480~1600년 무렵의 실제 배로 골랐다.
+   배 종류는 1480~1700년 무렵의 실제 배로 골랐다.
    수치는 이 게임에 맞게 정했다.
 
    cap 적재량(통) · hp 내구력 · crew [최저, 최대] · ports 최대 포문 · spd 돛 속도(°/일) · oar 노 속도(°/일)
@@ -157,6 +157,36 @@
     { id: 'atakebune', name: '안택선', lv: 4, cult: 'ea', cap: 260, hp: 124, crew: [110, 220], ports: 20, spd: 0.9, oar: 0.65, sails: ['sq'], maxMast: 1, price: 50000, turn: 0.7, from: 1540, armor: 0.7, hull: 'atake',
       traits: ['oar', 'armor', 'highdeck', 'coast'], feat: '물 위의 성', where: '사카이 (1540년~)',
       desc: '두꺼운 판자 벽과 망루를 올린 일본 수군의 대형 군선(安宅船). 느리지만 떠다니는 성과 같다.' },
+
+
+    // ------------------------------------------------ 17세기 선박 (성능과 해금 연도는 게임 설정)
+    { id: 'shipline', name: '전열함', lv: 5, cult: 'eu', cap: 1050, hp: 190, crew: [100, 360], ports: 72, spd: 1.22, sails: ['sq', 'sq', 'lat'], maxMast: 3, price: 135000, turn: 0.72, from: 1650, hull: 'west',
+      traits: ['gundeck', 'sturdy', 'awe'], feat: '두 층 포열로 전열을 지키는 중무장 군함', where: '잉글랜드·네덜란드·프랑스의 큰 항구 (1650년~)',
+      desc: '함대의 전열에 서서 옆구리의 두 층 포열로 싸운다. 화력과 내구력이 높지만 값과 필요한 선원이 많고 선회가 느리다.' },
+    { id: 'sloop', name: '슬루프', lv: 2, cult: 'eu', cap: 180, hp: 44, crew: [8, 60], ports: 12, spd: 1.78, sails: ['lat'], maxMast: 1, price: 12500, turn: 1.65, from: 1630, hull: 'west',
+      traits: ['scout', 'shallow'], feat: '외돛과 지브를 단 날랜 소형선', where: '잉글랜드·네덜란드·카리브해 항구 (1630년~)',
+      desc: '작은 선체에 세로로 펼친 큰 돛과 앞삼각돛을 단다. 연락과 탐험, 소규모 교역에 빠르지만 큰 군함의 포격에는 약하다.' },
+    { id: 'eastindiaman', name: '동인도무역선', lv: 5, cult: 'eu', cap: 1200, hp: 145, crew: [50, 240], ports: 36, spd: 1.28, sails: ['sq', 'sq', 'lat'], maxMast: 3, price: 94000, turn: 0.8, from: 1600, hull: 'west',
+      traits: ['thrift', 'sturdy', 'highdeck'], feat: '무장과 넓은 선창을 갖춘 원양 상선', where: '잉글랜드·네덜란드의 큰 항구 (1600년~)',
+      desc: '유럽과 아시아를 오가는 무역선. 큰 선창과 호신용 대포를 갖췄다. 같은 이름 아래 여러 선형이 있었으며 여기서는 17세기의 큰 무장 상선으로 표현했다.' },
+    { id: 'ketch', name: '케치', lv: 2, cult: 'eu', cap: 260, hp: 56, crew: [10, 70], ports: 10, spd: 1.50, sails: ['lat', 'lat'], maxMast: 2, price: 15000, turn: 1.35, from: 1600, hull: 'west',
+      traits: ['thrift', 'shallow'], feat: '작은 뒷돛대로 균형을 잡는 교역선', where: '잉글랜드·네덜란드·북미 항구 (1600년~)',
+      desc: '큰 주돛대 뒤에 작은 돛대를 두어 바람을 나누어 받는다. 적은 일손으로 연안의 짐을 나르는 실속 있는 두 돛대 배다.' },
+    { id: 'koch', name: '코치', lv: 3, cult: 'eu', cap: 290, hp: 78, crew: [14, 70], ports: 6, spd: 1.23, sails: ['sq', 'sq'], maxMast: 2, price: 19500, turn: 1.1, from: 1600, hull: 'west',
+      traits: ['sturdy', 'shallow', 'scout'], feat: '둥근 선체와 보강 외판의 북방 탐험선', where: '베르겐·오슬로·스톡홀름 (북방 선형 도입, 1600년~)',
+      desc: '러시아 북부 포모르 사람들이 쓰던 항해선. 둥근 선체와 보강한 외판, 얕은 흘수를 갖췄다. 게임에서는 북유럽 항구에서 도입해 짓는다.' },
+    { id: 'jounseon', name: '조운선', lv: 3, cult: 'ea', cap: 650, hp: 86, crew: [24, 90], ports: 6, spd: 1.18, oar: 0.4, sails: ['bat', 'bat'], maxMast: 2, price: 25000, turn: 1.05, from: 1600, hull: 'kr',
+      traits: ['oar', 'sturdy', 'shallow', 'thrift', 'coast'], feat: '세곡을 가득 싣는 조선의 평저 짐배', where: '한양·동래·한산도 (1600년~)',
+      desc: '넓은 평저 선창에 곡물을 싣고 연안을 따라 나른다. 군선의 높은 판옥 대신 화물 덮개와 넓은 짐칸을 두어 적은 일손으로 많이 싣는다.' },
+    { id: 'bezaisen', name: '벤자이센', lv: 3, cult: 'ea', cap: 600, hp: 76, crew: [16, 70], ports: 4, spd: 1.32, sails: ['sq'], maxMast: 1, price: 23000, turn: 1.0, from: 1619, hull: 'jp',
+      traits: ['thrift', 'shallow', 'coast'], feat: '큰 무명돛 하나로 짐을 나르는 일본 상선', where: '일본 항구 (1619년~)',
+      desc: '넓은 선창과 큰 사각 무명돛 하나를 가진 일본의 연안 상선. 히가키 회선의 운송을 참고했으며 군선의 방패와 망루는 달지 않는다.' },
+    { id: 'padewakang', name: '파데와캉', lv: 3, cult: 'sa', cap: 480, hp: 78, crew: [20, 100], ports: 10, spd: 1.44, sails: ['lat', 'lat'], maxMast: 2, price: 28000, turn: 1.15, from: 1600, hull: 'jong',
+      traits: ['monsoon', 'thrift'], feat: '기울어진 탄자돛의 술라웨시 교역선', where: '수라바야·테르나테·티도레 (1600년~)',
+      desc: '술라웨시 상인들의 교역선. 기울어진 직조 사각돛인 탄자돛 둘과 선미 양옆의 키를 갖췄다. 향료 제도와 자바를 오가는 데 알맞다.' },
+    { id: 'ghurab', name: '구라브', lv: 4, cult: 'is', cap: 390, hp: 98, crew: [42, 160], ports: 28, spd: 1.48, oar: 0.5, sails: ['lat', 'lat'], maxMast: 2, price: 43000, turn: 1.35, from: 1600, hull: 'dhow',
+      traits: ['oar', 'grapple', 'monsoon'], feat: '길게 뻗은 선수와 대포를 갖춘 인도 군선', where: '고아·말라바르 해안 (1600년~)',
+      desc: '인도 서해안의 무장선. 긴 선수와 낮은 앞갑판, 호신용 대포와 보조 노를 갖췄다. 구라브라는 이름 아래 여러 형태가 있어 17세기 인도양형으로 표현했다.' },
 
     // ------------------------------------------------ 아메리카
     { id: 'balsa', name: '발사', lv: 1, cult: 'am', cap: 60, hp: 16, crew: [5, 20], ports: 0, spd: 1.05, sails: ['sq'], maxMast: 1, price: 900, turn: 0.9, hull: 'raft',

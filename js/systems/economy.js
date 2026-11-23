@@ -278,7 +278,7 @@
     var rk = RK(), told = (n.rec.told || {})[c.id] || 0;
     if (!f.murmur && !U.chance(n.local ? (told < (rk.localSure == null ? 3 : rk.localSure) ? 1 : (rk.localLater == null ? 0.5 : rk.localLater)) : (rk.hearChance == null ? 0.45 : rk.hearChance))) return null;
     var x = n.rec, t = city(x.city), gn = G.GOOD[x.g].name, food = G.GOOD[x.g].cat === 'food', s = S();
-    var she = s.player.g === 'f', pn = s.player.name || '제독';
+    var she = G.R.heroFemale(s.player), pn = s.player.name || '제독';
     var price = gn + ' 값이 한 통 ' + U.num(x.pb) + '닢에서 ' + U.num(x.pa) + '닢으로';
     var oth = (x.others || []).filter(function (o) { var t2 = city(o.id); if (!t2) return false; var e = st().ev.filter(function (e0) { return e0.n === x.ev; })[0]; return e && day() < e.end && E.needLeft(e, t2, x.g) > 30; });
     var nextTip = oth.length ? ' 그래도 ' + city(oth[0].id).name + U.jx(city(oth[0].id).name, '은/는') + ' 아직 ' + gn + U.jx(gn, '이/가') + ' 모자라다더군.' : '';

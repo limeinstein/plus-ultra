@@ -37,7 +37,7 @@
   }
   function kidRow(k, heir, nextGen) {
     var f = fateNow(k, heir, nextGen);
-    return { key: key(k), name: F().kidName(k), sex: k.sex === 'f' ? 'f' : 'm', by: k.born ? k.born.y : null, age: F().kidAge(k), chain: kidChain(k), heir: k === heir, fate: f, sib: !f };
+    return { key: key(k), name: F().kidName(k), sex: k.sex === 'f' ? 'f' : 'm', by: k.born ? k.born.y : null, age: F().kidAge(k), chain: kidChain(k), heir: k === heir, fate: f, sib: !f, dad: k.fatherName || '' };
   }
 
   /** 세대 교체 때 (G.Family.succeed) — 물러나는 제독(p, 아직 s.player)을 남긴다. end: 'retire' | 'death' */
@@ -55,6 +55,7 @@
       end: end === 'death' ? 'death' : 'retire', age: R.age ? R.age() : null,
       title: R.fameTitle ? R.fameTitle(p.fame || 0) : '', chain: heroKeys(p),
       wife: wife, wives: wives,
+      sex: R.heroSex ? R.heroSex(p) : 'm', husbands: (p.husbandNames || []).slice(),   // 여성 제독과 그 남편들 (H.retire가 적어 둔 이름 — js/systems/husbands.js)
       kids: (p.kids || []).map(function (k) { return kidRow(k, heir, nextGen); }),
       sibs: (p.siblings || []).map(function (k) {   // 이 제독의 동생들 — 물러날 때 집에 남아 있던 사람은 이제 분가한다 (siblings.js)
         var f = sibFate(k); if (f.cls === 'home') f = { t: '분가함', cls: 'life' };
@@ -164,11 +165,12 @@
     var cur = {
       gen: p.generation || 1, name: p.name, born: p.born ? p.born.y : null, from: p.since, to: null, now: true, age: G.R.age ? G.R.age() : null,
       title: G.R.fameTitle ? G.R.fameTitle(p.fame || 0) : '', chain: heroKeys(p), wife: wife,
+      sex: G.R.heroSex ? G.R.heroSex(p) : 'm', husbands: G.Husbands ? G.Husbands.list().map(function (h) { return G.Husbands.name(h); }) : [],
       wives: (p.wives2 || []).map(function (w) { return G.Wives ? G.Wives.name(w) : '부인'; })
     };
     var kids = (p.kids || []).map(function (k) {
       var f = k.married ? fateNow(k, null, 0) : k.lost ? { t: '섬에서 사라짐', cls: 'lost' } : k.away ? { t: '독립 — ' + k.away.title, cls: 'home' } : k.crew ? { t: '항해사로 배에', cls: 'mate' } : k.aboard ? { t: '견습으로 배에', cls: 'mate' } : k.house != null ? { t: '어머니의 집에서', cls: 'home' } : { t: '집에서 자람', cls: 'home' };
-      return { key: key(k), name: Fm.kidName(k), sex: k.sex === 'f' ? 'f' : 'm', by: k.born ? k.born.y : null, age: Fm.kidAge(k), chain: kidChain(k), fate: f };
+      return { key: key(k), name: Fm.kidName(k), sex: k.sex === 'f' ? 'f' : 'm', by: k.born ? k.born.y : null, age: Fm.kidAge(k), chain: kidChain(k), fate: f, dad: k.fatherName || '' };
     });
     gens.push({ e: cur, kids: kids });
     return gens;
@@ -198,13 +200,14 @@
       var couple = '<div class="ft-couple' + (e.now ? ' now' : '') + '">' +
         '<div class="ft-person"><div class="ft-face" data-face="a' + gi + '"></div><div><div class="ft-gen">' + e.gen + '대 제독' + (e.now ? ' <span class="ft-now">지금</span>' : '') + '</div>' +
         '<b class="ft-name">' + (e.name ? nameHtml(e.name) : '이름이 전하지 않는 선대') + '</b><div class="ft-sub">' + U.esc(years(e)) + '</div>' + (e.title ? '<div class="ft-sub">' + U.esc(e.title) + '</div>' : '') + '</div></div>' +
+        (e.husbands && e.husbands.length ? '<div class="ft-tie">═</div><div class="ft-person"><div><div class="ft-gen">남편</div><b class="ft-name">' + U.esc(e.husbands.join(' · ')) + '</b></div></div>' :   // 여성 제독의 남편들
         (e.wife ? '<div class="ft-tie">═</div><div class="ft-person"><div class="ft-face" data-face="w' + gi + '"></div><div><div class="ft-gen">본처</div><b class="ft-name">' + U.esc(e.wife.name) + '</b>' +
           (e.wives && e.wives.length ? '<div class="ft-sub">둘째 부인: ' + U.esc(e.wives.join(' · ')) + '</div>' : '') + '</div></div>' :
-          (e.wives && e.wives.length ? '<div class="ft-tie">═</div><div class="ft-person"><div><div class="ft-gen">부인</div><b class="ft-name">' + U.esc(e.wives.join(' · ')) + '</b></div></div>' : '')) +
+          (e.wives && e.wives.length ? '<div class="ft-tie">═</div><div class="ft-person"><div><div class="ft-gen">부인</div><b class="ft-name">' + U.esc(e.wives.join(' · ')) + '</b></div></div>' : ''))) +
         '</div>';
       var kids = g.kids.length ? '<div class="ft-kids">' + g.kids.map(function (r, ki) {
         return '<div class="ft-kid ' + (r.heir ? 'heir ' : '') + (r.fate ? r.fate.cls : '') + '"><div class="ft-face" data-face="k' + gi + '_' + ki + '"></div>' +
-          '<b>' + nameHtml(r.name) + '</b><div class="ft-sub">' + (r.sex === 'f' ? '딸' : '아들') + (r.by != null ? ' · ' + r.by + '년생' : '') + '</div>' +
+          '<b>' + nameHtml(r.name) + '</b><div class="ft-sub">' + (r.sex === 'f' ? '딸' : '아들') + (r.by != null ? ' · ' + r.by + '년생' : '') + '</div>' + (r.dad ? '<div class="ft-sub">아버지 ' + U.esc(r.dad) + '</div>' : '') +
           (r.fate ? '<div class="ft-fate">' + U.esc(r.fate.t) + '</div>' : '') + '</div>';
       }).join('') + '</div>' : (e.stub ? '<div class="ft-none">이 대의 기록은 남아 있지 않다.</div>' : (last ? '<div class="ft-none">아직 아이가 없다.</div>' : ''));
       return '<section class="ft-row">' + couple + kids + '</section>';
@@ -217,7 +220,7 @@
       html: '<div class="ft-top muted">' + U.esc(s.player.name) + ' 가문 · ' + (s.player.generation || 1) + '대째</div>' + html(gens), buttons: [{ label: '닫기', value: 1 }] });
     w.el.classList.add('ft-win');
     gens.forEach(function (g, gi) {
-      var a = w.content.querySelector('[data-face="a' + gi + '"]'); if (a) a.appendChild(face(g.e.chain, 84, 'm'));
+      var a = w.content.querySelector('[data-face="a' + gi + '"]'); if (a) a.appendChild(face(g.e.chain, 84, g.e.sex === 'f' ? 'f' : 'm'));
       var b = w.content.querySelector('[data-face="w' + gi + '"]'); if (b && g.e.wife) b.appendChild(face(g.e.wife.chain, 84, 'f'));
       g.kids.forEach(function (r, ki) { var c = w.content.querySelector('[data-face="k' + gi + '_' + ki + '"]'); if (c) c.appendChild(face(r.chain, 70, r.sex)); });
     });

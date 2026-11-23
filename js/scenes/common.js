@@ -135,13 +135,15 @@
       '<div class="center"><span class="tag">' + (G.DISC_CATS[d.cat] || '') + '</span> <span class="tag">' + (d.how === 'trade' ? '교역품' : G.Disc.regName(d) || '') + '</span> <span class="tag">' + (G.Disc.valueTag ? G.Disc.valueTag(d) : '가치 ' + U.num(d.val)) + '</span>' + (mir ? ' <span class="tag mirage-tag">신기루 · ' + d.built + '년에 세워진다</span>' : '') + '</div>' +
       '<div class="desc">' + U.esc(d.desc) + '</div>' + (mir ? '<div class="desc mirage-note">눈앞에 떠오른 것은 아직 세상에 없는 ' + (d.cat === 'ruin' ? '건물' : '모습') + '이다. 아지랑이처럼 일렁이다 이내 흩어질 것이다. 손에 넣을 것은 없고, 신기루를 본 기록만 남는다.</div>' : '') + SC.folkInfo(d) + impactHtml + SC.realInfo(d.real) +
       (fame ? '<div class="center big" style="color:#6a3a14">명성 +' + U.num(fame) + '</div>' : '') + SC.relicStrip(d, relics) + '</div>';
-    var win = UI.window({ title: mir ? '신기루 — 미래의 발견' : fame ? '새로운 발견' : d.name, icon: 'star', width: 780, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] });
+    var win = UI.window({ title: mir ? '신기루 — 미래의 발견' : fame ? '새로운 발견' : d.name, icon: 'star', width: 780, clickAny: true, html: html, buttons: [!fame && G.DiscStories && G.DiscStories.enabled() && G.DiscStories.has(d) && G.Disc.foundByMe(d.id) ? { label: '현장 이야기', value: 'story', dis: !G.DiscStories.at(d) } : null, { label: '확인', value: 1, cls: 'navy' }].filter(Boolean) });
     win.content.querySelector('.art').appendChild(art);
     U.$$('[data-relic]', win.content).forEach(function (el) {
       var r = G.RELIC[el.dataset.relic]; if (!r || !A.relicArt) return;
       el.insertBefore(G.Img.make(G.Img.chain.relic(r), 112, 112, function () { return A.relicArt(r, 112, 112); }), el.firstChild);
     });
-    return win.result;
+    var answer = await win.result;
+    if (answer === 'story') { await G.DiscStories.play(d); return SC.discoveryCard(d, 0); }
+    return answer;
   };
 
   // ---------------------------------------------------------------- 지리·유적·자연 경관·동물·보물 발견 연출
@@ -163,6 +165,7 @@
   SC.hasReveal = function (d) { return !!revealKeys(d); };
   /** 장면 그림(GIF·장면 판)이 아직 없는 발견물: 발견 카드 뒤에 부하들의 관찰과 바람만 들려준다 (js/systems/discvoice.js) — 2026-10-28 */
   SC.discoveryVoices = async function (d) {
+    if (G.DiscStories && await G.DiscStories.play(d)) return 1;
     var dvl = G.DiscVoice ? G.DiscVoice.reveal(d) : [], used = {};   // 1~3명 무작위 (DV.count)
     for (var i = 0; i < dvl.length; i++) { used[dvl[i].m.id] = 1; await UI.say(dvl[i].text, { name: dvl[i].d.name, portrait: SC.mateSpec(dvl[i].m.id), lang: 3 }); }
     var w = G.DiscVoice && G.DiscVoice.wish ? G.DiscVoice.wish(d) : null;
@@ -377,6 +380,9 @@
       el.classList.add('out'); await U.sleep(450); if (el.parentNode) el.parentNode.removeChild(el);
       return true;
     }
+    if (G.DiscStories && G.DiscStories.enabled() && G.DiscStories.has(d)) {
+      await G.DiscStories.play(d);
+    } else {
     // 외침과 대답: 발견 갈래와 그때의 사정에 따라, 바로 앞에 나온 말은 피해서 (js/data/revealtalk.js)
     var RT = G.RevealTalk, rctx = RT ? RT.context(d) : null;
     await UI.say(RT ? RT.shout(d, rctx) : '제독, 보십시오! 저것이 바로 소문으로만 듣던 ' + d.name + '입니다!', lead);
@@ -409,6 +415,7 @@
       var recW = art.lv && craft.lv ? '그림과 기록' : art.lv ? '그림' : '기록';
       await UI.say(U.pickFresh('reveal:record', ['이만큼 자세한 ' + recW + '이라면 유럽의 학자와 궁정도 믿지 않을 수 없겠지요.', '이 ' + recW + '을 보면 의심하던 사람들도 입을 다물 겁니다.', '돌아가서 이 ' + recW + '을 펼치면 궁정이 한동안 시끄럽겠습니다.']), lead);
       if (extra > 0) UI.toast('현장 기록 — ' + (art.lv ? '그림 ' + art.lv + '단계' : '') + (art.lv && craft.lv ? ' · ' : '') + (craft.lv ? '세공 ' + craft.lv + '단계' : '') + ' · 명성 +' + U.num(extra) + ' 더', 'star', 4200);
+    }
     }
     el.classList.add('out');
     await U.sleep(450);

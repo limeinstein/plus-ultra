@@ -133,7 +133,7 @@
       // 제독과 후원자: 나이가 같은 또래면 조금, 성별이 다르고 매력이 높으면 조금
       var pa = P.playerAge(), sa = P.sponsorAge(sp);
       if (pa === sa) p += 0.02;
-      if ((S().player.g === 'f') !== G.Sponsor.female(sp) && R.stat('cha') >= 70) p += 0.03;
+      if (!G.R.heroFemale() && G.Sponsor.female(sp) && R.stat('cha') >= 70) p += 0.03;   // 여성 제독에게는 이 덤이 없다 (2026-11-23)
     }
     if (c.angle === 'legend') p -= 0.1;
     return U.clamp(p, 0.08, 0.92);

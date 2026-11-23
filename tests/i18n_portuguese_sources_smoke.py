@@ -33,6 +33,9 @@ for source in sorted((ROOT / 'tools/i18n/pt').glob('*.tsv')):
             # fmtDate는 월 번호 m 대신 번역한 월 이름 mon도 제공한다.
             if key == '{y}년 {m}월 {d}일':
                 translated = {'m' if name == 'mon' else name for name in translated}
+            # 이야기 날짜 포맷은 월 번호와 번역한 월 이름을 함께 제공한다.
+            if source.name == 'story_qa_20261123.tsv' and 'monthNum' in original:
+                translated = {'monthNum' if name == 'month' else name for name in translated}
             assert original == translated, (label, original, translated)
 
 print(f'포르투갈어 원본 {rows}행 · 치환 틀 {patterns}행 · 변수 누락·번역 열 손상 0')

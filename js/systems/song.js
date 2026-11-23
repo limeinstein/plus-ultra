@@ -98,6 +98,10 @@
   function repNames() { var t = T(); return ((t && t.rep) || []).map(function (k) { var r = D.concert.regions[k]; return r ? '「' + r.song + '」' : ''; }).filter(Boolean); }
   function fmt(t) {
     var s = S(), p = s.player, c = curCity();
+    if (String(t).indexOf('{leg|') >= 0) t = G.StoryText.format(t, {
+      leg: aboard('gyeonwoo') ? G.MATE.gyeonwoo.name : aboard('sy_woldam') ? G.MATE.sy_woldam.name : G.T('선원 하나'),
+      arm: aboard('sy_hwanggyu') ? G.MATE.sy_hwanggyu.name : G.T('다른 선원')
+    });
     var rep = repNames();
     return String(t).replace(/\{name\}/g, p.given || p.name).replace(/\{city\}/g, c ? c.name : '항구')
       .replace(/\{ship\}/g, (s.fleet.ships[0] || {}).name || D.ship)
@@ -276,7 +280,7 @@
     if (b.reported) { var st = s.disc[b.reported]; if (!(st && st.me && (st.reported || st.announced))) return false; }
     if (at === 'city' || at === 'concert') { if (!whereOk(b, ctx.city)) return false; }
     if (b.box) { var l = s.loc, x = b.box; if (l.mode !== 'sea' || l.lon < x[0] || l.lon > x[1] || l.lat < x[2] || l.lat > x[3]) return false; }
-    if (b.battles && !((s.stats.battles || 0) > (t.battleMark || 0))) return false;
+    if (b.battles && !G.StoryBattle.won('song', b)) return false;
     if (b.voice === 'back' && !voiceReady()) return false;
     return true;
   }
@@ -336,6 +340,7 @@
     var s = S(), t = T();
     t.battleMark = s.stats.battles || 0;
     var npc = { id: 'song_' + (o.label || 'pirate'), kind: o.kind || 'pirate', n: o.n || 2, K: 1, zone: G.Ships && G.Ships.zone ? G.Ships.zone(s.loc.lon, s.loc.lat) : 'east', hostile: true, label: o.label, names: o.names };
+    G.StoryBattle.start('song', o, npc);
     await UI.fade(function () { G.Game.go('battle', { npc: npc }); });
   }
   /** 도시에 들어설 때 (js/scenes/city.js) — 프롤로그 또는 일어날 사건 하나 */
@@ -353,6 +358,7 @@
   };
   /** 바다의 하루 끝 (js/scenes/sea.js) */
   SS.seaPending = function () {
+    G.StoryBattle.recover('song');
     var t = T(), s = S(); if (!t || !t.prologue || SS._busy || !s || s.loc.mode !== 'sea') return false;
     if (atlNear()) return true;
     return (D.beats || []).some(function (b) { return ready(b, 'sea'); });

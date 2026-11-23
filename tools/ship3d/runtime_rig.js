@@ -62,6 +62,7 @@
     var batten=ship.batten,tanja=ship.tanja;
     ship.batten=function(grp){quadGroup(grp,'batten',arguments,batten);};
     ship.tanja=function(grp){quadGroup(grp,'tanja',arguments,tanja);};
+    if(ship.gaff){var gaff=ship.gaff;ship.gaff=function(grp){quadGroup(grp,'gaff',arguments,gaff);};}
     var staticRig=rig.call(ship,{furl:false,brace:0,bill:1,flutter:0,phase:0}),dynamic=new T.Group();
     // 보조 활대와 지브도 같은 회전·고정 규칙을 적용한다.
     staticRig.children.slice().forEach(function(o){if(o.userData.rigYard&&moving.indexOf(o)<0){moving.push(o);yards.push({group:o,lower:null,brace:o.userData.braceFactor||1});}});
@@ -122,7 +123,7 @@
       return [x,y,z];
     }
     // 노받이 위치는 공용 모델의 buildOars와 동일하다.
-    var n=q.oars||(['galley','kr','panok','turtle','jp','atake','outrigger'].indexOf(s.hull)>=0?7:0), oars=[];
+    var n=s.id==='bezaisen'?0:q.oars||(['galley','kr','panok','turtle','jp','atake','outrigger'].indexOf(s.hull)>=0?7:0), oars=[];
     var poles,blades;
     if(n){
       poles=new T.InstancedMesh(new T.CylinderGeometry(.3,.32,1,5),ship.C.oar,n*2);

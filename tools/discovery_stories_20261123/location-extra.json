@@ -1,0 +1,661 @@
+[
+  {
+    "no": 351,
+    "query": "Tulum",
+    "entity": "Q725883",
+    "coordinates": [
+      {
+        "latitude": 20.214722222222,
+        "longitude": -87.428888888889,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q725883"
+  },
+  {
+    "no": 355,
+    "query": "Monte Albán",
+    "entity": "Q464899",
+    "coordinates": [
+      {
+        "latitude": 17.043888888889,
+        "longitude": -96.767777777778,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q464899"
+  },
+  {
+    "no": 356,
+    "query": "Great Pyramid of Cholula",
+    "entity": "Q1417475",
+    "coordinates": [
+      {
+        "latitude": 19.0575,
+        "longitude": -98.301944,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1417475"
+  },
+  {
+    "no": 387,
+    "query": "Ngorongoro Conservation Area",
+    "entity": "Q1217726",
+    "coordinates": [
+      {
+        "latitude": -3.21,
+        "longitude": 35.46,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1217726"
+  },
+  {
+    "no": 427,
+    "query": "Kells, County Meath",
+    "entity": "Q917848",
+    "coordinates": [
+      {
+        "latitude": 53.727998,
+        "longitude": -6.877613,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q917848"
+  },
+  {
+    "no": 443,
+    "query": "Runnymede",
+    "entity": "Q1483542",
+    "coordinates": [
+      {
+        "latitude": 51.444511111111,
+        "longitude": -0.56536944444444,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1483542"
+  },
+  {
+    "no": 444,
+    "query": "Mainz",
+    "entity": "Q1720",
+    "coordinates": [
+      {
+        "latitude": 49.99944444444444,
+        "longitude": 8.27361111111111,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1720"
+  },
+  {
+    "no": 445,
+    "query": "Basilica of Saint-Denis",
+    "entity": "Q184407",
+    "coordinates": [
+      {
+        "latitude": 48.935555555556,
+        "longitude": 2.3597222222222,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q184407"
+  },
+  {
+    "no": 446,
+    "query": "Roncevaux Pass",
+    "entity": "Q1305618",
+    "coordinates": [
+      {
+        "latitude": 43.01972222,
+        "longitude": -1.32416667,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1305618"
+  },
+  {
+    "no": 447,
+    "query": "Burgos",
+    "entity": "Q9580",
+    "coordinates": [
+      {
+        "latitude": 42.340833333333,
+        "longitude": -3.6997222222222,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q9580"
+  },
+  {
+    "no": 451,
+    "query": "Milan",
+    "entity": "Q490",
+    "coordinates": [
+      {
+        "latitude": 45.466944444444,
+        "longitude": 9.19,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q490"
+  },
+  {
+    "no": 452,
+    "query": "Venice",
+    "entity": "Q641",
+    "coordinates": [
+      {
+        "latitude": 45.439722222222,
+        "longitude": 12.331944444444,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q641"
+  },
+  {
+    "no": 453,
+    "query": "Leuven",
+    "entity": "Q118958",
+    "coordinates": [
+      {
+        "latitude": 50.8775,
+        "longitude": 4.704444,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q118958"
+  },
+  {
+    "no": 454,
+    "query": "Toledo, Spain",
+    "entity": "Q5836",
+    "coordinates": [
+      {
+        "latitude": 39.866666666667,
+        "longitude": -4.0333333333333,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q5836"
+  },
+  {
+    "no": 456,
+    "query": "Gyeongbokgung",
+    "entity": "Q482485",
+    "coordinates": [
+      {
+        "latitude": 37.5798841,
+        "longitude": 126.9767996,
+        "altitude": null,
+        "precision": 2.77778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q482485"
+  },
+  {
+    "no": 457,
+    "query": "Jongno",
+    "entity": "Q491066",
+    "coordinates": [
+      {
+        "latitude": 37.57295,
+        "longitude": 126.979358,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q491066"
+  },
+  {
+    "no": 458,
+    "query": "Gyeongbokgung",
+    "entity": "Q482485",
+    "coordinates": [
+      {
+        "latitude": 37.5798841,
+        "longitude": 126.9767996,
+        "altitude": null,
+        "precision": 2.77778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q482485"
+  },
+  {
+    "no": 459,
+    "query": "Gyeongbokgung",
+    "entity": "Q482485",
+    "coordinates": [
+      {
+        "latitude": 37.5798841,
+        "longitude": 126.9767996,
+        "altitude": null,
+        "precision": 2.77778e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q482485"
+  },
+  {
+    "no": 460,
+    "query": "Ulugh Beg Observatory",
+    "entity": "Q608580",
+    "coordinates": [
+      {
+        "latitude": 39.674722222222,
+        "longitude": 67.005555555556,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q608580"
+  },
+  {
+    "no": 461,
+    "query": "Jantar Mantar, Jaipur",
+    "entity": "Q508634",
+    "coordinates": [
+      {
+        "latitude": 26.924722222222,
+        "longitude": 75.825,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q508634"
+  },
+  {
+    "no": 463,
+    "query": "Frombork",
+    "entity": "Q497115",
+    "coordinates": [
+      {
+        "latitude": 54.358333333333334,
+        "longitude": 19.683333333333334,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q497115"
+  },
+  {
+    "no": 464,
+    "query": "Padua",
+    "entity": "Q617",
+    "coordinates": [
+      {
+        "latitude": 45.40777777777778,
+        "longitude": 11.873333333333333,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q617"
+  },
+  {
+    "no": 465,
+    "query": "Cremona",
+    "entity": "Q6231",
+    "coordinates": [
+      {
+        "latitude": 45.13333333333333,
+        "longitude": 10.024722222222222,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q6231"
+  },
+  {
+    "no": 466,
+    "query": "Beijing",
+    "entity": "Q956",
+    "coordinates": [
+      {
+        "latitude": 39.90403,
+        "longitude": 116.407526,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q956"
+  },
+  {
+    "no": 467,
+    "query": "Hanyang",
+    "entity": "Q453227",
+    "coordinates": [],
+    "source": "https://www.wikidata.org/wiki/Q453227"
+  },
+  {
+    "no": 468,
+    "query": "Palma de Mallorca",
+    "entity": "Q8826",
+    "coordinates": [
+      {
+        "latitude": 39.566666666667,
+        "longitude": 2.6497222222222,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q8826"
+  },
+  {
+    "no": 469,
+    "query": "Saint-Dié-des-Vosges",
+    "entity": "Q34427",
+    "coordinates": [
+      {
+        "latitude": 48.284166666667,
+        "longitude": 6.9491666666667,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q34427"
+  },
+  {
+    "no": 470,
+    "query": "Khanbaliq",
+    "entity": "Q101186473",
+    "coordinates": [
+      {
+        "latitude": 39.93333333333333,
+        "longitude": 116.4,
+        "altitude": null,
+        "precision": 0.016666666666666666,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q101186473"
+  },
+  {
+    "no": 471,
+    "query": "Luoyang",
+    "entity": "Q187136",
+    "coordinates": [
+      {
+        "latitude": 34.65867,
+        "longitude": 112.42447,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q187136"
+  },
+  {
+    "no": 521,
+    "query": "Mizoram",
+    "entity": "Q1502",
+    "coordinates": [
+      {
+        "latitude": 23.36,
+        "longitude": 92.8,
+        "altitude": null,
+        "precision": 1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1502"
+  },
+  {
+    "no": 533,
+    "query": "Mount Huaguo",
+    "entity": "Q17029014",
+    "coordinates": [
+      {
+        "latitude": 34.654107,
+        "longitude": 119.288335,
+        "altitude": null,
+        "precision": 1e-06,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q17029014"
+  },
+  {
+    "no": 535,
+    "query": "Mount Kurama",
+    "entity": "Q410132",
+    "coordinates": [
+      {
+        "latitude": 35.1167,
+        "longitude": 135.765,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q410132"
+  },
+  {
+    "no": 536,
+    "query": "Hii River",
+    "entity": "Q11500714",
+    "coordinates": [
+      {
+        "latitude": 35.1638,
+        "longitude": 133.1858,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      },
+      {
+        "latitude": 35.5541,
+        "longitude": 133.2728,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q11500714"
+  },
+  {
+    "no": 540,
+    "query": "Li Galli",
+    "entity": "Q1812834",
+    "coordinates": [
+      {
+        "latitude": 40.581031944444,
+        "longitude": 14.432323888889,
+        "altitude": null,
+        "precision": 2.7777777777778e-07,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1812834"
+  },
+  {
+    "no": 542,
+    "query": "Old New Synagogue",
+    "entity": "Q443107",
+    "coordinates": [
+      {
+        "latitude": 50.09,
+        "longitude": 14.418611111111,
+        "altitude": null,
+        "precision": 0.00027777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q443107"
+  },
+  {
+    "no": 544,
+    "query": "Gévaudan",
+    "entity": "Q514081",
+    "coordinates": [
+      {
+        "latitude": 44.7,
+        "longitude": 3.3,
+        "altitude": null,
+        "precision": 0.1,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q514081"
+  },
+  {
+    "no": 566,
+    "query": "Khortytsia",
+    "entity": "Q914907",
+    "coordinates": [
+      {
+        "latitude": 47.82,
+        "longitude": 35.1,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q914907"
+  },
+  {
+    "no": 567,
+    "query": "Navajo Nation",
+    "entity": "Q1783171",
+    "coordinates": [
+      {
+        "latitude": 36.186944444444,
+        "longitude": -109.57361111111,
+        "altitude": null,
+        "precision": null,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1783171"
+  },
+  {
+    "no": 577,
+    "query": "Taghaza",
+    "entity": "Q966431",
+    "coordinates": [
+      {
+        "latitude": 23,
+        "longitude": -4.2,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q966431"
+  },
+  {
+    "no": 580,
+    "query": "Almadén",
+    "entity": "Q465085",
+    "coordinates": [
+      {
+        "latitude": 38.766666666667,
+        "longitude": -4.8166666666667,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q465085"
+  },
+  {
+    "no": 589,
+    "query": "Niah Caves",
+    "entity": "Q1984562",
+    "coordinates": [
+      {
+        "latitude": 3.813889,
+        "longitude": 113.781389,
+        "altitude": null,
+        "precision": 1e-05,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1984562"
+  },
+  {
+    "no": 607,
+    "query": "Monte Pascoal",
+    "entity": "Q1499212",
+    "coordinates": [
+      {
+        "latitude": -16.916666666667,
+        "longitude": -39.266666666667,
+        "altitude": null,
+        "precision": 0.016666666666667,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q1499212"
+  },
+  {
+    "no": 614,
+    "query": "Gish Abay",
+    "entity": "Q655265",
+    "coordinates": [
+      {
+        "latitude": 10.9833,
+        "longitude": 37.2167,
+        "altitude": null,
+        "precision": 0.0001,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q655265"
+  },
+  {
+    "no": 622,
+    "query": "Limasawa",
+    "entity": "Q173678",
+    "coordinates": [
+      {
+        "latitude": 9.907777777777778,
+        "longitude": 125.075,
+        "altitude": null,
+        "precision": 0.0002777777777777778,
+        "globe": "http://www.wikidata.org/entity/Q2"
+      }
+    ],
+    "source": "https://www.wikidata.org/wiki/Q173678"
+  }
+]

@@ -53,7 +53,7 @@
   }
   CT.state = st;
   function today() { return U.dateNum(S().date); }
-  function female() { var p = S().player; return p.g === 'f'; }
+  function female() { return G.R.heroFemale(); }   // 뒤를 이은 딸도 여성형 작위 (R.heroSex — 2026-11-23)
   function lin(a, x) { return Math.min(a[2] == null ? 1e9 : a[2], Math.floor(a[0] + a[1] * x)); }
 
   // ================================================================ 나라·작위
@@ -128,7 +128,7 @@
   };
   function adr(t) {
     if (t.adr === '경') return S().player.name.split(' ')[0] + ' 경';
-    return (t.call ? t.call + ' ' : '') + t.adr;
+    return (t.call ? t.call + ' ' : '') + R.heroCall(t.adr);   // 여성 제독: 나리 → 아씨 (각하는 그대로)
   }
   var HAIL = {
     inn: ['{a}께서 저희 여관에 드시다니 영광입니다. 가장 좋은 방을 내어 드리지요.', '어서 오십시오, {a}. 방은 벌써 데워 두었습니다.'],
@@ -143,8 +143,32 @@
     gate: ['{a}, 성 밖은 위험합니다. 부디 조심해서 다녀오십시오.', '{a}께서 나가신다! 길을 비켜라! …살펴 가십시오.'],
     guard: ['{a}, 송구하오나 이곳의 주인께서는 지금 계시지 않습니다.', '{a}, 주인께서 자리를 비우셨습니다. 다음에 다시 찾아 주십시오.']
   };
+  /* 여성 제독이 작위가 낮을 때 듣는 인사 (2026-11-23 사용자 요청 「계급이 낮을 때는 무시하는 듯한 태도와 말을 한다」) */
+  var SLIGHT = {
+    inn: ['…혼자요? 바깥주인은 어디 계시오. 방값은 선불이오.', '여자 손님이 배를 몰고 왔다고? 허, 세상 참. 방은 저 구석이오.'],
+    market: ['아가씨, 구경만 할 거면 길을 막지 마시오.', '값을 알고나 묻는 거요? 이건 뱃사람들이 사 가는 물건인데.'],
+    library: ['여기는 학자들이 드나드는 곳이오. …글은 읽을 줄 아시오?', '책을 더럽히지만 마시오. 해도는 아녀자가 볼 물건이 아닌데.'],
+    guild: ['조합 일은 선장과 이야기하오. …그대가 선장이라고? 허.', '의뢰는 주겠소만, 사내들도 못 하는 일을 할 수 있겠소?'],
+    shipyard: ['배 주인은 어디 계시오? …그대라고? 목수들이 웃겠구려.', '돛과 용골이 뭔지는 아시오? 뭐, 돈만 내면 고쳐는 드리지.'],
+    tavern: ['여긴 뱃사람들 술집이오. 아가씨가 올 곳이 아닌데… 뭐, 앉으시오.', '선장을 찾으러 왔소? …그대가 선장? 하, 한 잔 받으시오. 내가 다 놀랐소.'],
+    trade: ['물건 값은 아시오? 바깥어른을 모셔 오는 게 빠를 텐데.', '여자 손에 장부라. 뭐, 금화에는 남녀가 없지. 무엇을 찾소?'],
+    restaurant: ['혼자 오셨소? 구석 자리로 가시오. 좋은 자리는 선장들 몫이오.', '주문은 바깥양반이 오면 받겠소. …아, 그대가 내는 거요? 그럼 앉으시오.'],
+    church: ['바다는 여인이 설 자리가 아니라고들 하오. …그래도 기도는 누구에게나 열려 있소.', '뱃사람들을 이끈다고 들었소. 주께서 그대의 고집을 굽어살피시기를.'],
+    mosque: ['여인이 배를 이끈다니 낯선 일이오. 그래도 길손은 길손이니 쉬어 가시오.'],
+    gate: ['성 밖은 아녀자가 다닐 길이 아니오. …말려도 갈 얼굴이군. 지나가시오.', '호위는 어디 있소? 허, 그대가 우두머리라고. 조심이나 하시오.']
+  };
+  /** 깔보는 인사 — 여성 제독이고 가장 높은 작위의 무게가 2 이하일 때 slight.chance로. 없으면 null */
+  CT.slight = function (c, kind) {
+    if (!S() || !R.heroFemale() || (G.Tutorial && G.Tutorial.active && G.Tutorial.active())) return null;
+    if (G.I18N && G.I18N.isKo && !G.I18N.isKo()) return null;   // 번역이 생길 때까지 한국어 화면에서만
+    var t = CT.best(), w = t ? t.w : 0, ch = ((B().slight || {}).chance || [0.6, 0.3, 0.15])[w];
+    if (!ch || !U.chance(ch)) return null;
+    var L = SLIGHT[kind === 'church' && c && c.rel === 'I' ? 'mosque' : kind];
+    return L ? U.pick(L) : null;
+  };
   /** 건물에 들어설 때의 인사: 작위가 있고 유럽·이슬람 도시면 공손한 인사, 아니면 예전 인사(lines에서 하나) */
   CT.hail = function (c, kind, lines) {
+    var sl = CT.slight(c, kind); if (sl) return sl;
     var a = CT.address(c), L = HAIL[kind === 'church' && c && c.rel === 'I' ? 'mosque' : kind];
     if (!a || !L) return U.pick(lines);
     return U.pick(L).replace('{a}', a);

@@ -1,0 +1,451 @@
+{
+  "player-faces-seven-20261123": {
+    "tool": "built-in image_gen",
+    "ageBasis": {
+      "youngApproximate": 25,
+      "middleAgedApproximate": 55,
+      "elapsedYears": 30
+    },
+    "records": [
+      {
+        "id": "armored_navigator",
+        "name": "철갑 항해사",
+        "capture": 1,
+        "reference": "C:/Users/User/AppData/Local/Temp/codex-clipboard-6802dc71-be25-4103-a39e-7904a77aeaf3.png",
+        "youngSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-93f4fbb2-6d63-4963-96ba-1c2157bea083.png",
+        "youngPrompt": "Use case: compositing / identity-preserve. Asset type: high quality painterly-realistic historical adventure game character cutout. Input image 1 is the EDIT TARGET: existing knee-up player character. Input image 2 is ONLY the FACE AND HAIRSTYLE IDENTITY reference supplied by the user. Replace only the target character's head/face/hairstyle with this reference identity, harmonized in the exact detailed semi-realistic painted illustration style of image 1; preserve his original costume, colors, pose, body proportions, hands, weapons and held props. Adult young man approximately 25 years old, recognizably matching image 2. Not a photo pasted onto painted clothes. Canvas: high-resolution single centered knee-up character, square format, head/hair and held objects fully in frame with clear margin, knees at bottom, genuine transparent alpha background. No scenery, no contact sheet, no second figure, no text, no labels, no watermark, no shadow plane. Maintain sharp facial detail and natural anatomy. Reference 2 identity: tousled voluminous black hair, striking green eyes, dark eyebrows, sharp youthful jaw, light natural stubble. Keep the worn steel armor and all leather gear from reference 1.",
+        "agedPrompt": "Use case: identity-preserve age progression. Input image 1 is the newly created YOUNG character (approximately 25 years old), the exact identity and edit target. Create THIS SAME MAN exactly 30 years later, approximately 55 years old: handsome, dignified, healthy, charismatic, masculine and distinguished middle-aged beauty. Make the 30-year aging clearly recognizable through believable forehead lines, crow's feet, nasolabial structure, slightly mature eyelids, mature neck/hand skin and natural hair changes, while preserving his individual eyes, nose, mouth, bone structure and attractiveness. He must look mid-fifties, not merely a young man with gray hair, and not elderly or frail. CRITICAL INVARIANTS: same costume and colors, same physique/fitness, exact same pose, expression, hands, weapons, held props, framing, illustration style and transparent alpha background as image 1. Detailed painterly-realistic historical adventure game knee-up cutout, single figure, square format, hair/head/props fully within canvas, no scenery/text/labels/contact sheet/watermark. Black tousled hair now has substantial silver at the temples and through the sides. Well-groomed short salt-and-pepper stubble/beard framing his strong jaw; same piercing green eyes.",
+        "faceCropNormalized": [
+          0.355,
+          0,
+          0.355
+        ],
+        "agedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-b3e835a8-b2de-459c-931b-0c1597d779c0.png",
+        "files": {
+          "young": {
+            "knee": "young\\knee\\armored_navigator.png",
+            "face": "young\\face\\armored_navigator.png"
+          },
+          "middle-aged": {
+            "knee": "middle-aged\\knee\\armored_navigator.png",
+            "face": "middle-aged\\face\\armored_navigator.png"
+          }
+        }
+      },
+      {
+        "id": "muscle_swordsman",
+        "name": "근육질 검사",
+        "capture": 2,
+        "reference": "C:/Users/User/AppData/Local/Temp/codex-clipboard-c8a5c3e2-e753-4a01-8a14-f198dc33124f.png",
+        "youngSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-82064b1a-444f-411d-944f-018036f3c871.png",
+        "youngPrompt": "Use case: compositing / identity-preserve. Asset type: high quality painterly-realistic historical adventure game character cutout. Input image 1 is the EDIT TARGET: existing knee-up player character. Input image 2 is ONLY the FACE AND HAIRSTYLE IDENTITY reference supplied by the user. Replace only the target character's head/face/hairstyle with this reference identity, harmonized in the exact detailed semi-realistic painted illustration style of image 1; preserve his original costume, colors, pose, body proportions, hands, weapons and held props. Adult young man approximately 25 years old, recognizably matching image 2. Not a photo pasted onto painted clothes. Canvas: high-resolution single centered knee-up character, square format, head/hair and held objects fully in frame with clear margin, knees at bottom, genuine transparent alpha background. No scenery, no contact sheet, no second figure, no text, no labels, no watermark, no shadow plane. Maintain sharp facial detail and natural anatomy. Reference 2 identity: shoulder-length center-parted black hair, blue eyes, strong masculine jaw, subtle stubble. Keep the original sleeveless open dark vest, muscular physique, sword, red sash and bracers from reference 1; do not replace his outfit with the reference photo's clothes.",
+        "agedPrompt": "Use case: identity-preserve age progression. Input image 1 is the newly created YOUNG character (approximately 25 years old), the exact identity and edit target. Create THIS SAME MAN exactly 30 years later, approximately 55 years old: handsome, dignified, healthy, charismatic, masculine and distinguished middle-aged beauty. Make the 30-year aging clearly recognizable through believable forehead lines, crow's feet, nasolabial structure, slightly mature eyelids, mature neck/hand skin and natural hair changes, while preserving his individual eyes, nose, mouth, bone structure and attractiveness. He must look mid-fifties, not merely a young man with gray hair, and not elderly or frail. CRITICAL INVARIANTS: same costume and colors, same physique/fitness, exact same pose, expression, hands, weapons, held props, framing, illustration style and transparent alpha background as image 1. Detailed painterly-realistic historical adventure game knee-up cutout, single figure, square format, hair/head/props fully within canvas, no scenery/text/labels/contact sheet/watermark. Shoulder-length black hair now salt-and-pepper with silver strands around the temples. A handsome trimmed salt-and-pepper beard. Retain muscular physical conditioning and blue eyes.",
+        "faceCropNormalized": [
+          0.34,
+          0.008,
+          0.365
+        ],
+        "agedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-14665354-e049-4598-a673-4777379e29db.png",
+        "files": {
+          "young": {
+            "knee": "young\\knee\\muscle_swordsman.png",
+            "face": "young\\face\\muscle_swordsman.png"
+          },
+          "middle-aged": {
+            "knee": "middle-aged\\knee\\muscle_swordsman.png",
+            "face": "middle-aged\\face\\muscle_swordsman.png"
+          }
+        }
+      },
+      {
+        "id": "hat_spinner",
+        "name": "모자를 돌리는 항해사",
+        "capture": 3,
+        "reference": "C:/Users/User/AppData/Local/Temp/codex-clipboard-47a39e47-bdf4-422f-9293-7a9707421f69.png",
+        "youngSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-8a664bb4-4577-4426-a38b-7882e0f92817.png",
+        "youngPrompt": "Use case: compositing / identity-preserve. Asset type: high quality painterly-realistic historical adventure game character cutout. Input image 1 is the EDIT TARGET: existing knee-up player character. Input image 2 is ONLY the FACE AND HAIRSTYLE IDENTITY reference supplied by the user. Replace only the target character's head/face/hairstyle with this reference identity, harmonized in the exact detailed semi-realistic painted illustration style of image 1; preserve his original costume, colors, pose, body proportions, hands, weapons and held props. Adult young man approximately 25 years old, recognizably matching image 2. Not a photo pasted onto painted clothes. Canvas: high-resolution single centered knee-up character, square format, head/hair and held objects fully in frame with clear margin, knees at bottom, genuine transparent alpha background. No scenery, no contact sheet, no second figure, no text, no labels, no watermark, no shadow plane. Maintain sharp facial detail and natural anatomy. Reference 2 identity: shoulder-length golden blond wavy hair, fair skin, angular masculine face. Retain the cheerful smile and hat-spinning finger gesture, blue worn jacket and original trousers from reference 1. Keep raised hand and complete hat clearly inside the canvas.",
+        "agedPrompt": "Use case: identity-preserve age progression. Input image 1 is the newly created YOUNG character (approximately 25 years old), the exact identity and edit target. Create THIS SAME MAN exactly 30 years later, approximately 55 years old: handsome, dignified, healthy, charismatic, masculine and distinguished middle-aged beauty. Make the 30-year aging clearly recognizable through believable forehead lines, crow's feet, nasolabial structure, slightly mature eyelids, mature neck/hand skin and natural hair changes, while preserving his individual eyes, nose, mouth, bone structure and attractiveness. He must look mid-fifties, not merely a young man with gray hair, and not elderly or frail. CRITICAL INVARIANTS: same costume and colors, same physique/fitness, exact same pose, expression, hands, weapons, held props, framing, illustration style and transparent alpha background as image 1. Detailed painterly-realistic historical adventure game knee-up cutout, single figure, square format, hair/head/props fully within canvas, no scenery/text/labels/contact sheet/watermark. Shoulder-length golden blond hair now ash-blond with visible silver streaks at the temples; tasteful short blond-gray beard. Keep his warm charismatic toothy smile and hat gesture.",
+        "faceCropNormalized": [
+          0.415,
+          0.018,
+          0.315
+        ],
+        "agedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-6a3215c0-a042-42eb-bccf-0f54a121d4d5.png",
+        "files": {
+          "young": {
+            "knee": "young\\knee\\hat_spinner.png",
+            "face": "young\\face\\hat_spinner.png"
+          },
+          "middle-aged": {
+            "knee": "middle-aged\\knee\\hat_spinner.png",
+            "face": "middle-aged\\face\\hat_spinner.png"
+          }
+        }
+      },
+      {
+        "id": "battle_vanguard",
+        "name": "돌격대장",
+        "capture": 4,
+        "reference": "C:/Users/User/AppData/Local/Temp/codex-clipboard-74cd6153-216f-4d13-a62e-67d0eff7bf3a.png",
+        "youngSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-b6556297-55f1-417a-bcb5-90e922d83b86.png",
+        "youngPrompt": "Use case: compositing / identity-preserve. Asset type: high quality painterly-realistic historical adventure game character cutout. Input image 1 is the EDIT TARGET: existing knee-up player character. Input image 2 is ONLY the FACE AND HAIRSTYLE IDENTITY reference supplied by the user. Replace only the target character's head/face/hairstyle with this reference identity, harmonized in the exact detailed semi-realistic painted illustration style of image 1; preserve his original costume, colors, pose, body proportions, hands, weapons and held props. Adult young man approximately 25 years old, recognizably matching image 2. Not a photo pasted onto painted clothes. Canvas: high-resolution single centered knee-up character, square format, head/hair and held objects fully in frame with clear margin, knees at bottom, genuine transparent alpha background. No scenery, no contact sheet, no second figure, no text, no labels, no watermark, no shadow plane. Maintain sharp facial detail and natural anatomy. Reference 2 identity: tousled dark brown hair, vivid pale blue-green eyes, fair skin, fine youthful handsome features. Keep the original shouting battle cry expression, powerful wide stance, clenched fists, red sash and original outfit from reference 1. Identity should still read through the shouting expression.",
+        "agedPrompt": "Use case: identity-preserve age progression. Input image 1 is the newly created YOUNG character (approximately 25 years old), the exact identity and edit target. Create THIS SAME MAN exactly 30 years later, approximately 55 years old: handsome, dignified, healthy, charismatic, masculine and distinguished middle-aged beauty. Make the 30-year aging clearly recognizable through believable forehead lines, crow's feet, nasolabial structure, slightly mature eyelids, mature neck/hand skin and natural hair changes, while preserving his individual eyes, nose, mouth, bone structure and attractiveness. He must look mid-fifties, not merely a young man with gray hair, and not elderly or frail. CRITICAL INVARIANTS: same costume and colors, same physique/fitness, exact same pose, expression, hands, weapons, held props, framing, illustration style and transparent alpha background as image 1. Detailed painterly-realistic historical adventure game knee-up cutout, single figure, square format, hair/head/props fully within canvas, no scenery/text/labels/contact sheet/watermark. Dark-brown hair with silver streaks at the temples; close trimmed salt-and-pepper beard/stubble. Same clear blue-green eyes and dynamic shouting expression. He is a seasoned charismatic battle commander.",
+        "faceCropNormalized": [
+          0.395,
+          0,
+          0.37
+        ],
+        "agedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-0d765fc0-9ede-4ec0-8c65-4a6941dc6ed9.png",
+        "files": {
+          "young": {
+            "knee": "young\\knee\\battle_vanguard.png",
+            "face": "young\\face\\battle_vanguard.png"
+          },
+          "middle-aged": {
+            "knee": "middle-aged\\knee\\battle_vanguard.png",
+            "face": "middle-aged\\face\\battle_vanguard.png"
+          }
+        }
+      },
+      {
+        "id": "army_officer",
+        "name": "정규군 장교",
+        "capture": 5,
+        "reference": "C:/Users/User/AppData/Local/Temp/codex-clipboard-9c05632a-282a-4b0d-ae94-e686be6a6dd2.png",
+        "youngSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-5a562637-4a6e-4a39-8513-501fbfbdfa13.png",
+        "youngPrompt": "Use case: compositing / identity-preserve. Asset type: high quality painterly-realistic historical adventure game character cutout. Input image 1 is the EDIT TARGET: existing knee-up player character. Input image 2 is ONLY the FACE AND HAIRSTYLE IDENTITY reference supplied by the user. Replace only the target character's head/face/hairstyle with this reference identity, harmonized in the exact detailed semi-realistic painted illustration style of image 1; preserve his original costume, colors, pose, body proportions, hands, weapons and held props. Adult young man approximately 25 years old, recognizably matching image 2. Not a photo pasted onto painted clothes. Canvas: high-resolution single centered knee-up character, square format, head/hair and held objects fully in frame with clear margin, knees at bottom, genuine transparent alpha background. No scenery, no contact sheet, no second figure, no text, no labels, no watermark, no shadow plane. Maintain sharp facial detail and natural anatomy. Reference 2 identity: long light-blond hair tied into a low ponytail, fair skin, angular youthful handsome face and pale eyes. Keep original navy officer uniform with gold epaulettes, medals, white cravat, red sash, gloves, sword and armillary sphere. Do not copy raised arms, short sleeves or modern white clothes from reference 2.",
+        "agedPrompt": "Use case: identity-preserve age progression. Input image 1 is the newly created YOUNG character (approximately 25 years old), the exact identity and edit target. Create THIS SAME MAN exactly 30 years later, approximately 55 years old: handsome, dignified, healthy, charismatic, masculine and distinguished middle-aged beauty. Make the 30-year aging clearly recognizable through believable forehead lines, crow's feet, nasolabial structure, slightly mature eyelids, mature neck/hand skin and natural hair changes, while preserving his individual eyes, nose, mouth, bone structure and attractiveness. He must look mid-fifties, not merely a young man with gray hair, and not elderly or frail. CRITICAL INVARIANTS: same costume and colors, same physique/fitness, exact same pose, expression, hands, weapons, held props, framing, illustration style and transparent alpha background as image 1. Detailed painterly-realistic historical adventure game knee-up cutout, single figure, square format, hair/head/props fully within canvas, no scenery/text/labels/contact sheet/watermark. Long light-blond ponytail with visible silver and ash-gray streaks. Distinguished neatly groomed short blond-gray beard, strong mature jaw and calm commanding presence. Retain exact ponytail and all military finery.",
+        "faceCropNormalized": [
+          0.35,
+          0,
+          0.37
+        ],
+        "agedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-09be2a20-67e8-4374-98bf-22b0085e1c82.png",
+        "files": {
+          "young": {
+            "knee": "young\\knee\\army_officer.png",
+            "face": "young\\face\\army_officer.png"
+          },
+          "middle-aged": {
+            "knee": "middle-aged\\knee\\army_officer.png",
+            "face": "middle-aged\\face\\army_officer.png"
+          }
+        }
+      },
+      {
+        "id": "sky_adventurer",
+        "name": "가죽옷 모험가",
+        "capture": 6,
+        "reference": "C:/Users/User/AppData/Local/Temp/codex-clipboard-6bf996cc-8b44-4f9e-84ac-f8c222266458.png",
+        "youngSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-f16eba45-7ead-4708-9943-ee98049dd5c8.png",
+        "youngPrompt": "Use case: compositing / identity-preserve. Asset type: high quality painterly-realistic historical adventure game character cutout. Input image 1 is the EDIT TARGET: existing knee-up player character. Input image 2 is ONLY the FACE AND HAIRSTYLE IDENTITY reference supplied by the user. Replace only the target character's head/face/hairstyle with this reference identity, harmonized in the exact detailed semi-realistic painted illustration style of image 1; preserve his original costume, colors, pose, body proportions, hands, weapons and held props. Adult young man approximately 25 years old, recognizably matching image 2. Not a photo pasted onto painted clothes. Canvas: high-resolution single centered knee-up character, square format, head/hair and held objects fully in frame with clear margin, knees at bottom, genuine transparent alpha background. No scenery, no contact sheet, no second figure, no text, no labels, no watermark, no shadow plane. Maintain sharp facial detail and natural anatomy. Reference 2 identity: silver-white side-parted voluminous hair, fair skin, gray-blue eyes, sharply defined elegant youthful face. White hair is his natural youthful character design, not old age. Keep original brown leather adventurer outfit, open cream shirt, sword, compass device and original pose from reference 1.",
+        "agedPrompt": "Use case: identity-preserve age progression. Input image 1 is the newly created YOUNG character (approximately 25 years old), the exact identity and edit target. Create THIS SAME MAN exactly 30 years later, approximately 55 years old: handsome, dignified, healthy, charismatic, masculine and distinguished middle-aged beauty. Make the 30-year aging clearly recognizable through believable forehead lines, crow's feet, nasolabial structure, slightly mature eyelids, mature neck/hand skin and natural hair changes, while preserving his individual eyes, nose, mouth, bone structure and attractiveness. He must look mid-fifties, not merely a young man with gray hair, and not elderly or frail. CRITICAL INVARIANTS: same costume and colors, same physique/fitness, exact same pose, expression, hands, weapons, held props, framing, illustration style and transparent alpha background as image 1. Detailed painterly-realistic historical adventure game knee-up cutout, single figure, square format, hair/head/props fully within canvas, no scenery/text/labels/contact sheet/watermark. Keep his natural silver-white hairstyle and gray-blue eyes; do NOT rely on white hair alone to suggest age because the young version already has white hair. Clearly mature facial planes, fine crow's feet and forehead wrinkles, slightly heavier eyelids, strong jaw and subtle well-groomed silver stubble.",
+        "faceCropNormalized": [
+          0.335,
+          0.005,
+          0.375
+        ],
+        "agedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-8d3da4a3-ea6d-4798-a051-cfa3d97fbbe6.png",
+        "files": {
+          "young": {
+            "knee": "young\\knee\\sky_adventurer.png",
+            "face": "young\\face\\sky_adventurer.png"
+          },
+          "middle-aged": {
+            "knee": "middle-aged\\knee\\sky_adventurer.png",
+            "face": "middle-aged\\face\\sky_adventurer.png"
+          }
+        }
+      },
+      {
+        "id": "blackcoat_captain",
+        "name": "검은 코트의 선장",
+        "capture": 7,
+        "reference": "C:/Users/User/AppData/Local/Temp/codex-clipboard-5e0b11c2-3ea8-440b-b021-1637a493abdc.png",
+        "youngSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-7615406c-d7be-484b-9495-d8bad6b7a99b.png",
+        "youngPrompt": "Use case: compositing / identity-preserve. Asset type: high quality painterly-realistic historical adventure game character cutout. Input image 1 is the EDIT TARGET: existing knee-up player character. Input image 2 is ONLY the FACE AND HAIRSTYLE IDENTITY reference supplied by the user. Replace only the target character's head/face/hairstyle with this reference identity, harmonized in the exact detailed semi-realistic painted illustration style of image 1; preserve his original costume, colors, pose, body proportions, hands, weapons and held props. Adult young man approximately 25 years old, recognizably matching image 2. Not a photo pasted onto painted clothes. Canvas: high-resolution single centered knee-up character, square format, head/hair and held objects fully in frame with clear margin, knees at bottom, genuine transparent alpha background. No scenery, no contact sheet, no second figure, no text, no labels, no watermark, no shadow plane. Maintain sharp facial detail and natural anatomy. Reference 2 identity: swept-back black hair, fair skin, refined handsome East Asian facial structure, dark eyes, soft defined lips. Keep original ornate black captain's coat, white collar, black gloves, armillary sphere, sword and original pose from reference 1.",
+        "agedPrompt": "Use case: identity-preserve age progression. Input image 1 is the newly created YOUNG character (approximately 25 years old), the exact identity and edit target. Create THIS SAME MAN exactly 30 years later, approximately 55 years old: handsome, dignified, healthy, charismatic, masculine and distinguished middle-aged beauty. Make the 30-year aging clearly recognizable through believable forehead lines, crow's feet, nasolabial structure, slightly mature eyelids, mature neck/hand skin and natural hair changes, while preserving his individual eyes, nose, mouth, bone structure and attractiveness. He must look mid-fifties, not merely a young man with gray hair, and not elderly or frail. CRITICAL INVARIANTS: same costume and colors, same physique/fitness, exact same pose, expression, hands, weapons, held props, framing, illustration style and transparent alpha background as image 1. Detailed painterly-realistic historical adventure game knee-up cutout, single figure, square format, hair/head/props fully within canvas, no scenery/text/labels/contact sheet/watermark. Preserve the East Asian identity and swept-back black hair, now with tasteful silver temples. Clearly visible but elegant eye-corner lines, forehead lines and mature facial structure, subtle neat salt-and-pepper stubble, refined commanding captain presence.",
+        "faceCropNormalized": [
+          0.335,
+          0.005,
+          0.365
+        ],
+        "agedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-b850fe77-18d4-4972-bbc3-d67d638e796a.png",
+        "files": {
+          "young": {
+            "knee": "young\\knee\\blackcoat_captain.png",
+            "face": "young\\face\\blackcoat_captain.png"
+          },
+          "middle-aged": {
+            "knee": "middle-aged\\knee\\blackcoat_captain.png",
+            "face": "middle-aged\\face\\blackcoat_captain.png"
+          }
+        }
+      }
+    ]
+  },
+  "player-faces-seven-plus20-20261123": {
+    "records": [
+      {
+        "id": "armored_navigator",
+        "name": "철갑 항해사",
+        "faceCropNormalized": [
+          0.355,
+          0,
+          0.355
+        ],
+        "youngPath": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\armored_navigator.png",
+        "prompt": "Use case: identity-preserve age progression. EDIT the single young character in the input image, approximately age 25, to THE SAME MAN 20 YEARS LATER, approximately age 45. This is a NEW 20-year-later variant, not the previous 30-year-later gray-haired version. Make a handsome healthy dignified middle-aged man, visibly about 45: moderately mature face planes, subtle forehead and eye-corner lines, slight nasolabial lines, firm jaw and natural skin texture. Add visible well-groomed moustache and chin/jaw facial hair specified below. Expression must be serious, restrained, contemplative/commanding, CLOSED MOUTH, no grin, no laughter, no shouting. IMPORTANT: hair must retain its original pigment, do NOT turn it all white, do NOT add white beard, no salt-and-pepper beard and no prominent gray/silver temples. Preserve his exact identity, eyes/nose/bone structure, original hairstyle (except stated color clarification), detailed painterly-realistic historical adventure game art style, exact outfit/colors, body/physique, stance, arms/hands, all weapons and held props, head orientation and overall knee-up framing. Only age the head/face naturally and change expression plus facial hair. Single centered knee-up cutout on genuine TRANSPARENT alpha, high resolution square, whole hair/head/held items safely in frame, no scenery, no text, no watermark, no labels, no extra people. Hair: retain the original deep black tousled voluminous hair, no silver temples. Facial hair: clearly visible short dark moustache connected to a neatly trimmed dark short boxed beard along chin and jaw. Same green eyes and reference identity; stern thoughtful gaze.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-2af6acb9-a051-460b-b41f-1894988d596b.png",
+        "files": {
+          "knee": "knee\\armored_navigator.png",
+          "face": "face\\armored_navigator.png"
+        }
+      },
+      {
+        "id": "muscle_swordsman",
+        "name": "근육질 검사",
+        "faceCropNormalized": [
+          0.34,
+          0.008,
+          0.365
+        ],
+        "youngPath": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\muscle_swordsman.png",
+        "prompt": "Use case: identity-preserve age progression. EDIT the single young character in the input image, approximately age 25, to THE SAME MAN 20 YEARS LATER, approximately age 45. This is a NEW 20-year-later variant, not the previous 30-year-later gray-haired version. Make a handsome healthy dignified middle-aged man, visibly about 45: moderately mature face planes, subtle forehead and eye-corner lines, slight nasolabial lines, firm jaw and natural skin texture. Add visible well-groomed moustache and chin/jaw facial hair specified below. Expression must be serious, restrained, contemplative/commanding, CLOSED MOUTH, no grin, no laughter, no shouting. IMPORTANT: hair must retain its original pigment, do NOT turn it all white, do NOT add white beard, no salt-and-pepper beard and no prominent gray/silver temples. Preserve his exact identity, eyes/nose/bone structure, original hairstyle (except stated color clarification), detailed painterly-realistic historical adventure game art style, exact outfit/colors, body/physique, stance, arms/hands, all weapons and held props, head orientation and overall knee-up framing. Only age the head/face naturally and change expression plus facial hair. Single centered knee-up cutout on genuine TRANSPARENT alpha, high resolution square, whole hair/head/held items safely in frame, no scenery, no text, no watermark, no labels, no extra people. Hair: original shoulder-length center-parted black hair remains black. Facial hair: masculine well-groomed dark moustache and short full dark beard. Same blue eyes, strong jaw, athletic muscular body. Serious restrained expression.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-8e40a190-6dd0-49a5-af52-e8ff14d7f5ed.png",
+        "files": {
+          "knee": "knee\\muscle_swordsman.png",
+          "face": "face\\muscle_swordsman.png"
+        }
+      },
+      {
+        "id": "hat_spinner",
+        "name": "모자를 돌리는 항해사",
+        "faceCropNormalized": [
+          0.415,
+          0.018,
+          0.315
+        ],
+        "youngPath": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\hat_spinner.png",
+        "prompt": "Use case: identity-preserve age progression. EDIT the single young character in the input image, approximately age 25, to THE SAME MAN 20 YEARS LATER, approximately age 45. This is a NEW 20-year-later variant, not the previous 30-year-later gray-haired version. Make a handsome healthy dignified middle-aged man, visibly about 45: moderately mature face planes, subtle forehead and eye-corner lines, slight nasolabial lines, firm jaw and natural skin texture. Add visible well-groomed moustache and chin/jaw facial hair specified below. Expression must be serious, restrained, contemplative/commanding, CLOSED MOUTH, no grin, no laughter, no shouting. IMPORTANT: hair must retain its original pigment, do NOT turn it all white, do NOT add white beard, no salt-and-pepper beard and no prominent gray/silver temples. Preserve his exact identity, eyes/nose/bone structure, original hairstyle (except stated color clarification), detailed painterly-realistic historical adventure game art style, exact outfit/colors, body/physique, stance, arms/hands, all weapons and held props, head orientation and overall knee-up framing. Only age the head/face naturally and change expression plus facial hair. Single centered knee-up cutout on genuine TRANSPARENT alpha, high resolution square, whole hair/head/held items safely in frame, no scenery, no text, no watermark, no labels, no extra people. Hair: retain original golden-blond shoulder-length waves, no white or gray hair. Facial hair: natural medium golden-brown moustache and short chin/jaw beard, visibly darker than the blond hair. Replace the broad toothy smile with a sober, thoughtful CLOSED-MOUTH expression, serious eyes. Keep the complete raised hat and spinning finger gesture.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-af960810-2c08-4ba9-976f-fff01d943e56.png",
+        "files": {
+          "knee": "knee\\hat_spinner.png",
+          "face": "face\\hat_spinner.png"
+        }
+      },
+      {
+        "id": "battle_vanguard",
+        "name": "돌격대장",
+        "faceCropNormalized": [
+          0.395,
+          0,
+          0.37
+        ],
+        "youngPath": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\battle_vanguard.png",
+        "prompt": "Use case: identity-preserve age progression. EDIT the single young character in the input image, approximately age 25, to THE SAME MAN 20 YEARS LATER, approximately age 45. This is a NEW 20-year-later variant, not the previous 30-year-later gray-haired version. Make a handsome healthy dignified middle-aged man, visibly about 45: moderately mature face planes, subtle forehead and eye-corner lines, slight nasolabial lines, firm jaw and natural skin texture. Add visible well-groomed moustache and chin/jaw facial hair specified below. Expression must be serious, restrained, contemplative/commanding, CLOSED MOUTH, no grin, no laughter, no shouting. IMPORTANT: hair must retain its original pigment, do NOT turn it all white, do NOT add white beard, no salt-and-pepper beard and no prominent gray/silver temples. Preserve his exact identity, eyes/nose/bone structure, original hairstyle (except stated color clarification), detailed painterly-realistic historical adventure game art style, exact outfit/colors, body/physique, stance, arms/hands, all weapons and held props, head orientation and overall knee-up framing. Only age the head/face naturally and change expression plus facial hair. Single centered knee-up cutout on genuine TRANSPARENT alpha, high resolution square, whole hair/head/held items safely in frame, no scenery, no text, no watermark, no labels, no extra people. Hair: original tousled dark-brown hair remains dark brown, no silver temples. Facial hair: dark-brown moustache and neatly kept short beard on chin and jaw. Replace the open-mouth shouting expression with a CLOSED-MOUTH stern determined expression and focused blue-green eyes. Keep the original wide braced battle stance and clenched fists, same face identity.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-960dcf4c-68bf-43a1-b538-b59c4fd26da7.png",
+        "files": {
+          "knee": "knee\\battle_vanguard.png",
+          "face": "face\\battle_vanguard.png"
+        }
+      },
+      {
+        "id": "army_officer",
+        "name": "정규군 장교",
+        "faceCropNormalized": [
+          0.35,
+          0,
+          0.37
+        ],
+        "youngPath": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\army_officer.png",
+        "prompt": "Use case: identity-preserve age progression. EDIT the single young character in the input image, approximately age 25, to THE SAME MAN 20 YEARS LATER, approximately age 45. This is a NEW 20-year-later variant, not the previous 30-year-later gray-haired version. Make a handsome healthy dignified middle-aged man, visibly about 45: moderately mature face planes, subtle forehead and eye-corner lines, slight nasolabial lines, firm jaw and natural skin texture. Add visible well-groomed moustache and chin/jaw facial hair specified below. Expression must be serious, restrained, contemplative/commanding, CLOSED MOUTH, no grin, no laughter, no shouting. IMPORTANT: hair must retain its original pigment, do NOT turn it all white, do NOT add white beard, no salt-and-pepper beard and no prominent gray/silver temples. Preserve his exact identity, eyes/nose/bone structure, original hairstyle (except stated color clarification), detailed painterly-realistic historical adventure game art style, exact outfit/colors, body/physique, stance, arms/hands, all weapons and held props, head orientation and overall knee-up framing. Only age the head/face naturally and change expression plus facial hair. Single centered knee-up cutout on genuine TRANSPARENT alpha, high resolution square, whole hair/head/held items safely in frame, no scenery, no text, no watermark, no labels, no extra people. Hair: original light golden blond ponytail remains blond, no white hair or gray temples. Facial hair: clearly visible neatly groomed medium blond-brown moustache plus a small pointed chin beard, a dignified officer's facial hair. Serious authoritative expression and restrained gaze.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-508b69d0-b52c-4a0c-a5f7-5b3f1a29c140.png",
+        "files": {
+          "knee": "knee\\army_officer.png",
+          "face": "face\\army_officer.png"
+        }
+      },
+      {
+        "id": "sky_adventurer",
+        "name": "가죽옷 모험가",
+        "faceCropNormalized": [
+          0.335,
+          0.005,
+          0.375
+        ],
+        "youngPath": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\sky_adventurer.png",
+        "prompt": "Use case: identity-preserve age progression. EDIT the single young character in the input image, approximately age 25, to THE SAME MAN 20 YEARS LATER, approximately age 45. This is a NEW 20-year-later variant, not the previous 30-year-later gray-haired version. Make a handsome healthy dignified middle-aged man, visibly about 45: moderately mature face planes, subtle forehead and eye-corner lines, slight nasolabial lines, firm jaw and natural skin texture. Add visible well-groomed moustache and chin/jaw facial hair specified below. Expression must be serious, restrained, contemplative/commanding, CLOSED MOUTH, no grin, no laughter, no shouting. IMPORTANT: hair must retain its original pigment, do NOT turn it all white, do NOT add white beard, no salt-and-pepper beard and no prominent gray/silver temples. Preserve his exact identity, eyes/nose/bone structure, original hairstyle (except stated color clarification), detailed painterly-realistic historical adventure game art style, exact outfit/colors, body/physique, stance, arms/hands, all weapons and held props, head orientation and overall knee-up framing. Only age the head/face naturally and change expression plus facial hair. Single centered knee-up cutout on genuine TRANSPARENT alpha, high resolution square, whole hair/head/held items safely in frame, no scenery, no text, no watermark, no labels, no extra people. Hair: the source character has naturally very pale silver-blond hair; render it as dimensional cool ASH-BLOND with darker ash-blond roots and inner strands, NOT pure white, NOT age-whitened and no additional gray. Facial hair: distinctly visible medium ash-brown moustache and close-trimmed ash-brown jaw/chin beard. Serious contemplative expression, same gray-blue eyes and recognizable individual facial structure.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-46f558a4-3756-492a-abbb-aa89aef8a807.png",
+        "files": {
+          "knee": "knee\\sky_adventurer.png",
+          "face": "face\\sky_adventurer.png"
+        }
+      },
+      {
+        "id": "blackcoat_captain",
+        "name": "검은 코트의 선장",
+        "faceCropNormalized": [
+          0.335,
+          0.005,
+          0.365
+        ],
+        "youngPath": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\blackcoat_captain.png",
+        "prompt": "Use case: identity-preserve age progression. EDIT the single young character in the input image, approximately age 25, to THE SAME MAN 20 YEARS LATER, approximately age 45. This is a NEW 20-year-later variant, not the previous 30-year-later gray-haired version. Make a handsome healthy dignified middle-aged man, visibly about 45: moderately mature face planes, subtle forehead and eye-corner lines, slight nasolabial lines, firm jaw and natural skin texture. Add visible well-groomed moustache and chin/jaw facial hair specified below. Expression must be serious, restrained, contemplative/commanding, CLOSED MOUTH, no grin, no laughter, no shouting. IMPORTANT: hair must retain its original pigment, do NOT turn it all white, do NOT add white beard, no salt-and-pepper beard and no prominent gray/silver temples. Preserve his exact identity, eyes/nose/bone structure, original hairstyle (except stated color clarification), detailed painterly-realistic historical adventure game art style, exact outfit/colors, body/physique, stance, arms/hands, all weapons and held props, head orientation and overall knee-up framing. Only age the head/face naturally and change expression plus facial hair. Single centered knee-up cutout on genuine TRANSPARENT alpha, high resolution square, whole hair/head/held items safely in frame, no scenery, no text, no watermark, no labels, no extra people. Hair: original swept-back deep black hair remains black, no white/gray temples. Preserve his East Asian individual identity. Facial hair: neatly groomed visible dark moustache and short dark goatee/chin beard, restrained fine dark stubble along jaw. Mature serious commanding gaze, closed mouth.",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-c81b7555-bb8f-4ce5-b63d-6249b1ea6fab.png",
+        "files": {
+          "knee": "knee\\blackcoat_captain.png",
+          "face": "face\\blackcoat_captain.png"
+        }
+      }
+    ],
+    "preserved30YearHashes": {
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\armored_navigator.png": "1d0543114c265648a24488cbbad2bc5dc85d109a80cd9fb3bb41b62b1822cb14",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\army_officer.png": "b1bc5e1b187665e629b9db74e8e7efbd5f05a2e2e60035ebc16985a989473788",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\battle_vanguard.png": "a0651aa175390759349c25cf938db13f049ee3e144312e2e2ea9c4ea2b970b46",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\blackcoat_captain.png": "925f728bacb2161bfd5dbada8da21412e4273865bf12a9e1110c23636d2cbd2c",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\hat_spinner.png": "f9ea9a9957a761edf2569c8a41665b27ec1b1e54b42da356411db8151d206365",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\muscle_swordsman.png": "450ea1c5ab718fdfa97cd31bf7a002c29ee37bba0a9ad59bdf8d3a0e7fdc5577",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\sky_adventurer.png": "50819c93ed00832b1051b25bf8d7eec3180ab8dec14c7fa0eaaeb717b6fac156",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\armored_navigator.png": "e684cf7a92ad2383be42db7a0dffb1b081e6ee8d0a94ca730835d44e62175d21",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\army_officer.png": "764d4c7f34a9bf762839ae3d7b9587228f73bd7e2557f6b32a7033daf865284b",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\battle_vanguard.png": "d121722b9de2ab0fe71e96eb49a030fe0e6765c251353754ca33b70fb373655d",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\blackcoat_captain.png": "6179e1cb709638a27d3782221bcf3637282198ac3a6c1b12f1522b5244af7726",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\hat_spinner.png": "38673cd82e89bb02ddbef24582a1c344de7a8b709fc9805993c2e22b540d3a91",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\muscle_swordsman.png": "f4836fa5c2fe84ecd7f3ed9c56036db90df1b10624775fef59c8038ff8d70321",
+      "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\sky_adventurer.png": "470f3c272c0a9658d1920050f7bd9fbd756a3717fe4292d860113783daadf283"
+    },
+    "tool": "built-in image_gen",
+    "ageBasis": {
+      "youngApproximate": 25,
+      "newApproximate": 45,
+      "elapsedYears": 20
+    }
+  },
+  "player-remaining-seven-plus30-20261123": {
+    "tool": "built-in image_gen",
+    "elapsedYears": 30,
+    "ageTreatment": "elderly veteran; silver-gray hair and beard, visible natural wrinkles",
+    "records": [
+      {
+        "id": "admiral",
+        "name": "기본 제독",
+        "youngPath": "D:/Git/대항해2 CLAUDE/WebGame/images/characters/player_half.webp",
+        "prompt": "Use case: identity-preserve age progression. Input image 1 is the existing YOUNG PLAYER CHARACTER edit target and sole identity/style/costume reference. Make THE EXACT SAME MAN 30 YEARS OLDER, a clearly OLD/ELDERLY, dignified veteran version. Respect the reference's apparent starting age: add thirty believable years, broadly late 50s to 60s. He must look visibly old, not a young face merely painted with white hair. Natural silver-gray/white hair, graying facial hair, substantial forehead and crow's feet lines, mature under-eye lids, nasolabial lines, older neck and hand skin. Preserve recognizable eye/nose/mouth/bone structure, ethnicity, hairstyle silhouette, healthy strong physique and his charisma. Keep the same calm serious/wise expression and face direction, exact original costume and colors, pose, hands, weapons, book/hat/glasses or other held props. Match the existing finely detailed semi-realistic PAINTED historical adventure game style, harmonized facial lighting and materials, no photographic pasted head. Output one high-resolution square knee-up character cutout, knees at bottom, hair/head/accessories/held props entirely inside frame with small safe margin. Genuine transparent alpha background, no landscape/backdrop/floor, no labels/text, no watermark, no contact sheet, no extra person. Character: original admiral with wavy brown hair, red embroidered cape, dark tunic, bronze bracers and hanging sword. Age his same rugged face 30 years: wavy silver-gray hair with a few dark strands, neatly trimmed substantial gray beard and moustache, pronounced forehead/eye lines, dignified weathered older sea captain. Preserve the red cape, entire belt/sword/bracers and calm strong stance.",
+        "faceCropNormalized": [
+          0.375,
+          0.085,
+          0.36
+        ],
+        "youngSourceSHA256": "f70b25268a50950ea45ac9cf24cfddbd155c44acb9185981a4b2e5f50711a799",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-0839849d-fa1d-4d90-9e74-9644ba6a42f4.png",
+        "files": {
+          "knee": "knee\\admiral.png",
+          "face": "face\\admiral.png"
+        }
+      },
+      {
+        "id": "ganghui",
+        "name": "중세의 연금술사",
+        "youngPath": "D:/Git/대항해2 CLAUDE/WebGame/images/characters/player_half_ganghui.png",
+        "prompt": "Use case: identity-preserve age progression. Input image 1 is the existing YOUNG PLAYER CHARACTER edit target and sole identity/style/costume reference. Make THE EXACT SAME MAN 30 YEARS OLDER, a clearly OLD/ELDERLY, dignified veteran version. Respect the reference's apparent starting age: add thirty believable years, broadly late 50s to 60s. He must look visibly old, not a young face merely painted with white hair. Natural silver-gray/white hair, graying facial hair, substantial forehead and crow's feet lines, mature under-eye lids, nasolabial lines, older neck and hand skin. Preserve recognizable eye/nose/mouth/bone structure, ethnicity, hairstyle silhouette, healthy strong physique and his charisma. Keep the same calm serious/wise expression and face direction, exact original costume and colors, pose, hands, weapons, book/hat/glasses or other held props. Match the existing finely detailed semi-realistic PAINTED historical adventure game style, harmonized facial lighting and materials, no photographic pasted head. Output one high-resolution square knee-up character cutout, knees at bottom, hair/head/accessories/held props entirely inside frame with small safe margin. Genuine transparent alpha background, no landscape/backdrop/floor, no labels/text, no watermark, no contact sheet, no extra person. Character: East Asian alchemist with round wire spectacles, messy curly brown hair, exquisite dark teal/ivory/gold astronomical embroidered robe, armillary device in one hand and sword at hip. Preserve his East Asian facial identity and EXACT round spectacles. Same curly hair now largely silver-gray, tasteful salt-and-silver moustache and short chin beard, clearly aged eyes/forehead/cheek/neck, a thoughtful wise older scholar with vitality. Preserve all embroidery, jewelry, sphere and pose.",
+        "faceCropNormalized": [
+          0.335,
+          0,
+          0.38
+        ],
+        "youngSourceSHA256": "187baa8ff75f0af381e129c88c85096a96f0f209e099528bd0747dd2e19f0d20",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-8b9101e1-c234-414d-a27a-45dd93431172.png",
+        "files": {
+          "knee": "knee\\ganghui.png",
+          "face": "face\\ganghui.png"
+        }
+      },
+      {
+        "id": "navigator_white",
+        "name": "하얀 남방의 항해사",
+        "youngPath": "D:/Git/대항해2 CLAUDE/WebGame/images/characters/player_half_navigator_white.png",
+        "prompt": "Use case: identity-preserve age progression. Input image 1 is the existing YOUNG PLAYER CHARACTER edit target and sole identity/style/costume reference. Make THE EXACT SAME MAN 30 YEARS OLDER, a clearly OLD/ELDERLY, dignified veteran version. Respect the reference's apparent starting age: add thirty believable years, broadly late 50s to 60s. He must look visibly old, not a young face merely painted with white hair. Natural silver-gray/white hair, graying facial hair, substantial forehead and crow's feet lines, mature under-eye lids, nasolabial lines, older neck and hand skin. Preserve recognizable eye/nose/mouth/bone structure, ethnicity, hairstyle silhouette, healthy strong physique and his charisma. Keep the same calm serious/wise expression and face direction, exact original costume and colors, pose, hands, weapons, book/hat/glasses or other held props. Match the existing finely detailed semi-realistic PAINTED historical adventure game style, harmonized facial lighting and materials, no photographic pasted head. Output one high-resolution square knee-up character cutout, knees at bottom, hair/head/accessories/held props entirely inside frame with small safe margin. Genuine transparent alpha background, no landscape/backdrop/floor, no labels/text, no watermark, no contact sheet, no extra person. Character: open white linen-shirt navigator with short dark wavy hair, blue-gray eyes, leather diagonal strap, navigational device in raised hand and hand resting on sword. Same individual 30 years older: silver-gray short waves, neatly shaped silver-gray moustache and short jaw/chin beard, weathered eye corners and forehead, deeply experienced calm navigator. Preserve open white shirt, gear and original posture.",
+        "faceCropNormalized": [
+          0.315,
+          0.005,
+          0.345
+        ],
+        "youngSourceSHA256": "e54bdda218c82c5881067a644a373df61c3cfd9bf90cf11c1e1751ec90826e10",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-63520dec-01d2-4637-9b19-fc870fa5dceb.png",
+        "files": {
+          "knee": "knee\\navigator_white.png",
+          "face": "face\\navigator_white.png"
+        }
+      },
+      {
+        "id": "sea_dog",
+        "name": "망원경을 든 뱃사람",
+        "youngPath": "D:/Git/대항해2 CLAUDE/WebGame/images/characters/player_half_sea_dog.png",
+        "prompt": "Use case: identity-preserve age progression. Input image 1 is the existing YOUNG PLAYER CHARACTER edit target and sole identity/style/costume reference. Make THE EXACT SAME MAN 30 YEARS OLDER, a clearly OLD/ELDERLY, dignified veteran version. Respect the reference's apparent starting age: add thirty believable years, broadly late 50s to 60s. He must look visibly old, not a young face merely painted with white hair. Natural silver-gray/white hair, graying facial hair, substantial forehead and crow's feet lines, mature under-eye lids, nasolabial lines, older neck and hand skin. Preserve recognizable eye/nose/mouth/bone structure, ethnicity, hairstyle silhouette, healthy strong physique and his charisma. Keep the same calm serious/wise expression and face direction, exact original costume and colors, pose, hands, weapons, book/hat/glasses or other held props. Match the existing finely detailed semi-realistic PAINTED historical adventure game style, harmonized facial lighting and materials, no photographic pasted head. Output one high-resolution square knee-up character cutout, knees at bottom, hair/head/accessories/held props entirely inside frame with small safe margin. Genuine transparent alpha background, no landscape/backdrop/floor, no labels/text, no watermark, no contact sheet, no extra person. Character: rugged sailor looking through a brass spyglass with raised arm, red waistcoat over cream rolled-sleeve shirt, rope in other hand. Same face in profile 30 years older: thick wavy gray hair, gray moustache and full short gray beard, pronounced sun-weathered skin and lines, steady intense gaze into spyglass. CRITICAL: keep the COMPLETE brass spyglass, eyepiece against his eye, raised forearm and fingers inside canvas, plus the rope and red waistcoat. Do not hide/crop/remove the telescope.",
+        "faceCropNormalized": [
+          0.18,
+          0,
+          0.53
+        ],
+        "youngSourceSHA256": "8f092b98630ee4f98d7f9bfd223d17016e1e23910aa09e490a5a3fb03bc6053f",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-76147dbc-76a9-4fd2-8b7c-50c9f9dcaa27.png",
+        "files": {
+          "knee": "knee\\sea_dog.png",
+          "face": "face\\sea_dog.png"
+        }
+      },
+      {
+        "id": "charismatic_admiral",
+        "name": "카리스마 제독",
+        "youngPath": "D:/Git/대항해2 CLAUDE/WebGame/images/characters/player_half_charismatic_admiral.png",
+        "prompt": "Use case: identity-preserve age progression. Input image 1 is the existing YOUNG PLAYER CHARACTER edit target and sole identity/style/costume reference. Make THE EXACT SAME MAN 30 YEARS OLDER, a clearly OLD/ELDERLY, dignified veteran version. Respect the reference's apparent starting age: add thirty believable years, broadly late 50s to 60s. He must look visibly old, not a young face merely painted with white hair. Natural silver-gray/white hair, graying facial hair, substantial forehead and crow's feet lines, mature under-eye lids, nasolabial lines, older neck and hand skin. Preserve recognizable eye/nose/mouth/bone structure, ethnicity, hairstyle silhouette, healthy strong physique and his charisma. Keep the same calm serious/wise expression and face direction, exact original costume and colors, pose, hands, weapons, book/hat/glasses or other held props. Match the existing finely detailed semi-realistic PAINTED historical adventure game style, harmonized facial lighting and materials, no photographic pasted head. Output one high-resolution square knee-up character cutout, knees at bottom, hair/head/accessories/held props entirely inside frame with small safe margin. Genuine transparent alpha background, no landscape/backdrop/floor, no labels/text, no watermark, no contact sheet, no extra person. Character: charismatic admiral with shoulder-length dark brown hair, ornate red-and-gold cloak and armor, one hand on sword, other holding navigational device down by side. Same identity 30 years later: shoulder-length silver-gray hair, full neatly groomed gray moustache/beard, lined authoritative face and mature eyelids, magnetic noble elderly commander. Preserve red cape/armor and all held items and stance.",
+        "faceCropNormalized": [
+          0.285,
+          0,
+          0.35
+        ],
+        "youngSourceSHA256": "26ce67517645c6f2a11abf6b46fa63737449483754d5ca61be72b70f2e235e10",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-be12dd11-f7cd-440b-9ce2-58f4be028933.png",
+        "files": {
+          "knee": "knee\\charismatic_admiral.png",
+          "face": "face\\charismatic_admiral.png"
+        }
+      },
+      {
+        "id": "noble_scholar",
+        "name": "귀족 학자 제독",
+        "youngPath": "D:/Git/대항해2 CLAUDE/WebGame/images/characters/player_half_noble_scholar.png",
+        "prompt": "Use case: identity-preserve age progression. Input image 1 is the existing YOUNG PLAYER CHARACTER edit target and sole identity/style/costume reference. Make THE EXACT SAME MAN 30 YEARS OLDER, a clearly OLD/ELDERLY, dignified veteran version. Respect the reference's apparent starting age: add thirty believable years, broadly late 50s to 60s. He must look visibly old, not a young face merely painted with white hair. Natural silver-gray/white hair, graying facial hair, substantial forehead and crow's feet lines, mature under-eye lids, nasolabial lines, older neck and hand skin. Preserve recognizable eye/nose/mouth/bone structure, ethnicity, hairstyle silhouette, healthy strong physique and his charisma. Keep the same calm serious/wise expression and face direction, exact original costume and colors, pose, hands, weapons, book/hat/glasses or other held props. Match the existing finely detailed semi-realistic PAINTED historical adventure game style, harmonized facial lighting and materials, no photographic pasted head. Output one high-resolution square knee-up character cutout, knees at bottom, hair/head/accessories/held props entirely inside frame with small safe margin. Genuine transparent alpha background, no landscape/backdrop/floor, no labels/text, no watermark, no contact sheet, no extra person. Character: scholarly noble admiral, swept-back light brown-blond hair, red embroidered cape over dark gold embroidered outfit, large leather-bound astronomical book held to chest, sword at hip. Same individual 30 years older: swept-back silver-gray hair, dignified well-groomed silver moustache and short pointed beard, clear age lines and wise thoughtful gaze. Preserve complete book with its gold design and hand on its cover, red cape, uniform and pose.",
+        "faceCropNormalized": [
+          0.365,
+          0.005,
+          0.37
+        ],
+        "youngSourceSHA256": "696653c46f35190142d6a9144965156d2edd0498a397b0b342f236c84346c16e",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-93fa3229-4b29-4f7a-80bc-abc5ae09558f.png",
+        "files": {
+          "knee": "knee\\noble_scholar.png",
+          "face": "face\\noble_scholar.png"
+        }
+      },
+      {
+        "id": "casanova",
+        "name": "카사노바",
+        "youngPath": "D:/Git/대항해2 CLAUDE/WebGame/images/characters/player_half_casanova.png",
+        "prompt": "Use case: identity-preserve age progression. Input image 1 is the existing YOUNG PLAYER CHARACTER edit target and sole identity/style/costume reference. Make THE EXACT SAME MAN 30 YEARS OLDER, a clearly OLD/ELDERLY, dignified veteran version. Respect the reference's apparent starting age: add thirty believable years, broadly late 50s to 60s. He must look visibly old, not a young face merely painted with white hair. Natural silver-gray/white hair, graying facial hair, substantial forehead and crow's feet lines, mature under-eye lids, nasolabial lines, older neck and hand skin. Preserve recognizable eye/nose/mouth/bone structure, ethnicity, hairstyle silhouette, healthy strong physique and his charisma. Keep the same calm serious/wise expression and face direction, exact original costume and colors, pose, hands, weapons, book/hat/glasses or other held props. Match the existing finely detailed semi-realistic PAINTED historical adventure game style, harmonized facial lighting and materials, no photographic pasted head. Output one high-resolution square knee-up character cutout, knees at bottom, hair/head/accessories/held props entirely inside frame with small safe margin. Genuine transparent alpha background, no landscape/backdrop/floor, no labels/text, no watermark, no contact sheet, no extra person. Character: elegant Casanova, wavy dark-blond shoulder-length hair, navy/gold embroidered cloak and outfit, gloves, rose tucked into waist, ornate sword. Same recognizable attractive individual 30 years later: silver-gray wavy hair, refined silver moustache and neatly trimmed silver chin/jaw beard, mature lined face and thoughtful knowing gaze, dignified older romantic captain. Preserve rose, gloves, navy cloak/gold trim, complete sword and original stance.",
+        "faceCropNormalized": [
+          0.335,
+          0.005,
+          0.365
+        ],
+        "youngSourceSHA256": "df7e2893df07c3ca7091a60923f7f5c38621548bdecd9815d727e80fb47d1c87",
+        "generatedSource": "C:\\Users\\User\\.codex\\generated_images\\01a20838-e14b-72f1-996d-cf4f6e56b6f5\\exec-e1fb92c0-e97d-4975-987b-16b187dcfcdb.png",
+        "files": {
+          "knee": "knee\\casanova.png",
+          "face": "face\\casanova.png"
+        }
+      }
+    ]
+  }
+}

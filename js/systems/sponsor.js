@@ -5,6 +5,16 @@
   var SP = {};
   G.Sponsor = SP;
   function S() { return G.Game.state; }
+  /* 시대에 따라 바뀌는 직함 (2026-11-23 — 도쿠가와 시대에도 「무로마치 쇼군」이던 것)
+     sp.eraTitles = [[해, 직함], …]: 그 해부터 그 직함으로 보인다. sp.title을 읽는 곳(건물·대화·소식·수첩)이 모두 그대로 따른다 */
+  (G.SPONSORS || []).forEach(function (sp) {
+    if (!sp.eraTitles || sp.__eraTitle) return;
+    var base = sp.title;
+    Object.defineProperty(sp, '__eraTitle', { value: true });
+    Object.defineProperty(sp, 'title', { configurable: true, enumerable: true,
+      get: function () { var s = G.Game && G.Game.state, y = s && s.date ? s.date.y + ((s.date.m || 1) - 1) / 12 : 0, t = base; sp.eraTitles.forEach(function (e) { if (y >= e[0]) t = e[1]; }); return t; },
+      set: function (v) { base = v; } });
+  });
 
   /** 대가 바뀌는 해에 소수를 쓰면 달까지 본다 (1520.5 = 1520년 7월부터 — 아즈텍 황제). 정수만 쓰면 예전과 같다 */
   function yearOf(date) { return date.y + ((date.m || 1) - 1) / 12; }
@@ -131,8 +141,9 @@
     if (t == null) t = (VV.noble || {})[key];
     if (t == null) return '';
     if (Array.isArray(t)) t = U.pickFresh(SP.voiceKey(sp) + ':' + key, t);     // 바로 앞에 한 말은 되풀이하지 않는다
+    if (SP.voiceKey(sp) === 'merchant' && G.R.heroCall('나리') !== '나리') t = t.replace(/나리/g, G.R.heroCall('나리'));   // 상인은 제독을 「나리」라 부른다 — 여성 제독은 「아씨」
     ctx = ctx || {};
-    var base = { p: S().player.name, me: SP.holderName(sp), I: (G.SPONSOR_SELF || {})[sp.id] || '짐', bro: sp.type === 'pope' ? '아들' : '형제' };
+    var base = { p: S().player.name, me: SP.holderName(sp), I: (G.SPONSOR_SELF || {})[sp.id] || '짐', bro: sp.type === 'pope' ? (G.R.heroFemale() ? '딸' : '아들') : (G.R.heroFemale() ? '자매' : '형제') };
     return t.replace(/\{(\^?)(\w+)(?:\|([^}]+))?\}/g, function (m, only, k, pair) {
       var val = ctx[k] != null ? ctx[k] : base[k];
       val = val == null ? '' : String(val);

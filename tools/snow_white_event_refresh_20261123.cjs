@@ -5,14 +5,16 @@ const path = require('path');
 const vm = require('vm');
 const { chromium } = require('./procedural_art/node_modules/playwright-core');
 const root = path.resolve(__dirname, '..');
-const record = path.join(root, 'artifacts/snow-white-events-20261123');
+const record = path.resolve(root, process.env.SNOW_WHITE_EVENT_RECORD || 'artifacts/snow-white-events-20261123/updo-v2');
+const selectedIds = new Set(process.argv.slice(2));
 const jobs = [
   ['snow_white_rescue', 'legend-events/snow_white_rescue', '왕비의 사냥꾼 — 안도와 감사'],
   ['onceupon', 'achievement-events/onceupon', 'Once Upon a Time — 새로운 항해의 설렘'],
   ['happily_after_all', 'legend-events/happily_after_all', 'Happily Ever After — 다정한 행복'],
   ['dreamcome', 'achievement-events/dreamcome', 'Dream Come True — 편안한 집']
-];
+].filter(job => !selectedIds.size || selectedIds.has(job[0]));
 async function main() {
+  if (!jobs.length) throw new Error('내보낼 사건 ID를 확인하세요.');
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe',
     headless: true, args: ['--no-sandbox'] });
   try {
@@ -78,7 +80,7 @@ async function main() {
     const validation = { images: results, errors };
     fs.writeFileSync(path.join(record, 'validation.json'), JSON.stringify(validation, null, 2));
     if (errors.length) throw new Error(errors.join('\n'));
-    console.log('사건 원화 4장 적용, 1881×836 규격·실제 사건 액자 로딩·정리 확인, 콘솔 오류 0.');
+    console.log('사건 원화 ' + jobs.length + '장 적용, 1881×836 규격·실제 사건 액자 로딩·정리 확인, 콘솔 오류 0.');
   } finally { await browser.close(); }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

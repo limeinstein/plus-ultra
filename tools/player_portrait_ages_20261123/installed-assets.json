@@ -1,0 +1,562 @@
+[
+  {
+    "id": "armored_navigator",
+    "name": "철갑 항해사",
+    "stage": "young",
+    "kind": "face",
+    "key": "portraits/player/armored_navigator",
+    "file": "portraits/player-ages-20261123/young/armored_navigator.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\face\\armored_navigator.png",
+    "sourceSHA256": "c5a7e3f639da1ad7384f07d2ecec60cae0969901429183e48e6548abdc1e5d3e"
+  },
+  {
+    "id": "armored_navigator",
+    "name": "철갑 항해사",
+    "stage": "young",
+    "kind": "knee",
+    "key": "characters/player_half_armored_navigator",
+    "file": "characters/player-ages-20261123/young/armored_navigator.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\armored_navigator.png",
+    "sourceSHA256": "391d2c0246f065795f0abba62c7b8187b36cd1767e350c087b718d96b8b7d36d"
+  },
+  {
+    "id": "armored_navigator",
+    "name": "철갑 항해사",
+    "stage": "middle",
+    "kind": "face",
+    "key": "portraits/player-aged/armored_navigator",
+    "file": "portraits/player-ages-20261123/middle/armored_navigator.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\face\\armored_navigator.png",
+    "sourceSHA256": "f309125f2a3c4a5fe212f29e65a800103adc50f278d2da60ef9f51d9d2452a65"
+  },
+  {
+    "id": "armored_navigator",
+    "name": "철갑 항해사",
+    "stage": "middle",
+    "kind": "knee",
+    "key": "characters/player_half_armored_navigator_old",
+    "file": "characters/player-ages-20261123/middle/armored_navigator.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\knee\\armored_navigator.png",
+    "sourceSHA256": "7b11b9e7692aa57fb94ca13c8539dd09861e1a24999a1655576df7a199f0a1f2"
+  },
+  {
+    "id": "armored_navigator",
+    "name": "철갑 항해사",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/armored_navigator",
+    "file": "portraits/player-ages-20261123/elderly/armored_navigator.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\armored_navigator.png",
+    "sourceSHA256": "1d0543114c265648a24488cbbad2bc5dc85d109a80cd9fb3bb41b62b1822cb14"
+  },
+  {
+    "id": "armored_navigator",
+    "name": "철갑 항해사",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_armored_navigator_elderly",
+    "file": "characters/player-ages-20261123/elderly/armored_navigator.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\armored_navigator.png",
+    "sourceSHA256": "e684cf7a92ad2383be42db7a0dffb1b081e6ee8d0a94ca730835d44e62175d21"
+  },
+  {
+    "id": "muscle_swordsman",
+    "name": "근육질 검사",
+    "stage": "young",
+    "kind": "face",
+    "key": "portraits/player/muscle_swordsman",
+    "file": "portraits/player-ages-20261123/young/muscle_swordsman.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\face\\muscle_swordsman.png",
+    "sourceSHA256": "a520ef0386a62aa8b546f14d1a00b0ca29a497dc9d79d9117e07c4b7864a07e5"
+  },
+  {
+    "id": "muscle_swordsman",
+    "name": "근육질 검사",
+    "stage": "young",
+    "kind": "knee",
+    "key": "characters/player_half_muscle_swordsman",
+    "file": "characters/player-ages-20261123/young/muscle_swordsman.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\muscle_swordsman.png",
+    "sourceSHA256": "80288e020546ebc15ec655df48aa3cc82a969b8f17e7ace93a648bd157573bb9"
+  },
+  {
+    "id": "muscle_swordsman",
+    "name": "근육질 검사",
+    "stage": "middle",
+    "kind": "face",
+    "key": "portraits/player-aged/muscle_swordsman",
+    "file": "portraits/player-ages-20261123/middle/muscle_swordsman.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\face\\muscle_swordsman.png",
+    "sourceSHA256": "f16012f89cd928578e085666281252040bfe86783df9ad4f4acb640679371110"
+  },
+  {
+    "id": "muscle_swordsman",
+    "name": "근육질 검사",
+    "stage": "middle",
+    "kind": "knee",
+    "key": "characters/player_half_muscle_swordsman_old",
+    "file": "characters/player-ages-20261123/middle/muscle_swordsman.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\knee\\muscle_swordsman.png",
+    "sourceSHA256": "c33df2e3273fb71a365e9419787ed09dc8c993df2c85f03cda5dac24d66cf49f"
+  },
+  {
+    "id": "muscle_swordsman",
+    "name": "근육질 검사",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/muscle_swordsman",
+    "file": "portraits/player-ages-20261123/elderly/muscle_swordsman.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\muscle_swordsman.png",
+    "sourceSHA256": "450ea1c5ab718fdfa97cd31bf7a002c29ee37bba0a9ad59bdf8d3a0e7fdc5577"
+  },
+  {
+    "id": "muscle_swordsman",
+    "name": "근육질 검사",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_muscle_swordsman_elderly",
+    "file": "characters/player-ages-20261123/elderly/muscle_swordsman.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\muscle_swordsman.png",
+    "sourceSHA256": "f4836fa5c2fe84ecd7f3ed9c56036db90df1b10624775fef59c8038ff8d70321"
+  },
+  {
+    "id": "hat_spinner",
+    "name": "모자를 돌리는 항해사",
+    "stage": "young",
+    "kind": "face",
+    "key": "portraits/player/hat_spinner",
+    "file": "portraits/player-ages-20261123/young/hat_spinner.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\face\\hat_spinner.png",
+    "sourceSHA256": "18aa4e417721bbb32e652e301bd39c1029ebd9f163c1f4652e0caf9ec5f99ac9"
+  },
+  {
+    "id": "hat_spinner",
+    "name": "모자를 돌리는 항해사",
+    "stage": "young",
+    "kind": "knee",
+    "key": "characters/player_half_hat_spinner",
+    "file": "characters/player-ages-20261123/young/hat_spinner.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\hat_spinner.png",
+    "sourceSHA256": "0b0a015fffe3c59a9f27d507c462505b5f0d143e0a56893f50db0e9e39ac5464"
+  },
+  {
+    "id": "hat_spinner",
+    "name": "모자를 돌리는 항해사",
+    "stage": "middle",
+    "kind": "face",
+    "key": "portraits/player-aged/hat_spinner",
+    "file": "portraits/player-ages-20261123/middle/hat_spinner.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\face\\hat_spinner.png",
+    "sourceSHA256": "cf60d13c087faed45bd2b266248650efdb78c20154311e321f674f68eaa92d40"
+  },
+  {
+    "id": "hat_spinner",
+    "name": "모자를 돌리는 항해사",
+    "stage": "middle",
+    "kind": "knee",
+    "key": "characters/player_half_hat_spinner_old",
+    "file": "characters/player-ages-20261123/middle/hat_spinner.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\knee\\hat_spinner.png",
+    "sourceSHA256": "5a99b73b833dfc6e8503d06114b64d200d6131dff228e35d9f536b79da66aa68"
+  },
+  {
+    "id": "hat_spinner",
+    "name": "모자를 돌리는 항해사",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/hat_spinner",
+    "file": "portraits/player-ages-20261123/elderly/hat_spinner.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\hat_spinner.png",
+    "sourceSHA256": "f9ea9a9957a761edf2569c8a41665b27ec1b1e54b42da356411db8151d206365"
+  },
+  {
+    "id": "hat_spinner",
+    "name": "모자를 돌리는 항해사",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_hat_spinner_elderly",
+    "file": "characters/player-ages-20261123/elderly/hat_spinner.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\hat_spinner.png",
+    "sourceSHA256": "38673cd82e89bb02ddbef24582a1c344de7a8b709fc9805993c2e22b540d3a91"
+  },
+  {
+    "id": "battle_vanguard",
+    "name": "돌격대장",
+    "stage": "young",
+    "kind": "face",
+    "key": "portraits/player/battle_vanguard",
+    "file": "portraits/player-ages-20261123/young/battle_vanguard.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\face\\battle_vanguard.png",
+    "sourceSHA256": "dea798ea83d8eb1a30313167a2cbb9f17768d1d6996c391a1e58171846145797"
+  },
+  {
+    "id": "battle_vanguard",
+    "name": "돌격대장",
+    "stage": "young",
+    "kind": "knee",
+    "key": "characters/player_half_battle_vanguard",
+    "file": "characters/player-ages-20261123/young/battle_vanguard.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\battle_vanguard.png",
+    "sourceSHA256": "71f9bf0cbebf5b74a410debc7f583985f4a15f19996c9f28cbdc9c3b940d2ce9"
+  },
+  {
+    "id": "battle_vanguard",
+    "name": "돌격대장",
+    "stage": "middle",
+    "kind": "face",
+    "key": "portraits/player-aged/battle_vanguard",
+    "file": "portraits/player-ages-20261123/middle/battle_vanguard.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\face\\battle_vanguard.png",
+    "sourceSHA256": "d0bccdb7f5757ec0beb6d599006aed126161ec00b88821b479f398ba19e6f38d"
+  },
+  {
+    "id": "battle_vanguard",
+    "name": "돌격대장",
+    "stage": "middle",
+    "kind": "knee",
+    "key": "characters/player_half_battle_vanguard_old",
+    "file": "characters/player-ages-20261123/middle/battle_vanguard.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\knee\\battle_vanguard.png",
+    "sourceSHA256": "7f4a8f9e6a3d31489057ab9fc35007fd2df1325a20687264f70d2ca206515227"
+  },
+  {
+    "id": "battle_vanguard",
+    "name": "돌격대장",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/battle_vanguard",
+    "file": "portraits/player-ages-20261123/elderly/battle_vanguard.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\battle_vanguard.png",
+    "sourceSHA256": "a0651aa175390759349c25cf938db13f049ee3e144312e2e2ea9c4ea2b970b46"
+  },
+  {
+    "id": "battle_vanguard",
+    "name": "돌격대장",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_battle_vanguard_elderly",
+    "file": "characters/player-ages-20261123/elderly/battle_vanguard.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\battle_vanguard.png",
+    "sourceSHA256": "d121722b9de2ab0fe71e96eb49a030fe0e6765c251353754ca33b70fb373655d"
+  },
+  {
+    "id": "army_officer",
+    "name": "정규군 장교",
+    "stage": "young",
+    "kind": "face",
+    "key": "portraits/player/army_officer",
+    "file": "portraits/player-ages-20261123/young/army_officer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\face\\army_officer.png",
+    "sourceSHA256": "b10fed479013a8426c4a843d5a4a40ca5a24010b989c1644fa55c314d504b178"
+  },
+  {
+    "id": "army_officer",
+    "name": "정규군 장교",
+    "stage": "young",
+    "kind": "knee",
+    "key": "characters/player_half_army_officer",
+    "file": "characters/player-ages-20261123/young/army_officer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\army_officer.png",
+    "sourceSHA256": "151bc247bccc746356d19acafa97e7cf1feac6c2818cd599590d4ce47ecbc260"
+  },
+  {
+    "id": "army_officer",
+    "name": "정규군 장교",
+    "stage": "middle",
+    "kind": "face",
+    "key": "portraits/player-aged/army_officer",
+    "file": "portraits/player-ages-20261123/middle/army_officer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\face\\army_officer.png",
+    "sourceSHA256": "a220196eb6063ffa21290280122a023e16908a09631914a8e704c4eb7fc81a7c"
+  },
+  {
+    "id": "army_officer",
+    "name": "정규군 장교",
+    "stage": "middle",
+    "kind": "knee",
+    "key": "characters/player_half_army_officer_old",
+    "file": "characters/player-ages-20261123/middle/army_officer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\knee\\army_officer.png",
+    "sourceSHA256": "97f9c7ef599c2b6f33545dc74433dbba0aac368ebb68ba3235b849c01d3c8b2d"
+  },
+  {
+    "id": "army_officer",
+    "name": "정규군 장교",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/army_officer",
+    "file": "portraits/player-ages-20261123/elderly/army_officer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\army_officer.png",
+    "sourceSHA256": "b1bc5e1b187665e629b9db74e8e7efbd5f05a2e2e60035ebc16985a989473788"
+  },
+  {
+    "id": "army_officer",
+    "name": "정규군 장교",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_army_officer_elderly",
+    "file": "characters/player-ages-20261123/elderly/army_officer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\army_officer.png",
+    "sourceSHA256": "764d4c7f34a9bf762839ae3d7b9587228f73bd7e2557f6b32a7033daf865284b"
+  },
+  {
+    "id": "sky_adventurer",
+    "name": "가죽옷 모험가",
+    "stage": "young",
+    "kind": "face",
+    "key": "portraits/player/sky_adventurer",
+    "file": "portraits/player-ages-20261123/young/sky_adventurer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\face\\sky_adventurer.png",
+    "sourceSHA256": "0baaf26699e33ed72394dd8dc8bca37464a97956dfa94e8a0090722f62116ccf"
+  },
+  {
+    "id": "sky_adventurer",
+    "name": "가죽옷 모험가",
+    "stage": "young",
+    "kind": "knee",
+    "key": "characters/player_half_sky_adventurer",
+    "file": "characters/player-ages-20261123/young/sky_adventurer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\sky_adventurer.png",
+    "sourceSHA256": "3de377359808c46073d1514252873b087dc67e1cd6097821c031eb2b77fe9dc2"
+  },
+  {
+    "id": "sky_adventurer",
+    "name": "가죽옷 모험가",
+    "stage": "middle",
+    "kind": "face",
+    "key": "portraits/player-aged/sky_adventurer",
+    "file": "portraits/player-ages-20261123/middle/sky_adventurer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\face\\sky_adventurer.png",
+    "sourceSHA256": "2470ae0089b766b7a28d31deb10f797d43a4f749bdc4dedb87458c41452d40bc"
+  },
+  {
+    "id": "sky_adventurer",
+    "name": "가죽옷 모험가",
+    "stage": "middle",
+    "kind": "knee",
+    "key": "characters/player_half_sky_adventurer_old",
+    "file": "characters/player-ages-20261123/middle/sky_adventurer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\knee\\sky_adventurer.png",
+    "sourceSHA256": "e85e7261c50a885315d6740ff2c0cb90f42a6444dcb7c59f472b68301ca44db1"
+  },
+  {
+    "id": "sky_adventurer",
+    "name": "가죽옷 모험가",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/sky_adventurer",
+    "file": "portraits/player-ages-20261123/elderly/sky_adventurer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\sky_adventurer.png",
+    "sourceSHA256": "50819c93ed00832b1051b25bf8d7eec3180ab8dec14c7fa0eaaeb717b6fac156"
+  },
+  {
+    "id": "sky_adventurer",
+    "name": "가죽옷 모험가",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_sky_adventurer_elderly",
+    "file": "characters/player-ages-20261123/elderly/sky_adventurer.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\sky_adventurer.png",
+    "sourceSHA256": "470f3c272c0a9658d1920050f7bd9fbd756a3717fe4292d860113783daadf283"
+  },
+  {
+    "id": "blackcoat_captain",
+    "name": "검은 코트의 선장",
+    "stage": "young",
+    "kind": "face",
+    "key": "portraits/player/blackcoat_captain",
+    "file": "portraits/player-ages-20261123/young/blackcoat_captain.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\face\\blackcoat_captain.png",
+    "sourceSHA256": "25a773bffe18b9aebd581769bf9c95c32aa1671736fa2223244e8bca1903b137"
+  },
+  {
+    "id": "blackcoat_captain",
+    "name": "검은 코트의 선장",
+    "stage": "young",
+    "kind": "knee",
+    "key": "characters/player_half_blackcoat_captain",
+    "file": "characters/player-ages-20261123/young/blackcoat_captain.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\young\\knee\\blackcoat_captain.png",
+    "sourceSHA256": "fb2ee515ddf9ca3f175a0deb4b9e32849cd9664feb8ee55714b1aa4238a70c42"
+  },
+  {
+    "id": "blackcoat_captain",
+    "name": "검은 코트의 선장",
+    "stage": "middle",
+    "kind": "face",
+    "key": "portraits/player-aged/blackcoat_captain",
+    "file": "portraits/player-ages-20261123/middle/blackcoat_captain.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\face\\blackcoat_captain.png",
+    "sourceSHA256": "61b2ec90d08d418c75460624ed4713cff766624345513eaf397c2e6021fd69f5"
+  },
+  {
+    "id": "blackcoat_captain",
+    "name": "검은 코트의 선장",
+    "stage": "middle",
+    "kind": "knee",
+    "key": "characters/player_half_blackcoat_captain_old",
+    "file": "characters/player-ages-20261123/middle/blackcoat_captain.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-plus20-20261123\\knee\\blackcoat_captain.png",
+    "sourceSHA256": "d9a3e80eeb0909e6fff92f2d88aa710d854e7e4b5fa8dfe679509a8740aa799c"
+  },
+  {
+    "id": "blackcoat_captain",
+    "name": "검은 코트의 선장",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/blackcoat_captain",
+    "file": "portraits/player-ages-20261123/elderly/blackcoat_captain.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\face\\blackcoat_captain.png",
+    "sourceSHA256": "925f728bacb2161bfd5dbada8da21412e4273865bf12a9e1110c23636d2cbd2c"
+  },
+  {
+    "id": "blackcoat_captain",
+    "name": "검은 코트의 선장",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_blackcoat_captain_elderly",
+    "file": "characters/player-ages-20261123/elderly/blackcoat_captain.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-faces-seven-20261123\\middle-aged\\knee\\blackcoat_captain.png",
+    "sourceSHA256": "6179e1cb709638a27d3782221bcf3637282198ac3a6c1b12f1522b5244af7726"
+  },
+  {
+    "id": "admiral",
+    "name": "기본 제독",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/admiral",
+    "file": "portraits/player-ages-20261123/elderly/admiral.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\face\\admiral.png",
+    "sourceSHA256": "26a34b86f07cfaa2e4f7376f9d366223f26d3c673dd78b07e95f0378e22b35f0"
+  },
+  {
+    "id": "admiral",
+    "name": "기본 제독",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_elderly",
+    "file": "characters/player-ages-20261123/elderly/admiral.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\knee\\admiral.png",
+    "sourceSHA256": "9a6af73fa1ad1d4e684a03f3c59403e77d0039b864604d42794777e3471d82db"
+  },
+  {
+    "id": "ganghui",
+    "name": "중세의 연금술사",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/ganghui",
+    "file": "portraits/player-ages-20261123/elderly/ganghui.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\face\\ganghui.png",
+    "sourceSHA256": "631ea26d232ed7e26b094a364339ff0bcc66e5512ec5a2152df0688bc260fbb9"
+  },
+  {
+    "id": "ganghui",
+    "name": "중세의 연금술사",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_ganghui_elderly",
+    "file": "characters/player-ages-20261123/elderly/ganghui.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\knee\\ganghui.png",
+    "sourceSHA256": "33a85d181654d2ee8805eb5bf75fdc6d486b4c07fa9195a1f87221958e54fe74"
+  },
+  {
+    "id": "navigator_white",
+    "name": "하얀 남방의 항해사",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/navigator_white",
+    "file": "portraits/player-ages-20261123/elderly/navigator_white.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\face\\navigator_white.png",
+    "sourceSHA256": "6d5a4339af570f432657a49f90ec26cad41239710bd4db12a5942c5aaf4d5a4c"
+  },
+  {
+    "id": "navigator_white",
+    "name": "하얀 남방의 항해사",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_navigator_white_elderly",
+    "file": "characters/player-ages-20261123/elderly/navigator_white.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\knee\\navigator_white.png",
+    "sourceSHA256": "4ff209999fa256474274d33a03bc199b50627ca2e94f4f9514651d1c9f0ffc3c"
+  },
+  {
+    "id": "sea_dog",
+    "name": "망원경을 든 뱃사람",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/sea_dog",
+    "file": "portraits/player-ages-20261123/elderly/sea_dog.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\face\\sea_dog.png",
+    "sourceSHA256": "d75a7d99af7f0ee3716fc43285ca4faf6e605e4b76852f6cbe75fa0ba716c203"
+  },
+  {
+    "id": "sea_dog",
+    "name": "망원경을 든 뱃사람",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_sea_dog_elderly",
+    "file": "characters/player-ages-20261123/elderly/sea_dog.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\knee\\sea_dog.png",
+    "sourceSHA256": "f9ad613785a50eb326786ed20950b8a06ec1f8d3e6a9543a9cefa079948d8421"
+  },
+  {
+    "id": "charismatic_admiral",
+    "name": "카리스마 제독",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/charismatic_admiral",
+    "file": "portraits/player-ages-20261123/elderly/charismatic_admiral.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\face\\charismatic_admiral.png",
+    "sourceSHA256": "6275be1fa71dbbb1549483659034afca4b47caede2bdf6e290dcfe289d178a0c"
+  },
+  {
+    "id": "charismatic_admiral",
+    "name": "카리스마 제독",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_charismatic_admiral_elderly",
+    "file": "characters/player-ages-20261123/elderly/charismatic_admiral.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\knee\\charismatic_admiral.png",
+    "sourceSHA256": "105ca49da6f867935e39df3e3cb25473061ae39fb7ce7b4aa06136236d91cd6a"
+  },
+  {
+    "id": "noble_scholar",
+    "name": "귀족 학자 제독",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/noble_scholar",
+    "file": "portraits/player-ages-20261123/elderly/noble_scholar.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\face\\noble_scholar.png",
+    "sourceSHA256": "3d71ffb24ebbd7edc71341dbfe2af808c5370dc5092a1ca7598b3993959c3fbf"
+  },
+  {
+    "id": "noble_scholar",
+    "name": "귀족 학자 제독",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_noble_scholar_elderly",
+    "file": "characters/player-ages-20261123/elderly/noble_scholar.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\knee\\noble_scholar.png",
+    "sourceSHA256": "902e1e7146fab03d374324cc89d611dba765731fff6ebc188600dd03565544bb"
+  },
+  {
+    "id": "casanova",
+    "name": "카사노바",
+    "stage": "elderly",
+    "kind": "face",
+    "key": "portraits/player-elderly/casanova",
+    "file": "portraits/player-ages-20261123/elderly/casanova.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\face\\casanova.png",
+    "sourceSHA256": "ba7b8d1c34ae7fd43cf965d92c3c07600fc33e3033b87f7f8cd270699d29854c"
+  },
+  {
+    "id": "casanova",
+    "name": "카사노바",
+    "stage": "elderly",
+    "kind": "knee",
+    "key": "characters/player_half_casanova_elderly",
+    "file": "characters/player-ages-20261123/elderly/casanova.webp",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\player-remaining-seven-plus30-20261123\\knee\\casanova.png",
+    "sourceSHA256": "870c753c642881d2e6d881f3d35679eb56ad33a8040504c6339cec15ba70929f"
+  }
+]
