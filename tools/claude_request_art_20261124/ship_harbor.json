@@ -1,0 +1,7 @@
+{
+  "id": "ship_harbor",
+  "output": "achievement-events/ship_harbor.webp",
+  "prompt": "Use case: historical-scene. Asset type: ultrawide 1881x836 finished historical sailing adventure game event painting. A confident adult female admiral with dark braided hair in a navy captain coat stands at the wooden ship's wheel of a sixteenth-century sailing ship departing a sunlit harbor. She looks ahead with a warm commanding smile, both hands actually gripping the spokes naturally. Her five distinct adult husbands work as capable crewmen across the deck: a dark-haired navigator points at a parchment chart on a lashed barrel, a blond sailor hauls a taut rope with two hands, a bearded mature man coils a rope, two men raise canvas near the mast. The admiral is the central visual focus. Bright blue open sea ahead, old stone port and terracotta roofs recede behind, billowing sails and honest wooden rigging. Energetic teamwork and affectionate companionship, fully clothed historical dress, realistic anatomy, correctly attached fingers and tools. Rich hand-painted cinematic adventure realism, delicate brush texture and natural light. Single continuous scene, no text, no panels, no lettering, no border or watermark.",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-20b9eed6-9108-4b86-af38-d2ebd06ad7e8.png",
+  "tool": "built-in image_gen"
+}

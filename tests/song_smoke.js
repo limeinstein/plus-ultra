@@ -55,10 +55,40 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
       UI.alert = async () => {}; UI.fade = async (fn) => { fn && fn(); };
       UI.window = (o) => /^바닷길 공연/.test(o.title || '') ? window._win(o) : ({ result: Promise.resolve(o.buttons ? o.buttons[o.buttons.length - 1].value : null), el: document.createElement('div'), content: document.createElement('div') });
       G.Scenes.discoveryCard = async () => {}; if (G.Names) G.Names.offer = async () => {};
-      G.FX.song = { sec: 1.2 };
+      G.FX.song = { sec: 1.2, fast: true };   // fast: 제목 카드·노랫가락을 기다리지 않는다
     });
     await page.evaluate(async () => { await G.Game.ensureGeo(); G.SongStory.start(); G.Game.go('city', { cityId: 229, song: true }); });
-    await page.waitForFunction(() => G.Game.sceneName === 'city' && G.Game.state && G.Game.state.song && G.Game.state.song.prologue, null, { timeout: 120000 });
+    // ── 도입부: 한산도를 걸으며 한 장면씩 (거리 → 자택 → 항구 → 술집 → 한산 관아 → 항구)
+    await page.waitForFunction(() => G.Game.sceneName === 'city' && G.Game.state && G.Game.state.song && G.Game.state.song.pro >= 1 && !G.Scenes.city.isBusy(), null, { timeout: 120000 });
+    const p1 = await page.evaluate(() => { const s = G.Game.state, t = s.song, td = G.SongStory.todo(G.CITY_DATA[229]); return { pro: t.pro, done: !!t.prologue, said: SAID.length, mates: s.mates.map(m => m.id).join(), contract: !!s.contract, todo: td.map(x => x.kind + ':' + x.text.replace(/<[^>]*>/g, '')), shots: G.SongStory._shots, cards: G.SongStory._cards, shotOn: G.SongStory.shotOn(), can: G.SongStory.canConcert(G.CITY_DATA[229]).ok }; });
+    ok(p1.pro === 1 && !p1.done && p1.said >= 10 && p1.said < 20 && p1.mates === 'sy_hwanggyu' && !p1.contract, '도입부 ① 거리: 갯바위의 기억과 황규 — 대사 ' + p1.said + '줄만 보고 걸을 수 있다 (계약·출항은 아직)');
+    ok(p1.todo.length === 1 && /^home:자택/.test(p1.todo[0]) && p1.shots === 1 && p1.cards === 2 && !p1.shotOn && !p1.can, '할 일 맨 위에 다음 갈 곳 하나 — ' + p1.todo[0] + ' · 이벤트 샷 ' + p1.shots + ' · 제목 카드 ' + p1.cards);
+    async function goIn(kind) {
+      await page.evaluate(async (k) => { SAID.length = 0; const td = G.SongStory.todo(G.Scenes.city.city())[0]; await G.Scenes.city.visit(k, td && td.kind === k ? td.arg : (k === 'mansion' ? G.R.bldArg(G.SPONSOR.sy_imsato) : undefined)); }, kind);
+      await page.waitForFunction(() => !G.Scenes.city.isBusy(), null, { timeout: 60000 });
+      return page.evaluate(() => { const s = G.Game.state, t = s.song, td = G.SongStory.todo(G.CITY_DATA[229])[0]; return { pro: t.pro, done: !!t.prologue, said: SAID.length, first: SAID[0] || '', who: Array.from(new Set(SAID.map(x => x.split(':')[0]))), cur: G.Scenes.city.current() && G.Scenes.city.current().kind, next: td ? td.kind : '', mates: s.mates.map(m => m.id).join(), shots: G.SongStory._shots, shotOn: G.SongStory.shotOn(), last: G.SongStory._lastShot || {} }; });
+    }
+    const n1 = await goIn('harbor');
+    ok(n1.pro === 1 && n1.said === 1 && !n1.cur && /집부터/.test(n1.first), '아직 때가 아닌 항구: 한마디 듣고 거리로 — ' + n1.first);
+    const n2 = await goIn('mansion');
+    ok(n2.pro === 1 && n2.said === 1 && !n2.cur && /^관아 아전/.test(n2.first), '아직 때가 아닌 관아: ' + n2.first);
+    const dep = await page.evaluate(async () => { SAID.length = 0; const r = await G.Scenes.city.B.harbor.depart(G.CITY_DATA[229]); return { r, scene: G.Game.sceneName, said: SAID.length }; });
+    ok(dep.r === false && dep.scene === 'city' && dep.said === 1, '도입부를 마치기 전에는 출항이 막힌다');
+    const freeIn = await goIn('trade');
+    ok(freeIn.pro === 1 && freeIn.cur === 'trade', '교역소 같은 다른 건물은 언제든 드나든다');
+    await page.evaluate(() => G.Scenes.city.leave());
+    const h1 = await goIn('home');
+    ok(h1.pro === 2 && !h1.cur && h1.next === 'harbor' && ['도현 아저씨', '어린 소영', '소영의 어머니'].every(n => h1.who.includes(n)) && h1.shots - n2.shots === 3 && !h1.shotOn, '② 자택: 지도와 끝맺지 못한 노래 — ' + h1.said + '줄 · 이벤트 샷 3장(이야기·노래·빈방) → 다음은 항구');
+    const h2 = await goIn('harbor');
+    ok(h2.pro === 3 && !h2.cur && h2.next === 'tavern' && h2.who.includes('박월담') && h2.mates === 'sy_hwanggyu' && h2.last.cast === 2, '③ 항구: 황규의 품삯 꾸러미 · 새 갓을 쓴 선비 — ' + h2.said + '줄 → 다음은 술집');
+    const h3 = await goIn('tavern');
+    ok(h3.pro === 4 && !h3.cur && h3.next === 'mansion' && h3.last.cast === 3 && /주막의 밤/.test(h3.last.title), '④ 술집: 주막의 밤(셋이 선 이벤트 샷) · 다음 날 아침 — ' + h3.said + '줄 → 다음은 한산 관아');
+    const h4 = await goIn('mansion');
+    ok(h4.pro === 5 && !h4.done && !h4.cur && h4.next === 'harbor' && h4.mates === 'sy_hwanggyu,sy_woldam' && h4.who.includes('사또 임처사'), '⑤ 한산 관아: 사또의 조건 · 박월담이 일행이 됨 — ' + h4.said + '줄 → 다음은 항구');
+    const h5 = await goIn('harbor');
+    ok(h5.pro === 6 && h5.done && h5.cur === 'harbor' && !h5.shotOn, '⑥ 항구: 물마루호 — 도입부 끝, 그대로 항구 메뉴(출항 준비)');
+    await page.evaluate(() => { SAID.length = 200; G.Scenes.city.leave(); });
+    await page.waitForFunction(() => G.Game.sceneName === 'city' && G.Game.state && G.Game.state.song && G.Game.state.song.prologue && !G.Scenes.city.isBusy(), null, { timeout: 120000 });
     const a = await page.evaluate(() => {
       const s = G.Game.state;
       return { name: s.player.name, given: s.player.given, nation: s.player.nation, g: s.player.g, home: s.player.home, city: s.loc.city, look: s.player.look,
@@ -74,7 +104,6 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     ok(a.ship === '물마루/maengseon' && a.map, '배 「물마루」(맹선) · 도현의 지도를 지님');
     ok(a.contract === 'qufu@sy_imsato' && a.hints.includes('qufu') && a.hints.includes('sy_longmen') && a.pass, '사또와 곡부 계약 · 단서 ' + a.hints.join(',') + ' · 노인(路引)');
     ok(a.ming === null, '노인이 있으면 명나라 항구(항주)에 들어갈 수 있다');
-    ok(a.said > 60 && ['어린 소영', '황규', '박월담', '사또 임처사', '도현 아저씨', '김소영'].every(n => a.who.includes(n)), '프롤로그 대사 ' + a.said + '줄 — ' + a.who.join('·'));
     ok(a.face === 'portraits/player/soyoung' && a.half === 'characters/player_half_soyoung' && a.wd === 'portraits/mates/sy_woldam_half' && a.hg === 'portraits/mates/sy_hwanggyu', '그림: 소영 얼굴·무릎상 · 월담·황규 초상');
 
     // ── 바닷길 공연 (진짜 무대 창)
@@ -87,15 +116,19 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
         const g0 = s.player.gold, pr = G.SongStory.concert(c);
         await new Promise(r => setTimeout(r, 400));
         const stage = document.querySelector('.song-stage'), cast = stage ? stage.querySelectorAll('.who').length : 0;
+        const phase = stage ? stage.querySelector('.phase').textContent + '|' + stage.querySelector('.lyric .cur').textContent : '';
         await new Promise(r => setTimeout(r, 1500));
         const res = document.querySelector('.song-stage .result'); const txt = res ? res.textContent : '';
         const btn = Array.from(document.querySelectorAll('.win .foot button')).filter(b => /무대를 정리한다|막을 내린다/.test(b.textContent))[0]; if (btn) btn.click();
         const r = await pr; window.CHOOSE = null;
-        return { r, cast, txt, gold: s.player.gold - g0, rep: s.song.rep.slice(), todo: G.SongStory.todo(c).map(x => x.text) };
+        return { r, cast, txt, phase, bow: !!(stage && stage.classList.contains('bowing')), gold: s.player.gold - g0, rep: s.song.rep.slice(), todo: G.SongStory.todo(c).map(x => x.text) };
       }, [id, choose]);
     }
     const c1 = await concertAt(229);
     ok(c1.r && c1.r.crowd > 0 && c1.gold === c1.r.gold && c1.cast === 3 && /공연장이 되었다/.test(c1.txt), '한산도 공연: 무대에 셋 · 관객 ' + c1.r.crowd + ' · 사례 ' + c1.gold + '닢');
+    ok(/^(길놀이|첫 소절|둘째 소절)\|.+/.test(c1.phase) && c1.bow, '공연의 흐름: 길놀이 → 소절 → 인사 (' + c1.phase.slice(0, 40) + ' … 인사)');
+    const op = await page.evaluate(() => ({ open: SAID.filter(x => /^(황규|박월담): /.test(x)).length, close: SAID.filter(x => /^: /.test(x)).length }));
+    ok(op.open >= 1 && op.close >= 1, '공연의 여는 말(동료)과 맺는 말(해설)이 있다');
     const c1b = await concertAt(229);
     ok(c1b.blocked, '같은 도시·바로 다음 공연은 막힌다 — ' + c1b.blocked);
 
@@ -116,11 +149,13 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     }
     await step('1막 곡부·용문: 장면과 지도 고쳐 쓰기', async () => {
       ADV(30); await FIND('qufu'); const a = SAID.length; ADV(10); await FIND('sy_longmen'); const b = SAID.length;
-      return { ok: DONE('a1_qufu') && DONE('a1_longmen') && a > 8 && b > 6, note: a + '줄 · ' + b + '줄' };
+      const L = G.SongStory._lastShot || {};
+      return { ok: DONE('a1_qufu') && DONE('a1_longmen') && a > 8 && b > 6 && L.painted && /용문/.test(L.title) && !G.SongStory.shotOn() && G.Game.state.song.actSeen[1] != null, note: a + '줄 · ' + b + '줄 · 원화 이벤트 샷 「' + L.title + '」 · 제1막 카드' };
     });
     await step('1막 보고 → 둘째 계약(도다이지)', async () => {
       REP('qufu'); ADV(20); await AT(229); const s = G.Game.state;
-      return { ok: DONE('a1_report') && s.contract && s.contract.disc === 'sy_todaiji' && s.song.act >= 2, note: SAID.length + '줄' };
+      const L = G.SongStory._lastShot || {};
+      return { ok: DONE('a1_report') && s.contract && s.contract.disc === 'sy_todaiji' && s.song.act >= 2 && !L.painted && L.cast >= 2 && /한산 관아/.test(L.title) && /mansion/.test(L.key) && !G.SongStory.shotOn(), note: SAID.length + '줄 · 꾸린 이벤트 샷 「' + L.title + '」(' + L.cast + '명)' };
     });
     await step('2막 항주(견우)·사카이(직녀) → 둘이 동료', async () => {
       ADV(15); await AT(177); const h = SAID.length; ADV(10); await AT(192); const s = G.Game.state;
@@ -183,15 +218,28 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     ok(c4.r && c4.cast === 4, '끝난 뒤 「바닷길 노래」를 끝까지 — 관객 ' + c4.r.crowd);
     const late = await page.evaluate(async () => { ADV(40); SAID.length = 0; window.CHOOSE = null; const s = G.Game.state; s.loc.city = 14; return 1; });
     const c5 = await concertAt(14);
-    const r12 = await page.evaluate(() => DONE('r12_song'));
-    ok(c5.r && r12, '공연 뒤 「아직 조금 슬퍼요. 그런데 이제는 이 노래가 좋아요.」');
+    const r12 = await page.evaluate(() => ({ done: DONE('r12_song'), last: G.SongStory._lastShot || {} }));
+    ok(c5.r && r12.done, '공연 뒤 「아직 조금 슬퍼요. 그런데 이제는 이 노래가 좋아요.」');
+    ok(r12.last.painted && /^song\/concerts\//.test(r12.last.key) && r12.last.title === '그 노래', '공연 뒤 사건 「그 노래」는 그 고장의 공연 원화 위에서 — ' + r12.last.key);
+    // 공연 원화: 넷이 모이면 네 명 원화, 임처사가 오기 전의 셋은 <지역>_trio 가 있을 때만
+    const art = await page.evaluate(() => {
+      const s = G.Game.state, c = G.CITY_DATA[229], keep = s.mates.slice(), F = G.IMAGE_FILES, A = G.SongStory.concertArt;
+      const four = A(c);
+        s.mates = keep.filter(m => m.id !== 'sy_imcheosa'); const trio0 = A(c);
+        const has0 = G.Img.has; G.Img.has = k => k !== 'song/concerts/kr_trio' && has0.call(G.Img, k); const trioAbsent = A(c); G.Img.has = has0;
+      const has = G.Img.has; G.Img.has = k => k === 'song/concerts/kr_trio' || has.call(G.Img, k); const trio1 = A(c);
+      s.mates = keep.filter(m => m.id !== 'sy_imcheosa' && m.id !== 'sy_woldam'); const duo = A(c);
+      G.Img.has = has; s.mates = keep; void F;
+        return { four, trio0, trioAbsent, trio1, duo };
+    });
+      ok(art.four === 'song/concerts/kr' && art.trio0 === 'song/concerts/kr_trio' && art.trioAbsent === null && art.trio1 === 'song/concerts/kr_trio' && art.duo === null, '공연 원화: 넷 → ' + art.four + ' · 셋(임처사 전) → ' + art.trio0 + ' · 그림이 없는 묶음은 무릎상 무대');
 
     // 대사에 이름 없는 사람·자리표가 남지 않았나
     const bad = await page.evaluate(() => {
       const D = G.SONG, out = [];
       const codes = new Set(['P', 'Y', 'W', 'H', 'I', 'D', 'M', 'J', 'GW', 'JN', 'MA', 'JI', 'HK', 'ML', 'DA', 'AB', 'N'].concat(Object.keys(D.npcs)));
       function walk(lines) { (lines || []).forEach(l => { if (Array.isArray(l)) { const k = String(l[0]).replace(/^\?/, ''); if (!codes.has(k)) out.push(k); } else if (l && l.opts) l.opts.forEach(o => walk(o[1])); }); }
-      Object.values(D.prologue).forEach(walk); D.beats.forEach(b => walk(b.lines)); Object.values(D.markScenes).forEach(walk); walk(D.ending.meet);
+      D.prologue.stages.forEach(st => walk(st.lines)); Object.values(D.prologue.notYet).forEach(v => (Array.isArray(v) ? [v] : Object.values(v)).forEach(l => walk([l]))); D.beats.forEach(b => walk(b.lines)); Object.values(D.markScenes).forEach(walk); walk(D.ending.meet);
       D.beats.forEach(b => (b.after || []).forEach(x => { if (x !== 'end' && !D.beats.some(y => y.id === x)) out.push('after:' + x); }));
       return out;
     });

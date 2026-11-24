@@ -1,0 +1,6 @@
+{
+  "key": "noble_scholar_walk",
+  "prompt": "Edit ONLY this sprite sheet's background. Remove ALL white and gray backdrop, haze and shadow around the figures. Make the complete space outside the figures genuinely transparent with alpha ZERO, no semi-transparent background. Preserve the EXACT 4 columns x 2 rows with 8 complete figures and every original pose, body, face, hair, hands, clothes, props and size. Keep the same arrangement and clear gutters. No redraws, no added labels, lines or text.",
+  "input": "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-motion-20261124\\raw\\noble_scholar_walk.png",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-75c9d901-474c-44b6-9231-a737f995d8d7.png"
+}

@@ -221,7 +221,7 @@
   S.draw = function (ctx, x, y, ang, len, spec, t) {
     spec = spec || {};
     // 촬영된 시트에는 원래 돛 색이 박혀 있다. 해적 도색은 같은 돛 색의 코드 그림으로 복귀한다.
-    if (spec.pirateLivery || spec.sailColor) return false;
+    if (spec.pirateLivery || spec.sailColor || spec.sailDesign || (G.SailDesign && G.SailDesign.rigKey(spec.type,spec))) return false;
     var meta = G.SHIP_ART && G.SHIP_ART[spec.type];
     var transform = ctx.getTransform ? ctx.getTransform() : null, device = transform ? Math.hypot(transform.a, transform.b) : 1;
     var sh = ready(meta, !!meta && len / meta.baseLen * device < CF().halfBelow);

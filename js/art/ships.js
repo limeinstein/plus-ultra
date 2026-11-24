@@ -23,6 +23,8 @@
     if (h === 'outrigger') { k.hull = '#5a3a22'; k.sail = '#cdb27a'; k.flag = '#c9a030'; }
     if (h === 'galley') k.hull = '#4a2e1c';
     Object.assign(k, over || {});
+    if(G.SailDesign && k.sailShape && G.SailDesign.canShape(typeId,k.sailShape)){var form=G.SailDesign.shape(k.sailShape);if(form.kind)k.sails=k.sails.map(function(){return form.kind;});}
+    if(G.SailDesign&&!A.validSailColor(k.sailColor)){var design=G.SailDesign.design(k.sailDesign);if(!['shield','roundel'].includes(design.pattern)&&design.field)k.sail=design.field;}
     if (A.validSailColor(k.sailColor)) { k.sail = k.sailColor; k.sailTint = k.sailColor; }
     return k;
   };
@@ -60,13 +62,14 @@
 
   // ================================================================ 돛 (옆모습)
   /** 대나무 살 돛: 돛대 뒤쪽으로 펼친 사다리꼴, 가로 살이 보인다. mx: 돛대 x, y0: 돛대 밑동, mh: 돛대 높이 */
-  A.sailBatSide = function (ctx, mx, y0, mh, sc, wk) {
+  A.sailBatSide = function (ctx, mx, y0, mh, sc, wk, spec) {
     sc = A.hex(sc || '#a95f36');
     var top = y0 - mh + 4, bot = y0 - 8, w = mh * 0.52 * (wk || 1);
     var p = [[mx + w * 0.22, top + mh * 0.1], [mx - w * 0.78, top - mh * 0.02], [mx - w * 0.92, bot], [mx + w * 0.24, bot]];
     ctx.fillStyle = grad(ctx, mx - w, 0, mx + w * 0.3, 0, sc, 0.78, 1.08);
     ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]); ctx.lineTo(p[1][0], p[1][1]);
     ctx.quadraticCurveTo(mx - w * 1.08, (top + bot) / 2, p[2][0], p[2][1]); ctx.lineTo(p[3][0], p[3][1]); ctx.closePath(); ctx.fill();
+    if(A.sailDecal)A.sailDecal(ctx,spec,mx-w,top,w*1.3,bot-top);
     ctx.strokeStyle = 'rgba(40,20,10,.55)'; ctx.lineWidth = 1.1;
     for (var k = 0; k <= 6; k++) {
       var u = k / 6, ya = p[0][1] + (p[3][1] - p[0][1]) * u, yb = p[1][1] + (p[2][1] - p[1][1]) * u;
@@ -75,38 +78,41 @@
     }
   };
   /** 일본 배의 네모 돛: 무명 폭을 세로로 이어 붙였다 */
-  function sailJpSide(ctx, mx, y0, mh, sc) {
+  function sailJpSide(ctx, mx, y0, mh, sc, spec) {
     sc = A.hex(sc || '#efe8d8');
     var top = y0 - mh + 6, bot = y0 - 10, w = mh * 0.46;
     ctx.fillStyle = grad(ctx, mx - w, 0, mx + w, 0, sc, 1.03, 0.78);
     ctx.beginPath(); ctx.moveTo(mx - w, top); ctx.lineTo(mx + w, top); ctx.quadraticCurveTo(mx + w + 8, (top + bot) / 2, mx + w, bot); ctx.lineTo(mx - w, bot); ctx.quadraticCurveTo(mx - w + 8, (top + bot) / 2, mx - w, top); ctx.fill();
+    if(A.sailDecal)A.sailDecal(ctx,spec,mx-w,top,w*2,bot-top);
     ctx.strokeStyle = 'rgba(90,70,50,.45)'; ctx.lineWidth = 0.9;
     for (var i = 1; i < 8; i++) { var x = mx - w + i * w * 2 / 8; ctx.beginPath(); ctx.moveTo(x, top + 1); ctx.lineTo(x + 3, bot - 1); ctx.stroke(); }
     ctx.strokeStyle = '#2b1d12'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(mx - w - 4, top); ctx.lineTo(mx + w + 4, top); ctx.stroke();
   }
-  function sailSqSide(ctx, mx, y0, mh, sc, cross) {
+  function sailSqSide(ctx, mx, y0, mh, sc, cross, spec) {
     sc = A.hex(sc);
     for (var k = 0; k < 2; k++) {
       var top = y0 - mh + 8 + k * mh * 0.45, hh = mh * 0.38, ww = 26 - k * 3;
       ctx.fillStyle = grad(ctx, mx - ww, 0, mx + ww, 0, sc, 1.05, 0.72);
       ctx.beginPath(); ctx.moveTo(mx - ww, top); ctx.lineTo(mx + ww, top); ctx.quadraticCurveTo(mx + ww + 6, top + hh * 0.5, mx + ww, top + hh); ctx.lineTo(mx - ww, top + hh); ctx.quadraticCurveTo(mx - ww + 6, top + hh * 0.5, mx - ww, top); ctx.fill();
+      if(A.sailDecal)A.sailDecal(ctx,spec,mx-ww,top,ww*2,hh);
       if (cross && k === 0) { ctx.fillStyle = '#a3261c'; ctx.fillRect(mx - 3, top + 4, 6, hh - 8); ctx.fillRect(mx - 10, top + hh * 0.35, 20, 6); }
     }
   }
-  function sailLatSide(ctx, mx, y0, mh, sc) {
+  function sailLatSide(ctx, mx, y0, mh, sc, spec) {
     sc = A.hex(sc);
     ctx.fillStyle = grad(ctx, mx - 30, 0, mx + 20, 0, sc, 1.05, 0.7);
     ctx.beginPath(); ctx.moveTo(mx + 6, y0 - mh); ctx.lineTo(mx - 34, y0 - 4); ctx.lineTo(mx + 4, y0 - 4); ctx.quadraticCurveTo(mx + 14, y0 - mh * 0.5, mx + 6, y0 - mh); ctx.fill();
+    if(A.sailDecal)A.sailDecal(ctx,spec,mx-35,y0-mh,48,mh);
     ctx.strokeStyle = '#3a2a1a'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(mx + 8, y0 - mh - 4); ctx.lineTo(mx - 36, y0); ctx.stroke();
   }
   /** 돛대 하나와 돛 */
   function mastSide(ctx, kind, mx, y0, mh, spec, rake, style, wk) {
     ctx.strokeStyle = '#2b1d12'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(mx, y0); ctx.lineTo(mx + (rake || 0), y0 - mh); ctx.stroke();
     var sx = mx + (rake || 0) * 0.5;
-    if (kind === 'bat') A.sailBatSide(ctx, sx, y0, mh, spec.sail, wk);
-    else if (kind === 'sq' && style === 'jp') sailJpSide(ctx, sx, y0, mh, spec.sail);
-    else if (kind === 'sq') sailSqSide(ctx, sx, y0, mh, spec.sail || '#efe4c9', spec.cross);
-    else sailLatSide(ctx, sx, y0, mh, spec.sail || '#efe4c9');
+    if (kind === 'bat') A.sailBatSide(ctx, sx, y0, mh, spec.sail, wk, spec);
+    else if (kind === 'sq' && style === 'jp') sailJpSide(ctx, sx, y0, mh, spec.sail, spec);
+    else if (kind === 'sq') sailSqSide(ctx, sx, y0, mh, spec.sail || '#efe4c9', spec.cross, spec);
+    else sailLatSide(ctx, sx, y0, mh, spec.sail || '#efe4c9', spec);
     if (spec.flag) { ctx.fillStyle = spec.flag; ctx.beginPath(); ctx.moveTo(mx + (rake || 0), y0 - mh); ctx.lineTo(mx + (rake || 0) - 16, y0 - mh + 3); ctx.lineTo(mx + (rake || 0), y0 - mh + 6); ctx.fill(); }
   }
   function oarsSide(ctx, x0, x1, y, n, len) {
@@ -330,17 +336,17 @@
       ctx.strokeStyle = 'rgba(70,50,30,.6)'; ctx.lineWidth = Math.max(0.6, L / 140);
       if (kind === 'bat') {
         ctx.fillStyle = A.rgba(A.shade(sc, 0.95));
-        ctx.beginPath(); ctx.moveTo(mx, -span * 0.45); ctx.quadraticCurveTo(mx - bil * 2.2, 0, mx, span * 0.45); ctx.lineTo(mx - W * 0.1, span * 0.42); ctx.quadraticCurveTo(mx - bil * 1.3, 0, mx - W * 0.1, -span * 0.42); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(mx, -span * 0.45); ctx.quadraticCurveTo(mx - bil * 2.2, 0, mx, span * 0.45); ctx.lineTo(mx - W * 0.1, span * 0.42); ctx.quadraticCurveTo(mx - bil * 1.3, 0, mx - W * 0.1, -span * 0.42); ctx.closePath(); ctx.fill(); if(A.sailDecal)A.sailDecal(ctx,spec,mx-W*.2,-span*.5,W*.9,span); ctx.stroke();
         ctx.strokeStyle = 'rgba(40,20,10,.55)';
         for (var k = -3; k <= 3; k++) { var yy = k * span * 0.12; ctx.beginPath(); ctx.moveTo(mx, yy); ctx.lineTo(mx - bil * 1.6 * (1 - Math.abs(k) / 5) - W * 0.1, yy); ctx.stroke(); }
       } else if (kind === 'sq') {
         ctx.fillStyle = A.rgba(A.shade(sc, 1.0));
-        ctx.beginPath(); ctx.moveTo(mx - W * 0.05, -span / 2); ctx.quadraticCurveTo(mx + bil * 2.2, 0, mx - W * 0.05, span / 2); ctx.lineTo(mx - W * 0.16, span / 2 * 0.96); ctx.quadraticCurveTo(mx + bil * 0.9, 0, mx - W * 0.16, -span / 2 * 0.96); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(mx - W * 0.05, -span / 2); ctx.quadraticCurveTo(mx + bil * 2.2, 0, mx - W * 0.05, span / 2); ctx.lineTo(mx - W * 0.16, span / 2 * 0.96); ctx.quadraticCurveTo(mx + bil * 0.9, 0, mx - W * 0.16, -span / 2 * 0.96); ctx.closePath(); ctx.fill(); if(A.sailDecal)A.sailDecal(ctx,spec,mx-W*.2,-span*.5,W*.9,span); ctx.stroke();
         ctx.strokeStyle = '#3a2616'; ctx.lineWidth = Math.max(1, L / 90); ctx.beginPath(); ctx.moveTo(mx - W * 0.08, -span / 2 - W * 0.05); ctx.lineTo(mx - W * 0.08, span / 2 + W * 0.05); ctx.stroke();
       } else {
         var yl = W * 2.0;
         ctx.fillStyle = A.rgba(A.shade(sc, 0.96));
-        ctx.beginPath(); ctx.moveTo(mx + yl * 0.35, -W * 0.08); ctx.quadraticCurveTo(mx - yl * 0.1, W * 0.55 + bil, mx - yl * 0.55, W * 0.62); ctx.lineTo(mx - yl * 0.45, W * 0.18); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(mx + yl * 0.35, -W * 0.08); ctx.quadraticCurveTo(mx - yl * 0.1, W * 0.55 + bil, mx - yl * 0.55, W * 0.62); ctx.lineTo(mx - yl * 0.45, W * 0.18); ctx.closePath(); ctx.fill(); if(A.sailDecal)A.sailDecal(ctx,spec,mx-W*.2,-span*.5,W*.9,span); ctx.stroke();
         ctx.strokeStyle = '#3a2616'; ctx.lineWidth = Math.max(1, L / 90); ctx.beginPath(); ctx.moveTo(mx + yl * 0.38, -W * 0.12); ctx.lineTo(mx - yl * 0.58, W * 0.66); ctx.stroke();
       }
       ctx.restore();

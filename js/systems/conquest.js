@@ -111,7 +111,7 @@
         G.State.log(c.name + ' 공략을 중단했다. ' + (p.militia ? '관군과 의병의 참전 및 계속되는 추가 동원으로 점령 불가.' : p.label + '의 추가 동원으로 점령 불가.'));
         return false;
       }
-      var owner = s.player.nation === 'PT' ? '포르투갈' : s.date.y < 1516 ? '카스티야' : '에스파냐';
+      var owner = R.myOwnerName ? R.myOwnerName(s.date.y) : s.player.nation === 'PT' ? '포르투갈' : s.date.y < 1516 ? '카스티야' : '에스파냐';
       var holdings = s.conquests || (s.conquests = {});
       holdings[c.id] = { owner: owner, from: R.cityOwner(c), date: { y: s.date.y, m: s.date.m, d: s.date.d }, day: s.day };
       // 본국에 알려져 명성이 오르고, 이웃 나라들 사이에는 악명이 퍼진다 (2026-11-10)

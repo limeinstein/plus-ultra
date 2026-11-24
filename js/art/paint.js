@@ -272,7 +272,7 @@
       if (sails[i] === 'lat' && i === n - 1) mh = 70;
       ctx.strokeStyle = '#2b1d12'; ctx.lineWidth = 2.4; ctx.beginPath(); ctx.moveTo(mx, -10); ctx.lineTo(mx, -10 - mh); ctx.stroke();
       var sc = A.hex(spec.sail || '#efe4c9');
-      if (sails[i] === 'bat' && A.sailBatSide) A.sailBatSide(ctx, mx, -10, mh, spec.sail || '#a95f36');
+      if (sails[i] === 'bat' && A.sailBatSide) A.sailBatSide(ctx, mx, -10, mh, spec.sail || '#a95f36',1,spec);
       else if (sails[i] === 'sq') {
         for (var k = 0; k < 2; k++) {
           var top = -10 - mh + 8 + k * mh * 0.45, hh = mh * 0.38, ww = 26 - k * 3;
@@ -280,6 +280,7 @@
           sg.addColorStop(0, A.rgba(A.shade(sc, 1.05))); sg.addColorStop(1, A.rgba(A.shade(sc, 0.72)));
           ctx.fillStyle = sg;
           ctx.beginPath(); ctx.moveTo(mx - ww, top); ctx.lineTo(mx + ww, top); ctx.quadraticCurveTo(mx + ww + 6, top + hh * 0.5, mx + ww, top + hh); ctx.lineTo(mx - ww, top + hh); ctx.quadraticCurveTo(mx - ww + 6, top + hh * 0.5, mx - ww, top); ctx.fill();
+          if(A.sailDecal)A.sailDecal(ctx,spec,mx-ww,top,ww*2,hh);
           if (spec.cross && k === 0 && i === Math.floor(n / 2)) { ctx.fillStyle = '#a3261c'; ctx.fillRect(mx - 3, top + 4, 6, hh - 8); ctx.fillRect(mx - 10, top + hh * 0.35, 20, 6); }
         }
       } else {
@@ -287,6 +288,7 @@
         sg2.addColorStop(0, A.rgba(A.shade(sc, 1.05))); sg2.addColorStop(1, A.rgba(A.shade(sc, 0.7)));
         ctx.fillStyle = sg2;
         ctx.beginPath(); ctx.moveTo(mx + 6, -10 - mh); ctx.lineTo(mx - 34, -14); ctx.lineTo(mx + 4, -14); ctx.quadraticCurveTo(mx + 14, -10 - mh * 0.5, mx + 6, -10 - mh); ctx.fill();
+        if(A.sailDecal)A.sailDecal(ctx,spec,mx-35,-10-mh,48,mh);
         ctx.strokeStyle = '#3a2a1a'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(mx + 8, -10 - mh - 4); ctx.lineTo(mx - 36, -10); ctx.stroke();
       }
       // pennant
@@ -395,7 +397,7 @@
         ctx.quadraticCurveTo(mx + bil * 2.2, 0, mx - W * 0.05, span / 2);
         ctx.lineTo(mx - W * 0.16, span / 2 * 0.96);
         ctx.quadraticCurveTo(mx + bil * 0.9, 0, mx - W * 0.16, -span / 2 * 0.96);
-        ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.closePath(); ctx.fill(); if(A.sailDecal)A.sailDecal(ctx,spec,mx-W*.18,-span*.5,W*.8,span); ctx.stroke();
         // yard
         ctx.strokeStyle = '#3a2616'; ctx.lineWidth = Math.max(1, L / 90); ctx.beginPath(); ctx.moveTo(mx - W * 0.08, -span / 2 - W * 0.05); ctx.lineTo(mx - W * 0.08, span / 2 + W * 0.05); ctx.stroke();
         if (spec.cross && i === Math.floor((n - 1) / 2)) { ctx.fillStyle = '#b3261e'; var cw = Math.max(1.5, W * 0.1); ctx.fillRect(mx, -span * 0.18, cw, span * 0.36); ctx.fillRect(mx - cw * 0.3, -cw * 1.6, cw * 1.8, cw * 3.2); }
@@ -407,7 +409,7 @@
         ctx.moveTo(mx + yl * 0.35, -W * 0.08);
         ctx.quadraticCurveTo(mx - yl * 0.1, W * 0.55 + bil, mx - yl * 0.55, W * 0.62);
         ctx.lineTo(mx - yl * 0.45, W * 0.18);
-        ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.closePath(); ctx.fill(); if(A.sailDecal)A.sailDecal(ctx,spec,mx-yl*.55,-W*.08,yl*.9,W*.8+bil); ctx.stroke();
         ctx.strokeStyle = '#3a2616'; ctx.lineWidth = Math.max(1, L / 90); ctx.beginPath(); ctx.moveTo(mx + yl * 0.38, -W * 0.12); ctx.lineTo(mx - yl * 0.58, W * 0.66); ctx.stroke();
       }
       ctx.restore();

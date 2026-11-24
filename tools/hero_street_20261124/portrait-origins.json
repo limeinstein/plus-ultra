@@ -1,0 +1,548 @@
+[
+  {
+    "id": "navigator_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\navigator_f.png",
+    "runtime": "images\\portraits\\player\\navigator_f.webp"
+  },
+  {
+    "id": "navigator_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\navigator_f.png",
+    "runtime": "images\\characters\\player_half_navigator_f.webp"
+  },
+  {
+    "id": "navigator_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\navigator_f.png",
+    "runtime": "images\\portraits\\player-aged\\navigator_f.webp"
+  },
+  {
+    "id": "navigator_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\navigator_f.png",
+    "runtime": "images\\characters\\player_half_navigator_f_old.webp"
+  },
+  {
+    "id": "navigator_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\navigator_f.png",
+    "runtime": "images\\portraits\\player-elderly\\navigator_f.webp"
+  },
+  {
+    "id": "navigator_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\navigator_f.png",
+    "runtime": "images\\characters\\player_half_navigator_f_elderly.webp"
+  },
+  {
+    "id": "missionary_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\missionary_f.png",
+    "runtime": "images\\portraits\\player\\missionary_f.webp"
+  },
+  {
+    "id": "missionary_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\missionary_f.png",
+    "runtime": "images\\characters\\player_half_missionary_f.webp"
+  },
+  {
+    "id": "missionary_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\missionary_f.png",
+    "runtime": "images\\portraits\\player-aged\\missionary_f.webp"
+  },
+  {
+    "id": "missionary_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\missionary_f.png",
+    "runtime": "images\\characters\\player_half_missionary_f_old.webp"
+  },
+  {
+    "id": "missionary_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\missionary_f.png",
+    "runtime": "images\\portraits\\player-elderly\\missionary_f.webp"
+  },
+  {
+    "id": "missionary_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\missionary_f.png",
+    "runtime": "images\\characters\\player_half_missionary_f_elderly.webp"
+  },
+  {
+    "id": "excavator_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\excavator_f.png",
+    "runtime": "images\\portraits\\player\\excavator_f.webp"
+  },
+  {
+    "id": "excavator_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\excavator_f.png",
+    "runtime": "images\\characters\\player_half_excavator_f.webp"
+  },
+  {
+    "id": "excavator_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\excavator_f.png",
+    "runtime": "images\\portraits\\player-aged\\excavator_f.webp"
+  },
+  {
+    "id": "excavator_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\excavator_f.png",
+    "runtime": "images\\characters\\player_half_excavator_f_old.webp"
+  },
+  {
+    "id": "excavator_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\excavator_f.png",
+    "runtime": "images\\portraits\\player-elderly\\excavator_f.webp"
+  },
+  {
+    "id": "excavator_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\excavator_f.png",
+    "runtime": "images\\characters\\player_half_excavator_f_elderly.webp"
+  },
+  {
+    "id": "noble_navigator_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\noble_navigator_f.png",
+    "runtime": "images\\portraits\\player\\noble_navigator_f.webp"
+  },
+  {
+    "id": "noble_navigator_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\noble_navigator_f.png",
+    "runtime": "images\\characters\\player_half_noble_navigator_f.webp"
+  },
+  {
+    "id": "noble_navigator_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\noble_navigator_f.png",
+    "runtime": "images\\portraits\\player-aged\\noble_navigator_f.webp"
+  },
+  {
+    "id": "noble_navigator_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\noble_navigator_f.png",
+    "runtime": "images\\characters\\player_half_noble_navigator_f_old.webp"
+  },
+  {
+    "id": "noble_navigator_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\noble_navigator_f.png",
+    "runtime": "images\\portraits\\player-elderly\\noble_navigator_f.webp"
+  },
+  {
+    "id": "noble_navigator_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\noble_navigator_f.png",
+    "runtime": "images\\characters\\player_half_noble_navigator_f_elderly.webp"
+  },
+  {
+    "id": "surveyor_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\surveyor_f.png",
+    "runtime": "images\\portraits\\player\\surveyor_f.webp"
+  },
+  {
+    "id": "surveyor_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\surveyor_f.png",
+    "runtime": "images\\characters\\player_half_surveyor_f.webp"
+  },
+  {
+    "id": "surveyor_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\surveyor_f.png",
+    "runtime": "images\\portraits\\player-aged\\surveyor_f.webp"
+  },
+  {
+    "id": "surveyor_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\surveyor_f.png",
+    "runtime": "images\\characters\\player_half_surveyor_f_old.webp"
+  },
+  {
+    "id": "surveyor_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\surveyor_f.png",
+    "runtime": "images\\portraits\\player-elderly\\surveyor_f.webp"
+  },
+  {
+    "id": "surveyor_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\surveyor_f.png",
+    "runtime": "images\\characters\\player_half_surveyor_f_elderly.webp"
+  },
+  {
+    "id": "explorer_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\explorer_f.png",
+    "runtime": "images\\portraits\\player\\explorer_f.webp"
+  },
+  {
+    "id": "explorer_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\explorer_f.png",
+    "runtime": "images\\characters\\player_half_explorer_f.webp"
+  },
+  {
+    "id": "explorer_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\explorer_f.png",
+    "runtime": "images\\portraits\\player-aged\\explorer_f.webp"
+  },
+  {
+    "id": "explorer_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\explorer_f.png",
+    "runtime": "images\\characters\\player_half_explorer_f_old.webp"
+  },
+  {
+    "id": "explorer_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\explorer_f.png",
+    "runtime": "images\\portraits\\player-elderly\\explorer_f.webp"
+  },
+  {
+    "id": "explorer_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\explorer_f.png",
+    "runtime": "images\\characters\\player_half_explorer_f_elderly.webp"
+  },
+  {
+    "id": "hunter_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\hunter_f.png",
+    "runtime": "images\\portraits\\player\\hunter_f.webp"
+  },
+  {
+    "id": "hunter_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\hunter_f.png",
+    "runtime": "images\\characters\\player_half_hunter_f.webp"
+  },
+  {
+    "id": "hunter_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\hunter_f.png",
+    "runtime": "images\\portraits\\player-aged\\hunter_f.webp"
+  },
+  {
+    "id": "hunter_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\hunter_f.png",
+    "runtime": "images\\characters\\player_half_hunter_f_old.webp"
+  },
+  {
+    "id": "hunter_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\hunter_f.png",
+    "runtime": "images\\portraits\\player-elderly\\hunter_f.webp"
+  },
+  {
+    "id": "hunter_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\hunter_f.png",
+    "runtime": "images\\characters\\player_half_hunter_f_elderly.webp"
+  },
+  {
+    "id": "soldier_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\soldier_f.png",
+    "runtime": "images\\portraits\\player\\soldier_f.webp"
+  },
+  {
+    "id": "soldier_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\soldier_f.png",
+    "runtime": "images\\characters\\player_half_soldier_f.webp"
+  },
+  {
+    "id": "soldier_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\soldier_f.png",
+    "runtime": "images\\portraits\\player-aged\\soldier_f.webp"
+  },
+  {
+    "id": "soldier_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\soldier_f.png",
+    "runtime": "images\\characters\\player_half_soldier_f_old.webp"
+  },
+  {
+    "id": "soldier_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\soldier_f.png",
+    "runtime": "images\\portraits\\player-elderly\\soldier_f.webp"
+  },
+  {
+    "id": "soldier_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\soldier_f.png",
+    "runtime": "images\\characters\\player_half_soldier_f_elderly.webp"
+  },
+  {
+    "id": "lookout_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\lookout_f.png",
+    "runtime": "images\\portraits\\player\\lookout_f.webp"
+  },
+  {
+    "id": "lookout_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\lookout_f.png",
+    "runtime": "images\\characters\\player_half_lookout_f.webp"
+  },
+  {
+    "id": "lookout_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\lookout_f.png",
+    "runtime": "images\\portraits\\player-aged\\lookout_f.webp"
+  },
+  {
+    "id": "lookout_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\lookout_f.png",
+    "runtime": "images\\characters\\player_half_lookout_f_old.webp"
+  },
+  {
+    "id": "lookout_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\lookout_f.png",
+    "runtime": "images\\portraits\\player-elderly\\lookout_f.webp"
+  },
+  {
+    "id": "lookout_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\lookout_f.png",
+    "runtime": "images\\characters\\player_half_lookout_f_elderly.webp"
+  },
+  {
+    "id": "white_navigator_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\white_navigator_f.png",
+    "runtime": "images\\portraits\\player\\white_navigator_f.webp"
+  },
+  {
+    "id": "white_navigator_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\white_navigator_f.png",
+    "runtime": "images\\characters\\player_half_white_navigator_f.webp"
+  },
+  {
+    "id": "white_navigator_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\white_navigator_f.png",
+    "runtime": "images\\portraits\\player-aged\\white_navigator_f.webp"
+  },
+  {
+    "id": "white_navigator_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\white_navigator_f.png",
+    "runtime": "images\\characters\\player_half_white_navigator_f_old.webp"
+  },
+  {
+    "id": "white_navigator_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\white_navigator_f.png",
+    "runtime": "images\\portraits\\player-elderly\\white_navigator_f.webp"
+  },
+  {
+    "id": "white_navigator_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\white_navigator_f.png",
+    "runtime": "images\\characters\\player_half_white_navigator_f_elderly.webp"
+  },
+  {
+    "id": "conqueror_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\conqueror_f.png",
+    "runtime": "images\\portraits\\player\\conqueror_f.webp"
+  },
+  {
+    "id": "conqueror_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\conqueror_f.png",
+    "runtime": "images\\characters\\player_half_conqueror_f.webp"
+  },
+  {
+    "id": "conqueror_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\conqueror_f.png",
+    "runtime": "images\\portraits\\player-aged\\conqueror_f.webp"
+  },
+  {
+    "id": "conqueror_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\conqueror_f.png",
+    "runtime": "images\\characters\\player_half_conqueror_f_old.webp"
+  },
+  {
+    "id": "conqueror_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\conqueror_f.png",
+    "runtime": "images\\portraits\\player-elderly\\conqueror_f.webp"
+  },
+  {
+    "id": "conqueror_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\conqueror_f.png",
+    "runtime": "images\\characters\\player_half_conqueror_f_elderly.webp"
+  },
+  {
+    "id": "black_hunter_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\black_hunter_f.png",
+    "runtime": "images\\portraits\\player\\black_hunter_f.webp"
+  },
+  {
+    "id": "black_hunter_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\black_hunter_f.png",
+    "runtime": "images\\characters\\player_half_black_hunter_f.webp"
+  },
+  {
+    "id": "black_hunter_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\black_hunter_f.png",
+    "runtime": "images\\portraits\\player-aged\\black_hunter_f.webp"
+  },
+  {
+    "id": "black_hunter_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\black_hunter_f.png",
+    "runtime": "images\\characters\\player_half_black_hunter_f_old.webp"
+  },
+  {
+    "id": "black_hunter_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\black_hunter_f.png",
+    "runtime": "images\\portraits\\player-elderly\\black_hunter_f.webp"
+  },
+  {
+    "id": "black_hunter_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\black_hunter_f.png",
+    "runtime": "images\\characters\\player_half_black_hunter_f_elderly.webp"
+  },
+  {
+    "id": "gold_surveyor_f",
+    "stage": "young",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\face\\gold_surveyor_f.png",
+    "runtime": "images\\portraits\\player\\gold_surveyor_f.webp"
+  },
+  {
+    "id": "gold_surveyor_f",
+    "stage": "young",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-professions-20261123\\knee\\gold_surveyor_f.png",
+    "runtime": "images\\characters\\player_half_gold_surveyor_f.webp"
+  },
+  {
+    "id": "gold_surveyor_f",
+    "stage": "middle",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\face\\gold_surveyor_f.png",
+    "runtime": "images\\portraits\\player-aged\\gold_surveyor_f.webp"
+  },
+  {
+    "id": "gold_surveyor_f",
+    "stage": "middle",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-mature-20261123\\knee\\gold_surveyor_f.png",
+    "runtime": "images\\characters\\player_half_gold_surveyor_f_old.webp"
+  },
+  {
+    "id": "gold_surveyor_f",
+    "stage": "elderly",
+    "kind": "face",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\face\\gold_surveyor_f.png",
+    "runtime": "images\\portraits\\player-elderly\\gold_surveyor_f.webp"
+  },
+  {
+    "id": "gold_surveyor_f",
+    "stage": "elderly",
+    "kind": "knee",
+    "source": "D:\\Git\\대항해2 CLAUDE\\output\\imagegen\\female-player-13-elderly-dyed-20261123\\knee\\gold_surveyor_f.png",
+    "runtime": "images\\characters\\player_half_gold_surveyor_f_elderly.webp"
+  }
+]

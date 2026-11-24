@@ -1,14 +1,13 @@
 /* 조선소 「여러 척 한꺼번에 개조」 (tests/shipyard_batch_smoke.js) — node tests/shipyard_batch_smoke.js
    · 개조 → 맨 위 「여러 척 한꺼번에 개조」 · 배를 골라(빌린 배는 빠짐, 하나를 뺄 수 있음) 돛·대포·삭구를 한 번에
    · 값은 한 척씩 할 때와 같고, 고르지 않은 배는 그대로 · 조선 기술이 모자라면 그 단에서 멈춤 · 콘솔 오류 0 */
-const path = require('path'); const { pathToFileURL } = require('url'); const { chromium } = require('playwright');
+const path = require('path'); const { pathToFileURL } = require('url'); let pw; try { pw = require('playwright'); } catch (_) { pw = require('../tools/procedural_art/node_modules/playwright-core'); } const { chromium } = pw;
 const ROOT = path.resolve(__dirname, '..');
 (async () => {
-  const b = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
+  const b = await chromium.launch({ executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe', args: ['--use-gl=angle', '--use-angle=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
   try {
   const page = await b.newPage({ viewport: { width: 1600, height: 900 } });
-  const errs = []; page.on('pageerror', e => errs.push('PAGEERR ' + e.message)); page.on('console', m => { if (m.type() === 'error' && !/Failed to load|net::|fonts|ERR_FILE/.test(m.text())) errs.push('CONSOLE ' + m.text()); });
-  await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+  const errs = []; page.on('pageerror', e => errs.push('PAGEERR ' + e.message)); page.on('console', m => { if (m.type() === 'error') errs.push('CONSOLE ' + m.text()); });
   await page.addInitScript(() => { window.requestAnimationFrame = () => 0; });
   await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await page.waitForFunction(() => window.G && G.Game && G.Scenes && G.Scenes.city && G.Scenes.city.B.shipyard, null, { timeout: 90000, polling: 200 });
@@ -44,7 +43,8 @@ const ROOT = path.resolve(__dirname, '..');
     await btn('개조한다'); await advance();
     const nMast = [A, B, D].reduce((t, sh) => t + (sh.sails.length > 1 ? 1 : 0), 0);
     ok([A, B, D].every(sh => sh.sails[0] === (sh.sails.length > 1 ? 'lat' : 'sq') && sh.sails.slice(1).every(x => x === 'sq')) && Cc.sails.every(x => x === 'sq'), '앞 돛대만 삼각돛 — 고른 3척 · 산 미겔은 그대로');
-    ok(g0 - s.player.gold === nMast * 300, '돛 값 ' + (g0 - s.player.gold) + '닢 (돛 ' + nMast + '개 × 300)');
+    const sailWant = [A, B, D].reduce((t, sh) => t + (sh.sails.length > 1 ? G.SailDesign.legacyCost(city, sh) : 0), 0);
+    ok(g0 - s.player.gold === sailWant && sailWant >= nMast * 2500, '돛 값 ' + (g0 - s.player.gold) + '닢 = 선박별 높은 개조비 합계');
     // 대포
     await sleep(200);
     g0 = s.player.gold;
@@ -78,5 +78,6 @@ const ROOT = path.resolve(__dirname, '..');
     return R;
   });
   console.log(out.join('\n')); console.log(errs.length ? errs.join('\n') : '콘솔 오류 0');
+  if (out.some(x => x.startsWith('✗')) || errs.length) process.exitCode = 1;
   } finally { await b.close(); }
 })();

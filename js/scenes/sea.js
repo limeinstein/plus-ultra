@@ -162,7 +162,7 @@
     hudEl.pause = btn('정지', 'pause', function () { if (st.paused) resume(); else halt(); });
     hudEl.search = btn('탐색', 'compass', function () { searchSea(); });
     var sp = U.el('div', 'speedctl');
-    SPEEDS.forEach(function (k) { var o = U.el('div', 'opt' + (st.speed === k ? ' on' : ''), '×' + k); o.onclick = function (e) { e.stopPropagation(); st.speed = k; U.$$('.opt', sp).forEach(function (x) { x.classList.remove('on'); }); o.classList.add('on'); }; sp.appendChild(o); });
+    SPEEDS.forEach(function (k) { var o = U.el('button', 'opt' + (st.speed === k ? ' on' : ''), '×' + k); o.type = 'button'; o.dataset.speed = k; o.onclick = function (e) { e.stopPropagation(); o.blur(); if (UI.busy() || st.busy) return; st.speed = k; buildSpeed(); }; sp.appendChild(o); });
     bar.appendChild(sp);
     // 하단 메뉴는 크기가 늘 같다 (2026-10-25 — 항구 이름·비 대책 단추에 따라 너비가 바뀌어 단추 자리가 밀리면서 「상륙」을 누르려다 「낚시」를 누르던 것):
     // 입항 단추는 너비를 정해 두고 긴 항구 이름은 말줄임(전체 이름은 풍선 도움말), 비 대책 단추는 늘 자리를 지키고 비가 올 때만 누를 수 있다
@@ -171,7 +171,7 @@
     if (G.Fishing) hudEl.fish = btn('낚시', 'fish', function () { goFish(); });
     if (G.Rain) { hudEl.rain = btn('비 대책', 'drop', function () { if (!G.Rain.raining()) return; st.busy++; G.Rain.ask(false).then(function () { st.busy = Math.max(0, st.busy - 1); refreshButtons(); }, function () { st.busy = Math.max(0, st.busy - 1); }); }); hudEl.rain.classList.toggle('disabled', !G.Rain.raining()); }   // 비가 오는 동안만 누를 수 있다 (자리는 늘 그대로)
     hudEl.chart = btn('해도', 'map', function () { SEA.chart(); });
-    btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
+    hudEl.notebook = btn('수첩', 'book', function () { st.busy++; G.Info.open().then(function () { st.busy = Math.max(0, st.busy - 1); }); });
     hudEl.follow = btn('', 'mouse', function () { toggleFollow(); }, 'follow');   // 설명·켬/끔·단축키는 풍선 도움말
     // 긴 하단 메뉴에 가려지지 않도록 지도 확대 단추는 오른쪽 위에 둔다.
     var zb = U.el('div', 'sea-zoom wood brass-frame'); zb.setAttribute('role', 'group'); zb.setAttribute('aria-label', '지도 확대');
@@ -182,8 +182,11 @@
     zoomButton('선박 확대', '선박을 ' + FXS().zoom.shipPreset + '배율로 보기', function () { var z = FXS().zoom; st.cam.zoomT = z.reference * z.shipPreset; });
     zoomButton('기본', '기본 배율로 돌아가기', function () { st.cam.zoomT = FXS().zoom.reference; });
     UI.add(zb);
-    bar.appendChild(G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy = Math.max(0, st.busy - 1); }));   // 맨 오른쪽: 설정 (수첩 밖)
+    if (G.SeaInstruments) G.SeaInstruments.mount(wb, zb);
+    hudEl.settings = G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy = Math.max(0, st.busy - 1); });
+    bar.appendChild(hudEl.settings);   // 맨 오른쪽: 설정 (수첩 밖)
     UI.add(bar);
+    if (G.SeaBar) G.SeaBar.mount(bar, hudEl);
     hudEl.bar = bar; st.followArmed = false; refreshFollow();
     if (G.HudPin) { G.HudPin.pin(mm, 'minimap', '해도'); G.HudPin.pin(wb, 'windbox', '바람 판'); G.HudPin.pin(hudEl.status, 'seastatus', '항해 상태판'); }   // 상태판도 끌어서 옮긴다 (베타 피드백 2026-11-02)   // 단추줄 위에 · 끌어서 옮기기 (js/ui/hudpin.js — 2026-10-30)
     refreshBar(); refreshHud();
@@ -230,7 +233,7 @@
   function toggleFollow() { if (!G.Ctrl) return; if (!G.Ctrl.toggle()) disarmFollow(); refreshFollow(); }
   SEA.toggleFollow = toggleFollow;
   /** 단추 모양을 맞추고, 설정 창에서 껐으면 따라가기를 멈춘다 */
-  function refreshFollow() { if (!st) return; if (!followOn() && st.followArmed) disarmFollow(); if (G.Ctrl) { G.Ctrl.paintButton(hudEl.follow); G.Ctrl.fitBar(hudEl.bar); } }
+  function refreshFollow() { if (!st) return; if (!followOn() && st.followArmed) disarmFollow(); if (G.Ctrl) { G.Ctrl.paintButton(hudEl.follow); if (G.SeaBar) G.SeaBar.fit(hudEl.bar); else G.Ctrl.fitBar(hudEl.bar); } }
   function onMove(e) {
     st.mouse = stagePos(e);
     if (UI.busy() || st.busy || st.path || e.buttons) return;
@@ -403,7 +406,7 @@
   }
   // 항해 배속: ×0.5(천천히 — 해안·해협을 손으로 몰 때) · ×1 · ×2 · ×4
   var SPEEDS = [0.5, 1, 2, 4];
-  function buildSpeed() { U.$$('.speedctl .opt').forEach(function (o, i) { o.classList.toggle('on', SPEEDS[i] === st.speed); }); }
+  function buildSpeed() { U.$$('.speedctl .opt').forEach(function (o, i) { o.classList.toggle('on', SPEEDS[i] === st.speed); }); if (G.SeaBar) G.SeaBar.sync(hudEl.bar); }
 
   // ================================================================ targets & path
   /** 목적지를 잡는다. 항구든 바다든 늘 바닷길(G.Nav.seaPath — 뭍·섬을 돌아가는 길)을 따라간다.
@@ -1865,6 +1868,8 @@
     // 배에 탄 아내와의 한때 (js/systems/familyevent.js)
     if (G.FamEv && (!G.Pace || G.Pace.ok('family'))) { try { if (await G.FamEv.atSea()) { if (G.Pace) G.Pace.mark('family'); refreshHud(); } } catch (e) { console.error(e); } }
     // 배에 함께 탄 아이의 하루 — 나이·성별·성격마다 (js/systems/kidvoyage.js)
+    // 여성 제독의 배에서 자라는 아이 — 밤울음·첫걸음·망대… (js/systems/seanest.js)
+    if (G.SeaNest && (!G.Pace || G.Pace.ok('seanest'))) { try { if (await G.SeaNest.atSea()) { if (G.Pace) G.Pace.mark('seanest'); refreshHud(); } } catch (e) { console.error(e); } }
     if (G.KidVoy && (!G.Pace || G.Pace.ok('kidvoy'))) { try { if (await G.KidVoy.atSea()) { if (G.Pace) G.Pace.mark('kidvoy'); refreshHud(); } } catch (e) { console.error(e); } }
     // random sea events (나흘에 한 번 넘게는 일어나지 않는다)
     if (G.JourneyEv && (!G.Pace || G.Pace.ok()) && await UI.autoRun(function () { return G.JourneyEv.seaDay({ st: st, refresh: refreshHud }); })) { /* 하늘과 날씨의 드문 사건 — 별똥별·은하수·일식·용오름… (js/systems/journeyev.js) */ }
@@ -2140,6 +2145,7 @@
       setTitle(hudEl.search, keyTip(canSearch ? '하루 동안 배를 세우고 주변 바다와 수평선을 살핍니다.' : '배를 완전히 세운 뒤 탐색할 수 있습니다.', 'seaSearch'));
     }
     keyHints();
+    if (G.SeaBar) G.SeaBar.refresh(hudEl.bar);
     var s = S(), l = s.loc;
     var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + (st.paused ? ' 가던 길에 멈춤 — Space·출발로 이어 가기' : (st.autoOn ? ' 자동항해 중' : st.pilot ? ' 바닷길 따라 항해 중' : ' 항해 중')) : (st.paused ? '목적지 가던 길에 멈춤 — Space·출발로 이어 가기' : '목적지로 항해 중'))
       : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — Space·방향키로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.pointerSteer ? '마우스를 따라 조타 중 (' + G.Keys.label('mouseFollow').replace(/^(왼쪽|오른쪽) /, '') + ' 끔)' : st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
@@ -2272,7 +2278,7 @@
       var lenS = si === 0 ? SP : FP;
       // 기함·동행선·호위 상선 각각의 실제 자리에 독립된 물길을 남긴다.
       shipWater(ctx,'fleet:'+si,sh.type,l.lon,l.lat,bx,by,ha,lenS*sv.squash,shipSpeed(),si===0);
-      var lk = A.shipLook(sh.type, { sails: sh.sails, sailColor: sh.sailColor, flag: sh.escort ? '#c9a030' : '#1d3f7a' });   // 호위하는 상선은 상선의 노란 깃발
+      var lk = A.shipLook(sh.type, { sails: sh.sails, sailColor: sh.sailColor, sailShape: sh.sailShape, sailDesign: sh.sailDesign, sailInk: sh.sailInk, flag: sh.escort ? '#c9a030' : '#1d3f7a' });   // 호위하는 상선은 상선의 노란 깃발
       var ps = st.pose || {}, ph = si * 1.7, RF = si && st.rideF && st.rideF[si], RDm = G.FX.ride || {};
       if (RF) lk.pose = { roll: U.clamp(RF.roll, -RDm.maxRoll, RDm.maxRoll), pitch: U.clamp(RF.pitch, -RDm.maxPitch, RDm.maxPitch), heave: U.clamp(RF.heave, -RDm.maxHeave, RDm.maxHeave) };
       else lk.pose = { roll: (ps.roll || 0) * (si ? 0.9 : 1), pitch: (ps.pitch || 0) + (si ? Math.sin(st.t * 1.1 + ph) * 0.01 : 0), heave: (ps.heave || 0) * (si ? Math.cos(ph) : 1) };
@@ -2419,13 +2425,15 @@
     var cv = hudEl.wind, ctx = cv.getContext('2d'), W = cv.width, c = W / 2;
     var s = S(), l = s.loc;
     ctx.clearRect(0, 0, W, W);
+    var wd = st.windVis.dir, ws = st.windVis.spd;
+    if (G.SeaInstruments) G.SeaInstruments.compass(cv, wd, l.heading);
+    else {
     ctx.save(); ctx.translate(c, c); ctx.scale(2, 2);
     // compass ring
     ctx.strokeStyle = 'rgba(227,198,141,.6)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, 58, 0, 7); ctx.stroke();
     ctx.fillStyle = '#e3c68d'; ctx.font = '700 12px ' + fontFam(); ctx.textAlign = 'center';
     [['N', 0, -46], ['E', 46, 4], ['S', 0, 52], ['W', -46, 4]].forEach(function (t) { ctx.fillText(t[0], t[1], t[2]); });
     // wind arrow (blowing toward)
-    var wd = st.windVis.dir, ws = st.windVis.spd;
     ctx.save(); ctx.rotate(-wd);
     ctx.strokeStyle = 'rgba(160,210,255,.95)'; ctx.fillStyle = 'rgba(160,210,255,.95)'; ctx.lineWidth = 4;
     ctx.beginPath(); ctx.moveTo(-30, 0); ctx.lineTo(24, 0); ctx.stroke();
@@ -2436,6 +2444,7 @@
     ctx.fillStyle = '#f2e7cc'; ctx.beginPath(); ctx.moveTo(22, 0); ctx.lineTo(-10, -7); ctx.lineTo(-5, 0); ctx.lineTo(-10, 7); ctx.fill();
     ctx.restore();
     ctx.restore();
+    }
     var rel = Math.abs(U.angDiff(l.heading, st.wind.dir)) * 180 / Math.PI;
     var rn = rel < 45 ? '순풍' : rel < 110 ? '옆바람' : rel < 150 ? '비스듬한 역풍' : '역풍';
     var from = U.dirName(st.wind.dir + Math.PI);
@@ -2445,7 +2454,13 @@
     // 비·노 젓기는 알림으로 띄우지 않고 여기에 늘 보인다 (알림 정리 2026-11-01 — js/ui/ui.js UI.toastTier의 state)
     var rtxt = G.Rain && G.Rain.raining() ? '<div style="font-size:12.5px;color:#a9c7e8" title="비 대책: ' + (G.Rain.ORDERS && S().rain && G.Rain.ORDERS[S().rain.order] ? G.Rain.ORDERS[S().rain.order].name : '') + '">☂ ' + G.Rain.name() + '</div>' : '';
     var otxt = R.rowing || (R.fleetInfo && R.fleetInfo.row) ? '<div style="font-size:12.5px;color:#e8c9a0" title="돛이 바람을 못 받아 선원들이 노를 젓는다 — 오래 저으면 지친다">노 젓는 중</div>' : '';
-    setHtml(hudEl.wtxt, '<div style="font-size:15px;color:#e3c68d">' + from + '풍</div><div style="font-size:14px">풍속 ' + '●●●●●'.slice(0, Math.max(1, Math.round(ws * 5))) + '</div><div style="font-size:14px;color:#d9c9a6">' + rn + '</div>' + mtxt + ctxt + rtxt + otxt);
+    if (G.SeaInstruments) {
+      setHtml(hudEl.wtxt, G.SeaInstruments.rows({ direction: from + '풍', strength: Math.max(1, Math.min(5, Math.round(ws * 5))), relation: rn,
+        cloud: crg ? crg.name : '구름 관측 중', monsoon: mz ? (mph === 'sw' ? '남서' : '북동') + ' 계절풍 ~' + mnx.date.m + '/' + mnx.date.d : '',
+        monsoonTip: mz ? mz.name + '의 계절풍' : '', rain: rtxt ? G.Rain.name() : '',
+        rainTip: rtxt ? '비 대책: ' + (G.Rain.ORDERS && S().rain && G.Rain.ORDERS[S().rain.order] ? G.Rain.ORDERS[S().rain.order].name : '') : '', rowing: !!otxt }));
+      G.SeaInstruments.fit();
+    } else setHtml(hudEl.wtxt, '<div style="font-size:15px;color:#e3c68d">' + from + '풍</div><div style="font-size:14px">풍속 ' + '●●●●●'.slice(0, Math.max(1, Math.round(ws * 5))) + '</div><div style="font-size:14px;color:#d9c9a6">' + rn + '</div>' + mtxt + ctxt + rtxt + otxt);
   }
   /* 작은 해도 — 양피지 지형(G.ChartArt.terrain)은 한 번 그리는 데 20ms 넘게 걸려, 0.3초마다 통째로 다시 그리면 항해가 툭툭 끊겼다 (2026-11-01).
      지형은 따로 담아 두고 배가 조금 움직일 때는 담아 둔 지형을 그만큼 옮겨 그린다. 도시·표식·배·가장자리는 늘 새로 그린다.

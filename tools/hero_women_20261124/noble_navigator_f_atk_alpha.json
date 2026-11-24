@@ -1,0 +1,8 @@
+{
+  "key": "noble_navigator_f_atk_alpha",
+  "prompt": "Background removal task. Deliver the same 24 sprite figures as isolated cutouts on a FULLY TRANSPARENT alpha channel. Erase EVERY white backdrop pixel and all gray floor shadows everywhere around and between the figures. Outside the character silhouettes must have alpha exactly ZERO, NOT semitransparent white. The viewer must be able to see any colored background through all empty areas. Preserve same strict 6 columns x 4 rows, all poses, faces, hair, opaque outfits, hands, boots, thin sword blades and locations. Same image dimensions. No checkerboard painted into image, no white background, no halo, no cast shadow, no added content.",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-women-20261124\\raw\\noble_navigator_f_atk.png"
+  ],
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-65b6b99e-8c9a-4df3-b987-7da782239c63.png"
+}

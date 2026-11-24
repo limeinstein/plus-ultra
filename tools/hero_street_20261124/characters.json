@@ -1,0 +1,173 @@
+[
+  {
+    "id": "admiral",
+    "reference": "art_sources/hero-motion-20261124/references/admiral.png",
+    "source": "images/characters/player_half.webp"
+  },
+  {
+    "id": "ganghui",
+    "reference": "art_sources/hero-motion-20261124/references/ganghui.png",
+    "source": "images/characters/player_half_ganghui.png"
+  },
+  {
+    "id": "navigator_white",
+    "reference": "art_sources/hero-motion-20261124/references/navigator_white.png",
+    "source": "images/characters/player_half_navigator_white.png"
+  },
+  {
+    "id": "armored_navigator",
+    "reference": "art_sources/hero-motion-20261124/references/armored_navigator.png",
+    "source": "images/characters/player-ages-20261123/young/armored_navigator.webp"
+  },
+  {
+    "id": "sea_dog",
+    "reference": "art_sources/hero-motion-20261124/references/sea_dog.png",
+    "source": "images/characters/player_half_sea_dog.png"
+  },
+  {
+    "id": "muscle_swordsman",
+    "reference": "art_sources/hero-motion-20261124/references/muscle_swordsman.png",
+    "source": "images/characters/player-ages-20261123/young/muscle_swordsman.webp"
+  },
+  {
+    "id": "hat_spinner",
+    "reference": "art_sources/hero-motion-20261124/references/hat_spinner.png",
+    "source": "images/characters/player-ages-20261123/young/hat_spinner.webp"
+  },
+  {
+    "id": "charismatic_admiral",
+    "reference": "art_sources/hero-motion-20261124/references/charismatic_admiral.png",
+    "source": "images/characters/player_half_charismatic_admiral.png"
+  },
+  {
+    "id": "battle_vanguard",
+    "reference": "art_sources/hero-motion-20261124/references/battle_vanguard.png",
+    "source": "images/characters/player-ages-20261123/young/battle_vanguard.webp"
+  },
+  {
+    "id": "noble_scholar",
+    "reference": "art_sources/hero-motion-20261124/references/noble_scholar.png",
+    "source": "images/characters/player_half_noble_scholar.png"
+  },
+  {
+    "id": "casanova",
+    "reference": "art_sources/hero-motion-20261124/references/casanova.png",
+    "source": "images/characters/player_half_casanova.png"
+  },
+  {
+    "id": "army_officer",
+    "reference": "art_sources/hero-motion-20261124/references/army_officer.png",
+    "source": "images/characters/player-ages-20261123/young/army_officer.webp"
+  },
+  {
+    "id": "sky_adventurer",
+    "reference": "art_sources/hero-motion-20261124/references/sky_adventurer.png",
+    "source": "images/characters/player-ages-20261123/young/sky_adventurer.webp"
+  },
+  {
+    "id": "blackcoat_captain",
+    "reference": "art_sources/hero-motion-20261124/references/blackcoat_captain.png",
+    "source": "images/characters/player-ages-20261123/young/blackcoat_captain.webp"
+  },
+  {
+    "id": "jessica",
+    "reference": "art_sources/hero-motion-20261124/references/jessica.png",
+    "source": "images/characters/player_half_jessica.webp"
+  },
+  {
+    "id": "soyoung",
+    "reference": "art_sources/hero-motion-20261124/references/soyoung.png",
+    "source": "images/characters/player_half_soyoung.webp"
+  },
+  {
+    "id": "navigator_f",
+    "name": "여성 항해사",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\navigator_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "missionary_f",
+    "name": "여성 선교사",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\missionary_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "excavator_f",
+    "name": "여성 발굴자",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\excavator_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "noble_navigator_f",
+    "name": "여성 귀족 항해사",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\noble_navigator_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "surveyor_f",
+    "name": "여성 측량사",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\surveyor_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "explorer_f",
+    "name": "여성 탐험가",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\explorer_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "hunter_f",
+    "name": "여성 사냥꾼",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\hunter_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "soldier_f",
+    "name": "여성 군인",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\soldier_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "lookout_f",
+    "name": "여성 파수꾼",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\lookout_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "white_navigator_f",
+    "name": "백발 여성 항해사",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\white_navigator_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "conqueror_f",
+    "name": "여성 정복자",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\conqueror_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "black_hunter_f",
+    "name": "검은 머리 여성 사냥꾼",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\black_hunter_f_knee.png",
+    "newStreet": true
+  },
+  {
+    "id": "gold_surveyor_f",
+    "name": "금발 여성 측량사",
+    "sex": "f",
+    "reference": "art_sources\\hero-street-20261124\\references\\gold_surveyor_f_knee.png",
+    "newStreet": true
+  }
+]

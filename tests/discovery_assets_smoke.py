@@ -25,11 +25,13 @@ assert len(all_ids) == len(set(all_ids)), "발견물 ID 중복: " + ", ".join(so
 sea_ids = ids(r"^\s*s\('([^']+)'", "js/data/seadisc.js")
 tutorial_ids = ids(r"W\.list\.push\(\['([^']+)'", "js/data/tutorial.js")
 story_ids = ids(r"^\s*\['(ft_[^']+)',\s*'[^']+',\s*\d+", "js/data/story.js")
+song_ids = {row['id'] for row in rows if row.get('song')}
 known = set(all_ids)
 
 assert len(sea_ids) == 24 and sea_ids <= known, "본편 해양 발견물 누락: " + ", ".join(sorted(sea_ids - known))
 assert tutorial_ids == {"herc_cave"} and tutorial_ids <= known, "튜토리얼 발견물 누락"
 assert len(story_ids) == 7 and story_ids <= known, "이야기 발견물 누락: " + ", ".join(sorted(story_ids - known))
+assert song_ids == {'sy_longmen', 'sy_todaiji'}, "바닷길 노래 전용 발견물 등록 누락"
 # 자료를 추가할 때마다 바뀌는 총개수 대신 실제 로딩된 전체 목록을 검사한다.
 assert known, "발견물 자료를 읽지 못했습니다."
 
@@ -48,6 +50,9 @@ for did in sorted(known):
         if f'"{folder}/{did}"' not in manifest:
             missing.append(f"manifest:{folder}/{did}")
 assert not missing, "발견물 그림 누락:\n" + "\n".join(missing)
+for did in song_ids:
+    for key in ('items/evidence_' + did, 'map-discoveries/completion/' + did):
+        assert f'"{key}"' in manifest and (ROOT / 'images' / (key + '.webp')).is_file(), '이야기 증거품·외관 누락: ' + key
 
 # 완성된 세 파일이 있는데 어느 모드의 발견물에도 없는 경우도 잡는다.
 asset_sets = [{path.stem for path in (ROOT / "images" / folder).glob(f"*{ext}")} for folder, ext in folders.items()]
@@ -59,6 +64,6 @@ assert not orphaned, "자료에 없는 발견물 그림: " + ", ".join(sorted(or
 
 print(
     f"PASS: discoveries {len(known)} "
-    f"(main {len(known - story_ids)}, story-only {len(story_ids)}, tutorial {len(tutorial_ids)}); "
+    f"(main {len(known - story_ids - song_ids)}, story-only {len(story_ids)}, song {len(song_ids)}, tutorial {len(tutorial_ids)}); "
     "GIF/end/sheet/manifest complete"
 )

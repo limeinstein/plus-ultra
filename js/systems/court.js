@@ -66,7 +66,13 @@
     var portrait = G.Art.withImg(G.Art.npcSpec('courtier:' + sp.id, 'official', style, 'm'), [key]);
     return { name: row.name, title: sp.title + '의 신하', portrait: portrait, portraitChain: [key], half: [key + '_half'], lang: SP().langLv(sp), li: SP().langLi(sp) };
   };
-  CT.isHome = function (realm) { return !!realm.nation && realm.nation === S().player.nation; };
+  /** 제 나라의 궁정인가: 포르투갈·에스파냐(realm.nation) · 만든 제독의 잉글랜드·오스만·조선(realm.home — 이야기 모드의 주인공은 빼고, G.R.myNation) */
+  CT.isHome = function (realm) {
+    var n = S().player.nation; if (!realm) return false;
+    return (!!realm.nation && realm.nation === n) || (!!realm.home && realm.home === n && !!(G.R.myNation && G.R.myNation()));
+  };
+  /** 이 후원자가 제 나라의 군주인가 (js/systems/sponsor.js — 제 나라 후원자는 처음부터 조금 더 믿어 준다) */
+  CT.homeRuler = function (sp) { var r = CT.realmOf(sp); return !!r && CT.isHome(r); };
   CT.ladder = function (realm) { return CT.isHome(realm) ? realm.ranks : realm.honor; };
   /** 이 나라에서 받은 작위의 칸 (0 = 없음) */
   CT.rank = function (realm) { return st().titles[realm.id] || 0; };
@@ -109,7 +115,7 @@
   function homeSponsor() {
     var p = S().player, out = null;
     Object.keys(G.COURT.realms).forEach(function (k) {
-      var r = G.COURT.realms[k]; if (r.nation !== p.nation || out) return;
+      var r = G.COURT.realms[k]; if (!CT.isHome(r) || out) return;
       r.sponsors.forEach(function (id) { var sp = G.SPONSOR[id]; if (!out && sp && SP().present(sp) && sp.city === p.home) out = sp; });
       r.sponsors.forEach(function (id) { var sp = G.SPONSOR[id]; if (!out && sp && SP().present(sp)) out = sp; });
     });
@@ -186,7 +192,7 @@
   CT.perkText = function () {
     var t = CT.best(); if (!t) return '';
     var h = B().haggle || { p: 0.04, disc: 0.005, own: 1.5 };
-    var gates = CT.titles().filter(function (x) { return x.realm.kind === 'is' || x.realm.nation; }).map(function (x) { return x.realm.name; });
+    var gates = CT.titles().filter(function (x) { return x.realm.kind === 'is' || x.realm.nation || CT.isHome(x.realm); }).map(function (x) { return x.realm.name; });
     return '귀족의 권한 — 유럽·이슬람 도시에서 값 깎기 성공률 +' + Math.round(h.p * t.w * 100) + '%, 깎는 폭 +' + (Math.round(h.disc * t.w * 1000) / 10) + '%p (작위를 내린 나라의 땅에서는 ' + h.own + '배)' +
       (gates.length ? ' · ' + gates.join('·') + '의 땅은 이교도·조약으로 막혀도 잠입 없이 들어간다' : '');   // js/systems/sneak.js SN.welcome
   };

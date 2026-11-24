@@ -333,7 +333,7 @@
   }
   function homeRealm() {
     var nat = S().player.nation, rs = G.COURT && G.COURT.realms;
-    for (var id in rs || {}) if (rs[id].nation === nat) return id;
+    for (var id in rs || {}) if (rs[id].nation === nat || (G.Court && G.Court.isHome && G.Court.isHome(rs[id]))) return id;
     return null;
   }
 

@@ -1,0 +1,9 @@
+{
+  "id": "sy_map",
+  "kind": "icon",
+  "name": "도현의 지도",
+  "output": "items/sy_map.webp",
+  "prompt": "Use case: stylized-concept. Asset type: one premium hand-painted historical sailing RPG inventory icon, square 1024x1024, TRUE transparent RGBA background, single coherent object centered with 12 percent clear margin, all edges intact. Rich realistic paper fibers, cloth and wood details, soft warm light from upper left, crisp silhouette readable at 256px. No human hands, no people, no scenery, no labels, no watermark, no text outside the object, no checkerboard or opaque background. Any manuscript ink is tiny indistinct traditional marks rather than readable modern writing. Subject: one lovingly preserved unfolded hand-drawn world travel map on irregular warm cream rag paper with creased folds and slightly frayed corners, loosely curled left lower edge. Loose recognizable simple ink outlines of Africa, Europe and East Asia, rough dotted sailing routes, several small question marks, tiny sketched temple and cliff landmarks, faded ink and a few later reddish ink route corrections by its young owner. A faded blue cloth tying cord rests across a rolled edge. Sparse not overly exact map, an affectionate unfinished guide from a lost traveler circa 1480 Korea, no map title or readable place labels, no modern atlas colors, no crisp modern vector cartography. Whole map inside canvas, no desk or decorative compass.",
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-b98abebf-9b82-4075-b3c3-eed49915fe3a.png"
+}

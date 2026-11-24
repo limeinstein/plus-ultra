@@ -1,0 +1,12 @@
+{
+  "id": "excavator_f",
+  "name": "여성 발굴자",
+  "key": "excavator_f_atk",
+  "kind": "atk",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_knee.png",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_face.png"
+  ],
+  "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four six-frame actions in left-to-right row order: row 1 overhead saber slash (ready, windup, high arc, downward cut, followthrough, recovery); row 2 horizontal thrust (guard, pull back, extend, full lunge, recoil, recovery); row 3 low sweeping cut (crouch windup, draw back, swing, extension, followthrough, recover); row 4 short pommel bash (guard, pull back, step in, pommel forward, followthrough, recover). Each keyframe clearly changes arm, wrist, blade and leg positions, while keeping the same right hand firmly gripping the hilt. Every full figure must be surrounded by generous transparent margins: maximum 78% of cell height, including raised hands.",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-1f814fd5-fe48-4d58-8f02-c1b08ac935fe.png"
+}

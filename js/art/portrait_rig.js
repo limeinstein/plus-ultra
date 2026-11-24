@@ -75,7 +75,7 @@
       el.decoding = 'async'; el.draggable = false; el.src = src;
     }
     else if (opts.portrait instanceof HTMLCanvasElement) el = opts.portrait;
-    else if (opts.portrait && G.Art && G.Art.portraitCanvas) el = G.Art.portraitCanvas(opts.portrait, opts.size || 248);
+    else if (opts.portrait && G.Art && G.Art.portraitCanvas) el = G.Art.portraitCanvas(opts.portrait, opts.size || 248, { transparent: true });
     else return null;
     el.classList.add('rig-fallback');
     host.appendChild(el);

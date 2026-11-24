@@ -128,21 +128,41 @@
     var k = String(l[0]); if (k.charAt(0) !== '?') return true;
     var id = MATE_OF[k.slice(1)]; return !id || aboard(id);
   }
-  async function play(lines) {
+  /** 시험·빨리 넘기기: 기다리는 연출(카드·노랫가락)을 건너뛴다 */
+  function quick() { return !!(G.FX && G.FX.song && (G.FX.song.noWait || G.FX.song.fast)); }
+  function sleep(ms) { return quick() ? Promise.resolve() : new Promise(function (r) { setTimeout(r, ms); }); }
+  /** 대사 사이의 연출 줄: { card, sub } 제목 카드 · { shot } 이벤트 샷 · { shotEnd } · { sing: 초, solo } 노랫가락 · { toast: [글, 아이콘] } · { give } · { join: 동료 } */
+  async function direct(ln, ctx) {
+    if (ln.card) await SS.card(ln.card, ln.sub);
+    if (ln.shot) await SS.shot(ln.shot, ctx);
+    if (ln.shotEnd) await SS.shotEnd();
+    if (ln.sing) await SS.hum(ln.sing, ln.solo);
+    if (ln.toast) UI.toast(ln.toast[0], ln.toast[1] || 'scroll', 4200);
+    if (ln.give) proGive();
+    if (ln.join) proJoin(ln.join);
+  }
+  function isLine(l) { return Array.isArray(l) || !!(l && l.ask); }
+  async function play(lines, ctx) {
     lines = (lines || []).filter(keep).map(function (l) { return Array.isArray(l) ? [String(l[0]).replace(/^\?/, ''), l[1]] : l; });
+    var talk = lines.filter(isLine);     // 마주 선 사람을 찾을 때는 연출 줄을 빼고 본다
     for (var i = 0; i < lines.length; i++) {
-      var ln = lines[i];
-      if (Array.isArray(ln)) await UI.say(fmt(ln[1]), facing(ln[0], lines, i));
+      var ln = lines[i], ti = talk.indexOf(ln);
+      if (ctx && ctx.onLine) { try { await ctx.onLine(lines, i); } catch (e) { console.error(e); } }
+      if (Array.isArray(ln)) await UI.say(fmt(ln[1]), facing(ln[0], talk, ti));
       else if (ln && ln.ask) {
-        var v = await UI.ask(fmt(ln.ask), ln.opts.map(function (o, k) { return { label: o[0], value: k }; }), facing(ln.by || 'P', lines, i));
+        var v = await UI.ask(fmt(ln.ask), ln.opts.map(function (o, k) { return { label: o[0], value: k }; }), facing(ln.by || 'P', talk, ti));
         var o = ln.opts[v == null ? 0 : v];
         if (Array.isArray(o[1])) await play(o[1]);
       }
+      else if (ln) { try { await direct(ln, ctx); } catch (e) { console.error(e); } }
     }
   }
   SS.play = play;
 
-  // ================================================================ 사건 컷 (images/song/cuts/<이름> — 파일이 없으면 대사만)
+  // ================================================================ 이벤트 샷 — 대화하는 동안 화면 위쪽 액자에 그 장면이 떠 있다 (2026-11-24)
+  //   · 그린 원화가 있으면 그것을 (images/song/cuts/<이름>)
+  //   · 없으면 그 자리의 그림(건물 안·거리·선실·발견물) + 그 장면 사람들의 무릎상 + 빛으로 꾸린다 (js/art/eventshot.js G.EventShot.compose)
+  //   · 예전에는 원화를 따로 창으로 한 번 보여 주고 닫은 뒤 거리 배경 앞에서 대화했다 — 그림과 대화가 따로 놀았다.
   var CUTS = {
     prologue: ['song/cuts/prologue', '한산도, 1474년', '폭풍이 지나간 아침, 갯바위 아래의 낯선 사내.'],
     qufu: ['song/cuts/qufu', '곡부 — 공부자의 사당', '이름이 지워지는 것을 두려워하는 사람들.'],
@@ -159,6 +179,52 @@
     rochefort: ['song/cuts/rochefort', '로슈포르 — 검은 망토와 암호 악보', '노래 속에 숨긴 암호를 읽는다.'],
     hook_piano: ['song/cuts/hook_piano', '후크 — 갈고리 선장의 밤 연주', '달빛 드는 선실, 건반 위로 흐르는 선장의 또 다른 가락.']
   };
+  var curShot = null, curShotKey = '';
+  function shotBg(o, c) {
+    var K = G.Img.chain; c = c || curCity() || G.CITY_DATA[S().player.home];
+    if (Array.isArray(o.bg)) return o.bg;
+    if (o.place && c) return K.interior(o.place, c);
+    if (!c) return [];
+    if (o.bg === 'night') return K.city(c, 'night').concat(K.bg(c));
+    return K.bg(c);
+  }
+  function castOf(list) {
+    return (list || []).map(function (x) {
+      var k = Array.isArray(x) ? x[0] : x, sp = who(k);
+      return { half: (sp && sp.half) || [], x: Array.isArray(x) && x[1] != null ? x[1] : null, lead: !!(Array.isArray(x) && x[2]) };
+    }).filter(function (x) { return G.Img.pick(x.half); });
+  }
+  /** 이벤트 샷을 띄운다. spec: 원화 이름(문자열) 또는 { title, img?, place|bg, cast, light }. 같은 그림이 이미 떠 있으면 그대로 둔다 */
+  SS.shot = async function (spec, ctx) {
+    if (!G.FamEv || !G.FamEv.showPic || !G.Img) return false;
+    if (typeof spec === 'string') { var c0 = CUTS[spec]; if (!c0) return false; spec = { img: c0[0], title: c0[1] }; }
+    var painted = spec.img && G.Img.has(spec.img) ? spec.img : null;
+    var cast = painted ? [] : castOf(spec.cast), bg = painted ? [] : shotBg(spec, ctx && ctx.city);
+    var key = painted || [G.Img.pick(bg) || '-', spec.light || '', spec.title || ''].concat(cast.map(function (x) { return G.Img.pick(x.half) + '@' + x.x + (x.lead ? '!' : ''); })).join('|');
+    if (curShot && key === curShotKey) return true;
+    if (!painted && !G.Img.pick(bg) && !cast.length) return false;      // 꾸릴 그림이 하나도 없다 — 대사만
+    var hd = null;
+    try {
+      if (painted) hd = G.FamEv.showPic({ img: painted, title: spec.title, noStand: true });
+      else if (G.EventShot && G.EventShot.compose) {
+        // 자리를 정하지 않은 사람은 고르게 벌려 세운다. 주인공이 없으면 가운데 사람
+        var free = cast.filter(function (x) { return x.x == null; }), n = cast.length;
+        cast.forEach(function (x, i) { if (x.x == null) x.x = n === 1 ? 0.56 : 0.3 + 0.53 * i / (n - 1); });
+        if (n && !cast.some(function (x) { return x.lead; })) cast[n > 2 ? 1 : n - 1].lead = true;
+        void free;
+        var cv = await G.EventShot.compose({ bg: bg, cast: cast, light: spec.light || 'day', sparkle: false, bgY: spec.bgY });
+        hd = G.FamEv.showPic({ canvas: cv, title: spec.title, noStand: true });
+      }
+    } catch (e) { console.error(e); }
+    if (!hd || !hd.box) return false;
+    hd.box.classList.add('song-shot');
+    curShot = hd; curShotKey = key; SS._shots = (SS._shots || 0) + 1; SS._lastShot = { key: key, title: spec.title || '', painted: !!painted, cast: cast.length };
+    if (hd.ready && !quick()) { try { await hd.ready; } catch (e) { /* */ } }
+    return true;
+  };
+  SS.shotEnd = function () { var h = curShot; curShot = null; curShotKey = ''; return h ? h.stop() : Promise.resolve(); };
+  SS.shotOn = function () { return !!curShot; };
+  /** 원화를 큰 창으로 따로 본다 (수첩의 「특별 원화」) */
   SS.cut = function (id) {
     var c = CUTS[id], key = c && c[0];
     if (!c || !G.Img || !G.Img.has(key)) return Promise.resolve(false);
@@ -169,6 +235,42 @@
     return win.result;
   };
   SS.cutKeys = function () { return Object.keys(CUTS).map(function (id) { return CUTS[id][0]; }); };
+
+  /** 제목 카드 — 때와 곳이 바뀔 때 화면을 잠깐 덮는다 (누르거나 Enter로 넘김) */
+  SS.card = function (text, sub) {
+    SS._cards = (SS._cards || 0) + 1;
+    var root = document.getElementById('ui'); if (!root || quick()) return Promise.resolve();
+    css();
+    return new Promise(function (res) {
+      var el = document.createElement('div'); el.className = 'song-card';
+      el.innerHTML = '<div class="song-card-in"><i></i><b>' + U.esc(text) + '</b>' + (sub ? '<span>' + U.esc(sub) + '</span>' : '') + '<i></i></div>';
+      root.appendChild(el);
+      var done = false, t1 = null;
+      function end() {
+        if (done) return; done = true; clearTimeout(t1); window.removeEventListener('keydown', key, true);
+        el.classList.remove('on'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); res(); }, 420);
+      }
+      function key(e) { if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); end(); } }
+      requestAnimationFrame(function () { el.classList.add('on'); });
+      setTimeout(function () { el.onclick = end; window.addEventListener('keydown', key, true); }, 350);   // 앞 대사를 넘기던 손이 카드까지 넘기지 않게
+      t1 = setTimeout(end, 2400);
+    });
+  };
+  /** 대화 사이에 흐르는 노랫가락 (공연이 아닌 자리 — 주막의 밤·옛 기억). 다음 대사로 넘어가도 끝까지 흐르고 저절로 잦아든다 */
+  var humStop = null;
+  SS.hum = async function (sec, solo) {
+    SS.humEnd();
+    if (quick()) return;
+    var ids = solo ? [] : band().map(function (x) { return x.id; }).filter(function (id) { return id === 'sy_hwanggyu'; });
+    var AU = G.Audio, prev = AU && AU.want;
+    try { if (AU && AU.stop) AU.stop(); } catch (e) { /* */ }
+    var stopM = SS.music({ region: 'kr', seed: 7, sec: sec, voice: true, players: ids, soft: true });
+    var stop = function () { stopM(); try { if (AU && prev && AU.music && !AU.want) AU.music(prev, true); } catch (e) { /* */ } };
+    humStop = stop;
+    setTimeout(function () { if (humStop === stop) SS.humEnd(); }, (sec + 1.5) * 1000);
+    await sleep(900);
+  };
+  SS.humEnd = function () { if (humStop) { try { humStop(); } catch (e) { /* */ } humStop = null; } };
 
   // ================================================================ 시작
   SS.begin = async function (skip) {   // skip: 이야기 고르기 지도에서 이미 골랐다
@@ -215,20 +317,73 @@
     return s;
   };
 
-  /** 프롤로그 — 1474년의 아침 → 1480년 부두 → 한산 관아(첫 계약) */
-  SS.prologue = async function (c) {
-    var t = T(); if (!t || t.prologue) return;
-    var P = D.prologue;
-    await SS.cut('prologue');
-    await play(P.flash);
-    await play(P.harbor);
-    await play(P.sato);
+  /** 프롤로그 — 한산도를 걸으며 한 장면씩 (G.SONG.prologue.stages · 2026-11-24)
+     ① 거리(1474년의 갯바위 → 1480년) → ② 자택(지도·끝맺지 못한 노래) → ③ 항구(황규·월담) → ④ 술집(주막의 밤) → ⑤ 한산 관아(사또·계약·노인) → ⑥ 항구(물마루호)
+     저장 상태 s.song.pro = 끝낸 장면 수. 장면은 그 건물에 들어설 때(js/scenes/city.js C.visit → SS.enter) 일어나고, 끝나면 「다음 갈 곳」을 알린다.
+     ⑥을 마치면 s.song.prologue = 1 — 그 전에는 출항·성문·바닷길 공연·다른 사건이 열리지 않는다. */
+  function stages() { return (D.prologue && D.prologue.stages) || []; }
+  SS.stage = function () { var t = T(); return t && !t.prologue ? stages()[t.pro || 0] || null : null; };
+  function proGive() {
+    var t = T(); if (!t || t.pass) return;
     t.pass = 1;
     SS.contract(D.first);
     SS.hint('sy_longmen');
-    await play(P.after);
-    t.prologue = 1; S().flags.prologue = true;
+    if (G.Game.refreshHud) G.Game.refreshHud();
+  }
+  function proJoin(id) {
+    var s = S(); if (!G.MATE[id] || aboard(id)) return;
+    s.mates.push({ id: id, role: (D.roles || {})[id] || 'none', joined: U.dateNum(s.date), loyal: 90, ev: 1, from: D.home });
+    if (G.CrewAuto && G.CrewAuto.refresh) { try { G.CrewAuto.refresh(); } catch (e) { console.error(e); } }
+    UI.toast(G.MATE[id].name + U.jx(G.MATE[id].name, '이/가') + ' 일행이 되었다.', 'people', 4200);
+  }
+  function proDone() {
+    var t = T(), s = S(); if (!t || t.prologue) return;
+    proGive(); (D.joinLater || []).forEach(proJoin);     // 장면이 도중에 끊겼어도 받을 것은 받는다
+    t.pro = stages().length; t.prologue = 1; s.flags.prologue = true;
     G.Game.refreshHud();
+  }
+  /** 다음 갈 건물을 거리에서 금빛으로 짚어 준다 */
+  function pointNext() {
+    var st = SS.stage(), TW = G.Town;
+    if (!st || !inCity() || !TW || !TW.active() || TW.hidden() || st.at === 'start') return;
+    try { if (TW.lookAt) TW.lookAt(st.at); if (TW.highlight) TW.highlight([st.at], 14000); } catch (e) { console.error(e); }
+  }
+  async function runStage(c) {
+    var t = T(), st = SS.stage(); if (!st) return null;
+    var last = (t.pro || 0) + 1 >= stages().length;
+    t.pro = (t.pro || 0) + 1;                 // 먼저 적는다 — 도중에 오류가 나도 같은 장면이 되풀이되지 않게
+    SS._busy = true;
+    try { await play(st.lines, { city: c }); } catch (e) { console.error(e); }
+    try { await SS.shotEnd(); } catch (e) { console.error(e); }
+    SS.humEnd(); SS._busy = false;
+    if (st.id === 'sato') { proGive(); proJoin('sy_woldam'); }
+    if (last) proDone();
+    else if (st.next) {
+      UI.toast('다음 — ' + st.next, 'star', 6200);
+      setTimeout(pointNext, 900);
+    }
+    G.State.log('「' + D.title + '」 — ' + (PRO_LOG[st.id] || '이야기가 한 걸음 나아갔다.'));
+    return st;
+  }
+  var PRO_LOG = { wake: '여섯 해 전 갯바위에서 건진 사내를 떠올렸다.', map: '도현 아저씨의 지도를 품에 넣고 집을 나섰다.', pier: '황규가 품삯 꾸러미를 들고 따라나섰다. 새 갓을 쓴 선비를 만났다.',
+    night: '주막의 밤, 발 묶인 뱃사람들 앞에서 노래했다.', sato: '사또에게서 맹선 한 척과 노인(路引)을 받았다. 박월담이 일행이 되었다.', sail: '「물마루」호에 올랐다. 바다에 길을 내러.' };
+  SS.prologue = async function (c) {     // 첫 장면 (이야기를 시작한 거리)
+    var t = T(); if (!t || t.prologue || (t.pro || 0) > 0) return;
+    await runStage(c);
+  };
+  /** 건물에 들어설 때 (js/scenes/city.js C.visit) — false 를 돌려주면 그 건물의 보통 일을 건너뛰고 거리로 나온다 */
+  SS.enter = async function (c, kind) {
+    var t = T(); if (!t || t.prologue || !c || c.id !== D.home) return true;
+    var st = SS.stage(); if (!st) { proDone(); return true; }
+    if (st.at === 'start') { await runStage(c); st = SS.stage(); if (!st) return true; }   // 첫 장면을 못 본 채 불러온 저장
+    if (st.at === kind) { await runStage(c); if (inCity() && G.Game.cityHud) G.Game.cityHud(); return !!st.stay; }
+    var NY = (D.prologue && D.prologue.notYet) || {}, ln = NY[kind];
+    if (ln && !Array.isArray(ln)) ln = ln[st.id];
+    if (!ln) return true;                    // 교역소·조선소·여관·사당은 언제든 구경할 수 있다
+    await UI.say(fmt(ln[1]), who(ln[0]));
+    UI.toast('할 일 — ' + String(st.goal || '').replace(/<[^>]*>/g, ''), 'star', 4600);
+    setTimeout(pointNext, 700);
+    return false;
   };
   /** 사또와의 계약 (교섭 없이 정해진 조건). 다른 계약이 걸려 있으면 단서만 */
   SS.contract = function (id) {
@@ -284,19 +439,93 @@
     if (b.voice === 'back' && !voiceReady()) return false;
     return true;
   }
+  // ---------------------------------------------------------------- 사건의 이벤트 샷 · 막 제목 · 맺음
+  var ACTS = { 1: '중원', 2: '견우와 직녀', 3: '하회탈', 4: '왜구의 잔치', 5: '금봉호', 6: '돌 속의 도시', 7: '리스본', 8: '프랑스', 9: '다시 만난 마테우스', 10: '해적섬 · 목소리', 11: '아틀란티스', 12: '귀향' };
+  // 원화가 없는 사건: 꾸린 장면의 제목 · 자리(place 건물 안 / bg 그림 열쇠) · 빛
+  var SHOTS = {
+    a1_report: { title: '한산 관아 — 돌 대신 이름 세 장', place: 'mansion' },
+    a2_report: { title: '한산 관아 — 사또의 마지막 결재', place: 'mansion', light: 'dusk' },
+    a3_stow: { title: '선창 — 하회탈의 악사', bg: ['cabins/hold', 'cabins/store'], light: 'night' },
+    a4_wako: { title: '새벽 안개 — 왜구', bg: ['battle/rough-sea'], light: 'dusk' },
+    a4_after: { title: '폭풍 뒤 — 밧줄', bg: ['battle/rough-sea'], light: 'night' },
+    a5_contract: { title: '금봉호 — 독점 계약서' },
+    a5_framed: { title: '부두 — 누명' },
+    r2_letter: { title: '여관 — 월담의 연애 강독', place: 'inn', light: 'gold' },
+    a9_mateus: { title: '부두 — 낯익은 뒷모습' },
+    r4_same: { title: '같은 사람, 다른 기억', light: 'gold' },
+    r6_mishap: { title: '합동 공연이 끝난 밤', bg: 'night', light: 'night' },
+    r7_confess: { title: '제 입으로 하는 말', light: 'dusk' },
+    r8_comfort: { title: '서투른 위로', place: 'inn', light: 'gold' },
+    a10_hook: { title: '텅 빈 부두 — 갈고리 손의 신사' },
+    a10_care: { title: '목소리 없는 선장' },
+    a10_hum: { title: '여관 부엌 — 아주 작은 콧노래', place: 'inn' },
+    a11_letter: { title: '도현의 편지', light: 'gold' },
+    a11_farewell: { title: '갈라지는 두 배', light: 'dusk' },
+    a12_home: { title: '한산도 — 작은 마당', light: 'gold' },
+    r12_song: { title: '그 노래', bg: 'night', light: 'night' }
+  };
+  function segCast(lines, i) {
+    var seen = [], j = i, k;
+    if (Array.isArray(lines[j]) && lines[j][0] === 'N') j++;
+    for (; j < lines.length; j++) {
+      var l = lines[j];
+      k = Array.isArray(l) ? l[0] : l && l.ask ? (l.by || 'P') : null;
+      if (k === 'N') break;
+      if (k && seen.indexOf(k) < 0) seen.push(k);
+      if (l && l.ask) l.opts.forEach(function (o) { (Array.isArray(o[1]) ? o[1] : []).forEach(function (x) { if (Array.isArray(x) && x[0] !== 'N' && seen.indexOf(x[0]) < 0) seen.push(x[0]); }); });
+    }
+    var others = seen.filter(function (x) { return x !== 'P' && G.Img.pick((who(x) || {}).half || []); }).slice(0, 2);
+    // 왼쪽 아래에는 말하는 사람의 얼굴이 서므로, 장면 속 사람들은 조금 오른쪽으로 모아 세운다
+    var cast = (seen.indexOf('P') >= 0 || others.length < 2 ? [['P', others.length ? (others.length > 1 ? 0.3 : 0.38) : 0.56]] : []);
+    others.forEach(function (x, n) { cast.push([x, others.length > 1 ? (cast.length && cast[0][0] === 'P' ? [0.57, 0.83][n] : [0.4, 0.76][n]) : 0.74, n === 0 ? 1 : 0]); });
+    return others.length ? cast : null;
+  }
+  /** 사건 줄을 이벤트 샷과 함께 보여 준다. base: 원화 이름(문자열) 또는 꾸릴 장면 { title, place|bg, light }.
+     꾸린 장면은 해설(N)로 끊기는 대목마다 그 대목에 나오는 사람들로 다시 선다 — 대화가 장면 단위로 끊긴다 */
+  async function playScene(lines, base, ctx) {
+    ctx = ctx || {};
+    var c2 = { city: ctx.city };
+    if (typeof base === 'string' || base.img) { await SS.shot(base, c2); await play(lines, c2); return; }   // 원화: 장면 내내 그대로
+    var lastCast = null;
+    c2.onLine = async function (ls, i) {
+      var l = ls[i], isN = Array.isArray(l) && l[0] === 'N';
+      if (i > 0 && !isN) return;
+      var cast = segCast(ls, i) || lastCast; lastCast = cast;
+      if (!cast && !base.bg && !base.place && !ctx.city) return;
+      if (i > 0 && SS.shotOn()) await sleep(160);
+      await SS.shot({ title: base.title, place: base.place, bg: base.bg, light: base.light, cast: cast || [] }, c2);
+    };
+    await play(lines, c2);
+  }
+  function beatShot(b, ctx) {
+    if (b.cut && CUTS[b.cut] && G.Img.has(CUTS[b.cut][0])) return b.cut;
+    if (b.id === 'a7_lisbon' && G.Img.has(CUTS.lisbon[0])) return 'lisbon';
+    var o = {}, sh = SHOTS[b.id] || {}, k; for (k in sh) o[k] = sh[k];
+    if (b.at === 'concert' && ctx.city) { var art = SS.concertArt(ctx.city); if (art) return { img: art, title: o.title || ctx.city.name }; }   // 공연 뒤 사건: 그 고장의 공연 원화 위에서
+    if (!o.title) o.title = ctx.city ? ctx.city.name : b.at === 'sea' ? '바다 위에서' : '';
+    if (b.at === 'find' && ctx.disc && !o.bg) o.bg = ['discovery-ends/' + ctx.disc, 'discoveries/' + ctx.disc];
+    if (b.at === 'sea' && !o.bg && !o.place) o.bg = ['cabins/deck', 'battle/rough-sea'];
+    return o;
+  }
+  function plain(html) { return String(html || '').replace(/<[^>]*>/g, ''); }
   /** 사건 하나를 보여 주고 then 을 치른다 */
   async function run(b, ctx) {
-    var t = T(), s = S();
+    var t = T(), s = S(); ctx = ctx || {};
     t.beats[b.id] = today();          // 먼저 적는다 — 도중에 오류가 나도 같은 사건이 되풀이되지 않게
-    if (b.act) t.act = Math.max(t.act || 1, b.act);
+    var seen = t.actSeen || (t.actSeen = {});
     try {
-      if (b.cut) await SS.cut(b.cut);
-      else if (b.id === 'a7_lisbon') await SS.cut('lisbon');
-      await play(b.lines);
+      if (b.act && !seen[b.act] && ACTS[b.act]) { seen[b.act] = today(); await SS.card('제' + b.act + '막', ACTS[b.act]); }   // 막이 바뀔 때 제목 카드
     } catch (e) { console.error(e); }
-    await SS.apply(b.then || {}, ctx || {});
-    G.State.log('「' + D.title + '」 — ' + (BEAT_LOG[b.id] || '이야기가 한 걸음 나아갔다.'));
+    if (b.act) t.act = Math.max(t.act || 1, b.act);
+    try { await playScene(b.lines, beatShot(b, ctx), ctx); } catch (e) { console.error(e); }
+    try { await SS.shotEnd(); } catch (e) { console.error(e); }
+    var note = BEAT_LOG[b.id] || '이야기가 한 걸음 나아갔다.';
+    UI.toast('「' + D.title + '」 — ' + note, 'scroll', 5600);      // 맺음: 이번 장면에서 일어난 일 한 줄
+    await SS.apply(b.then || {}, ctx);
+    G.State.log('「' + D.title + '」 — ' + note);
     if (G.Game.refreshHud) G.Game.refreshHud();
+    var th = b.then || {};
+    if (!th.battle && !th.finale) { var g = plain(SS.guide()); if (g) setTimeout(function () { if (T()) UI.toast('다음 — ' + g, 'star', 6400); }, 1500); }   // 다음 갈 곳
   }
   var BEAT_LOG = {
     a1_qufu: '곡부 공묘에서 탁본 세 장과 제사 노래를 얻었다.', a1_longmen: '용문의 절벽이 노래를 한 박자 늦게 따라 불렀다.',
@@ -347,8 +576,12 @@
   SS.arrive = async function (c, arg) {
     var t = T(); if (!t) return false;
     arg = arg || {};
-    if (arg.song) { await SS.prologue(c); if (G.Game.cityHud) G.Game.cityHud(); return true; }
-    if (arg.load || !t.prologue) return false;
+    if (!t.prologue) {
+      if (!(t.pro > 0) && (arg.song || !arg.load)) { await SS.prologue(c); if (G.Game.cityHud) G.Game.cityHud(); return true; }   // 첫 장면
+      setTimeout(pointNext, 1200);            // 도입부 도중에 이어하기: 다음 갈 곳을 다시 짚어 준다
+      return false;
+    }
+    if (arg.load) return false;
     var b = (D.beats || []).filter(function (x) { return ready(x, 'city', { city: c }); })[0];
     if (!b) return false;
     await run(b, { city: c });
@@ -378,7 +611,9 @@
     var mk = D.markScenes[d.id], note = (D.marks || []).filter(function (m) { return m[0] === d.id; })[0];
     if (mk && !t.marks[d.id]) {
       t.marks[d.id] = today();
-      try { await play(mk); } catch (e) { console.error(e); }
+      try { await playScene(mk, { title: d.name + ' — 지도를 고쳐 쓰다', bg: ['discovery-ends/' + d.id, 'discoveries/' + d.id], light: 'gold' }, {}); } catch (e) { console.error(e); }
+      try { await SS.shotEnd(); } catch (e) { console.error(e); }
+      UI.toast('「' + d.name + '」 — 도현 아저씨의 지도를 고쳐 썼다.', 'scroll', 5200);
       G.State.log('「' + d.name + '」 — 도현 아저씨의 지도를 고쳐 썼다.');
     } else if (note && !t.marks[d.id]) t.marks[d.id] = today();
     var bs = (D.beats || []).filter(function (b) { return ready(b, 'find', { disc: d.id }); });
@@ -400,8 +635,8 @@
   SS.ending = async function () {
     var s = S(), t = T(); if (!t || t.end) return;
     t.end = 'done'; t.endDay = today();
-    await SS.cut('atlantis');
-    await play(D.ending.meet);
+    try { await SS.card('마지막 소절', '아틀란티스'); await SS.shot('atlantis'); await play(D.ending.meet); } catch (e) { console.error(e); }
+    try { await SS.shotEnd(); } catch (e) { console.error(e); }
     var w = s.player.items.filter(function (it) { return it.id === 'sy_map'; })[0];
     if (w) w.desc = '도현 아저씨가 그려 준 세상 — 이제는 소영의 글씨가 훨씬 많다. 아직 비어 있는 한쪽이 남아 있다.';
     if (G.Fame) { G.Fame.add('ex', 900); G.Fame.add('so', 300); }
@@ -432,10 +667,15 @@
   }
   function regionKey(c) { return c.lang === 14 || c.style === 'kr' ? 'kr' : c.region; }
   SS.regionKey = regionKey;
-  // 네 사람이 함께 있을 때만 네 명의 합주 원화를 쓴다.
+  // 네 사람이 함께 있을 때만 네 명의 합주 원화를 쓴다 (그림에 탈 쓴 임처사가 있어, 그가 합류하는 3막 전에 보이면 안 된다).
+  // 임처사가 오기 전(1~2막)의 셋 — 소영·황규·월담 — 은 초반용 원화 images/song/concerts/<지역>_trio 가 생기면 그것을 쓴다. 없으면 무릎상 무대.
+  //   <지역> = kr(조선) · 0~10(G.REGIONS 번호) — 네 명 원화와 같은 이름에 _trio 만 붙인다. manifest에 올리면 코드 수정 없이 붙는다.
   SS.concertArt = function (c) {
-    var key = c && 'song/concerts/' + regionKey(c);
-    return c && PLAYERS.every(function (x) { return aboard(x[0]); }) && G.Img && G.Img.has(key) ? key : null;
+    if (!c || !G.Img) return null;
+    var key = 'song/concerts/' + regionKey(c);
+    if (PLAYERS.every(function (x) { return aboard(x[0]); })) return G.Img.has(key) ? key : null;
+    if (aboard('sy_woldam') && aboard('sy_hwanggyu') && !aboard('sy_imcheosa') && G.Img.has(key + '_trio')) return key + '_trio';
+    return null;
   };
   /** 공연을 열 수 있나 {ok, why} */
   SS.canConcert = function (c) {
@@ -458,7 +698,11 @@
   }
   /** 「이 도시에서 할 일」 판의 줄 (js/scenes/city.js) */
   SS.todo = function (c) {
-    var t = T(); if (!t || !t.prologue || !c) return [];
+    var t = T(); if (!t || !c) return [];
+    if (!t.prologue) {                        // 도입부: 다음 갈 건물 하나 (누르면 그리로 간다)
+      var st0 = SS.stage();
+      return st0 && st0.goal && c.id === D.home ? [{ kind: st0.at, arg: st0.at === 'mansion' && R.bldArg && G.SPONSOR[D.sponsor] ? R.bldArg(G.SPONSOR[D.sponsor]) : undefined, icon: 'star', hot: true, text: st0.goal }] : [];
+    }
     var out = [], cc = SS.canConcert(c);
     if (cc.ok) out.push({ icon: 'star', hot: true, text: '바닷길 공연 — 오늘 밤 <b>' + U.esc(c.name) + '</b> 한가운데를 공연장으로', onClick: function () { return SS.concert(c); } });
     else if (cc.why && !cc.soon) out.push({ icon: 'heart', hot: false, text: '바닷길 공연 — ' + U.esc(cc.why), onClick: function () { G.Info.open('song'); } });
@@ -496,11 +740,10 @@
     if (!AC || !(vol > 0.01)) return noop;
     var ctx; try { ctx = new AC(); } catch (e) { return noop; }
     try { if (ctx.state === 'suspended' && ctx.resume) ctx.resume(); } catch (e) { /* */ }
-    var out = ctx.createGain(); out.gain.value = Math.min(1, vol * 1.4) * 0.55; out.connect(ctx.destination);
+    var out = ctx.createGain(); out.gain.value = Math.min(1, vol * 1.4) * (o.soft ? 0.38 : 0.55); out.connect(ctx.destination);
     var noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate), nd = noise.getChannelData(0); for (var i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
     var scale = SCALES[o.region] || SCALES.kr, r = rng(o.seed || 1), t0 = ctx.currentTime + 0.15;
-    var east = o.region === 'kr' || o.region === 6 || o.region === 9;
-    var tempo = east ? 76 : o.region === 3 || o.region === 10 ? 112 : 96, beat = 60 / tempo, sw = east ? 1.5 : 1;   // 동쪽은 굿거리처럼 셋잇단 느낌
+    var tp0 = SS.tempo(o.region), east = tp0.east, beat = tp0.beat, sw = east ? 1.5 : 1;   // 동쪽은 굿거리처럼 셋잇단 느낌
     function f(m) { return 440 * Math.pow(2, (m - 69) / 12); }
     function deg(n) { var len = scale.length, oc = Math.floor(n / len); return scale[((n % len) + len) % len] + 12 * oc; }
     function env(g, t, a, peak, dur, rel) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.setValueAtTime(peak, t + Math.max(a, dur - rel)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); }
@@ -534,73 +777,114 @@
       src.start(t); src.stop(t + 0.35);
       if (!hi) { var k = ctx.createOscillator(), kg = ctx.createGain(); k.frequency.setValueAtTime(120, t); k.frequency.exponentialRampToValueAtTime(48, t + 0.22); k.connect(kg); kg.connect(out); kg.gain.setValueAtTime(0.5, t); kg.gain.exponentialRampToValueAtTime(0.0001, t + 0.28); k.start(t); k.stop(t + 0.3); }
     }
-    var root = 62 + (east ? 0 : 2), bars = Math.max(4, Math.round((o.sec || 10) / (beat * 4))), pos = 0, has = function (id) { return (o.players || []).indexOf(id) >= 0; };
+    var root = 62 + (east ? 0 : 2), bars = o.bars || Math.max(o.soft ? 2 : 4, Math.round((o.sec || 10) / (beat * 4))), intro = o.intro || 0, pos = 0, has = function (id) { return (o.players || []).indexOf(id) >= 0; };
     var phrase = []; for (var n = 0, x = 4; n < 8; n++) { x += Math.round((r() - 0.5) * 3); x = Math.max(1, Math.min(9, x)); phrase.push({ d: x, len: r() < 0.3 ? 2 : 1 }); }
     for (var b = 0; b < bars; b++) {
       var bt = t0 + b * beat * 4;
       // 장단 (규) — 강박에 북, 사이에 꽹과리
-      if (has('sy_hwanggyu')) for (var q = 0; q < 4; q++) { hit(bt + q * beat, false); if (q % 2 || b % 2) hit(bt + q * beat + beat * 0.5 * sw / 1.5, true); }
+      if (has('sy_hwanggyu')) for (var q = 0; q < 4; q++) { hit(bt + q * beat, false); if (q % 2 || b % 2 || b < intro) hit(bt + q * beat + beat * 0.5 * sw / 1.5, true); if (b < intro && q === 3) hit(bt + q * beat + beat * 0.75, true); }   // 길놀이 마디는 꽹과리가 촘촘하다
       // 거문고 (월담) — 마디 첫 박과 셋째 박에 낮은 술대
       if (has('sy_woldam')) { pluck(bt, root - 24 + deg(b % 2 ? 2 : 0), 1.3, 'sawtooth', 900, 0.28); pluck(bt + beat * 2, root - 12 + deg(b % 4 === 3 ? 4 : 2), 0.9, 'sawtooth', 1100, 0.18); }
       // 아쟁 (처사) — 마디를 길게 긋는다 (유럽을 지난 뒤면 기타처럼 퉁긴다)
       if (has('sy_imcheosa')) { if (o.eu && b % 2) { for (var gq = 0; gq < 4; gq++) pluck(bt + gq * beat, root - 12 + deg(gq % 2 ? 4 : 2), 0.5, 'triangle', 2200, 0.12); } else bow(bt, root - 12 + deg(b % 4 < 2 ? 0 : 4), beat * 3.9); }
       // 노래 (소영)
-      if (o.voice) for (var k = 0; k < 4; k++) {
+      if (o.voice && b >= intro) for (var k = 0; k < 4; k++) {
         var nt = phrase[(pos++) % phrase.length], vary = b >= bars / 2 && k === 3 ? 2 : 0;
         if (b === bars - 1 && k === 3) { voice(bt + k * beat, root + deg(0), beat * 2.2); break; }
         voice(bt + k * beat, root + deg(nt.d + vary), beat * (nt.len > 1 ? 1.6 : 0.92));
       }
     }
+    // 박수: 노래가 끝난 자리에서 잦아드는 손뼉 (고역 잡음 알갱이)
+    if (o.applause) {
+      var te = t0 + bars * beat * 4 + 0.15;
+      for (var ci = 0; ci < 150; ci++) {
+        var ct = te + Math.pow(Math.random(), 1.6) * 2.6, src2 = ctx.createBufferSource(), f2 = ctx.createBiquadFilter(), g2c = ctx.createGain();
+        src2.buffer = noise; f2.type = 'bandpass'; f2.frequency.value = 1500 + Math.random() * 2200; f2.Q.value = 1.2;
+        src2.connect(f2); f2.connect(g2c); g2c.connect(out);
+        var pk = 0.16 * (1 - (ct - te) / 3.2);
+        g2c.gain.setValueAtTime(Math.max(0.01, pk), ct); g2c.gain.exponentialRampToValueAtTime(0.0001, ct + 0.05);
+        src2.start(ct, Math.random() * 0.5); src2.stop(ct + 0.07);
+      }
+    }
     var stopped = false;
+    function close(fade) {
+      try { out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setValueAtTime(out.gain.value, ctx.currentTime); out.gain.linearRampToValueAtTime(0, ctx.currentTime + fade); } catch (e) { /* */ }
+      setTimeout(function () { try { ctx.close(); } catch (e) { /* */ } }, fade * 1000 + 200);
+    }
     return function () {
       if (stopped) return; stopped = true;
-      try { out.gain.cancelScheduledValues(ctx.currentTime); out.gain.setValueAtTime(out.gain.value, ctx.currentTime); out.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5); } catch (e) { /* */ }
-      setTimeout(function () { try { ctx.close(); } catch (e) { /* */ } }, 700);
+      var endAt = t0 + bars * beat * 4, now = ctx.currentTime;
+      if (o.applause && now > endAt - 0.3 && now < endAt + 2.4) setTimeout(function () { close(0.5); }, (endAt + 2.4 - now) * 1000);   // 박수가 울리는 동안에는 끊지 않는다
+      else close(0.5);
     };
   };
 
   // ---------------------------------------------------------------- 공연장 화면
   var CSS = '.song-stage{position:relative;width:100%;height:560px;overflow:hidden;border-radius:6px;background:#0d0b14;font-family:inherit}' +
-    '.song-stage .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.42) saturate(.85)}' +
+    '.song-stage .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.52) saturate(.85)}' +
+    '.song-stage .glow{position:absolute;left:8%;right:8%;bottom:70px;height:330px;background:radial-gradient(ellipse at 50% 100%,rgba(255,186,104,.34),rgba(255,186,104,0) 68%);pointer-events:none}' +
     '.song-stage .night{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,8,30,.55),rgba(10,8,30,.1) 40%,rgba(0,0,0,.65))}' +
-    '.song-stage .beam{position:absolute;top:-40px;width:240px;height:620px;background:linear-gradient(180deg,rgba(255,236,170,.32),rgba(255,236,170,0));clip-path:polygon(45% 0,55% 0,100% 100%,0 100%);mix-blend-mode:screen;transform-origin:50% 0;animation:songBeam 4.6s ease-in-out infinite alternate}' +
+    '.song-stage .beam{position:absolute;top:-40px;width:240px;height:620px;background:linear-gradient(180deg,rgba(255,236,170,.2),rgba(255,236,170,0));filter:blur(5px);clip-path:polygon(45% 0,55% 0,100% 100%,0 100%);mix-blend-mode:screen;transform-origin:50% 0;animation:songBeam 4.6s ease-in-out infinite alternate}' +
     '.song-stage .beam.b2{animation-duration:5.4s;animation-direction:alternate-reverse}' +
     '@keyframes songBeam{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}' +
     '.song-stage .lanterns{position:absolute;left:0;right:0;top:4px;height:50px}' +
     '.song-stage .lanterns i{position:absolute;width:16px;height:22px;border-radius:45%;background:radial-gradient(circle at 50% 40%,#ffe3a0,#e0602c 70%);box-shadow:0 0 18px 6px rgba(255,160,70,.45);animation:songSway 2.8s ease-in-out infinite alternate}' +
     '@keyframes songSway{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(3px) rotate(4deg)}}' +
     '.song-stage .banner{position:absolute;left:50%;top:46px;transform:translateX(-50%);padding:6px 22px;border:2px solid #c9a35a;background:rgba(40,20,10,.75);color:#f6e2b0;font-size:22px;letter-spacing:2px;white-space:nowrap;border-radius:4px}' +
-    '.song-stage .floor{position:absolute;left:6%;right:6%;bottom:118px;height:26px;background:linear-gradient(180deg,#6b4526,#3a2412);border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.6)}' +
-    '.song-stage .cast{position:absolute;left:0;right:0;bottom:136px;display:flex;justify-content:center;align-items:flex-end;gap:6px}' +
+    '.song-stage .mat{position:absolute;left:20%;right:20%;bottom:100px;height:64px;border-radius:50%;background:radial-gradient(ellipse at 50% 45%,rgba(150,112,62,.9),rgba(92,64,32,.7) 55%,rgba(0,0,0,0) 72%)}' +
+    '.song-stage .cast{position:absolute;left:0;right:0;bottom:126px;display:flex;justify-content:center;align-items:flex-end;gap:0}' +
+    '.song-stage .who.drum{animation:songDrum .78s ease-in-out infinite alternate}.song-stage .who.strings{animation:songLean 2.6s ease-in-out infinite alternate}.song-stage .who.bow{animation:songLean 3.4s ease-in-out infinite alternate-reverse}.song-stage .who.singer{animation:songSing 2.1s ease-in-out infinite alternate;z-index:2}' +
+    '@keyframes songDrum{from{transform:translateY(0) rotate(-1.2deg)}to{transform:translateY(-7px) rotate(1.4deg)}}' +
+    '@keyframes songLean{from{transform:rotate(-1deg)}to{transform:rotate(1.2deg) translateY(-2px)}}' +
+    '@keyframes songSing{from{transform:translateY(0) scale(1)}to{transform:translateY(-6px) scale(1.02)}}' +
+    '.song-stage.bowing .who{animation:none;transform:translateY(14px);transition:transform .6s ease}.song-stage.bowing .who.lead{transform:translateY(20px) rotate(-1.5deg)}' +
+    '.song-stage .phase{position:absolute;left:18px;top:20px;padding:1px 12px;font-size:13px;letter-spacing:.34em;color:#d8c28e;border-top:1px solid rgba(201,163,90,.5);border-bottom:1px solid rgba(201,163,90,.5);white-space:nowrap}' +
+    '.song-stage.over .phase,.song-stage.over .lyric{opacity:0;transition:opacity .4s}' +
     '.song-stage .who{position:relative;display:flex;flex-direction:column;align-items:center;animation:songBob 1.6s ease-in-out infinite alternate}' +
     '.song-stage .who:nth-child(2n){animation-delay:.4s}.song-stage .who canvas{display:block;filter:drop-shadow(0 0 14px rgba(255,220,150,.35))}' +
     '.song-stage .who.lead canvas{filter:drop-shadow(0 0 22px rgba(255,236,190,.7))}' +
     '.song-stage .who span{margin-top:-4px;padding:1px 9px;background:rgba(20,12,6,.8);color:#f1dfb4;font-size:13px;border-radius:9px;white-space:nowrap}' +
     '@keyframes songBob{from{transform:translateY(0)}to{transform:translateY(-5px)}}' +
-    '.song-stage canvas.crowd{position:absolute;left:0;bottom:0;width:100%;height:150px}' +
+    '.song-stage canvas.crowd{position:absolute;left:0;bottom:0;width:100%;height:170px}' +
     '.song-stage .note{position:absolute;color:#ffe7a8;font-size:26px;text-shadow:0 0 8px #f90;pointer-events:none;animation:songNote 3.2s linear forwards}' +
     '@keyframes songNote{from{opacity:0;transform:translateY(0)}15%{opacity:1}to{opacity:0;transform:translateY(-260px) rotate(20deg)}}' +
     '.song-stage .cheer{position:absolute;padding:4px 12px;background:rgba(250,240,215,.94);color:#3a2610;border-radius:14px;font-size:16px;box-shadow:0 2px 8px rgba(0,0,0,.4);animation:songCheer 2.8s ease-out forwards;white-space:nowrap}' +
     '@keyframes songCheer{from{opacity:0;transform:translateY(12px) scale(.9)}15%{opacity:1;transform:none}80%{opacity:1}to{opacity:0;transform:translateY(-16px)}}' +
-    '.song-stage .lyric{position:absolute;left:50%;top:98px;transform:translateX(-50%);max-width:92%;overflow:hidden;text-overflow:ellipsis;color:#fff6dc;font-size:18px;text-shadow:0 2px 6px #000;white-space:nowrap;opacity:.95}' +
-    '.song-stage .heat{position:absolute;right:18px;top:20px;width:190px;color:#f3dfb2;font-size:14px}' +
-    '.song-stage .heat b{display:block;height:10px;margin-top:4px;background:rgba(255,255,255,.18);border-radius:5px;overflow:hidden}' +
-    '.song-stage .heat b i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f6c453,#e8572e);transition:width .4s}' +
-    '.song-stage .result{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);min-width:460px;padding:18px 26px;background:rgba(244,232,204,.97);color:#2b1d0d;border:2px solid #9b7a3c;border-radius:8px;font-size:17px;line-height:1.65;box-shadow:0 8px 28px rgba(0,0,0,.6);animation:songPop .5s ease-out both}' +
+    '.song-stage .lyric{position:absolute;left:4%;right:4%;bottom:10px;z-index:2;text-align:center;color:#fff6dc;text-shadow:0 2px 8px #000,0 0 14px rgba(0,0,0,.7);pointer-events:none}' +
+    '.song-stage .lyric .prev{height:22px;font-size:15px;color:rgba(255,246,220,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
+    '.song-stage .lyric .cur{font-size:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
+    '.song-stage .lyric .cur.in{animation:songLine .8s ease-out both}.song-stage .lyric .cur.cap{font-size:17px;color:#e6d3a2}' +
+    '@keyframes songLine{from{opacity:0;transform:translateY(10px);letter-spacing:.22em}to{opacity:1;transform:none;letter-spacing:.03em}}' +
+    '.song-stage .heat{position:absolute;right:18px;top:16px;width:200px;color:#f3dfb2;font-size:14px;text-align:right;text-shadow:0 1px 4px #000}' +
+    '.song-stage .heat .cnt b{font-size:20px;color:#ffe9b5}' +
+    '.song-stage .heat .bar{display:block;height:8px;margin-top:4px;background:rgba(255,255,255,.18);border-radius:5px;overflow:hidden}' +
+    '.song-stage .heat .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f6c453,#e8572e);transition:width .4s}' +
+    '.song-stage .cheer.mine{background:rgba(255,238,196,.98);border:1px solid #b98a3a;font-weight:700;z-index:3}' +
+    '.song-stage .result{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);min-width:460px;padding:18px 26px;background:rgba(244,232,204,.97);color:#2b1d0d;border:2px solid #9b7a3c;border-radius:8px;font-size:17px;line-height:1.65;box-shadow:0 8px 28px rgba(0,0,0,.6);z-index:6;animation:songPop .5s ease-out both}' +
     '@keyframes songPop{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}' +
     '.song-stage .result h4{margin:0 0 6px;font-size:21px}' +
-    '.song-stage.illustrated .bg{filter:none}' +
+    '.song-stage.illustrated .bg{filter:none;animation:songKen 24s ease-out forwards}' +
+    '@keyframes songKen{from{transform:scale(1)}to{transform:scale(1.07)}}' +
     '.song-stage.illustrated .night{background:linear-gradient(180deg,rgba(0,0,0,.36),transparent 22%,transparent 80%,rgba(0,0,0,.5))}' +
-    '.song-stage.illustrated .beam,.song-stage.illustrated .lanterns,.song-stage.illustrated .floor,.song-stage.illustrated .cast,.song-stage.illustrated .crowd{display:none}' +
+    '.song-stage.illustrated .beam,.song-stage.illustrated .lanterns,.song-stage.illustrated .mat,.song-stage.illustrated .glow,.song-stage.illustrated .cast,.song-stage.illustrated .crowd{display:none}' +
     '.song-stage.illustrated .banner{top:8px;font-size:18px}' +
-    '.song-stage.illustrated .lyric{top:auto;bottom:12px}';
+    '.song-stage.illustrated .lyric{bottom:0;left:0;right:0;padding:40px 4% 10px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.66) 55%)}';
+  CSS += '.song-card{position:absolute;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 45%,rgba(24,17,10,.88),rgba(4,3,6,.97));opacity:0;transition:opacity .4s ease;cursor:pointer}' +
+    '.song-card.on{opacity:1}' +
+    '.song-card-in{display:flex;flex-direction:column;align-items:center;gap:16px;color:#f3e3bd;text-align:center;transform:translateY(10px);transition:transform 1.1s ease}' +
+    '.song-card.on .song-card-in{transform:none}' +
+    '.song-card-in b{font-size:46px;letter-spacing:.2em;font-weight:700;text-shadow:0 2px 14px rgba(0,0,0,.85)}' +
+    '.song-card-in span{font-size:21px;letter-spacing:.12em;color:#cdb98a}' +
+    '.song-card-in i{display:block;width:300px;height:1px;background:linear-gradient(90deg,transparent,#c9a35a,transparent)}';
   var cssOn = false;
   function css() { if (cssOn) return; cssOn = true; var el = document.createElement('style'); el.id = 'song-css'; el.textContent = CSS; document.head.appendChild(el); }
-  function drawCrowd(cv, t, heat, rr) {
+  function drawCrowd(cv, t, heat, rr, gather) {
     var ctx = cv.getContext('2d'), w = cv.width, h = cv.height; ctx.clearRect(0, 0, w, h);
+    if (gather == null) gather = 1;
     for (var row = 0; row < 3; row++) {
       var n = 26 + row * 6, y0 = h - 6 - (2 - row) * 0, base = h - row * 26;
       for (var i = 0; i < n; i++) {
+        if (rr[(row * 31 + i * 3) % rr.length] > 0.12 + gather * 0.9) continue;      // 아직 오지 않은 사람 — 공연이 흐를수록 자리가 찬다
         var x = (i + 0.5 + (row % 2) * 0.5) / n * w, ph = rr[(row * 40 + i) % rr.length] * 6.28;
         var bob = Math.sin(t * (2.2 + heat * 3) + ph) * (2 + heat * 7);
         var col = 'rgb(' + (34 - row * 9) + ',' + (28 - row * 7) + ',' + (44 - row * 10) + ')';
@@ -620,15 +904,34 @@
       void y0;
     }
   }
-  /** 공연 — 곡을 고르고, 무대를 보고, 결과를 받는다 */
+  /** 그 고장의 빠르기 — 한 박·한 마디의 길이(초) */
+  SS.tempo = function (region) {
+    var east = region === 'kr' || region === 6 || region === 9;
+    var tempo = east ? 76 : region === 3 || region === 10 ? 112 : 96;
+    return { east: east, tempo: tempo, beat: 60 / tempo, bar: 240 / tempo };
+  };
+  /** 부를 노래의 소절 넷 — 무대 위에 한 줄씩 뜬다 */
+  function lyricLines(v, c, rinfo) {
+    var K = D.concert, split = function (t) { return String(t).split(/\s*\/\s*/); };
+    if (v === 'full') return split(D.song.last);
+    if (v === 'half') return split(D.song.first);
+    if (v === 'kr') return (K.regions.kr.lines || ['어기야 디야 — 한산도 물마루를 넘어간다']).slice();
+    var tpl = v === 'learn' ? K.learnLines : K.localLines;
+    return (tpl || []).map(function (t) { return String(t).replace(/\{song\}/g, rinfo.song).replace(/\{city\}/g, c.name); });
+  }
+  /** 공연 — 여는 말 → 곡 고르기 → 무대(길놀이 · 네 소절 · 인사) → 결과 → 맺는 말 */
   SS.concert = async function (c) {
     c = c || curCity(); var t = T(), s = S(), K = D.concert;
     var chk = SS.canConcert(c); if (!chk.ok) { UI.toast('바닷길 공연 — ' + chk.why, 'heart', 3600); return false; }
+    var players = band();
+    // 여는 말: 판을 벌이는 동료 한 사람 (곡을 고르기 전에 — 공연이 창 하나로 불쑥 시작하지 않게)
+    var openers = (K.open || []).filter(function (x) { return aboard(x[0]); });
+    if (openers.length) { var op = openers[Math.floor(Math.random() * openers.length)]; await UI.say(fmt(op[1]), mateWho(op[0])); }
     var choices = songChoices(c);
     var v = await UI.ask('오늘 밤 ' + c.name + '에서 무슨 노래를 부를까?', choices.map(function (o) { return { label: o.label, value: o.id }; }).concat([{ label: '오늘은 쉰다', value: null }]), me());
     if (v == null) return false;
     var pick = choices.filter(function (o) { return o.id === v; })[0];
-    var rk = regionKey(c), rinfo = K.regions[rk] || K.regions.kr, players = band();
+    var rk = regionKey(c), rinfo = K.regions[rk] || K.regions.kr;
     // 관객·사례
     var musicSum = U.sum(players, function (x) { return (G.MATE[x.id].sk || {}).music || 0; }) + 3;
     var fameK = 1 + Math.min(0.8, (s.player.fame || 0) / 4000);
@@ -636,60 +939,88 @@
     var crowd = Math.round((K.base + K.perSize * (c.size || 1)) * (0.55 + 0.15 * players.length + 0.03 * musicSum) * fameK * pick.k * repeatK * U.rf(0.9, 1.12));
     var gold = Math.round(crowd * K.ticket), so = Math.max(K.soFame[0], Math.min(K.soFame[1], Math.round(crowd / 110)));
     var learn = v === 'learn' && t.rep.indexOf(rk) < 0;
-    // 무대
+    // 무대의 흐름: 길놀이(반주만 한 마디) → 소절마다 한 마디 → 인사. 시간은 그 고장 빠르기에서 나온다 (시험: G.FX.song.sec 로 줄인다)
+    var lines = lyricLines(v, c, rinfo), tp = SS.tempo(rk), INTRO = 1, OUTRO = 2.6;
+    var natural = (INTRO + lines.length) * tp.bar + OUTRO, total = (G.FX && G.FX.song && G.FX.song.sec) || natural, kT = total / natural;
+    var tIntro = INTRO * tp.bar * kT, tLine = tp.bar * kT, tSong = tIntro + lines.length * tLine;
+    var leadWho = players.filter(function (x) { return x.id === 'sy_hwanggyu'; })[0] || players[0];
+    var introCap = leadWho ? G.MATE[leadWho.id].name + '의 ' + leadWho.inst.split('·')[0] + U.jx(leadWho.inst.split('·')[0], '이/가') + ' 길을 연다 — 사람들이 하나둘 모여든다' : '사람들이 하나둘 모여든다';
     css();
-    var lyric = v === 'full' ? D.song.last : v === 'half' ? D.song.first : v === 'kr' ? '♪ 어기야 디야 — 한산도 물마루를 넘어간다 ♪' : '♪ (' + c.name + '의 말로 부르는 「' + rinfo.song + '」) ♪';
-    var html = '<div class="song-stage"><div class="night"></div><div class="beam" style="left:18%"></div><div class="beam b2" style="left:58%"></div>' +
-      '<div class="lanterns"></div><div class="banner">' + U.esc(c.name) + ' — 바닷길 공연</div>' +
-      '<div class="heat">열기<b><i></i></b></div><div class="floor"></div><div class="cast"></div><div class="lyric"></div><canvas class="crowd" width="1100" height="150"></canvas></div>';
+    var html = '<div class="song-stage"><div class="night"></div><div class="glow"></div><div class="beam" style="left:20%"></div><div class="beam b2" style="left:56%"></div>' +
+      '<div class="lanterns"></div><div class="banner">' + U.esc(c.name) + ' — 바닷길 공연</div><div class="phase"></div>' +
+      '<div class="heat"><span class="cnt">관객 <b>0</b>명</span><b class="bar"><i></i></b></div><div class="mat"></div><div class="cast"></div><div class="lyric"><div class="prev"></div><div class="cur"></div></div><canvas class="crowd" width="1100" height="170"></canvas></div>';
     var finished = false, finishFn = null;
     var win = UI.window({ title: '바닷길 공연 — ' + c.name, icon: 'star', width: 1150, parch: false, html: html, clickAny: false,
       buttons: [{ label: '막을 내린다', value: 'ok', cls: 'navy', onClick: function () { if (!finished) { if (finishFn) finishFn(); return false; } } }] });
-    var stage = win.content.querySelector('.song-stage');
+    var stage = win.content.querySelector('.song-stage'), leadBox = null;
     try {
       var artKey = SS.concertArt(c);
       if (artKey) { stage.classList.add('illustrated'); stage.dataset.art = artKey; }
-      var bg = G.Img.make(artKey ? [artKey] : G.Img.chain.city(c, 'night'), 1100, 560, function () { var x = document.createElement('canvas'); x.width = 1100; x.height = 560; var g = x.getContext('2d'); var gr = g.createLinearGradient(0, 0, 0, 560); gr.addColorStop(0, '#1b1640'); gr.addColorStop(1, '#3a2a2a'); g.fillStyle = gr; g.fillRect(0, 0, 1100, 560); return x; }, { fit: artKey ? 'contain' : 'cover' });
+      var bg = G.Img.make(artKey ? [artKey] : G.Img.chain.city(c, 'night').concat(G.Img.chain.bg(c)), 1100, 560, function () { var x = document.createElement('canvas'); x.width = 1100; x.height = 560; var g = x.getContext('2d'); var gr = g.createLinearGradient(0, 0, 0, 560); gr.addColorStop(0, '#1b1640'); gr.addColorStop(1, '#3a2a2a'); g.fillStyle = gr; g.fillRect(0, 0, 1100, 560); return x; }, { fit: artKey ? 'contain' : 'cover' });
       bg.className = 'bg'; stage.insertBefore(bg, stage.firstChild);
       var ln = stage.querySelector('.lanterns'); for (var li = 0; li < 14; li++) { var lt = document.createElement('i'); lt.style.left = (3 + li * 7) + '%'; lt.style.top = (Math.sin(li / 13 * Math.PI) * 26) + 'px'; lt.style.animationDelay = (li * 0.21) + 's'; ln.appendChild(lt); }
       var cast = stage.querySelector('.cast');
-      function add(chain, label, lead, w, h) {
-        var box = document.createElement('div'); box.className = 'who' + (lead ? ' lead' : '');
+      var add = function (chain, label, lead, w, h, role) {
+        var box = document.createElement('div'); box.className = 'who' + (lead ? ' lead' : '') + (role ? ' ' + role : '');
         var cv = G.Img.make(chain, w, h, function () { var x = document.createElement('canvas'); x.width = w; x.height = h; return x; }, { fit: 'contain' });
         box.appendChild(cv); var sp = document.createElement('span'); sp.textContent = label; box.appendChild(sp); return box;
-      }
-      var line = players.map(function (x) { return add(G.Img.chain.mateHalf(x.id), G.MATE[x.id].name + ' · ' + x.inst, false, 150, 225); });
-      var lead = add(G.Img.chain.heroHalf(), s.player.given + ' · 소리', true, 186, 279);
-      var order = line.slice(0, 1).concat([lead]).concat(line.slice(1));
+      };
+      var ROLE = { sy_woldam: 'strings', sy_hwanggyu: 'drum', sy_imcheosa: 'bow' };
+      var line = players.map(function (x) { return add(G.Img.chain.mateHalf(x.id), G.MATE[x.id].name + ' · ' + x.inst, false, 176, 264, ROLE[x.id]); });
+      leadBox = add(G.Img.chain.heroHalf(), s.player.given + ' · 소리', true, 214, 321, 'singer');
+      var order = line.slice(0, 1).concat([leadBox]).concat(line.slice(1));
       order.forEach(function (x) { cast.appendChild(x); });
-      stage.querySelector('.lyric').textContent = lyric;
     } catch (e) { console.error(e); }
     // 음악
     var AU = G.Audio, prev = AU && AU.want;
     try { if (AU && AU.stop) AU.stop(); } catch (e) { /* */ }
-    var sec = (G.FX && G.FX.song && G.FX.song.sec) || 11;
-    var stopMusic = SS.music({ region: rk, seed: hash(c.id + ':' + v + ':' + (t.concerts || 0)), sec: sec, voice: true, players: players.map(function (x) { return x.id; }), eu: !!t.flags.europeBand });
-    // 열기·관객
-    var cv = stage.querySelector('canvas.crowd'), heatBar = stage.querySelector('.heat i'), t0 = Date.now(), rr = []; for (var q = 0; q < 97; q++) rr.push(Math.random());
-    var heat = 0, timer = null, cheerAt = 0, cheers = rinfo.cheer.slice();
+    var stopMusic = SS.music({ region: rk, seed: hash(c.id + ':' + v + ':' + (t.concerts || 0)), bars: INTRO + lines.length, intro: INTRO, applause: true, voice: true, players: players.map(function (x) { return x.id; }), eu: !!t.flags.europeBand });
+    // 무대의 시간
+    var cv = stage.querySelector('canvas.crowd'), heatBar = stage.querySelector('.heat .bar i'), cnt = stage.querySelector('.heat .cnt b'), phaseEl = stage.querySelector('.phase'),
+      curEl = stage.querySelector('.lyric .cur'), prevEl = stage.querySelector('.lyric .prev');
+    var t0 = Date.now(), rr = []; for (var q = 0; q < 97; q++) rr.push(Math.random());
+    var heat = 0, timer = null, cheers = rinfo.cheer.slice(), shown = -2, cheered = {}, bowed = false;
+    var PHASE = ['첫 소절', '둘째 소절', '셋째 소절', '끝 소절'];
+    function setLine(i) {
+      if (i === shown) return; shown = i;
+      if (i < 0) { phaseEl.textContent = '길놀이'; prevEl.textContent = ''; curEl.textContent = introCap; curEl.className = 'cur cap'; return; }
+      phaseEl.textContent = lines.length === 4 ? PHASE[i] : (i + 1) + '째 소절';
+      prevEl.textContent = i > 0 ? lines[i - 1] : '';
+      curEl.className = 'cur'; void curEl.offsetWidth; curEl.textContent = '♪ ' + lines[i]; curEl.className = 'cur in';
+    }
+    function bubble(text, cls, x, y, ms) {
+      var ch = document.createElement('div'); ch.className = cls; ch.textContent = text; ch.style.left = x + '%'; ch.style.bottom = y + 'px'; stage.appendChild(ch);
+      setTimeout(function () { if (ch.parentNode) ch.parentNode.removeChild(ch); }, ms || 3000);
+    }
     function frame() {
       if (finished) return;
-      var el = (Date.now() - t0) / 1000, p = Math.min(1, el / sec);
-      heat = Math.min(1, p * 1.15); if (heatBar) heatBar.style.width = Math.round(heat * 100) + '%';
-      try { drawCrowd(cv, el, heat, rr); } catch (e) { /* */ }
-      if (el - cheerAt > 2.4 && cheers.length) {
-        cheerAt = el; var ch = document.createElement('div'); ch.className = 'cheer'; ch.textContent = cheers.shift();
-        ch.style.left = (8 + Math.random() * 62) + '%'; ch.style.bottom = (150 + Math.random() * 30) + 'px'; stage.appendChild(ch);
-        setTimeout(function () { if (ch.parentNode) ch.parentNode.removeChild(ch); }, 3000);
+      var el = (Date.now() - t0) / 1000, p = Math.min(1, el / tSong);
+      var gather = Math.min(1, el / (tSong * 0.55));               // 사람들이 모여드는 만큼
+      heat = Math.min(1, Math.max(0, (el - tIntro * 0.6) / (tSong - tIntro * 0.6)) * 1.1);
+      if (heatBar) heatBar.style.width = Math.round(heat * 100) + '%';
+      if (cnt) cnt.textContent = U.num(Math.round(crowd * (0.06 + 0.94 * gather * gather)));
+      try { drawCrowd(cv, el, heat, rr, gather); } catch (e) { /* */ }
+      var li = el < tIntro ? -1 : Math.min(lines.length - 1, Math.floor((el - tIntro) / tLine));
+      if (el < tSong) setLine(li);
+      if (li >= 1 && !cheered[li] && cheers.length && el - tIntro - li * tLine > tLine * 0.35) { cheered[li] = 1; bubble(cheers.shift(), 'cheer', 8 + Math.random() * 62, 170 + Math.random() * 30, 3000); }   // 둘째 소절부터 추임새
+      if (el > tIntro && Math.random() < 0.2) { var nt = document.createElement('div'); nt.className = 'note'; nt.textContent = Math.random() < 0.5 ? '♪' : '♫'; nt.style.left = (40 + Math.random() * 20) + '%'; nt.style.bottom = (330 + Math.random() * 60) + 'px'; stage.appendChild(nt); setTimeout(function () { if (nt.parentNode) nt.parentNode.removeChild(nt); }, 3300); }
+      if (el >= tSong && !bowed) {                                 // 인사: 노래가 끝나고 박수
+        bowed = true; stage.classList.add('bowing'); phaseEl.textContent = '인사';
+        prevEl.textContent = lines[lines.length - 1]; curEl.className = 'cur cap'; curEl.textContent = '(박수가 터진다)';
+        bubble(fmt(K.thanks || '고맙습니다!'), 'cheer mine', 34, 412, 2600 * Math.max(0.4, kT));
+        if (cheers.length) bubble(cheers.shift(), 'cheer', 60, 190, 2600);
       }
-      if (Math.random() < 0.18) { var nt = document.createElement('div'); nt.className = 'note'; nt.textContent = Math.random() < 0.5 ? '♪' : '♫'; nt.style.left = (38 + Math.random() * 24) + '%'; nt.style.bottom = (300 + Math.random() * 60) + 'px'; stage.appendChild(nt); setTimeout(function () { if (nt.parentNode) nt.parentNode.removeChild(nt); }, 3300); }
-      if (p >= 1) { finish(); return; }
+      if (el >= tSong + OUTRO * kT) { finish(); return; }
+      void p;
     }
-    timer = setInterval(frame, 120);
+    setLine(-1);
+    timer = setInterval(frame, 100);
     function finish() {
       if (finished) return; finished = true; clearInterval(timer);
       if (heatBar) heatBar.style.width = '100%';
-      try { drawCrowd(cv, 0, 1, rr); } catch (e) { /* */ }
+      if (cnt) cnt.textContent = U.num(crowd);
+      stage.classList.add('bowing', 'over');
+      try { drawCrowd(cv, 0, 1, rr, 1); } catch (e) { /* */ }
       stopMusic();
       var res = document.createElement('div'); res.className = 'result';
       // 숫자와 단위를 함께 옮긴다. 따로 옮기면 인원 단위 「명」을 왕조 이름으로 읽을 수 있다.
@@ -717,11 +1048,13 @@
     if (inCity() && G.Game.cityHud) { try { G.Game.cityHud(); } catch (e) { console.error(e); } }   // 「이 도시에서 할 일」을 다시 그린다
     if (G.Audio && G.Audio.sfx) G.Audio.sfx('coin');
     G.Game.refreshHud();
-    // 동료 한 마디 · 공연 뒤 사건
-    var cand = D.concert.after.filter(function (x) { return aboard(x[0]); });
-    if (cand.length) { var pickL = cand[Math.floor(Math.random() * cand.length)]; await UI.say(pickL[1], mateWho(pickL[0])); }
+    // 맺는 말: 흩어지는 사람들 한 줄 · 동료 한 마디 · 공연 뒤 사건
     var bt = (D.beats || []).filter(function (x) { return ready(x, 'concert', { city: c }); })[0];
-    if (bt) await run(bt, { city: c });
+    if (!bt) {
+      var outs = (K.close || []); if (outs.length) await UI.say(fmt(outs[(t.concerts - 1) % outs.length]), {});
+      var cand = D.concert.after.filter(function (x) { return aboard(x[0]); });
+      if (cand.length) { var pickL = cand[Math.floor(Math.random() * cand.length)]; await UI.say(pickL[1], mateWho(pickL[0])); }
+    } else await run(bt, { city: c });
     return { crowd: crowd, gold: gold, so: so, learn: learn };
   };
 
@@ -815,10 +1148,18 @@
     if (R) {
       wrap(R, 'nationName', function (orig) { return function (n) { return n === 'KR' ? '조선' : orig.apply(this, arguments); }; });
       wrap(R, 'nativeLang', function (orig) { return function (n) { return n === 'KR' ? 14 : orig.apply(this, arguments); }; });
-      wrap(R, 'isHomeNation', function (orig) { return function (c) { var s = S(); if (s && s.player.nation === 'KR') return (R.cityOwner ? R.cityOwner(c) : c.nation) === '조선'; return orig.apply(this, arguments); }; });
+      wrap(R, 'isHomeNation', function (orig) { return function (c) { var s = S(); if (s && s.song && s.player.nation === 'KR') return (R.cityOwner ? R.cityOwner(c) : c.nation) === '조선'; return orig.apply(this, arguments);   /* 이 이야기에서만 — 만든 제독은 G.NATIONS.KR */ }; });
     }
     // 명나라 항구: 사또가 준 노인(路引)으로 든다
     var C = G.Scenes && G.Scenes.city;
+    // 도입부를 마치기 전에는 떠나지 않는다 (항구는 SS.enter 가 먼저 막지만, 다른 길로 출항을 눌러도)
+    if (C && C.B && C.B.harbor) wrap(C.B.harbor, 'depart', function (orig) {
+      return async function () {
+        var t = T();
+        if (t && !t.prologue) { var ln = ((D.prologue || {}).notYet || {}).depart; if (ln) await UI.say(fmt(ln[1]), who(ln[0])); return false; }
+        return orig.apply(this, arguments);
+      };
+    });
     if (C) wrap(C, 'entryCheck', function (orig) { return function (c) { var r = orig.apply(this, arguments), t = T(); if (r && r.reason === 'closed' && t && t.pass && isMing(c)) return null; return r; }; });
   }
   function boot() { try { install(); } catch (e) { console.error(e); } }

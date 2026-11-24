@@ -1,0 +1,12 @@
+{
+  "id": "excavator_f",
+  "name": "여성 발굴자",
+  "key": "excavator_f_cutin",
+  "kind": "cutin",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_knee.png",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_face.png"
+  ],
+  "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props.",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-2840b2db-9b45-4bcc-acb6-49ce9c24f975.png"
+}

@@ -1,0 +1,6 @@
+{
+  "key": "sea_dog_walk",
+  "prompt": "Edit ONLY background transparency of this exact production sprite sheet. Preserve 8 figures in EXACTLY 4 columns x 2 rows in the exact original cells and poses, preserving every head, finger, sword tip, foot, face, clothes, colors, size and arrangement. Remove ALL white, gray or brown background and haze around every silhouette so every background pixel has ACTUAL alpha=0. A pure transparent cutout of each full-body figure. No opaque or partly-transparent backdrop or floor shadows. Do not repaint or alter any pose or face, do not move or resize figures, do not add labels, lines, objects or text. Preserve isolated small components such as sword and ribbons.",
+  "input": "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-motion-20261124\\raw\\sea_dog_walk.png",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-d9e42553-b72f-42f4-9739-ae4c8ed86585.png"
+}

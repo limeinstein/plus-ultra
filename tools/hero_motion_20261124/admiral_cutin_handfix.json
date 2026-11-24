@@ -1,0 +1,7 @@
+{
+  "key": "admiral_cutin",
+  "alpha": false,
+  "prompt": "Correct ONLY the sword hand and nearby wrist/hilt in this event illustration. Make a clearly visible anatomical FIVE-digit grip: FOUR curled fingers wrap fully around the leather handle and occlude it, THUMB clearly visible opposing across the index/middle fingers. The handle is enclosed in the closed palm, not floating under a fist. Continuous wrist and forearm, guard in front of knuckles between hand and blade, pommel behind little finger. Rotate the wrist slightly to show the thumb and closed fingers clearly. Keep all other details, face, costume, other hand's held objects, blade, effects and scene unchanged.",
+  "input": "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-motion-20261124\\raw\\admiral_cutin.png",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-67248e47-debf-4c65-aea5-b78b920a3172.png"
+}

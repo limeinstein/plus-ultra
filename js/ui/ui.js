@@ -682,7 +682,7 @@
 
   function portraitNode(who, size) {
     if (!who || !who.portrait) return null;
-    return who.portrait instanceof HTMLCanvasElement ? who.portrait : G.Art.portraitCanvas(who.portrait, size);
+    return who.portrait instanceof HTMLCanvasElement ? who.portrait : G.Art.portraitCanvas(who.portrait, size, { transparent: true });
   }
 
   /* 얼굴 칸이 있는 대화창(장면 그림 위의 사건 대사 · 사람이 서지 않는 화면 — .dlg .pframe)
@@ -724,7 +724,7 @@
       pf.style.cssText = 'position:absolute;left:' + f.nameInset + 'px;bottom:calc(100% + ' + bottom + 'px);width:' + width + 'px;height:' + size + 'px;margin:0;padding:0;display:flex;align-items:flex-end;justify-content:center;';
       if (face) {
         if (opts && opts.portrait && !(opts.portrait instanceof HTMLCanvasElement) && face.width < size) {
-          try { var large = G.Art.portraitCanvas(opts.portrait, Math.ceil(size)); if (large) { pf.replaceChild(large, face); face = large; } } catch (e) { /* 원래 얼굴을 쓴다 */ }
+          try { var large = G.Art.portraitCanvas(opts.portrait, Math.ceil(size), { transparent: true }); if (large) { pf.replaceChild(large, face); face = large; } } catch (e) { /* 원래 얼굴을 쓴다 */ }
         }
         face.style.width = face.style.height = size + 'px';
       }
@@ -735,7 +735,7 @@
       var sz = h > FACE_BOX + 4 ? Math.min(FACE_MAX, h - 16) : 134, cur = parseFloat(cv.style.width) || 134;
       if (Math.abs(sz - cur) < 2) break;
       if (sz > 134 && opts && opts.portrait && !(opts.portrait instanceof HTMLCanvasElement) && cv.width < sz) {
-        try { var big = G.Art.portraitCanvas(opts.portrait, Math.round(sz)); if (big) { pf.replaceChild(big, cv); cv = big; } } catch (e) { /* 그대로 키운다 */ }
+        try { var big = G.Art.portraitCanvas(opts.portrait, Math.round(sz), { transparent: true }); if (big) { pf.replaceChild(big, cv); cv = big; } } catch (e) { /* 그대로 키운다 */ }
       }
       cv.style.width = cv.style.height = sz + 'px';
       pf.style.flex = '0 0 ' + (sz + 16) + 'px'; pf.style.width = (sz + 16) + 'px';

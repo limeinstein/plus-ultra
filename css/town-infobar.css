@@ -1,0 +1,47 @@
+/* 마을 하단: 남색 원형 황동 인장 + 양피지 이름표. 바다·실내 단추에는 적용하지 않는다. */
+.infobar.town-medallions {
+  display:grid; grid-template-columns:repeat(9,minmax(0,1fr)); gap:var(--tb-gap);
+  left:var(--tb-left); bottom:var(--tb-bottom); width:min(var(--tb-width),calc(100% - var(--tb-left) * 2)); height:var(--tb-height);
+  padding:0; border:0; background:none; box-shadow:none; pointer-events:none !important;
+}
+.infobar.town-medallions .btn {
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:3px;
+  position:relative; min-width:0; min-height:0; height:100%; padding:0; margin:0;
+  font-family:var(--serif); font-size:var(--tb-font); font-weight:700; letter-spacing:0;
+  border:0; border-radius:0; background:none; color:#3b2917; box-shadow:none; filter:none;
+  pointer-events:auto;
+}
+.infobar.town-medallions .tb-medal {
+  position:relative; isolation:isolate; display:flex; align-items:center; justify-content:center;
+  width:var(--tb-medal); height:var(--tb-medal); flex:0 0 var(--tb-medal); border-radius:50%; border:3px solid transparent;
+  color:#e4bd69;
+  background:radial-gradient(circle at 35% 20%,#2c455d,#182c43 65%,#0e1e30) padding-box,
+    conic-gradient(from 25deg,#c99b49,#fff0b1 14%,#9e6729 29%,#e4c780 49%,#92602b 65%,#f7dda0 83%,#c99b49) border-box;
+  box-shadow:0 2px 4px #0008,inset 0 0 0 1px #795c31; transition:color .14s,background .14s;
+}
+.infobar.town-medallions .tb-medal::before { content:''; position:absolute; inset:2px; border:1px solid #e4c98966; border-radius:50%; pointer-events:none; }
+.infobar.town-medallions .tb-medal::after { content:''; position:absolute; inset:-5px; border:1px solid #be984f; border-radius:50%; box-shadow:0 0 0 1px #523e2799; pointer-events:none; }
+.infobar.town-medallions .tb-medal > svg { width:32px; height:32px; stroke-width:1.35; color:currentColor; pointer-events:none; }
+.infobar.town-medallions .tb-label {
+  position:relative; display:flex; align-items:center; justify-content:center;
+  flex:1; min-height:var(--tb-labelHeight); width:100%; padding:3px 12px; font-size:inherit; line-height:1.12;
+  color:#3b2917; word-break:keep-all; overflow-wrap:anywhere; white-space:normal; pointer-events:none;
+  background:var(--tb-paper) center / 100% 100% no-repeat; filter:drop-shadow(0 2px 2px #0006);
+}
+.infobar.town-medallions .btn:hover .tb-medal,
+.infobar.town-medallions .btn:focus-visible .tb-medal,
+.infobar.town-medallions .btn.kbd-focus .tb-medal {
+  color:#75501f; background:radial-gradient(circle at 35% 20%,#fff8e6,#f0ddaf 70%,#d5b675) padding-box,
+    conic-gradient(from 25deg,#cf9e45,#fff0b1 14%,#a76f28 29%,#f4d88c 49%,#a26c29 65%,#fff0b1 83%,#cf9e45) border-box;
+}
+.infobar.town-medallions .btn:hover .tb-label,
+.infobar.town-medallions .btn:focus-visible .tb-label,
+.infobar.town-medallions .btn.kbd-focus .tb-label { background-image:var(--tb-navy); color:#f6d98f; }
+.infobar.town-medallions .btn:focus-visible { outline:1px solid #edcd83; outline-offset:4px; border-radius:8px; }
+.infobar.town-medallions .btn:active { transform:translateY(1px); }
+.infobar.town-medallions .btn[data-town-info="contract"] .tb-medal > svg { transform:rotate(-25deg); }
+.infobar.town-medallions .btn[data-town-info="contract"] .tb-medal::before { inset:auto 12px 11px auto; width:6px; height:6px; background:#9d3e30; border-color:#d1a152; }
+@media (prefers-reduced-motion:reduce) { .infobar.town-medallions .tb-medal { transition:none; } }
+
+.infobar.town-medallions { --tb-paper:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22320%22%20height%3D%2248%22%20viewBox%3D%220%200%20320%2048%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23f9dda0%22%2F%3E%3Cstop%20offset%3D%22.38%22%20stop-color%3D%22%23ae752a%22%2F%3E%3Cstop%20offset%3D%22.7%22%20stop-color%3D%22%23f6d994%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23986022%22%2F%3E%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22paper%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23f3dfb7%22%2F%3E%3Cstop%20offset%3D%22.28%22%20stop-color%3D%22%23fff3d8%22%2F%3E%3Cstop%20offset%3D%22.72%22%20stop-color%3D%22%23f6e7c7%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23dfc38f%22%2F%3E%3C%2FlinearGradient%3E%0A%20%20%20%20%3Cfilter%20id%3D%22grain%22%3E%3CfeTurbulence%20baseFrequency%3D%22.7%22%20numOctaves%3D%222%22%20seed%3D%228%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3CfeComponentTransfer%3E%3CfeFuncA%20type%3D%22linear%22%20slope%3D%22.045%22%2F%3E%3C%2FfeComponentTransfer%3E%3CfeBlend%20in%3D%22SourceGraphic%22%20mode%3D%22multiply%22%2F%3E%3C%2Ffilter%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cpath%20d%3D%22M24%202H296L304%2011L309%2012L312%2019L318%2024L312%2029L309%2036L304%2037L296%2046H24L16%2037L11%2036L8%2029L2%2024L8%2019L11%2012L16%2011Z%22%20fill%3D%22url%28%23gold%29%22%20stroke%3D%22%23593913%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M25%205H295L302%2014L307%2015L309%2021L313%2024L309%2027L307%2033L302%2034L295%2043H25L18%2034L13%2033L11%2027L7%2024L11%2021L13%2015L18%2014Z%22%20fill%3D%22url%28%23paper%29%22%20stroke%3D%22%23fff0ba%22%20filter%3D%22url%28%23grain%29%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M26%208H294L301%2017L305%2018L308%2024L305%2030L301%2031L294%2040H26L19%2031L15%2030L12%2024L15%2018L19%2017Z%22%20fill%3D%22none%22%20stroke%3D%22%23c6a16a%22%20stroke-width%3D%22.7%22%2F%3E%0A%3C%2Fsvg%3E%0A'); --tb-navy:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22320%22%20height%3D%2248%22%20viewBox%3D%220%200%20320%2048%22%20preserveAspectRatio%3D%22none%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22gold%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23fff0b9%22%2F%3E%3Cstop%20offset%3D%22.4%22%20stop-color%3D%22%23bc8731%22%2F%3E%3Cstop%20offset%3D%22.7%22%20stop-color%3D%22%23ffe3a2%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23946020%22%2F%3E%3C%2FlinearGradient%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22navy%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%2330445f%22%2F%3E%3Cstop%20offset%3D%22.4%22%20stop-color%3D%22%231b304d%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23102039%22%2F%3E%3C%2FlinearGradient%3E%0A%20%20%3C%2Fdefs%3E%0A%20%20%3Cpath%20d%3D%22M24%202H296L304%2011L309%2012L312%2019L318%2024L312%2029L309%2036L304%2037L296%2046H24L16%2037L11%2036L8%2029L2%2024L8%2019L11%2012L16%2011Z%22%20fill%3D%22url%28%23gold%29%22%20stroke%3D%22%23593913%22%20stroke-width%3D%221.5%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M25%205H295L302%2014L307%2015L309%2021L313%2024L309%2027L307%2033L302%2034L295%2043H25L18%2034L13%2033L11%2027L7%2024L11%2021L13%2015L18%2014Z%22%20fill%3D%22url%28%23navy%29%22%20stroke%3D%22%23ffe2a0%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M26%208H294L301%2017L305%2018L308%2024L305%2030L301%2031L294%2040H26L19%2031L15%2030L12%2024L15%2018L19%2017Z%22%20fill%3D%22none%22%20stroke%3D%22%23b98b43%22%20stroke-width%3D%22.7%22%2F%3E%0A%3C%2Fsvg%3E%0A'); }
+

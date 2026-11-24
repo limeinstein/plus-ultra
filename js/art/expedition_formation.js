@@ -5,6 +5,33 @@
   function cfg() { return (G.FX && G.FX.sprites && G.FX.sprites.expedition && G.FX.sprites.expedition.formation) || {}; }
   function sheets() { return (G.EXPEDITION_FOLLOWERS || {}).sheets || {}; }
   function crewSheets() { return (G.EXPEDITION_CREW || {}).sheets || {}; }
+  function blenderSheets() { return (G.EXPEDITION_PAINTED || {}).sheets || {}; }
+  function mountSheets() { return (G.EXPEDITION_MOUNT_ART || {}).sheets || {}; }
+  F.gender = function (u, index, count) {
+    if (!index) return u.heroGender === 'f' || (u.heroGender !== 'm' && G.R && G.R.heroFemale && G.R.heroFemale()) ? 'f' : 'm';
+    return index === Math.min((cfg().gait || {}).femaleSlot || 3, count - 1) ? 'f' : 'm';
+  };
+  // 인물과 탈것을 함께 고른다. 짐꾼을 거느린 제독은 짐을 지지 않고 앞에서 걷는다.
+  F.character = function (u, it) {
+    var kind = it.leader ? variant(u) : it.role;
+    if (kind !== 'foot' && !(it.leader && kind === 'porter') && !mountSheets()[(it.leader ? 'captain_' + it.gender : it.gender === 'f' ? 'scout_f' : 'crew_m') + '_' + kind]) return null;
+    return it.leader ? 'captain_' + it.gender : it.gender === 'f' ? 'scout_f' : 'crew_m';
+  };
+  F.hasArt = function (id) {
+    var kind = id === 'walk' ? 'foot' : id;
+    if (kind === 'foot') return !!blenderSheets().captain_m_walk && !!blenderSheets().captain_f_walk && !!blenderSheets().scout_f_run;
+    if (kind === 'porter') return F.hasArt('walk') && !!mountSheets().scout_f_porter;
+    return ['captain_m_', 'captain_f_', 'scout_f_'].every(function (prefix) { return !!mountSheets()[prefix + kind]; });
+  };
+  F.canDraw = function (u) {
+    var roles = F.roles(u);
+    return roles.every(function (role, i) {
+      var kind = i ? role : variant(u), gender = F.gender(u, i, roles.length);
+      var character = i ? gender === 'f' ? 'scout_f' : 'crew_m' : 'captain_' + gender;
+      var list = kind === 'foot' || !i && kind === 'porter' ? ['walk', 'run', 'idle'].map(function (action) { return blenderSheets()[character + '_' + action]; }) : [mountSheets()[character + '_' + kind] || crewSheets()['male_' + kind] || sheets()[kind]];
+      return list.every(function (sheet) { if (!sheet || !G.Img) return false; if (!G.Img.get(sheet.key)) { G.Img.want(sheet.key); return false; } return true; });
+    });
+  };
   function mod(n, d) { return ((n % d) + d) % d; }
   function image(id) {
     var s = sheets()[id], I = G.Img;
@@ -44,14 +71,23 @@
     if (id === 'camel') list.push('camel2');
     if (id === 'wagon') list.push('oxwagon');
     list.forEach(image);
+    Object.keys(blenderSheets()).forEach(function (key) { if (G.Img) G.Img.want(blenderSheets()[key].key); });
+    Object.keys(mountSheets()).forEach(function (key) { var sheet = mountSheets()[key]; if (list.indexOf(sheet.kind) >= 0 && G.Img) G.Img.want(sheet.key); });
     list.forEach(function (kind) {
+      if (F.hasArt(kind)) return;
       ['female_', 'captain_'].forEach(function (prefix) { var s = crewSheets()[prefix + kind]; if (s && G.Img) G.Img.want(s.key); });
     });
     // 짐꾼 원화는 두 사람이므로 제독은 단독 도보 원화를 미리 준비한다.
     if (id === 'porter' && G.ExpeditionMotion) G.ExpeditionMotion.preload('walk');
   };
   F.ready = function (id) { return !!image(id); };
-  F.crewReady = function () { return Object.keys(crewSheets()).every(function (id) { var s = crewSheets()[id]; G.Img.want(s.key); return !!G.Img.get(s.key); }); };
+  F.crewReady = function () {
+    var needed = Object.keys(crewSheets()).filter(function (id) { return id.indexOf('male_') === 0; }).map(function (id) { return crewSheets()[id]; });
+    needed = needed.concat(Object.keys(blenderSheets()).map(function (id) { return blenderSheets()[id]; }), Object.keys(mountSheets()).map(function (id) { return mountSheets()[id]; }));
+    var ready = true;
+    needed.forEach(function (s) { if (!G.Img.get(s.key)) { G.Img.want(s.key); ready = false; } });
+    return ready;
+  };
   function along(pts, distance, heading) {
     var acc = 0;
     for (var i = 1; i < pts.length; i++) {
@@ -195,6 +231,8 @@
     state.members.slice(1).forEach(function (m, i) {
       if (!space && !state.travelled) {
         if (u.moving) m.phase = chosen.phase + ((c.phaseOffsets || [])[i + 1] || 0);
+        // 시트 비교 화면은 이동 경로가 없다. 방향 선택·자동 회전 때 모든 대원이 같은 방위를 향한다.
+        m.heading = chosen.heading;
         m.moving = !!u.moving; return;
       }
       if (!dt) return;
@@ -253,7 +291,10 @@
     });
     return roles.map(function (role, i) {
       var m = state.members[i], p = toScreen(m);
-      return { index: i, role: role, leader: i === 0, gender: i === 3 ? 'f' : 'm', x: p.x, y: p.y, heading: m.heading, phase: m.phase, moving: m.moving,
+      var speed = i ? m.speed : state.speed, gait = c.gait || {}, threshold = m.running ? (gait.runExitPx || 56) : (gait.runEnterPx || 70);
+      m.running = !!m.moving && (!!u.fast || speed / size >= threshold);
+      return { index: i, role: role, leader: i === 0, gender: F.gender(u, i, roles.length), x: p.x, y: p.y, heading: m.heading, phase: m.phase, moving: m.moving,
+        speed: speed, gait: !m.moving ? 'idle' : m.running ? 'run' : 'walk',
         worldX: m.x, worldY: m.y, m: { t: role === 'foot' || role === 'porter' ? 'person' : 'beast' } };
     });
   };
@@ -272,6 +313,9 @@
       var kind = it.leader ? variant(u) : it.role;
       var appearance = it.leader ? 'captain_' + kind : it.gender === 'f' ? 'female_' + kind : null;
       var sheet = appearance && crewSheets()[appearance];
+      var character = F.character(u, it), onFoot = kind === 'foot' || it.leader && kind === 'porter';
+      var rendered = character && (onFoot ? blenderSheets()[character + '_' + it.gait] : mountSheets()[character + '_' + kind]);
+      if (rendered) { sheet = rendered; appearance = onFoot ? character : character + '_' + kind; }
       // 아직 전용 제독·여성 원화가 없는 이동 수단은 같은 이동 수단의 공용 원화를 쓴다.
       // 이전 동작 시트로 내려가면 짐꾼·마차처럼 자세와 크기가 다른 역할이 순간적으로 바뀐다.
       if (!sheet) {
@@ -287,8 +331,11 @@
       if (im) {
         var dir = mod(Math.round((Math.PI / 2 - target) / (Math.PI / 4)), 8);
         var directionRow = sheet.directionRows ? sheet.directionRows[dir] : [dir, false], row = directionRow[0];
-        var frame = mod(Math.floor(it.phase * 4), 4);
-        it.sheet = sheet; it.im = im; it.cell = sheet.cells[row * 4 + frame]; it.frame = frame; it.row = row; it.flip = directionRow[1];
+        // 옛 라마 시트의 앞쪽 대각선도 주둥이와 인물의 발끝이 함께 오른쪽을 향하게 맞춘다.
+        if (sheet.file === 'sprites/expedition_follower_llama.png' && (dir === 3 || dir === 5)) { row = 3; directionRow = [row, dir === 3]; }
+        var count = sheet.framesPerDirection || sheet.columns || 4;
+        var frame = mod(Math.floor(it.phase * count), count);
+        it.sheet = sheet; it.im = im; it.cell = sheet.cells[row * count + frame]; it.frame = frame; it.row = row; it.direction = dir; it.flip = directionRow[1];
         it.scale = s * sheet.targetHeight / ((sheet.rowHeights || [])[row] || sheet.bodyHeight);
         it.appearance = appearance || 'male_' + kind;
       } else {

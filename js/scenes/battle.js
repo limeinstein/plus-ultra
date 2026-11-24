@@ -2762,7 +2762,7 @@
       if (b.monster && G.SeaMonsters) {
         G.SeaMonsters.draw(ctx, b, p[0], p[1], st.t);
       } else {
-      var spec = A.shipLook(b.type, { sails: b.sails, sailColor: b.src && b.src.sailColor, flag: b.side === 'me' ? '#1d3f7a' : st.npc.kind === 'pirate' ? '#111' : '#8a1e1e' });
+      var spec = A.shipLook(b.type, { sails: b.sails, sailColor: b.src && b.src.sailColor, sailShape: b.src && b.src.sailShape, sailDesign: b.src && b.src.sailDesign, sailInk: b.src && b.src.sailInk, flag: b.side === 'me' ? '#1d3f7a' : st.npc.kind === 'pirate' ? '#111' : '#8a1e1e' });
       if (b.side === 'en') { spec.cross = false; A.pirateLook(spec, st.npc); }
       // 선체의 흔들림(선회 때 바깥으로 기울고, 물결에 오르내림)과 선체에 붙은 물(선수 파도·선측 물줄기)
       var sr = Math.min(1.4, Math.max(0, b.spd || 0) / (BFX.ref / BFX.day)), slp = Math.min(1.2, Math.abs(b.lat || 0) / (BFX.ref / BFX.day) * 2.2), ph0 = (b.x + b.y) * 0.01;

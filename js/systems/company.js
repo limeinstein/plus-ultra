@@ -149,7 +149,7 @@
   };
   CO.fee = function (co) {
     co = cobj(co); var k = K(), b = st();
-    var f = co.fee * (co.nation === nationName() ? 1 : k.foreignK) * (1 + k.smuggleFeeK * (b.smug[co.id] || 0));
+    var f = co.fee * ((R.isMyCompany ? R.isMyCompany(co.nation) : co.nation === nationName()) ? 1 : k.foreignK) * (1 + k.smuggleFeeK * (b.smug[co.id] || 0));
     return Math.round(f / 100) * 100;
   };
   /** 입회할 수 없는 까닭 (없으면 '') */

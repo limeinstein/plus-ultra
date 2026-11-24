@@ -16,6 +16,21 @@
     notebook: { width: 1320, height: 840, padLeft: 68, padRight: 36, padTop: 24, padBottom: 30 },
     // 거리 건물 메뉴: 배경판 없는 양피지 버튼. 실내 명령 메뉴에는 적용하지 않는다.
     townMenu: { width: 540, top: 96, right: 26, bottom: 86, rowHeight: 40, gap: 6, fontSize: 19, minFont: 16, singleAt: 4 },
+    // 마을 하단: 황동 인장 아홉 개와 양피지 이름표. 날짜 표시는 좁은 화면에서 한 단 위로 피한다.
+    townInfoBar: { width: 1120, left: 24, bottom: 12, height: 88, medal: 52, labelHeight: 30, gap: 12, font: 17, minFont: 13, captionRoom: 360 },
+    // 항해 하단: 양피지 명령판 두 날개와 중앙 황동 배속 다이얼. 작은 UI에서는 아이콘을 글 위로 놓는다.
+    seaCommandBar: { margin: 14, bottom: 16, dialWidth: 292, compactDialWidth: 232, compactAt: 1340, wingHeight: 78, compactWingHeight: 88, font: 17, compactFont: 15 },
+    // 육상은 같은 명령판·다이얼을 공유하고 긴 기능 이름을 두 줄까지 표시한다.
+    landCommandBar: { font: 17, compactFont: 14 },
+    // 항해 계기: 원형 황동 나침반·확대 단추와 높이·왼쪽 여백이 같은 정보 명패.
+    seaInstruments: { windWidth: 374, compass: 182, rowHeight: 40, gap: 6, font: 19, minFont: 13, compactAt: 1340, windBottom: 146,
+      compactWidth: 338, compactCompass: 152, compactRow: 32, compactFont: 16, compactWindBottom: 130,
+      zoomWidth: 250, compactZoomWidth: 220, zoomTop: 68, compactZoomTop: 58,
+      plaqueWidths: { direction: 138, strength: 184, relation: 158, cloud: 184, monsoon: 184, rain: 154, rowing: 166 },
+      // 선택한 5안의 원본을 수정하지 않고 CSS에서 각 장식 창만 보여 준다.
+      art: { width: 1672, height: 941, key: 'ui/sea-instruments/original05',
+        paper: [1452, 729, 205, 44], navy: [1378, 186, 144, 48], paperFill: [1543, 593, 20, 16], navyFill: [1340, 619, 24, 18],
+        compass: [1269, 568, 188, 186], round: [1396, 113, 65, 65], readout: [1468, 109, 84, 77] } },
     storySelect: { width: 1540, height: 840, slots: 5, infoWidth: 36,
       // 선택 카드·소개 초상의 머리 높이와 정수리 자리. 원본 그림은 그대로 쓴다.
       portraits: { headHeight: 0.58, top: 0.01, frames: {
@@ -138,6 +153,11 @@
       flow: 0.74,                       // 큰 너울을 따라 흐르는 넓은 청록 명암 (0이면 끔)
       ripple: 0.32,                     // 가까이서만 보이는 잔물결 법선의 세기
       crest: 0.56,                      // 강풍의 파도 꼭대기에서만 부서지는 포말
+      optics: {                        // Blender 원본과 같은 물 재질. 깊이는 해안 거리에서 추정한 연출용 수심이다
+        ior: 1.333, transmission: 0.76, specular: 0.5, roughness: 0.22,
+        absorption: [0.24, 0.065, 0.028], depth: 3.2, // RGB 광흡수 / 수심 배율
+        bump: 0.30, tile: 1.6, drift: 0.018, foam: 0.55 // Ocean 실측 잔결 / 반복 크기 / 흐름 / 포말
+      },
       surface: {                       // 수면 명암·빛 전용. 파도 높이·항해 속력은 바꾸지 않는다
         seaNormal: 0.22, battleNormal: 1.5,
         reflection: 0.30, sky: 0.30,     // 파면 반사와 하늘빛
@@ -277,6 +297,119 @@
       // 초상 위치 검토 22~37번. rect는 원화 안의 [왼쪽, 위, 너비, 높이] 비율.
       // 긴 관모·터번은 같은 인물의 무릎상에서 머리와 가슴을 함께 잡아 얼굴을 가운데에 둔다.
       frames: {
+        // 투명 라이벌 얼굴 시작 — tools/repair_portrait_transparency_frames_20261124.py
+        "portraits/rivals/four-20261110/금빛 날개 데위": {"source": "portraits/rivals/four-20261110/금빛 날개 데위_half", "rect": [0.26343984, 0.00056119, 0.49502031, 0.33001354]},
+        "portraits/rivals/four-20261110/붉은 손톱 카테리나": {"source": "portraits/rivals/four-20261110/붉은 손톱 카테리나_half", "rect": [0.23935, 0, 0.5025, 0.335]},
+        "portraits/rivals/four-20261110/아홉 꼬리 홍련": {"source": "portraits/rivals/four-20261110/아홉 꼬리 홍련_half", "rect": [0.24241389, 0.00058079, 0.44472222, 0.29648148]},
+        "portraits/rivals/ref38073-37560/뱀 비늘 쁘라파이": {"source": "portraits/rivals/ref38073-37560/뱀 비늘 쁘라파이_half", "rect": [0.134625, 0, 0.485, 0.32333333]},
+        "portraits/rivals/ref38073-37560/붉은 손톱 카테리나": {"source": "portraits/rivals/ref38073-37560/붉은 손톱 카테리나_half", "rect": [0.24808889, 0.00176725, 0.50222222, 0.33481481]},
+        "portraits/rivals/ref38073-37560/아홉 꼬리 홍련": {"source": "portraits/rivals/ref38073-37560/아홉 꼬리 홍련_half", "rect": [0.33196875, 0, 0.5042625, 0.336175]},
+        "portraits/rivals/ref38073-37560/인어 귀걸이 마리솔": {"source": "portraits/rivals/ref38073-37560/인어 귀걸이 마리솔_half", "rect": [0.33223056, 0, 0.46388889, 0.30925926]},
+        "portraits/rivals/ref38073-37560/흑십자의 파올라": {"source": "portraits/rivals/ref38073-37560/흑십자의 파올라_half", "rect": [0.29186389, 0.00024745, 0.46972222, 0.31314815]},
+        "portraits/rivals/ref39049-39045/안개섬 모이라": {"source": "portraits/rivals/ref39049-39045/안개섬 모이라_half", "rect": [0.21896944, 0.00207998, 0.38111111, 0.25407407]},
+        "portraits/rivals/ref39049-39045/진주 눈물 소교": {"source": "portraits/rivals/ref39049-39045/진주 눈물 소교_half", "rect": [0.31251944, 0, 0.44611111, 0.29740741]},
+        "portraits/rivals/가라앉은 종소리 이네스": {"source": "portraits/rivals/가라앉은 종소리 이네스_half", "rect": [0.44821667, 0, 0.43666667, 0.29111111]},
+        "portraits/rivals/가면 쓴 와양": {"source": "portraits/rivals/가면 쓴 와양_half", "rect": [0.31866944, 0, 0.57611111, 0.38407407]},
+        "portraits/rivals/가시 열매 바구스": {"source": "portraits/rivals/가시 열매 바구스_half", "rect": [0.20770278, 0, 0.57944444, 0.3862963]},
+        "portraits/rivals/고래 냄새 이브라힘": {"source": "portraits/rivals/고래 냄새 이브라힘_half", "rect": [0.39639167, 0, 0.47916667, 0.31944444]},
+        "portraits/rivals/구루시마 미치후사": {"source": "portraits/rivals/구루시마 미치후사_half", "rect": [0.22444375, 0, 0.5489625, 0.365975]},
+        "portraits/rivals/금가루 페드로": {"source": "portraits/rivals/금가루 페드로_half", "rect": [0.24248056, 0, 0.54138889, 0.36092593]},
+        "portraits/rivals/금빛 날개 데위": {"source": "portraits/rivals/금빛 날개 데위_half", "rect": [0.26343984, 0.00056119, 0.49502031, 0.33001354]},
+        "portraits/rivals/기욤 르 테스튀": {"source": "portraits/rivals/기욤 르 테스튀_half", "rect": [0.19508906, 0.00020413, 0.47297188, 0.31531458]},
+        "portraits/rivals/노래하는 마르코 칼라브레세": {"source": "portraits/rivals/노래하는 마르코 칼라브레세_half", "rect": [0.17817778, 0, 0.47944444, 0.31962963]},
+        "portraits/rivals/니컬러스 블랙우드": {"source": "portraits/rivals/니컬러스 블랙우드_half", "rect": [0.20506667, 0, 0.55666667, 0.37111111]},
+        "portraits/rivals/달리 마미": {"source": "portraits/rivals/달리 마미_half", "rect": [0.24890833, 0, 0.69333333, 0.46222222]},
+        "portraits/rivals/디르크 시버르스": {"source": "portraits/rivals/디르크 시버르스_half", "rect": [0.14835, 0, 0.60255, 0.4017]},
+        "portraits/rivals/디에고 그리요": {"source": "portraits/rivals/디에고 그리요_half", "rect": [0.24541944, 0, 0.51361111, 0.34240741]},
+        "portraits/rivals/라 뷔즈": {"source": "portraits/rivals/라 뷔즈_half", "rect": [0.19055, 0, 0.4675, 0.31166667]},
+        "portraits/rivals/라우런스 더 흐라프": {"source": "portraits/rivals/라우런스 더 흐라프_half", "rect": [0.32779687, 0, 0.44800625, 0.29867083]},
+        "portraits/rivals/라팔마의 마녀 베아트리스": {"source": "portraits/rivals/라팔마의 마녀 베아트리스_half", "rect": [0.36037031, 0, 0.53890938, 0.35927292]},
+        "portraits/rivals/로버트 컬리퍼드": {"source": "portraits/rivals/로버트 컬리퍼드_half", "rect": [0.26745833, 0, 0.49833333, 0.33222222]},
+        "portraits/rivals/로슈 브라질리아노": {"source": "portraits/rivals/로슈 브라질리아노_half", "rect": [0.29401875, 0, 0.5857125, 0.390475]},
+        "portraits/rivals/로크의 발톱 사이드": {"source": "portraits/rivals/로크의 발톱 사이드_half", "rect": [0.30338984, 0, 0.47527031, 0.31684687]},
+        "portraits/rivals/마튀랭 로메가스": {"source": "portraits/rivals/마튀랭 로메가스_half", "rect": [0.3443875, 0, 0.552375, 0.36825]},
+        "portraits/rivals/모해봉": {"source": "portraits/rivals/모해봉_half", "rect": [0.28720313, 0, 0.48884375, 0.32589583]},
+        "portraits/rivals/물범 가죽의 에일리드": {"source": "portraits/rivals/물범 가죽의 에일리드_half", "rect": [0.19949297, 0, 0.48651406, 0.32434271]},
+        "portraits/rivals/미르 알리 베이": {"source": "portraits/rivals/미르 알리 베이_half", "rect": [0.29850859, 0, 0.45183281, 0.30122187]},
+        "portraits/rivals/미셸 드 그라몽": {"source": "portraits/rivals/미셸 드 그라몽_half", "rect": [0.23083889, 0, 0.45722222, 0.30481481]},
+        "portraits/rivals/바다 야자 라히마": {"source": "portraits/rivals/바다 야자 라히마_half", "rect": [0.18937222, 0, 0.60805556, 0.40537037]},
+        "portraits/rivals/바르톨로메우 포르투게스": {"source": "portraits/rivals/바르톨로메우 포르투게스_half", "rect": [0.26678611, 0, 0.48527778, 0.32351852]},
+        "portraits/rivals/뱀 문신 손": {"source": "portraits/rivals/뱀 문신 손_half", "rect": [0.18329167, 0, 0.45166667, 0.30111111]},
+        "portraits/rivals/뱀 비늘 쁘라파이": {"source": "portraits/rivals/뱀 비늘 쁘라파이_half", "rect": [0.134625, 0, 0.485, 0.32333333]},
+        "portraits/rivals/벤저민 호니골드": {"source": "portraits/rivals/벤저민 호니골드_half", "rect": [0.1576, 0, 0.525, 0.35]},
+        "portraits/rivals/보라 바람의 이보": {"source": "portraits/rivals/보라 바람의 이보_half", "rect": [0.35642031, 0, 0.53125937, 0.35417292]},
+        "portraits/rivals/복수의 겐치": {"source": "portraits/rivals/복수의 겐치_half", "rect": [0.19912109, 0, 0.49240781, 0.32827187]},
+        "portraits/rivals/부라크 레이스": {"source": "portraits/rivals/부라크 레이스_half", "rect": [0.2591, 0, 0.53835, 0.3589]},
+        "portraits/rivals/불 뿜는 데미르": {"source": "portraits/rivals/불 뿜는 데미르_half", "rect": [0.33171944, 0, 0.48611111, 0.32407407]},
+        "portraits/rivals/불꽃 수염 셀림": {"source": "portraits/rivals/불꽃 수염 셀림_half", "rect": [0.19076667, 0, 0.45166667, 0.30111111]},
+        "portraits/rivals/붉은 손톱 카테리나": {"source": "portraits/rivals/붉은 손톱 카테리나_half", "rect": [0.24808889, 0.00176725, 0.50222222, 0.33481481]},
+        "portraits/rivals/붉은 수액 툰가": {"source": "portraits/rivals/붉은 수액 툰가_half", "rect": [0.15808125, 0, 0.5197875, 0.346525]},
+        "portraits/rivals/사이이다 알후라": {"source": "portraits/rivals/사이이다 알후라_half", "rect": [0.33659722, 0, 0.43055556, 0.28703704]},
+        "portraits/rivals/산호 가위 조반니": {"source": "portraits/rivals/산호 가위 조반니_half", "rect": [0.33884722, 0, 0.58305556, 0.3887037]},
+        "portraits/rivals/산호초 늑대 니콜로": {"source": "portraits/rivals/산호초 늑대 니콜로_half", "rect": [0.40849375, 0, 0.5397625, 0.35984167]},
+        "portraits/rivals/새뮤얼 벨러미": {"source": "portraits/rivals/새뮤얼 벨러미_half", "rect": [0.21605078, 0, 0.48554844, 0.32369896]},
+        "portraits/rivals/세 머리의 야쿱 레이스": {"source": "portraits/rivals/세 머리의 야쿱 레이스_half", "rect": [0.32458889, 0, 0.43722222, 0.29148148]},
+        "portraits/rivals/세바스티앙 곤살베스 티바우": {"source": "portraits/rivals/세바스티앙 곤살베스 티바우_half", "rect": [0.27880556, 0, 0.46388889, 0.30925926]},
+        "portraits/rivals/손도끼 유라이": {"source": "portraits/rivals/손도끼 유라이_half", "rect": [0.18512656, 0, 0.59474688, 0.39649792]},
+        "portraits/rivals/술레이만 레이스": {"source": "portraits/rivals/술레이만 레이스_half", "rect": [0.14695, 0, 0.4515, 0.301]},
+        "portraits/rivals/스티드 보닛": {"source": "portraits/rivals/스티드 보닛_half", "rect": [0.17896111, 0, 0.43277778, 0.28851852]},
+        "portraits/rivals/아궁": {"source": "portraits/rivals/아궁_half", "rect": [0.24042222, 0, 0.47805556, 0.3187037]},
+        "portraits/rivals/아르나우트 마미": {"source": "portraits/rivals/아르나우트 마미_half", "rect": [0.28669444, 0, 0.48861111, 0.32574074]},
+        "portraits/rivals/아이딘 레이스": {"source": "portraits/rivals/아이딘 레이스_half", "rect": [0.21491389, 0, 0.63222222, 0.42148148]},
+        "portraits/rivals/아홉 꼬리 홍련": {"source": "portraits/rivals/아홉 꼬리 홍련_half", "rect": [0.33196875, 0, 0.5042625, 0.336175]},
+        "portraits/rivals/안개 속의 로드리고": {"source": "portraits/rivals/안개 속의 로드리고_half", "rect": [0.28231389, 0, 0.45722222, 0.30481481]},
+        "portraits/rivals/안개섬 모이라": {"source": "portraits/rivals/안개섬 모이라_half", "rect": [0.21896944, 0.00207998, 0.38111111, 0.25407407]},
+        "portraits/rivals/안사제": {"source": "portraits/rivals/안사제_half", "rect": [0.22215556, 0, 0.48388889, 0.32259259]},
+        "portraits/rivals/알론소 데 콘트레라스": {"source": "portraits/rivals/알론소 데 콘트레라스_half", "rect": [0.2034875, 0, 0.514725, 0.34315]},
+        "portraits/rivals/알리 비친": {"source": "portraits/rivals/알리 비친_half", "rect": [0.29486111, 0, 0.48277778, 0.32185185]},
+        "portraits/rivals/앤 보니": {"source": "portraits/rivals/앤 보니_half", "rect": [0.30092109, 0, 0.48865781, 0.32577188]},
+        "portraits/rivals/얀 빌럼스": {"source": "portraits/rivals/얀 빌럼스_half", "rect": [0.158875, 0, 0.505, 0.33666667]},
+        "portraits/rivals/얀 야콥선": {"source": "portraits/rivals/얀 야콥선_half", "rect": [0.28300278, 0, 0.48444444, 0.32296296]},
+        "portraits/rivals/양언적": {"source": "portraits/rivals/양언적_half", "rect": [0.24276563, 0, 0.51156875, 0.34104583]},
+        "portraits/rivals/에드워드 만스펠트": {"source": "portraits/rivals/에드워드 만스펠트_half", "rect": [0.2736875, 0, 0.449175, 0.29945]},
+        "portraits/rivals/에드워드 잉글랜드": {"source": "portraits/rivals/에드워드 잉글랜드_half", "rect": [0.21483889, 0, 0.48722222, 0.32481481]},
+        "portraits/rivals/여덟 팔 잉에보르그": {"source": "portraits/rivals/여덟 팔 잉에보르그_half", "rect": [0.11932109, 0, 0.55330781, 0.36887188]},
+        "portraits/rivals/여우 가면 다케루": {"source": "portraits/rivals/여우 가면 다케루_half", "rect": [0.25613125, 0, 0.5644875, 0.376325]},
+        "portraits/rivals/열쇠 지기 파티마": {"source": "portraits/rivals/열쇠 지기 파티마_half", "rect": [0.14312222, 0, 0.45055556, 0.30037037]},
+        "portraits/rivals/엽마": {"source": "portraits/rivals/엽마_half", "rect": [0.28229609, 0, 0.49480781, 0.32987187]},
+        "portraits/rivals/오셀로틀 마요르가": {"source": "portraits/rivals/오셀로틀 마요르가_half", "rect": [0.30414375, 0, 0.6271125, 0.418075]},
+        "portraits/rivals/오평": {"source": "portraits/rivals/오평_half", "rect": [0.24827578, 0, 0.52739844, 0.35159896]},
+        "portraits/rivals/유향": {"source": "portraits/rivals/유향_half", "rect": [0.26349167, 0, 0.51166667, 0.34111111]},
+        "portraits/rivals/은빛 목소리의 루치아": {"source": "portraits/rivals/은빛 목소리의 루치아_half", "rect": [0.30683056, 0.00998877, 0.37388889, 0.24925926]},
+        "portraits/rivals/이괴기": {"source": "portraits/rivals/이괴기_half", "rect": [0.21978125, 0, 0.5656875, 0.377125]},
+        "portraits/rivals/이단": {"source": "portraits/rivals/이단_half", "rect": [0.25800556, 0, 0.45888889, 0.30592593]},
+        "portraits/rivals/인어 귀걸이 마리솔": {"source": "portraits/rivals/인어 귀걸이 마리솔_half", "rect": [0.33223056, 0, 0.46388889, 0.30925926]},
+        "portraits/rivals/잭 래컴": {"source": "portraits/rivals/잭 래컴_half", "rect": [0.23995278, 0, 0.43194444, 0.28796296]},
+        "portraits/rivals/존 너트": {"source": "portraits/rivals/존 너트_half", "rect": [0.23811944, 0, 0.60111111, 0.40074074]},
+        "portraits/rivals/존 보언": {"source": "portraits/rivals/존 보언_half", "rect": [0.34925938, 0, 0.42678125, 0.28452083]},
+        "portraits/rivals/존 캘리스": {"source": "portraits/rivals/존 캘리스_half", "rect": [0.12306562, 0, 0.53076875, 0.35384583]},
+        "portraits/rivals/존 테일러": {"source": "portraits/rivals/존 테일러_half", "rect": [0.30683125, 0, 0.5599875, 0.373325]},
+        "portraits/rivals/증일본": {"source": "portraits/rivals/증일본_half", "rect": [0.2621375, 0, 0.544725, 0.36315]},
+        "portraits/rivals/진동": {"source": "portraits/rivals/진동_half", "rect": [0.31749609, 0, 0.45475781, 0.30317187]},
+        "portraits/rivals/진상천": {"source": "portraits/rivals/진상천_half", "rect": [0.27565859, 0, 0.46143281, 0.30762187]},
+        "portraits/rivals/진주 눈물 소교": {"source": "portraits/rivals/진주 눈물 소교_half", "rect": [0.31251944, 0, 0.44611111, 0.29740741]},
+        "portraits/rivals/찰스 베인": {"source": "portraits/rivals/찰스 베인_half", "rect": [0.18414453, 0, 0.49856094, 0.33237396]},
+        "portraits/rivals/카라엥 갈레송": {"source": "portraits/rivals/카라엥 갈레송_half", "rect": [0.29799297, 0, 0.52101406, 0.34734271]},
+        "portraits/rivals/크라켄 사냥꾼 하랄": {"source": "portraits/rivals/크라켄 사냥꾼 하랄_half", "rect": [0.28933056, 5.648e-05, 0.38638889, 0.25759259]},
+        "portraits/rivals/크리스토퍼 콘던트": {"source": "portraits/rivals/크리스토퍼 콘던트_half", "rect": [0.28686667, 0, 0.44666667, 0.29777778]},
+        "portraits/rivals/클라스 콤판": {"source": "portraits/rivals/클라스 콤판_half", "rect": [0.24791389, 0, 0.48222222, 0.32148148]},
+        "portraits/rivals/클라인 헨슬라인": {"source": "portraits/rivals/클라인 헨슬라인_half", "rect": [0.31006094, 0, 0.68132813, 0.45421875]},
+        "portraits/rivals/클린턴 앳킨슨": {"source": "portraits/rivals/클린턴 앳킨슨_half", "rect": [0.22033611, 0, 0.49527778, 0.33018519]},
+        "portraits/rivals/토머스 튜": {"source": "portraits/rivals/토머스 튜_half", "rect": [0.32241389, 0, 0.41722222, 0.27814815]},
+        "portraits/rivals/페르낭 멘드스 핀투": {"source": "portraits/rivals/페르낭 멘드스 핀투_half", "rect": [0.17520833, 0.0013191, 0.53583333, 0.35722222]},
+        "portraits/rivals/폭풍 부르는 탕칭": {"source": "portraits/rivals/폭풍 부르는 탕칭_half", "rect": [0.34040625, 0, 0.4399875, 0.293325]},
+        "portraits/rivals/피터 이스턴": {"source": "portraits/rivals/피터 이스턴_half", "rect": [0.34557778, 0, 0.43694444, 0.2912963]},
+        "portraits/rivals/하산 베네치아노": {"source": "portraits/rivals/하산 베네치아노_half", "rect": [0.32464722, 0, 0.41805556, 0.2787037]},
+        "portraits/rivals/하프 켜는 엘레니": {"source": "portraits/rivals/하프 켜는 엘레니_half", "rect": [0.28411094, 0.00335687, 0.43182813, 0.28788542]},
+        "portraits/rivals/해초 수염 바스티앙": {"source": "portraits/rivals/해초 수염 바스티앙_half", "rect": [0.31240313, 0, 0.55034375, 0.36689583]},
+        "portraits/rivals/향유고래 아미나": {"source": "portraits/rivals/향유고래 아미나_half", "rect": [0.26150278, 0.00138657, 0.48194444, 0.3212963]},
+        "portraits/rivals/허풍쟁이 코너": {"source": "portraits/rivals/허풍쟁이 코너_half", "rect": [0.22158889, 0, 0.41972222, 0.27981481]},
+        "portraits/rivals/헨리 메인웨어링": {"source": "portraits/rivals/헨리 메인웨어링_half", "rect": [0.24256944, 0, 0.42611111, 0.28407407]},
+        "portraits/rivals/헨리 제닝스": {"source": "portraits/rivals/헨리 제닝스_half", "rect": [0.13801667, 0, 0.45916667, 0.30611111]},
+        "portraits/rivals/홍적진": {"source": "portraits/rivals/홍적진_half", "rect": [0.1799625, 0, 0.552975, 0.36865]},
+        "portraits/rivals/황금 가면 카탈리나": {"source": "portraits/rivals/황금 가면 카탈리나_half", "rect": [0.2754, 0, 0.455, 0.30333333]},
+        "portraits/rivals/흑십자의 파올라": {"source": "portraits/rivals/흑십자의 파올라_half", "rect": [0.29186389, 0.00024745, 0.46972222, 0.31314815]},
+        // 투명 라이벌 얼굴 끝
         'portraits/history/br_gwanghae_king': { source: 'portraits/history/br_gwanghae_king_half', rect: [0.085525, 0, 0.7, 0.466666667] },
         'portraits/history/ot_suleyman': { source: 'portraits/history/ot_suleyman_half', rect: [0.26115, 0, 0.56, 0.373333333] },
         'maid-styles/africa/8': { rect: [0.143555, 0.033203, 0.856445, 0.856445] },
@@ -629,6 +762,8 @@
       admiralHeight: 52,
       formation: {      // 선장·좌우 동료·후미의 다이아 편대. [뒤쪽 간격, 좌우 폭] (화면 px × 탐험대 크기)
         enabled: true, maxMembers: 4, lateralY: 0.72, turnRate: 4.8,
+        // 빠른 걸음에서는 별도 달리기 자세. 경계에서 걷기와 달리기가 번갈아 나오지 않게 한다.
+        gait: { runEnterPx: 70, runExitPx: 56, femaleSlot: 3 },
         groundMinGap: 20, groundAngles: 24, groundRadii: [1, 0.85, 0.7, 0.55, 0.4, 0.25, 0.1],
         phaseOffsets: [0, 0.21, 0.48, 0.73],
         tracks: {      // 대원마다 구두·발굽·발바닥과 바퀴·썰매 자국을 구분한다.
@@ -816,6 +951,7 @@
     }
   };
   // 돛 염색 팔레트. null은 선종 고유의 원래 천 색이다.
+  G.FX.sailDecor = { textureSize: 512 };
   G.FX.sailColors = [
     { name: '원래 색', color: null }, { name: '상아색', color: '#f1e6cc' },
     { name: '황토색', color: '#c69b62' }, { name: '벽돌색', color: '#aa4f3b' },

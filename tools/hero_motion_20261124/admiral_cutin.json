@@ -1,0 +1,8 @@
+{
+  "id": "admiral",
+  "key": "admiral_cutin",
+  "kind": "cutin",
+  "reference": "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-motion-20261124\\references\\admiral.png",
+  "prompt": "Use case: illustration-story. Asset: dramatic full-width SPECIAL ATTACK EVENT SHOT, landscape 1536x640. Historical maritime RPG hand-painted realistic cinematic art. Preserve referenced adult protagonist's facial identity, hairstyle, outfit colors and accessories. The protagonist occupies the LEFT two thirds, lunges and attacks toward the RIGHT with one sword, fierce focused expression, dynamic foreshortening, fabric whipping, readable whole weapon, upper-thigh crop. Golden blade streaks sweep right, sea spray, a storm-lit sailing ship deck in background, luminous dramatic rim light. No opponent, no text, no watermark, no borders, no logos, no gore. This is a finished richly painted background scene, fully opaque.Adult rugged brown-haired male admiral with short stubble, dark blue leather tunic, red cloak with gold trim and a round compass medallion, brown belts and boots. Wield one European sword. Background: sunset waves and a red-sailed flagship.",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-ecdf34f9-31ac-48be-b1b5-2443a736d021.png"
+}

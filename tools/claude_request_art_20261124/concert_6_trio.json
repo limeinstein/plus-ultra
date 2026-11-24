@@ -1,0 +1,13 @@
+{
+  "id": "concert_6_trio",
+  "name": "중국 항주 초반 3인 공연",
+  "output": "song/concerts/6_trio.webp",
+  "prompt": "Use case: historical-scene. New original historical sailing RPG concert illustration, single continuous ultrawide 1881x836 composition. Three portrait references specify identities and costumes only, NOT edit targets. Exactly THREE featured musicians, clearly recognizable: young adult Korean singer Kim Soyoung, black loose braid with flowers, indigo short jacket, cream woven travel clothes, waist pouch, opened paper blossom fan held while singing warmly; Hwanggyu, long black hair, cream sleeves, black vest, yellow shoulder band and red sash, performs on small Korean brass kkwaenggwari gong with padded mallet; Park Woldam, curled mustache and small goatee, broad black gat and flowing cream robe, seated playing a long wooden six-string geomungo on a low stand, right-hand bamboo stick touches strings. Preserve reference faces, clothing and instrument shapes. Full warm expressive performance, believable hands grasping fan and sticks, finely painted cinematic adventure realism, real skin color, detailed hair and cloth. Audience locally dressed and applauding behind them. No masked man, fourth band member, modern microphone, electrical gear, guitar, collage, panels, text, labels, borders or watermark. Scene: Ming-era Hangzhou West Lake shoreline at late afternoon, traditional white plaster houses with dark tiled roofs, stone arched bridge, willow boughs, small wooden boats, pale hazy hills, local merchants and families listening delightedly. Warm lake reflections. Soyoung turns toward the audience with her fan, Hwanggyu marks the beat while Woldam smiles over the zither.",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\characters\\player_half_soyoung.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_hwanggyu_half.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_woldam_half.webp"
+  ],
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-06e5878d-2d2c-42cd-a3bf-d6648d3a26ef.png"
+}

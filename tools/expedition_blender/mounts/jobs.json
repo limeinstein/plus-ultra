@@ -1,0 +1,240 @@
+[
+  {
+    "id": "captain_m_porter",
+    "kind": "porter",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_porter.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_porter",
+    "kind": "porter",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_porter.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_porter",
+    "kind": "porter",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_porter.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_horse",
+    "kind": "horse",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_horse.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_horse",
+    "kind": "horse",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_horse.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_horse",
+    "kind": "horse",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_horse.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_camel",
+    "kind": "camel",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_camel.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_camel",
+    "kind": "camel",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_camel.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_camel",
+    "kind": "camel",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_camel.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_camel2",
+    "kind": "camel2",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_camel2.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_camel2",
+    "kind": "camel2",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_camel2.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_camel2",
+    "kind": "camel2",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_camel2.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_donkey",
+    "kind": "donkey",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_donkey.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_donkey",
+    "kind": "donkey",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_donkey.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_donkey",
+    "kind": "donkey",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_donkey.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_llama",
+    "kind": "llama",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_llama.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_llama",
+    "kind": "llama",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_llama.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_llama",
+    "kind": "llama",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_llama.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_yak",
+    "kind": "yak",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_yak.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_yak",
+    "kind": "yak",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_yak.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_yak",
+    "kind": "yak",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_yak.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_wagon",
+    "kind": "wagon",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_wagon.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_wagon",
+    "kind": "wagon",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_wagon.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_wagon",
+    "kind": "wagon",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_wagon.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_oxwagon",
+    "kind": "oxwagon",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_oxwagon.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_oxwagon",
+    "kind": "oxwagon",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_oxwagon.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_oxwagon",
+    "kind": "oxwagon",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_oxwagon.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_elephant",
+    "kind": "elephant",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_elephant.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_elephant",
+    "kind": "elephant",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_elephant.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_elephant",
+    "kind": "elephant",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_elephant.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "captain_m_reindeer",
+    "kind": "reindeer",
+    "character": "captain_m",
+    "source": "images/sprites/expedition_follower_reindeer.png",
+    "reference": "tools/expedition_blender/painted/captain_m_turnaround.png"
+  },
+  {
+    "id": "captain_f_reindeer",
+    "kind": "reindeer",
+    "character": "captain_f",
+    "source": "images/sprites/expedition_follower_reindeer.png",
+    "reference": "tools/expedition_blender/painted/captain_f_turnaround.png"
+  },
+  {
+    "id": "scout_f_reindeer",
+    "kind": "reindeer",
+    "character": "scout_f",
+    "source": "images/sprites/expedition_follower_reindeer.png",
+    "reference": "tools/expedition_blender/painted/scout_f_run.png"
+  },
+  {
+    "id": "crew_m_reindeer",
+    "kind": "reindeer",
+    "character": "crew_m",
+    "source": "images/sprites/expedition_follower_reindeer.png",
+    "reference": "tools/expedition_blender/mounts/crew_m_reindeer_north.png"
+  }
+]

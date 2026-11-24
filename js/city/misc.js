@@ -1079,6 +1079,7 @@
       s.player.wife ? { label: '가족', icon: 'heart', sub: (s.player.kids.length ? '자녀 ' + s.player.kids.length + (G.Family.aboard().length ? ' (견습 ' + G.Family.aboard().length + ')' : '') : '') + (s.player.preg && s.player.preg.told ? (s.player.kids.length ? ' · ' : '') + '아기를 기다리는 중' : ''), onClick: function () { return G.Family.talk(); } } : null,
       G.Siblings && G.Siblings.home().length ? { label: G.Siblings.menuLabel ? G.Siblings.menuLabel() : '동생들', icon: 'people', sub: G.Siblings.home().length + '명 · 함께 항해 ' + G.Siblings.aboard().length + '/' + G.Siblings.K().maxHire, onClick: function () { return G.Siblings.menu(c); } } : null,
       G.HomeLife && G.HomeLife.kidsHome().length ? { label: '아이와 함께', icon: 'star', sub: '놀이·배움·가족의 시간', onClick: function () { return G.HomeLife.menu(); } } : null,
+      G.SeaNest ? G.SeaNest.homeItem(c) : null,   // 여성 제독: 배에서 키울 아이 (js/systems/seanest.js)
       G.Family.canAwait && G.Family.canAwait() ? { label: '해산을 기다린다', icon: 'heart', sub: '약 ' + Math.max(1, s.player.preg.due - s.day) + '일', onClick: function () { return G.Family.awaitBirth(); } } : null,
       G.FamilyTree && G.FamilyTree.has() ? { label: '가계도', icon: 'people', sub: (s.player.generation || 1) + '대째 가문', onClick: function () { return G.FamilyTree.open(); } } : null,
       G.Ball ? G.Ball.menuItem(c) : null,    // 귀족의 무도회 (js/systems/ball.js — 2026-11-03)

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "admiral",
+    "reference": "art_sources/hero-motion-20261124/references/admiral.png",
+    "source": "images/characters/player_half.webp"
+  },
+  {
+    "id": "ganghui",
+    "reference": "art_sources/hero-motion-20261124/references/ganghui.png",
+    "source": "images/characters/player_half_ganghui.png"
+  },
+  {
+    "id": "navigator_white",
+    "reference": "art_sources/hero-motion-20261124/references/navigator_white.png",
+    "source": "images/characters/player_half_navigator_white.png"
+  },
+  {
+    "id": "armored_navigator",
+    "reference": "art_sources/hero-motion-20261124/references/armored_navigator.png",
+    "source": "images/characters/player-ages-20261123/young/armored_navigator.webp"
+  },
+  {
+    "id": "sea_dog",
+    "reference": "art_sources/hero-motion-20261124/references/sea_dog.png",
+    "source": "images/characters/player_half_sea_dog.png"
+  },
+  {
+    "id": "muscle_swordsman",
+    "reference": "art_sources/hero-motion-20261124/references/muscle_swordsman.png",
+    "source": "images/characters/player-ages-20261123/young/muscle_swordsman.webp"
+  },
+  {
+    "id": "hat_spinner",
+    "reference": "art_sources/hero-motion-20261124/references/hat_spinner.png",
+    "source": "images/characters/player-ages-20261123/young/hat_spinner.webp"
+  },
+  {
+    "id": "charismatic_admiral",
+    "reference": "art_sources/hero-motion-20261124/references/charismatic_admiral.png",
+    "source": "images/characters/player_half_charismatic_admiral.png"
+  },
+  {
+    "id": "battle_vanguard",
+    "reference": "art_sources/hero-motion-20261124/references/battle_vanguard.png",
+    "source": "images/characters/player-ages-20261123/young/battle_vanguard.webp"
+  },
+  {
+    "id": "noble_scholar",
+    "reference": "art_sources/hero-motion-20261124/references/noble_scholar.png",
+    "source": "images/characters/player_half_noble_scholar.png"
+  },
+  {
+    "id": "casanova",
+    "reference": "art_sources/hero-motion-20261124/references/casanova.png",
+    "source": "images/characters/player_half_casanova.png"
+  },
+  {
+    "id": "army_officer",
+    "reference": "art_sources/hero-motion-20261124/references/army_officer.png",
+    "source": "images/characters/player-ages-20261123/young/army_officer.webp"
+  },
+  {
+    "id": "sky_adventurer",
+    "reference": "art_sources/hero-motion-20261124/references/sky_adventurer.png",
+    "source": "images/characters/player-ages-20261123/young/sky_adventurer.webp"
+  },
+  {
+    "id": "blackcoat_captain",
+    "reference": "art_sources/hero-motion-20261124/references/blackcoat_captain.png",
+    "source": "images/characters/player-ages-20261123/young/blackcoat_captain.webp"
+  },
+  {
+    "id": "jessica",
+    "reference": "art_sources/hero-motion-20261124/references/jessica.png",
+    "source": "images/characters/player_half_jessica.webp"
+  },
+  {
+    "id": "soyoung",
+    "reference": "art_sources/hero-motion-20261124/references/soyoung.png",
+    "source": "images/characters/player_half_soyoung.webp"
+  }
+]

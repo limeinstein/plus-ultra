@@ -1,0 +1,6 @@
+{
+  "id": "jessica",
+  "prompt": "Edit the supplied special attack event illustration. Correct ONLY the sword-holding hand, wrist and nearby weapon hilt so the character genuinely holds the sword with an anatomically correct secure grip. Show a natural human hand with exactly five digits: all FOUR fingers visibly curl around and occlude the leather grip; the thumb wraps in opposition across the curled index/middle finger. The handle lies INSIDE the closed palm, fully connected through the wrist to the forearm. The metal guard stays in FRONT of the knuckles between hand and blade, the pommel stays behind the little-finger side. NO hand on blade, no fist glued on top of hilt, no straight hanging fingers, no absent thumb, no floating handle. You may rotate the wrist and hilt slightly to make this grip physically clear. Retain face, expression, clothing, colors, framing, lighting, action direction, whole scene and all other details. Her right hand holds the curved gold-hilt saber. Preserve the recognizable saber, and redraw the grip anatomy clearly inside its protective knuckle bow.",
+  "input": "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-motion-20261124\\raw\\jessica_cutin.png",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-a1470231-7c5e-45b1-917f-257025fc6107.png"
+}

@@ -367,7 +367,7 @@
     if (R) {
       wrap(R, 'nationName', function (orig) { return function (n) { return n === 'NL' ? '네덜란드' : orig.apply(this, arguments); }; });
       wrap(R, 'nativeLang', function (orig) { return function (n) { return n === 'NL' ? 3 : orig.apply(this, arguments); }; });
-      wrap(R, 'isHomeNation', function (orig) { return function (c) { var s = S(); if (s && s.player.nation === 'NL') return own(c) === '네덜란드'; return orig.apply(this, arguments); }; });
+      wrap(R, 'isHomeNation', function (orig) { return function (c) { var s = S(); if (s && s.gold && s.player.nation === 'NL') return own(c) === '네덜란드'; return orig.apply(this, arguments);   /* 이 이야기에서만 — 만든 제독은 G.NATIONS.NL (부르고뉴 시절의 저지대 포함) */ }; });
     }
   }
   function boot() { try { install(); } catch (e) { console.error(e); } }

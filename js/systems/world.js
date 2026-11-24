@@ -112,7 +112,8 @@
     if (G.Treaty) out = out.concat(G.Treaty.daily());   // 토르데시야스·사라고사 조약의 날, 바다에서 경계선 넘기 (js/systems/treaty.js)   // 세상의 시장 사건: 가뭄·전쟁·풍작… (js/systems/economy.js)   // 유럽 시장의 소식·세상의 유행 (js/systems/era.js)
     if (G.Fad) out = out.concat(G.Fad.daily());             // 끝난 유행을 거둔다
     if (G.Family && G.Family.daily) out = out.concat(G.Family.daily());
-    if (G.Mother) out = out.concat(G.Mother.daily());       // 여성 제독의 임신·해산 — 창은 main.js loop에서 G.Mother.tick (js/systems/motherhood.js)
+    if (G.Mother) out = out.concat(G.Mother.daily());
+    if (G.SeaNest) out = out.concat(G.SeaNest.daily());     // 배에서 자라는 아이: 아기의 밤울음 · 함대를 잃으면 집으로 (js/systems/seanest.js)       // 여성 제독의 임신·해산 — 창은 main.js loop에서 G.Mother.tick (js/systems/motherhood.js)
     if (G.KidCrew) out = out.concat(G.KidCrew.daily());     // 어른이 된 자식 항해사 — 배운 것 옮겨 적기 · 견습이 어른이 되면 정식 항해사 (js/systems/kidcrew.js)
     if (G.HomeLife) out = out.concat(G.HomeLife.daily());   // 먼 바다에서 추억의 물건을 꺼내 본다
     if (G.Escort) out = out.concat(G.Escort.daily());       // 상선 호위의 기한

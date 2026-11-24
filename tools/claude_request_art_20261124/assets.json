@@ -1,0 +1,321 @@
+[
+  {
+    "id": "discovery_sy_longmen",
+    "name": "용문석굴",
+    "kind": "scene",
+    "output": "discoveries/sy_longmen.gif",
+    "files": [
+      {
+        "file": "images/discoveries/sy_longmen.gif",
+        "bytes": 1936993,
+        "sha256": "c25e6ce2c4512b07eb9d0c2c6557da7a3fbb659d3f29c2ed1f5103f83747f84a"
+      },
+      {
+        "file": "images/discovery-ends/sy_longmen.jpg",
+        "bytes": 69305,
+        "sha256": "a20cb5345174790544e6fd1a375288a6c646cbe964653bace902269ce08194d6"
+      },
+      {
+        "file": "images/discovery-sheets/sy_longmen.webp",
+        "bytes": 1181816,
+        "sha256": "2b9b77f77d5987e581e25050bf9f1c92025297cd6ddba047217d2405f6f5a314"
+      }
+    ]
+  },
+  {
+    "id": "discovery_sy_todaiji",
+    "name": "도다이지 대불",
+    "kind": "scene",
+    "output": "discoveries/sy_todaiji.gif",
+    "files": [
+      {
+        "file": "images/discoveries/sy_todaiji.gif",
+        "bytes": 1600309,
+        "sha256": "7ff0958209f15496ac0428c3db9060268c55d5cea677929371f40785e2e7382e"
+      },
+      {
+        "file": "images/discovery-ends/sy_todaiji.jpg",
+        "bytes": 68714,
+        "sha256": "07ba67b7cf563643d3d6dc72398a03e2cc5d21534a166568969fe9f615a83025"
+      },
+      {
+        "file": "images/discovery-sheets/sy_todaiji.webp",
+        "bytes": 1024446,
+        "sha256": "f645d0dd3f989d6e6dd2c79e202f12f59aa50d687550cf4e60904571e978d324"
+      }
+    ]
+  },
+  {
+    "id": "r_sy_longmen",
+    "name": "용문석굴 탁본첩",
+    "kind": "icon",
+    "output": "items/evidence_sy_longmen.webp",
+    "files": [
+      {
+        "file": "images/items/evidence_sy_longmen.webp",
+        "bytes": 23412,
+        "sha256": "353a50981e5bc58c25cb9166cd763270ea8b858f023d7f08c74c88c4c0ea8fc3"
+      }
+    ]
+  },
+  {
+    "id": "r_sy_todaiji",
+    "name": "도다이지 대불 중수 기록",
+    "kind": "icon",
+    "output": "items/evidence_sy_todaiji.webp",
+    "files": [
+      {
+        "file": "images/items/evidence_sy_todaiji.webp",
+        "bytes": 27500,
+        "sha256": "f7571bb63e3dee886d28f50f613542fe4f2655eee6ad91bdc45a3013a1841d3c"
+      }
+    ]
+  },
+  {
+    "id": "sy_map",
+    "name": "도현의 지도",
+    "kind": "icon",
+    "output": "items/sy_map.webp",
+    "files": [
+      {
+        "file": "images/items/sy_map.webp",
+        "bytes": 28296,
+        "sha256": "2545bafa040623f5eff4ce8abdb4f599da4b59599eb6f6ebfb3dfc8ac710e3b7"
+      }
+    ]
+  },
+  {
+    "id": "map_sy_longmen",
+    "name": "용문석굴 지도 외관",
+    "kind": "map",
+    "output": "map-discoveries/completion/sy_longmen.webp",
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/sy_longmen.webp",
+        "bytes": 106606,
+        "sha256": "6c3dc905c40b3e3f9de3c2187fb7ae39d32623abb0c82a44545ae4e229be451f"
+      }
+    ]
+  },
+  {
+    "id": "map_sy_todaiji",
+    "name": "도다이지 지도 외관",
+    "kind": "map",
+    "output": "map-discoveries/completion/sy_todaiji.webp",
+    "files": [
+      {
+        "file": "images/map-discoveries/completion/sy_todaiji.webp",
+        "bytes": 90346,
+        "sha256": "6ffbbede32e86b53df44a3fd2e1ed57a4d6fdb56841265b5f3ce62e96f52b814"
+      }
+    ]
+  },
+  {
+    "id": "concert_0_trio",
+    "name": "이베리아 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/0_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/0_trio.webp",
+        "bytes": 782922,
+        "sha256": "459f37560e8bc7a750fcf32a70e1904b451c89134cc59818b877c648c8a62f89"
+      }
+    ]
+  },
+  {
+    "id": "concert_10_trio",
+    "name": "아메리카 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/10_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/10_trio.webp",
+        "bytes": 729360,
+        "sha256": "6c6fa49b81e0a93bdf8a005c20bee203c1326ff2b97131347d41069f1894f4fb"
+      }
+    ]
+  },
+  {
+    "id": "concert_1_trio",
+    "name": "북유럽 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/1_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/1_trio.webp",
+        "bytes": 697196,
+        "sha256": "ecc1567b4eb0a29f33e9858c05cf71df997f1708e33b27d2beb4f52b909ee70c"
+      }
+    ]
+  },
+  {
+    "id": "concert_2_trio",
+    "name": "지중해 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/2_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/2_trio.webp",
+        "bytes": 722684,
+        "sha256": "be5dc919f08cd68ca2ff6705ce64df0b7884b13ae22cf26a79359887507534d4"
+      }
+    ]
+  },
+  {
+    "id": "concert_3_trio",
+    "name": "아프리카 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/3_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/3_trio.webp",
+        "bytes": 785164,
+        "sha256": "2e18d363f89c70af1182e746c0775ede82e7a8db1331cade1cc3d11fa8ac36f9"
+      }
+    ]
+  },
+  {
+    "id": "concert_4_trio",
+    "name": "중근동 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/4_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/4_trio.webp",
+        "bytes": 728850,
+        "sha256": "777b6c048b3a84c62d0cf08c1ba4d26bd90d17fc45e0c165773d9c2204a54fab"
+      }
+    ]
+  },
+  {
+    "id": "concert_5_trio",
+    "name": "인도 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/5_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/5_trio.webp",
+        "bytes": 801468,
+        "sha256": "8925129ed1d703cb8118aeef4548cffcba05d55733317afb47b2884a42011640"
+      }
+    ]
+  },
+  {
+    "id": "concert_6_trio",
+    "name": "중국 항주 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/6_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/6_trio.webp",
+        "bytes": 710260,
+        "sha256": "3657ec7a21430256e9012c2d6f0fa1e1a6208303fbd6c88a27b868dc47ab2969"
+      }
+    ]
+  },
+  {
+    "id": "concert_7_trio",
+    "name": "중앙아시아 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/7_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/7_trio.webp",
+        "bytes": 732882,
+        "sha256": "9d55de5061c353a35afdc531ef814070f19ae792dfefd35e1e2075cd415df46b"
+      }
+    ]
+  },
+  {
+    "id": "concert_8_trio",
+    "name": "동남아시아 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/8_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/8_trio.webp",
+        "bytes": 740110,
+        "sha256": "78087f71e37021b9b21b882b3343010cbcdf31402a6690969b616339780950e7"
+      }
+    ]
+  },
+  {
+    "id": "concert_9_trio",
+    "name": "일본 사카이 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/9_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/9_trio.webp",
+        "bytes": 696068,
+        "sha256": "0c83b6f34b4b374baa6b2c756b0aef806354fc4c7807d3b0674464419cfab755"
+      }
+    ]
+  },
+  {
+    "id": "concert_kr_trio",
+    "name": "조선 초반 3인 공연",
+    "kind": "event",
+    "output": "song/concerts/kr_trio.webp",
+    "files": [
+      {
+        "file": "images/song/concerts/kr_trio.webp",
+        "bytes": 643802,
+        "sha256": "fdbd9e9a7146cdcddc7c08f0bf52a0922ed462e95dfa004d0b1788f791d1c643"
+      }
+    ]
+  },
+  {
+    "id": "cheukcheon",
+    "name": "측천무후 — 노년의 새로운 인연",
+    "kind": "event",
+    "output": "achievement-events/cheukcheon.webp",
+    "files": [
+      {
+        "file": "images/achievement-events/cheukcheon.webp",
+        "bytes": 681520,
+        "sha256": "85683fab1303810437c0066013ded55c86007b743032ac4e8b5603445183df9b"
+      }
+    ]
+  },
+  {
+    "id": "cv_belen",
+    "name": "벨렌 강의 불과 구조",
+    "kind": "event",
+    "output": "legend-events/cv_belen.webp",
+    "files": [
+      {
+        "file": "images/legend-events/cv_belen.webp",
+        "bytes": 743636,
+        "sha256": "3d6185cfa288031ab979516be6f1d3d3b11ca5dc85af08ad0233a3fb35e23436"
+      }
+    ]
+  },
+  {
+    "id": "femme_fatale",
+    "name": "팜므파탈 — 젊은 제독의 혼인 약속",
+    "kind": "event",
+    "output": "achievement-events/femme_fatale.webp",
+    "files": [
+      {
+        "file": "images/achievement-events/femme_fatale.webp",
+        "bytes": 691814,
+        "sha256": "ddbd0af97e81637be31fab08b2414b11c44717460b419dec658773c3eb8a2843"
+      }
+    ]
+  },
+  {
+    "id": "ship_harbor",
+    "name": "남편들과 함께하는 항해",
+    "kind": "event",
+    "output": "achievement-events/ship_harbor.webp",
+    "files": [
+      {
+        "file": "images/achievement-events/ship_harbor.webp",
+        "bytes": 717362,
+        "sha256": "e154cfc6d839632ef0e8dea2949604fea17b9becd6c28d7154ae96fe627c29fa"
+      }
+    ]
+  }
+]

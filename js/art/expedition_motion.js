@@ -15,11 +15,12 @@
   }
   E.preload = function (id) {
     var m = spec(id || 'walk');
-    ['walk', 'walkFront', 'turn', 'camp'].forEach(function (action) { picture(asset(m, action)); });
+    if (!G.ExpeditionFormation || !G.ExpeditionFormation.hasArt(id || 'walk')) ['walk', 'walkFront', 'turn', 'camp'].forEach(function (action) { picture(asset(m, action)); });
     if (G.ExpeditionFormation) G.ExpeditionFormation.preload(id);
   };
   E.ready = function (id, action) {
     var m = spec(id); action = action || 'walk';
+    if (action !== 'camp' && G.ExpeditionFormation && G.ExpeditionFormation.hasArt(id)) return G.ExpeditionFormation.canDraw({ mount: { id: id, n: 99 }, party: 4 });
     return !!picture(asset(m, action)) && (action !== 'walk' || !m.walkFront || !!picture(asset(m, 'walkFront')));
   };
   E.sample = function (u) {
@@ -59,7 +60,12 @@
   };
   E.draw = function (ctx, u) {
     if (config().enabled === false || (G.FX && G.FX.sprites && G.FX.sprites.party === false) || !spec((u.mount && u.mount.id) || 'walk')) return false;
-    var chosen = E.sample(u), im = chosen && picture(chosen.sheet);
+    var chosen = E.sample(u);
+    // 새 편대는 각자의 원화가 모두 준비된 뒤 함께 표시한다. 옛 무리 시트를 중복으로 받지 않는다.
+    if (chosen && chosen.action !== 'camp' && G.ExpeditionFormation && G.ExpeditionFormation.hasArt(chosen.id)) {
+      return G.ExpeditionFormation.canDraw(u) ? G.ExpeditionFormation.draw(ctx, u, chosen, null) : [];
+    }
+    var im = chosen && picture(chosen.sheet);
     if (!im) return false;
     var cell = chosen.sheet.cells[chosen.index];
     if (!cell) return false;

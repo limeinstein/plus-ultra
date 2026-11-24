@@ -1,0 +1,8 @@
+{
+  "key": "missionary_f_atk_alpha",
+  "prompt": "Remove ONLY the opaque white/gray backdrop and floor shadows from this exact sprite sheet, replacing them with genuine alpha=0 transparency. Preserve all 24 exact character poses, faces, clothes, boots, hands and swords in the same strict 6 columns by 4 rows and same positions and proportions. Preserve image dimensions and generous transparent cell gutters. No pose changes, no cropping, no redrawing. Character clothing stays opaque. Output an actual transparent PNG, not a painted checkerboard.",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-women-20261124\\raw\\missionary_f_atk.png"
+  ],
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-99fe1a67-561b-42cf-b5da-b0552a026406.png"
+}

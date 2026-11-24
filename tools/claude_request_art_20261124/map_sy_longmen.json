@@ -1,0 +1,10 @@
+{
+  "id": "map_sy_longmen",
+  "disc": "sy_longmen",
+  "kind": "map",
+  "name": "용문석굴 지도 외관",
+  "output": "map-discoveries/completion/sy_longmen.webp",
+  "prompt": "Use case: stylized-concept. Asset type: ONE transparent world-map landmark miniature for an elegant hand-painted historical maritime exploration RPG. Square canvas 1024x1024, genuinely transparent RGBA background, whole site isolated in the center with 10 percent empty transparent margin, no rectangular landscape backdrop, no opaque sky, no checkerboard, no pedestal, no plinth, no lettering, no labels or watermark. Elevated three-quarter orthographic isometric view, coherent readable compact silhouette at 128px, realistic gently painted stone, wood and vegetation, warm neutral daylight, subtle contact shadow only. Subject: miniature of the Fengxian Longmen Grottoes limestone cliff sanctuary in China circa 1480. A curved weathered gray-beige natural cliff face directly carved with one large serene seated Vairocana Buddha and flanking smaller standing bodhisattvas and guardian statues, many tiny cave niches to one side, stone terrace steps at base, a small irregular narrow strip of jade river along the foot and sparse willow foliage. Natural rock vignette, carved figures recessed in rock, not independent golden statues, not a built temple or pagoda, no modern tourist structures.",
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-5ccdab47-5133-4938-87cc-530d28c488d1.png"
+}

@@ -5,16 +5,15 @@
   var C = {};
   G.Scenes.create = C;
 
-  var NAMES = {
-    PT: ['주앙 다 시우바', '디오구 페헤이라', '페르낭 소아르스', '가브리엘 코스타', '루이스 멘드스', '안토니우 카르발류'],
-    ES: ['디에고 로드리게스', '라몬 데 에레라', '후안 데 메디나', '알론소 페레스', '가르시아 데 로하스', '페드로 데 에스피노사']
-  };
-  /* 여성 제독의 이름 (성은 같은 나라 집안의 것) */
-  var NAMES_F = {
-    PT: ['이네스 다 시우바', '베아트리스 페헤이라', '카타리나 소아르스', '레오노르 코스타', '필리파 멘드스', '마리아나 카르발류'],
-    ES: ['이사벨 로드리게스', '카탈리나 데 에레라', '후아나 데 메디나', '베아트리스 페레스', '엘비라 데 로하스', '레오노르 데 에스피노사']
-  };
-  function names(nat) { return (p && p.g === 'f' ? NAMES_F : NAMES)[nat || p.nation] || NAMES.PT; }
+  /* 나라 — 에스파냐·포르투갈·잉글랜드·네덜란드·오스만·조선 (자료: G.NATIONS — js/data/base.js, 2026-11-24 사용자 요청).
+     이름(남·여, 성은 같은 나라 집안의 것)·고향·모국어·첫 배가 나라마다 다르다 */
+  function natOf(nat) { return G.NATIONS[nat || p.nation] || G.NATIONS.PT; }
+  function names(nat) { var n = natOf(nat).names; return n[p && p.g === 'f' ? 'f' : 'm'] || n.m; }
+  /** 그 나라에 어울리는 생김새가 정해져 있으면(G.NATIONS.look) 그 얼굴부터 보여 준다 — 얼굴을 직접 넘겨 고른 뒤로는 건드리지 않는다 */
+  function natLook() {
+    var L = natOf().look, id = L && L[p.g === 'f' ? 'f' : 'm']; if (!id || p.facePicked) return;
+    var i = G.Img.heroFaces(p.g).indexOf('portraits/player/' + id); if (i >= 0) p.face = i;
+  }
   var p;
 
   /* 이름과 성 — 한국식(성 한 글자이거나 남궁·제갈 같은 두 글자 성 + 한글 이름)이면 「성이름」, 그 밖은 「이름 성」으로 붙여 부른다 */
@@ -78,7 +77,7 @@
   }
   function baseLangs() {
     var lg = []; for (var i = 0; i < G.LANGS.length; i++) lg.push(0);
-    lg[R.nativeLang(p.nation)] = 3; lg[p.nation === 'PT' ? 0 : 1] = 2;
+    var N = natOf(); lg[N.lang] = 3; lg[N.lang2] = 2;   // 모국어 능숙 + 이웃 말 보통 (포르투갈 ↔ 스페인어, 조선 → 중국어 …)
     return lg;
   }
   function points() { return agePoints() + knowPoints(); }
@@ -109,7 +108,7 @@
     G.Game.showLayers(false, false, true);
     p = { name: '', given: '', surname: '', nation: 'PT', job: 'explorer', age: 22, birth: { m: 4, d: 12 }, diff: 'normal', face: 1, g: 'm',
       skipIntro: G.State.introSeen() || !!(G.Game.state && G.Game.state.flags && G.Game.state.flags.prologue) };
-    setName(U.pick(NAMES.PT));
+    setName(U.pick(names('PT')));
     reset(false);
     render();
   };
@@ -134,9 +133,9 @@
       '<div class="cr-bonus muted">나이 보너스 — 능력 점수 <b>' + statPoints() + '</b> · 특기 점수 <b>' + agePoints() + '</b><br>지식(지력 ' + p.st.int + ') 보너스 — 특기 점수 <b>+' + knowPoints() + '</b>' + (knowNext() ? ' <small>(지력 ' + knowNext().at + '이면 +' + knowNext().pts + ')</small>' : '') + '</div>' +
       '</div></div>';
     // column 2
-    h += '<div class="col" style="width:430px"><div class="sect parch ornament-corners"><h4>국적</h4><div class="opt-row">' +
-      opt('nat', 'PT', '포르투갈 (리스본)', p.nation === 'PT') + opt('nat', 'ES', '에스파냐 (세빌리아)', p.nation === 'ES') + '</div>' +
-      '<div class="muted" style="margin-top:8px;font-size:16px;line-height:1.5">' + (p.nation === 'PT' ? '아프리카 항로 개척에 앞선 해양 왕국. 모국어 포르투갈어, 스페인어도 조금 한다.' : '레콩키스타를 마무리하는 카스티야와 아라곤의 연합 왕국. 모국어 스페인어, 포르투갈어도 조금 한다.') + '</div></div>' +
+    h += '<div class="col" style="width:430px"><div class="sect parch ornament-corners"><h4>국적</h4><div class="opt-row cr-nat">' +
+      G.NATION_ORDER.map(function (k) { return opt('nat', k, G.NATIONS[k].label, p.nation === k); }).join('') + '</div>' +
+      '<div class="muted cr-natdesc" style="margin-top:8px;font-size:16px;line-height:1.5">' + natOf().desc + '</div></div>' +
       '<div class="sect parch ornament-corners" style="flex:1"><h4>직업</h4><div class="opt-row">' +
       G.JOBS.map(function (j) { return opt('job', j.id, j.name, p.job === j.id); }).join('') + '</div>' +
       '<div style="margin-top:10px;font-size:17px;line-height:1.55">' + G.JOBS.filter(function (j) { return j.id === p.job; })[0].desc + '</div>' +
@@ -177,7 +176,7 @@
     pv.appendChild(A.portraitCanvas(playerSpec(), 200));
     // events
     // 얼굴 고르기: ◀·▶ 모두 끝에 닿으면 반대쪽 끝으로 돌아간다 (마지막 다음은 처음, 처음 앞은 마지막) — 2026-10-17
-    function stepFace(d) { var n = Math.max(1, G.Img.heroFaces(p.g).length); p.face = (((p.face || 0) + d) % n + n) % n; render(); }
+    function stepFace(d) { var n = Math.max(1, G.Img.heroFaces(p.g).length); p.face = (((p.face || 0) + d) % n + n) % n; p.facePicked = true; render(); }
     box.querySelector('#face').onclick = function () { stepFace(1); };
     box.querySelector('#faceprev').onclick = function () { stepFace(-1); };
     var fullEl = box.querySelector('#fullnm b');
@@ -200,8 +199,8 @@
     U.$$('[data-g]', box).forEach(function (el) {
       el.onclick = function () {
         var g = el.dataset.g, v = el.dataset.v;
-        if (g === 'nat') { if (p.nation !== v) { p.nation = v; setName(U.pick(names(v))); reset(true); } }
-        else if (g === 'sex') { if ((p.g === 'f' ? 'f' : 'm') !== v) { p.g = v; p.face = 0; setName(U.pick(names())); } }   // 성별: 얼굴 목록과 이름을 그 성별 것으로 (능력·특기는 그대로)
+        if (g === 'nat') { if (p.nation !== v) { p.nation = v; setName(U.pick(names(v))); reset(true); natLook(); } }   // 나라: 이름·모국어를 그 나라 것으로 (능력치는 그대로, 특기·어학 배분은 처음부터)
+        else if (g === 'sex') { if ((p.g === 'f' ? 'f' : 'm') !== v) { p.g = v; p.face = 0; p.facePicked = false; natLook(); setName(U.pick(names())); } }   // 성별: 얼굴 목록과 이름을 그 성별 것으로 (능력·특기는 그대로)
         else if (g === 'job') { p.job = v; reset(false); }
         else if (g === 'diff') p.diff = v;
         render();
@@ -258,7 +257,7 @@
   function mOpts() { var s = ''; for (var m = 1; m <= 12; m++) s += '<option value="' + m + '"' + (m === p.birth.m ? ' selected' : '') + '>' + m + '</option>'; return s; }
   function dOpts() { var s = ''; for (var d = 1; d <= U.daysInMonth(1460, p.birth.m); d++) s += '<option value="' + d + '"' + (d === p.birth.d ? ' selected' : '') + '>' + d + '</option>'; return s; }
   function playerSpec() {
-    var sp = A.portraitSpec({ seed: 'player' + p.face + p.nation, culture: 'med', g: p.g === 'f' ? 'f' : 'm', age: p.age > 34 ? 'mid' : 'young', cloth: ['#1e3552', '#5a1e1e', '#2a3a2a', '#3a2a4a'][p.face % 4], beard: p.g === 'f' ? 0 : p.face % 3 });
+    var sp = A.portraitSpec({ seed: 'player' + p.face + p.nation, culture: natOf().culture || 'med', g: p.g === 'f' ? 'f' : 'm', age: p.age > 34 ? 'mid' : 'young', cloth: ['#1e3552', '#5a1e1e', '#2a3a2a', '#3a2a4a'][p.face % 4], beard: p.g === 'f' ? 0 : p.face % 3 });
     var face = G.Img.chain.player(p.face, p.g);
     if (face.length) face = G.Img.chain.heroPortrait({ look: face[0].slice('portraits/player/'.length) }, p.age);
     return A.withImg(sp, face);
@@ -309,7 +308,7 @@
     }
     await G.Game.ensureGeo();
     var T = test ? G.BALANCE.testChar : null;
-    var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, g: p.g, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000, ships: T ? T.ships : null });
+    var S = G.State.newGame({ name: p.name, nation: p.nation, job: p.job, age: p.age, birth: p.birth, st: p.st, sk: p.sk, lg: p.lg, diff: p.diff, g: p.g, byNation: true, gold: T ? T.gold : p.diff === 'easy' ? 5000 : 3000, ships: T ? T.ships : null });
     if (T) S.player.luck = T.luck;
     S.player.given = p.given; S.player.surname = p.surname;      // 부를 때는 S.player.name(붙인 이름)을 그대로 쓴다
     S.player.portrait = playerSpec();

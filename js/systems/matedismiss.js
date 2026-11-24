@@ -82,7 +82,7 @@
     if (!d || !row(m.id)) return false;
     c = c || (s.loc && s.loc.mode === 'city' && G.CITY_DATA[s.loc.city]);
     if (!c) { UI.toast('항구의 술집이나 여관에서 해고할 수 있습니다.', 'people'); return false; }
-    if (m.id === 'rocco') { await UI.say('제독, 저를 버리시겠다는 겁니까? ...농담이시겠지요.', speaker(d)); return false; }
+    if (m.id === 'rocco' || m.founder) { await UI.say('제독, 저를 버리시겠다는 겁니까? ...농담이시겠지요.', speaker(d)); return false; }
     if (G.Husbands && G.Husbands.is(m.id)) { await UI.say(G.Husbands.fireLine(), speaker(d)); return false; }   // 남편은 해고할 수 없다 (js/systems/husbands.js)
     var ML = G.MateLeave, sp = ML && ML.spouseOf(m.id), sr = sp && row(sp), words = sp && ML.spouseWords(sp, m.id);
     var short = MD.days(m) < K().returnMaxDays;

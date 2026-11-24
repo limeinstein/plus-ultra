@@ -34,13 +34,13 @@ def main():
         raise ValueError('중복 선종 ID')
     source += 'var specs=' + json.dumps({s['id']: s for s in items}, ensure_ascii=False, separators=(',', ':')) + ';\n'
     source += '''G.ShipModels={ids:Object.keys(specs),has:function(id){return Object.prototype.hasOwnProperty.call(specs,id);},
-      create:function(T,id){
+      create:function(T,id,options){
         if(!this.has(id))throw new Error('지원하지 않는 선종: '+id);
         window.Ship3D.init(T);var ship=new window.Ship3D.Ship(specs[id]);
         Object.keys(ship.C).forEach(function(k){ship.C[k]=ship.C[k].clone();});
         var data=G.FX.shipArt,p=data.profiles[id];if(!p)throw new Error('미술 프로필 누락: '+id);
         var look=Object.assign({},data.families.west,data.families[p.family],p);
-        window.RigDetail.prepare(ship,G.FX.shipRig);
+        window.RigDetail.prepare(ship,G.FX.shipRig,options);
         if(id==='geobukseon')window.TurtleDetail.prepare(ship,G.FX.turtle3d);
         if(id==='galleon'||id==='lgalleon')ship=window.GalleonDetail.enrich(ship,T,Object.assign({},G.FX.ship3d,{art:look}));
         else ship=window.FleetDetail.enrich(ship,T,look,p);

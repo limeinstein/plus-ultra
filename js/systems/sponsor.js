@@ -242,7 +242,7 @@
     var home = G.CITY_DATA[sp.city];
     if (d.pw <= 1 && d.lon != null && home && d.how !== 'trade' && G.Geo.dist(home.lon, home.lat, d.lon, d.lat) < 30) v += 1.0;
     // 제 나라 항해자의 첫 모험은 조금 더 너그럽게 들어 준다
-    if (sp.nation && sp.nation === s.player.nation && !SP.rel(sp.id).done) v += 0.4;
+    if (((sp.nation && sp.nation === s.player.nation) || (G.Court && G.Court.homeRuler && G.Court.homeRuler(sp))) && !SP.rel(sp.id).done) v += 0.4;   // 제 나라 후원자 (오스만·조선은 제 나라 군주 — js/systems/court.js)
     // 시샘하던 후원자에게 「다음 발견은 먼저 가져오겠다」고 약속했고, 그 약속을 지키러 왔다
     if (SP.rel(sp.id).promise) v += 0.8;
     v += U.rf(-0.8, 0.8);
@@ -418,7 +418,7 @@
       UI.toast('동료들의 충성심이 올랐다. 다음 원정도 함께하겠다고 한다.', 'people', 4200);
     } else {
       var leave = [];
-      s.mates.forEach(function (m) { G.R.setLoyal(m, (m.loyal || 70) - 6); if (m.loyal < 25 && m.id !== 'rocco') leave.push(m); });
+      s.mates.forEach(function (m) { G.R.setLoyal(m, (m.loyal || 70) - 6); if (m.loyal < 25 && m.id !== 'rocco' && !m.founder) leave.push(m); });
       // 부부는 함께 (2026-11-01 사용자 피드백): 떠나는 사람의 짝도 함께 내린다 — 짝은 떠나는 사람을 빼기 전에 찾는다 (js/systems/mateleave.js)
       var ML = G.MateLeave, follow = [];
       if (ML && ML.spouseOf) leave.forEach(function (m) {

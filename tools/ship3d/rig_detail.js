@@ -1,8 +1,18 @@
 /* 선종별 범장. 선체 자료를 복사하고 지붕·선루 위에 실제 돛의 아래 끝을 배치한다. */
 (function(root){'use strict';
   var PI=Math.PI,mix=function(a,b,t){return a+(b-a)*t;};
-  root.RigDetail={prepare:function(ship,c){
+  root.RigDetail={prepare:function(ship,c,opt){
     var p=c.profiles[ship.s.id];if(!p)throw new Error('범장 프로필 누락: '+ship.s.id);
+    opt=opt||{};p=p.map(function(m){return m.slice();});
+    var shape=G.SailDesign?G.SailDesign.shape(opt.sailShape).id:'native',type=ship.s.id;
+    var custom=G.SailDesign&&G.SailDesign.rigKey(type,opt);
+    if(custom&&type!=='geobukseon')p.forEach(function(m,i){
+      var chosen=shape!=='native'?shape:opt.sails[Math.round(i*(opt.sails.length-1)/Math.max(1,p.length-1))];
+      if(shape==='native'&&chosen==='sq'&&ship.s.hull==='jp')chosen='jp';
+      if(chosen==='sq'){m[2]='sq';m[3]=ship.s.cap>=300?2:1;m[4]=Math.min(1.65,Math.max(1.15,m[4]));}
+      else if(chosen==='bat'){m[2]=ship.s.hull==='kr'?'kr':'bat';m[3]=1;m[4]=.78;}
+      else{m[2]=chosen;m[3]=1;m[4]=chosen==='tanja'?.95:chosen==='gaff'?1.4:1.25;}
+    });
     ship.rigPlan=p;ship.rigConfig=c;
     if(ship.s.id==='geobukseon')return;
     var s=Object.assign({},ship.s);s.masts=p.map(function(m){return m[0]*s.L;});s.heights=p.map(function(m){return m[1]*s.L;});

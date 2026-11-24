@@ -1,0 +1,10 @@
+{
+  "id": "r_sy_longmen",
+  "kind": "icon",
+  "name": "용문석굴 탁본첩",
+  "disc": "sy_longmen",
+  "output": "relics/r_sy_longmen.webp",
+  "prompt": "Use case: stylized-concept. Asset type: one premium hand-painted historical sailing RPG inventory icon, square 1024x1024, TRUE transparent RGBA background, single coherent object centered with 12 percent clear margin, all edges intact. Rich realistic paper fibers, cloth and wood details, soft warm light from upper left, crisp silhouette readable at 256px. No human hands, no people, no scenery, no labels, no watermark, no text outside the object, no checkerboard or opaque background. Any manuscript ink is tiny indistinct traditional marks rather than readable modern writing. Subject: a small Chinese Ming-era accordion-fold paper album of purchased Longmen Grottoes stone rubbings, open in a shallow zigzag to show three cream mulberry-paper panels with black ink impressions of a small serene seated Buddhist stone figure, halo and weathered stone inscription textures; another folded dark indigo cloth cover beneath, simple faded red tying cord loose beside it. This is a carefully made paper rubbing album, NOT a broken piece removed from a monument. One compact horizontal composition, a few rubbed red seals are abstract blurred marks, no modern photograph. Treat the album as a scholar's travel keepsake.",
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-18a9d242-0083-44e5-9d40-a92cdda6505d.png"
+}

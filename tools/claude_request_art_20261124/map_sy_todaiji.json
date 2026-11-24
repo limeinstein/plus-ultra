@@ -1,0 +1,10 @@
+{
+  "id": "map_sy_todaiji",
+  "disc": "sy_todaiji",
+  "kind": "map",
+  "name": "도다이지 지도 외관",
+  "output": "map-discoveries/completion/sy_todaiji.webp",
+  "prompt": "Use case: stylized-concept. Asset type: ONE transparent world-map landmark miniature for an elegant hand-painted historical maritime exploration RPG. Square canvas 1024x1024, genuinely transparent RGBA background, whole site isolated in the center with 10 percent empty transparent margin, no rectangular landscape backdrop, no opaque sky, no checkerboard, no pedestal, no plinth, no lettering, no labels or watermark. Elevated three-quarter orthographic isometric view, coherent readable compact silhouette at 128px, realistic gently painted stone, wood and vegetation, warm neutral daylight, subtle contact shadow only. Subject: the medieval Kamakura-period Great Buddha Hall of Todaiji in Nara as it stood circa 1480 before 1567, broad and stately monumental timber hall with expansive dark gray tile double-eaved roof and red-brown timber pillars, deep overhanging eaves, restrained wooden bracketwork, open central doors, shallow gray stone base and broad front stair. Larger broader medieval hall rather than the narrow 1709 building, no later ornate central curved gable. Two small green trees at the back corners provide scale, compact patch of natural ground only. Whole roof, foundation and stairs clearly visible, no huge surrounding landscape or compound wall.",
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-839d3ed8-b9b2-4b79-b32f-90cf09634ae1.png"
+}

@@ -356,13 +356,14 @@
     UI.cmdMenu(c.name, '', items, { town: true, shortcuts: true });
     // bottom info row
     var bar = U.el('div', 'infobar wood');
-    [['admiral', '제독', 'crown'], ['fleet', '함대', 'ship'], ['items', '소지품', 'chest'], ['disc', '발견물', 'star'], ['contract', '계약·의뢰', 'seal'], ['map', '해도', 'map'], ['log', '일지', 'log'], [null, '수첩', 'book']].forEach(function (b) {   // 수첩 = 단서·업적·교역 수첩 등 모든 탭 (바다·뭍의 「수첩」과 같다)
+    [['admiral', '제독', 'crown'], ['fleet', '함대', 'ship'], ['items', '소지품', 'chest'], ['disc', '발견물', 'rose'], ['contract', '계약·의뢰', 'scroll'], ['map', '해도', 'map'], ['log', '일지', 'log'], [null, '수첩', 'book']].forEach(function (b) {   // 수첩 = 단서·업적·교역 수첩 등 모든 탭 (바다·뭍의 「수첩」과 같다)
       var e = U.el('button', 'btn small ghost', G.icon(b[2]) + b[1]);
       e.onclick = function () { if (UI.busy() || busy) return; G.Info.open(b[0] || undefined); };
       bar.appendChild(e);
     });
     bar.appendChild(G.Info.settingsButton('small ghost', function () { return !busy; }));   // 설정은 수첩 밖으로 — 맨 오른쪽
     UI.add(bar);
+    if (G.TownBar) G.TownBar.mount(bar);
     var cap = U.el('div', 'caption', U.fmtDate(s.date) + ' · ' + U.fmtLat(c.lat) + ' ' + U.fmtLon(c.lon));
     UI.add(cap);
     // 이 도시에서 할 일
@@ -495,7 +496,9 @@
     if (kind !== 'gate') { try { await C.findInside(c, kind); } catch (e) { console.error(e); } }
     if (G.Osa) { try { await G.Osa.enter(c, kind); } catch (e) { console.error(e); } }   // 모항에서 소꿉친구의 특기 장면 (요리→항구, 의학→여관 …)
     var ok = true;
-    try { if (B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }
+    // 이야기 모드 「바닷길 노래」의 도입부: 건물에 들어설 때 그 자리의 장면이 일어난다. false 면 장면만 보고 거리로 (js/systems/song.js SS.enter)
+    if (G.SongStory && G.SongStory.active() && G.SongStory.enter) { try { ok = (await G.SongStory.enter(c, kind)) !== false; } catch (e) { console.error(e); } }
+    try { if (ok && B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }
     busy = false;
     if (!ok) { if (cur && G.Game.scene === C) C.main(); return; }
     if (cur && G.Game.scene === C) C.menu();
@@ -601,13 +604,15 @@
 
   // ---------------------------------------------------------------- prologue
   C.prologue = async function (c) {
-    var s = S(), p = s.player, mate = G.MATE.rocco;
+    var s = S(), p = s.player;
+    var fm = s.mates.filter(function (m) { return m.role === 'first'; })[0], mate = (fm && G.MATE[fm.id]) || G.MATE.rocco;   // 첫 부관 — 루카, 조선 제독은 역관 김서진 (G.NATIONS.mate)
+    var N = R.myNation ? R.myNation() : null;
     var home = G.CITY_DATA[p.home];
     var sp = G.Scenes.mateSpeaker('first');
     await UI.say(U.fmtDate(s.date) + ', ' + home.name + '.\n항구에는 아침 안개가 걷히고, 갈매기 소리 사이로 뱃사람들의 외침이 들려온다.', {});
     await UI.say('제독! 드디어 오셨군요. ' + mate.name + '입니다. 오늘부터 부관으로서 제독을 모시게 되었습니다.\f' +
       '우리 배 ' + s.fleet.ships.map(function (sh) { return '「' + sh.name + '」호'; }).join('와 ') + U.jx(s.fleet.ships[s.fleet.ships.length - 1].name + '호', '은/는') + ' 항구에 정박해 있습니다. 선원 ' + s.fleet.crew + '명, 식량과 물은 ' + R.daysOfFood() + '일치를 실어 두었습니다.', sp);
-    await C.me('수고했네, 루카. 앞으로 잘 부탁하네.');
+    await C.me(mate.id === 'rocco' ? '수고했네, 루카. 앞으로 잘 부탁하네.' : '수고했네, ' + ((N && N.mateCall) || mate.name) + '. 앞으로 잘 부탁하네.');
     await UI.say('제독, 이 넓은 세상에는 아직 아무도 본 적 없는 곳과 물건이 가득하다고 합니다.\f' +
       '도서관의 책이나 술집의 소문에서 단서를 모으십시오. 그 단서를 왕궁이나 귀족 저택의 후원자에게 제안하면 모험 자금을 받을 수 있습니다.\f' +
       '계약을 맺은 뒤 목적지를 찾아내 기한 안에 보고하면, 사례금과 함께 이름을 떨치게 될 겁니다. 명성이 높아지면 더 큰 후원자도 만나 주겠지요.\f' +
@@ -634,6 +639,7 @@
     if (G.Conquest && G.Conquest.holding(c)) return null;   // 점령지는 예전의 외국인 출입 금지를 거두지만 수배 규칙은 유지한다
     // 이슬람 성지·내륙·지중해 이슬람 도시는 이슬람 왕조가 다스리는 동안 이교도를 막는다 (js/systems/sneak.js G.Sneak)
     var SN = G.Sneak, zone = SN ? SN.islamZone(c) : (c.flags.indexOf('H') >= 0 ? 'holy' : null), pass = SN ? SN.hasPass(c) : false;
+    if (zone && R.heroFaith && R.heroFaith() === 'I') zone = null;   // 이슬람을 믿는 제독(오스만)은 이교도가 아니다 — 성지·내륙·지중해의 이슬람 도시가 열려 있다 (2026-11-24)
     if (zone === 'holy' && (!SN || SN.islamRuled(c, own))) return { reason: 'holy', text: '이교도는 이 성스러운 도시에 들어올 수 없다.' };
     if (zone && zone !== 'holy' && SN.islamRuled(c, own) && !pass) return { reason: 'islam', zone: zone, text: zone === 'med' ? '이교도의 배는 이 항구에 들어올 수 없다. 돌아가라!' : '이교도는 이 성문을 지날 수 없다. 썩 물러가라!', bribe: 1200 + c.size * 600 };
     if (c.flags.indexOf('X') >= 0 && !(s.flags.mingTrade) && !pass && !(G.Gyeonwoo && G.Gyeonwoo.letIn(c))) return { reason: 'closed', text: '외국인은 들어올 수 없다.', bribe: 2400 + c.size * 800 };

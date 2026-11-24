@@ -50,6 +50,7 @@
     var out = mates.length ? [{ kind: 'mate', m: mates[0] }] : [];
     wives.forEach(function (w) { out.push({ kind: 'wife', w: w }); });
     var kids = G.Family && G.Family.aboard ? G.Family.aboard().filter(function (k) { return !k.unnamed; }) : [];
+    if (G.SeaNest) kids = kids.concat(G.SeaNest.list().filter(function (k) { return G.Family.kidAge(k) >= 4; }));   // 어머니의 배에서 자라는 아이도 (js/systems/seanest.js)
     kids.forEach(function (k) { out.push({ kind: 'kid', k: k }); });
     return out;
   };
@@ -95,9 +96,9 @@
   /** 아이의 선물 (나이에 맞게) */
   LF.kidGift = function (k) {
     var age = G.Family.kidAge(k), f = k.sex === 'f';
-    if (age < 10) return { fx: 'drawing', line: '아버지 배를 그렸어요! 돛이 제일 크게 나왔어요. 선원 아저씨들도 다 그렸어요!' };
+    if (age < 10) return { fx: 'drawing', line: G.R.heroParent() + ' 배를 그렸어요! 돛이 제일 크게 나왔어요. 선원 아저씨들도 다 그렸어요!' };
     if (age < 16) return { fx: 'model', line: f ? '조개껍데기를 모아 목걸이를 만들었어요. 바다에 나가실 때 걸고 가세요.' : '갑판장 아저씨한테 배워서 작은 배를 깎았어요. 우리 기함이에요!' };
-    return { fx: 'watch', line: '오늘 밤 당직은 제가 서겠습니다. 아버지는 푹 쉬십시오. 생신 축하드립니다.' };
+    return { fx: 'watch', line: '오늘 밤 당직은 제가 서겠습니다. ' + G.R.heroParent() + '는 푹 쉬십시오. 생신 축하드립니다.' };
   };
   /** 선물을 받는다 — 받은 것을 한 줄로 돌려준다 */
   function receive(g) {
@@ -159,7 +160,7 @@
       var g = gv.kind === 'mate' ? LF.giftFor(gv.m) : gv.kind === 'wife' ? LF.wifeGift(gv.w) : LF.kidGift(gv.k), got = receive(g), r = { gv: g, got: got, kind: gv.kind };
       if (gv.kind === 'mate') { gv.m.loyal = Math.min(100, (gv.m.loyal || 70) + (k.giftLoyalUp || 2)); r.name = G.MATE[gv.m.id].name; r.tag = '부하 · 충성 ' + Math.round(gv.m.loyal); r.spec = G.Scenes.mateSpec(gv.m.id); }
       else if (gv.kind === 'wife') { r.name = gv.w.name; r.tag = gv.w.main ? '아내' : '둘째 부인'; r.spec = gv.w.speaker && gv.w.speaker.portrait; }
-      else { G.Family.addBond(gv.k, k.kidBond || 3); r.name = gv.k.name; r.tag = (gv.k.sex === 'f' ? '딸' : '아들') + ' · ' + G.Family.kidAge(gv.k) + '세 · 견습'; r.spec = G.Family.kidSpec(gv.k); }
+      else { G.Family.addBond(gv.k, k.kidBond || 3); r.name = gv.k.name; r.tag = (gv.k.sex === 'f' ? '딸' : '아들') + ' · ' + G.Family.kidAge(gv.k) + '세 · ' + (gv.k.nest ? '배에서 자람' : '견습'); r.spec = G.Family.kidSpec(gv.k); }
       return r;
     });
     var fam = rows.some(function (r) { return r.kind !== 'mate'; }), mate = rows.some(function (r) { return r.kind === 'mate'; });

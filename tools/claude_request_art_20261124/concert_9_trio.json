@@ -1,0 +1,13 @@
+{
+  "id": "concert_9_trio",
+  "name": "일본 사카이 초반 3인 공연",
+  "output": "song/concerts/9_trio.webp",
+  "prompt": "Use case: historical-scene. New original historical sailing RPG concert illustration, single continuous ultrawide 1881x836 composition. Three portrait references specify identities and costumes only, NOT edit targets. Exactly THREE featured musicians, clearly recognizable: young adult Korean singer Kim Soyoung, black loose braid with flowers, indigo short jacket, cream woven travel clothes, waist pouch, opened paper blossom fan held while singing warmly; Hwanggyu, long black hair, cream sleeves, black vest, yellow shoulder band and red sash, performs on small Korean brass kkwaenggwari gong with padded mallet; Park Woldam, curled mustache and small goatee, broad black gat and flowing cream robe, seated playing a long wooden six-string geomungo on a low stand, right-hand bamboo stick touches strings. Preserve reference faces, clothing and instrument shapes. Full warm expressive performance, believable hands grasping fan and sticks, finely painted cinematic adventure realism, real skin color, detailed hair and cloth. Audience locally dressed and applauding behind them. No masked man, fourth band member, modern microphone, electrical gear, guitar, collage, panels, text, labels, borders or watermark. Scene: Late-fifteenth-century Sakai port town wooden market square, low timber merchant houses with dark tile roofs, cloth shop curtains without readable writing, a view toward moored wooden cargo boats and the distant sea. Japanese townsfolk in period kosode and straw hats gather at sunset. Paper lanterns glow as Soyoung sings energetically with her fan and the two men accompany her. No geisha stage stereotype, no modern buildings.",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\characters\\player_half_soyoung.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_hwanggyu_half.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_woldam_half.webp"
+  ],
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-02555f03-8cca-446c-a529-24e71061204f.png"
+}

@@ -30,7 +30,12 @@
   /** 그 해에 있는 나라들 */
   RL.powers = function (y) { y = y || S().date.y; return D().order.filter(function (k) { var p = D().powers[k]; return (!p.from || y >= p.from) && (!p.to || y < p.to); }); };
   /** 제독의 나라 */
-  RL.mine = function () { var s = S(); return s && s.player ? (s.player.nation === 'ES' ? 'ES' : 'PT') : null; };
+  RL.mine = function () {
+    var s = S(); if (!s || !s.player) return null;
+    var N = R.myNation ? R.myNation() : null;   // 만든 제독: 그 나라의 열쇠 (잉글랜드 EN · 네덜란드 NL · 오스만 OT) — 조선은 유럽 외교 밖(null)
+    if (N) return N.rel || null;
+    return s.player.nation === 'ES' ? 'ES' : 'PT';
+  };
   /** 도시 주인의 나라 열쇠 */
   RL.cityPower = function (c) { return c ? RL.power(R.cityOwner(c)) : null; };
 
@@ -173,6 +178,7 @@
       r.seen[e.id] = 1;
       var fresh = U.dayIndex(s.date) - U.dayIndex({ y: e.y, m: e.m || 1, d: e.d || 1 }) <= 60;   // 오래전 일(게임을 늦게 시작했을 때)은 알리지 않고 관계만
       (e.mods || []).forEach(function (m) { RL.set(m[0], m[1], m[2], m[3], m[4] || e.title); });
+      if (!eventAllowed(e)) return;   // 세계의 외교 변화는 적용하되, 다른 믿음의 제독에게 십자군을 청하지 않는다.
       if (e.battle && t <= dn(e.battle.until)) r.pend.push(e.id);   // 큰 해전은 기한 안이면 늦게 시작한 판에서도 그 바다로 가면 싸울 수 있다
       if (!fresh) { r.told = r.told || {}; r.told[e.id] = 1; }   // 지난 일은 사절이 찾아오지 않는다
       if (!fresh || e.silent) return;
@@ -233,13 +239,20 @@
   }
 
   // ================================================================ 사절·큰 해전 (사건 중 제독에게 오는 것)
+  function eventAllowed(e) {
+    if (!e.need || !e.need.faith) return true;
+    var s = S(), p = s && s.player, nation = p && G.NATIONS && G.NATIONS[p.nation];
+    // 이야기 모드도 본래 국적을 쓴다. R.heroFaith는 이야기의 기존 규칙을 위해 그리스도교를 기본으로 돌려준다.
+    var faith = nation ? nation.faith : R.heroFaith();
+    return faith === e.need.faith;
+  }
   function metNeed(e) {
     if (!e.need || !e.need.met) return true;
     return e.need.met.some(function (id) { var x = S().sponsors && S().sponsors[id]; return x && x.met; });
   }
   RL.pending = function () {
     var s = S(), r = s && s.rel; if (!r || !r.pend || !r.pend.length) return false;
-    return r.pend.some(function (id) { var e = evOf(id); if (!e) return false; return ((e.who || e.ask) && !(r.told || {})[id] && metNeed(e)) || (e.battle && battleHere(e)); });
+    return r.pend.some(function (id) { var e = evOf(id); if (!e || !eventAllowed(e)) return false; return ((e.who || e.ask) && !(r.told || {})[id] && metNeed(e)) || (e.battle && battleHere(e)); });
   };
   function evOf(id) { return (G.REL_EVENTS || []).filter(function (e) { return e.id === id; })[0] || null; }
   function battleHere(e) {
@@ -254,7 +267,7 @@
     try {
       var keep = [];
       while (r.pend.length) {
-        var id = r.pend.shift(), e = evOf(id); if (!e) continue;
+        var id = r.pend.shift(), e = evOf(id); if (!e || !eventAllowed(e)) continue;   // 옛 저장의 대기 중 사절·참전도 걸러 낸다.
         r.told = r.told || {};
         if ((e.who || e.ask) && !r.told[id] && metNeed(e)) { r.told[id] = 1; await court(e); }
         if (e.battle) {
@@ -323,6 +336,7 @@
   /* spec: {id, foe: 나라 이름, n: 적 배 수, ships: [배 종류…], allies: [{type, name}], allyName: '돈 후안의 신성 동맹 함대', intro: 대사, who: {name, portrait}, win: {fame, gold, so, text}, lose: 글}
      싸우겠다고 하면 해전 장면으로 — 결과는 js/scenes/battle.js 가 G.Rel.afterBattle 로 알린다 */
   RL.greatBattle = async function (spec, e) {
+    if (e && !eventAllowed(e)) return false;
     var s = S(), r = st(), id = spec.id || (e && e.id);
     if (r.battle[id]) return false;
     var who = spec.who ? RL.speaker(spec.who) : G.Scenes.mateSpeaker('first');

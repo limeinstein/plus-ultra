@@ -43,9 +43,11 @@
   ST.introSeen = function () { return lsGet('plusultra_intro_seen') === '1'; };
   ST.markIntroSeen = function () { lsSet('plusultra_intro_seen', '1'); };
 
-  /** params: {name, nation, job, age, birth:{m,d}, st:{...}, sk:{...}, lg:[...], diff, g: 'm'|'f' (없으면 남성)} */
+  /** params: {name, nation, job, age, birth:{m,d}, st:{...}, sk:{...}, lg:[...], diff, g: 'm'|'f' (없으면 남성),
+               byNation: true면 고향·첫 배·부관·아는 고장을 그 나라 것(G.NATIONS — js/data/base.js)으로 (제독 만들기). 없으면 예전처럼 리스본/세빌리아 (이야기 모드·튜토리얼·시험)} */
   ST.newGame = function (p) {
-    var home = p.nation === 'PT' ? 0 : 7;
+    var N = p.byNation && G.NATIONS ? G.NATIONS[p.nation] : null;   // 제독 만들기에서 고른 나라 (2026-11-24 국적 여섯)
+    var home = N ? N.home : p.nation === 'PT' ? 0 : 7;
     var S = {
       version: 1,
       tradeGoodsVersion: 1,   // 이미 나뉜 교역품의 ID는 불러올 때 다시 추정하지 않는다.
@@ -67,6 +69,7 @@
       mates: [],
       loc: { mode: 'city', city: home, lon: G.CITY_DATA[home].lon, lat: G.CITY_DATA[home].lat, heading: Math.PI },
       contract: null,
+      originNation: p.nation,   // 처음 국적 — 발견 명성의 고향 문화권(G.Disc.homeSphere). 후계자도 그대로 이어 간다 (2026-11-24)
       disc: {}, hints: {},
       known: [], chart: null,
       market: {}, sponsors: {}, maids: {}, owners: {},
@@ -80,11 +83,12 @@
     // starting ship depends on job (p.ships가 있으면 그 배들로 시작 — 앞의 것이 기함, 테스트용 캐릭터)
     var job0 = (G.JOBS || []).filter(function (j) { return j.id === p.job; })[0];
     var shipType = (job0 && job0.ship && G.SHIP[job0.ship]) ? job0.ship : 'caravel';   // 직업별 첫 배는 js/data/base.js G.JOBS 의 ship
+    if (N && N.shipType && G.SHIP[N.shipType]) shipType = N.shipType;   // 그 나라의 배로 시작한다 (조선: 맹선)
     var types = (p.ships || []).filter(function (id) { return G.SHIP[id]; }).slice(0, G.MAX_SHIPS || 5);
     if (!types.length) types = [shipType];
     var hc = G.CITY_DATA[S.player.home], wood = hc && G.Ships ? G.Ships.localWood(hc).id : null;
     types.forEach(function (id, i) {
-      var ship = R.newShip(id, i ? null : p.nation === 'PT' ? '산 가브리엘' : '산타 클라라', wood);
+      var ship = R.newShip(id, i ? null : N ? N.ship : p.nation === 'PT' ? '산 가브리엘' : '산타 클라라', wood);
       ship.guns = { type: 'saker', n: 4 };
       S.fleet.ships.push(ship);
     });
@@ -94,10 +98,15 @@
     S.fleet.mat = (G.BALANCE && G.BALANCE.matStart) || 10;     // 자재(수리용 목재·밧줄·돛천) — 바다 위 수리에 쓴다
     S.fleet.cargo = {};
     // starting mate
-    S.mates.push({ id: 'rocco', role: 'first', joined: 0, loyal: 80 });
-    // known cities: Iberia, western Med, Atlantic islands; home region
+    // 첫 부관: 루카. 그 나라에 따로 정한 사람이 있으면 그 사람(조선: 역관 김서진) — founder: 루카처럼 해고할 수 없고 제 발로 떠나지 않는다
+    if (N && N.mate && G.MATE && G.MATE[N.mate]) S.mates.push({ id: N.mate, role: 'first', joined: 0, loyal: 80, founder: 1, from: home });
+    else S.mates.push({ id: 'rocco', role: 'first', joined: 0, loyal: 80 });
+    // known cities: Iberia, western Med, Atlantic islands; home region (그 나라의 아는 고장이 따로 있으면 그것 — G.NATIONS.known)
+    var kn = N && N.known;
     G.CITY_DATA.forEach(function (c) {
-      if (c.region === 0 || c.region === 2 || (c.region === 1 && c.port) || [78, 79, 81, 82, 83, 85].indexOf(c.id) >= 0) S.known.push(c.id);
+      if (!c) return;
+      if (kn ? (kn.all.indexOf(c.region) >= 0 || (kn.ports.indexOf(c.region) >= 0 && c.port) || kn.more.indexOf(c.id) >= 0)
+        : (c.region === 0 || c.region === 2 || (c.region === 1 && c.port) || [78, 79, 81, 82, 83, 85].indexOf(c.id) >= 0)) S.known.push(c.id);
     });
     if (S.known.indexOf(home) < 0) S.known.push(home);
     ST.chartInit(S);
@@ -109,12 +118,15 @@
     if (G.ColonySp) G.ColonySp.apply();   // 식민지의 후원자 — 지난 게임의 것을 걷어 내고 이 게임의 것으로 (js/systems/colonysponsor.js)
     if (G.Wander) G.Wander.apply();     // 철새(떠돌이 항해사)를 이 게임의 것으로
     if (G.Siblings) G.Siblings.apply();   // 동생 항해사 (js/systems/siblings.js)
-    ST.revealChart(-12, 38, 9);
-    ST.revealChart(0, 40, 9);
-    ST.revealChart(12, 38, 8);
-    ST.revealChart(24, 37, 7);
-    ST.revealChart(-2, 50, 7);
-    ST.revealChart(-16, 30, 7);
+    if (N && N.reveal) N.reveal.forEach(function (r) { ST.revealChart(r[0], r[1], r[2]); });
+    else {
+      ST.revealChart(-12, 38, 9);
+      ST.revealChart(0, 40, 9);
+      ST.revealChart(12, 38, 8);
+      ST.revealChart(24, 37, 7);
+      ST.revealChart(-2, 50, 7);
+      ST.revealChart(-16, 30, 7);
+    }
     ST.log('항해자 ' + p.name + U.j(p.name, '이/가').slice(p.name.length) + ' ' + G.CITY_DATA[home].name + '에서 모험의 첫걸음을 내디뎠다.');
     return S;
   };

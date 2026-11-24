@@ -33,7 +33,7 @@
     PT: { m: ['주앙', '마누엘', '디오구', '페드루', '안토니우', '프란시스쿠', '루이스', '가스파르', '베르나르두'], f: ['마리아', '이자벨', '레오노르', '베아트리스', '카타리나', '이네스', '주아나', '브리테스'] },
     ES: { m: ['후안', '페드로', '루이스', '디에고', '안토니오', '프란시스코', '알론소', '곤살로', '에르난도'], f: ['마리아', '이사벨', '레오노르', '베아트리스', '카탈리나', '이네스', '후아나', '엘비라'] }
   };
-  F.names = function (sex) { var n = NAMES[S().player.nation] || NAMES.PT; return n[sex === 'f' ? 'f' : 'm']; };
+  F.names = function (sex) { var nat = S().player.nation, N = G.NATIONS && G.NATIONS[nat], n = NAMES[nat] || (N && N.kids) || NAMES.PT; return n[sex === 'f' ? 'f' : 'm']; };   // 잉글랜드·네덜란드·오스만·조선의 아이 이름은 G.NATIONS.kids (js/data/base.js)
   F.kidName = function (k) { return k.unnamed ? (k.sex === 'f' ? '갓 태어난 딸' : '갓 태어난 아들') : k.name; };
 
   // ---------------------------------------------------------------- 성: 아이는 아버지의 성을 물려받는다 (사용자 요청 2026-10-26)
@@ -290,6 +290,7 @@
       if (k.unnamed || k.lost) return;                             // 섬에서 사라진 아이 (js/systems/peterpan.js)
       if (k.away) return;                                          // 서른 넘어 독립한 아들 — 제 삶을 산다 (js/systems/kidcrew.js)
       if (k.married) return;                                       // 시집간 딸: 제 집에 사니 아버지가 집을 비워도 사이가 식지 않는다 (2026-10-28 피드백) — 편지로 가까워진다 (marriedLetter)
+      if (k.nest && G.SeaNest) { G.SeaNest.month(k, out); return; }   // 여성 제독의 배에서 자라는 아이 — 어머니 곁 (js/systems/seanest.js)
       var age = F.kidAge(k);
       if (k.aboard) {
         k.sea = (k.sea || 0) + 1;                                    // 함께 바다에 나간 달 수
@@ -351,7 +352,7 @@
     // 집에 들르면 아이들과 가까워진다 (보름에 한 번)
     if (p.lastHomeBond == null || s.day - p.lastHomeBond >= 15) {
       p.lastHomeBond = s.day;
-      p.kids.forEach(function (k) { if (!k.unnamed && !k.aboard && k.house == null && !k.married && !k.away) F.addBond(k, c.bondVisit || 3); });
+      p.kids.forEach(function (k) { if (!k.unnamed && !k.aboard && !k.nest && k.house == null && !k.married && !k.away) F.addBond(k, c.bondVisit || 3); });
     }
     // 이름 없는 아기
     for (var i = 0; i < p.kids.length; i++) {
@@ -393,7 +394,7 @@
     await UI.say(away ? wl('away', null, '얼마 만이에요… 정말 오래 걸렸네요. 얼굴 좀 보여 줘요.') : wl('greet', null, U.pick(['당신, 이번 항해는 어땠어요? 이야기 들려주세요.', '아이들이 당신을 많이 보고 싶어 했어요.', '몸 건강히 돌아와 줘서 고마워요.'])), w);
     if (p.preg) { var pn = Math.max(1, Math.round((p.preg.due - s.day) / 30)); await UI.say(p.preg.told ? wl('preg', { n: pn }, '배 속의 아기가 오늘 발로 찼어요. ' + pn + '달만 기다리면 만나요.') : wl('pregHint', null, U.pick(['요즘 이상하게 신 것이 당겨요.', '요즘 몸이 조금 나른해요.'])), w); }
     if (!p.kids.length && !p.preg) await UI.say(wl('nokids', null, U.pick(['우리에게도 아이가 생기면 좋겠어요. 집에 자주 들러 줘요.', '당신이 집에 오래 있으면 좋겠어요.'])), w);
-    var low = p.kids.filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && !k.married && !k.away && F.kidAge(k) >= 4 && F.bond(k) < 30; })[0];
+    var low = p.kids.filter(function (k) { return !k.unnamed && !k.aboard && !k.nest && k.house == null && !k.married && !k.away && F.kidAge(k) >= 4 && F.bond(k) < 30; })[0];
     if (low) await UI.say(wl('lowKid', { kid: F.given(low) }, F.given(low) + U.jx(F.given(low), '이/가') + ' 요즘 당신 이야기를 잘 안 해요. 아버지 얼굴이 가물가물한가 봐요. 집에 좀 더 자주 와 줘요.'), w);
     var kv = function (k, age, b, fb) { return (VO && VO.kid(k, age, b)) || fb; }, kr = function (k, kind, fb) { return (VO && VO.kidReact(k, kind)) || fb; };
     for (var i = 0; i < p.kids.length; i++) {
@@ -620,6 +621,7 @@
     // 함대는 고향 항구로
     delete s.landReturn;
     p.kids.forEach(function (x) { x.aboard = false; });   // 견습으로 배에 타던 아이들도 집으로
+    if (G.SeaNest) G.SeaNest.allHome();                    // 배에서 자라던 아이들도 (js/systems/seanest.js)
     if (hc) s.loc = { mode: 'city', city: home, lon: hc.lon, lat: hc.lat };
     s.regency = { heir: k.name, from: from, forced: !!forced };
     // 세월이 흐른다 — 창에 해·달과 아이의 나이를 보여 주며 하루씩 넘긴다 (세상의 일은 모아 두었다가 끝에 몇 가지만 보여 준다)
@@ -713,6 +715,7 @@
 
   F.succeed = async function (k, forced) {
     var s = S(), p = s.player;
+    if (G.SeaNest) G.SeaNest.allHome();          // 어머니의 배에서 자라던 아이들은 집으로 (js/systems/seanest.js)
     if (G.KidCrew) G.KidCrew.beforeSucceed(k);   // 배에 탄 아들은 함대에서 내려 제독이 되고, 독립한 아들은 돌아온다 (js/systems/kidcrew.js)
     F.prepareHeir(k);
     var sur = await F.askSurname();   // 뒤를 잇는 아이는 아버지의 성을 그대로 (옛 일지면 이때 한 번 묻는다 — 지금 제독·아이들 이름에도 붙는다)

@@ -1,0 +1,13 @@
+{
+  "id": "concert_8_trio",
+  "name": "동남아시아 초반 3인 공연",
+  "output": "song/concerts/8_trio.webp",
+  "prompt": "Use case: historical-scene. New original ultrawide 1881x836 finished painting for a historical maritime RPG concert event. Input portraits are identity and clothing references only. Exactly THREE featured musicians: young adult Korean woman Kim Soyoung, black loose braid with small flowers, indigo short jacket, cream travel clothing and waist pouch, singing joyously with opened plum blossom paper fan; young adult Korean man Hwanggyu with long black hair, cream sleeves, black vest, yellow shoulder ribbon and red sash, playing a traditional Korean hourglass janggu drum using two proper sticks; mature Korean man Park Woldam with curled mustache and small goatee, wide black gat and cream robe, seated playing a horizontal long dark wooden six-string geomungo with raised bridges and a bamboo plucking stick in his right hand. Preserve their faces and outfits from references. Energetic group interaction with a warmly appreciative local audience, accurate hands and instrument contact, natural warm skin, detailed painterly hair and woven textiles. Cinematic realistic adventure illustration, single continuous scene. No fourth band member or masked man, no guitar, modern microphone or electronics, no writing, labels, collage, border or watermark. Scene: Premodern Southeast Asian river-port wooden pavilion with open sides and woven palm roof, broad tropical leaves, small wooden boats and stilt houses by a jade river, locals in period wrapped cotton clothing and batik patterns clap and laugh. Warm tropical dusk with oil lanterns, flower garlands, joyful gentle humid atmosphere. Respectful varied human faces, no caricature.",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\characters\\player_half_soyoung.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_hwanggyu_half.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_woldam_half.webp"
+  ],
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-341a8bba-a389-46a5-a9c5-ca1078f0c362.png"
+}

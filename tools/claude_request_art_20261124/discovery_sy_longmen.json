@@ -1,0 +1,13 @@
+{
+  "id": "discovery_sy_longmen",
+  "disc": "sy_longmen",
+  "kind": "scene",
+  "name": "용문석굴",
+  "output": "discoveries/sy_longmen.gif",
+  "end": "discovery-ends/sy_longmen.jpg",
+  "sheet": "discovery-sheets/sy_longmen.webp",
+  "sceneStyle": "ruin",
+  "prompt": "Use case: historical-scene. ONE production animation storyboard sprite sheet for an Age-of-Sail historical exploration game. EXACTLY 4 equal columns by 4 equal rows: sixteen landscape panels, no extra panels. Request overall 2304x1024 wide sheet, each individual cell 576x256 ultrawide. Perfect boundaries at exact quarter lines, edge-to-edge without margins or gutters, no border, labels, numbers, writing or captions. Realistic finely painted miniature documentary cinematography, consistent coherent main site in all panels; no graphic overlays. Left-to-right then top-to-bottom sequence. Subject: LONGMEN GROTTOES, the east and west gray limestone cliffs along the Yi River near Luoyang, China. Main identifiable site is the Fengxian open-air rock-cut sanctuary: colossal serene seated Vairocana Buddha in the center, flanked symmetrically by standing disciples, crowned bodhisattvas and fierce guardian kings, carved directly into vertical limestone cliff, stone stairs and numerous small niches along neighboring cliff. Precisely carved sacred stone, gray and warm weathered ochre, green river and willow banks. Sequence panels: 1 a miniature rocky river gorge on a wood worktable, 2 craftsmen mark tiny niche recesses, 3 niches and seated statue take shape, 4 fully carved miniature sanctuary, 5 full miniature showing two cliffs and river, 6 match cut to actual site circa 1480 with preserved weathered statues, 7 approach along river footpath, 8 closer on serene Buddha and flanking statues, 9 oblique view along many tiny carved niches, 10 look across the river toward opposite cliff, 11 high downstream view of same site in afternoon, 12 closer upstream three-quarter view, 13 warm sunset highlights the carved stone, 14 quiet blue moonlit cliff beside reflecting river, 15 misty dawn over the valley, 16 clear morning final majestic panorama with all central statues visible. Entire important sanctuary stays inside each cell; the colossal Buddha is carved into the cliff, not a free-standing bronze statue. No modern concrete boardwalk, fencing, signs, tourists, electric lights, cranes or modern buildings, no invented central pagoda.",
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-4aeeced2-289e-4675-8cb5-3759d671ba05.png"
+}

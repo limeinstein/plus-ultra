@@ -316,7 +316,7 @@
     if (R) {
       wrap(R, 'nationName', function (orig) { return function (n) { return n === 'EN' ? '잉글랜드' : orig.apply(this, arguments); }; });
       wrap(R, 'nativeLang', function (orig) { return function (n) { return n === 'EN' ? 3 : orig.apply(this, arguments); }; });
-      wrap(R, 'isHomeNation', function (orig) { return function (c) { var s = S(); if (s && s.player.nation === 'EN') return own(c) === '잉글랜드'; return orig.apply(this, arguments); }; });
+      wrap(R, 'isHomeNation', function (orig) { return function (c) { var s = S(); if (s && s.jhook && s.player.nation === 'EN') return own(c) === '잉글랜드'; return orig.apply(this, arguments);   /* 이 이야기에서만 — 만든 제독은 G.NATIONS.EN */ }; });
     }
     // 6막(아버지의 문서)을 얻기 전에는 런던이 수배 중이다 — 잠입은 할 수 있다
     var C = G.Scenes && G.Scenes.city;

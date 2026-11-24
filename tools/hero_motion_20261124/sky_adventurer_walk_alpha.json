@@ -1,0 +1,6 @@
+{
+  "key": "sky_adventurer_walk",
+  "prompt": "Remove ONLY the white background and haze from this exact 8-frame walking sprite atlas. Keep all eight complete figures in exactly the original 4 columns x 2 rows grid, same faces, costumes, poses, scale, boots and arrangement. All background pixels must be actual alpha=0 transparency, no semi-transparent white backdrop, no floor shadows. Preserve hair edges and all small props; do not redraw or change anything else.",
+  "input": "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-motion-20261124\\raw\\sky_adventurer_walk.png",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-862b2e7e-8d9f-40c5-b691-262da2eb5b38.png"
+}

@@ -19,6 +19,11 @@ precision highp float;
 precision highp int;
 uniform sampler2D uGeo;
 uniform sampler2D uClim;
+uniform highp sampler2DArray uOcean;
+uniform vec4 uOptics; // IOR, transmission, specular, roughness
+uniform vec4 uAbsorption; // RGB 흡수 계수, 해안 거리로 추정한 수심 배율
+uniform vec4 uOceanFlow; // Blender 법선 세기, 반복 크기, 흐름, 포말
+uniform vec2 uOceanTime; // 장수, 재생 주기
 uniform vec2 uRes;
 uniform vec2 uCenter;
 uniform float uZoom;
@@ -479,6 +484,18 @@ vec4 bergs(vec2 p, float dens, out float skirt, out float shadow, out float ring
 }
 
 // 지도 위 수면의 공통 조명. 큰 파도의 높이는 G.Waves와 공유하고 미세한 법선만 빛에 더한다.
+// Blender Ocean 평가 메시의 법선·foam 속성. 세계 좌표/바람 방향에 붙이고 밉맵으로 잔결의 깜빡임을 막는다.
+vec3 oceanDetail(vec2 p, vec2 wd, float px, float t){
+  vec2 wp = vec2(-wd.y,wd.x);
+  vec2 uv = vec2(dot(p,wd),dot(p,wp))*uOceanFlow.y - vec2(t*uOceanFlow.z,t*uOceanFlow.z*.23);
+  float phase = mod(t/max(.1,uOceanTime.y),1.0)*uOceanTime.x;
+  float a = floor(phase), b = mod(a+1.0,uOceanTime.x);
+  float blend = fract(phase); blend = blend*blend*(3.0-2.0*blend);
+  vec3 data = mix(texture(uOcean,vec3(uv,a)).rgb,texture(uOcean,vec3(uv,b)).rgb,blend);
+  vec2 g = (data.rg*2.0-1.0)*uOceanFlow.x;
+  float visible = smoothstep(65.0,340.0,px);
+  return vec3((wd*g.x+wp*g.y)*visible,data.b*visible);
+}
 vec2 waterRipples(vec2 p, vec2 wd, float px, float t, float wind){
   vec2 wp = vec2(-wd.y, wd.x);
   vec2 q = vec2(dot(p, wd), dot(p, wp));
@@ -512,13 +529,21 @@ vec3 waterLight(vec3 col, vec2 slope, float height){
   float skyH = smoothstep(-.12,.88,reflected.z);
   vec3 sky = mix(vec3(.57,.69,.76),vec3(.15,.35,.53),skyH);
   sky = mix(sky,vec3(.38,.45,.51),weather*.7);
-  float fresnel = .025 + .975*pow(1.0-nv,5.0);
+  float f0 = pow((uOptics.x-1.0)/(uOptics.x+1.0),2.0)*uOptics.z*2.0;
+  float fresnel = f0 + (1.0-f0)*pow(1.0-nv,5.0);
   col = mix(col,sky,clamp(uSurface.w*(.14+fresnel*.86),0.0,.65));
   // 넓은 은빛 어깨 위의 반짝임: 같은 파면 기울기에 따라 끊어지며 부드럽게 밝기를 제한한다.
   float nh = max(dot(n,normalize(sun+eye)),0.0);
+  // GGX 반사. 먼 화면의 작은 법선은 반사 폭에 포함해 점 깜빡임을 억제한다.
+  float roughness = clamp(uOptics.w + weather*.10 + length(fwidth(slope))*.3,.09,.7);
+  float alpha = roughness*roughness, a2 = alpha*alpha;
+  float denom = nh*nh*(a2-1.0)+1.0;
+  float D = a2/(3.141593*denom*denom);
+  float k = (roughness+1.0)*(roughness+1.0)/8.0;
+  float Gv = nv/(nv*(1.0-k)+k), Gl = nl/(nl*(1.0-k)+k);
+  float fh = f0+(1.0-f0)*pow(1.0-max(dot(eye,normalize(sun+eye)),0.0),5.0);
   float broad = pow(nh,mix(18.0,48.0,uSheen.x));
-  float sharp = pow(nh,mix(100.0,260.0,uSheen.x));
-  float energy = (broad*.42 + sharp*.62)*uSurface.z*uW0.w*(1.0-weather);
+  float energy = (broad*.24 + D*Gv*Gl*fh/max(.08,4.0*nv))*uSurface.z*uW0.w*(1.0-weather);
   float limit = max(.001,uSheen.y);
   float shine = limit*(1.0-exp(-energy/limit));
   vec3 light = mix(vec3(.91,.96,1.0),vec3(1.0,.67,.32),uSheen.z);
@@ -539,6 +564,10 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
   // 심해: 뭍에서 멀어질수록(해안까지 6→56텍셀, 약 0.5°→5°) 점점 더 어둡고 짙은 남색으로. 큰 너울 그늘이 얼룩진다
   float abyss = smoothstep(6.0, 56.0, d) * (1.0 - battle);
   col = mix(col, uW4.rgb, abyss);
+  // Beer–Lambert: 긴 광로일수록 붉은빛부터 흡수된다. 기존 에메랄드→남색의 색 단계는 유지한다.
+  float opticalDepth = max(.02,z*uAbsorption.w);
+  vec3 transmittance = exp(-uAbsorption.rgb*opticalDepth);
+  col = mix(col,col*transmittance + uW4.rgb*(1.0-transmittance),.32);
   col *= 1.0 - 0.07*abyss*smoothstep(0.35, 0.75, fbm(p*0.21 + vec2(40.0 - t*0.003, 7.0), 2));
   float Tw = cl.r;
   col = mix(col, col*vec3(0.84,0.95,0.98) + vec3(0.0,0.015,0.02), smoothstep(0.32, 0.12, Tw));
@@ -546,17 +575,8 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
   col *= 0.95 + 0.10*fbm(p*0.55 + vec2(t*0.004, 0.0), 2);
   float ct = coastType(p);
   float rockyC = smoothstep(0.44, 0.58, ct);
-  // 얕은 물에 비치는 바닥: 모래 물결, 수중 암반, 해초
+  // 얕은 물의 바닥 투과량. 굴절 위치는 수면 기울기를 구한 뒤 정한다.
   float vis = exp(-z*2.4) * (1.0 - battle);
-  if (vis > 0.02) {
-    vec3 bv = voro(p*14.0);
-    float rockBed = rockyC * smoothstep(0.42, 0.12, bv.x) * smoothstep(0.3, 0.6, fbm(p*5.0, 2));
-    float weed = smoothstep(0.58, 0.72, fbm(p*6.0 + 30.0, 3)) * step(0.35, Tw) * (1.0 - rockyC);
-    float rip = 0.5 + 0.5*sin(fbm(p*14.0, 2)*26.0);
-    col = mix(col, col*vec3(1.08,1.05,0.92)*(0.96 + 0.08*rip), vis*0.45*(1.0 - rockyC));
-    col = mix(col, col*vec3(0.58,0.64,0.66), vis*rockBed*0.75);
-    col = mix(col, col*vec3(0.70,0.84,0.70), vis*weed*0.45);
-  }
   // 강어귀의 흙탕물
   float plume = exp(-rivD/2.4) * exp(-d/3.5) * (1.0 - battle);
   col = mix(col, vec3(0.36,0.41,0.33), plume*0.5);
@@ -590,7 +610,23 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
   }
   // 별도 등고선을 없애고 실제 너울 높이와 경사에서 물의 부피를 읽는다.
   float offshore = smoothstep(2.0,max(3.0,uCoastSurface.w),d);
-  vec2 slope = (grad*uSurface.x*(1.0 + rough*.18) + waterRipples(p,wd,pxD,t,wstr)) * mix(uCoastSurface.x,1.0,offshore);
+  vec3 ocean = oceanDetail(p,wd,pxD,t);
+  vec2 slope = (grad*uSurface.x*(1.0 + rough*.18) + waterRipples(p,wd,pxD,t,wstr) + ocean.xy) * mix(uCoastSurface.x,1.0,offshore);
+  if (vis > .02) {
+    // 물의 굴절률과 수면 법선으로 해저를 읽는 위치를 휘게 한다.
+    vec3 ray = refract(vec3(0.0,0.0,-1.0),normalize(vec3(-slope,1.0)),1.0/uOptics.x);
+    vec2 bedP = p + ray.xy/max(.1,-ray.z)*min(opticalDepth,4.0)*.075;
+    vec3 bv = voro(bedP*14.0);
+    float rockBed = rockyC*smoothstep(.42,.12,bv.x)*smoothstep(.3,.6,fbm(bedP*5.0,2));
+    float weed = smoothstep(.58,.72,fbm(bedP*6.0+30.0,3))*step(.35,Tw)*(1.0-rockyC);
+    float rip = .5+.5*sin(fbm(bedP*14.0,2)*26.0);
+    vec3 bed = col*vec3(1.10,1.07,.94)*(.93+.14*rip);
+    bed = mix(bed,bed*vec3(.58,.64,.66),rockBed*.75);
+    bed = mix(bed,bed*vec3(.70,.84,.70),weed*.45);
+    float caustic = pow(max(0.0,1.0-abs(sin(dot(bedP,wd)*85.0+t*.32+fbm(bedP*18.0,2)*5.0))),10.0);
+    bed += vec3(.18,.26,.20)*caustic*smoothstep(110.0,450.0,pxD)*.24;
+    col = mix(col,bed*exp(-uAbsorption.rgb*opticalDepth*.35),vis*uOptics.y);
+  }
   // 연안은 예전의 맑은 청록 물빛을 유지한다. 확대해도 반사광이 거친 능선처럼 솟지 않는다.
   float detail = mix(uSheen.w,1.0,smoothstep(110.0,300.0,pxD)) * mix(uCoastSurface.y,uCoastSurface.z,offshore);
   col = mix(col,waterLight(col,slope,swellH/max(.025,.085*uW0.y)),detail);
@@ -604,7 +640,7 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
     float fine = smoothstep(0.47, 0.63, vnoise(vec2(cq.x*5.2, cq.y*1.1) + 19.0));
     float ridge = smoothstep(0.74, 0.94, crest);
     float amount = smoothstep(wcT, 0.95, wstr) * uW0.z * uW5.z * (0.38 + 0.34*rough);
-    float caps = ridge * seg * (0.58 + 0.42*fine) * amount * smoothstep(0.7, 2.2, d) * mix(.25,1.0,offshore);
+    float caps = ridge * seg * (0.58 + 0.42*fine + ocean.z*uOceanFlow.w) * amount * smoothstep(0.7, 2.2, d) * mix(.25,1.0,offshore);
     col = mix(col, vec3(0.58,0.84,0.84), clamp(caps, 0.0, 0.30));
   }
 
@@ -617,6 +653,7 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
     float sw = smoothstep(0.24, 0.03, d) * (0.35 + 0.65*(0.5 + 0.5*sin(t*1.05 + fbm(p*12.0, 2)*9.0))) * smoothstep(0.30, 0.60, fbm(p*16.0 + t*0.07, 2));
     float spray = rockyC * smoothstep(0.40, 0.02, d) * smoothstep(0.6, 0.85, vnoise(p*34.0 + vec2(t*0.5, -t*0.3)));
     float foam = (bnd*gaps*(0.55 + 0.35*(1.0 - rockyC)) + sw*0.75 + spray*0.8) * lineOK;
+    foam *= .70 + .30*smoothstep(.06,.6,ocean.z + gaps*.32);
     foam += (1.0 - lineOK) * smoothstep(0.7, 0.0, d) * 0.22 * (0.6 + 0.4*gaps);
     // 절벽 아래 물은 그늘
     col *= 1.0 - 0.18*smoothstep(0.8, 0.0, d)*smoothstep(0.6, 0.75, ct);
@@ -693,11 +730,12 @@ vec3 battleSea(vec2 q, float pxU, float coastD){
   float offshore = smoothstep(2.0,max(3.0,uCoastSurface.w),coastD);
   vec2 slope = grad*uSurface.y;
   // 해전의 선체 주변에는 더 작은 결을 얹는다. 수면을 확대할수록 단계 없이 선명해진다.
-  slope += waterRipples(q/4.0,wd,pxU*4.0,t,wstr);
+  vec3 ocean = oceanDetail(q/4.0,wd,pxU*4.0,t);
+  slope += waterRipples(q/4.0,wd,pxU*4.0,t,wstr) + ocean.xy;
   slope *= mix(uCoastSurface.x,1.0,offshore);
   col = mix(col,waterLight(col,slope,hs*9.0),mix(uCoastSurface.y,uCoastSurface.z,offshore));
   float breakGate = smoothstep(.52,.76,vnoise(q*.8 - wd*t*.08));
-  float caps = smoothstep(.76,.96,crest)*breakGate*smoothstep(.68,1.0,wstr)*uW0.z*uW5.z;
+  float caps = smoothstep(.76,.96,crest)*breakGate*smoothstep(.68,1.0,wstr)*uW0.z*uW5.z*(1.0+ocean.z*uOceanFlow.w);
   col = mix(col,vec3(.62,.84,.84),clamp(caps*.35,0.0,.18)*mix(.25,1.0,offshore));
   return col;
 }
@@ -863,6 +901,8 @@ void main(){
   var UNIFORMS = ['uGeo', 'uClim', 'uRes', 'uCenter', 'uZoom', 'uTime', 'uWind', 'uCloud', 'uEdge', 'uMode', 'uDusk', 'uStorm', 'uQuality', 'uBattleOrigin', 'uBattleZoom', 'uSurface', 'uSheen', 'uCoastSurface', 'uWaterSun',
     'uT0', 'uT1', 'uW0', 'uW1', 'uW2', 'uW3', 'uW4', 'uW5', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize', 'uCloudK', 'uCloudDir', 'uCloudForm'];
 
+  UNIFORMS = UNIFORMS.concat(['uOcean', 'uOptics', 'uAbsorption', 'uOceanFlow', 'uOceanTime']);
+
   /* 두 패스:
      · 육지 캐시 — 무거운 육지(높이·생태·나무·강)는 화면보다 1.45배 넓은 판에 그려 두고, 카메라가 그 판 안에 있는 동안 다시 쓴다.
        배가 움직여 여유의 40%를 쓰면 진행 방향으로 앞선 새 판을 한 장면에 1/4씩 뒤에서 그려 두었다가 바꿔 끼운다(끊김 없이).
@@ -926,6 +966,21 @@ void main(){
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     this.texGeo = tg; this.texClim = tc;
+    // 자료를 JS에 넣어 file://·단일 파일판에서도 비동기 요청 없이 읽는다.
+    var baked = G.OceanBaked, pixels = new Uint8Array([128,128,0,255]), side = 1, frames = 1;
+    if (baked) {
+      var raw = atob(baked.data); pixels = new Uint8Array(raw.length);
+      for (var i = 0; i < raw.length; i++) pixels[i] = raw.charCodeAt(i);
+      side = baked.size; frames = baked.frames;
+    }
+    var ocean = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D_ARRAY, ocean);
+    gl.texImage3D(gl.TEXTURE_2D_ARRAY, 0, gl.RGBA8, side, side, frames, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+    gl.generateMipmap(gl.TEXTURE_2D_ARRAY);
+    gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_WRAP_S, gl.REPEAT);
+    gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_WRAP_T, gl.REPEAT);
+    this.texOcean = ocean;
   };
 
   function fxv(o, k, d) { return o && o[k] != null ? o[k] : d; }
@@ -933,10 +988,16 @@ void main(){
     var gl = this.gl;
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.texGeo); gl.uniform1i(u.uGeo, 0);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, this.texClim); gl.uniform1i(u.uClim, 1);
+    gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D_ARRAY, this.texOcean); gl.uniform1i(u.uOcean, 3);
     gl.uniform2f(u.uRes, W, H);
     gl.uniform1f(u.uZoom, zoom);
     gl.uniform1f(u.uQuality, view.quality == null ? 1 : view.quality);
     var FX = G.FX || {}, T = FX.terrain, Wt = FX.water;
+    var op = Wt && Wt.optics, absorption = fxv(op, 'absorption', [.24,.065,.028]), baked = G.OceanBaked;
+    gl.uniform4f(u.uOptics, fxv(op,'ior',1.333), fxv(op,'transmission',.76), fxv(op,'specular',.5), fxv(op,'roughness',.22));
+    gl.uniform4f(u.uAbsorption, absorption[0], absorption[1], absorption[2], fxv(op,'depth',3.2));
+    gl.uniform4f(u.uOceanFlow, baked ? fxv(op,'bump',.30) : 0, fxv(op,'tile',1.6), fxv(op,'drift',.018), fxv(op,'foam',.55));
+    gl.uniform2f(u.uOceanTime, baked ? baked.frames : 1, baked ? baked.seconds : 4);
     var sh = fxv(Wt, 'shallow', [0.10, 0.47, 0.55]), dp = fxv(Wt, 'deep', [0.04, 0.165, 0.32]), lg = fxv(Wt, 'lagoon', [0.30, 0.66, 0.63]), ab = fxv(Wt, 'abyss', [0.016, 0.075, 0.19]);
     gl.uniform4f(u.uT0, fxv(T, 'relief', 1), fxv(T, 'mountain', 1), fxv(T, 'forest', 1), fxv(T, 'treeSize', 1));
     gl.uniform4f(u.uT1, fxv(T, 'snowline', 0), fxv(T, 'river', 1), fxv(T, 'beach', 1), fxv(T, 'detail', 1));

@@ -273,6 +273,10 @@ body { font-family: var(--serif); font-weight: var(--body-weight, 400); color: v
 .create .cr-head { position: relative; }
 .create .cr-head .cr-sex { position: absolute; right: 0; top: -4px; gap: 4px; flex-wrap: nowrap; }
 .create .cr-head .cr-sex .opt { padding: 3px 12px; font-size: 16px; }
+/* 제독 만들기 — 국적 여섯: 두 칸씩 세 줄, 소개 글은 네 줄 자리를 잡아 두어 나라를 바꿔도 아래 칸이 들썩이지 않는다 */
+.create .cr-nat { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 8px; }
+.create .cr-nat .opt { padding: 6px 8px; font-size: 17px; text-align: center; white-space: nowrap; }
+.create .cr-natdesc { min-height: 6em; }
 /* 아이콘 자리에 그림 (G.icon({src})) — 알림·바다 소식의 얼굴·물건 */
 img.ic.ic-pic { width: 34px; height: 34px; object-fit: contain; border-radius: 6px; background: radial-gradient(circle, rgba(255,248,224,.9), rgba(180,143,87,.35)); flex: 0 0 auto; }
 .toast img.ic.ic-pic { width: 44px; height: 44px; flex: 0 0 44px; }

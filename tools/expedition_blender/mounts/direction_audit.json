@@ -1,0 +1,5 @@
+{
+  "captain_m_reindeer": {"flipRows": [1, 2, 3], "reason": "원본 순록의 오른쪽 세 방위가 왼쪽을 향해 전신·썰매·운전자를 함께 뒤집는다."},
+  "captain_f_reindeer": {"flipRows": [1, 2, 3], "reason": "원본 순록의 오른쪽 세 방위가 왼쪽을 향해 전신·썰매·운전자를 함께 뒤집는다."},
+  "scout_f_reindeer": {"flipRows": [1, 2, 3], "reason": "원본 순록의 오른쪽 세 방위가 왼쪽을 향해 전신·썰매·운전자를 함께 뒤집는다."}
+}

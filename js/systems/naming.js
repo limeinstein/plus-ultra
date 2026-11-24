@@ -131,7 +131,7 @@
     var by = s.nameBy && s.nameBy[d.id], st = s.disc[d.id];
     if (by === 'me' && st && !st.nameGrant) {
       st.nameGrant = true;
-      var gold = N.goldFor(d), fame = 100 + d.pw * 50, king = s.player.nation === 'ES' ? '에스파냐 왕실' : '포르투갈 왕실';
+      var gold = N.goldFor(d), fame = 100 + d.pw * 50, king = G.R.myCrown ? G.R.myCrown() : s.player.nation === 'ES' ? '에스파냐 왕실' : '포르투갈 왕실';
       s.player.gold += gold; G.Fame.add('ex', fame);
       G.State.log(king + '이 「' + d.name + '」의 이름을 공인했다. (하사금 ' + gold + '닢, 명성 +' + fame + ')');
       await UI.alert(king + '이 제독이 붙인 이름 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 공인했습니다. 이제 온 세상의 지도에 이 이름이 적힙니다.<br><br>명명 하사금 금화 <b>' + U.num(gold) + '</b>닢 · 명성 +' + fame, '이름의 공인');

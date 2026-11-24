@@ -123,7 +123,7 @@
   /** 아이와 함께 사는 어머니 (없으면 null) — 본가의 아이는 본처, 둘째 부인의 집 아이는 그 부인 */
   KG.momOf = function (k) {
     var p = S().player;
-    if (k.aboard || k.away || k.married || k.lost) return null;
+    if (k.aboard || k.nest || k.away || k.married || k.lost) return null;
     if (k.house != null) return k.house === -1 ? null : k.mother || null;
     if (!p.wife) return null;
     return !k.mother || k.mother === p.wife ? p.wife : null;   // 본국에 데려온 둘째 부인의 아이는 어머니와 떨어져 산다

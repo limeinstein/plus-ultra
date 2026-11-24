@@ -53,10 +53,10 @@
     // 정크·일본선 등의 지붕 지도는 다른 선종도 쓴다. 남아 있는 모형의 지도를 해제하지 않는다.
     var kept=new Set();Object.keys(r.models).forEach(function(other){if(other===id)return;r.models[other].body.traverse(function(o){if(o.material)Object.keys(o.material).forEach(function(k){var t=o.material[k];if(t&&t.isTexture)kept.add(t);});});});
     r.yaw.remove(m.body);release(m.body,kept);m.body.clear();delete r.models[id];
-    if(r.type===id){r.type=null;r.ship=r.rig=r.flag=null;}
+    if(r.modelKey===id){r.type=null;r.modelKey=null;r.ship=r.rig=r.flag=null;}
   }
   function trimModels(r,keep){
-    var idle=Object.keys(r.models).filter(function(id){return id!==r.type&&(!r.inFrame||r.models[id].seen!==r.frame);});
+    var idle=Object.keys(r.models).filter(function(id){return id!==r.modelKey&&(!r.inFrame||r.models[id].seen!==r.frame);});
     idle.sort(function(a,b){return r.models[b].seen-r.models[a].seen;});
     if(idle.length>keep){idle.slice(keep).forEach(function(id){dropModel(r,id);});r.renderer.renderLists.dispose();}
   }
@@ -106,19 +106,20 @@
       if(e.specular){m.specular.copy(e.specular);if(col)m.specular.set(finish.specular).convertSRGBToLinear();}
     });
   }
-  function select(r,id){
-    if(r.type===id){r.models[id].seen=r.frame;return true;}if(failedTypes[id])return false;
+  function select(r,id,opt){
+    var variant=G.SailDesign?G.SailDesign.rigKey(id,opt):'',modelKey=id+(variant?'@'+variant:'');
+    if(r.modelKey===modelKey){r.models[modelKey].seen=r.frame;return true;}if(failedTypes[id])return false;
     var T=G.Three,c=cfg();
-    r.yaw.remove(r.body);r.type=null;r.ship=r.rig=r.flag=null;
-    var cached=r.models[id];
+    r.yaw.remove(r.body);r.type=null;r.modelKey=null;r.ship=r.rig=r.flag=null;
+    var cached=r.models[modelKey];
     if(cached){
-      r.body=cached.body;r.yaw.add(r.body);r.ship=cached.ship;r.rig=cached.rig;r.flag=cached.flag;r.surfaces=cached.surfaces;r.span=cached.span;r.anchor=cached.anchor;r.buildMs=cached.buildMs;r.type=id;r.switches++;cached.seen=r.frame;
+      r.body=cached.body;r.yaw.add(r.body);r.ship=cached.ship;r.rig=cached.rig;r.flag=cached.flag;r.surfaces=cached.surfaces;r.span=cached.span;r.anchor=cached.anchor;r.buildMs=cached.buildMs;r.type=id;r.modelKey=modelKey;r.switches++;cached.seen=r.frame;
       Object.assign(r.camera,{left:-r.span/2,right:r.span/2,top:r.anchor,bottom:r.anchor-r.span});r.camera.updateProjectionMatrix();
       if(!r.inFrame)trimModels(r,0);return true;
     }
     r.body=new T.Group();r.yaw.add(r.body);
     try{
-      var started=performance.now(),ship=G.ShipModels.create(T,id),hull=ship.buildHull(),rig=G.ShipModels.makeRig(ship,T,batch,c);
+      var started=performance.now(),ship=G.ShipModels.create(T,id,opt),hull=ship.buildHull(),rig=G.ShipModels.makeRig(ship,T,batch,c);
       r.body.add(batch(hull,T));r.body.add(rig.root);
       var i=Math.min(1,ship.s.masts.length-1),flag=new T.Mesh(new T.PlaneGeometry(1,1,12,2),new T.MeshStandardMaterial({color:'#315c99',side:T.DoubleSide,roughness:.8}));
       flag.position.set(ship.s.masts[i],ship.s.H+ship.s.heights[i]+.4,0);flag.geometry.attributes.position.setUsage(T.DynamicDrawUsage);flag.frustumCulled=false;flag.castShadow=true;r.body.add(flag);
@@ -132,7 +133,7 @@
       r.span=Math.max(c.span,rad*2+c.boundsPadding*2,anchor+rad*c.elevation+c.boundsPadding);r.anchor=anchor;
       Object.assign(r.camera,{left:-r.span/2,right:r.span/2,top:r.anchor,bottom:r.anchor-r.span});r.camera.updateProjectionMatrix();
       r.ship=ship;r.rig=rig;r.flag=flag;r.surfaces=surfaceMaterials(r.body,T);r.type=id;r.switches++;r.builds++;r.buildMs=performance.now()-started;
-      r.models[id]={body:r.body,ship:ship,rig:rig,flag:flag,surfaces:r.surfaces,span:r.span,anchor:r.anchor,buildMs:r.buildMs,seen:r.frame};
+      r.modelKey=modelKey;r.models[modelKey]={body:r.body,ship:ship,rig:rig,flag:flag,surfaces:r.surfaces,span:r.span,anchor:r.anchor,buildMs:r.buildMs,seen:r.frame,variant:variant};
       if(!r.inFrame)trimModels(r,0);return true;
     }catch(e){failedTypes[id]=e.message;release(r.body);r.body.clear();r.ship=r.rig=r.flag=null;return false;}
   }
@@ -150,7 +151,11 @@
       var p=r.ship.artProfile,base=r.ship.dyeBase||(r.ship.dyeBase=new G.Three.Color(p.sail||G.FX.shipArt.families[p.family].sail).convertSRGBToLinear());
       r.tint.set(spec.sailColor).convertSRGBToLinear();r.tint.r/=Math.max(.001,base.r);r.tint.g/=Math.max(.001,base.g);r.tint.b/=Math.max(.001,base.b);
     }
-    r.rig.sails.forEach(function(a){var m=a.mesh.material;if(!m.userData.shipBaseColor)m.userData.shipBaseColor=m.color.clone();m.color.copy(m.userData.shipBaseColor).multiply(r.tint);});
+    r.rig.sails.forEach(function(a){var m=a.mesh.material;if(!m.userData.shipBaseColor)m.userData.shipBaseColor=m.color.clone();
+      var active=G.SailDesign&&G.SailDesign.design(spec.sailDesign).id!=='plain',p=r.ship.artProfile,base=p.sail||G.FX.shipArt.families[p.family].sail;
+      if(G.SailArt)G.SailArt.decorate(m,spec,base,G.Three);
+      m.color.copy(m.userData.shipBaseColor);if(!active)m.color.multiply(r.tint);
+    });
     var pose=spec.pose||{};r.body.rotation.set(clamp(pose.roll||0,-.3,.3),0,clamp(pose.pitch||0,-.16,.16));r.body.position.y=clamp(pose.heave||0,-.1,.1)*c.heave;
     var light=spec.light||{},cloud=clamp(light.cloud||0,0,1),dusk=clamp(light.dusk||0,0,1);
     r.sun.intensity=c.sunLight*(1-cloud*.65)*(1-dusk*.7);r.hemi.intensity=c.skyLight*(1-dusk*.45);r.rim.intensity=c.rimLight*(1-cloud*.5);r.sun.color.set(dusk>.25?0xffb77b:0xffecd1);
@@ -194,7 +199,7 @@
      다음 프레임에 차례가 온다. 선종·크기·깃발·돛 빛깔이 바뀌거나 뱃머리가 돌면 바로 새로 그린다. sid가 없는 그림(해전·감상)은 예전처럼 매번 그린다. */
   var reuse={};
   function reusable(k,spec,angle,len,pixels,c,now,r){
-    if(!k||k.type!==spec.type||k.pixels!==pixels||Math.abs(len-k.len)>len*.01||(spec.flag||null)!==k.flag||(spec.sailTint||null)!==k.tint||(spec.pirateLivery||null)!==k.livery)return false;
+    if(!k||k.type!==spec.type||k.color!==(spec.sailColor||null)||k.design!==(spec.sailDesign||'plain')||k.ink!==(spec.sailInk||null)||k.rig!==(G.SailDesign?G.SailDesign.rigKey(spec.type,spec):'')||k.pixels!==pixels||Math.abs(len-k.len)>len*.01||(spec.flag||null)!==k.flag||(spec.sailTint||null)!==k.tint||(spec.pirateLivery||null)!==k.livery)return false;
     var da=Math.abs(angle-k.angle)%PI2;if(da>Math.PI)da=PI2-da;
     var age=now-k.at,fu=Math.abs((spec.furl||0)-k.furl);
     if(age<c.reuseMs&&da<(c.reuseTurn||.02)&&fu<.04)return true;                       // 방금 그린 그림
@@ -206,19 +211,20 @@
     var start=performance.now(),tx=ctx.getTransform(),dev=Math.hypot(tx.a,tx.b),scale=len/c.baseLen;
     // 바로 앞에 그린 다른 선종의 폭(r.span)이 아니라 이 배의 실제 모형 폭으로 버퍼 크기를 정한다.
     // 선종을 번갈아 그릴 때 같은 배의 해상도가 바뀌어 캔버스를 다시 할당하던 것을 막는다.
-    if(!r.models[spec.type]&&!select(r,spec.type))return false;
-    var naturalPixels=clamp(Math.ceil(r.models[spec.type].span*scale*dev*c.supersample/32)*32,c.minBuffer,c.maxBuffer);
+    if(!select(r,spec.type,spec))return false;
+    var modelKey=r.modelKey;
+    var naturalPixels=clamp(Math.ceil(r.models[modelKey].span*scale*dev*c.supersample/32)*32,c.minBuffer,c.maxBuffer);
     var key=c.reuseMs>0&&spec.sid!=null?String(spec.sid):null,k=key?reuse[key]:null,pixels=naturalPixels;
     // 파도에 따른 길이 변화가 32px 경계를 오갈 때 캐시 캔버스를 매번 다시 만들지 않는다. 처음·실제 배율 변경 때 한 단계 여유를 두며 해상도는 낮추지 않는다.
     if(key){if(!k||naturalPixels>k.pixels||naturalPixels<k.pixels-64)pixels=clamp(naturalPixels+32,c.minBuffer,c.maxBuffer);else pixels=k.pixels;}
     if(key&&reusable(k,spec,angle,len,pixels,c,start,r)){
-      r.neededPixels=Math.max(r.neededPixels||0,pixels);if(r.models[spec.type])r.models[spec.type].seen=r.frame;   // 버퍼 줄이기·모형 정리가 이 배를 빼먹지 않게
+      r.neededPixels=Math.max(r.neededPixels||0,pixels);if(r.models[modelKey])r.models[modelKey].seen=r.frame;   // 버퍼 줄이기·모형 정리가 이 배를 빼먹지 않게
       ctx.save();ctx.translate(x,y);ctx.rotate(-Math.atan2(Math.sin(angle)*c.elevation,Math.cos(angle)));ctx.fillStyle='rgba(0,14,28,.24)';ctx.beginPath();
       ctx.ellipse(0,len*.035,len*(k.L/c.baseLen)*.47,len*(k.W/48)*.13,0,0,PI2);ctx.fill();ctx.restore();
       ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(k.cv,x-k.span*.5*scale,y-k.anchor*scale,k.span*scale,k.span*scale);ctx.restore();
       k.seen=start;r.reused=(r.reused||0)+1;r.drawn++;return true;
     }
-    if(!select(r,spec.type))return false;
+    if(!select(r,spec.type,spec))return false;
     // 큰 배에 맞춰 확보한 버퍼를 재사용한다. 배마다 캔버스를 줄였다 늘리면 GPU가 앞선 그림을 기다리며 멈칫한다.
     // 작은 배는 필요한 영역에 같은 해상도로 그려 잘라 옮긴다(돛·망루의 픽셀 밀도는 그대로).
     if(pixels>r.buffer||(!r.inFrame&&pixels!==r.buffer)){r.renderer.setSize(pixels,pixels,false);r.buffer=pixels;}
@@ -233,6 +239,7 @@
       if(k.cv.width!==pixels){k.cv.width=pixels;k.cv.height=pixels;}
       var kc=k.cv.getContext('2d');kc.clearRect(0,0,pixels,pixels);kc.drawImage(r.renderer.domElement,0,r.buffer-pixels,pixels,pixels,0,0,pixels,pixels);
       k.type=spec.type;k.pixels=pixels;k.at=k.seen=start;k.angle=angle;k.len=len;k.furl=spec.furl||0;k.flag=spec.flag||null;k.tint=spec.sailTint||null;k.livery=spec.pirateLivery||null;
+      k.color=spec.sailColor||null;k.design=spec.sailDesign||'plain';k.ink=spec.sailInk||null;k.rig=G.SailDesign?G.SailDesign.rigKey(spec.type,spec):'';
       k.L=r.ship.s.L;k.W=r.ship.s.W;k.span=r.span;k.anchor=r.anchor;
       ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(k.cv,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();
     }else{ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(r.renderer.domElement,0,r.buffer-pixels,pixels,pixels,x-r.span*.5*scale,y-r.anchor*scale,r.span*scale,r.span*scale);ctx.restore();}

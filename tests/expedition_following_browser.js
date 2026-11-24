@@ -14,7 +14,7 @@ fs.mkdirSync(OUT,{recursive:true});
   await page.waitForFunction(()=>window.followDemo&&G.ExpeditionMotion.ready('walk')&&G.ExpeditionFormation.ready('foot'),null,{timeout:60000,polling:100});
   const cases=[];
   for(const id of ['walk','porter','horse','camel','donkey','llama','yak','wagon','elephant','reindeer']){
-   await page.selectOption('#mount',id);await page.waitForFunction(id=>G.ExpeditionMotion.ready(id)&&G.ExpeditionFormation.ready(id==='walk'?'foot':id),id,{polling:100});
+   await page.selectOption('#mount',id);await page.waitForFunction(id=>G.ExpeditionMotion.ready(id)&&G.ExpeditionMotion.ready(id,'turn')&&G.ExpeditionFormation.ready(id==='walk'?'foot':id)&&G.ExpeditionFormation.crewReady(),id,{polling:100,timeout:60000});
    const result=await page.evaluate(()=>{let maxMove=0,old=null;for(let f=0;f<650;f++){const list=followDemo.step(1/60);if(old)list.filter(i=>!i.leader).forEach(i=>{const before=old.find(j=>j.index===i.index);maxMove=Math.max(maxMove,Math.hypot(i.worldX-before.worldX,i.worldY-before.worldY));});old=list;}return{count:old.length,maxMove,moving:old.filter(i=>!i.leader&&i.moving).length,poses:old.map(i=>({index:i.index,phase:i.phase,heading:i.heading,x:i.worldX,y:i.worldY}))};});
    assert.strictEqual(result.count,4);assert(result.maxMove<3,'위치 연속성 '+id);cases.push({id,...result});
    if(id==='horse')await page.locator('#stage').screenshot({path:path.join(OUT,'horse-corner.png')});

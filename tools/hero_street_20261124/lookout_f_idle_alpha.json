@@ -1,0 +1,8 @@
+{
+  "key": "lookout_f_idle_alpha",
+  "prompt": "Use case: background-extraction. Edit ONLY the background of this exact sprite sheet. Remove ALL white and gray backdrop, haze, floor shadows and background color around each figure. Make ALL outside space genuinely transparent with actual alpha=0. Preserve EXACTLY 6 columns by 3 rows, 18 full-body poses, their faces, hair, hands, clothing, props, boot soles, sizes, layout and pose order. No new poses, no moved figures, no cropping, no new text or lines. Preserve all opaque colors inside each character. Keep the complete original canvas.",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources/hero-street-20261124/raw/lookout_f_idle.png"
+  ],
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-5e3e9e9f-f279-4703-aea6-45d03275ef95.png"
+}

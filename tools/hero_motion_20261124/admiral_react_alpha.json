@@ -1,0 +1,7 @@
+{
+  "key": "admiral_react",
+  "alpha": true,
+  "prompt": "Edit target: this exact 24-pose sprite atlas. Remove ONLY the existing white backdrop, gray halo and all background haze; the entire background around all figures must be actual alpha=0 transparent. Preserve all 24 poses and the EXACT 6 columns x 4 rows grid, character face, clothing, size, every sword, knees and lying-down pose. Isolate complete silhouettes with fine hair. No other changes.",
+  "input": "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-motion-20261124\\raw\\admiral_react.png",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-65056c3a-1b7d-4949-bee2-f93fc1e17f9b.png"
+}

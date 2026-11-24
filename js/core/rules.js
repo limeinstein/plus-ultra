@@ -176,13 +176,38 @@
     }
     return t;
   };
-  R.nationName = function (n) { return n === 'PT' ? '포르투갈' : n === 'ES' ? '에스파냐' : n; };
-  R.nativeLang = function (n) { return n === 'PT' ? 1 : 0; };
+  /* 제독의 나라 — 자료는 G.NATIONS (js/data/base.js). 2026-11-24 국적 여섯(에스파냐·포르투갈·잉글랜드·네덜란드·오스만·조선) */
+  R.nationName = function (n) { var N = G.NATIONS && G.NATIONS[n]; return N ? N.name : n; };
+  R.nativeLang = function (n) { var N = G.NATIONS && G.NATIONS[n]; return N ? N.lang : 0; };
   R.isHomeNation = function (c) {
     var S = R.S(); var own = R.cityOwner(c);
-    if (S.player.nation === 'PT') return own === '포르투갈';
+    var N = G.NATIONS && G.NATIONS[S.player.nation];
+    if (N) return N.lands.indexOf(own) >= 0 || (!!N.cities && !!c && N.cities.indexOf(c.id) >= 0);
     return own === '카스티야' || own === '아라곤' || own === '에스파냐';
   };
+  /** 제독 만들기에서 고른 나라의 자료(G.NATIONS). 이야기 모드의 주인공(제시카·아드리안·소영)은 그 이야기의 규칙을 따르므로 null —
+      궁정의 제 나라 작위·외교·이슬람 항구 출입처럼 나라에 따라 달라지는 새 규칙은 이것으로 가린다 */
+  R.myNation = function () {
+    var S = R.S(), p = S && S.player; if (!p || S.jhook || S.gold || S.song) return null;
+    return (G.NATIONS && G.NATIONS[p.nation]) || null;
+  };
+  /** 제독의 믿음: 'C' 그리스도교(기본) · 'I' 이슬람 · 'K' 유교 */
+  R.heroFaith = function () { var N = R.myNation(); return (N && N.faith) || 'C'; };
+  /** 제독의 나라가 점령지에 올리는 깃발(나라 이름) — 그 해의 이름으로 (카스티야 → 에스파냐, 잉글랜드 → 영국) */
+  R.myOwnerName = function (y) {
+    var S = R.S(), N = G.NATIONS && G.NATIONS[S.player.nation] || G.NATIONS.ES, out = N.owner[0][1];
+    y = y == null ? S.date.y : y;
+    N.owner.forEach(function (o) { if (y >= o[0]) out = o[1]; });
+    return out;
+  };
+  /** 그 나라(도시 주인 이름)의 회사가 제독에게 제 나라 회사인가 (js/systems/company.js 입회금) */
+  R.isMyCompany = function (coNation) {
+    var S = R.S(), n = S.player.nation, N = R.myNation();
+    if (N) return N.lands.indexOf(coNation) >= 0;
+    return coNation === ({ PT: '포르투갈', ES: '카스티야' }[n] || n);
+  };
+  /** 포상을 내리는 제 나라의 조정 — 「포르투갈 왕실」·「조선 조정」 */
+  R.myCrown = function () { var S = R.S(), N = G.NATIONS && G.NATIONS[S.player.nation]; return N ? N.crown : '포르투갈 왕실'; };
   /** 이베리아 두 왕실(포르투갈·에스파냐)의 땅인가 */
   R.iberOwner = function (own) { return own === '포르투갈' || own === '카스티야' || own === '아라곤' || own === '에스파냐'; };
 

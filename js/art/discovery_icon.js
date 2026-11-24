@@ -55,6 +55,11 @@
     POS[id] = { key: 'map-discoveries/completion/' + id, slot: 0, cols: 1, rows: 1 };
   });
 
+  // 바닷길 노래의 첫 항해에서 만나는 두 유적의 전용 지도 외관.
+  ['sy_longmen', 'sy_todaiji'].forEach(function (id) {
+    POS[id] = { key: 'map-discoveries/completion/' + id, slot: 0, cols: 1, rows: 1 };
+  });
+
   // 2026-10-31 누락 외관 자동 등록 시작
   POS.aurora = { key: "map-discoveries/completion/aurora", slot: 0, cols: 1, rows: 1 };
   POS.maldives = { key: "map-discoveries/completion/maldives", slot: 0, cols: 1, rows: 1 };

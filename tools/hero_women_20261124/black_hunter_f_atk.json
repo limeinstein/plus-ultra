@@ -1,0 +1,12 @@
+{
+  "id": "black_hunter_f",
+  "name": "검은 머리 여성 사냥꾼",
+  "key": "black_hunter_f_atk",
+  "kind": "atk",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\black_hunter_f_knee.png",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\black_hunter_f_face.png"
+  ],
+  "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette. Every full figure surrounded by transparent margins, maximum 78% of cell height including raised hands.",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-3f4b7510-af33-4cd3-855c-40782f37501b.png"
+}

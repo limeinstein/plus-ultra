@@ -344,6 +344,7 @@
       var v = await UI.choose(sh.name + '호 개조', [
         { label: '대포', right: (G.CANNON[sh.guns.type] || {}).name + ' ' + sh.guns.n + '/' + sh.ports + '문', value: 'gun', icon: 'cannon' },
         { label: '돛', right: sh.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k] || k; }).join('·'), value: 'sail', icon: 'sail' },
+        { label: '돛 모양·문양', right: G.SailDesign.label(sh), value: 'design', icon: 'sail', desc: '단색·줄무늬·국가·왕실·귀족·해적 도안 · 고급 개조' },
         { label: '돛 색깔', right: A.sailColorName(sh.sailColor), value: 'dye', icon: 'sail', desc: '미리 보고 고릅니다 · 배마다 저장됩니다' },
         { label: '삭구 개량 (맞바람)', right: rigLabel(sh), value: 'rig', icon: 'gear' },
         { label: '포문 증설', right: sh.ports + '/' + t.ports + '문', value: 'port', icon: 'plus', disabled: sh.ports >= t.ports },
@@ -361,6 +362,7 @@
       else if (v === 'gun') await refitGuns(c, sh);
       else if (v === 'sail') await refitSails(c, sh);
       else if (v === 'dye') await Y.dyeSails(c, sh);
+      else if (v === 'design') await Y.sailWorkshop(c, sh);
       else if (v === 'rig') await refitRig(c, sh);
       else if (v === 'port') await refitPorts(c, sh);
       else if (v === 'fig') await refitFig(c, sh);
@@ -370,11 +372,12 @@
   };
   /* 「개조할 배」 목록의 한 줄 — 수첩 「함대」 표(js/ui/info.js PAGES.fleet)와 같은 칸에 삭구를 더했다. 둘째 줄은 배의 특징과 맡긴 곳·창고 */
   // 색을 고르는 동안에는 미리보기만 바꾼다. 적용할 때 소유권·잔액을 다시 확인한다.
+  function DYE_COST(c,sh,current){return G.SailDesign.quote(c,sh,Object.assign({},sh,{sailColor:current?null:'#435d87'})).total;}
   Y.dyeSails = async function (c, sh) {
     var s = S(), owned = function () { return s.fleet.ships.concat(C.B.harbor.moored(c)).indexOf(sh) >= 0 && !sh.loan; };
     if (!owned()) return;
     var current = A.validSailColor(sh.sailColor) ? sh.sailColor.toLowerCase() : null, picked = current;
-    var cost = Math.max(1, sh.sails.length) * G.BALANCE.sailDye.pricePerMast;
+    var cost = DYE_COST(c,sh,current);
     var palette = G.FX.sailColors;
     var win = UI.window({ title: sh.name + '호 — 돛 색깔', icon: 'sail', width: 660,
       html: '<p>색을 고르면 이 배의 돛에 미리 보입니다. 적용 비용 ' + U.num(cost) + '닢 · 소지금 ' + U.num(s.player.gold) + '닢</p>' +
@@ -389,7 +392,7 @@
         var cv = el.querySelector('canvas'), ctx = cv.getContext('2d'), custom = el.querySelector('input');
         function preview() {
           ctx.fillStyle = '#193b4b'; ctx.fillRect(0, 0, cv.width, cv.height);
-          var look = A.shipLook(sh.type, { sails: sh.sails, sailColor: picked, flag: '#315c99', rig: { fill: .9, brace: .15, lee: 1 } });
+          var look = A.shipLook(sh.type, { sails: sh.sails, sailShape: sh.sailShape, sailDesign: sh.sailDesign, sailInk: sh.sailInk, sailColor: picked, flag: '#315c99', rig: { fill: .9, brace: .15, lee: 1 } });
           if (!G.Ship3D || !G.Ship3D.draw(ctx, cv.width / 2, cv.height * .88, .55, 200, look, 1.25)) {
             A.shipSide(ctx, cv.width / 2, cv.height * .78, 1.35, look, U.makeRng(1), 1);
           }
@@ -415,6 +418,7 @@
     var sailTitle = sh.sails.map(function (k) { return { sq: '사각', lat: '삼각', bat: '살돛' }[k] || k; }).join(' · ');
     var hurt = sh.hp < sh.maxHp;
     var extra = [];
+    if (sh.sailShape || sh.sailDesign) extra.push('돛 장식: ' + G.SailDesign.label(sh));
     if (sh.sailColor) extra.push('돛 색깔: ' + A.sailColorName(sh.sailColor));
     if (sh.ports < t.ports) extra.push('포문 ' + sh.ports + '/' + t.ports + '문 (늘릴 수 있음)');
     if (G.Cabins && G.Cabins.storeCount && sh !== s.fleet.ships[0] && G.Cabins.storeCount(sh)) extra.push('선실 창고 ' + G.Cabins.storeCount(sh) + '/' + G.Cabins.slots(sh) + '칸');
@@ -474,22 +478,22 @@
     else if (done.length) await C.say(keeper(), U.pick(['다 됐네. 함대가 한 몸처럼 움직일 걸세.', '모두 손봤네. 이제 느린 배 때문에 기다릴 일은 줄겠지.', '한꺼번에 하니 일꾼들도 신이 났다네.']));
   }
   async function batchSails(c, ships) {
-    var s = S(), price = 300, kinds = sailKinds(c);
+    var s = S(), price = function(sh){ return G.SailDesign.legacyCost(c,sh); }, kinds = sailKinds(c);
     var choices = kinds.slice(); if (kinds.indexOf('lat') >= 0) choices.push('mix');
     function want(sh, i, k) { return k === 'mix' ? (i === 0 && sh.sails.length > 1 ? 'lat' : 'sq') : k; }
-    function count(sh, k) { var n = 0; sh.sails.forEach(function (x, i) { if (x !== want(sh, i, k)) n++; }); return n; }
-    var k = await UI.choose('돛 일괄 변경 — ' + ships.length + '척 (1개 ' + price + '닢)', choices.map(function (x) {
-      var n = U.sum(ships, function (sh) { return count(sh, x); });
-      return { label: x === 'mix' ? '앞 돛대는 삼각돛, 나머지는 사각돛' : '모든 돛대를 ' + G.SAIL_NAME[x] + U.jx(G.SAIL_NAME[x], '으로/로'), right: n ? n + '개 · 금화 ' + U.num(n * price) + '닢' : '이미 모두 그렇다',
+    function count(sh, k) { if(sh.type==='geobukseon')return 0; if(sh.sailShape)return sh.sails.length; var n = 0; sh.sails.forEach(function (x, i) { if (x !== want(sh, i, k)) n++; }); return n; }
+    var k = await UI.choose('돛 일괄 변경 — ' + ships.length + '척 (배 크기에 따라 비용 산정)', choices.map(function (x) {
+      var n = U.sum(ships, function (sh) { return count(sh, x); }), total=U.sum(ships,function(sh){return count(sh,x)*price(sh);});
+      return { label: x === 'mix' ? '앞 돛대는 삼각돛, 나머지는 사각돛' : '모든 돛대를 ' + G.SAIL_NAME[x] + U.jx(G.SAIL_NAME[x], '으로/로'), right: n ? n + '개 · 금화 ' + U.num(total) + '닢' : '이미 모두 그렇다',
         value: x, icon: 'sail', disabled: !n, desc: x === 'mix' ? '순풍과 맞바람의 절충 — 돛대가 하나뿐인 배는 사각돛' : '' };
     }), { width: 680, text: '사각돛은 순풍에서 빠르고, 삼각돛은 옆바람과 맞바람에 강합니다.' + (kinds.length > 2 ? ' 대나무 살 돛은 그 사이입니다.' : '') });
     if (!k) return;
-    var lines = ships.map(function (sh) { var n = count(sh, k); return { sh: sh, n: n, cost: n * price, skip: !n, text: n ? sailTxt(sh) + ' → ' + sh.sails.map(function (x, i) { return { sq: '사각', lat: '삼각', bat: '살돛' }[want(sh, i, k)]; }).join('·') : '바꿀 돛이 없다' }; });
+    var lines = ships.map(function (sh) { var n = count(sh, k); return { sh: sh, n: n, cost: n * price(sh), skip: !n, text: n ? sailTxt(sh) + ' → ' + sh.sails.map(function (x, i) { return { sq: '사각', lat: '삼각', bat: '살돛' }[want(sh, i, k)]; }).join('·') : '바꿀 돛이 없다' }; });
     var pc = planConfirm('돛 일괄 변경', lines);
     if (pc.tot > s.player.gold) { await C.say(keeper(), '금화 ' + U.num(pc.tot) + '닢 필요하네. 돈이 모자라는군.'); return; }
     if (!(await pc.ask())) return;
     var done = [];
-    lines.forEach(function (l) { if (l.skip) return; l.sh.sails = l.sh.sails.map(function (x, i) { return want(l.sh, i, k); }); s.player.gold -= l.cost; done.push(l.sh); });
+    lines.forEach(function (l) { if (l.skip) return; delete l.sh.sailShape; l.sh.sails = l.sh.sails.map(function (x, i) { return want(l.sh, i, k); }); s.player.gold -= l.cost; done.push(l.sh); });
     await batchDone('돛을 바꾸었다', done, []);
   }
   /** 대포 1문 값: 물가(배 갈래)를 따른다 — 지금 있는 조선소 */
@@ -616,14 +620,15 @@
   /** 이 조선소에서 달 수 있는 돛: 동아시아 조선소는 대나무 살 돛도 단다 */
   function sailKinds(c) { var y = SH().cityYards(c); return y.indexOf('ea') >= 0 || y.indexOf('sa') >= 0 ? ['sq', 'lat', 'bat'] : ['sq', 'lat']; }
   async function refitSails(c, sh) {
-    var s = S(), price = 300, kinds = sailKinds(c);
+    if(sh.type==='geobukseon'){await C.say(keeper(),'거북선은 덮개와 돛 접기 구조 때문에 선종 고유 범장을 유지하네. 색과 문양은 바꿀 수 있지.');return;}
+    var s = S(), price = G.SailDesign.legacyCost(c, sh), kinds = sailKinds(c);
     for (;;) {
       var opts = sh.sails.map(function (k, i) { var nx = kinds[(kinds.indexOf(k) + 1) % kinds.length] || 'sq'; return { label: (i + 1) + '번 돛대', right: G.SAIL_NAME[k] + ' → ' + G.SAIL_NAME[nx], value: i, icon: 'sail' }; });
       var i = await UI.choose('돛 바꾸기 (1개 ' + price + '닢)', opts, { width: 620, text: sh.name + '호 — ' + capHp(sh) + ' <small class="muted">(돛을 바꿔도 그대로)</small><br>사각돛은 순풍에서 빠르고, 삼각돛은 옆바람과 맞바람에 강합니다.' + (kinds.length > 2 ? ' 대나무 살 돛은 그 사이 — 어느 바람에나 무난하고 폭풍에 빨리 줄일 수 있습니다.' : '') });
       if (i == null) return;
       if (s.player.gold < price) { await C.say(keeper(), '돈이 모자라는군.'); return; }
       var cur = kinds.indexOf(sh.sails[i]);
-      s.player.gold -= price; sh.sails[i] = kinds[(cur + 1) % kinds.length] || 'sq';
+      s.player.gold -= price; delete sh.sailShape; sh.sails[i] = kinds[(cur + 1) % kinds.length] || 'sq';
       UI.toast((i + 1) + '번 돛대를 ' + G.SAIL_NAME[sh.sails[i]] + U.jx(G.SAIL_NAME[sh.sails[i]], '으로/로') + ' 바꾸었다.', 'sail');
     }
   }

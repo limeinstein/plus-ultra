@@ -430,7 +430,7 @@
     // 오스만이 다스리는 발칸·레반트
     72: 'ottoman', 73: 'ottoman', 76: 'ottoman', 112: 'ottoman', 113: 'ottoman', 114: 'ottoman',
     115: 'ottoman', 116: 'ottoman', 117: 'ottoman', 118: 'ottoman', 119: 'ottoman', 120: 'ottoman',
-    121: 'ottoman', 
+    121: 'ottoman',
     // 베네치아가 쥔 섬
     74: 'italy', 75: 'italy',
     // 섬 동남아시아·열대 아메리카는 대나무 고상가옥
@@ -553,7 +553,12 @@
     sea_dog: '망원경을 든 뱃사람', muscle_swordsman: '근육질 검사', hat_spinner: '모자를 돌리는 항해사',
     charismatic_admiral: '카리스마 제독', battle_vanguard: '돌격대장', noble_scholar: '귀족 학자 제독',
     casanova: '카사노바', army_officer: '정규군 장교', sky_adventurer: '가죽옷 모험가', blackcoat_captain: '검은 코트의 선장',
-    jessica: '붉은 외투의 선장', soyoung: '꽃 댕기의 항해사'   // 여성 생김새 (I.HERO_SEX)
+    jessica: '붉은 외투의 선장', soyoung: '꽃 댕기의 항해사',   // 여성 생김새 (I.HERO_SEX)
+    navigator_f: '여성 항해사', missionary_f: '여성 선교사', excavator_f: '여성 발굴자',
+    noble_navigator_f: '여성 귀족 항해사', surveyor_f: '여성 측량사', explorer_f: '여성 탐험가',
+    hunter_f: '여성 사냥꾼', soldier_f: '여성 군인', lookout_f: '여성 파수꾼',
+    white_navigator_f: '백발 여성 항해사', conqueror_f: '여성 정복자',
+    black_hunter_f: '검은 머리 여성 사냥꾼', gold_surveyor_f: '금발 여성 측량사'
     // 이름 있는 인물 16명(레오나르두 드 발렌사 …)은 20대·40대 얼굴이 없어 항구의 부하 후보로 옮겼다 (js/data/storycrew.js)
   };
   I.heroName = function (id) { return I.HERO_NAMES[id] || id; };
@@ -927,11 +932,12 @@
   };
   /** 경쟁자 전용 그림이 먼저, 없을 때 같은 인물의 동료 그림을 잇는다. */
   K.rivalHalf = function (name) { return K.halfOf(K.rival(name)); };
-  /** 제독 만들기에서 고를 수 있는 얼굴: 20대(portraits/player/)와 40대(portraits/player-aged/) 그림이 모두 있는 것만. 40대 그림이 하나도 없으면 있는 대로 */
+  /** 제독 만들기의 성별별 얼굴. 남성은 중년 그림이 있는 외형을 우선하며 여성은 등록된 외형을 모두 보여 준다. */
   I.heroFaces = function (sex) {   // sex 'f' = 여성 생김새, 그 밖(없음 포함) = 남성 생김새
     var want = sex === 'f' ? 'f' : 'm';
     var all = I.list('portraits/player/').filter(function (k) { return I.heroLookSex(k.slice('portraits/player/'.length)) === want; }), both = all.filter(function (k) { return I.has('portraits/player-aged/' + k.slice('portraits/player/'.length)); });
-    return both.length ? both : all;
+    // 나이별 초상을 가진 새 여성 외형이 추가되어도 제시카·소영을 선택 목록에 남긴다.
+    return want === 'f' ? all : both.length ? both : all;
   };
   K.player = function (face, sex) { var l = I.heroFaces(sex); return l.length ? [l[((face || 0) % l.length + l.length) % l.length]] : []; };
   /** 아이 그림: 저장된 자녀 외형 변형(son_age10_v1…v5, daughter_age10_v1…v5)을 먼저 고른다.

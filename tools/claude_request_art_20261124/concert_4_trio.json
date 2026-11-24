@@ -1,0 +1,13 @@
+{
+  "id": "concert_4_trio",
+  "name": "중근동 초반 3인 공연",
+  "output": "song/concerts/4_trio.webp",
+  "prompt": "Use case: historical-scene. One new finished ultrawide 1881x836 historical maritime RPG concert event painting. Input portraits are identity and costume references only. Exactly THREE featured performers: Kim Soyoung, young adult Korean singer with black loosely braided hair and small flowers, indigo short jacket, cream woven travel clothes, waist pouch, singing with opened paper blossom fan; Hwanggyu, handsome young adult Korean man with long flowing black hair, cream sleeves, black vest, yellow ribbon and red sash, playing a traditional Korean hourglass janggu drum with one thin and one padded stick; Park Woldam, mature Korean man with curled mustache and small goatee, black broad-brim gat and cream robe, seated at a long wooden six-string geomungo zither with bridges and a right-hand bamboo stick. Preserve reference faces, outfits and instruments. Three performers interacting with appreciative local audience, natural anatomy, fingers gripping objects correctly, realistic warm skin, delicately painted hair and fabric, cinematic light and depth. Traditional acoustic music only, no masked fourth musician, guitar, microphone, loudspeaker, electricity, modern objects, writing, panels or watermark. Scene: A sixteenth-century Middle Eastern caravanserai courtyard at blue twilight, warm lanterns under sandstone arches, geometric tile accents, ornate wooden shutters and distant minaret silhouette, a few resting camels beyond the arch. Diverse adult merchants and travelers in historical robes and turbans listen and clap. Calm hospitality turning into joyous rhythmic applause.",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\characters\\player_half_soyoung.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_hwanggyu_half.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_woldam_half.webp"
+  ],
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-d4932789-b542-4e93-8b5c-20bbf785deb6.png"
+}

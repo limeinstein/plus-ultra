@@ -690,7 +690,7 @@
       var idle = (!m.role || m.role === 'none') && m.room == null;
       if (idle) lo -= b.idleLoyal == null ? 2 : b.idleLoyal;
       else if (paid && lo < (b.settle || 70)) lo += adj;
-      R().setLoyal(m, U.clamp(lo, m.id === 'rocco' ? 5 : 0, 100));
+      R().setLoyal(m, U.clamp(lo, m.id === 'rocco' || m.founder ? 5 : 0, 100));
       if (m.loyal <= 0) { s.leaving = s.leaving || []; if (s.leaving.indexOf(m.id) < 0) s.leaving.push(m.id); }
     });
     if (paid) { var w = CB.wageWarning(); if (w) out.push({ icon: 'coin', text: (R().purser() ? '경리' : '부관') + ': 동료·선원 급료가 한 달 ' + U.num(w.wage) + '닢 — 소지금으로 ' + Math.max(0, w.months) + '달 버틴다. 예금은 금고에서 미리 찾아야 한다.' }); }

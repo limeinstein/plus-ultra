@@ -313,13 +313,16 @@
   }
 
   /** draw portrait into ctx at size sz */
-  A.drawPortrait = function (ctx, sz, s) {
+  A.drawPortrait = function (ctx, sz, s, opts) {
+    var transparent = !!(opts && opts.transparent);
     var rng = U.makeRng(U.strHash(String(s.seed || 'p') + 'd'));
     ctx.save();
-    // background
-    var bg = ctx.createRadialGradient(sz * 0.35, sz * 0.3, sz * 0.05, sz * 0.5, sz * 0.5, sz * 0.8);
-    bg.addColorStop(0, A.rgba(A.shade(s.bg, 1.9))); bg.addColorStop(0.55, A.rgba(s.bg)); bg.addColorStop(1, A.rgba(A.shade(s.bg, 0.35)));
-    ctx.fillStyle = bg; ctx.fillRect(0, 0, sz, sz);
+    // 원화가 없는 대체 얼굴도 대화·수첩의 투명 여백을 유지한다.
+    if (!transparent) {
+      var bg = ctx.createRadialGradient(sz * 0.35, sz * 0.3, sz * 0.05, sz * 0.5, sz * 0.5, sz * 0.8);
+      bg.addColorStop(0, A.rgba(A.shade(s.bg, 1.9))); bg.addColorStop(0.55, A.rgba(s.bg)); bg.addColorStop(1, A.rgba(A.shade(s.bg, 0.35)));
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, sz, sz);
+    }
     if (s.facing < 0) { ctx.translate(sz, 0); ctx.scale(-1, 1); }
     var cx = sz * 0.46, cy = sz * 0.42, R = sz * 0.2;
     // torso
@@ -568,6 +571,7 @@
       ctx.fillStyle = '#e2b84b'; ctx.fillRect(cx - R * .91, cy + R * .25, R * .12, R * .45);
     }
     ctx.restore();
+    if (transparent) return;   // 사각형 전체의 음영·질감은 투명 배경을 다시 채우므로 생략한다.
     // frame glow & vignette
     var vg = ctx.createRadialGradient(sz / 2, sz / 2, sz * 0.3, sz / 2, sz / 2, sz * 0.72);
     vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.55)');
@@ -640,13 +644,11 @@
     if (portraitAlpha.has(im)) return portraitAlpha.get(im);
     var transparent = false;
     try {
-      var c = A.canvas(2, 2), x = c.getContext('2d');
-      var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
-      [[0, 0], [iw - 1, 0], [0, ih - 1], [iw - 1, ih - 1]].forEach(function (p, i) {
-        x.drawImage(im, p[0], p[1], 1, 1, i % 2, Math.floor(i / 2), 1, 1);
-      });
-      var pixels = x.getImageData(0, 0, 2, 2).data;
-      for (var i = 3; i < pixels.length; i += 4) if (pixels[i] === 0) transparent = true;
+      // 모자·옷이 네 모서리를 덮어도 안쪽의 투명 여백을 놓치지 않는다.
+      var c = A.canvas(32, 32), x = c.getContext('2d');
+      x.drawImage(im, 0, 0, 32, 32);
+      var pixels = x.getImageData(0, 0, 32, 32).data;
+      for (var i = 3; i < pixels.length; i += 4) if (pixels[i] < 255) { transparent = true; break; }
     } catch (e) { /* 외부 그림을 읽을 수 없으면 빈 가장자리가 생기지 않는 자르기를 쓴다. */ }
     portraitAlpha.set(im, transparent);
     return transparent;
@@ -675,7 +677,8 @@
     // 얼굴 자체가 잘리지 않도록 얼굴 상자를 안쪽에 남긴다.
     shift = U.clamp(shift, -f.box[0], 1 - f.box[0] - f.box[2]);
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = k.bg; ctx.fillRect(0, 0, w, h);
+    // 대화 초상은 가운데로 옮긴 뒤에도 원화의 투명 여백을 유지한다.
+    if (!transparent) { ctx.fillStyle = k.bg; ctx.fillRect(0, 0, w, h); }
     if (transparentPortrait(im)) {
       // 투명 원화는 크기·높이를 유지한 채 가로로만 옮긴다.
       ctx.drawImage(im, shift * w, 0, w, h);
@@ -689,6 +692,8 @@
   A.portraitCanvas = function (spec, size, opts) {
     size = size || 134;
     opts = opts || {};
+    // 얼굴상은 어디에서 불러도 투명이 기본이다. 의도한 배경 칸만 false로 요청한다.
+    var transparent = opts.transparent !== false;
     // 무대 전체가 CSS로 확대되므로 논리 크기 2배만 그리면 큰 화면에서 다시 흐려진다.
     // 현재 무대 배율과 화면 DPR을 반영하되 지나친 메모리 사용을 막아 4배에서 멈춘다.
     var stageScale = G.Game && G.Game.scale ? G.Game.scale : 1;
@@ -703,20 +708,20 @@
         if (G.Img.has(frame.source)) chain = [frame.source];
         else frame = null;
       }
-      var oc = G.Img.make(chain, px, px, function () { var pc = A.canvas(px, px); A.drawPortrait(pc.getContext('2d'), px, spec); return pc; }, {
-        fy: 0.25, bg: opts.transparent ? null : '#1a120c',
-        post: function (ctx, w, h, key) { centerPortrait(ctx, w, h, key, frame, opts.transparent); }
+      var oc = G.Img.make(chain, px, px, function () { var pc = A.canvas(px, px); A.drawPortrait(pc.getContext('2d'), px, spec, { transparent: transparent }); return pc; }, {
+        fy: 0.25, bg: transparent ? null : '#1a120c',
+        post: function (ctx, w, h, key) { centerPortrait(ctx, w, h, key, frame, transparent); }
       });
       if (frame) oc.setAttribute('data-portrait-frame', faceKey);
       oc.style.width = size + 'px'; oc.style.height = size + 'px';
       return oc;
     }
-    var key = JSON.stringify(spec) + '@' + px;
+    var key = JSON.stringify(spec) + '@' + px + ':' + transparent;
     var c = A.canvas(px, px);
     c.style.width = size + 'px'; c.style.height = size + 'px';
     var ctx = c.getContext('2d');
     if (cache[key]) { ctx.drawImage(cache[key], 0, 0); return c; }
-    A.drawPortrait(ctx, px, spec);
+    A.drawPortrait(ctx, px, spec, { transparent: transparent });
     var copy = A.canvas(px, px); copy.getContext('2d').drawImage(c, 0, 0); cache[key] = copy;
     return c;
   };

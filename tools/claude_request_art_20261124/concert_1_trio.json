@@ -1,0 +1,13 @@
+{
+  "id": "concert_1_trio",
+  "name": "북유럽 초반 3인 공연",
+  "output": "song/concerts/1_trio.webp",
+  "prompt": "Use case: historical-scene. Asset type: one finished 1881x836 ultrawide hand-painted historical sailing RPG concert event. These three input portraits are identity and clothing references only, not edit targets. Create a new full scene, preserve their faces and characteristic outfits. Exactly THREE featured musicians: Kim Soyoung, young ADULT Korean female singer, loosely braided black hair with small flowers, indigo short jacket, cream woven blouse and travel trousers, belts and pouch, sings joyfully holding her opened plum-blossom paper fan; Hwanggyu, handsome long-black-haired young ADULT Korean male in black vest over cream linen, red sash and yellow shoulder ribbon, plays the described percussion instrument; Park Woldam, mature Korean male with curled mustache and small goatee, black broad-brim gat and flowing cream robe, seated playing a long dark wooden six-string geomungo zither horizontally on a stand with bridges and right-hand bamboo stick. Keep clear visible relationships between fingers and instruments, expressive performance energy, smiling audience behind them in locally appropriate period clothes. Warm natural skin, painterly realism, detailed hair strands and textiles, environmental depth, excellent anatomy. No masked man, no fourth featured musician, no guitar, no modern microphone, no electric instrument or amplification, no modern buildings, no text, no panels, no frame or watermark. Scene: Cozy northern European harbor tavern interior, heavy dark oak beams, amber fireplace and candles, leaded small windows with rain and mast silhouettes outside. Wool-clad sailors and townspeople laugh and clap around the trio. Hwanggyu plays a traditional double-headed Korean hourglass janggu drum strapped at waist, one thin stick and one padded stick. Soyoung sings near the hearth, Woldam seated at his geomungo; clear expressive interplay.",
+  "references": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\characters\\player_half_soyoung.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_hwanggyu_half.webp",
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\portraits\\mates\\sy_woldam_half.webp"
+  ],
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-9b491158-20ee-46f7-acd3-1b957141a231.png"
+}

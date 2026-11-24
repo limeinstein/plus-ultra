@@ -25,7 +25,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       const out = {}, R = G.R, UI = G.UI, H = G.Husbands, M = G.Mother, F = G.Family, CB = G.Cabins, KB = G.BALANCE.mother;
       let said = [], alerts = [], chosen = [], pickRoom = null;
       UI.say = async (t) => { said.push(String(t)); }; UI.alert = async (t) => { alerts.push(String(t)); }; UI.toast = () => {}; UI.confirm = async () => true;
-      UI.choose = async (t, o) => { chosen.push(String(t)); return pickRoom != null && /헐어/.test(t) ? pickRoom : o[0].value; };
+      UI.choose = async (t, o) => { chosen.push(String(t)); if (/어떻게 키울까/.test(t)) return 'home'; return pickRoom != null && /헐어/.test(t) ? pickRoom : o[0].value; };
       UI.ask = async (t, o) => o[0].value; UI.prompt = async (t, v) => v;
       G.State.save = () => {}; G.Game.refreshHud = () => {};
       const chance0 = G.U.chance; let roll = true;   // 확률은 날을 보낼 때만 고정한다 (새 게임 만들기 등은 그대로)

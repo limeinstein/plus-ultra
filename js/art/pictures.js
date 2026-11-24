@@ -608,7 +608,7 @@
   // ---------------------------------------------------------------- ship picture
   A.shipCard = function (typeId, w, h, seed, spec) {
     var chain = G.Img.chain.ship(typeId);
-    if (!(spec && spec.sailColor) && G.Img.pick(chain)) return G.Img.make(chain, w, h, function () { return paintShipCard(typeId, w, h, seed, spec); });
+    if (!(spec && (spec.sailColor || spec.sailDesign || G.SailDesign && G.SailDesign.rigKey(typeId,spec))) && G.Img.pick(chain)) return G.Img.make(chain, w, h, function () { return paintShipCard(typeId, w, h, seed, spec); });
     return paintShipCard(typeId, w, h, seed, spec);
   };
   function paintShipCard(typeId, w, h, seed, spec) {
@@ -622,7 +622,7 @@
     var fit = Math.min(w * 0.94 / span, h * 0.72 / 118);
     var scale = fit * U.clamp(0.66 + t.cap / 1500, 0.7, 1);
     var drawn = false;
-    if (G.Ship3D && (t.from >= 1600 || look.sailColor)) {
+    if (G.Ship3D && (t.from >= 1600 || look.sailColor || look.sailDesign || G.SailDesign && G.SailDesign.rigKey(typeId,look))) {
       var model = G.FX.shipRig.profiles[typeId], tallest = Math.max.apply(null, model.map(function (m) { return m[1]; }));
       var len = Math.min(w * .70, h * .76 / (tallest + .22));
       drawn = G.Ship3D.draw(ctx, w * .5, h * .88, .55, len, look, 1.25);

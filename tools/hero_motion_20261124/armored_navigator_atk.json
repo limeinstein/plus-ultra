@@ -1,0 +1,7 @@
+{
+  "id": "armored_navigator",
+  "kind": "atk",
+  "prompt": "Redraw image 1 as a polished game character animation atlas. Image 1 is the pose-and-layout reference, image 2 is the face-and-costume reference. Use the adult man from image 2 in EVERY cell: identical tousled dark hair, face, dark metal shoulders, brown leather outfit and compass medallion. Keep exactly 6 columns by 4 rows with 24 complete separate figures, all facing right, preserving the pose sequence in image 1. Each figure and all props stay wholly inside its own cell with wide transparent gutters. Clean natural five-digit hands with fingers wrapped around held props. Detailed hand-painted realistic maritime RPG art matching image 2. Actual completely transparent alpha=0 background outside figures; no shadows, color backdrops, grid lines, labels or text. This is a solo character animation asset, no other people or targets.",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a20908-8a70-7fd1-9e0a-b4f340636459\\exec-9ac570f0-ecbd-4f0c-9d2a-61680f495150.png",
+  "layout": "runtime"
+}

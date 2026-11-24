@@ -154,7 +154,7 @@
   };
   /** 집에 있는 아이들 (이름이 있고, 세 살부터, 견습으로 나가 있지 않은) */
   HL.kidsHome = function () {
-    return (S().player.kids || []).filter(function (k) { return !k.unnamed && !k.aboard && k.house == null && !k.married && !k.away && F().kidAge(k) >= 3; });   // 시집간 딸은 집에 없다 (kidwed.js)
+    return (S().player.kids || []).filter(function (k) { return !k.unnamed && !k.aboard && !k.nest && k.house == null && !k.married && !k.away && F().kidAge(k) >= 3; });   // 시집간 딸은 집에 없다 (kidwed.js)
   };
 
   // ---------------------------------------------------------------- 집 안에 서 있는 가족
@@ -163,7 +163,7 @@
     var s = S(), p = s.player, out = [], Fm = F();
     var sibs = G.Siblings ? G.Siblings.family() : [];   // 새 제독의 동생들 (js/systems/siblings.js)
     if (!p.wife) return sibs;
-    var ws = Fm.wifeSpeaker(), babies = (p.kids || []).filter(function (k) { return !k.aboard && k.house == null && Fm.kidAge(k) < 3; });
+    var ws = Fm.wifeSpeaker(), babies = (p.kids || []).filter(function (k) { return !k.aboard && !k.nest && k.house == null && Fm.kidAge(k) < 3; });
     var wchain = ws.half || [];
     if (!wchain.length && ws.portrait && G.Art.portraitKeys) { try { wchain = G.Img.chain.halfFor(G.Art.portraitKeys(ws.portrait)); } catch (e) { wchain = []; } }
     out.push({ who: 'wife', name: Fm.wifeName(), sub: babies.length ? babies.map(function (k, i) { var nm = Fm.kidName(k); return i === babies.length - 1 ? U.j(nm, '을/를') : nm; }).join('·') + ' 안고 있다' : (p.preg && p.preg.told ? '아기를 기다리는 중' : '아내'), chain: wchain, portrait: ws.portrait, scale: 1 });

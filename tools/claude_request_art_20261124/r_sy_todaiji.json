@@ -1,0 +1,10 @@
+{
+  "id": "r_sy_todaiji",
+  "kind": "icon",
+  "name": "도다이지 대불 중수 기록",
+  "disc": "sy_todaiji",
+  "output": "relics/r_sy_todaiji.webp",
+  "prompt": "Use case: stylized-concept. Asset type: one premium hand-painted historical sailing RPG inventory icon, square 1024x1024, TRUE transparent RGBA background, single coherent object centered with 12 percent clear margin, all edges intact. Rich realistic paper fibers, cloth and wood details, soft warm light from upper left, crisp silhouette readable at 256px. No human hands, no people, no scenery, no labels, no watermark, no text outside the object, no checkerboard or opaque background. Any manuscript ink is tiny indistinct traditional marks rather than readable modern writing. Subject: a small fifteenth-century Japanese washi temple repair record booklet, open at a slight three-quarter angle. Warm aged paper, two simple sewn holes with dark thread, subdued ochre fabric cover under pages. One page bears a modest sepia ink sketch of a monumental seated Vairocana Buddha and timber column, other page faint narrow vertical handwritten columns with small abstract vermilion seal. Two tied folded sheets beneath form a coherent booklet bundle. Handcrafted documentary copy given by a monk, paper is naturally textured, all pages whole. No metal Buddha sculpture, no stolen sacred object, no modern spiral binding, no western Latin print.",
+  "tool": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a20b25-4bc1-7143-8841-eddf075f5739\\exec-b40d1618-7463-4081-9bf2-31fce406310e.png"
+}

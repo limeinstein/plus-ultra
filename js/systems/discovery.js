@@ -189,7 +189,27 @@
   D.valueK = function (d) { return D.valueParts(d).k; };
   D.value = function (d) { return Math.round(d.val * D.valueK(d) * D.mirageK(d)); };
   D.rewardK = function (kind) { var r = G.BALANCE && G.BALANCE.discoveryReward; return (r && r[kind]) || 1; };   // 발견 보상 배수 (G.BALANCE.discoveryReward — 2026-11-10 1.8배)
-  D.fameFor = function (d) { var combo = G.SkillCombos ? G.SkillCombos.bonus('discoveryReward') : 0; return Math.round((D.value(d) / 26 + d.pw * 30 * D.mirageK(d) * (1 + combo)) * D.rewardK('fame') * D.bioK(d)); };
+  D.fameFor = function (d) { var combo = G.SkillCombos ? G.SkillCombos.bonus('discoveryReward') : 0; return Math.round((D.value(d) / 26 + d.pw * 30 * D.mirageK(d) * (1 + combo)) * D.rewardK('fame') * D.bioK(d) * D.homeK(d)); };
+  /** 고향 문화권에 따른 명성 배수 (G.BALANCE.homeFame, 2026-11-24 사용자 요청)
+      처음 국적이 유럽(오스만 포함)이냐 동아시아냐에 따라, 고향 사람들이 이미 아는 것은 명성이 낮고 처음 듣는 먼 문명의 것은 높다.
+      예: 조선 제독에게 불국사 ×0.55 · 카르낙 거석군·로마 유적 ×1.4 / 유럽 제독에게는 거꾸로.
+      국적은 새 게임 때 s.originNation에 적어 두고(후계자도 이어 감), 옛 저장은 지금 국적으로 판단한다.
+      생물(creature)은 이미 고향에서 떨어진 거리로 명성을 매기므로(D.bioK) 빼고, 갈래를 정할 수 없는 국적이면 ×1. */
+  D.homeSphere = function () {
+    var K = G.BALANCE && G.BALANCE.homeFame, s = S();
+    if (!K || !s || !s.player) return null;
+    var n = s.originNation || s.player.nation;
+    if (K.nations && K.nations[n]) return K.nations[n];
+    var hc = G.CITY_DATA[s.player.home], r = hc ? hc.region : null;   // 표에 없는 국적: 고향 도시의 지역으로
+    return r == null ? null : K.regionSphere && K.regionSphere[r] || null;
+  };
+  D.homeParts = function (d) {
+    var K = G.BALANCE && G.BALANCE.homeFame, sp = D.homeSphere();
+    if (!K || !sp || !d || d.reg == null || (K.skip && K.skip[d.cat])) return { sphere: sp, k: 1 };
+    var k = K[sp] && K[sp][d.reg];
+    return { sphere: sp, k: k == null ? 1 : k };
+  };
+  D.homeK = function (d) { return D.homeParts(d).k; };
   /** 동물·식물(생물) 발견의 명성 배수 — 고향에서 멀고 희귀할수록 (G.BALANCE.bioFame, 2026-11-19). 생물이 아니면 1 */
   D.bioParts = function (d) {
     var K = G.BALANCE && G.BALANCE.bioFame, s = S();
@@ -362,6 +382,9 @@
     var foundFame = G.Fame.add('ex', fame);
     var bp = D.bioParts(d);   // 먼 땅의 희귀한 생물일수록 명성이 더 오른다 (G.BALANCE.bioFame)
     if (bp.k >= 1.15) setTimeout(function () { UI.toast((bp.distK >= 0.15 && bp.rare >= 0.15 ? '고향에서 먼 땅의 희귀한 생물' : bp.distK >= bp.rare ? '고향에서 먼 땅의 생물' : '희귀한 생물') + ' — 명성 ×' + bp.k.toFixed(2), 'star', 4800); }, 1300);
+    var hp = D.homeParts(d), hName = G.BALANCE.homeFame && G.BALANCE.homeFame.names ? G.BALANCE.homeFame.names[hp.sphere] : '';   // 고향 문화권에서 이미 아는 것인가, 처음 듣는 것인가 (G.BALANCE.homeFame)
+    if (hp.k <= 0.9) setTimeout(function () { UI.toast((hName || '고향') + '에서는 이미 널리 알려진 것이라 — 명성 ×' + hp.k.toFixed(2), 'scroll', 4800); }, 1700);
+    else if (hp.k >= 1.1) setTimeout(function () { UI.toast((hName || '고향') + ' 사람들은 들어 본 적 없는 먼 문명의 것 — 명성 ×' + hp.k.toFixed(2), 'star', 4800); }, 1700);
     if (G.Birds) G.Birds.record(d, foundFame);
     // 증거품: 이름 붙은 증거(해도·지도)는 소지품으로 챙긴다 — 보고·발표할 때 건넨다 (잃으면 믿어 주지 않는다)
     if (d.evidence && !s.player.items.some(function (it) { return it.kind === 'evidence' && it.disc === d.id; })) {
@@ -497,7 +520,8 @@
   // ---------------------------------------------------------------- 발견 유물·증거
   D.relicsOf = function (id) { return (G.RELICS && G.RELICS[id]) || []; };
   /** 보고·발표할 때 증거를 보여야 하는 발견인가 (해도·지도 증거품이나 유물이 있는 발견) */
-  D.needsProof = function (d) { return !!(d && (d.evidence || D.relicsOf(d.id).length)); };
+  // 나중에 기록물을 더한 이야기 발견물은 옛 저장에 증거품이 없어도 보고할 수 있다.
+  D.needsProof = function (d) { return !!(d && ((d.evidence && !d.proofOptional) || D.relicsOf(d.id).length)); };
   /** 이 발견의 증거로 쓸 수 있는 소지품 (아직 쓰지 않은 해도·지도와 유물) */
   D.proofItems = function (id) { return S().player.items.filter(function (it) { return it.disc === id && R.isProof(it); }); };
   D.hasProof = function (id) { return D.proofItems(id).length > 0; };
@@ -633,7 +657,7 @@
     if (COLLECT.indexOf(n) < 0) return;
     var gold = n * 400, fame = n * 6;
     s.player.gold += gold; G.Fame.add('ex', fame);
-    var king = s.player.nation === 'ES' ? '에스파냐 왕실' : '포르투갈 왕실';
+    var king = G.R.myCrown ? G.R.myCrown() : s.player.nation === 'ES' ? '에스파냐 왕실' : '포르투갈 왕실';
     setTimeout(function () { UI.toast('발견 ' + n + '가지 달성! ' + king + '에서 포상금 금화 ' + U.num(gold) + '닢을 보내왔다. (명성 +' + fame + ')', 'crown', 6500); }, 900);
     G.State.log('발견 ' + n + '가지를 모았다. ' + king + '의 포상 (금화 ' + U.num(gold) + ', 명성 +' + fame + ')');
   };

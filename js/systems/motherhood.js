@@ -205,7 +205,8 @@
       G.State.log(fill(L.birthLog, { name: full, dad: nm(dad) || '?' }));
     }
     var hc = G.CITY_DATA[R.seat ? R.seat() : p.home];
-    await UI.alert(fill(L.after, { home: hc ? hc.name : '' }), L.birthTitle);
+    var atSea = G.SeaNest && G.SeaNest.afterBirth ? await G.SeaNest.afterBirth(kids) : false;   // 내 배에서 직접 키운다 · 고향 집 (js/systems/seanest.js)
+    if (!atSea) await UI.alert(fill(L.after, { home: hc ? hc.name : '' }), L.birthTitle);
     if (G.Game.refreshHud) G.Game.refreshHud();
   };
 
@@ -240,7 +241,7 @@
     var s = S(), p = P(), c = FK(); if (!p || !R.heroFemale(p) || p.wife) return;
     if (p.lastHomeBond != null && s.day - p.lastHomeBond < 15) return;
     p.lastHomeBond = s.day;
-    (p.kids || []).forEach(function (k) { if (!k.unnamed && !k.aboard && k.house == null && !k.married && !k.away) F().addBond(k, c.bondVisit || 3); });
+    (p.kids || []).forEach(function (k) { if (!k.unnamed && !k.aboard && !k.nest && k.house == null && !k.married && !k.away) F().addBond(k, c.bondVisit || 3); });
   };
   /** 수첩 「배우자」 칸 뒤에 붙는 글 */
   M.info = function () {

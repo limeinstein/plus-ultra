@@ -56,6 +56,23 @@
     ['백작', 'Conde', 'Condesa', 5, '각하'], ['후작', 'Marqués', 'Marquesa', 6, '각하'], ['공작', 'Duque', 'Duquesa', 7, '각하'],
     ['대공', 'Gran Duque', 'Gran Duquesa', 8, '전하']
   ];
+  /* 제독 만들기에서 고른 나라의 귀족 사다리 (2026-11-24 국적 여섯 — 잉글랜드·오스만·조선. 네덜란드는 군주의 궁정이 없어 제 나라 사다리가 없다)
+     realm.home: 그 나라 사람으로 만든 제독(R.myNation)에게 ranks를 준다 — 이야기 모드의 주인공은 예전처럼 명예 작위(honor) */
+  var EN = [
+    ['에스콰이어', 'Esquire', 'Gentlewoman', 1, '나리'], ['기사', 'Knight', 'Dame', 2, '경'], ['남작', 'Baron', 'Baroness', 3, '각하'], ['자작', 'Viscount', 'Viscountess', 4, '각하'],
+    ['백작', 'Earl', 'Countess', 5, '각하'], ['후작', 'Marquess', 'Marchioness', 6, '각하'], ['공작', 'Duke', 'Duchess', 7, '각하'],
+    ['대공', 'Grand Duke', 'Grand Duchess', 8, '전하']
+  ];
+  var OT = [
+    ['아아', 'Ağa', 'Hatun', 1, '나리'], ['레이스', 'Reis', 'Hatun', 2, '나리'], ['베이', 'Bey', 'Hanım', 3, '나리'], ['산자크베이', 'Sancakbeyi', 'Hanımefendi', 4, '각하'],
+    ['파샤', 'Paşa', 'Hanımefendi', 5, '각하'], ['베일레르베이', 'Beylerbeyi', 'Hanımsultan', 6, '각하'], ['카푸단 파샤', 'Kapudan Paşa', 'Hanımsultan', 7, '각하'],
+    ['대재상', 'Sadrazam', 'Sultan', 8, '각하']
+  ];
+  var KR = [
+    ['만호', '萬戶', '萬戶', 1, '나리'], ['첨절제사', '僉節制使', '僉節制使', 2, '나리'], ['수군우후', '水軍虞候', '水軍虞候', 3, '영감'], ['수군절도사', '水軍節度使', '水軍節度使', 4, '영감'],
+    ['병조참판', '兵曹參判', '兵曹參判', 5, '영감'], ['병조판서', '兵曹判書', '兵曹判書', 6, '대감'], ['부원군', '府院君', '府院君', 7, '대감'],
+    ['영의정', '領議政', '領議政', 8, '대감']
+  ];
   var BARBARY = [83, 82, 81, 85], ARABIA = [124, 109, 125], MALAY = [166, 170, 167], EAST = [191];
   var TURK = [['오스만 제국', 0, 9999], ['하프스 왕조', 0, 1574], ['틀렘센 왕국', 0, 1554], ['맘루크 왕조', 0, 1517]];
 
@@ -69,7 +86,7 @@
     FR: { name: '프랑스', sponsors: ['fr_king'], kind: 'eu', lands: ['프랑스'],
       honor: [['생미셸 기사단 기사', "Chevalier de l'Ordre de Saint-Michel", "Dame de l'Ordre de Saint-Michel", 1, '나리'], ['남작', 'Baron', 'Baronne', 3, '각하'], ['백작', 'Comte', 'Comtesse', 5, '각하']],
       foes: [['카스티야', 1494, 1559], ['잉글랜드', 0, 1560], ['오스만 제국', 0, 1525]], dens: BARBARY, ladies: ['발루아의 클로드 왕녀', '앙굴렘의 마르그리트 왕녀', '발루아의 르네 왕녀'] },
-    EN: { name: '잉글랜드', sponsors: ['en_king'], kind: 'eu', lands: ['잉글랜드', '영국'],
+    EN: { name: '잉글랜드', sponsors: ['en_king'], home: 'EN', kind: 'eu', lands: ['잉글랜드', '영국'], ranks: EN,
       honor: [['기사', 'Knight Bachelor', 'Dame', 1, '경'], ['남작', 'Baron', 'Baroness', 3, '각하'], ['가터 기사', 'Knight of the Garter', 'Lady of the Garter', 5, '경']],
       foes: [['프랑스', 0, 1560], ['카스티야', 1585, 1604], ['스코틀랜드', 0, 1560]], dens: BARBARY, ladies: ['요크의 엘리자베스 왕녀', '튜더의 메리 왕녀', '튜더의 마거릿 왕녀'] },
     HRE: { name: '신성로마제국', sponsors: ['de_emperor'], kind: 'eu', lands: ['오스트리아', '신성로마제국', '부르고뉴'],
@@ -93,7 +110,7 @@
     HU: { name: '헝가리', sponsors: ['hu_king'], kind: 'eu', lands: ['헝가리'],
       honor: [['용 기사단 기사', 'Societas Draconistarum', 'Societas Draconistarum', 1, '나리'], ['남작', 'Báró', 'Báróné', 3, '각하']],
       foes: [['오스만 제국', 0, 9999]], dens: BARBARY, ladies: ['후녀디의 에르제베트 왕녀', '야기에우워의 언너 왕녀', '자포여의 보르벌러 왕녀', '바토리의 크리스티나 공녀'] },
-    OT: { name: '오스만 제국', sponsors: ['ot_sultan'], kind: 'is', lands: ['오스만 제국'],
+    OT: { name: '오스만 제국', sponsors: ['ot_sultan'], home: 'OT', kind: 'is', lands: ['오스만 제국'], ranks: OT,
       honor: [['아아', 'Ağa', 'Hatun', 1, '나리'], ['베이', 'Bey', 'Hanım', 3, '나리'], ['파샤', 'Paşa', 'Sultan Hanım', 6, '각하']],
       foes: [['베네치아', 0, 9999], ['카스티야', 0, 9999], ['맘루크 왕조', 0, 1517], ['포르투갈', 1500, 9999]], dens: BARBARY, ladies: ['아이셰 술탄', '파트마 술탄', '미흐리마 술탄', '게브헤르한 술탄'] },
     EG: { name: '맘루크 왕조', sponsors: ['eg_sultan'], kind: 'is', lands: ['맘루크 왕조'],
@@ -119,7 +136,7 @@
     TH: { name: '아유타야', sponsors: ['th_king'], kind: 'as', lands: ['아유타야 왕국'],
       honor: [['쿤', 'Khun', 'Khun', 1, '나리'], ['루앙', 'Luang', 'Luang', 3, '나리'], ['프라', 'Phra', 'Phra', 5, '각하']],
       foes: [['한타와디 왕국', 0, 9999], ['말라카 술탄국', 0, 1511]], dens: MALAY, ladies: ['아유타야의 수리요타이 공주', '수판부리의 사왓 공주'] },
-    KR: { name: '조선', sponsors: ['kr_king'], kind: 'as', lands: ['조선'],
+    KR: { name: '조선', sponsors: ['kr_king'], home: 'KR', kind: 'as', lands: ['조선'], ranks: KR,
       honor: [['수직 사정', '受職 司正', '受職 司正', 1, '나리'], ['수직 호군', '受職 護軍', '受職 護軍', 3, '영감'], ['수직 상호군', '受職 上護軍', '受職 上護軍', 5, '영감']],
       foes: [['일본', 1510, 1512], ['일본', 1555, 1556], ['일본', 1592, 1598]], dens: EAST, ladies: ['전주 이씨 정순옹주', '전주 이씨 경현공주'] }
   } };

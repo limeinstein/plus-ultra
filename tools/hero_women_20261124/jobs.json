@@ -1,0 +1,431 @@
+[
+  {
+    "id": "navigator_f",
+    "name": "여성 항해사",
+    "key": "navigator_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\navigator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\navigator_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "navigator_f",
+    "name": "여성 항해사",
+    "key": "navigator_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\navigator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\navigator_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "navigator_f",
+    "name": "여성 항해사",
+    "key": "navigator_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\navigator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\navigator_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "missionary_f",
+    "name": "여성 선교사",
+    "key": "missionary_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\missionary_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\missionary_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque ivory/navy/gold travel outfit from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Book secured in belt satchel, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "missionary_f",
+    "name": "여성 선교사",
+    "key": "missionary_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\missionary_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\missionary_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "missionary_f",
+    "name": "여성 선교사",
+    "key": "missionary_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\missionary_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\missionary_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "excavator_f",
+    "name": "여성 발굴자",
+    "key": "excavator_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "excavator_f",
+    "name": "여성 발굴자",
+    "key": "excavator_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "excavator_f",
+    "name": "여성 발굴자",
+    "key": "excavator_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\excavator_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "noble_navigator_f",
+    "name": "여성 귀족 항해사",
+    "key": "noble_navigator_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\noble_navigator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\noble_navigator_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "noble_navigator_f",
+    "name": "여성 귀족 항해사",
+    "key": "noble_navigator_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\noble_navigator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\noble_navigator_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "noble_navigator_f",
+    "name": "여성 귀족 항해사",
+    "key": "noble_navigator_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\noble_navigator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\noble_navigator_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "surveyor_f",
+    "name": "여성 측량사",
+    "key": "surveyor_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\surveyor_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\surveyor_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "surveyor_f",
+    "name": "여성 측량사",
+    "key": "surveyor_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\surveyor_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\surveyor_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "surveyor_f",
+    "name": "여성 측량사",
+    "key": "surveyor_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\surveyor_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\surveyor_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "explorer_f",
+    "name": "여성 탐험가",
+    "key": "explorer_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\explorer_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\explorer_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "explorer_f",
+    "name": "여성 탐험가",
+    "key": "explorer_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\explorer_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\explorer_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "explorer_f",
+    "name": "여성 탐험가",
+    "key": "explorer_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\explorer_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\explorer_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "hunter_f",
+    "name": "여성 사냥꾼",
+    "key": "hunter_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\hunter_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\hunter_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "hunter_f",
+    "name": "여성 사냥꾼",
+    "key": "hunter_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\hunter_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\hunter_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "hunter_f",
+    "name": "여성 사냥꾼",
+    "key": "hunter_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\hunter_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\hunter_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "soldier_f",
+    "name": "여성 군인",
+    "key": "soldier_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\soldier_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\soldier_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "soldier_f",
+    "name": "여성 군인",
+    "key": "soldier_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\soldier_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\soldier_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "soldier_f",
+    "name": "여성 군인",
+    "key": "soldier_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\soldier_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\soldier_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "lookout_f",
+    "name": "여성 파수꾼",
+    "key": "lookout_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\lookout_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\lookout_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "lookout_f",
+    "name": "여성 파수꾼",
+    "key": "lookout_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\lookout_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\lookout_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "lookout_f",
+    "name": "여성 파수꾼",
+    "key": "lookout_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\lookout_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\lookout_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "white_navigator_f",
+    "name": "백발 여성 항해사",
+    "key": "white_navigator_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\white_navigator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\white_navigator_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "white_navigator_f",
+    "name": "백발 여성 항해사",
+    "key": "white_navigator_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\white_navigator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\white_navigator_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "white_navigator_f",
+    "name": "백발 여성 항해사",
+    "key": "white_navigator_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\white_navigator_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\white_navigator_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "conqueror_f",
+    "name": "여성 정복자",
+    "key": "conqueror_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\conqueror_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\conqueror_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "conqueror_f",
+    "name": "여성 정복자",
+    "key": "conqueror_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\conqueror_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\conqueror_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "conqueror_f",
+    "name": "여성 정복자",
+    "key": "conqueror_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\conqueror_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\conqueror_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "black_hunter_f",
+    "name": "검은 머리 여성 사냥꾼",
+    "key": "black_hunter_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\black_hunter_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\black_hunter_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "black_hunter_f",
+    "name": "검은 머리 여성 사냥꾼",
+    "key": "black_hunter_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\black_hunter_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\black_hunter_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "black_hunter_f",
+    "name": "검은 머리 여성 사냥꾼",
+    "key": "black_hunter_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\black_hunter_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\black_hunter_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  },
+  {
+    "id": "gold_surveyor_f",
+    "name": "금발 여성 측량사",
+    "key": "gold_surveyor_f_atk",
+    "kind": "atk",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\gold_surveyor_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\gold_surveyor_f_face.png"
+    ],
+    "prompt": "Create a transparent animation sheet of this adult woman rehearsing a theatrical fencing routine ALONE, a stage performance with no opponent and no harm. This is non-contact sports choreography, with a practice prop sword. Preserve her exact face and opaque clothing, colors, accessories and costume from reference 1 and reference face 2. Complete her full body in tall brown leather boots. Her original occupational tools secured at belt or back, free left hand empty. Realistic painterly historical adventure game style. Exactly 24 full-body poses, strict 6 columns by 4 rows on a landscape 1536x1024 canvas, same size, facing right, transparent alpha background, no floor or shadow. Every whole figure and sword tip inside its cell. Right hand holds the prop handle anatomically: four fingers wrapped around handle and opposing thumb, wrist attached naturally. Row 1 six frames of a broad overhead stage flourish, lowering forward and returning to ready. Row 2 six frames of extending the practice sword straight ahead, a small forward step, retract and return to ready. Row 3 six frames of a low horizontal flourish and recovery. Row 4 six frames drawing the hand back to shoulder, extending the rounded pommel forward at chest level, and returning to ready. Clear changes in arms, legs and prop angle, smooth sequential choreography. No other person, impacts, injury, blood, aggression, violence, dramatic effects, text or grid lines. Actual alpha=0 outside each silhouette."
+  },
+  {
+    "id": "gold_surveyor_f",
+    "name": "금발 여성 측량사",
+    "key": "gold_surveyor_f_react",
+    "kind": "react",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\gold_surveyor_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\gold_surveyor_f_face.png"
+    ],
+    "prompt": "Use case: stylized-concept. Production transparent sprite atlas for historical maritime RPG, detailed realistic painterly game illustration. Reference 1 is the original adult woman's head-to-knees outfit, reference 2 is her face. Preserve EXACT same adult woman's face, hair, opaque clothing, colors, short skirt/shorts, armor, accessories and body proportions, complete her legs with the same practical tall leather boots. Keep occupational tools, books, bows, quiver and map cases secured at belt or back. Wield ONLY ONE simple gold-guard European rapier/saber in her RIGHT hand. Anatomically correct five-digit grip: four fingers wrap around and occlude the leather hilt, thumb opposes over fingers, guard in front of knuckles, pommel behind little finger. Blade firmly attached to hilt; wrist connected naturally to forearm. No floating weapons, disconnected handles, extra limbs, extra fingers, gore or motion trails. EXACTLY 24 fully visible full-body poses in STRICT 6 columns by 4 rows, landscape 2304x1536. All whole figures including boots, fingers, sword tips and cloth safely inside their equal cells with generous transparent gutters. Consistent same body scale, camera, right-facing three-quarter side view. Genuine ALPHA ZERO background everywhere outside silhouettes, no floor, shadows, white/gray haze, background, labels, text, watermarks or grid lines. Do not crop any figure or sword tip. Four rows in exact left-to-right order. Row 1 parry (neutral ready, high guard, blade parry, bracing, relax, neutral). Row 2 defense (guard, low guard, middle guard, stepping back, regain balance, neutral). Row 3 hit reaction (flinch, recoil, clutch side with free hand, stumble back, regain balance, neutral). Row 4 EXACTLY: 1 neutral standing sword low; 2 command raised free hand; 3 kneel on ONE knee; 4 collapsing low; 5 LYING COMPLETELY FLAT HORIZONTALLY ON THE GROUND in side view, full extended body head to boots, width at least THREE TIMES its height, no raised knees or torso; 6 rising to kneel. The prone figure in row 4 column 5 must fit horizontally in its own square cell, with entire head, hair and boots visible. No blood, no wounds."
+  },
+  {
+    "id": "gold_surveyor_f",
+    "name": "금발 여성 측량사",
+    "key": "gold_surveyor_f_cutin",
+    "kind": "cutin",
+    "references": [
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\gold_surveyor_f_knee.png",
+      "D:\\Git\\대항해2 CLAUDE\\WebGame\\art_sources\\hero-street-20261124\\references\\gold_surveyor_f_face.png"
+    ],
+    "prompt": "Use case: illustration-story. Dramatic SPECIAL ATTACK event illustration for historical maritime RPG. Reference 1 is this adult woman's exact costume, Reference 2 her facial identity. Preserve her face, hairstyle, age and opaque costume and colors exactly. Same practical tall boots. Dynamic sword lunge toward RIGHT, protagonist fills LEFT two thirds, upper-thigh framing, face fierce and focused, wind in hair and cloth. ONE gold-guard European saber held in RIGHT hand with an especially clear anatomically correct FIVE-digit closed grip: FOUR curled fingers completely wrap and occlude the leather hilt, thumb visibly opposes across index/middle fingers, continuous natural wrist and forearm. Guard lies between knuckles and blade, pommel extends behind little finger. Show grip from a readable oblique angle, no foreshortening obscuring the grip. Sword must be firmly enclosed in palm, never floating under a fist. Left hand open and empty, all occupational equipment secured at belt/back, bow sheathed on back if present. Rich cinematic hand-painted realistic game illustration with gold blade streaks, sea spray and a storm-lit sailing ship deck background. Luminous rim light. Landscape 1536x640, fully opaque finished scene. No opponent, no text, borders, logos, watermark or gore. No other people. No extra swords, fingers or floating props."
+  }
+]
