@@ -623,6 +623,7 @@
   K.heroPortrait = function (p, age) {
     var id = I.heroLook(p), young = FACE + id, middle = 'portraits/player-aged/' + id;
     var hc = heirChain(p, false, age); if (hc) return hc.concat([young]);
+    var story = G.StoryArt && G.StoryArt.player(p, false, age); if (story && story.length) return story.concat([middle, young]);
     var stage = I.heroAgeStage(p, age);
     if (stage === 'elderly') return ['portraits/player-elderly/' + id, middle, young];
     return stage === 'middle' ? [middle, young] : [young];
@@ -649,6 +650,7 @@
     var id = I.heroLook(p), young = id === 'admiral' ? 'characters/player_half' : 'characters/player_half_' + id;
     var middle = id === 'admiral' ? 'characters/player_half_old' : 'characters/player_half_' + id + '_old';
     var hc = heirChain(p, true, age); if (hc) return hc.concat([young]);   // 뒤를 이은 자녀의 전신상
+    var story = G.StoryArt && G.StoryArt.player(p, true, age); if (story && story.length) return story.concat([middle, young]);
     var stage = I.heroAgeStage(p, age);
     if (stage === 'elderly') return [young + '_elderly', middle, young];
     return stage === 'middle' ? [middle, young] : [young];

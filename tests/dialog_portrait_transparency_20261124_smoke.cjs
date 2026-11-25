@@ -15,13 +15,14 @@ fs.mkdirSync(OUT, { recursive: true });
     headless: true,
     args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader']
   });
-  const errors = [], results = [];
+  const errors = [], results = [], rigs = [];
   try {
     const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+    await page.route(/https:\/\/fonts\.(googleapis|gstatic)\.com\//, r => r.fulfill({ status: 200, contentType: 'text/css', body: '' }));
     await page.addInitScript(() => { window.requestAnimationFrame = cb => cb.name === 'loop' ? 0 : setTimeout(() => cb(performance.now()), 16); });
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded' });
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     await page.evaluate(() => {
       const s = G.Game.state = G.State.newGame({ name: '김소영', nation: 'KR', job: 'adventurer', age: 24,
@@ -43,6 +44,8 @@ fs.mkdirSync(OUT, { recursive: true });
       ['myeongwol', '명월', 'portraits/history/wm_myeongwol', false],
       ['hwanggyu', '황규', 'portraits/mates/sy_hwanggyu', false],
       ['soyoung', '김소영', 'portraits/player/soyoung', false],
+      ['anne', '앤 보니', 'portraits/rivals/앤 보니', false],
+      ['maid', '일본 여급', 'maid-styles/japan/1', false],
       ['choice', '명월', 'portraits/history/wm_myeongwol', true]
     ]) {
       const result = await page.evaluate(async ({ name, key, ask }) => {
@@ -69,11 +72,13 @@ fs.mkdirSync(OUT, { recursive: true });
       const transparent = alphaStats(G.Art.portraitCanvas(spec, 248, { transparent: true }));
       const opaque = alphaStats(G.Art.portraitCanvas(spec, 248, { transparent: false }));
       const face = G.PORTRAIT_FACES[key];
+      const layout = G.PORTRAIT_LAYOUT[key];
       let centered;
       try {
+        delete G.PORTRAIT_LAYOUT[key];
         G.PORTRAIT_FACES[key] = { box: [.3, .2, .4, .5], eyes: [.6, .4, .8, .4], mouth: [.7, .55] };
         centered = alphaStats(G.Art.portraitCanvas(spec, 248, { transparent: true }));
-      } finally { G.PORTRAIT_FACES[key] = face; }
+      } finally { G.PORTRAIT_FACES[key] = face; G.PORTRAIT_LAYOUT[key] = layout; }
       const host = document.createElement('div'); document.querySelector('#ui').appendChild(host);
       const fallback = G.Img.pick; let picks = 0;
       G.Img.pick = function () { return picks++ === 0 ? null : fallback.apply(this, arguments); };
@@ -85,7 +90,38 @@ fs.mkdirSync(OUT, { recursive: true });
       rig.destroy(); host.remove();
       return { name: '가운데 정렬·기존 얼굴 칸·리그 대체', key, ...transparent, opaque, centered, rigAlpha };
     }));
-    fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify({ results, errors }, null, 2));
+    // 수동 frames에 없는 얼굴도 대화 인물·체인 전용 호출에서 공통 구도를 쓴다.
+    for (const key of ['portraits/mates/gs_eleonore', 'maid-styles/japan/1', 'portraits/player/soyoung', 'portraits/rivals/앤 보니']) {
+      const check = await page.evaluate(async key => {
+        const frame = G.PORTRAIT_LAYOUT[key];
+        if (!frame) throw Error('공통 구도 누락: ' + key);
+        await G.Img.load(frame.source);
+        const spec = { img: [key], noRole: true, noFallback: true };
+        const reference = G.Art.portraitCanvas(spec, 248).toDataURL();
+        const host = document.createElement('div'); document.querySelector('#ui').appendChild(host);
+        const output = [], manual = G.FX.portraitFace.frames[key];
+        delete G.FX.portraitFace.frames[key];
+        try {
+          for (const opts of [{ portrait: spec }, { chain: [key] }]) {
+            const rig = G.PortraitRig.mount(host, { ...opts, profile: 'bust' });
+            try {
+              const cv = rig.root.querySelector('canvas');
+              output.push({ canvas: !!cv, equal: !!cv && cv.toDataURL() === reference,
+                stats: cv && alphaStats(cv) });
+            } finally { rig.destroy(); }
+          }
+        } finally {
+          host.remove();
+          if (manual) G.FX.portraitFace.frames[key] = manual;
+        }
+        return { key, output };
+      }, key);
+      for (const mode of check.output) {
+        assert(mode.canvas && mode.equal && mode.stats.clear > .05, '대화 리그 공통 구도: ' + JSON.stringify(check));
+      }
+      rigs.push(check);
+    }
+    fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify({ results, rigs, errors }, null, 2));
     for (const result of results) {
       assert(result.clear > .05 && result.solid > .05 && result.corner === 0, '대화 초상 투명도: ' + JSON.stringify(result));
       if (result.opaque) {

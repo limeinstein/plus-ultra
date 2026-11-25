@@ -979,10 +979,25 @@
   };
 
   // ---------------------------------------------------------------- 입력
+  /** 초반 거리 조작 안내의 표시 기간. 옛 저장은 경과 일수로 시작 날짜를 복원한다. */
+  T.controlsHintAvailable = function () {
+    var s = G.Game && G.Game.state;
+    if (!s || !s.date) return false;
+    // 이야기 모드는 준비 단계에서 수십 년을 넘기기도 한다. 그때 늘어난 day 대신 실제 이야기 시작일을 쓴다.
+    var started = 0;
+    [s.story, s.song, s.jhook, s.gold].forEach(function (t) {
+      if (t && typeof t.started === 'number' && t.started <= U.dateNum(s.date)) started = Math.max(started, t.started);
+    });
+    var start = started ? { y: Math.floor(started / 10000), m: Math.floor(started / 100) % 100, d: started % 100 } : U.addDays(s.date, -Math.max(0, s.day || 0));
+    var month = start.m - 1 + G.BALANCE.townControlsMonths, y = start.y + Math.floor(month / 12), m = month % 12 + 1;
+    var end = { y: y, m: m, d: Math.min(start.d, U.daysInMonth(y, m)) };
+    return U.dateNum(s.date) < U.dateNum(end);
+  };
   /** 거리 클릭을 받는 투명한 판. onPick(kind, arg) 로 알려 준다. 뒤편의 볼거리를 누르면 T.inspect */
   T.catcher = function (onPick) {
     if (st) st.onPick = onPick;      // ↑ 키로 들어갈 때도 같은 길로
-    if (st && !T._toldKeys) { T._toldKeys = true; UI.toast('거리 — ←→ 걷기 · Shift 뛰기 · ↑ 건물에 들어가기 · 마우스: 가고 싶은 곳이나 건물을 누른다', 'boot', 5600); }
+    var game = G.Game.state;
+    if (st && T._toldKeysFor !== game && T.controlsHintAvailable()) { T._toldKeysFor = game; UI.toast('거리 — ←→ 걷기 · Shift 뛰기 · ↑ 건물에 들어가기 · 마우스: 가고 싶은 곳이나 건물을 누른다', 'boot'); }
     var el = U.el('div', 'towncatch');
     el.style.cssText = 'position:absolute;inset:0;z-index:4;cursor:default';
     var down = null, moved = 0;

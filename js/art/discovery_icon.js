@@ -180,8 +180,13 @@
     return Promise.all(jobs);
   };
 
-  DI.metrics = function (d, scale) {
+  DI.metrics = function (d, scale, zoom) {
     scale = scale || 1;
+    if(zoom&&G.TerrainArt&&G.TerrainArt.has(d.id)){
+      var wide=Math.min(G.FX.terrainWorld.landmarkMax,Math.max(BASE,zoom*.36))*scale;
+      var m=G.TerrainArt.metrics('wonder-'+d.id,wide);
+      return {width:m.width,height:m.height,radius:Math.max(m.width,m.height)*.46,top:-m.height/2,base:m.height/2};
+    }
     var p = d && POS[d.id], im = p && G.Img && G.Img.get(p.key), ratio = 1;
     if (im) ratio = (im.naturalHeight || im.height) / (im.naturalWidth || im.width);
     var w = BASE * scale, h = BASE * ratio * scale;
@@ -191,7 +196,8 @@
   /** 발견물 좌표 (x,y)를 중심으로 투명 스프라이트 한 칸을 그린다. */
   DI.draw = function (ctx, d, x, y, opts) {
     opts = opts || {};
-    var p = d && POS[d.id], scale = opts.scale || 1, met = DI.metrics(d, scale);
+    var p = d && POS[d.id], scale = opts.scale || 1, met = DI.metrics(d, scale, opts.zoom);
+    if(opts.zoom&&G.TerrainArt&&G.TerrainArt.has(d.id)&&G.TerrainArt.sprite(ctx,'wonder-'+d.id,x-met.width/2,y-met.height/2,met.width,met.height))return met;
     if (!p || !G.Img) return met;
     var im = G.Img.get(p.key);
     if (!im) { request(p.key); return met; }
@@ -212,10 +218,10 @@
     return met;
   };
 
-  DI.at = function (list, toScreen, x, y, scale) {
+  DI.at = function (list, toScreen, x, y, scale, zoom) {
     var best = null, bd = Infinity;
     (list || DI.visible()).forEach(function (d) {
-      var p = toScreen(d.lon, d.lat), hit = Math.max(14, DI.metrics(d, scale).radius + 3);
+      var p = toScreen(d.lon, d.lat), hit = Math.max(14, DI.metrics(d, scale, zoom).radius + 3);
       var dd = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y);
       if (dd <= hit * hit && dd < bd) { best = d; bd = dd; }
     });

@@ -15,9 +15,11 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
   const errors = [];
   try {
     const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
+    // 원화를 기다리는 동안 실시간 항해가 시험용 날짜·위치를 움직이지 않게 한다.
+    await page.addInitScript(() => { const raf = window.requestAnimationFrame.bind(window); window.requestAnimationFrame = cb => cb.name === 'loop' ? 0 : raf(cb); });
     page.on('pageerror', e => errors.push('PAGEERR ' + e.message));
-    page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.goto(BASE);
+    page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
+    await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && !document.querySelector('.title-menu .btn.disabled'), null, { timeout: 120000 });
     const t = await page.evaluate(() => ({ list: G.StorySelect.list().map(m => m.id), beats: G.GOLD.beats.length }));
     ok(t.list.includes('gold') && t.beats >= 60, '고르기 지도에 「황금의 바다」 · 사건 ' + t.beats + '개');

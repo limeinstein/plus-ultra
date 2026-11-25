@@ -163,7 +163,6 @@
       if (!arg.load && G.DiscoveryGuides) await G.DiscoveryGuides.arrive(c);
       if (G.Strand && s.loc.via === 'sea' && !arg.load) { var sfBack = await G.Strand.atCity(c); if (sfBack) { await C.mate(sfBack); G.Game.refreshHud(); } }   // 이 항구에 남겨 둔 배를 되찾는다
       else if (G.Strand && s.loc.via === 'land' && !arg.load && G.Strand.offerByLand) { if (await G.Strand.offerByLand(c)) G.Game.cityHud(); }   // 뭍길로 왔어도 이 항구에 남겨 둔 배에 오를 수 있다 (제보 2026-11-06)
-      if (arg.load) { UI.toast(U.fmtDate(s.date) + ' — ' + c.name, 'book'); }
       if (G.Cabins && s.leaving && s.leaving.length) await G.Cabins.farewell();   // 충성이 바닥난 부하가 내리겠다고 나선다
       if (G.Studio && G.Studio.pending()) await G.Studio.present();   // 화실·조각실에서 완성한 명작을 바친다
       if (G.Rel && G.Rel.pending()) await G.Rel.present();       // 궁정의 소식·교황의 사절·큰 해전 (js/systems/relations.js)
@@ -325,6 +324,7 @@
   };
 
   C.news = async function (list) {
+    if (G.Records) { G.Records.addNews(list); return; }
     var html = '<div style="font-size:19px;line-height:1.7">' + list.map(function (m) { return '<div class="flex" style="align-items:flex-start;gap:10px;margin:6px 0">' + G.icon(m.icon || 'scroll') + '<div>' + U.esc(UI.tidyNews ? UI.tidyNews(m.text) : m.text) + '</div></div>'; }).join('') + '</div>';
     await UI.window({ title: '세상의 소식', icon: 'scroll', width: 720, clickAny: true, html: html, buttons: [{ label: '확인', value: 1, cls: 'navy' }] }).result;
   };
@@ -364,8 +364,6 @@
     bar.appendChild(G.Info.settingsButton('small ghost', function () { return !busy; }));   // 설정은 수첩 밖으로 — 맨 오른쪽
     UI.add(bar);
     if (G.TownBar) G.TownBar.mount(bar);
-    var cap = U.el('div', 'caption', U.fmtDate(s.date) + ' · ' + U.fmtLat(c.lat) + ' ' + U.fmtLon(c.lon));
-    UI.add(cap);
     // 이 도시에서 할 일
     var todo = C.todo(c);
     if (todo.length && C.todoClosed !== c.id + ':' + s.day) {
@@ -480,7 +478,7 @@
     // 거리에서 실제 건물 문을 열 때마다 하루가 흐른다. 입장 연출 뒤, 그 건물의 사건/메뉴보다 먼저 날짜를 갱신한다.
     var dayMsgs = G.Game.passDays(1);
     G.Game.refreshHud();
-    dayMsgs.forEach(function (m) { if (m && m.text) UI.toast(m.text, m.icon || 'calendar', m.history ? 5200 : 3400); });
+    dayMsgs.forEach(function (m) { if (m && m.text) UI.toast(m.text, m.icon || 'calendar', m.history ? 5200 : 3400, m.history ? { record: 'history', img: m.img, date: m.recordDate } : null); });
     if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
     var ikind = (typeof B.paint === 'function' ? B.paint(c, arg) : B.paint) || kind, ivar = B.variant ? B.variant(c, arg) : '';
     if (G.Img.count()) {

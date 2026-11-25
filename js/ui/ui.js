@@ -334,6 +334,14 @@
   UI.hud = {
     show: function (cells) {
       hudEl.classList.remove('hidden');
+      // 날짜가 있는 마을·항해·육상 상태바만 선택한 갈색 일체형 틀을 쓴다. 해전 HUD는 그대로 둔다.
+      var framed = cells.some(function (c) { return c.k === 'date'; });
+      hudEl.classList.toggle('brown-hud', framed);
+      if (framed) {
+        var f = G.FX.topHud;
+        var vars = { height: f.height, top: f.top, inset: f.inset, font: f.font, label: f.labelFont, pad: f.cellPad, icon: f.icon, medal: f.medal };
+        Object.keys(vars).forEach(function (k) { hudEl.style.setProperty('--hud-' + k, vars[k] + 'px'); });
+      }
       var h = '<button class="notice-btn" type="button" title="지난 소식 — 띄우지 않은 상태·먼 소문과 대화 중에 모아 둔 소식도 여기에"><svg class="emb" viewBox="0 0 48 48">' + emblemSvg() + '</svg><i class="nb-n"></i></button>';
       cells.forEach(function (c) {
         if (c.grow) { h += '<div class="grow"></div>'; return; }
@@ -342,6 +350,7 @@
         else h += '<div class="cell' + (c.cls ? ' ' + c.cls : '') + '" data-k="' + (c.k || '') + '">' + (c.icon ? G.icon(c.icon) : '') + '<span>' + c.text + '</span></div>';
       });
       hudEl.innerHTML = h;
+      if (G.Records && framed) G.Records.mount(hudEl);
       var nb = hudEl.querySelector('.notice-btn'); if (nb) { nb.addEventListener('click', function (e) { e.stopPropagation(); if (!UI.busy()) UI.openNotices(); }); badge(); }
       if (UI.noticeSettings) UI.noticeSettings();
       hudEl.classList.toggle('dense', cells.length > 9);
@@ -371,6 +380,13 @@
   function fitHud() {
     if (!hudEl || hudEl.classList.contains('hidden')) return;
     hudEl.style.zoom = '';
+    if (hudEl.classList.contains('brown-hud')) {
+      var f = G.FX.topHud, sizes = [[f.font, f.cellPad], [f.compactFont, f.compactPad], [f.minFont, f.minPad]];
+      for (var i = 0; i < sizes.length; i++) {
+        hudEl.style.setProperty('--hud-font', sizes[i][0] + 'px'); hudEl.style.setProperty('--hud-pad', sizes[i][1] + 'px');
+        if (hudEl.scrollWidth <= hudEl.clientWidth + 1) break;
+      }
+    }
     var need = hudEl.scrollWidth, have = hudEl.clientWidth;
     if (have > 0 && need > have + 1) hudEl.style.zoom = Math.max(0.6, have / need * 0.985).toFixed(3);   // 글꼴이 늦게 읽혀 폭이 조금 바뀌어도 넘치지 않게 1.5% 여유
   }
@@ -396,7 +412,7 @@
         부르는 쪽에서 정하려면 UI.toast(text, icon, ms, { tier: 'big' | 'line' | 'state' | 'quiet' }).
      ② 한 자리 (zone): 왼쪽 빈 공간에서 상태판·해도·조작줄을 피한다. 끌어서 옮기면 이 기기에 기억하고 오른쪽 클릭으로 되돌린다. 한꺼번에 둘(큰 일 셋)까지.
      ③ 대화 중 보류: 사람이 말하는 동안(대화창·발견 뒤 대화)에는 띄우지 않고 모아 두었다가(나침반 단추에 수) 대화가 끝나면 최근 것부터 셋까지.
-     ⑤ 읽는 시간: 글자 수에 맞춰 2.5~8초. 누르면 바로 닫힌다. 같은 말이 1분 안에 또 오면 다시 띄우지 않는다.
+     ⑤ 읽는 시간: 글자 수에 맞춰 1.4~4초. 누르면 빠르게 닫힌다. 같은 말이 1분 안에 또 오면 다시 띄우지 않는다.
      조정값: G.BALANCE.notice */
   function NK() { return (G.BALANCE && G.BALANCE.notice) || {}; }
   var TIER_STATE = /^(비가 그쳤다|소나기가 내리기 시작했다|먹구름이 몰려와 폭우가 쏟아진다|돛이 바람을 못 받아)/;
@@ -469,16 +485,17 @@
   }
   function lifeMs(text, ms) {
     var k = NK(), n = String(text).replace(/<[^>]+>/g, '').length;
-    var auto = Math.min(k.maxMs || 8000, Math.max(k.minMs || 2500, (k.baseMs || 1800) + n * (k.perChar || 60)));
-    return Math.min(k.maxMs || 8000, Math.max(auto, ms || 0));
+    var auto = Math.min(k.maxMs || 4000, Math.max(k.minMs || 1400, (k.baseMs || 900) + n * (k.perChar || 28)));
+    return Math.min(k.maxMs || 4000, Math.max(auto, ms || 0));
   }
   function showToast(text, icon, ms, tier) {
     setZone();
     var lead = icon && typeof icon === 'object' ? (icon.src ? '<img class="toast-pic" src="' + icon.src + '" alt="">' : G.icon(icon.icon || 'chest')) : G.icon(icon || 'rose');
     var t = U.el('div', 'toast wood t-' + tier, lead + '<div class="tt">' + text + '</div>');
+    var dismiss = NK().dismissMs || 180; t.style.setProperty('--toast-dismiss', dismiss + 'ms');
     t._n = { text: text, icon: icon, ms: ms, tier: tier, key: noticeKey(text) };
     var gone = false;
-    function close() { if (gone) return; gone = true; t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 520); }
+    function close() { if (gone) return; gone = true; t.classList.add('out'); setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, dismiss); }
     t.addEventListener('click', function (e) { e.stopPropagation(); close(); });
     t.title = '끌어서 알림 위치 옮기기 · 누르면 닫기 · 오른쪽 클릭: 제자리로 · 지난 소식은 윗줄 왼쪽 나침반';
     toastEl.appendChild(t);
@@ -530,6 +547,7 @@
   /** icon: 아이콘 이름, 또는 {src: 그림 주소, icon: 그림이 없을 때 아이콘} — 물건을 얻었을 때 그 물건 그림 · opt.tier: 등급을 정해 줄 때 */
   UI.toast = function (text, icon, ms, opt) {
     if (text == null || text === '') return;
+    if (G.Records && G.Records.captureToast(text, icon, opt)) return;
     var tier = UI.toastTier(text, icon, ms, opt), plain = String(text).replace(/<[^>]+>/g, '');
     recent.push({ d: noticeDate(), text: plain, icon: typeof icon === 'string' ? icon : (icon && icon.icon) || 'chest', tier: tier });
     if (recent.length > (NK().keep || 40)) recent.shift();
@@ -554,7 +572,9 @@
     var rows = UI.recentNotices().map(function (x) {
       return '<div class="nl-row nl-' + x.tier + '">' + G.icon(x.icon || 'chest') + '<div><small>' + U.esc(x.d) + (TN[x.tier] ? ' · ' + TN[x.tier] : '') + '</small><div>' + U.esc(x.text) + '</div></div></div>';
     }).join('') || '<div class="muted">아직 소식이 없습니다.</div>';
-    return UI.window({ title: '지난 소식', icon: 'scroll', width: 720, html: '<div class="notice-list">' + rows + '</div><div class="muted" style="margin-top:8px;font-size:14px">최근 ' + (NK().keep || 40) + '개까지 · 오래된 소식과 큰 사건은 일지에 남습니다.</div>', buttons: [{ label: '닫기', value: 1, cls: 'navy' }] }).result;
+    var buttons = G.Records ? [{ label: '증거·역사 기록함', value: 'records' }] : [];
+    buttons.push({ label: '닫기', value: 1, cls: 'navy' });
+    return UI.window({ title: '지난 소식', icon: 'scroll', width: 720, html: '<div class="notice-list">' + rows + '</div><div class="muted" style="margin-top:8px;font-size:14px">최근 ' + (NK().keep || 40) + '개까지 · 오래된 소식과 큰 사건은 일지에 남습니다.</div>', buttons: buttons }).result.then(function (v) { if (v === 'records') return G.Records.open(); return v; });
   };
   UI.noticeBadge = badge;
   // ④ 항해·탐험 상태판은 한 줄로 접혀 있다 — 마우스를 올리거나 누르면 펼친다 (css .status-strip)

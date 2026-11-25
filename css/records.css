@@ -1,0 +1,39 @@
+/* 작은 황동 배지만 상단에 남기고, 기록 원문·그림은 사용자가 열었을 때만 보여 준다. */
+.hud .record-badge {
+  display:inline-flex; flex:0 0 auto; align-items:center; justify-content:center; gap:4px; height:var(--record-height);
+  margin:0 5px 0 2px; padding:0 8px; border:1px solid #a77c42; border-radius:5px;
+  background:#302116; color:#dfc394; font:700 var(--record-font)/1.1 var(--serif); white-space:nowrap;
+  box-shadow:inset 0 0 0 1px #5a3e22; cursor:pointer;
+}
+.hud .record-badge[hidden] { display:none !important; }
+.hud .record-badge svg { width:15px; height:15px; flex:0 0 15px; }
+.hud .record-badge.has-unread { color:#ffe5aa; border-color:#e1b46b; background:linear-gradient(#543a23,#302014); }
+.hud .record-badge:hover,
+.hud .record-badge:focus-visible { outline:2px solid #f2d398; outline-offset:2px; color:#fff0c8; }
+.record-browser { display:flex; flex-direction:column; height:100%; min-height:0; gap:12px; color:#3a2819; }
+.record-filters { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.record-filters button {
+  padding:7px 18px; border:1px solid #ab854e; border-radius:4px; background:#f4e5c5; color:#3a2819;
+  font:700 16px/1.2 var(--serif); cursor:pointer;
+}
+.record-filters button.on { background:#392719; color:#ffe2a0; box-shadow:inset 0 0 0 1px #c09653; }
+.record-count { margin-left:auto; font-size:14px; color:#765b38; }
+.record-columns { display:grid; grid-template-columns:minmax(200px,34%) minmax(0,1fr); flex:1; min-height:0; gap:16px; }
+.record-list { overflow:auto; min-height:0; padding:2px 9px 2px 2px; border-right:1px solid #bc9b66; }
+.record-row {
+  display:flex; flex-direction:column; align-items:flex-start; gap:6px; width:100%; padding:12px; margin:0 0 8px;
+  border:1px solid #b79560; border-radius:4px; background:#e8d8b7; color:#45321f; text-align:left;
+  font-family:var(--serif); cursor:pointer; overflow-wrap:anywhere;
+}
+.record-row.unread { background:#fff1d0; border-left:4px solid #bd8840; }
+.record-row.selected { background:#3c2a1b; color:#f7e7c4; border-color:#bd914d; }
+.record-row-meta { font-size:12px; opacity:.85; }
+.record-row-title { font-size:16px; font-weight:700; line-height:1.45; }
+.record-detail { min-width:0; min-height:0; overflow:auto; padding:7px 12px 18px 2px; }
+.record-meta { font-size:13px; line-height:1.6; color:#7d5c32; }
+.record-detail h3 { font-size:23px; line-height:1.5; margin:12px 0 16px; overflow-wrap:anywhere; }
+.record-picture { display:block; max-width:100%; max-height:260px; object-fit:contain; margin:0 auto 18px; border:1px solid #bc9a64; background:#e3d2ad; }
+.record-text { white-space:pre-wrap; line-height:1.85; font-size:18px; overflow-wrap:anywhere; }
+.record-empty { padding:24px 10px; font-size:16px; line-height:1.8; color:#876b45; }
+.record-row:focus-visible,
+.record-filters button:focus-visible { outline:2px solid #9a6726; outline-offset:2px; }

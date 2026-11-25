@@ -270,7 +270,7 @@
   H.title = function () { var t = G.Court && G.Court.best(), sl = G.Slave ? G.Slave.title() : '', fm = G.Princess ? G.Princess.title() : '', gv = G.Colony ? G.Colony.title() : '', pv = G.Court && G.Court.privateer && G.Court.privateer() ? '사략선장' : ''; var head = [gv, pv, sl, fm].filter(Boolean).join(' · '); return head ? head + (t ? ' · ' + t.ko : '') : t ? t.ko : R.fameTitle(Game.state.player.fame); };   // 노예 무역에 손을 대면 「노예 상인」, 왕녀와 혼인하면 「부마」가 먼저 붙는다   // 노예 무역에 손을 대면 「노예 상인」이 먼저 붙는다
   H.titleTip = function () { var t = G.Court ? G.Court.titles() : [], sl = G.Slave ? G.Slave.title() : ''; return (G.Court && G.Court.privateer && G.Court.privateer() ? '사략선장 (사략허가장을 지닌 동안 — 해적의 습격 −' + G.Court.pirateCutPct() + '%) — ' : '') + (sl ? sl + ' (노예를 사고판 이름 — 남은 ' + G.Slave.remain() + '일) — ' : '') + (G.Princess && G.Princess.title() ? '부마 (' + G.Princess.wifeRealm() + ' 왕실의 사위) — ' : '') + (t.length ? t.map(function (x) { return G.Court.fullName(x, true); }).join(' · ') + ' — ' : '') + R.fameTitle(Game.state.player.fame); };
   H.fameTip = function () { return G.Fame ? '통합 명성 = ' + G.Fame.text() : ''; };
-  /* 언어 칸: 제독 본인 단계(금빛 ●)와 부관·통역 덕에 오른 단계(파란 ●)를 나눠 보인다 —
+  /* 언어 칸: 제독 본인 단계(밝은 금빛 ●)와 부관·통역 덕에 오른 단계(황동색 ●)를 나눠 보인다 —
      예전에는 일행 단계만 ●로 보여, 통역이 아랍어를 잘하면 본인은 기초인데도 ●●●로 보였다 (2026-11-11 피드백 — 후계자의 아랍어) */
   function langOwn(li) { var p = Game.state.player; return Math.min(3, (p.lg && p.lg[li]) || 0); }
   H.lang = function (c) {
@@ -282,11 +282,18 @@
     if (!c) return '';
     var cl = R.cityLang(c), lv = cl.lv || 0, own = langOwn(cl.li), who = null;
     if (lv > own && G.Tongues && G.Tongues.situation) { try { var sit = G.Tongues.situation({ li: cl.li }); who = sit && sit.mate ? sit.mate.name : null; } catch (e) { who = null; } }
-    return '이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 ' + G.LANG_LV[own] + (lv > own ? ' · 일행 ' + G.LANG_LV[lv] + ' (' + (who ? who + U.jx(who, '이/가') + ' 통역' : '부관·통역 덕') + ' — 파란 점)' : '') +
+    return '이 도시의 말과 제독 일행이 하는 수준 — 제독 본인 ' + G.LANG_LV[own] + (lv > own ? ' · 일행 ' + G.LANG_LV[lv] + ' (' + (who ? who + U.jx(who, '이/가') + ' 통역' : '부관·통역 덕') + ' — 황동색 점)' : '') +
       (cl.alt ? ' · 이 항구는 ' + G.LANGS[c.lang] + ' 대신 포르투갈어가 통한다 (' + G.Treaty.ptLang(c) + ')' : '');
   };
   H.gold = function () { return U.num(Game.state.player.gold) + '<small>닢</small>'; };
   H.date = function () { return U.fmtDate(Game.state.date); };
+  /** 옛 저장에 규율 값이 없으면 새 함대의 기본값으로 표시한다. */
+  H.discipline = function () {
+    var f = Game.state.fleet || {}, n = Number(f.discipline);
+    if (f.discipline == null || !isFinite(n)) n = 80;
+    n = U.clamp(n, 0, 100);
+    return { text: Math.round(n) + '%', warn: n < G.BALANCE.mutiny.discipline, tip: '선원 규율 — 낮아지면 불만과 반란의 위험이 커집니다.' };
+  };
   /** 보급 일수와 위기 단계. 교역품으로 대신 먹고 마실 수 있는 양도 포함한다. */
   H.supply = function (kind, amount) {
     var f = Game.state.fleet, cargo = R.provisionCargo(kind), use = R.dailyUse();
@@ -299,9 +306,9 @@
       tip: name + ' ' + base + '일' + (cargo ? ' + 교역품 대체분 ' + extra + '일 = 합계 ' + days + '일. 교역품을 팔면 대체분도 줄어듭니다.' : '. 교역품 대체분은 없습니다.'),
       text: (days >= 999 ? '—' : extra ? base + '+<small title="교역품 대체분">' + extra + '</small>일' : days + '일') + (state ? ' <small class="supply-state ' + (days < 3 ? 'crisis' : 'low') + '">' + state + '</small>' : ''), warn: days < 7 };
   };
-  /** 도시에 있을 때: 날짜 · 도시 · 위도·경도 · 식량·식수 · 피로 · 계약 | 소지금 · 명성 · 직위 */
+  /** 도시에 있을 때: 날짜 · 도시·언어 · 위도·경도 · 피로·규율 · 계약 | 소지금 · 명성 · 직위 */
   Game.cityHud = function () {
-    var S = Game.state, c = G.CITY_DATA[S.loc.city], f = S.fleet, k = H.contract(), food = H.supply('food'), water = H.supply('water');
+    var S = Game.state, c = G.CITY_DATA[S.loc.city], f = S.fleet, k = H.contract(), discipline = H.discipline();
     var own = c && R.cityOwner ? R.cityOwner(c) : '';
     UI.hud.show([
       { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
@@ -309,18 +316,16 @@
       { k: 'lang', icon: 'scroll', label: '언어', text: H.lang(c), tip: H.langTip(c) },
       { k: 'lat', icon: 'compass', label: '위도', text: c ? U.fmtLat(c.lat) : H.lat() },
       { k: 'lon', label: '경도', text: c ? U.fmtLon(c.lon) : H.lon() },
-      { k: 'food', icon: 'bread', label: '식량', text: food.text, tip: food.tip },
-      { k: 'water', icon: 'drop', label: '식수', text: water.text, tip: water.tip },
       { k: 'fat', icon: 'hourglass', label: '피로', text: Math.round(f.fatigue || 0) + '%' },
+      { k: 'discipline', icon: 'shield', label: '규율', text: discipline.text, tip: discipline.tip },
       { k: 'contract', icon: 'seal', label: '계약', text: k.text, tip: k.tip },
       { grow: true },
       { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() },
       { k: 'fame', icon: 'laurel', label: '명성', text: U.num(S.player.fame), tip: H.fameTip() },
       { k: 'title', icon: 'crown', label: '직위', text: H.title(), tip: H.titleTip() }
     ]);
-    UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
-    UI.hud.tip('food', food.tip); UI.hud.tip('water', water.tip);
     UI.hud.set('fat', Math.round(f.fatigue || 0) + '%', (f.fatigue || 0) > 60);
+    UI.hud.set('discipline', discipline.text, discipline.warn);
     UI.hud.set('contract', k.text, k.warn);
   };
   Game.refreshHud = function () {
@@ -330,10 +335,14 @@
     if (G.Fame) G.Fame.sync();   // 갈래의 합을 통합 명성에 맞춘다
     UI.hud.set('fame', U.num(S.player.fame)); UI.hud.tip('fame', H.fameTip());
     UI.hud.set('title', H.title()); UI.hud.tip('title', H.titleTip());
-    var food = H.supply('food'), water = H.supply('water'), f = S.fleet || {};
-    UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
-    UI.hud.tip('food', food.tip); UI.hud.tip('water', water.tip);
+    var f = S.fleet || {};
+    if (S.loc && S.loc.mode === 'sea') {
+      var food = H.supply('food'), water = H.supply('water');
+      UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
+      UI.hud.tip('food', food.tip); UI.hud.tip('water', water.tip);
+    }
     UI.hud.set('fat', Math.round(f.fatigue || 0) + '%', (f.fatigue || 0) > 60);
+    var discipline = H.discipline(); UI.hud.set('discipline', discipline.text, discipline.warn); UI.hud.tip('discipline', discipline.tip);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
     // 도시의 언어 칸: 세대 교체·말 공부·통역을 들이고 내보낸 뒤에도 바로 바뀌게 (예전에는 도시에 다시 들어와야 바뀌어, 선대의 ●●●가 남았다 — 2026-11-11 피드백)
     if (S.loc && S.loc.mode === 'city') { var lc = G.CITY_DATA[S.loc.city]; if (lc) { UI.hud.set('lang', H.lang(lc)); UI.hud.tip('lang', H.langTip(lc)); } }
@@ -392,6 +401,10 @@
     Game.checkTitle();
     // 소식은 보고서처럼 말고 이야기하듯 (【…】 머리표·줄표를 걷어 낸다 — js/ui/ui.js UI.tidyNews)
     if (UI.tidyNews) out.forEach(function (m) { if (m && typeof m.text === 'string') m.text = UI.tidyNews(m.text); });
+    // 날짜를 넘기는 쪽이 역사 알림을 쓰지 않아도 실제 플레이 중의 소식은 기록한다.
+    var history = out.filter(function (m) { return m && m.history; });
+    history.forEach(function (m) { if (!m.recordDate) m.recordDate = U.dateNum(S.date); });
+    if (G.Records && Game.sceneName !== 'title' && Game.sceneName !== 'create') G.Records.addNews(history);
     return out;
   };
 

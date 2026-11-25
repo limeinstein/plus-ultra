@@ -1,0 +1,38 @@
+/* 선택한 2안: 진한 갈색 일체형 황동 프레임. 날짜·소지금도 같은 바탕 위의 일반 칸이다. */
+.hud.brown-hud {
+  left:var(--hud-inset); right:var(--hud-inset); top:var(--hud-top); height:var(--hud-height);
+  padding:0 16px 0 9px; gap:0; isolation:isolate; overflow:visible; border:0; background:none; box-shadow:none;
+  color:#f6e8c9; font-family:var(--serif);
+  filter:drop-shadow(0 2px 2px #0008);
+}
+.hud.brown-hud::before {
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='58' viewBox='0 0 1600 58' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x2='0' y2='1'%3E%3Cstop stop-color='%23ffebba'/%3E%3Cstop offset='.3' stop-color='%23ba8845'/%3E%3Cstop offset='.65' stop-color='%23ebcb8d'/%3E%3Cstop offset='1' stop-color='%238c5d2a'/%3E%3C/linearGradient%3E%3ClinearGradient id='w' x2='0' y2='1'%3E%3Cstop stop-color='%23402c1c'/%3E%3Cstop offset='.4' stop-color='%232d1e13'/%3E%3Cstop offset='1' stop-color='%2321160e'/%3E%3C/linearGradient%3E%3Cpattern id='grain' width='11' height='58' patternUnits='userSpaceOnUse'%3E%3Cpath d='M2 0V58M5 0V58' stroke='%23b59262' opacity='.06'/%3E%3Cpath d='M8 0V58' stroke='%23000000' opacity='.14'/%3E%3C/pattern%3E%3C/defs%3E%3Cpath d='M18 2H1582L1589 10L1594 12L1598 29L1594 46L1589 48L1582 56H18L11 48L6 46L2 29L6 12L11 10Z' fill='url(%23g)' stroke='%23563a20' stroke-width='2'/%3E%3Cpath d='M20 6H1580L1587 14L1591 16L1594 29L1591 42L1587 44L1580 52H20L13 44L9 42L6 29L9 16L13 14Z' fill='url(%23w)' stroke='%23ffdf9c' stroke-width='1.4'/%3E%3Cpath d='M23 9H1577L1584 17L1588 19L1590 29L1588 39L1584 41L1577 49H23L16 41L12 39L10 29L12 19L16 17Z' fill='url(%23grain)' stroke='%238e6738' stroke-width='.8'/%3E%3C/svg%3E");
+  background-size:100% 100%; background-repeat:no-repeat;
+}
+.hud.brown-hud .notice-btn {
+  width:var(--hud-medal); height:var(--hud-medal); flex:0 0 var(--hud-medal); margin:0 5px 0 0;
+  border-radius:50%; background:radial-gradient(circle at 45% 30%,#61472b,#24180e 76%);
+  box-shadow:0 0 0 1px #805c2d,inset 0 0 0 2px #e2bb76,inset 0 0 0 4px #815c30;
+}
+.hud.brown-hud .notice-btn .emb { width:100%; height:100%; margin:0; flex:0 0 100%; }
+.hud.brown-hud .cell,
+.hud.brown-hud.dense .cell.two {
+  height:calc(var(--hud-height) - 17px); min-width:0; flex:1 0 auto;
+  padding:0 var(--hud-pad); gap:6px; color:#f6e8c9; letter-spacing:0;
+  background:none; box-shadow:none; border:0; border-radius:0; position:relative;
+}
+.hud.brown-hud .cell::before {
+  content:""; position:absolute; left:0; top:0; bottom:0; width:1px;
+  background:linear-gradient(transparent,#d2aa6d 15%,#8b663b 85%,transparent); opacity:.9;
+}
+.hud.brown-hud .cell svg,
+.hud.brown-hud .cell.two svg { width:var(--hud-icon); height:var(--hud-icon); flex:0 0 var(--hud-icon); opacity:1; color:#efd29a; }
+.hud.brown-hud .cell.two .tv { min-width:0; gap:1px; line-height:1.1; }
+.hud.brown-hud .cell.two em { font-size:var(--hud-label); letter-spacing:.02em; color:#d7ba87; }
+.hud.brown-hud .cell span,
+.hud.brown-hud .cell.two span { font-size:var(--hud-font); font-weight:700; }
+.hud.brown-hud .cell small { font-size:.75em; color:#d7c39e; }
+.hud.brown-hud .cell .dots { font-size:.8em; letter-spacing:-1px; }
+.hud.brown-hud .tv.val-warn > span { color:#ffb293; }
+.hud.brown-hud .grow { min-width:0; flex:0 0 0; }

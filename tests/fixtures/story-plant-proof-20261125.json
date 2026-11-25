@@ -1,0 +1,192 @@
+[
+  {
+    "id": "r_ds_282_plant",
+    "disc": "ds_282",
+    "name": "사탕수수 줄기 표본",
+    "kind": "animal",
+    "desc": "마디와 속살이 보이도록 잘라 말린 사탕수수 줄기. 즙을 짜는 원료의 모습을 보고할 수 있다.",
+    "prompt": "Create one compact square game inventory object illustration with genuine transparent alpha background. A SMALL OPEN RECTANGULAR WOODEN BOTANICAL SPECIMEN BOX, in three-quarter view, lined with ivory linen. Inside the box lie three cut lengths of purple-green sugarcane, ends showing fibrous creamy pith, secured with natural twine. The box has plain dark brown wood and small brass corners. Hand painted realistic 17th century RPG item art, warm natural colors. Exact complete closed silhouette of the box, fully contained in image, centered with wide empty transparent margins. No background surface of any kind. No glow, no aura, no gradient, no shadow cast outside the box. No text or labels. Only this physical box and its botanical contents on transparent alpha.",
+    "initialPrompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: three short purple-green sugarcane stalk sections tied with coarse twine, one cut end showing pale fibrous pith. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "rejectedVersions": [
+      "original",
+      "v2"
+    ],
+    "selectedSource": "r_ds_282_plant-v3.png"
+  },
+  {
+    "id": "r_ds_287_plant",
+    "disc": "ds_287",
+    "name": "멕시코 고추 씨앗 꾸러미",
+    "kind": "animal",
+    "desc": "붉게 익은 고추와 그 속에서 골라 낸 씨앗을 종이에 싸 왔다. 열매의 모양과 매운 향이 남아 있다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: three dried red chili peppers beside a small open folded parchment packet of pale pepper seeds. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_287_plant.png"
+  },
+  {
+    "id": "r_ds_291_plant",
+    "disc": "ds_291",
+    "name": "구자라트 목화 다래 표본",
+    "kind": "animal",
+    "desc": "갈라진 다래에 흰 솜이 붙은 목화 가지. 솜 속의 검은 씨앗도 함께 보관했다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: a short cotton branch with three open brown bolls containing fluffy ivory cotton and a few dark cotton seeds. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_291_plant.png"
+  },
+  {
+    "id": "r_ds_292_plant",
+    "disc": "ds_292",
+    "name": "벵골 쪽 염료 표본",
+    "kind": "treasure",
+    "desc": "쪽풀에서 얻은 남빛 앙금을 말려 굳힌 조각. 물들인 작은 천 조각과 함께 싸 두었다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: deep indigo-blue natural pigment cakes on a folded cream linen cloth with one vivid blue dyed swatch and a small dried indigo sprig. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_292_plant.png"
+  },
+  {
+    "id": "r_ds_297_plant",
+    "disc": "ds_297",
+    "name": "갠지스 연밥 표본",
+    "kind": "animal",
+    "desc": "구멍마다 씨앗이 든 연밥을 말렸다. 진흙 속에서 핀 연꽃의 씨앗을 먼 항구까지 가져갈 수 있다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: two dried lotus seed pods with circular holes, several dark oval lotus seeds on a small folded ivory cloth. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_297_plant.png"
+  },
+  {
+    "id": "r_ds_391_plant",
+    "disc": "ds_391",
+    "name": "소코트라 용혈수 수지",
+    "kind": "treasure",
+    "desc": "용혈수 줄기에서 얻은 붉은 수지를 굳혀 담았다. 깨뜨린 조각 속까지 핏빛이 돈다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: jagged deep blood-red dragon blood resin chunks inside a shallow carved wooden bowl, one small grey bark fragment. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_391_plant.png"
+  },
+  {
+    "id": "r_ds_521_plant",
+    "disc": "ds_521",
+    "name": "대나무 꽃과 열매 표본",
+    "kind": "animal",
+    "desc": "꽃이 핀 대나무 이삭과 떨어진 열매를 종이에 싸 왔다. 숲 전체가 꽃을 피운 흔적이다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: a dried bamboo flowering panicle with fine tan spikelets and a few bamboo grains tied onto a small parchment specimen sheet, two narrow green leaves. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_521_plant.png"
+  },
+  {
+    "id": "r_ds_582_plant",
+    "disc": "ds_582",
+    "name": "장뇌 결정 표본",
+    "kind": "treasure",
+    "desc": "나무 속에서 긁어 낸 하얀 결정을 작은 마개 병에 담았다. 뚜껑을 열면 시원하고 강한 향이 난다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: an open short clear historical glass jar containing irregular translucent white camphor crystals, a cork beside it and a small wood chip. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_582_plant.png"
+  },
+  {
+    "id": "r_ds_583_plant",
+    "disc": "ds_583",
+    "name": "침향 나무 조각",
+    "kind": "treasure",
+    "desc": "검은 수지가 나뭇결 사이에 밴 침향 조각. 젖은 천에 싸서 향이 흩어지지 않게 보관했다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: several dark resin-veined agarwood chips on a folded ivory cloth, rich black-brown grain and golden amber resin glints. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_583_plant.png"
+  },
+  {
+    "id": "r_ds_586_plant",
+    "disc": "ds_586",
+    "name": "몰약 수지 표본",
+    "kind": "treasure",
+    "desc": "가시덤불에서 받은 붉은 갈색 진을 굳힌 알갱이. 작은 토기 그릇에 담아 향을 지켰다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: reddish amber-brown myrrh resin tears in a shallow warm terracotta bowl, a few loose translucent resin nuggets. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_586_plant.png"
+  },
+  {
+    "id": "r_ds_590_plant",
+    "disc": "ds_590",
+    "name": "고려 인삼 뿌리 표본",
+    "kind": "animal",
+    "desc": "잔뿌리까지 온전히 거둔 인삼 한 뿌리를 한지에 싸 왔다. 사람처럼 갈라진 뿌리의 모습을 살필 수 있다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: a Korean wild ginseng root specimen, one pale golden human-shaped forked root with many fine rootlets, nestled in a small open dark wooden specimen box lined with a folded ivory hanji sheet, a red cord securing the root. Painterly hand-painted realistic game illustration, warm ochre and brown, subtle gold highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item, no landscape, no people, no lettering, no labels, no border, no watermark. Transparent background, genuine alpha. This is one item illustration, no collage.",
+    "selectedSource": "r_ds_590_plant.png"
+  },
+  {
+    "id": "r_ds_591_plant",
+    "disc": "ds_591",
+    "name": "대황 뿌리 표본",
+    "kind": "animal",
+    "desc": "노란 속살이 드러나도록 썬 대황 뿌리를 말렸다. 자른 면의 빛깔과 결이 선명하다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: thick dried rhubarb root slices showing golden yellow-orange marbled cut surfaces, one whole brown root section on folded parchment. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_591_plant.png"
+  },
+  {
+    "id": "r_ds_593_plant",
+    "disc": "ds_593",
+    "name": "사프란 암술 표본",
+    "kind": "animal",
+    "desc": "꽃에서 한 올씩 골라 낸 붉은 암술을 작은 나무 함에 담았다. 가는 실 같은 모양이 그대로 남아 있다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: a small open round dark wooden spice box filled with vivid crimson saffron threads, a few threads outside and one delicate purple crocus flower with three red stigmas. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_593_plant.png"
+  },
+  {
+    "id": "r_ds_594_plant",
+    "disc": "ds_594",
+    "name": "말린 바닐라 꼬투리",
+    "kind": "animal",
+    "desc": "검게 익혀 말린 바닐라 꼬투리를 묶었다. 한 개를 갈라 속의 작은 씨앗과 향을 확인할 수 있다.",
+    "prompt": "Create one compact square game inventory object illustration with genuine transparent alpha background. A SMALL OPEN RECTANGULAR WOODEN BOTANICAL SPECIMEN BOX, in three-quarter view, lined with ivory linen. Inside the box lie a neatly tied bundle of long dark cured vanilla pods with a single pod split to show the black seeds. The box has plain dark brown wood and small brass corners. Hand painted realistic 17th century RPG item art, warm natural colors. Exact complete closed silhouette of the box, fully contained in image, centered with wide empty transparent margins. No background surface of any kind. No glow, no aura, no gradient, no shadow cast outside the box. No text or labels. Only this physical box and its botanical contents on transparent alpha.",
+    "initialPrompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: a bundle of long dark brown cured vanilla pods tied with natural fibre cord, one split pod revealing tiny glossy black seeds. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "rejectedVersions": [
+      "original",
+      "v2"
+    ],
+    "selectedSource": "r_ds_594_plant-v3.png"
+  },
+  {
+    "id": "r_ds_600_plant",
+    "disc": "ds_600",
+    "name": "사고야자 녹말 표본",
+    "kind": "animal",
+    "desc": "야자 속을 씻어 가라앉힌 하얀 녹말을 말려 담았다. 잘라 낸 줄기 속살도 함께 보관했다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: a small woven palm-leaf basket holding a mound of ivory sago starch, beside a short sago palm pith sample with fibrous brown rind. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_600_plant.png"
+  },
+  {
+    "id": "r_ds_819_plant",
+    "disc": "ds_819",
+    "name": "천 년 올리브 접가지",
+    "kind": "animal",
+    "desc": "늙은 올리브 나무의 어린 가지를 젖은 이끼에 싸 왔다. 은빛 잎과 검푸른 열매가 함께 달려 있다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: a short olive graft cutting with silvery narrow green leaves and three dark purple olives, cut end wrapped in damp moss and linen tied with twine. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_819_plant.png"
+  },
+  {
+    "id": "r_ds_820_plant",
+    "disc": "ds_820",
+    "name": "브리슬콘 솔방울 표본",
+    "kind": "animal",
+    "desc": "비늘 끝에 가는 가시가 난 솔방울과 짧은 바늘잎 가지. 높은 산의 늙은 소나무에서 주웠다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: two brown bristlecone pine cones with slender bristle-tipped scales, a short twig bearing dense short green five-needle clusters. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_820_plant.png"
+  },
+  {
+    "id": "r_ds_822_plant",
+    "disc": "ds_822",
+    "name": "타이탄 아룸 열매 표본",
+    "kind": "animal",
+    "desc": "꽃이 진 뒤 맺힌 붉은 열매 몇 알을 작은 표본 병에 보관했다. 큰 꽃대의 기록과 함께 보고할 수 있다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: a small corked clear historical glass specimen jar containing several vivid orange-red titan arum berries in clear preserving liquid, a single berry cut open showing a pale seed. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_822_plant.png"
+  },
+  {
+    "id": "r_ds_824_plant",
+    "disc": "ds_824",
+    "name": "맨드레이크 뿌리 표본",
+    "kind": "animal",
+    "desc": "두 갈래로 갈라진 맨드레이크 뿌리를 흙째 거두어 말렸다. 전설 속 비명의 주인공은 조용히 상자에 누워 있다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: one earthy tan mandrake root with naturally forked human-like legs and small leaf rosette, lying on folded coarse ivory linen, natural plant with no face. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_824_plant.png"
+  },
+  {
+    "id": "r_ds_825_plant",
+    "disc": "ds_825",
+    "name": "겨우살이 가지 화관",
+    "kind": "gift",
+    "desc": "늘 푸른 겨우살이 가지와 하얀 열매를 둥글게 엮었다. 겨울 숲에서 가져온 작은 화관이다.",
+    "prompt": "Use case: stylized-concept. Asset type: single inventory evidence icon for a historical age-of-sail RPG. Subject: a small circular wreath of mistletoe twigs with pairs of oval green leaves and clusters of pearly white berries, bound by a restrained red ribbon. Painterly hand-painted realistic game illustration, warm ochre and brown accents, subtle golden highlights, crisp detailed silhouette readable at 256px, three-quarter view, centered with generous 12% transparent margin. A portable botanical discovery proof item. No landscape, no people, no lettering, no labels, no border, no watermark, no collage. Transparent background, genuine alpha.",
+    "selectedSource": "r_ds_825_plant.png"
+  }
+]

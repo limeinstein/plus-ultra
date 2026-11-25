@@ -42,7 +42,12 @@
   };
   HP.fit = function () { HP.prune(); pins.forEach(place); };
   HP.refresh = function (key) { pins.forEach(function (p) { if (p.key === key) place(p); }); };
-  HP.reset = function (key) { put(key, null); HP.fit(); };
+  HP.reset = function (key) {
+    put(key, null);
+    // 제자리로 돌렸으면 앞선 끌기의 클릭 억제도 끝낸다. 다음 알림의 첫 누르기를 삼키지 않는다.
+    pins.forEach(function (p) { if (p.key === key && p.el) p.el._hpMoved = false; });
+    HP.fit();
+  };
   /** 판을 옮길 수 있게 — key: 기억할 이름 · 판의 onclick(누르기)은 끌지 않았을 때만 */
   HP.pin = function (el, key, label, options) {
     if (!el) return el;

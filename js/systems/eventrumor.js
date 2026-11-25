@@ -95,6 +95,7 @@
     st().log = st().log.slice(0, 12);
     if (G.VoyagePlans) G.VoyagePlans.learnRumor(r, body, c);
     G.State.log('소문 (' + (c ? c.name + '의 마을 사람' : '마을 사람') + '): ' + body);
+    if (G.Records) G.Records.add('evidence', { title: '마을 사람에게 들은 이야기', text: body, source: (c ? c.name + ' · ' : '') + '마을 사람', key: 'rumor|' + r.id + '|' + s.day });
   };
   /** 수첩 「할 일」 아래 — 들은 소문 (아직 일어날 수 있는 것만) */
   ER.html = function () {

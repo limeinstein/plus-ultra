@@ -47,6 +47,7 @@
   function who(k) {
     try {
       if (k === 'P') return me();
+      var artSpeaker = G.StoryArt && G.StoryArt.speaker('jhook', k); if (artSpeaker) return artSpeaker;
       if (k === 'N' || !k) return {};
       if (MATE_OF[k]) return mateWho(MATE_OF[k]);
       if (k === 'GO') return G.MATE.omalley ? mateWho('omalley', '그레이스') : { name: '그레이스' };
@@ -83,18 +84,21 @@
     return sp;
   }
   function keep(l) { if (!Array.isArray(l)) return true; var k = String(l[0]); if (k.charAt(0) !== '?') return true; var id = MATE_OF[k.slice(1)]; return !id || aboard(id); }
-  async function play(lines) {
+  async function play(lines, beat, branch) {
     lines = (lines || []).filter(keep).map(function (l) { return Array.isArray(l) ? [String(l[0]).replace(/^\?/, ''), l[1]] : l; });
+    try {
     for (var i = 0; i < lines.length; i++) {
       var ln = lines[i];
+      if (beat && G.StoryArt) await G.StoryArt.line('jhook', beat, ln, branch ? -1 : i);
       if (Array.isArray(ln)) await UI.say(fmt(ln[1]), facing(ln[0], lines, i));
       else if (ln && ln.ask) {
         var v = await UI.ask(fmt(ln.ask), ln.opts.map(function (o, k) { return { label: o[0], value: k }; }), facing(ln.by || 'P', lines, i));
         var o = ln.opts[v == null ? 0 : v];
         var t = T(); if (t) (t.picks || (t.picks = [])).push(o[0]);
-        if (Array.isArray(o[1])) await play(o[1]);
+        if (Array.isArray(o[1])) await play(o[1], beat, true);
       }
     }
+    } finally { if (!branch && G.StoryArt) await G.StoryArt.end(); }
   }
   JH.play = play;
 
@@ -157,7 +161,7 @@
   JH.prologue = async function () {
     var t = T(); if (!t || t.prologue) return;
     var P = D.prologue;
-    await play(P.pro); await play(P.a1); await play(P.a2);
+    await play(P.pro, 'prologue'); await play(P.a1, 'prologue_a1'); await play(P.a2, 'prologue_a2');
     giveItems(['jh_coat', 'jh_compass']);
     t.prologue = 1; t.beats.start = today(); S().flags.prologue = true;
     UI.toast('아버지의 외투와 나침반을 받았다. 다음은 브리스틀 — 콘월의 킬리그루 저택.', 'scroll', 5200);
@@ -203,7 +207,7 @@
     var t = T();
     t.beats[b.id] = today();
     if (b.act) t.act = Math.max(t.act || 1, b.act);
-    try { await play(b.lines); } catch (e) { console.error(e); }
+    try { await play(b.lines, b.id); } catch (e) { console.error(e); }
     await JH.apply(b.then || {}, ctx || {});
     G.State.log('「' + D.short + '」 — ' + (b.title || TITLES[b.id] || '이야기가 한 걸음 나아갔다.'));
     if (G.Game.refreshHud) G.Game.refreshHud();
@@ -306,6 +310,7 @@
       (g ? '<div style="margin-bottom:10px"><b>지금 할 일</b> — ' + g + '</div>' : '') +
       '<table class="tbl"><tr><th></th><th>사건</th><th></th></tr>' + rows + '</table></div></div>';
     try { var box = el.querySelector('.jh-face'), cv = G.Img.make(G.Img.chain.heroHalf(), 300, 380, function () { var x = document.createElement('canvas'); x.width = 300; x.height = 380; return x; }, { fit: 'contain' }); box.appendChild(cv); } catch (e) { console.error(e); }
+    if (G.StoryArt) G.StoryArt.gallery('jhook', el);
   };
 
   // ================================================================ 게임 함수 감싸기

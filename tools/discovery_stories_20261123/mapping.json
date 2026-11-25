@@ -6246,7 +6246,8 @@
       "r": 0.65,
       "discStoryNew": true,
       "needHint": true,
-      "plant": true
+      "animal": true,
+      "insect": true
     },
     "coordinateSource": "https://www.wikidata.org/wiki/Q244451",
     "placement": "원고의 장소"
@@ -8690,7 +8691,7 @@
       "cat": "nature",
       "lat": 42,
       "lon": 50.5,
-      "how": "sea",
+      "how": "land",
       "pw": 3,
       "val": 8500,
       "lang": 9,
@@ -8702,7 +8703,7 @@
       "needHint": true
     },
     "coordinateSource": "https://www.wikidata.org/wiki/Q5484",
-    "placement": "원고의 장소"
+    "placement": "외해에서 진입할 수 없는 내륙 호수의 육상 관찰 — 기존 좌표·범위·발견물 ID 유지"
   },
   {
     "no": 633,
@@ -8716,7 +8717,7 @@
       "cat": "nature",
       "lat": 45,
       "lon": 60,
-      "how": "sea",
+      "how": "land",
       "pw": 3,
       "val": 8500,
       "lang": 9,
@@ -8728,7 +8729,7 @@
       "needHint": true
     },
     "coordinateSource": "https://www.wikidata.org/wiki/Q35883",
-    "placement": "원고의 장소"
+    "placement": "외해에서 진입할 수 없는 내륙 호수의 육상 관찰 — 기존 좌표·범위·발견물 ID 유지"
   },
   {
     "no": 634,

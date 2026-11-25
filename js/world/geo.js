@@ -152,7 +152,7 @@
     TEX_PER_DEG = W / 360;
     Geo.W = W; Geo.H = H; Geo.TEX_PER_DEG = TEX_PER_DEG;
     var t0 = performance.now();
-    var landBits = G.unpackB64(D.land, W * H / 8);
+    var landBits = G.unpackB64(G.TERRAIN_DETAIL ? G.TERRAIN_DETAIL.land : D.land, W * H / 8);
     var rivBits = G.unpackB64(D.river, W * H / 8);
     climTex = G.unpackB64(D.climate, CW * CH * 4);
     var land = new Uint8Array(W * H);
@@ -195,6 +195,7 @@
     Geo.landMask = land;
     Geo.timing = { unpack: t1 - t0, edt: t2 - t1, pack: performance.now() - t2 };
     Geo.ready = true;
+    if (G.Terrain) G.Terrain.init();
   };
 
   /** 강 하구 잇기: 강 자료의 줄기가 바다 몇 칸 앞에서 끊긴 곳(예: 테주강·리스본)이 있어, 강물이 땅 한가운데서 멈춘 것처럼 보인다.

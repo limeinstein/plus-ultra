@@ -110,8 +110,10 @@
     s.player.gold -= price;
     s.player.items.push({ id: 'clue_' + t.id, kind: 'clue', sp: t.id, clue: d.id, name: t.ev.name,
       desc: t.ev.desc + ' — 「' + d.name + '」의 단서를 뒷받침한다.' });
-    var r = G.Disc.noteHint(d, 'evidence:' + t.id);
-    if (!r) UI.toast(t.ev.name + U().jx(t.ev.name, '을/를') + ' 손에 넣었다.', 'scroll');
+    var item = s.player.items[s.player.items.length - 1];
+    var record = { record: 'evidence', title: t.ev.name, body: t.ev.name + U().jx(t.ev.name, '을/를') + ' 손에 넣었다.\n\n' + t.ev.desc + '\n\n' + G.Disc.hintText(d), img: G.Disc.proofSrc ? G.Disc.proofSrc(item) : '', source: c.name + ' 술집' };
+    var r = G.Disc.noteHint(d, 'evidence:' + t.id, record);
+    if (!r) UI.toast(t.ev.name + U().jx(t.ev.name, '을/를') + ' 손에 넣었다.', 'scroll', null, record);
     if (G.Game.refreshHud) G.Game.refreshHud();
     return true;
   };

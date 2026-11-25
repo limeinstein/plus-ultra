@@ -5,8 +5,16 @@
 (function (G) {
   'use strict';
   G.FX = {
+    // 지역별 숲은 같은 녹색 계열 안에서 작은 명암 차이만 쓴다. 수종은 윤곽·높이로 나눈다.
+    terrainWorld: { enabled:true, atlasSide:768, relief:1.0, forestDensity:.76, nearZoom:300, farZoom:180,
+      maxTrees:1050, treeCell:.0625, treeWorld:.085, landmarkMax:220, paletteVariation:.07,
+      forest:[.19,.28,.13], boreal:[.12,.22,.16], tropical:[.13,.27,.13], mediterranean:[.27,.31,.15] },
     // 제독 얼굴상·무릎상: 40세부터 중년, 70세부터 노년 그림을 쓴다.
     heroPortraitAge: { middle: 40, elderly: 70 },
+    // 마을·항해·육상 상단: 갈색 일체형 황동 틀. 글씨 크기는 기존 HUD 자동 맞춤과 함께 쓴다.
+    topHud: { height: 54, top: 4, inset: 8, font: 17, labelFont: 12, cellPad: 11, icon: 18, medal: 46,
+      compactFont: 15, compactPad: 7, minFont: 13, minPad: 5 },
+    recordBadge: { font: 13, height: 30, titleChars: 64 },
     // 해도 대화창: 무대 안쪽 크기, 이름표 자리, 다음 쪽 오입력 방지. 그림의 투명 여백은 원본을 보존한 채 잘라 보여 준다.
     dialogPanel: { height: 224, faceHeight: 164, padX: 168, padRight: 192, padY: 36, facePadY: 18, lineHeight: 1.62, contentGap: 14, paperVeil: 0.72, nameWidth: 300, nameHeight: 46, nameLift: 30, nameInset: 24, bustOverlap: 6,
       choices: { compactAt: 5, padY: 24, maxHeight: 126, fontSize: 17, buttonHeight: 36, padX: 16, gap: 6 }, // 선택지가 많아도 무릎상은 일반 대화와 같은 크기

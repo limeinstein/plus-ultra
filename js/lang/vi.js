@@ -25877,3 +25877,6 @@
     }
   });
 })(window.G = window.G || {});
+
+/* 후속 고유명 번역 보완. 기존 번역 본문은 유지한다. */
+(function(G){G.I18N.add("vi",{"name": {"천하의 실권자": "Người nắm thực quyền thiên hạ", "도쿠가와 쇼군": "Tướng quân Tokugawa"}});})(window.G=window.G||{});

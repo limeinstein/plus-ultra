@@ -7,10 +7,12 @@
   var DAY_SEC = 1.3;
   var st = null;
   function S() { return G.Game.state; }
+  function walkable(lon,lat) { return G.Hydro&&G.Hydro.ready ? G.Hydro.canWalk(lon,lat) : G.Geo.isLand(lon,lat); }
+  function walkSegment(a,b) { return G.LandNav ? G.LandNav.clear(a,b) : walkable(b[0],b[1]); }
   function zoomBy(k) { st.cam.zoomT = U.clamp((st.cam.zoomT || st.cam.zoom) * k, 80, 700); }
   var TERR = {
     grass: { name: '초원', spd: 0.34 }, steppe: { name: '스텝', spd: 0.36 }, desert: { name: '사막', spd: 0.26, thirst: 2 }, forest: { name: '숲', spd: 0.2 },
-    jungle: { name: '밀림', spd: 0.14, sick: 1 }, mountain: { name: '산악', spd: 0.1 }, snow: { name: '설원', spd: 0.1, cold: 1 }, tundra: { name: '툰드라', spd: 0.2, cold: 1 }, ice: { name: '빙원', spd: 0.07, cold: 2 }, sea: { name: '바다', spd: 0 }
+    jungle: { name: '밀림', spd: 0.14, sick: 1 }, mountain: { name: '산악', spd: 0.1 }, snow: { name: '설원', spd: 0.1, cold: 1 }, tundra: { name: '툰드라', spd: 0.2, cold: 1 }, ice: { name: '빙원', spd: 0.07, cold: 2 }, river: { name:'강 도하', spd:0.34 }, frozenriver: { name:'얼어붙은 강', spd:0.34, cold:1 }, sea: { name: '바다', spd: 0 }
   };
 
   L.enter = async function (arg) {
@@ -83,7 +85,7 @@
   function buildUI() {
     var s = S();
     UI.clearScreen();
-    // 육상 탐험 중: 날짜 · 위도 · 경도 · 탐험 일수 · 대원 · 식량 · 식수 · 피로 · 지형 · 탈것 · 계약 | 소지금 · 명성
+    // 육상 탐험 중: 날짜 · 위도 · 경도 · 탐험 일수 · 대원 · 경비 · 피로 · 규율 · 지형 · 탈것 · 계약 | 소지금
     var H = G.Game.hud;
     UI.hud.show([
       { k: 'date', icon: 'calendar', label: '날짜', text: H.date() },
@@ -92,15 +94,13 @@
       { k: 'days', icon: 'tent', label: '탐험', text: '' },
       { k: 'party', icon: 'people', label: '대원', text: '' },
       { k: 'cost', icon: 'coin', label: '하루 경비', text: '', tip: '육상 탐험 중에는 배의 식량·물을 쓰지 않고, 그 고장에서 먹을 것과 물을 사고 길잡이·짐꾼 삯을 금화로 냅니다.' },
-      { k: 'food', icon: 'bread', label: '식량', text: '' },
-      { k: 'water', icon: 'drop', label: '식수', text: '' },
       { k: 'fat', icon: 'hourglass', label: '피로', text: '' },
+      { k: 'discipline', icon: 'shield', label: '규율', text: H.discipline().text, tip: H.discipline().tip },
       { k: 'terr', icon: 'land', label: '지형', text: '' },
       { k: 'mount', icon: 'boot', label: '탈것', text: '' },
       { k: 'contract', icon: 'seal', label: '계약', text: '' },
       { grow: true },
-      { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() },
-      { k: 'fame', icon: 'laurel', label: '명성', text: U.num(s.player.fame) }
+      { k: 'gold', icon: 'coin', label: '소지금', text: H.gold() }
     ]);
     var catcher = U.el('div', 'mapcatch'); catcher.style.cssText = 'position:absolute;inset:0;z-index:5;cursor:crosshair';
     catcher.addEventListener('mousedown', onDown);
@@ -216,25 +216,24 @@
     UI.hud.set('days', (l.days || 0) + '일째');
     UI.hud.set('party', l.party + '명');
     var dc = dailyCost(); UI.hud.set('cost', U.num(dc) + '닢', s.player.gold < dc * 5);
-    var food = H.supply('food'), water = H.supply('water');
-    UI.hud.set('food', food.text, food.warn); UI.hud.set('water', water.text, water.warn);
-    UI.hud.tip('food', food.tip); UI.hud.tip('water', water.tip);
     UI.hud.set('fat', Math.round(f.fatigue) + '%', f.fatigue > 60);
+    var discipline = H.discipline(); UI.hud.set('discipline', discipline.text, discipline.warn);
     var k = H.contract(); UI.hud.set('contract', k.text, k.warn); UI.hud.tip('contract', k.tip);
-    UI.hud.set('fame', U.num(s.player.fame));
     var t = G.Geo.terrain(l.lon, l.lat), mt = MT(), M = G.Mounts;
     UI.hud.set('terr', (TERR[t] || TERR.grass).name);
+    if(G.Hydro&&G.Hydro.ready){var e=G.Hydro.landEffect(l.lon,l.lat),fresh=G.Hydro.freshwater(l.lon,l.lat);UI.hud.tip('terr',e.river?e.river.name+' · '+(e.bridge?'다리·나루: 도하 벌칙 없음':e.reason||'도하 속력 '+Math.round(e.speed*100)+'%'+(e.risk?' · 짐승·짐 손실 위험 '+Math.round(e.risk*1000)/10+'%':''))+(fresh?' · 식수 보충 가능':''):fresh?fresh.name+' 부근: 식수 보충 가능':'실제 고도와 지역 식생에 따른 지형');}
     var sk = t === 'sea' ? 'grass' : t, sp = M.speed(mt, sk, l.party), su = M.suit(mt.id, sk);
     UI.hud.set('mount', mt.id === 'walk' ? '도보' : M.get(mt.id).name + ' ×' + sp.toFixed(1) + ' <small class="suit ' + su.cls + '">' + su.mark + '</small>', mt.id !== 'walk' && su.cls === 'bad');
     UI.hud.set('gold', H.gold());
   }
   function pos(e) { var r = G.Game.canvases().overlay.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 1600, (e.clientY - r.top) / r.height * 900]; }
+  L.refreshHud=refreshHud;
   // st.qo: 이번 장면을 그릴 때 쓴 지진 흔들림(화면 px, js/art/quakefx.js). 카메라(st.cam)에는 더하지 않고 그리기·클릭 변환에만 넣는다
   function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
   L.toScreen = toScreen;
   function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
   // 편대의 표시 위치만 확인한다. 선장의 실제 이동·지형 판정과는 별개다.
-  function expeditionGround(x, y) { var p = toWorld(x, y); return G.Geo.isLand(p[0], p[1]); }
+  function expeditionGround(x, y) { var p = toWorld(x, y); return walkable(p[0], p[1]); }
   /* 마우스 따라가기 (기본 끔 · 수첩 옆 단추나 Shift, G.Ctrl): 끔이면 누른 곳까지 걷고, 켬이면 가려는 쪽을 한 번 누른 뒤로는
      마우스를 옮기는 대로 발걸음이 돈다(조작 감도만큼 차츰). 도시·표식을 누르면 예전처럼 그리로 간다 */
   function followOn() { return !!(G.Ctrl && G.Ctrl.follow()); }
@@ -281,7 +280,7 @@
     var mk = !c && !landmark && G.Explore.markerAt(st.marks || [], toScreen, p[0], p[1]);
     if (mk) w = [mk.lon, mk.lat];
     if (!c && !landmark && !mk && followOn()) { st.path = null; st.goCity = null; st.followArmed = true; st.pointerWalk = false; pointerWalk(p); return; }   // 마우스 따라가기: 누른 쪽으로 걷기 시작
-    if (!G.Geo.isLand(w[0], w[1])) { UI.toast('그곳은 물입니다. 육지를 클릭하십시오.', 'land'); return; }
+    if (!walkable(w[0], w[1])) { UI.toast('그곳은 물입니다. 육지를 클릭하십시오.', 'land'); return; }
     st.goCity = c || null;                                // 도시를 직접 눌렀으면 닿자마자 묻지 않고 들어간다
     st.dir = null; disarmFollow(); routeTo(w); st.paused = false; refreshBar();
   }
@@ -308,7 +307,7 @@
     return kiCache;
   }
   function cityAt(x, y) { var best = null, bd = Infinity; knownInland().forEach(function (c) { var p = toScreen(c.lon, c.lat), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y), hit = Math.max(24, G.CityIcon.metrics(c, 1.15).radius + 5); if (d <= hit * hit && d < bd) { bd = d; best = c; } }); return best; }
-  function landmarkAt(x, y) { return G.DiscoveryIcon ? G.DiscoveryIcon.at(G.DiscoveryIcon.visible(), toScreen, x, y, 1.15) : null; }
+  function landmarkAt(x, y) { return G.DiscoveryIcon ? G.DiscoveryIcon.at(G.DiscoveryIcon.visible(), toScreen, x, y, 1.15, st.cam.zoom) : null; }
   function cityNear() { var s = S(), l = s.loc, best = null, bd = 0.3; G.CITY_DATA.forEach(function (c) { if (Math.abs(c.lat - l.lat) >= bd || !R.cityExists(c)) return; var d = G.Geo.dist(l.lon, l.lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } }); return best; }
   function atBase() { var s = S(), l = s.loc, b = l.base; return G.Geo.dist(l.lon, l.lat, b.lon, b.lat) < (b.type === 'ship' ? 0.45 : 0.3); }
   function promptWait() { return ((((G.BALANCE || {}).cityEntryPrompt || {}).cooldownMs) || 5000); }
@@ -364,20 +363,25 @@
     var px0 = l.lon, py0 = l.lat, daysMoved = 0;
     if (!st.paused && !st.busy && !UI.busy()) pointerTurn(dt);
     if (!st.paused && !st.busy && !UI.busy() && (st.path || st.dir)) {
-      if (!G.Geo.isLand(l.lon, l.lat)) { var lp1 = landPoint(l.lon, l.lat); l.lon = lp1[0]; l.lat = lp1[1]; }   // 물 위에 서 있으면(옛 저장·지도 경계) 먼저 뭍으로 — 끼여서 못 움직이지 않게
+      if (!walkable(l.lon, l.lat)) { var lp1 = landPoint(l.lon, l.lat); l.lon = lp1[0]; l.lat = lp1[1]; }   // 물 위에 서 있으면(옛 저장·지도 경계) 먼저 뭍으로 — 끼여서 못 움직이지 않게
       var days = dt * st.speed / DAY_SEC; daysMoved = days;
       var terr = G.Geo.terrain(l.lon, l.lat), tv = (TERR[terr] || TERR.grass).spd;
       var mk = G.Mounts.speed(MT(), terr, l.party);
       var v = tv * mk * (1 + R.skill('ops') * 0.1) * (s.fleet.fatigue > 70 ? 0.7 : 1) * (l.party > 20 ? 0.9 : 1) * (st.fastDays > 0 ? 1.45 : 1) * (G.Disaster ? G.Disaster.slow(l.lon, l.lat) : 1);   // 재해의 자취 안에서는 느리다
+      var riverEffect=G.Hydro&&G.Hydro.ready?G.Hydro.landEffect(l.lon,l.lat):null;
+      if(riverEffect&&riverEffect.river)v*=riverEffect.speed;
       st.mk = mk;
       var stepLen = v * days;
+      if(G.Hydro&&G.Hydro.ready){var moveDir=st.dir;if(!moveDir&&st.path){var tx=G.Geo.wrapLon(st.path[0]-l.lon),ty=st.path[1]-l.lat,tl=Math.hypot(tx,ty);if(tl)moveDir=[tx/tl,ty/tl];}if(moveDir)stepLen=G.Hydro.landStep([l.lon,l.lat],moveDir,stepLen,riverEffect&&riverEffect.river?riverEffect.speed:1);}
       if (st.dir) {
         var mx = l.lon + st.dir[0] * stepLen, my = l.lat + st.dir[1] * stepLen;
-        if (G.Geo.isLand(mx, my)) { l.lon = G.Geo.wrapLon(mx); l.lat = my; l.heading = Math.atan2(st.dir[1], st.dir[0]); }
+        if (walkSegment([l.lon,l.lat],[mx,my])) { l.lon = G.Geo.wrapLon(mx); l.lat = my; l.heading = Math.atan2(st.dir[1], st.dir[0]); }
         else { st.dir = null; st.paused = true; refreshBar(); UI.toast('물가에 막혀 더 나아갈 수 없습니다.', 'land'); }
       } else {
       var dx = G.Geo.wrapLon(st.path[0] - l.lon), dy = st.path[1] - l.lat, d = Math.hypot(dx, dy);
-      if (d <= stepLen) {
+      if (d <= stepLen && !walkSegment([l.lon,l.lat],st.path)) {
+        st.path=null;st.paused=true;refreshBar();UI.toast('지금은 강을 건널 수 없습니다. 다리나 나루를 찾으십시오.','land');
+      } else if (d <= stepLen) {
         l.lon = st.path[0]; l.lat = st.path[1];
         var nxt = st.path.next;   // 물을 둘러 가는 길(routeTo)의 다음 굽이
         if (nxt && nxt.length) { var np = nxt[0]; np.next = nxt.slice(1); np.goal = st.path.goal; np.rerouted = st.path.rerouted; st.path = np; }
@@ -388,7 +392,7 @@
         // 목표에 얼마나 다가갔는지 적어 두고, 제자리를 맴돌면 멈춘다
         if (st.goalRef !== st.path) { st.goalRef = st.path; st.bestD = d; st.wander = 0; st.slideSide = 0; }
         if (d < st.bestD - 0.03) { st.bestD = d; st.wander = 0; } else st.wander += stepLen;
-        if (G.Geo.isLand(nx, ny)) { l.lon = G.Geo.wrapLon(nx); l.lat = ny; l.heading = Math.atan2(dy, dx); }
+        if (walkSegment([l.lon,l.lat],[nx,ny])) { l.lon = G.Geo.wrapLon(nx); l.lat = ny; l.heading = Math.atan2(dy, dx); }
         else if (st.wander > Math.max(0.8, Math.min(2.0, st.bestD * 0.6)) || !slideAround(Math.atan2(dy, dx), stepLen)) {
           // 막히면 한 번은 뭍길을 다시 찾아 둘러 간다 (js/world/landnav.js)
           var goal = st.path.goal || st.path, again = !st.path.rerouted && routeTo([goal[0], goal[1]], true);
@@ -400,6 +404,7 @@
       st.dayAcc += days;
       if (st.dayAcc >= 1) { st.dayAcc -= 1; runDay(); }
     }
+    if ((l.lon !== px0 || l.lat !== py0) && G.Hydro&&G.Hydro.ready) G.Hydro.movedLand(s,[px0,py0],[l.lon,l.lat]);
     if (l.lon !== px0 || l.lat !== py0) G.State.surveyChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
     animate(dt, px0, py0);
     var dxc = G.Geo.wrapLon(l.lon - st.cam.lon), kc = 1 - Math.exp(-dt * 3);
@@ -466,7 +471,7 @@
       for (var k = 0; k < 2; k++) {
         var sg = k === 0 ? side : -side, h2 = h + sg * a * 0.22;
         var x2 = l.lon + Math.cos(h2) * len * 0.85, y2 = l.lat + Math.sin(h2) * len * 0.85;
-        if (G.Geo.isLand(x2, y2)) { st.slideSide = sg; l.lon = G.Geo.wrapLon(x2); l.lat = y2; l.heading = h2; return true; }
+        if (walkSegment([l.lon,l.lat],[x2,y2])) { st.slideSide = sg; l.lon = G.Geo.wrapLon(x2); l.lat = y2; l.heading = h2; return true; }
       }
     }
     return false;
@@ -485,6 +490,7 @@
       l.days++;
       var terr = G.Geo.terrain(l.lon, l.lat), T = TERR[terr] || TERR.grass;
       var mt = MT(), M = G.Mounts;
+      if(G.Hydro&&G.Hydro.ready)G.Hydro.landDay(s,msgs);
       payDay(msgs, terr);
       // 피로: 걸음의 피로는 탈것이 덜어 주고, 추위는 털옷·썰매가 조금 덜어 준다
       var landFat = G.SkillCombos ? G.SkillCombos.factor('landFatigue') : 1;
@@ -501,7 +507,7 @@
       G.State.revealChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
       // discover inland cities
       G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c) || s.known.indexOf(c.id) >= 0) return; if (G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 0.8) { s.known.push(c.id); UI.toast('새로운 도시 「' + c.name + '」' + U.jx(c.name, '을/를') + ' 발견했다!', 'castle', 4000); G.Fame.add('ex', 5); } });
-      msgs.forEach(function (m) { UI.toast(m.text, m.icon); });
+      msgs.forEach(function (m) { UI.toast(m.text, m.icon, null, m.history ? { record: 'history', img: m.img, date: m.recordDate } : null); });
       refreshHud();
       if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
       // 자연재해: 지진·화산·산사태·쓰나미·홍수가 탐험대를 덮친다 (js/systems/disaster.js)
@@ -763,8 +769,10 @@
     var T = TERR[terr] || TERR.grass;
     var mk = (M.use(mt, terr, l.party, 'food') + M.use(mt, terr, l.party, 'water')) / 2;   // 먹이·물을 덜 쓰는 짐승이면 그만큼 싸다
     var cw = G.Castaway ? G.Castaway.costMult() : 1;   // 표류기: 그 땅에서 살아남는 법을 알아 덜 든다
+    var riverWater=G.Hydro&&G.Hydro.ready&&G.Hydro.freshwater(l.lon,l.lat);
+    var waterSaving=riverWater||l.riverWaterUntil>=s.day ? .82 : 1;
     var cb = G.SkillCombos ? G.SkillCombos.factor('landCost') : 1;
-    return Math.max(1, Math.round((K.base + K.perMan * (l.party || 0)) * mk * cw * cb * (1 + (K.thirsty || 0) * ((T.thirst || 1) - 1))));
+    return Math.max(1, Math.round((K.base + K.perMan * (l.party || 0)) * mk * cw * cb * waterSaving * (1 + (K.thirsty || 0) * ((riverWater ? 1 : T.thirst || 1) - 1))));
   }
   L.dailyCost = function () { return dailyCost(); };
   /** 하루 경비를 낸다. 모자라면 가진 만큼 내고, 대원들이 지치고 몇은 떠난다 */
@@ -818,7 +826,7 @@
       } else if (v === 'water') {
         spendDays(1);
         // 땅의 물 많음: 숲·밀림·눈 녹은 물은 넉넉하고, 사막은 거의 없다
-        var wet = { grass: 1.0, steppe: 0.6, forest: 1.2, jungle: 1.4, desert: 0.15, mountain: 1.0, snow: 0.9, tundra: 0.9, ice: 0.5 }[terr] || 0.8;
+        var wet = { river:1.5, frozenriver:.9, grass: 1.0, steppe: 0.6, forest: 1.2, jungle: 1.4, desert: 0.15, mountain: 1.0, snow: 0.9, tundra: 0.9, ice: 0.5 }[terr] || 0.8;
         var K = LC(), wr = K.water || [4, 8];
         var want = R.dailyUse() * U.rf(wr[0], wr[1]) * wet * Math.min(2, 0.5 + l.party / 20) * (1 + R.skill('survey') * 0.15) * (G.Castaway ? G.Castaway.findMult() : 1);
         if (want < R.dailyUse() * 0.5) UI.toast('땅이 말라 물길을 찾지 못했다.', 'drop');
@@ -1055,7 +1063,7 @@
     var dx = G.Geo.wrapLon(b[0] - a[0]), dy = b[1] - a[1], step = 0.02, pad = 0.12;
     function segment(x, y, xx, yy) {
       var n = Math.max(1, Math.ceil(Math.hypot(xx - x, yy - y) / 0.01));
-      for (var k = 0; k <= n; k++) if (!G.Geo.isLand(G.Geo.wrapLon(x + (xx - x) * k / n), y + (yy - y) * k / n)) return false;
+      for (var k = 0; k <= n; k++) if (!walkable(G.Geo.wrapLon(x + (xx - x) * k / n), y + (yy - y) * k / n)) return false;
       return true;
     }
     var bx = a[0] + dx;
@@ -1085,14 +1093,14 @@
   }
   /** 뭍이면 그 자리, 물 위면 가장 가까운 뭍 (한 걸음이라도 걸을 수 있게 물가에서 조금 더 안쪽) — 못 찾으면 그 자리 */
   function landPoint(lon, lat) {
-    if (G.Geo.isLand(lon, lat)) return [lon, lat];
+    if (walkable(lon, lat)) return [lon, lat];
     for (var r = 0.01; r <= 1.2; r += 0.01) {
       var best = null;
       for (var a = 0; a < 32; a++) {
         var h = a / 32 * 6.283, x = lon + Math.cos(h) * r, y = lat + Math.sin(h) * r;
-        if (!G.Geo.isLand(x, y)) continue;
+        if (!walkable(x, y)) continue;
         var x2 = lon + Math.cos(h) * (r + 0.03), y2 = lat + Math.sin(h) * (r + 0.03);   // 물가 한 줄 안쪽까지 뭍인 쪽을 먼저
-        var deep = G.Geo.isLand(x2, y2);
+        var deep = walkable(x2, y2);
         if (!best || (deep && !best.deep)) best = { p: deep ? [x2, y2] : [x, y], deep: deep };
         if (deep) break;
       }
@@ -1103,7 +1111,7 @@
   L.landPoint = landPoint;
   L.camp = function () { return camp(); };   // 야영 메뉴 (시험용 — tests/joan_smoke.js)
   function nearestLand(lon, lat) {
-    for (var r = 0.05; r < 0.6; r += 0.05) for (var a = 0; a < 16; a++) { var x = lon + Math.cos(a / 16 * 6.283) * r, y = lat + Math.sin(a / 16 * 6.283) * r; if (G.Geo.isLand(x, y)) return [x, y]; }
+    for (var r = 0.05; r < 0.6; r += 0.05) for (var a = 0; a < 16; a++) { var x = lon + Math.cos(a / 16 * 6.283) * r, y = lat + Math.sin(a / 16 * 6.283) * r; if (walkable(x, y)) return [x, y]; }
     return null;
   }
   /** 탐험을 마칠 때 한 줄로 돌아본다 */
@@ -1154,6 +1162,7 @@
     var cv = G.Game.canvases().overlay, ctx = cv.getContext('2d'), k = G.Game.overlayScale || 1;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.setTransform(k, 0, 0, k, 0, 0);
     var ff = fontFam();
+    if(G.TerrainArt)G.TerrainArt.draw(ctx,st.cam,toScreen,l);
     // base marker
     var bp = toScreen(l.base.lon, l.base.lat);
     if (G.LandSea) G.LandSea.draw(ctx, toScreen, st.cam.zoom, st.t, ff);   // 바다를 오가는 배들 (내 배보다 아래)
@@ -1162,7 +1171,7 @@
     // 직접 발견한 도시 밖 유적·자연 경관은 소도시 정도 크기의 투명 모형으로 표시한다.
     if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
       var p = toScreen(d.lon, d.lat); if (p[0] < -60 || p[0] > 1660 || p[1] < -60 || p[1] > 960) return;
-      var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: 1.15 });
+      var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: 1.15, zoom: st.cam.zoom });
       ctx.font = '600 14px ' + ff; var key = 'disc:' + d.id, tw = labelW[key] || (labelW[key] = ctx.measureText(d.name).width), lx = p[0] + mark.radius + 3;
       ctx.fillStyle = 'rgba(20,14,8,.58)'; ctx.fillRect(lx, p[1] - 10, tw + 9, 19); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(d.name, lx + 4, p[1] + 4);
     });

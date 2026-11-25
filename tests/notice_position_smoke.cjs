@@ -12,7 +12,7 @@ const OUT = path.resolve(__dirname, '../artifacts/notice-position-20261103');
     const p = await browser.newPage({ viewport: { width: 1600, height: 900 } });
     p.on('pageerror', e => errors.push(e.message));
     p.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await p.route('https://fonts.googleapis.com/**', r => r.fulfill({ body: '', contentType: 'text/css' }));
+    
     await p.addInitScript(() => { requestAnimationFrame = () => 0; });
     async function start() {
       await p.waitForFunction(() => window.G && G.Game && G.Scenes.sea, null, { polling: 100 });
@@ -24,7 +24,7 @@ const OUT = path.resolve(__dirname, '../artifacts/notice-position-20261103');
         const st = G.Scenes.sea.runtime(); st.paused = true; s.loc.lon = -25; s.loc.lat = -10; st.cam.lon = -25; st.cam.lat = -10;
         document.querySelectorAll('.modal-back').forEach(e => e.remove());
         document.querySelector('.toasts').innerHTML = '';
-        G.BALANCE.notice.minMs = G.BALANCE.notice.maxMs = 60000; // 포인터 검사 중 시간 만료와 분리한다.
+        G.BALANCE.notice.minMs = G.BALANCE.notice.maxMs = 600000; // 느린 그림 검사에서도 포인터 검사와 시간 만료를 분리한다.
         window.noticeSample = () => G.UI.toast('시에라리온 쪽으로 바닷길을 따라 갑니다 (뭍·섬을 돌아감). 이번 항해는 자동항해를 풀어 배속은 그대로입니다 — 다음 항구부터 다시 자동항해.', 'map', 8000);
         s.flags.cloudTip = true;
         for (let i = 0; i < 12; i++) G.Scenes.sea.update(0);
@@ -90,11 +90,18 @@ const OUT = path.resolve(__dirname, '../artifacts/notice-position-20261103');
     const beforeReset = await rects();
     await p.mouse.click(beforeReset.toast.x + 30, beforeReset.toast.y + 25, { button: 'right' });
     assert.equal((await rects()).saved, null, '오른쪽 클릭으로 기본 위치 복원');
+    assert.equal(await p.locator('.toasts').evaluate(el => !!el._hpMoved), false, '제자리 복원 뒤 첫 클릭을 억제하지 않음');
     // 그냥 누르면 기존처럼 닫힌다(드래그 직후 억제 시간이 지난 다음 별도 클릭).
+    // 앞의 크기 반복에서 같은 문구가 중복 억제되었을 수 있으므로, 이 검사는 새 문구 한 장으로 분리한다.
+    await p.evaluate(() => { document.querySelector('.toasts').innerHTML = ''; G.UI.toast('포인터 단순 클릭을 확인할 마지막 소식', 'scroll'); });
     await p.waitForTimeout(450);
-    const clickRect = (await rects()).toast;
-    await p.mouse.click(clickRect.x + 40, clickRect.bottom - 25);
-    assert.equal(await p.locator('.toasts .toast.out').count(), 1, '단순 클릭은 닫기');
+    const beforeClick = await p.locator('.toasts .toast').count();
+    assert(beforeClick > 0, '누르기 전에 알림 카드가 남아 있다');
+    // 스크롤 가능한 알림 영역의 빈 여백이 아니라 실제 마지막 카드를 누른다.
+    await p.locator('.toasts .toast').last().click({ position: { x: 40, y: 25 } });
+    // 짧아진 퇴장 효과 중간의 .out 대신 실제 제거를 확인한다.
+    await p.waitForFunction(n => document.querySelectorAll('.toasts .toast').length < n, beforeClick, { polling: 50, timeout: 5000 });
+    assert.equal(await p.locator('.toasts .toast').count(), beforeClick - 1, '단순 클릭은 닫기');
     assert.deepEqual(errors, [], '콘솔 오류 0');
     fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify({ initial, moved, restored, errors }, null, 2));
     console.log('통과: 왼쪽 배치·패널 겹침 방지·실제 드래그·클릭 닫기·재접속 위치 복원·작은 창·긴 알림·오른쪽 클릭 초기화·콘솔 오류 0');

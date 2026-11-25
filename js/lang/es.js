@@ -50589,3 +50589,6 @@
     }
   });
 })(window.G = window.G || {});
+
+/* 후속 고유명 번역 보완. 기존 번역 본문은 유지한다. */
+(function(G){G.I18N.add("es",{"name": {"천하의 실권자": "Gobernante de facto (tenkabito)", "도쿠가와 쇼군": "Shogun Tokugawa"}});})(window.G=window.G||{});

@@ -336,7 +336,7 @@ table.tbl .up { color: #8a2a1e; } table.tbl .down { color: #2e6a36; }
 @keyframes trade-profit-glow { 0% { opacity: 0; transform: scale(.72); } 25% { opacity: .85; } 100% { opacity: 0; transform: scale(1.15); } }
 .toast { min-width: 280px; max-width: 520px; padding: 11px 18px 11px 14px; font-size: 18px; display: flex; gap: 12px; align-items: center; animation: tin .35s ease-out; }
 .toast svg { width: 30px; height: 30px; flex: 0 0 30px; color: var(--brass-hi); }
-.toast.out { animation: tout .5s ease-in forwards; }
+.toast.out { animation: tout var(--toast-dismiss, 180ms) ease-in forwards; }
 @keyframes tin { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
 @keyframes tout { to { opacity: 0; transform: translateY(-14px); } }
 
@@ -1054,7 +1054,7 @@ table.tbl tr:has(+ tr.sub) td { border-bottom: none; padding-bottom: 2px; }
 .hud.dense .cell.two span { font-size: 16px; }
 .hud .cell.two.val-warn span { color: #ff9f7a; }
 .hud .cell .dots { letter-spacing: -1px; color: #e8c878; font-size: 13px; margin-left: 3px; }
-.hud .cell .dots b.team { font-weight: inherit; color: #7fb2ee; }   /* 부관·통역 덕에 오른 단계 — 제독 본인 단계(금빛)와 나눈다 */
+.hud .cell .dots b.team { font-weight: inherit; color: #c3954d; }   /* 부관·통역 단계는 황동색, 제독 본인 단계는 밝은 금빛 */
 .hud .supply-state { display: inline-block; margin-left: 4px; padding: 1px 5px; border-radius: 8px; font-size: 10px !important; line-height: 1.2; color: #2a160c !important; background: #e6b75a; vertical-align: 1px; }
 .hud .supply-state.crisis { color: #fff4e8 !important; background: #a82e24; animation: supplyPulse 1s ease-in-out infinite alternate; }
 @keyframes supplyPulse { from { box-shadow: 0 0 0 rgba(255,100,70,0); } to { box-shadow: 0 0 10px rgba(255,100,70,.85); } }
@@ -2409,3 +2409,12 @@ body.osa-sepia #scene, body.osa-sepia #world, body.osa-sepia #overlay, body.osa-
 .dlg-stage > .actor-name.chart-name.speaking { filter:brightness(1.12); color:#ffe2a4; }
 .dlg-stage > .actor-name.chart-name.speaking::before { content:'▸'; flex:0 0 auto; color:#edc66d; }
 .dlg .name.chart-name.has-bio::after, .dlg-stage .actor-name.chart-name.has-bio::after { content:none; }
+
+/* 이야기 원화와 제독 얼굴 고르기 */
+.story-art-gallery,.create-face-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;max-height:640px;overflow:auto;padding:6px}
+.story-art-card,.create-face-card{border:1px solid #ab8846;border-radius:8px;background:#eee4d0;color:#312516;padding:9px;cursor:pointer;font:inherit}
+.story-art-card:hover,.create-face-card:hover,.create-face-card:focus-visible,.create-face-card.selected{outline:3px solid #9d6c23;background:#fff4d8}
+.story-art-card img{display:block;width:100%;height:130px;object-fit:contain;background:#1b2431}
+.story-art-card span,.create-face-card span{display:block;font-size:15px;margin-top:6px}
+.create-face-gallery h4{grid-column:1/-1;margin:8px 0 0}.create-face-card canvas{display:block;margin:auto;max-width:100%;height:auto}
+.story-art-shot .fs-clip img{object-fit:contain;animation:none}

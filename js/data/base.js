@@ -786,7 +786,9 @@
     // 알림(갈색 쪽지 — js/ui/ui.js UI.toast): 보이는 시간 = baseMs + 글자 수×perChar (minMs~maxMs) · 같은 말 다시 띄우지 않는 시간 · 「지난 소식」에 남기는 수
     // 민족 발견물에서 나서는 동료 (js/systems/folkjoin.js): 민족 발견마다 chance로 · 품삯은 철새 셈의 payK배
     folkJoin: { chance: 0.03, payK: 0.8 },
-    notice: { baseMs: 1800, perChar: 60, minMs: 2500, maxMs: 8000, repeatMs: 60000, bigRepeatMs: 10000, picQuietMs: 5000, keep: 40 },
+    notice: { baseMs: 900, perChar: 28, minMs: 1400, maxMs: 4000, dismissMs: 180, repeatMs: 60000, bigRepeatMs: 10000, picQuietMs: 5000, keep: 40, recordKeep: 200 },
+    // 거리 조작 안내는 게임 시작 후 석 달 안에만 보인다. 이후에는 설정의 키 설명을 쓴다.
+    townControlsMonths: 3,
     // 대항해시대의 끝 (js/systems/eraend.js): 이날이 되면 세월이 멈추고 나레이션과 「항해의 끝」 결산으로 게임이 끝난다
     eraEnd: { y: 1700, m: 1, d: 1 },
     // 야영지에서 배 고치기 (js/scenes/land.js camp): 배가 보이는 곳(landPack.near)에서, 자재가 있을 때.
@@ -1087,4 +1089,12 @@
   G.FIGUREHEAD = {}; G.FIGUREHEADS.forEach(function (f) { G.FIGUREHEAD[f.id] = f; });
 
   G.SHIP_NAMES = ['산티아고', '산마르코', '산안토니오', '산마르틴', '산세바스찬', '산조르디', '아르메리아', '루이자', '카타리나', '콘세프시온', '블랑카', '에레오노라', '요한나', '테레사', '디니스', '산타마리아', '후아나', '아순시온', '콘스탄시아', '베렌게라', '트리니다드', '빅토리아', '에스페란사', '산가브리엘', '산라파엘', '베리오', '핀타', '니냐', '플로르 데 라 마르', '보아 비아젱'];
+
+  // 강의 통행·계절·보급. 폭과 수심은 강별 자료의 게임용 값이며 해상 속력은 바꾸지 않는다.
+  G.BALANCE.waterways = { freezeLatitude:54, winterMonths:[12,1,2], floodDays:7,
+    freshRadius:0.18, refillDays:1.0, riverBaseSpeed:0.34, upstream:0.76, downstream:1.18,
+    cargoLoss:0.035, crossingCooldown:1,
+    mounts:{walk:[.58,.22,.035],porter:[.66,.30,.02],horse:[.86,.58,.02],elephant:[.94,.74,.012],
+      wagon:[.28,.035,.13],donkey:[.58,.30,.05],camel:[.60,.34,.045],llama:[.58,.32,.04],yak:[.68,.43,.025],reindeer:[.48,.18,.05]},
+    shipDraft:{galleon:4.4,lgalleon:5.2,carrack:4.5,lcarrack:5.4,line:5.6}, shipWidthSafety:2.2, shipTurnSafety:2.6 };
 })(window.G = window.G || {});

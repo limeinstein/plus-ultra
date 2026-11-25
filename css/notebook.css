@@ -46,7 +46,7 @@
 .notebook-win .mb-table .mb-face { width:30px; height:30px; }
 .notebook-win .mb-detail { grid-template-columns:140px 214px minmax(0,1fr); gap:12px; }
 .notebook-win .mb-nav, .notebook-win .mb-profile { background:#fff6df33; border-color:#b79b61; }
-.notebook-win .mb-portrait { height:224px; min-height:96px; max-height:224px; flex:1 1 224px; background:none; }
+.notebook-win .mb-portrait { height:224px; max-height:224px; flex:1 1 224px; background:none; }
 .notebook-win .mb-name, .notebook-win .mb-section-title, .notebook-win .mb-record .mb-language-title {
   background:linear-gradient(90deg,#1b3047,#2b435b); color:#f0dcac; border:1px solid #b29150;
 }

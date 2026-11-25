@@ -96,10 +96,12 @@
     s.hints[id] = { src: src, d: U.dateNum(s.date) }; return true;
   };
   /** 대화에서 단서를 들었을 때: 적고 알린다. 'new' · 'more'(겹침) · null */
-  D.noteHint = function (d, src) {
+  D.noteHint = function (d, src, record) {
     if (!d) return null;
-    if (D.addHint(d.id, src)) { UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll'); return 'new'; }
-    if (D.lastMore === d.id) { UI.toast('단서가 겹쳤다: 「' + d.name + '」 — 단서 ' + D.hintLv(d.id) + '겹, 찾기가 쉬워졌다', 'scroll', 4200); return 'more'; }
+    var where = /^(tavern|rumor)/.test(src || '') ? '술집' : /^(town|local)/.test(src || '') ? '마을 사람' : /^sponsor/.test(src || '') ? '후원자' : /^book/.test(src || '') ? '도서관' : '';
+    var opt = record || { record: 'evidence', title: d.name + ' 단서', body: D.hintText(d), source: where };
+    if (D.addHint(d.id, src)) { UI.toast('단서를 얻었다: 「' + d.name + '」', 'scroll', null, opt); return 'new'; }
+    if (D.lastMore === d.id) { UI.toast('단서가 겹쳤다: 「' + d.name + '」 — 단서 ' + D.hintLv(d.id) + '겹, 찾기가 쉬워졌다', 'scroll', 4200, record || { record: 'evidence', title: d.name + ' 단서 보강', body: D.hintText(d) + '\n\n단서 ' + D.hintLv(d.id) + '겹으로 보강했다.', source: where }); return 'more'; }
     return null;
   };
   /** 소문 후보에 넣을 수 있는가: 아직 단서가 없거나, 이 출처에서 들으면 겹친다. 무게(겹칠 것은 가볍게) */

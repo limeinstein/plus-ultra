@@ -198,6 +198,14 @@ runtime="""/* 발견물 이야기 원고에서 생성. tools/compile_discovery_s
     if (G.discClueInstall) G.discClueInstall(d);
     G.DISCOVERIES.push(d); G.DISC[d.id] = d; G.DISC_STORY_NEW.push(d.id);
   });
+
+  // 뒤늦게 등록된 식물도 기존 유물과 같은 등록·획득 규칙을 쓴다.
+  (G.PLANT_RELICS || []).forEach(function (a) {
+    if (G.DISC_STORY_NEW.indexOf(a[0]) < 0) return;
+    var ex = { rid: a[1] };
+    if (a[6]) for (var k in a[6]) ex[k] = a[6][k];
+    G.registerDiscoveryRelic(a[0], a[2], a[3], a[4], a[5], ex);
+  });
 })(window.G = window.G || {});
 """.replace('__PAYLOAD__',json.dumps(payload,ensure_ascii=False,separators=(',',':')))
 (ROOT/'js/data/discstories_20261123.js').write_text(runtime,encoding='utf-8',newline='\n')

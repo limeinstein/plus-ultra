@@ -18,18 +18,20 @@
     edge = new Uint8Array(GW * GH * 8);
     near = new Uint8Array(GW * GH);
     var Geo = G.Geo;
+    // 전 세계의 바닷길 격자는 해안·호수만 본다. 강 내부는 아래의 공유 선분 경로가 맡는다.
+    var coarseRaw=Geo.baseSdfRaw||Geo.sdfRaw,coarseSdf=Geo.baseSdf||Geo.sdf;
     for (var y = 0; y < GH; y++) {
       var lat = LAT0 - (y + 0.5) / RES;
       for (var x = 0; x < GW; x++) {
         var lon = -180 + (x + 0.5) / RES, i = y * GW + x;
-        var s = Geo.sdfRaw(lon, lat);
+        var s = coarseRaw(lon, lat);
         rep[i] = 4;
         if (s < -0.9) { pass[i] = 2; if (s > -N.NEAR_TX) near[i] = 1; }          // 트인 바다 (뭍이 가까우면 표시)
         else if (s < 1.8) {
           // 물가: 3×3 부분 격자에서 가장 깊은 물을 찾아, 충분히 물이면 지나갈 수 있는 칸으로 (좁은 해협)
           var best = 99, bk = 4;
           for (var k = 0; k < 9; k++) {
-            var v = Geo.sdf(lon + ((k % 3) - 1) * SUB, lat - (((k / 3) | 0) - 1) * SUB);
+            var v = coarseSdf(lon + ((k % 3) - 1) * SUB, lat - (((k / 3) | 0) - 1) * SUB);
             if (v < best) { best = v; bk = k; }
           }
           if (best < -0.35) { pass[i] = 1; rep[i] = bk; }
@@ -291,5 +293,23 @@
       out.push(pts[j]); i = j;
     }
     return out;
+  };
+  // 좁은 강은 전 세계의 거친 격자 대신 공유 꺾은선으로 연결한다. 기존 바닷길 탐색은 보존한다.
+  var seaOriginal = {path:N.path,pathTight:N.pathTight,seaPath:N.seaPath,clear:N.clear,nearestSea:N.nearestSea};
+  var riverRouting=false;
+  ['path','pathTight','seaPath'].forEach(function(name){
+    N[name]=function(lon0,lat0,lon1,lat1){
+      if(!G.Hydro||!G.Hydro.ready||riverRouting)return seaOriginal[name].apply(N,arguments);
+      riverRouting=true;var result;
+      try{result=G.Hydro.path([lon0,lat0],[lon1,lat1],function(a,b,c,d){return seaOriginal.seaPath(a,b,c,d);});
+        if(result===undefined)result=seaOriginal[name].apply(N,arguments);
+      }finally{riverRouting=false;}
+      return result;
+    };
+  });
+  N.clear=function(a,b){return G.Hydro&&G.Hydro.ready?G.Hydro.clear(a,b,G.Hydro.fleetProfile()):seaOriginal.clear(a,b);};
+  N.nearestSea=function(lon,lat){
+    if(G.Hydro&&G.Hydro.ready){var q=G.Hydro.at(lon,lat);if(q&&G.Hydro.isWater(q,lon,lat)&&G.Hydro.canSail(lon,lat))return [lon,lat];}
+    return seaOriginal.nearestSea.apply(N,arguments);
   };
 })(window.G = window.G || {});

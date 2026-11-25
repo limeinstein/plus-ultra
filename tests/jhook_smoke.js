@@ -17,6 +17,7 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     const page = await browser.newPage({ viewport: { width: 1366, height: 768 } });
     page.on('pageerror', e => errors.push('PAGEERR ' + e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+    await page.addInitScript(()=>{const raf=requestAnimationFrame.bind(window);requestAnimationFrame=cb=>cb.name==='loop'?0:raf(cb)});
     await page.goto(BASE);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && !document.querySelector('.title-menu .btn.disabled'), null, { timeout: 120000 });
     const t = await page.evaluate(() => ({ btns: Array.from(document.querySelectorAll('.title-menu .btn')).map(b => b.textContent.trim()), list: G.StorySelect.list().map(m => m.id), rel: G.SONG && G.SONG.release }));
@@ -29,7 +30,7 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
       UI.say = async (t, who) => { SAID.push((who && who.name || '') + ': ' + String(t).slice(0, 60)); };
       UI.ask = async (t, opts) => opts[0].value;
       UI.alert = async () => {}; UI.fade = async (fn) => { fn && fn(); };
-      UI.window = (o) => /^이야기 모드/.test(o.title || '') ? window._win(o) : ({ result: Promise.resolve(o.buttons ? o.buttons[o.buttons.length - 1].value : null), el: document.createElement('div'), content: document.createElement('div'), close() {} });
+      UI.window = (o) => /^이야기 모드/.test(o.title || '') ? window._win(o) : ({ result: Promise.resolve(o.buttons ? o.buttons[o.buttons.length - 1].value : null), el: document.createElement('div'), content: Object.assign(document.createElement('div'), {innerHTML:o.html || ''}), close() {} });
     });
     await page.evaluate(() => { window.OPEN = G.StorySelect.open(); });
     await page.waitForSelector('.ss-card', { timeout: 60000 });

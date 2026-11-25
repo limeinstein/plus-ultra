@@ -122,7 +122,8 @@
     h += '<div class="col" style="width:330px"><div class="sect parch ornament-corners" style="flex:1">' +
       '<div class="cr-head"><h4>제독</h4><div class="opt-row cr-sex">' + opt('sex', 'm', '남성', p.g !== 'f') + opt('sex', 'f', '여성', p.g === 'f') + '</div></div>' +   // 성별 — 제목 줄 오른쪽 (칸 높이를 늘리지 않는다)
       '<div style="display:flex;justify-content:center;margin:6px 0 10px"><div class="wood" style="padding:8px" id="pv"></div></div>' +
-      '<div class="center" style="margin-bottom:12px"><button class="btn small" id="faceprev" title="앞의 얼굴">◀ 앞 얼굴</button> <button class="btn small" id="face" title="다음 얼굴">다음 얼굴 ▶</button>' + lookLine() + '</div>' +
+      '<div class="center" style="margin-bottom:12px"><button class="btn small" id="faceprev" title="앞의 얼굴">◀ 앞 얼굴</button> <button class="btn small" id="face" title="다음 얼굴">다음 얼굴 ▶</button>' + lookLine() +
+      '<button class="btn small" id="faceall" style="margin-top:6px">얼굴 모두 보기 · 여성 ' + G.Img.heroFaces('f').length + ' · 남성 ' + G.Img.heroFaces('m').length + '</button></div>' +
       '<div class="flex" style="gap:8px;align-items:flex-end"><div style="flex:1.15;min-width:0"><label>이름</label><input type="text" id="nm" maxlength="12" style="width:100%" value="' + U.esc(p.given) + '"></div>' +
       '<div style="flex:1;min-width:0"><label>성</label><input type="text" id="sn" maxlength="12" style="width:100%" value="' + U.esc(p.surname) + '"></div>' +
       '<button class="btn small" id="rn" title="다른 이름">' + G.icon('dice') + '</button></div>' +
@@ -173,12 +174,13 @@
     UI.add(box);
     // portrait
     var pv = box.querySelector('#pv');
-    pv.appendChild(A.portraitCanvas(playerSpec(), 200));
+    pv.appendChild(A.portraitCanvas(playerSpec(), 184));
     // events
     // 얼굴 고르기: ◀·▶ 모두 끝에 닿으면 반대쪽 끝으로 돌아간다 (마지막 다음은 처음, 처음 앞은 마지막) — 2026-10-17
     function stepFace(d) { var n = Math.max(1, G.Img.heroFaces(p.g).length); p.face = (((p.face || 0) + d) % n + n) % n; p.facePicked = true; render(); }
     box.querySelector('#face').onclick = function () { stepFace(1); };
     box.querySelector('#faceprev').onclick = function () { stepFace(-1); };
+    box.querySelector('#faceall').onclick = chooseFace;
     var fullEl = box.querySelector('#fullnm b');
     function onName() { p.given = box.querySelector('#nm').value; p.surname = box.querySelector('#sn').value; p.name = fullName(p.given, p.surname); if (fullEl) fullEl.textContent = p.name; }
     ['#nm', '#sn'].forEach(function (q) {
@@ -263,6 +265,36 @@
     return A.withImg(sp, face);
   }
   C.playerSpec = playerSpec;
+  /** 여성 외형도 바로 눈에 띄도록 남녀의 모든 선택지를 한 창에서 펼친다. */
+  function chooseFace() {
+    var win = UI.window({ title: '제독의 얼굴을 고른다', icon: 'people', width: 1040,
+      html: '<div class="create-face-tabs"><button class="btn small" data-sex="all">모두 ' + (G.Img.heroFaces('f').length + G.Img.heroFaces('m').length) + '명</button> <button class="btn small" data-sex="f">여성 ' + G.Img.heroFaces('f').length + '명</button> <button class="btn small" data-sex="m">남성 ' + G.Img.heroFaces('m').length + '명</button></div><div class="create-face-gallery"></div>', buttons: [{ label: '닫는다', value: null }] });
+    var grid = win.content.querySelector('.create-face-gallery');
+    [p.g === 'f' ? 'f' : 'm', p.g === 'f' ? 'm' : 'f'].forEach(function (sex) {
+      var faces = G.Img.heroFaces(sex);
+      faces.forEach(function (key, i) {
+        var id = key.slice('portraits/player/'.length), b = document.createElement('button');
+        b.className = 'create-face-card' + (p.g === sex && p.face === i ? ' selected' : '');
+        b.dataset.sex = sex; b.dataset.order = i * 2 + (sex === 'f' ? 0 : 1);
+        b.setAttribute('data-look', id); b.setAttribute('aria-label', G.Img.heroName(id));
+        var sp = A.withImg(A.portraitSpec({ g: sex, seed: id }), G.Img.chain.heroPortrait({ look: id }, p.age));
+        b.appendChild(A.portraitCanvas(sp, 118));
+        var label = document.createElement('span'); label.textContent = G.Img.heroName(id); b.appendChild(label);
+        b.onclick = function () {
+          if (p.g !== sex) { p.g = sex; setName(U.pick(names())); }
+          p.face = i; p.facePicked = true; win.close(); render();
+        };
+        grid.appendChild(b);
+      });
+    });
+    Array.prototype.slice.call(grid.children).sort(function (a, b) { return +a.dataset.order - +b.dataset.order; }).forEach(function (b) { grid.appendChild(b); });
+    win.content.querySelectorAll('.create-face-tabs button').forEach(function (tab) {
+      tab.onclick = function () {
+        grid.querySelectorAll('.create-face-card').forEach(function (card) { card.hidden = tab.dataset.sex !== 'all' && card.dataset.sex !== tab.dataset.sex; });
+        grid.scrollTop = 0;
+      };
+    });
+  }
   /** 고른 얼굴의 생김새 이름 — 그 얼굴로 거리를 걷고(characters/<이름>/walk_*) 일기토도 그 모습(duel/fighters/<이름>), 40세부터 수염 난 모습 */
   function lookLine() {
     var faces = G.Img.heroFaces(p.g);

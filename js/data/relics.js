@@ -175,8 +175,9 @@
   G.RELICS = {};      // 발견 id → [유물]
   G.RELIC = {};       // 유물 id → 유물
   var count = {};
-  LIST.forEach(function (x) {
+  function register(x) {
     var d = G.DISC && G.DISC[x.disc]; if (!d) return;
+    if (x.extra.rid && G.RELIC[x.extra.rid]) return G.RELIC[x.extra.rid];
     var r;
     if (x.extra.use) {
       // 이미 있는 물건을 유물로 쓴다 (예: 엑스칼리버)
@@ -202,7 +203,12 @@
     }
     (G.RELICS[x.disc] = G.RELICS[x.disc] || []).push(r);
     G.RELIC[r.id] = r;
-  });
+    return r;
+  }
+  G.registerDiscoveryRelic = function (disc, name, kind, v, desc, extra) {
+    return register({ disc: disc, name: name, kind: kind, v: v, desc: desc, extra: extra || {} });
+  };
+  LIST.forEach(register);
   if (G.ITEM_KIND) { G.ITEM_KIND.book = '서적'; G.ITEM_KIND.fig = '선수상'; G.ITEM_KIND.animal = '동식물'; }
 
   // ------------------------------------------------------------------ 수호 유물 (ward): 제독이 지닌 물건 가운데 그 공격을 막는 것

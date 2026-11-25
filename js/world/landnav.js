@@ -13,11 +13,11 @@
   LN.MAXSPAN = 50;    // 창 한 변의 최대 길이(°)
   LN.LAND = 0.06;     // 뭍으로 치는 sdf
   LN.MAXNODES = 60000;
-  function sdf(lon, lat) { return G.Geo.sdf(lon, lat); }
+  function sdf(lon, lat) { return G.Hydro && G.Hydro.ready ? (G.Hydro.canWalk(lon,lat) ? 1 : -1) : G.Geo.sdf(lon, lat); }
   /** a에서 b까지 곧게 뭍으로만 이어지나 (0.04° 간격) */
   LN.clear = function (a, b) {
-    var dx = G.Geo.wrapLon(b[0] - a[0]), dy = b[1] - a[1], n = Math.max(2, Math.ceil(Math.sqrt(dx * dx + dy * dy) / 0.04));
-    for (var i = 1; i < n; i++) if (sdf(G.Geo.wrapLon(a[0] + dx * i / n), a[1] + dy * i / n) <= 0) return false;
+    var dx = G.Geo.wrapLon(b[0] - a[0]), dy = b[1] - a[1], n = Math.max(2, Math.ceil(Math.sqrt(dx * dx + dy * dy) / 0.012));
+    for (var i = 0; i <= n; i++) if (sdf(G.Geo.wrapLon(a[0] + dx * i / n), a[1] + dy * i / n) <= 0) return false;
     return true;
   };
   LN.path = function (lon0, lat0, lon1, lat1) {
@@ -61,7 +61,8 @@
         if (k >= 4 && (!isL(cy * W + nx) || !isL(ny * W + cx))) continue;   // 대각선은 두 옆 칸도 뭍일 때만 (좁은 물목을 비스듬히 건너지 않게)
         // 두 칸 가운데가 뭍이어도 사이에 좁은 강·물목이 있을 수 있다.
         if (!LN.clear([lonOf(cx), latOf(cy)], [lonOf(nx), latOf(ny)])) continue;
-        var g = gs[c] + (k >= 4 ? 1.414 : 1);
+        var effect = G.Hydro && G.Hydro.ready ? G.Hydro.landEffect(G.Geo.wrapLon(lonOf(nx)),latOf(ny)) : null;
+        var g = gs[c] + (k >= 4 ? 1.414 : 1) / Math.max(.04,effect ? effect.speed : 1);
         if (g < gs[ni]) { gs[ni] = g; came[ni] = c; push(g + h(ni) * 1.05, ni); }
       }
     }

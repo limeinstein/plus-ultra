@@ -703,7 +703,7 @@
     var chain = A.portraitKeys(spec);
     if (chain && G.Img.pick(chain)) {
       var faceKey = G.Img.pick(chain), frames = G.FX && G.FX.portraitFace && G.FX.portraitFace.frames;
-      var frame = frames && frames[faceKey];
+      var frame = (G.PORTRAIT_LAYOUT && G.PORTRAIT_LAYOUT[faceKey]) || (frames && frames[faceKey]);
       if (frame && frame.source) {
         if (G.Img.has(frame.source)) chain = [frame.source];
         else frame = null;

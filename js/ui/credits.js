@@ -24,7 +24,9 @@
       ['three.js r147', '3D 배 그림', 'MIT License — © 2010-2022 three.js authors (js/vendor/THREE-LICENSE.txt)', 'https://threejs.org'],
       ['Electron (설치판)', 'Windows 설치형 게임의 껍데기', 'MIT License — Chromium 등의 라이선스는 설치 폴더의 LICENSES.chromium.html', 'https://www.electronjs.org'] ] },
     { h: '지도·자료', rows: [
-      ['Natural Earth', '세계 지도(해안선·땅)', '공개 저작물', 'https://www.naturalearthdata.com'],
+      ['Natural Earth', '세계 지도(해안선·땅), 1:10m 강·자연 호수', '공개 저작물', 'https://www.naturalearthdata.com'],
+      ['NOAA NCEI · ETOPO 2022', '실제 고도·지역별 산맥과 자연경관의 바탕', '공개 자료 · 60각초판을 가공', 'https://www.ncei.noaa.gov/products/etopo-global-relief-model'],
+      ['Ecoregions 2017 © RESOLVE · Dinerstein et al.', '14개 육상 생물군계로 분류한 지역 식생 · 경계 단순화·래스터 변환', 'CC BY 4.0 · BioScience 67(6): 534–545 (2017)', 'https://ecoregions.world/'],
       ['UNESCO 세계유산센터', '세계유산 등재 자료 — 한국어로 새로 쓴 글의 바탕', 'CC BY-SA 3.0 IGO', 'https://whc.unesco.org'],
       ['위키백과', '발견물·인물 요약의 바탕 — 한국어로 새로 쓴 글', 'CC BY-SA 4.0', 'https://www.wikipedia.org'],
       ['위키미디어 공용', '발견 그림이 참고한 원본 사진 — 작가·라이선스는 발견 카드와 도감의 「실제 자료」에', 'CC0 · CC BY · CC BY-SA (사진마다 다름)', 'https://commons.wikimedia.org'],

@@ -49,6 +49,7 @@
   function who(k) {
     try {
       if (k === 'P') return me();
+      var artSpeaker = G.StoryArt && G.StoryArt.speaker('gold', k); if (artSpeaker) return artSpeaker;
       if (k === 'N' || !k) return {};
       if (MATE_OF[k]) return mateWho(MATE_OF[k]);
       if (k === 'ED') return G.MATE.edmund ? mateWho('edmund', '에드먼드 헤일') : { name: '에드먼드 헤일' };
@@ -85,18 +86,21 @@
     return sp;
   }
   function keep(l) { if (!Array.isArray(l)) return true; var k = String(l[0]); if (k.charAt(0) !== '?') return true; var id = MATE_OF[k.slice(1)]; return !id || aboard(id); }
-  async function play(lines) {
+  async function play(lines, beat, branch) {
     lines = (lines || []).filter(keep).map(function (l) { return Array.isArray(l) ? [String(l[0]).replace(/^\?/, ''), l[1]] : l; });
+    try {
     for (var i = 0; i < lines.length; i++) {
       var ln = lines[i];
+      if (beat && G.StoryArt) await G.StoryArt.line('gold', beat, ln, branch ? -1 : i);
       if (Array.isArray(ln)) await UI.say(fmt(ln[1]), facing(ln[0], lines, i));
       else if (ln && ln.ask) {
         var v = await UI.ask(fmt(ln.ask), ln.opts.map(function (o, k) { return { label: o[0], value: k }; }), facing(ln.by || 'P', lines, i));
         var o = ln.opts[v == null ? 0 : v];
         var t = T(); if (t) (t.picks || (t.picks = [])).push(o[0]);
-        if (Array.isArray(o[1])) await play(o[1]);
+        if (Array.isArray(o[1])) await play(o[1], beat, true);
       }
     }
+    } finally { if (!branch && G.StoryArt) await G.StoryArt.end(); }
   }
   JH.play = play;
 
@@ -159,7 +163,7 @@
   JH.prologue = async function () {
     var t = T(); if (!t || t.prologue) return;
     var P = D.prologue;
-    await play(P.pro);
+    await play(P.pro, 'prologue');
     t.prologue = 1; t.beats.start = today(); S().flags.prologue = true;
     UI.toast('「새벽별」이 에이 만을 나선다. 어느 항구든 — 첫 짐을 판다.', 'scroll', 5200);
     await UI.fade(function () { G.Game.go('sea', { depart: D.home }); });
@@ -212,7 +216,7 @@
     var t = T();
     t.beats[b.id] = today();
     if (b.act) t.act = Math.max(t.act || 1, b.act);
-    try { await play(b.lines); } catch (e) { console.error(e); }
+    try { await play(b.lines, b.id); } catch (e) { console.error(e); }
     await JH.apply(b.then || {}, ctx || {});
     G.State.log('「' + D.short + '」 — ' + (b.title || TITLES[b.id] || '이야기가 한 걸음 나아갔다.'));
     if (G.Game.refreshHud) G.Game.refreshHud();
@@ -357,6 +361,7 @@
       (g ? '<div style="margin-bottom:6px"><b>지금 할 일</b> — ' + g + '</div>' : '') + (d ? '<div style="margin-bottom:10px" class="muted">' + d + '</div>' : '') +
       '<table class="tbl"><tr><th></th><th>사건</th><th></th></tr>' + rows + '</table></div></div>';
     try { var box = el.querySelector('.gs-face'), cv = G.Img.make(G.Img.chain.heroHalf(), 300, 380, function () { var x = document.createElement('canvas'); x.width = 300; x.height = 380; return x; }, { fit: 'contain' }); box.appendChild(cv); } catch (e) { console.error(e); }
+    if (G.StoryArt) G.StoryArt.gallery('gold', el);
   };
 
   // ================================================================ 게임 함수 감싸기
