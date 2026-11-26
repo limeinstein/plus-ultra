@@ -91,6 +91,12 @@ if os.path.isfile(event_art_overrides):
         PREFERRED_FILES.update(json.load(event_art_file))
 
 
+# 발견물 중복 파일을 한 경로로 모아도 옛 저장·도감 키는 유지한다.
+discovery_asset_overrides = os.path.join(TOOLS, 'discovery_category_20261126', 'asset-overrides.json')
+if os.path.isfile(discovery_asset_overrides):
+    with open(discovery_asset_overrides, encoding='utf-8') as discovery_asset_file:
+        PREFERRED_FILES.update(json.load(discovery_asset_file))
+
 # 혼인 업적의 도감도 실제 달성 사건과 같은 그림을 쓴다 (2026-11-10).
 PREFERRED_FILES['achievement-events/happily'] = 'legend-events/happily_after_all.webp'
 
@@ -581,7 +587,7 @@ def write_manifest(found):
 
 def is_valid(key, keys):
     family_age = re.match(r'^portraits/family/(?:[a-z0-9_]+/)?(?:son|daughter)_age(?:5|10|15|20|40)(?:_v[1-5])?(?:_half)?$', key)
-    return key in keys or family_age or key.startswith(('map-cities/', 'map-ruins/', 'portraits/story-player/', 'gold/cuts/', 'jhook/cuts/', 'portraits/player/', 'portraits/player-aged/', 'portraits/player-elderly/', 'portraits/player-ages-20261123/', 'portraits/courtiers/', 'portraits/building-managers/', 'portraits/gardeners/', 'interiors/royal-gardens/', 'landmarks/', 'map-discoveries/', 'characters/',
+    return key in keys or family_age or key.startswith(('map-cities/', 'map-ruins/', 'map-ruin-additions/', 'portraits/story-player/', 'gold/cuts/', 'jhook/cuts/', 'portraits/player/', 'portraits/player-aged/', 'portraits/player-elderly/', 'portraits/player-ages-20261123/', 'portraits/courtiers/', 'portraits/building-managers/', 'portraits/gardeners/', 'interiors/royal-gardens/', 'landmarks/', 'map-discoveries/', 'characters/',
                                           'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'figureheads/', 'relics/', 'relic-kinds/',
                                           'discovery-ends/', 'discovery-sheets/', 'duel/', 'street-folk/', 'npc-walk/', 'guide/', 'masterworks/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 

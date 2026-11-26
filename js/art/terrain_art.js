@@ -203,6 +203,8 @@
     var out=[],N=Math.round(2/f.treeCell),cell=2/N,coastFx=G.FX.terrainCoast;
     var dfx=G.FX.terrainBiomes,style=dfx.vegetation,plains=dfx.plains,rocks=dfx.rocks;
     var tall=plains.tall,grainPlaces=cropCenters(cx,cy,tall);
+    var stonehenge=G.DISC&&G.DISC.stonehenge, clearing=G.FX.mapRuins.stonehengeClearing;
+    if(stonehenge&&(Math.abs(stonehenge.lon-(cx*2+1))>1+clearing[0]||Math.abs(stonehenge.lat-(cy*2+1))>1+clearing[1]))stonehenge=null;
     for(var j=0;j<N;j++)for(var i=0;i<N;i++){
       var ix=cx*N+i,iy=cy*N+j,k=hash(ix,iy),lon=G.Geo.wrapLon((ix+.15+hash(ix+31,iy)*.70)*cell),lat=(iy+.15+hash(ix,iy+71)*.70)*cell;
       if(lat<-82||lat>82)continue;
@@ -221,6 +223,10 @@
       }
       // 같은 군락 안의 공터. 채도가 다른 색을 섞지 않고 수형과 밀도로 표현한다.
       density*=.65+.35*G.Geo.vnoise(lon*7+2,lat*7+8);
+      if(stonehenge){
+        var distance=Math.hypot((lon-stonehenge.lon)/clearing[0],(lat-stonehenge.lat)/clearing[1]);
+        density*=clamp((distance-.78)/.22,0,1);
+      }
       if(b===1)density*=f.tropicalDensity;
       var coast=G.Terrain.coastAt(lon,lat),shore=G.Geo.sdf(lon,lat)/(4096/360),coastPalm=coast.strength>.12&&Math.abs(lat)<30&&shore>coastFx.palmBand[0]&&shore<coastFx.palmBand[1];
       if(coastPalm)density=Math.max(density,coastFx.palmDensity);

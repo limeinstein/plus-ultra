@@ -14,6 +14,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import math
 import re
 from pathlib import Path
@@ -182,6 +183,13 @@ def shared_palette(frames: list[Image.Image]) -> Image.Image:
 
 
 def build_one(did: str) -> Path:
+    aliases = ROOT / 'tools/discovery_category_20261126/asset-overrides.json'
+    if OUT.resolve() == (ROOT / 'images/discoveries').resolve() and aliases.is_file():
+        target = json.loads(aliases.read_text(encoding='utf-8')).get('discoveries/' + did)
+        if target:
+            owner = ROOT / 'images' / target
+            assert owner.is_file(), '중복 통합 원본 없음: ' + str(owner)
+            return owner
     source = source_for(did)
     with Image.open(source) as raw:
         src = raw.convert("RGB")

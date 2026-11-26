@@ -32,14 +32,21 @@
     var p=D.photos[id];
     return p?{key:'map-cities/landmarks/'+id,r:[0,0,p[0],p[1],.5,p[1]/p[0]*.93]}:null;
   }
-  function direct(id){
+  function originalArt(id){
     if(HERO[id])return atlas('heritage',HERO[id]);
     var ruin=G.RUIN_MODELS&&G.RUIN_MODELS[id];
-    return ruin?{key:ruin[0],r:ruin.slice(1,7)}:photo(id);
+    if(ruin)return {key:ruin[0],r:ruin.slice(1,7)};
+    return G.RUIN_ADDITIONS&&G.RUIN_ADDITIONS[id]?null:photo(id);
+  }
+  function direct(id){
+    var original=originalArt(id);
+    if(original)return original;
+    var r=G.RUIN_ADDITIONS&&G.RUIN_ADDITIONS[id];
+    return r?{key:r[0],r:r.slice(1,7)}:null;
   }
   function valid(d,date){
     return d && d.cat==='ruin' && d.how==='city' && !d.mirage50 && !d.mirageFrom && !d.alwaysMirage &&
-      (!d.built||d.built<=date.y) && (!d.openY||d.openY<=date.y) && !(G.Disc&&G.Disc.isFuture(d));
+      (!d.built||d.built<=date.y) && (!d.openY||d.openY<=date.y) && (!d.goneY||date.y<d.goneY) && !(G.Disc&&G.Disc.isFuture(d));
   }
   function sites(id){
     var list=G.DISCOVERIES||[];
@@ -79,7 +86,8 @@
     sites(c.id).forEach(function(d){
       if(d.id===royal||!valid(d,date))return;
       var i=pref.indexOf(d.id);
-      var score=(i>=0?1e6-i*1e4:0)+(direct(d.id)?50000:0)+(d.wonder?5000:0)+Math.min(20000,d.val||0);
+      // 도시에 이미 전용 대표 외관이 있으면 누락 보완으로 대표 발견물이 바뀌지 않는다.
+      var score=(i>=0?1e6-i*1e4:0)+(originalArt(d.id)?50000:0)+(d.wonder?5000:0)+Math.min(20000,d.val||0);
       if(score>best){best=score;chosen=d;}
     });
     return chosen;

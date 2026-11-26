@@ -41,10 +41,11 @@ folders = {
     "discovery-sheets": ".webp",
 }
 manifest = (ROOT / "images/manifest.js").read_text(encoding="utf-8")
+files = dict(re.findall(r'^\s*"([^"]+)"\s*:\s*"([^"]+)"', manifest, re.M))
 missing = []
 for did in sorted(known):
     for folder, ext in folders.items():
-        path = ROOT / "images" / folder / f"{did}{ext}"
+        path = ROOT / "images" / files.get(folder + '/' + did, folder + '/' + did + ext)
         if not path.is_file():
             missing.append(str(path.relative_to(ROOT)))
         if f'"{folder}/{did}"' not in manifest:

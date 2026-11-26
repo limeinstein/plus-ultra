@@ -1,0 +1,44 @@
+[
+  {
+    "id": "bulguksa",
+    "source": "tools/discovery_painted_20261126/before/images/discoveries/bulguksa.gif",
+    "target": "images/discoveries/bulguksa.gif",
+    "sha256": "2384fa6a2d2fd826fa0b833ff04682b7290364ce2994e299422f1ede2bddfcb2",
+    "action": "existing-native-gif-restored"
+  },
+  {
+    "id": "bulguksa",
+    "source": "tools/discovery_painted_20261126/before/images/discovery-ends/bulguksa.jpg",
+    "target": "images/discovery-ends/bulguksa.jpg",
+    "sha256": "7c2a893e70d682e5586fe3d2a1b78f48f97fe976f01180d020210a52091629ef",
+    "action": "existing-native-gif-restored"
+  },
+  {
+    "id": "bulguksa",
+    "source": "tools/discovery_painted_20261126/before/images/discovery-sheets/bulguksa.webp",
+    "target": "images/discovery-sheets/bulguksa.webp",
+    "sha256": "970ad802ed3f639afe2a64ecc8eac57bc8f6472ce286423942deec95fab99d44",
+    "action": "existing-native-gif-restored"
+  },
+  {
+    "id": "colosseum",
+    "source": "tools/discovery_painted_20261126/before/images/discoveries/colosseum.gif",
+    "target": "images/discoveries/colosseum.gif",
+    "sha256": "4503b80b3bf6c67a4ba42a220611631d0c91697870a7581cf39f03ae52976911",
+    "action": "existing-native-gif-restored"
+  },
+  {
+    "id": "colosseum",
+    "source": "tools/discovery_painted_20261126/before/images/discovery-ends/colosseum.jpg",
+    "target": "images/discovery-ends/colosseum.jpg",
+    "sha256": "38484eb277593fe94b69ab642a9d55334267438d3eb310f2c26bd4a4c3fb433a",
+    "action": "existing-native-gif-restored"
+  },
+  {
+    "id": "colosseum",
+    "source": "tools/discovery_painted_20261126/before/images/discovery-sheets/colosseum.webp",
+    "target": "images/discovery-sheets/colosseum.webp",
+    "sha256": "8b2410eb5d0120a2152ab28e8683e1ebe62daf3b55852c794a2528fb8016c4a3",
+    "action": "existing-native-gif-restored"
+  }
+]

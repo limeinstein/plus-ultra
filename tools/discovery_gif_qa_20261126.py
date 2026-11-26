@@ -27,8 +27,8 @@ def audit(row, files):
         rel = files.get(key)
         if not rel:
             result['issues'].append('미연결:' + key)
-        elif rel != key + ext:
-            result['issues'].append('대상 경로 불일치:' + key + ' → ' + rel)
+        elif not rel.startswith(folder + '/') or not rel.endswith(ext) or '..' in Path(rel).parts:
+            result['issues'].append('잘못된 대상 경로:' + key + ' → ' + rel)
         path = ROOT / 'images' / rel if rel else canonical
         if not path.is_file():
             result['issues'].append('파일 없음:' + str(path.relative_to(ROOT)))

@@ -1,0 +1,8 @@
+{
+  "discoveries/flyingfish": "discoveries/f_flying.gif",
+  "discoveries/pufferfish": "discoveries/f_puffer.gif",
+  "discovery-ends/flyingfish": "discovery-ends/f_flying.jpg",
+  "discovery-ends/pufferfish": "discovery-ends/f_puffer.jpg",
+  "discovery-sheets/flyingfish": "discovery-sheets/f_flying.webp",
+  "discovery-sheets/pufferfish": "discovery-sheets/f_puffer.webp"
+}

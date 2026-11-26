@@ -90,9 +90,6 @@ def storyboard_frames(path: Path) -> list[Image.Image]:
 
 
 def build_one(tid: str, src: Path) -> Path:
-    # 회화로 교체한 발견물은 옛 모형·회전·조립 출력기로 덮어쓰지 않는다.
-    if OUT.resolve() == (ROOT / 'images/discoveries').resolve() and (ROOT / 'tools/discovery_painted_20261126/receipts' / (tid + '.json')).is_file():
-        return OUT / (tid + '.gif')
     source = SOURCES / f"{tid}.png"
     n = len(DURATIONS)
     if source.exists():

@@ -6,6 +6,7 @@ const assert = require('node:assert/strict');
 const { chromium } = require('../tools/procedural_art/node_modules/playwright-core');
 
 const root = path.resolve(__dirname,'..');
+fs.mkdirSync(path.join(root,'artifacts/world-detail-20261125'),{recursive:true});
 const scripts = [
   'js/core/inflate.js','js/data/base.js','js/data/seafx.js','js/data/world_data.js',
   'js/data/terrain_detail.js','js/data/terrain_patches.js','js/data/waterway_geometry.js',

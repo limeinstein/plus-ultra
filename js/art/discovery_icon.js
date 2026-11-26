@@ -148,7 +148,9 @@
     if (G.Img && G.Img.has(key)) POS[id] = { key: key, slot: 0, cols: 1, rows: 1 };
   });
 
-  function model(d) { return d && d.cat === 'ruin' && G.RUIN_MODELS && G.RUIN_MODELS[d.id]; }
+  function model(d) {
+    return d && d.cat === 'ruin' && ((G.RUIN_MODELS && G.RUIN_MODELS[d.id]) || (G.RUIN_ADDITIONS && G.RUIN_ADDITIONS[d.id]));
+  }
   DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && (POS[d.id] || model(d))); };
   var groundMemo = new WeakMap();
   DI.position = function (d) {
@@ -190,7 +192,7 @@
       return G.Disc.foundByMe(d.id);
     });
   }
-  DI.count = function () { return Object.keys(POS).length + Object.keys(G.RUIN_MODELS || {}).filter(function (id) {
+  DI.count = function () { return Object.keys(POS).length + Object.keys(Object.assign({},G.RUIN_ADDITIONS,G.RUIN_MODELS)).filter(function (id) {
     return !POS[id] && G.DISC && DI.isMapLandmark(G.DISC[id]);
   }).length; };
   DI.source = function (d) {

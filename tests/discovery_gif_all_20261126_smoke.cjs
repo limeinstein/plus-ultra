@@ -13,6 +13,7 @@ const onlyPlayback = process.argv.includes('--only-playback');
     args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const errors = [], report = { partial, categories: {}, loaded: [], playback: [] };
   fs.mkdirSync(OUT, { recursive: true });
+  fs.copyFileSync(path.join(ROOT, 'tests/fixtures/discovery-gif-gallery-20261126.html'), path.join(OUT, 'index.html'));
   try {
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
     page.on('pageerror', e => errors.push(e.message));

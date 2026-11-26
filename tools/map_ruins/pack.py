@@ -59,7 +59,7 @@ def source_tile(legacy, files):
     return tile
 
 
-def stonehenge_finish(image):
+def tidy_stone_edges(image):
     # Keep the original close, irregular stones and grass between them. The original
     # matte left saturated red/yellow pixels in the semi-transparent silhouette.
     alpha = image.getchannel('A')
@@ -97,7 +97,7 @@ def pack(rows, layout, files, out):
             legacy = row['source']
             frame = source_tile(legacy,files)
             if site == 'stonehenge':
-                frame = stonehenge_finish(frame)
+                frame = tidy_stone_edges(frame)
             image, anchor = normalize(frame)
             if legacy['cols']==legacy['rows']==1:
                 singles[row.get('region',0)].append((row,image,anchor,'legacy'))

@@ -6,20 +6,106 @@ from pathlib import Path
 
 import bpy
 
-from build_models import W, configure, cliff, column, frustum, monolith, rubble, steps, wall
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from build_models import W, configure, cliff, column, frustum, rubble, steps, weathered_materials
 
 
-def vesta(m):
-    for i in range(3):
-        m.cylinder(0,0,i*.08,1.12-i*.07,.08,'stone',32)
-    for i in range(15):
-        a=i*math.tau/15
-        x,y=.84*math.cos(a),.84*math.sin(a)
-        column(m,x,y,.24,1.15 if i not in (6,7,8,9) else .43,.08,broken=i in (6,7,8,9))
-        if i not in (5,6,7,8,9,10):
-            m.beam((x,y,1.48),(.84*math.cos(a+.42),.84*math.sin(a+.42),1.48),.105,'cut')
-    m.cylinder(0,0,.24,.56,.51,'wall',18)
-    rubble(m,.39,-.70,12,.42)
+def detailed_materials(key):
+    materials=weathered_materials(key)
+    for part in ('wall','cut','stone','roof','tile','wood','beam','soil','leaf'):
+        mat=materials[part]
+        if mat.get('map-ruin-detail'):
+            continue
+        mat['map-ruin-detail']=True
+        nodes,links=mat.node_tree.nodes,mat.node_tree.links
+        shader=nodes.get('Principled BSDF')
+        coord=next(node for node in nodes if node.type=='TEX_COORD').outputs['Object']
+
+        def noise(name,vector,scale,detail):
+            n=nodes.new('ShaderNodeTexNoise')
+            n.label=name
+            n.inputs['Scale'].default_value=scale
+            n.inputs['Detail'].default_value=detail
+            n.inputs['Roughness'].default_value=.73
+            links.new(vector,n.inputs['Vector'])
+            return n
+
+        def stain(label,source,color_low,color_high,weight):
+            ramp=nodes.new('ShaderNodeValToRGB')
+            ramp.label=label
+            a,b=ramp.color_ramp.elements
+            a.position,a.color=.28,(*color_low,1)
+            b.position,b.color=.72,(*color_high,1)
+            links.new(source,ramp.inputs['Fac'])
+            mix=nodes.new('ShaderNodeMixRGB')
+            mix.blend_type='MULTIPLY'
+            mix.inputs[0].default_value=weight
+            links.new(shader.inputs['Base Color'].links[0].from_socket,mix.inputs[1])
+            links.new(ramp.outputs['Color'],mix.inputs[2])
+            links.new(mix.outputs[0],shader.inputs['Base Color'])
+
+        mineral=part in ('wall','cut','stone','roof','tile')
+        stretch=nodes.new('ShaderNodeVectorMath')
+        stretch.operation='MULTIPLY'
+        stretch.inputs[1].default_value=(1.7,1.7,.38) if part not in ('wood','beam') else (2.6,2.6,.24)
+        links.new(coord,stretch.inputs[0])
+        runoff=noise('빗물 자국과 나뭇결',stretch.outputs[0],10,2.5)
+        stain('오래된 표면의 색 변화',runoff.outputs['Fac'],(.20,.23,.18),(1.19,1.13,1.03),.52 if mineral else .44)
+
+        grain=noise('석재 알갱이',coord,71 if mineral else 48,2)
+        if mineral:
+            warp=noise('갈라진 모서리',coord,24,2)
+            amount=nodes.new('ShaderNodeVectorMath')
+            amount.operation='SCALE'
+            amount.inputs['Scale'].default_value=.088
+            links.new(warp.outputs['Color'],amount.inputs[0])
+            bent=nodes.new('ShaderNodeVectorMath')
+            bent.operation='ADD'
+            links.new(coord,bent.inputs[0])
+            links.new(amount.outputs[0],bent.inputs[1])
+            seams=nodes.new('ShaderNodeTexVoronoi')
+            seams.feature='DISTANCE_TO_EDGE'
+            seams.label='깨어진 석재와 유약의 가장자리'
+            seams.inputs['Scale'].default_value=11 if part in ('wall','stone') else 15
+            links.new(bent.outputs[0],seams.inputs['Vector'])
+            joints=nodes.new('ShaderNodeMath')
+            joints.operation='MULTIPLY'
+            joints.use_clamp=True
+            joints.inputs[1].default_value=12
+            links.new(seams.outputs['Distance'],joints.inputs[0])
+            stain('깨진 틈의 광물색',joints.outputs[0],(.31,.29,.24),(1.08,1.11,1.05),.46 if part!='tile' else .30)
+            relief=nodes.new('ShaderNodeMath')
+            relief.operation='MULTIPLY_ADD'
+            links.new(grain.outputs['Fac'],relief.inputs[0])
+            relief.inputs[1].default_value=.63
+            links.new(joints.outputs[0],relief.inputs[2])
+            grain_height=relief.outputs[0]
+        else:
+            grain_height=grain.outputs['Fac']
+        bump=nodes.new('ShaderNodeBump')
+        bump.inputs['Strength'].default_value=.49 if mineral else .33
+        bump.inputs['Distance'].default_value=.043 if mineral else .028
+        links.new(shader.inputs['Normal'].links[0].from_socket,bump.inputs['Normal'])
+        links.new(grain_height,bump.inputs['Height'])
+        links.new(bump.outputs['Normal'],shader.inputs['Normal'])
+        if part in ('wall','cut','stone','wood','beam'):
+            shade=nodes.new('ShaderNodeAmbientOcclusion')
+            shade.inputs['Distance'].default_value=.24
+            shade.samples=8
+            shade.only_local=True
+            shade.label='기둥과 벽돌 사이의 그늘'
+            links.new(shader.inputs['Base Color'].links[0].from_socket,shade.inputs['Color'])
+            links.new(shade.outputs['Color'],shader.inputs['Base Color'])
+    return materials
+
+
+def wall(m,x,y,z,w,d,h,crenel=False):
+    m.box(x,y,z,w,d,h-.057,'wall')
+    m.box(x,y,z+h-.060,w+.025,d+.025,.061,'cut')
+    if crenel:
+        count=max(2,int(w*5))
+        for i in range(count):
+            m.box(x+w*((i+.5)/count-.5),y-d*.32,z+h,w/count*.47,d*.41,.12,'cut')
 
 
 def timbuktu(m):
@@ -56,12 +142,16 @@ def pompeii(m):
 
 def tiled_portal(m,x,y,w,h):
     for dx in (-w*.43,w*.43):
-        m.box(x+dx,y,0,w*.175,.29,h,'tile')
+        m.box(x+dx,y,0,w*.175,.29,h-.024,'tile')
         m.box(x+dx,y-.157,.08,w*.115,.025,h*.82,'sign')
     m.box(x,y,h*.72,w,.30,h*.28,'tile')
+    m.box(x,y,h-.009,w+.027,.324,.047,'cut')
     m.arch(x,y-.158,.05,w*.65,h*.82,'dark',point=True,line=True)
     for i in range(6):
         m.box(x-w*.41+i*w*.164,y-.176,h*.84,w*.065,.022,.048,'cut')
+    for i in range(7):
+        for dx in (-w*.44,w*.44):
+            m.box(x+dx,y-.183,.18+i*h*.095,w*(.04 if i%2 else .065),.013,.042,'cut')
 
 
 def madrasa(m,x,y,w,d,h):
@@ -102,7 +192,7 @@ def western_wall(m):
             h=.16 if row<6 else .13
             m.box(x,.33,row*.146,.408,.51+i%3*.014,h,'stone' if (row*5+i)%4==1 else 'wall')
     for x in (-1.8,1.73):
-        wall(m,x,.52,0,.20,.76,1.19)
+        wall(m,x,.52,0,.20,.76,1.24)
     for i in range(7):
         m.box(-1.45+i*.46,-.32,0,.34,.32,.028,'cut')
 
@@ -169,10 +259,11 @@ def cheomseongdae(m):
         for j in range(12):
             if i in (6,7,8) and j in (8,9):
                 continue
-            a=(j+i%2*.42)*math.tau/12
-            b=a+math.tau/12-.025
-            m.prism([(rr*math.cos(t),rr*math.sin(t),z) for rr,t in ((r-.11,a),(r,a),(r,b),(r-.11,b))],
-                    (0,0,.125),'wall' if (i+j)%5 else 'stone')
+            a=(j+i%2*.42)*math.tau/12+.012*math.sin(i*1.7+j)
+            b=a+math.tau/12-.020-.011*math.cos(j*4+i*2)
+            outer=r+.019*math.sin(j*6.6+i*2.3)
+            m.prism([(rr*math.cos(t),rr*math.sin(t),z) for rr,t in ((r-.11,a),(outer,a),(outer,b),(r-.11,b))],
+                    (0,0,.123),'wall' if (i+j)%5 else 'stone')
     for z in (1.83,1.93):
         for x in (-.37,.37):m.box(x,0,z,.16,.88,.105,'cut')
         for y in (-.36,.36):m.box(0,y,z,.63,.16,.105,'stone')
@@ -395,6 +486,10 @@ def suzhou(m):
         m.box(x,y-.108,.13,.198,.039,.067,'cut')
     for i in range(4):
         cliff(m,.94+i*.14,.62-i*.23,.43,.49,.36+i%2*.20,i+230,'stone')
+    for x,y,size in ((-.97,.70,.23),(.68,.86,.27)):
+        m.cylinder(x,y,0,.035,.49,'beam',7,.019)
+        m.rings(x,y,[(.37,size*.51,size*.63),(.51,size,size*.87),(.67,size*.84,size*.72),
+                       (.77,size*.41,size*.42)],9,'leaf',x)
 
 
 def fort_jesus(m):
@@ -409,8 +504,20 @@ def fort_jesus(m):
     m.arch(0,-.72,.02,.37,.39,'dark',line=True)
 
 
+def kukulcan(m):
+    steps(m,0,.54,0,.98,1.27,.76,12,'cut')
+    for x in (-.66,.66):
+        m.beam((x,-.56,.11),(x,.51,.82),.088,'wall')
+        m.rings(x,-.79,[(0,.24,.26),(.13,.27,.29),(.31,.22,.19),(.40,.15,.125)],8,'wall')
+        m.box(x,-.99,.07,.40,.21,.12,'stone')
+        m.box(x,-1.064,.143,.34,.035,.043,'dark')
+        for dx in (-.105,.105):m.box(x+dx,-.965,.26,.063,.039,.054,'stone')
+        for i in range(3):
+            m.beam((x-.16+i*.16,-.74,.23),(x-.20+i*.20,-.51,.37-i*.018),.035,'cut')
+
+
 RECIPES = [
- ('vesta','roman',1.17,0,vesta), ('ds_085','sudan',1.03,.08,timbuktu),
+ ('ds_085','sudan',1.03,.08,timbuktu),
  ('ds_096','roman',1.07,0,pompeii), ('ds_301','tilework',1.02,0,registan),
  ('ds_303','tilework',1.02,0,imam), ('ds_309','greek',1.04,.13,western_wall),
  ('ds_313','moorish',1.03,0,cordoba), ('ds_315','cathedral',.99,.04,cologne),
@@ -424,12 +531,14 @@ RECIPES = [
  ('ds_700','lubeck',1.02,.01,holsten), ('ds_713','japan',1.03,0,horyuji),
  ('ds_714','japan',.97,0,kiyomizu), ('ds_716','korea',1.01,.07,changdeok),
  ('ds_720','china',1.08,.02,suzhou), ('ds_722','eastafrica',1.09,-.13,fort_jesus),
+ ('ds_850','inca',1.35,.08,kukulcan),
 ]
 
 
 def main():
     out = Path(sys.argv[sys.argv.index('--')+1]).resolve()
     configure(out,cell=416)
+    W.B.materials=detailed_materials
     W.METER = 5.65
     for key, palette in {
         'roman':'B8A48C E1CCA8 78584B AD5F46 8D7659', 'sudan':'A37144 D4AC75 785042 8B5334 A48354',

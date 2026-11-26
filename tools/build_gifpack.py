@@ -32,12 +32,12 @@ def main():
     use, _, _ = BD.pick_images(found)
     gifs = {k: rel for k, rel in found.items() if rel.lower().endswith('.gif') and use.get(k) != rel}
     keep = set()
-    for k, rel in sorted(gifs.items()):
+    for rel in sorted(set(gifs.values())):
         dst = os.path.join(OUT, 'images', rel)
         keep.add(os.path.normpath(dst))
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         BD.W.copy_if_changed(os.path.join(pages.ROOT, 'images', rel), dst)
-    total = sum(os.path.getsize(os.path.join(OUT, 'images', rel)) for rel in gifs.values())
+    total = sum(os.path.getsize(os.path.join(OUT, 'images', rel)) for rel in set(gifs.values()))
     lst = ('/* 설치형 게임 GIF 팩 %s — tools/build_gifpack.py가 만든다. 발견물 GIF %d개를 팩 안의 원본으로 쓰고, 발견 장면도 원본 GIF로 돌린다 */\n'
            '(function (G) {\n'
            "  var base = ((window.PU_DESKTOP && window.PU_DESKTOP.gifpack) || '') + '/images/';\n"

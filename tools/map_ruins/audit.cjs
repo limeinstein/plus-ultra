@@ -23,7 +23,7 @@ const output=path.resolve(process.argv[2]||path.join(root,'artifacts/map-archite
         id:d.id,name:d.name,how:d.how,city:d.city,lon:d.lon,lat:d.lat,built:d.built,openY:d.openY,goneY:d.goneY,
         future:!!(G.Disc.isFuture(d)||d.mirage50||d.alwaysMirage||d.mirageFrom),
         desc:d.desc,region:d.reg, source:G.DiscoveryIcon.source(d), key:G.DiscoveryIcon.key(d),
-        model:G.RUIN_MODELS[d.id]||null, formation:!!G.Terrain.formationFor(d.id),
+        model:G.RUIN_MODELS[d.id]||null, added:G.RUIN_ADDITIONS?.[d.id]||null, formation:!!G.Terrain.formationFor(d.id),
         cityArt:G.Img.path('map-cities/landmarks/'+d.id), oldArt:G.Img.path('landmarks/'+d.id)
       }));
       const sk=Object.fromEntries(G.SKILLS.map(d=>[d.id,1]));

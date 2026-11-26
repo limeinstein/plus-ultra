@@ -42,11 +42,13 @@ assert len(MORE_BEAST_IDS) == 26, len(MORE_BEAST_IDS)
 assert len(ANIMAL_IDS) == 143, len(ANIMAL_IDS)
 assert len(ANIMAL_IDS) == len(set(ANIMAL_IDS)), "duplicate animal discovery id"
 
+manifest = dict(re.findall(r'^\s*"([^"]+)"\s*:\s*"([^"]+)"', (ROOT / 'images/manifest.js').read_text(encoding='utf-8'), re.M))
+
 for did in ANIMAL_IDS:
     source = source_for(did)
-    gif = ROOT / "images" / "discoveries" / f"{did}.gif"
-    end = ROOT / "images" / "discovery-ends" / f"{did}.jpg"
-    sheet = ROOT / "images" / "discovery-sheets" / f"{did}.webp"
+    gif = ROOT / "images" / manifest['discoveries/' + did]
+    end = ROOT / "images" / manifest['discovery-ends/' + did]
+    sheet = ROOT / "images" / manifest['discovery-sheets/' + did]
     for path in (source, gif, end, sheet):
         assert path.exists(), path
 

@@ -168,9 +168,6 @@ def orbit_frames(vs: list[Image.Image], base: Image.Image, seed: int) -> tuple[l
 
 
 def build_one(did: str, source: Path) -> Path:
-    # 회화로 교체한 발견물은 옛 모형·회전·조립 출력기로 덮어쓰지 않는다.
-    if OUT.resolve() == (ROOT / 'images/discoveries').resolve() and (ROOT / 'tools/discovery_painted_20261126/receipts' / (did + '.json')).is_file():
-        return OUT / (did + '.gif')
     seed = sum((i + 1) * ord(c) for i, c in enumerate(did))
     base = paper(seed)
     vs = views(source)
