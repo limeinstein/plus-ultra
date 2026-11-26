@@ -1,12 +1,26 @@
 /* 작은 황동 배지만 상단에 남기고, 기록 원문·그림은 사용자가 열었을 때만 보여 준다. */
 .hud .record-badge {
-  display:inline-flex; flex:0 0 auto; align-items:center; justify-content:center; gap:4px; height:var(--record-height);
-  margin:0 5px 0 2px; padding:0 8px; border:1px solid #a77c42; border-radius:5px;
+  position:relative; display:inline-flex; flex:0 0 var(--record-height); align-items:center; justify-content:center;
+  width:var(--record-height); height:var(--record-height);
+  margin:0 10px 0 2px; padding:0; border:1px solid #a77c42; border-radius:50%;
   background:#302116; color:#dfc394; font:700 var(--record-font)/1.1 var(--serif); white-space:nowrap;
   box-shadow:inset 0 0 0 1px #5a3e22; cursor:pointer;
 }
 .hud .record-badge[hidden] { display:none !important; }
+.hud .record-number[hidden] { display:none !important; }
 .hud .record-badge svg { width:15px; height:15px; flex:0 0 15px; }
+.hud .record-number {
+  position:absolute; right:-7px; top:-7px; display:block; min-width:17px; height:17px; padding:0 4px;
+  border:1px solid #f1d39a; border-radius:9px; background:#c69c5a; color:#281b10;
+  font:700 11px/15px var(--serif); text-align:center; box-shadow:0 1px 2px #0008;
+}
+.hud .record-tooltip {
+  position:absolute; top:calc(100% + 8px); left:0; z-index:4; visibility:hidden; opacity:0;
+  padding:7px 10px; border:1px solid #be9556; border-radius:4px; background:#302116; color:#f5dfb4;
+  font:700 var(--record-font)/1.35 var(--serif); white-space:nowrap; box-shadow:0 3px 8px #0008; pointer-events:none;
+}
+.hud .record-badge:hover .record-tooltip,
+.hud .record-badge:focus-visible .record-tooltip { visibility:visible; opacity:1; }
 .hud .record-badge.has-unread { color:#ffe5aa; border-color:#e1b46b; background:linear-gradient(#543a23,#302014); }
 .hud .record-badge:hover,
 .hud .record-badge:focus-visible { outline:2px solid #f2d398; outline-offset:2px; color:#fff0c8; }

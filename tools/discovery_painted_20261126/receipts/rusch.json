@@ -1,0 +1,43 @@
+{
+  "id": "rusch",
+  "name": "블라디미르 우스펜스키 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/rusch.png",
+  "sourceSha256": "3d8670f14e4fdaa0d612c09fd9fa5b8bb6c09791fa008f8ea36005be976b2b2a",
+  "sourceMtimeNs": 1795660488698183700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/rusch.gif",
+      "sha256": "205b2efea9016406d3168e9a9e3726e1b36e710056dbc55d5302760956516dd2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/rusch.jpg",
+      "sha256": "3a3647e559c7b4bbbc700f290db5022b80d29dadb3558f765ae4e7b7bdd5a004"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/rusch.webp",
+      "sha256": "29e78748c6f5bb01c5220c22024b120b28cb284dea52a22b19cee6d8a1dfabc0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/rusch.gif",
+      "sha256": "908c814d335b99e63ee2355e9622bbf2510837b1c59959cdd16b356ec46b79ce",
+      "bytes": 3635267
+    },
+    {
+      "file": "images/discovery-ends/rusch.jpg",
+      "sha256": "5725a11dcdff890b091cd0202e6b94d5ea399ea7fb5db81710a22b6f52ab1abd",
+      "bytes": 89904
+    },
+    {
+      "file": "images/discovery-sheets/rusch.webp",
+      "sha256": "6c27ab6f1be7c0cc25dfded5898a301653cab59f983cdd38fa2888af869d102d",
+      "bytes": 1541660
+    }
+  ]
+}

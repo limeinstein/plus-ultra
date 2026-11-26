@@ -1,0 +1,43 @@
+{
+  "id": "reykholt",
+  "name": "레이크홀트",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/reykholt.png",
+  "sourceSha256": "5894b3758e743577ba6dd2475a3459bb4e30f85cba8c1565748c3a97c6cda6ec",
+  "sourceMtimeNs": 1795660996735688000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/reykholt.gif",
+      "sha256": "52725c55f4ada31e62808752a72bc33a27cc4ed78ef047ce5f9a3454b3da0f4a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/reykholt.jpg",
+      "sha256": "98eb7be69c7da5a3f4dca8987a124dc9c1efb1c90dcd9b14424fbc14adb8abfe"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/reykholt.webp",
+      "sha256": "47f62a4e5ac075ec9d8e4ec24f53a45c62ea108f5410ece2dc16a5749b3cf4fa"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/reykholt.gif",
+      "sha256": "64aa4317c417fdb5fb74a69c034a93a33267171c2d988945a8fd5967fa14c4cd",
+      "bytes": 3551899
+    },
+    {
+      "file": "images/discovery-ends/reykholt.jpg",
+      "sha256": "ac562af77cf973f5b0361b3cde1ac3e8f00b8e9e0350020e5a8e585808f6f729",
+      "bytes": 92220
+    },
+    {
+      "file": "images/discovery-sheets/reykholt.webp",
+      "sha256": "dfc30fd72e0cceebd44530f6e994247b2dae82806623af08571040f412f89fbd",
+      "bytes": 1597544
+    }
+  ]
+}

@@ -6,7 +6,7 @@
 (function (G) {
   'use strict';
   var L = G.Loader = {};
-  var el = null, shownAt = 0, hideT = null, depth = 0;
+  var el = null, shownAt = 0, hiding = null, depth = 0, launch = false;
   function FX() { return (G.FX && G.FX.loader) || { minShow: 450, fadeMs: 450, fadeAfter: 350 }; }
   function box() {
     if (el) return el;
@@ -21,12 +21,16 @@
   }
   /** 떠 있는가 */
   L.shown = function () { return !!(box() && el.classList.contains('on')); };
+  L.busy = function () { return depth > 0 || L.shown(); };
   /** 글 바꾸기 */
   L.text = function (t) { var b = box().querySelector('.bl-text'); if (b && t != null) b.textContent = t; };
   /** 띄운다. o.dim: 뒤 화면이 비치는 작은 모양 (장면 사이) */
   L.show = function (t, o) {
     box(); o = o || {};
-    if (hideT) { clearTimeout(hideT); hideT = null; }
+    if (hiding) { clearTimeout(hiding.timer); hiding.resolve(); hiding = null; }
+    launch = o.delayMs > 0;
+    if (launch) el.style.setProperty('--bl-fade', (FX().launchFadeMs || 160) + 'ms');
+    else el.style.removeProperty('--bl-fade');
     el.classList.toggle('dim', !!o.dim);
     el.classList.remove('out');
     if (!el.classList.contains('on')) { el.classList.add('on'); shownAt = performance.now(); }
@@ -35,22 +39,34 @@
   /** 걷는다 — 너무 짧게 깜박이지 않게 minShow ms 는 보여 준 뒤 천천히 */
   L.hide = function () {
     box();
+    if (hiding) return hiding.promise;
     if (!el.classList.contains('on')) return Promise.resolve();
-    var F = FX(), wait = Math.max(0, (F.minShow || 0) - (performance.now() - shownAt));
-    return new Promise(function (res) {
-      if (hideT) clearTimeout(hideT);
-      hideT = setTimeout(function () {
-        hideT = null;
-        el.classList.add('out'); el.classList.remove('on');
-        setTimeout(function () { if (!el.classList.contains('on')) el.classList.remove('out', 'dim'); res(); }, F.fadeMs || 450);
-      }, wait);
-    });
+    var F = FX(), wait = launch ? 0 : Math.max(0, (F.minShow || 0) - (performance.now() - shownAt));
+    var fade = launch ? (F.launchFadeMs || 160) : (F.fadeMs || 450);
+    var current = hiding = {};
+    current.promise = new Promise(function (resolve) { current.resolve = resolve; });
+    current.timer = setTimeout(function () {
+      el.classList.add('out'); el.classList.remove('on');
+      current.timer = setTimeout(function () {
+        el.classList.remove('out', 'dim'); hiding = null; current.resolve();
+      }, fade);
+    }, wait);
+    return current.promise;
   };
   /** fn 을 하는 동안 띄워 둔다 (겹쳐 불러도 맨 바깥이 끝날 때 걷힌다) */
   L.during = async function (t, fn, o) {
-    depth++; L.show(t, o);
+    depth++;
+    box().classList.add('pending');
+    var showTimer;
+    if (o && o.delayMs > 0 && !L.shown()) {
+      L.text(t);
+      showTimer = setTimeout(function () { if (!L.shown()) L.show(null, o); }, o.delayMs);
+    } else L.show(t, o);
     try { return await fn(); }
-    finally { depth--; if (depth <= 0) { depth = 0; await L.hide(); } }
+    finally {
+      clearTimeout(showTimer);
+      if (--depth === 0) { el.classList.remove('pending'); await L.hide(); }
+    }
   };
   /** 다음 장면이 화면에 그려질 때까지 (두 번의 화면 갱신) */
   L.frames = function (n) {

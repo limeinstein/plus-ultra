@@ -1,0 +1,43 @@
+{
+  "id": "hagiasophia",
+  "name": "성 소피아 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/hagiasophia.png",
+  "sourceSha256": "a1b581267c7ec3311ec8f2acfd7201f2bdc4627a48b9d664612f11d0a2b79393",
+  "sourceMtimeNs": 1795660508085050800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/hagiasophia.gif",
+      "sha256": "597549044ba88198abd2b70a2a9376cc55f6d6488e3b9507c4305f10bc18ee1e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/hagiasophia.jpg",
+      "sha256": "2443c006fcd2e9a7386943aaf997411a00ae64dc765118317d73491fe0c28f65"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/hagiasophia.webp",
+      "sha256": "61fe3a2212c085d648174d0f2583c53d0b8a2f6d7b54c8ea617630573884e2fc"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/hagiasophia.gif",
+      "sha256": "82e94c4a2b13672924237aaeb0f74fd29aa7314b67b491f3dd4b69fccf82fba9",
+      "bytes": 3479286
+    },
+    {
+      "file": "images/discovery-ends/hagiasophia.jpg",
+      "sha256": "2cbf1b8d81eab9e78a980c8f5b9085c3b0b9409aef626a0917d086ffde6f39a5",
+      "bytes": 98690
+    },
+    {
+      "file": "images/discovery-sheets/hagiasophia.webp",
+      "sha256": "1562c278fd2b8ebc41a7a56b139f8d8f36acf980e4f35b89056853a4e70b6175",
+      "bytes": 1719584
+    }
+  ]
+}

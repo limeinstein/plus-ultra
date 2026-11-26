@@ -1,0 +1,43 @@
+{
+  "id": "sagustinstatue",
+  "name": "산아구스틴의 돌 신상",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sagustinstatue.png",
+  "sourceSha256": "b8ecaa2ce992cbbaf6e833b73f21de472e83ca5a65a84343c8287c6ebcdd2ff2",
+  "sourceMtimeNs": 1795662653268725200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sagustinstatue.gif",
+      "sha256": "59fc03c9420b4f371bc4780d1417efeb87b53d6018806c97f58acc55252078e1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sagustinstatue.jpg",
+      "sha256": "383c2c28e235813566fa2408b02e14a8330112a69626ea35afa9bbea2131ba53"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sagustinstatue.webp",
+      "sha256": "3d18e37ce84e66cfb37f8e86b4be01e41f6360b8ccd59574d4270a9f5453d7bd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sagustinstatue.gif",
+      "sha256": "842d902ea8c1fe247ffa4254247bdca43b47e25c627acc276321a6ac8758c6b6",
+      "bytes": 3586345
+    },
+    {
+      "file": "images/discovery-ends/sagustinstatue.jpg",
+      "sha256": "6b4d15cc8f5d5a78d849c6652a694e45633545fc1c3b874cf6ba709f056f5d6a",
+      "bytes": 95985
+    },
+    {
+      "file": "images/discovery-sheets/sagustinstatue.webp",
+      "sha256": "3ba7a0e5a604faa018851113427cb5b231dec755f78277fc8dc3cf8213f28eee",
+      "bytes": 1677372
+    }
+  ]
+}

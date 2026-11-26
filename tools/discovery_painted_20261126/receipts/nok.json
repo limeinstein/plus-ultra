@@ -1,0 +1,43 @@
+{
+  "id": "nok",
+  "name": "노크 문화 유적",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/nok.png",
+  "sourceSha256": "6c00ccb791f81f919dec5b5e1a5050279ad45839a45b362ab22fbcf3d581f845",
+  "sourceMtimeNs": 1795662357897407200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nok.gif",
+      "sha256": "20d5194467af6916111320bb8325e967f4f8cfdf4ea2ecacf765931501020127"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nok.jpg",
+      "sha256": "f1d626826eb9b5ea531777694d184ce39e4b2ce4bd3bf87c0bc807a4ac34a6b5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nok.webp",
+      "sha256": "ad6dc355705e2cc8aace0294228b34c3b10800aba9f2012f03d04812560786b7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nok.gif",
+      "sha256": "b2b5c0f220b6d1813cd15e98b9b6c7074588020f7fe0a615167c7cad9c195629",
+      "bytes": 3534328
+    },
+    {
+      "file": "images/discovery-ends/nok.jpg",
+      "sha256": "7746012f34e762ac498678fdf5c1a60d2dda2fcffac0ae5842b397c93984d7f9",
+      "bytes": 98981
+    },
+    {
+      "file": "images/discovery-sheets/nok.webp",
+      "sha256": "32641c641d36320fc62ac61152e0e7d49d8199d7903a0f51af361c2fe86d8c73",
+      "bytes": 1714580
+    }
+  ]
+}

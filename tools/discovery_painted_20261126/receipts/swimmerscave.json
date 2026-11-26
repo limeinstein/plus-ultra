@@ -1,0 +1,43 @@
+{
+  "id": "swimmerscave",
+  "name": "헤엄치는 사람들의 동굴",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/swimmerscave.png",
+  "sourceSha256": "9cbc4626d82da809b264f64186ad1ac674a981590a1db77338e5430664729c76",
+  "sourceMtimeNs": 1795662445885668200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/swimmerscave.gif",
+      "sha256": "c76e18282608f2122da3dcd3e1e6882ed6556d914d2271b09f5414f6024d7b12"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/swimmerscave.jpg",
+      "sha256": "e6a797977a5b0c6b649f0ab8990c938feb5c9ff8610a7b40a7ac6a8c294e4337"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/swimmerscave.webp",
+      "sha256": "c2f56b65118a2a1f88e6fbf23817267de0019fba4a03b25bcac05139b9544990"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/swimmerscave.gif",
+      "sha256": "4f184f5985c51ef621de998acbfed67c791d8a8aa8c677d44e15ebe35653ab0f",
+      "bytes": 3223631
+    },
+    {
+      "file": "images/discovery-ends/swimmerscave.jpg",
+      "sha256": "f16c79263e260fbf5afbbdf9da95a2160ef8ecfc804506af0f02164b37c92a37",
+      "bytes": 83966
+    },
+    {
+      "file": "images/discovery-sheets/swimmerscave.webp",
+      "sha256": "c63128245c914d2d9b7e3c787cd3672e5ea3899f3e390e1cede2cd779c96b46e",
+      "bytes": 1416622
+    }
+  ]
+}

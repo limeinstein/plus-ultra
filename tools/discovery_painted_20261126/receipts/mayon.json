@@ -1,0 +1,43 @@
+{
+  "id": "mayon",
+  "name": "마욘 화산",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/mayon.png",
+  "sourceSha256": "54a69813a553ffbfb3d17780231facc279d7951ce55134f689d80ebca4094bf9",
+  "sourceMtimeNs": 1795659649536212300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mayon.gif",
+      "sha256": "a11b844653c799754c20c7d5484a35026ea30ceea7bed681c23b3c0249842934"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mayon.jpg",
+      "sha256": "1102e88eff5ea17b2e4c20f8e0b096977843af637497f62d8be745aca5f3cf69"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mayon.webp",
+      "sha256": "2c259393b82638ceef4551f92f4407d94e826307b17205178c3aa3366b500f37"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mayon.gif",
+      "sha256": "b408e6bcbc5e8260c9b7a431818d4f1c06c403762a8f14b5057ce59386672b2b",
+      "bytes": 2487986
+    },
+    {
+      "file": "images/discovery-ends/mayon.jpg",
+      "sha256": "ab0461770e3063675aa2213ac1092a3b77e6a5cafa42d7888715367597ff056b",
+      "bytes": 78859
+    },
+    {
+      "file": "images/discovery-sheets/mayon.webp",
+      "sha256": "912681735c544861bde5c781b433747a65b5f3e38a36d6bfd65253944e1f771e",
+      "bytes": 1245678
+    }
+  ]
+}

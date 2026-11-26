@@ -1,0 +1,43 @@
+{
+  "id": "greatlib",
+  "name": "알렉산드리아 대도서관",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/greatlib.png",
+  "sourceSha256": "8885ef51a19df5156b0fb8d5511dba1da874dedb1ffec2a3dd92675e440c231e",
+  "sourceMtimeNs": 1795660789167362500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/greatlib.gif",
+      "sha256": "d9d4a7db16722bf49265166584ef88de9ae406ca4b27bb8e9d10127f77ab7c94"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/greatlib.jpg",
+      "sha256": "dc744dbb34bca9c085e482373d258d328953a6b2a458fb572e9d0732d3c1cd48"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/greatlib.webp",
+      "sha256": "b165439fb1ad7065797e02a678a238218ddf3a30b0ef0fabcc7f1ee3752cbd2f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/greatlib.gif",
+      "sha256": "4d8f320489a1a910cda855d66b7750eb1423594aaffcf72a1e7fb65e610f7ba7",
+      "bytes": 3687004
+    },
+    {
+      "file": "images/discovery-ends/greatlib.jpg",
+      "sha256": "4172aae05206a6809795c6396cf588ace73ed4d9d6286f8b5f7413e0120a770b",
+      "bytes": 102295
+    },
+    {
+      "file": "images/discovery-sheets/greatlib.webp",
+      "sha256": "47af5fbe71a8b41c9ccdad8fb1f6b609d7948d025afb9d3b172d09522c826435",
+      "bytes": 1774384
+    }
+  ]
+}

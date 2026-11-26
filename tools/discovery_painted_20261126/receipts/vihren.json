@@ -1,0 +1,43 @@
+{
+  "id": "vihren",
+  "name": "비흐렌산",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/vihren.png",
+  "sourceSha256": "d88aeb4b2df0dcfc5a4905597eddfac55dc9fc3bfd9c577b601df5d89625aa60",
+  "sourceMtimeNs": 1795659644298020700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/vihren.gif",
+      "sha256": "004890818869da1724f6095b20927a3cf2dce1a05f022ad9bc159e879b0f20fc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/vihren.jpg",
+      "sha256": "8ff06f957324ac804f1f85e516dd2da91052343b565edd92cbfb8c9ca4082f23"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/vihren.webp",
+      "sha256": "0337799cbe6d6eef8a1ef0bdc111eca60763feb54088e0b622484c401a7b9493"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/vihren.gif",
+      "sha256": "93dc3daedb49792d117cc838edb15eb2ffc6c6f2e53596f0d47744318d6d6971",
+      "bytes": 3320081
+    },
+    {
+      "file": "images/discovery-ends/vihren.jpg",
+      "sha256": "ad942762c882023d7af36b26012a578dab783975f58fd8dc32c335f6917723c6",
+      "bytes": 100439
+    },
+    {
+      "file": "images/discovery-sheets/vihren.webp",
+      "sha256": "aa7cd96841774d076512bbecaf0ce5ae67298eb4166b5396e81a5b7c3ba84059",
+      "bytes": 1801270
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "nike",
+  "name": "사모트라케의 니케",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/nike.png",
+  "sourceSha256": "cb6bc626af49caa6268b878ba725ca1290a8efb84cf3a4f2a17ca8b2efd8b1c2",
+  "sourceMtimeNs": 1795660586086244000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nike.gif",
+      "sha256": "0a650806d4b2f3fbe2b66b6de7e65a8fe335926109ae8f1c1414306c8e79b04c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nike.jpg",
+      "sha256": "6d57bf3aa8145bf98582abdfb28726594ae85931079911f67a1d1fda1a00da74"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nike.webp",
+      "sha256": "a67fdbac7f4798a03c8c2bfa0fa75f166fdbc5ffddbe2bafd100e0a9c62cb1e0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nike.gif",
+      "sha256": "7fb723603bcea2551c64a45de749126acd6693ace0694cd66573297d75df370a",
+      "bytes": 3511290
+    },
+    {
+      "file": "images/discovery-ends/nike.jpg",
+      "sha256": "c01e9b69a6bebccd0e0a43eec0412636ffc4fe167280d8d08b21692e48b2a736",
+      "bytes": 79159
+    },
+    {
+      "file": "images/discovery-sheets/nike.webp",
+      "sha256": "bd77ba2533301631ce20b78baccae1d3109c9e9265b994eea61c2c70c6e85509",
+      "bytes": 1304682
+    }
+  ]
+}

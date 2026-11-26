@@ -1,0 +1,43 @@
+{
+  "id": "sumela",
+  "name": "수멜라 수도원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sumela.png",
+  "sourceSha256": "603bae43a055fb2a67df4edaacbc2493d98b191b66d24d70160662b3f2c133b9",
+  "sourceMtimeNs": 1795662092178461000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sumela.gif",
+      "sha256": "5df304720d272b6a24ec6d1ecbe20c188f4ea5aefbfac73e3bd641096cb63885"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sumela.jpg",
+      "sha256": "c10aedb4a5652733374a290d69fba98b421cbab6b16dac650dd7466cf906363e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sumela.webp",
+      "sha256": "183de37837dc8a3a716012cddc716700f58d9d03abb46744d40955e7411a8856"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sumela.gif",
+      "sha256": "0b70c881c3061f1935599f407753d28a56a6e72c54c92bad18d20a2ad53ceb46",
+      "bytes": 3776535
+    },
+    {
+      "file": "images/discovery-ends/sumela.jpg",
+      "sha256": "539c3fdda365efbb9d862433b52aa63b9a7ff548ef42117b7081bc9e6e665c3f",
+      "bytes": 99558
+    },
+    {
+      "file": "images/discovery-sheets/sumela.webp",
+      "sha256": "94613507f942882709a3b568987855157e881abd287233d2450711d414c6fc07",
+      "bytes": 1752434
+    }
+  ]
+}

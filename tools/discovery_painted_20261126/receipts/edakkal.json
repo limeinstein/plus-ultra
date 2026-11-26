@@ -1,0 +1,43 @@
+{
+  "id": "edakkal",
+  "name": "에다칼 동굴",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/edakkal.png",
+  "sourceSha256": "8007219eb2ed21287148e96561d7c76f06044ba474ae04bf79235fd98d1d0bde",
+  "sourceMtimeNs": 1795662402080679100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/edakkal.gif",
+      "sha256": "32fdbfd09c46bdc346e438c0dcf92d5b889f6dd1f83241b93701b77aca027004"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/edakkal.jpg",
+      "sha256": "e956078e7491510192456f015db5becaca44fd471945128d38b95bbff3d96576"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/edakkal.webp",
+      "sha256": "f0764f42530b42c039a23a9c9af9d9f1a43dc14a2753cff1771d900fcce6358d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/edakkal.gif",
+      "sha256": "64df63767c3dee91e7cff0b88548c0df3a9458037282ac270b71cd4c8a2a3864",
+      "bytes": 3657017
+    },
+    {
+      "file": "images/discovery-ends/edakkal.jpg",
+      "sha256": "f8236e937b5572ab969bfad42788a242ecb82091584c778737d4b6fc5c9183b1",
+      "bytes": 91125
+    },
+    {
+      "file": "images/discovery-sheets/edakkal.webp",
+      "sha256": "b48bd5f2af2d91f2562f918d23a0c6529ae88edb5076171afdf39599a1fcadf7",
+      "bytes": 1563126
+    }
+  ]
+}

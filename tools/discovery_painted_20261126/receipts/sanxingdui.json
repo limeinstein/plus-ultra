@@ -1,0 +1,43 @@
+{
+  "id": "sanxingdui",
+  "name": "삼성퇴",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sanxingdui.png",
+  "sourceSha256": "ee07cfc974b21c0d3e9b2369356a200268bda730626c62e21bb94d84e2d58b92",
+  "sourceMtimeNs": 1795662513380919200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sanxingdui.gif",
+      "sha256": "00cd93f9a4fcbb54d1250b3c464a97508f4da3e4e103b04de5120550715ebaae"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sanxingdui.jpg",
+      "sha256": "6901dc76875355e6ffcecc5238dbbab15d0d3d5b199386d3a0672eb33e9f41d8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sanxingdui.webp",
+      "sha256": "8303f7c4c26a0337192b9076b8bd5262f87283579be12a4f42f4ce34c6d1dd86"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sanxingdui.gif",
+      "sha256": "6f70891fa38aa3f6f10ca62338c9d1f426fc93ea97f90a5283b7d18846502fcd",
+      "bytes": 3593688
+    },
+    {
+      "file": "images/discovery-ends/sanxingdui.jpg",
+      "sha256": "b44051853a801924f7a757b18694b0964c4421aa02c3beda95b6ba0d8f572179",
+      "bytes": 95931
+    },
+    {
+      "file": "images/discovery-sheets/sanxingdui.webp",
+      "sha256": "05360636049d74979efc0b3784d379768197ffe2f885f9a2e22bd1e6d4237b41",
+      "bytes": 1670936
+    }
+  ]
+}

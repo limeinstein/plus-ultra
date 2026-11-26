@@ -1,0 +1,43 @@
+{
+  "id": "brendan",
+  "name": "성 브렌던의 섬",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/brendan.png",
+  "sourceSha256": "be6d7e1f8b1cb62f4466c297c8dbaa91947fd473bef6a0e5f55591fbac16eaf9",
+  "sourceMtimeNs": 1795660531243926000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/brendan.gif",
+      "sha256": "f0c7679bb8c333c362c19af3c77f6976f7fce6aa0ef801cababede52027fe145"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/brendan.jpg",
+      "sha256": "68df9477d5f22a1a946c201da57aec3c5fdcc02c443f63e50508310f88413e31"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/brendan.webp",
+      "sha256": "e06cf187874dae831f8a4a32cd52ecb30357f2bb85c587cdce7478fb2b5ed13c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/brendan.gif",
+      "sha256": "27e5de5aa02f52ba7b230e7360e565ed92ca2aa40ad3e54d1f8137ad08f25e15",
+      "bytes": 3186815
+    },
+    {
+      "file": "images/discovery-ends/brendan.jpg",
+      "sha256": "1bfa62fc33f1ae39e24806dc196bc72f3f74d8a1422e9c9aaf4122181c05b009",
+      "bytes": 76619
+    },
+    {
+      "file": "images/discovery-sheets/brendan.webp",
+      "sha256": "5fae356337d566bfe0dcfcbae7d83207ebbf788283317c02f7f46cdae6453541",
+      "bytes": 1254054
+    }
+  ]
+}

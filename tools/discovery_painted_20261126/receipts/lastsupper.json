@@ -1,0 +1,43 @@
+{
+  "id": "lastsupper",
+  "name": "최후의 만찬",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/lastsupper.png",
+  "sourceSha256": "8592b4c6a567f8fdc1a1f67a2b385951716d49ed956160f52e1215d8cae55d2f",
+  "sourceMtimeNs": 1795660492396888400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/lastsupper.gif",
+      "sha256": "71424ad2d3f8f2b6e061de6e6e3e56bda944b0b04e0adf5b816bf5415331e207"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/lastsupper.jpg",
+      "sha256": "f2447f833ddfe027ba7a8598cb7cd80a489f000cc24b03c398f61b55376c0269"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/lastsupper.webp",
+      "sha256": "b3d8b996d21f82aea2cdabb13ca0b70f50e3ef4bb47afdae5ce1c590077406c9"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/lastsupper.gif",
+      "sha256": "b3f8e8afdc884e05e1d3cad219f4e622c9eb32f55401784d5074d9f8af4531ed",
+      "bytes": 3577609
+    },
+    {
+      "file": "images/discovery-ends/lastsupper.jpg",
+      "sha256": "eaa5035ae579597395750554c91b04fdb0b815e6ce27bd7e8e9fd8077bd8d287",
+      "bytes": 86718
+    },
+    {
+      "file": "images/discovery-sheets/lastsupper.webp",
+      "sha256": "89a5b9144071b7bf7b938f926d361c19966e8d62fadf5d69d8fd70d94344ac6f",
+      "bytes": 1469356
+    }
+  ]
+}

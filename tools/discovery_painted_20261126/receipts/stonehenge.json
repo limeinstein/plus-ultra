@@ -1,0 +1,43 @@
+{
+  "id": "stonehenge",
+  "name": "스톤헨지",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/stonehenge.png",
+  "sourceSha256": "b24d94cd7c06cabdbe93b006cede5977d04b3c8ae95face6563fd0996f4d761f",
+  "sourceMtimeNs": 1795659464451504200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/stonehenge.gif",
+      "sha256": "65bca6cd487661305a48accee8964b376cd76d4fb07a5e019c78964c975da323"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/stonehenge.jpg",
+      "sha256": "9b99b143be415e561d57fc873793a3df4cf37ffed034fc411cb3a85b7eab6f96"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/stonehenge.webp",
+      "sha256": "034d2439b8d2ec49ede9e82e00beaefde0d032948653a72a01d6b8ca643af458"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/stonehenge.gif",
+      "sha256": "675c9b411beb9f34d6b3e6ea0f7a487ea0e372f3ca1d30f9629409691627be00",
+      "bytes": 3072404
+    },
+    {
+      "file": "images/discovery-ends/stonehenge.jpg",
+      "sha256": "637a7f716b1e558a3c948141f37c42eb8ae8e74e73b3f214ac0e39c351e7f149",
+      "bytes": 83394
+    },
+    {
+      "file": "images/discovery-sheets/stonehenge.webp",
+      "sha256": "0bc2469ba312a8fa240e4e0dc23bda5161c2fe2bb25b0a9b04ea827af7af7158",
+      "bytes": 1396494
+    }
+  ]
+}

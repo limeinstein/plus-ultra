@@ -1,0 +1,43 @@
+{
+  "id": "chocolatehills",
+  "name": "초콜릿 힐",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/chocolatehills.png",
+  "sourceSha256": "3995cf1a0fc6c26553009e951ac3c2f9834a81cfd97f708ecf940f85c6773b4f",
+  "sourceMtimeNs": 1795659649579559900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/chocolatehills.gif",
+      "sha256": "e587d0f58902825af5d5fdc1934c61bae2cb16653638da76d1b79700f802395d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/chocolatehills.jpg",
+      "sha256": "76ce3b4d42ad5831d7473fd6ebe5b5945fb69dbd7e941a8aafb1df5366cfb6bc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/chocolatehills.webp",
+      "sha256": "e59a91423932c88bf465b49651fc2d151de5d3539d9aed6ed8b2f29477b13c52"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/chocolatehills.gif",
+      "sha256": "74e79335f7c0fcb6f48c807a6f54c40636e1cd85f649aec1c3787f057e34ef7a",
+      "bytes": 2765309
+    },
+    {
+      "file": "images/discovery-ends/chocolatehills.jpg",
+      "sha256": "daf74525cfe245cbccac30f6312490d783f080f5b0246878d946b6925d516763",
+      "bytes": 94598
+    },
+    {
+      "file": "images/discovery-sheets/chocolatehills.webp",
+      "sha256": "f456efe3a1bee9cc03ca84b55c301a9c6232f2b23d4004f502274e407eee5a0e",
+      "bytes": 1602134
+    }
+  ]
+}

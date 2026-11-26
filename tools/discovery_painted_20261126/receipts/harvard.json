@@ -1,0 +1,43 @@
+{
+  "id": "harvard",
+  "name": "하버드 대학교",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/harvard.png",
+  "sourceSha256": "7fb5202131fb3a81f117d2c6baf4172253af5c5325d2ca70f3e5aa08597fbead",
+  "sourceMtimeNs": 1795662978470581500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/harvard.gif",
+      "sha256": "2394a5a07f207ccc12b74ab660d443775dc11255f3d10a3bb7786ad6d6d3ead7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/harvard.jpg",
+      "sha256": "8761e9fe3353caa9bf43e3f39de2484c7c9b1c6e3399232399a68a5afd5d8922"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/harvard.webp",
+      "sha256": "a9deab773ad70a179be5d4a666baf63132d2bf2f8eaee77f141ccd468857fcdb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/harvard.gif",
+      "sha256": "b835c67b04e33c9f848dc059e5500c65d2ff63c203cd008110585e4522eeab84",
+      "bytes": 3559594
+    },
+    {
+      "file": "images/discovery-ends/harvard.jpg",
+      "sha256": "9d54a35a80fe362c7be1250fb65a79f22213feea4bf7efa87282427f6e9add98",
+      "bytes": 93162
+    },
+    {
+      "file": "images/discovery-sheets/harvard.webp",
+      "sha256": "75e1a069608a1dd54ae3039346d7742fa73e3bf38489b6c1ddcd8cc73ce2c598",
+      "bytes": 1630116
+    }
+  ]
+}

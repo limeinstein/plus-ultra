@@ -1,0 +1,43 @@
+{
+  "id": "emeishan",
+  "name": "아미산",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/emeishan.png",
+  "sourceSha256": "f4a6aa61d5a79c520acffd8c2c5eb3ef3a34c32cb1b9fb4999a971a8a3bf1547",
+  "sourceMtimeNs": 1795659646695308600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/emeishan.gif",
+      "sha256": "7889fa2aed4f3abd2e744c37949cc4dca4f2a0e90d75eb19e99986625ee4c43e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/emeishan.jpg",
+      "sha256": "6ba076db85fc14eafd72a58a99c99d9636e7a514e003e88dcca87235d04e9634"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/emeishan.webp",
+      "sha256": "086724e142da2f32cf87f5579217b711c114a788b173b1e23c2c3d4860dcc628"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/emeishan.gif",
+      "sha256": "647c660bb38f5bfb632cabde00e35f5c7e2d5b970763f9b803e15602825ddfac",
+      "bytes": 3198782
+    },
+    {
+      "file": "images/discovery-ends/emeishan.jpg",
+      "sha256": "d624ffcd1c424548fc6aaaf0651e38539f87edf274857f6c976a489d5f9774d4",
+      "bytes": 81300
+    },
+    {
+      "file": "images/discovery-sheets/emeishan.webp",
+      "sha256": "9469a8b44b98de005113e0cf3f1115160e0fed1c3450846129cefafd09a1a95d",
+      "bytes": 1353940
+    }
+  ]
+}

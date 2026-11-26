@@ -1,0 +1,43 @@
+{
+  "id": "borabora",
+  "name": "보라보라",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/borabora.png",
+  "sourceSha256": "83ed8c5bf1ff582a06e680e66d6711289a9cdc19bf3a3aa917615ec6b62329cd",
+  "sourceMtimeNs": 1795659661711897000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/borabora.gif",
+      "sha256": "ec175ff99001997030601278ee2fb8c6ffbf3522bab364a8ed1a93af9b9331d3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/borabora.jpg",
+      "sha256": "4425dd9cce6dd684b9dc66d0a2e84509dd8aad76e2421cbcdf4d943570c01911"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/borabora.webp",
+      "sha256": "ab98872c0e0c45e85ac3992375a0ec83693438abb97cbf9ca2ec5ada0aa07c42"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/borabora.gif",
+      "sha256": "4ddb091a4fb090618d0356a64908000dd77da8ac1a6e8c274481bd262edcf588",
+      "bytes": 2641567
+    },
+    {
+      "file": "images/discovery-ends/borabora.jpg",
+      "sha256": "aa8d7b91f29e10e4ea7ad3a030e4f4ed857fef102282a62b837d6a98b97fc980",
+      "bytes": 92257
+    },
+    {
+      "file": "images/discovery-sheets/borabora.webp",
+      "sha256": "8eb449fabd66f830f67db3e1f1f5c677f50d9e6ea5fbbe78ac582919ee252ce7",
+      "bytes": 1554784
+    }
+  ]
+}

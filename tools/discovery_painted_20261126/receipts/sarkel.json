@@ -1,0 +1,43 @@
+{
+  "id": "sarkel",
+  "name": "사르켈 — 하자르의 흰 성",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sarkel.png",
+  "sourceSha256": "af34d5466ba3470d3271498352b4230174d42cae6e52dd92f3969991b124895a",
+  "sourceMtimeNs": 1795663470502722300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sarkel.gif",
+      "sha256": "378c7ca4744941f2860257d41881442adcc0078db85a94a5485aedfa8ba56593"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sarkel.jpg",
+      "sha256": "dfc12f223b141b4de7506f7ced2579c85017b72e8e10185b56e597f2a232c3b4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sarkel.webp",
+      "sha256": "9fa49842683d884d6d9912248dcb1766c30bf6860e38231f93e4e84e6d91311c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sarkel.gif",
+      "sha256": "645c27feacea88df0714d1a2fe26a10cfc2ea20479dfc0aaa3b5e6c0e9bc9e4c",
+      "bytes": 3304780
+    },
+    {
+      "file": "images/discovery-ends/sarkel.jpg",
+      "sha256": "789ffef91d47d30cbc9e7d662b7e1eaecd4cc980e8517faadce62f559d3c0bd8",
+      "bytes": 92914
+    },
+    {
+      "file": "images/discovery-sheets/sarkel.webp",
+      "sha256": "b181e22e14a8de55a230c6ab316def25d45732d6f2930f7b2430fdda6aa60292",
+      "bytes": 1590834
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "devilstower",
+  "name": "마토 티피라 (곰의 오두막)",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/devilstower.png",
+  "sourceSha256": "20dc634fce599594437c37397593b631bd42de8ffd8e869a2cfce6de98352005",
+  "sourceMtimeNs": 1795659645119320900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/devilstower.gif",
+      "sha256": "d625bf5522c8885cab30083c8306f4fc72bcf6d943012a847ec4ab5d2247ef0e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/devilstower.jpg",
+      "sha256": "578df6228422a1c6a61342f7a2b90fd6f3653d913d01c707466b6efbca86fe60"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/devilstower.webp",
+      "sha256": "243c271681a66d427cd327950482724320b9b301781d92af702ff1bcb1d5d0e8"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/devilstower.gif",
+      "sha256": "74089c39e5659dc6bd42e4357c98c55121c199a298dc17343455642eb966f6ab",
+      "bytes": 2968615
+    },
+    {
+      "file": "images/discovery-ends/devilstower.jpg",
+      "sha256": "ce9574c51a672bfcddb51aa9843adc731ad5a1d706324c2538f350813bd79a50",
+      "bytes": 95683
+    },
+    {
+      "file": "images/discovery-sheets/devilstower.webp",
+      "sha256": "b47200b8e177b6c4f6a964361c07cadb7206d70b793eb99ac623f4ac1c41f6fe",
+      "bytes": 1667062
+    }
+  ]
+}

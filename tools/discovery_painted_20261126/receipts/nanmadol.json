@@ -1,0 +1,43 @@
+{
+  "id": "nanmadol",
+  "name": "난마돌",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/nanmadol.png",
+  "sourceSha256": "0581581b13c03f5100ac405e871d6bd9e32befd240b0c7a339e324d76107b6f3",
+  "sourceMtimeNs": 1795661302274357500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nanmadol.gif",
+      "sha256": "2af6f57b0ff16a5904d4951f5d06de56fc934c27629fd6afb36098e62bc86032"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nanmadol.jpg",
+      "sha256": "2adb50cd97cf885c970d1688ab081bf88de2293a793a59d6ea379f089176b060"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nanmadol.webp",
+      "sha256": "56af54ec4220b02d06939365b0089af012b9d61551f2ec4dc4d4c0559d37a945"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nanmadol.gif",
+      "sha256": "cad395995a47c6e58270946f8bdde7e933ee6b650da1d722bdda2e9bca655dc4",
+      "bytes": 3463786
+    },
+    {
+      "file": "images/discovery-ends/nanmadol.jpg",
+      "sha256": "9beede9c3316d09d91fc2c2a5c536f16e5ac55688074adaff3d82413d17483fb",
+      "bytes": 101392
+    },
+    {
+      "file": "images/discovery-sheets/nanmadol.webp",
+      "sha256": "a837c610b26d6f118e05f8f37630302dd5dc26ef19443242d7874c1a045b2915",
+      "bytes": 1756388
+    }
+  ]
+}

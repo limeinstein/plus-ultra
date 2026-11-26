@@ -1,0 +1,43 @@
+{
+  "id": "bluemosque",
+  "name": "술탄 아흐메트 모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/bluemosque.png",
+  "sourceSha256": "ba1e71d0a7ad680021d4b67b952eb9f75060eac90b57447ac1dee8daabd8b23b",
+  "sourceMtimeNs": 1795661244965385300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bluemosque.gif",
+      "sha256": "725615981a03e24ae28f194ed1e92a5a6c5b40a97acd362222c433062cace143"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bluemosque.jpg",
+      "sha256": "67c2d4cccd4d44ce962e9d5500819f0944ca91fe1ce5d13f40cf21ce04497bc0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bluemosque.webp",
+      "sha256": "5faf438d6f7d49bea2937fe5c4d4e30225ee9e7f22efaedba898bdb5a9d23518"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bluemosque.gif",
+      "sha256": "10f22db834152aa3ba27d89e4055f2bca9d9a19f17478be0f21fb22850fb7aa7",
+      "bytes": 3382611
+    },
+    {
+      "file": "images/discovery-ends/bluemosque.jpg",
+      "sha256": "bfd1e845cd2d9b58287550834695efb2ab07515bc52f5eaba991c6256ea140fd",
+      "bytes": 98610
+    },
+    {
+      "file": "images/discovery-sheets/bluemosque.webp",
+      "sha256": "3b9de1c4223d5b11f653a8110eacbce45327961eca06102ac56e21d61fad1317",
+      "bytes": 1672840
+    }
+  ]
+}

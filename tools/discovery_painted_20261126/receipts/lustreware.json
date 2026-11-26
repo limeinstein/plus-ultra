@@ -1,0 +1,43 @@
+{
+  "id": "lustreware",
+  "name": "마니세스 금채 접시",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/lustreware.png",
+  "sourceSha256": "6f4f82993aa48143f712062d87aab3705f6511dac6392f9a30c037b12d6a4f9d",
+  "sourceMtimeNs": 1795660175344627000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/lustreware.gif",
+      "sha256": "adc7817a79c22dfa16d035a8a24829e9a7a0743668b3f8fb3ab45d2160dee166"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/lustreware.jpg",
+      "sha256": "70cc8c59771066f5ddac2ecf59ecd060a977b5babd842292327e7c26edd76088"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/lustreware.webp",
+      "sha256": "b29cf8fad2d47c2656d136a01f6b216e5c9e42fb6beff74ad15c4ce51d37198c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/lustreware.gif",
+      "sha256": "67fbbaaf3efe37da8f7348fd8424e5d949f92fa0579d40d8cc2ce96c2977a022",
+      "bytes": 3578221
+    },
+    {
+      "file": "images/discovery-ends/lustreware.jpg",
+      "sha256": "ee640602ab3074cc695a181120e234ea446e4a2c54d46e9a6c24e12b8c8817cd",
+      "bytes": 102784
+    },
+    {
+      "file": "images/discovery-sheets/lustreware.webp",
+      "sha256": "a0c3db70b7c363fafe032e514f9dad08cfec5085d02c2deb07a5ce0358d3341b",
+      "bytes": 1745148
+    }
+  ]
+}

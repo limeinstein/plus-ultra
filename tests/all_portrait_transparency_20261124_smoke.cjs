@@ -11,7 +11,7 @@ fs.mkdirSync(OUT, { recursive: true });
 
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe',
-    headless: true, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
+    headless: true, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const errors = [], results = [];
   const retry = process.argv.includes('--retry-failures');
   const reportFile = path.join(OUT, 'runtime-audit.json');
@@ -21,7 +21,7 @@ fs.mkdirSync(OUT, { recursive: true });
     const p = await browser.newPage({ viewport: { width: 1280, height: 900 } });
     p.on('pageerror', e => errors.push(e.message));
     p.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await p.route(/https:\/\/fonts\.(googleapis|gstatic)\.com\//, r => r.fulfill({ status: 200, contentType: 'text/css', body: '' }));
+
     await p.goto(pathToFileURL(path.join(ROOT, 'tests/fixtures/portrait-audit-20261124.html')).href, { waitUntil: 'load', timeout: 120000 });
     await p.waitForFunction(() => window.G && G.Art && G.Art.portraitCanvas);
     await p.evaluate(() => {

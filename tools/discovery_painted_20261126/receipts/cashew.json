@@ -1,0 +1,43 @@
+{
+  "id": "cashew",
+  "name": "캐주",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/cashew.png",
+  "sourceSha256": "c6f60d522650247540b36e4992a5d96bce3882a81a3c58354c07886208e38605",
+  "sourceMtimeNs": 1795659653984991300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/cashew.gif",
+      "sha256": "feca2a6ac88d816a1d230e1386b4643a60c9735af532e0137c1c7f00956ba128"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/cashew.jpg",
+      "sha256": "bf5937c7a5ea3047ef7cb5919dbd71e427e42c2f49e409027f08ba3e9495f5b6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/cashew.webp",
+      "sha256": "ddc40994e55c4ab049ff0cfd9e3cd2671599b40e18c0dd9dabd4ec94d3eec737"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/cashew.gif",
+      "sha256": "7e1f2f18f9a1de39e4bb4b0277bf37e2572ae0434f3080a58c105508973acef6",
+      "bytes": 3441780
+    },
+    {
+      "file": "images/discovery-ends/cashew.jpg",
+      "sha256": "d996ec366593f2e68ec1532997a5085a5d9db362a3baf8c730bd3aeefaf3e8cd",
+      "bytes": 103168
+    },
+    {
+      "file": "images/discovery-sheets/cashew.webp",
+      "sha256": "8990c75dfdcd779815f58be222e4a6b5926e0a1fed4ac9cf3bec56d7dd516106",
+      "bytes": 1776684
+    }
+  ]
+}

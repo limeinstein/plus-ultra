@@ -1,0 +1,43 @@
+{
+  "id": "arzhan",
+  "name": "아르잔 고분",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/arzhan.png",
+  "sourceSha256": "8d32b05c2c71106fb88f43b7c05197ee4f58bb086b0d10d0cc394fa3701ad27d",
+  "sourceMtimeNs": 1795662079006733700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/arzhan.gif",
+      "sha256": "460fa680d2f22c0c2990de1c3471dd00deecbe29f47d527655635660b181eb05"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/arzhan.jpg",
+      "sha256": "485666a3ff0bc2702b8436158077ae65d280ca17f1141024546a351d5029abd2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/arzhan.webp",
+      "sha256": "58076ad4182d697be5761d7ab2190e5b1e7f4f1d8369fbda289d002797667c9a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/arzhan.gif",
+      "sha256": "a0bbf41da6e4108b330270328b4516652d79f906205461b3d8ddea152a59b70e",
+      "bytes": 3200638
+    },
+    {
+      "file": "images/discovery-ends/arzhan.jpg",
+      "sha256": "d3c09b2dd9232190a67aed5f815f669e067af962f788d461ddc0a0b8a403c8d7",
+      "bytes": 94573
+    },
+    {
+      "file": "images/discovery-sheets/arzhan.webp",
+      "sha256": "884dcac9e3f3dabc985bb9fab582fc2a35d892f18c4a58acf4ad299b898635f9",
+      "bytes": 1638772
+    }
+  ]
+}

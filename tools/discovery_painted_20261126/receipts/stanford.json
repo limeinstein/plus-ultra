@@ -1,0 +1,43 @@
+{
+  "id": "stanford",
+  "name": "스탠퍼드 대학교",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/stanford.png",
+  "sourceSha256": "4ef7b16cd356656099a32c41c7956d57e2a46873791de0054417e7003e965410",
+  "sourceMtimeNs": 1795663010942679900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/stanford.gif",
+      "sha256": "d825d4e5666b7163ef47b2c64171dc9aef33b240ddaec754adce6245f6aedf06"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/stanford.jpg",
+      "sha256": "cb2033c1206af6190859c35000a894e39f0bab8130459643ef98033a4d41aa97"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/stanford.webp",
+      "sha256": "bb8dc6a04bf67f3012d1fb7618ae8c1c36c814fc9cfc8f235257a549181b8b5b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/stanford.gif",
+      "sha256": "04dcccf7587711af644fb6efb9a26252300f21ed0c5a607ec34c25a909a749de",
+      "bytes": 3446373
+    },
+    {
+      "file": "images/discovery-ends/stanford.jpg",
+      "sha256": "7584ca8b21c2cd774219c41a2426c39842f0c43b2ce3be60a9213ea3fd276849",
+      "bytes": 105276
+    },
+    {
+      "file": "images/discovery-sheets/stanford.webp",
+      "sha256": "ae228a2f382dad9c95e2aa65ee2a31989e4b90a822178ae0016e034731f21b05",
+      "bytes": 1789426
+    }
+  ]
+}

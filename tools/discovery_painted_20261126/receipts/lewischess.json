@@ -1,0 +1,43 @@
+{
+  "id": "lewischess",
+  "name": "루이스 섬의 상아 체스 말",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/lewischess.png",
+  "sourceSha256": "c6a8021e1fd02d11dd26710ef659f720a31ff9abdfb1f4be532b9fd17eb03565",
+  "sourceMtimeNs": 1795663252911009500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/lewischess.gif",
+      "sha256": "216f29c0674787680a19fb2774ce64a6222b3f9664dd7d47ac72b4e315960722"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/lewischess.jpg",
+      "sha256": "5de6b9bf2a0d69f7757bc89b3f8a02d500722bad69110801dffe4d45ff11fcf5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/lewischess.webp",
+      "sha256": "24e1999520b393bf1d70da6f48214ecb826868aa6df7531b717147396fde9025"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/lewischess.gif",
+      "sha256": "fe306374a0ebbc72fece814705e0e8edab8d17bf496d6865cfd659168370c7cc",
+      "bytes": 3643333
+    },
+    {
+      "file": "images/discovery-ends/lewischess.jpg",
+      "sha256": "d4619afdbcd43017a8d36f595e66d23054b914a5bd8307cc37472541cb46e33d",
+      "bytes": 90763
+    },
+    {
+      "file": "images/discovery-sheets/lewischess.webp",
+      "sha256": "c7616c914c3f0ec1798b1a38872649d8d72213c391235348ae9c6ad1e5b80c68",
+      "bytes": 1538054
+    }
+  ]
+}

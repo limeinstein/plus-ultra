@@ -1,0 +1,43 @@
+{
+  "id": "oceo",
+  "name": "옥에오 — 부남의 옛 항구",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/oceo.png",
+  "sourceSha256": "664ee740c255619582b711e0dfd8f9a864c379de7c8449b4d315e8b7f84c34c4",
+  "sourceMtimeNs": 1795662679342958700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/oceo.gif",
+      "sha256": "80bdfaf5a00f663b3ae812ecac75102f4bf5249084d348e38d6f7c5e1ee997c1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/oceo.jpg",
+      "sha256": "b7221733cb0989bfb962e55b08c03dbb4b4026e65c0664fae1bfac13b905f40a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/oceo.webp",
+      "sha256": "fed83c338470e82616f608a9acc2b097ea186fe68eb339f47c0f374dea54c9e5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/oceo.gif",
+      "sha256": "5e69ba8f754007bfb2c5b33f0678f5e0b6b230f246d126e119d2109e083498f5",
+      "bytes": 3584489
+    },
+    {
+      "file": "images/discovery-ends/oceo.jpg",
+      "sha256": "90290bf9cd4f896069b50cd2bf4759ae995324bf195d9bbfec499218e728a21d",
+      "bytes": 102222
+    },
+    {
+      "file": "images/discovery-sheets/oceo.webp",
+      "sha256": "2e7283300f3c7ac22f770bfcc69024a9e61cc464d464aa381d982ee8e796edeb",
+      "bytes": 1765384
+    }
+  ]
+}

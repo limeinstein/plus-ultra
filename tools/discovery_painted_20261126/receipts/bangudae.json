@@ -1,0 +1,43 @@
+{
+  "id": "bangudae",
+  "name": "반구대 암각화",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/bangudae.png",
+  "sourceSha256": "c119d3b85e27190c536a3e47dabf8966b2a486efc1559da108551c8a97770abb",
+  "sourceMtimeNs": 1795662686537512800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bangudae.gif",
+      "sha256": "bfca939ebd67d3203dcd250ad2bc37eae7f024a578312e3529db6197bda739ff"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bangudae.jpg",
+      "sha256": "608cd86e0baa39e86d252625a97c2d14cd48a36aa3c7b45bc30842782314e438"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bangudae.webp",
+      "sha256": "6ddd53854cac689e04435deed1bab8986ea94bd40f05090cdc61288c98fa2afc"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bangudae.gif",
+      "sha256": "b0b10acf52cf8f448a6e160f31d898610a17512222a6fe27e932f84b1f2e75a7",
+      "bytes": 3775364
+    },
+    {
+      "file": "images/discovery-ends/bangudae.jpg",
+      "sha256": "b2f50cbfeed25a00f4061bc8df0f933b9034591a57ef056ef42a3812415bc3e3",
+      "bytes": 100932
+    },
+    {
+      "file": "images/discovery-sheets/bangudae.webp",
+      "sha256": "95d83faf0e46fcd374e926c57eb3916cece9b55bbb87da8cd6ed13d9a25042c4",
+      "bytes": 1776342
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "apostolic",
+  "name": "성 베드로 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/apostolic.png",
+  "sourceSha256": "53cb31eed4a1d2b7ac0576dbdd74096932dec6095bf594d4cfcbefbf3f6f948d",
+  "sourceMtimeNs": 1795661246412711300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/apostolic.gif",
+      "sha256": "c31bd9e666b9b5c79da137649479e3d82cf816fd4d10a82494079faa74c65f4d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/apostolic.jpg",
+      "sha256": "65cb94a52ec45f910a370225173e3565635a374b4e0c70b14b4a1bc59425ebb0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/apostolic.webp",
+      "sha256": "fe61976c0aaa01d271eb0c39104d93972b400d58458c64b7ee008c7f4e9df87f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/apostolic.gif",
+      "sha256": "fb56cd203b172880f1364fa2c15f2750ffdc1d58256a3fff625475ed43d3e87d",
+      "bytes": 3518665
+    },
+    {
+      "file": "images/discovery-ends/apostolic.jpg",
+      "sha256": "08858bbaa2192d22c7b0e804eb2b04b28808e89b2fac54ac42c1d2bd11459ca3",
+      "bytes": 97032
+    },
+    {
+      "file": "images/discovery-sheets/apostolic.webp",
+      "sha256": "418aca1841bf1a82abaa549e18fa21a097346e2c129de94d508bda3c5645f8dc",
+      "bytes": 1679790
+    }
+  ]
+}

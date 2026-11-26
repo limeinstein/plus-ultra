@@ -6,7 +6,7 @@ const { chromium } = require('../tools/procedural_art/node_modules/playwright-co
 const ROOT = path.resolve(__dirname, '..'), OUT = path.join(ROOT, 'artifacts/ui-keyboard-20261122');
 fs.mkdirSync(OUT, { recursive: true });
 (async () => {
-  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe', args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe', args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const errors = [], cases = [];
   try {
     const p = await browser.newPage({ viewport: { width: 960, height: 540 } });
@@ -18,6 +18,8 @@ fs.mkdirSync(OUT, { recursive: true });
     });
     await p.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await p.waitForFunction(() => window.G && G.Game.sceneName === 'title', null, { timeout: 120000 });
+    await p.waitForFunction(() => !G.Loader.shown() && !G.Scenes.title.bootPending && !document.querySelector('.title-menu button.navy.disabled'), null, { timeout: 120000 });
+    await p.evaluate(() => G.Game.prepareRenderer());
     await p.evaluate(() => {
       G.State.newGame({ name: '선장', nation: 'PT', job: 'explorer', age: 24, birth: { m: 1, d: 1 }, st: { str: 60, int: 60, mar: 60, cha: 60 }, sk: {}, lg: [], diff: 'normal' });
       G.Game.state.settings.res = .35;

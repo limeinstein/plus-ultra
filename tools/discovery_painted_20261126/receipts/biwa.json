@@ -1,0 +1,43 @@
+{
+  "id": "biwa",
+  "name": "비파",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/biwa.png",
+  "sourceSha256": "c39c132418b6cc0a1368b6541052a9c84bd40612527fad1f79d130f17eab3cda",
+  "sourceMtimeNs": 1795659653843574600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/biwa.gif",
+      "sha256": "29ada323778cf5b51f80dd79d133b362b4ac2c06f5c71143af35db372dff5349"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/biwa.jpg",
+      "sha256": "97c007ab29dc6c75b54b81f0826551832936443938682b3c4862ca7c043d5d06"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/biwa.webp",
+      "sha256": "4518036808724896ed68b0eafaea69c82e8d2fba7f47a5bceec38baf73958d8c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/biwa.gif",
+      "sha256": "cb0c0664f5b80e0c69203506da0bf408248becf64829a44cede188b66b17d321",
+      "bytes": 3273618
+    },
+    {
+      "file": "images/discovery-ends/biwa.jpg",
+      "sha256": "ac72b2593a7db623dabb7f9df51b2efd61b3effcb5de8cda468eafee95113cc7",
+      "bytes": 94931
+    },
+    {
+      "file": "images/discovery-sheets/biwa.webp",
+      "sha256": "7fd3f127f21059204b509f08ded64ca8d4bb099f009a2741b7c57cfa9d339712",
+      "bytes": 1579828
+    }
+  ]
+}

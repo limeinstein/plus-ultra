@@ -1,0 +1,43 @@
+{
+  "id": "mallorca",
+  "name": "마요르카 섬",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/mallorca.png",
+  "sourceSha256": "28ecaaa4e3b9911097bf707b18fb258b28543a1e06f8e4db85b70de522a8c7ff",
+  "sourceMtimeNs": 1795659660291022800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mallorca.gif",
+      "sha256": "2084e80597bc96143aae3c6989a52cb30f3b561c270e6ebbd4b1fd338778ed5c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mallorca.jpg",
+      "sha256": "795859c01b47abe6e4e52204a1f74ce1f56e8a076a0514743b18ba5f4e62c0d0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mallorca.webp",
+      "sha256": "db6bc1efe36976b94cb47847c528f4f560ba34ec53335ec00e65ac54e0289bc4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mallorca.gif",
+      "sha256": "ea2baaaed61516a5cb13b78542261fb69bc79ae7fbfa697d077f01035e7dc184",
+      "bytes": 3111655
+    },
+    {
+      "file": "images/discovery-ends/mallorca.jpg",
+      "sha256": "b56bd41b5daaa06e9e28409b3ec77465302d9b68c06a423f1c8640d09ddfd182",
+      "bytes": 103054
+    },
+    {
+      "file": "images/discovery-sheets/mallorca.webp",
+      "sha256": "4e1357ba22161932eef32b2c5c5ced1a141c916013b625218df8eddf78a735d3",
+      "bytes": 1844502
+    }
+  ]
+}

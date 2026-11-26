@@ -1,0 +1,43 @@
+{
+  "id": "sicily",
+  "name": "시칠리아",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/sicily.png",
+  "sourceSha256": "7427b37c7ace1e0819935121a9147f990ac073855a68425710c384af1a3ef156",
+  "sourceMtimeNs": 1795659660670742800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sicily.gif",
+      "sha256": "cad18ff48660b7f42c278d531aa0525d2fcaccd797fb444d7a127e8f7a99ae29"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sicily.jpg",
+      "sha256": "89da1661bf2c49c32b43ce95aab996bd7013502d49422afab5adcf1c07936bae"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sicily.webp",
+      "sha256": "96841cfd911033623e23775b653a0243495abea3d4b52e0d9444a066bd75b952"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sicily.gif",
+      "sha256": "1b02cd1f7f5735e261471dff191bb5ca2c7429dda902dc8dfa59557de504530c",
+      "bytes": 2866132
+    },
+    {
+      "file": "images/discovery-ends/sicily.jpg",
+      "sha256": "6c457a970e92abbc6e75d47ef46093715cdced7f9566bd427e11775f2bb3ab29",
+      "bytes": 91673
+    },
+    {
+      "file": "images/discovery-sheets/sicily.webp",
+      "sha256": "07c382b9c2ef7e2a24e3d64555d18696da836c3481e1b600b93453be25f8dc0a",
+      "bytes": 1566630
+    }
+  ]
+}

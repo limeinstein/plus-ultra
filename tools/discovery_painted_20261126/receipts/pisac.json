@@ -1,0 +1,43 @@
+{
+  "id": "pisac",
+  "name": "피삭",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/pisac.png",
+  "sourceSha256": "5e16ce19c08e9861d2470be9912372a88c67a1e23e8beec7390ad494cfb5f568",
+  "sourceMtimeNs": 1795663220137933400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/pisac.gif",
+      "sha256": "2b88fe4c33007f77538ecb048c5b00f08fb2d06db26f7c215d92f479c5ce3c5f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/pisac.jpg",
+      "sha256": "e4b8ae6edbec0a00c36165c7421c8ae78d0d73878eca7de0e5448393ca31e5f2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/pisac.webp",
+      "sha256": "a6b649d6bb309c71ec8c48109824b79571407efe36dfd2e64b5f36b3af2641f7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/pisac.gif",
+      "sha256": "6756fd40dc422872969c61ccc7e612222ed332add2de3bef7a3b9685ca03ec21",
+      "bytes": 3524566
+    },
+    {
+      "file": "images/discovery-ends/pisac.jpg",
+      "sha256": "46164f63824f60adc9a5a681f98e178a8be646ba4428e602b9eda16e1b4cd0cc",
+      "bytes": 96768
+    },
+    {
+      "file": "images/discovery-sheets/pisac.webp",
+      "sha256": "92edb7a781199c23b34c8382c28d4c3003d83ea2dbd3300586d3e039f0086764",
+      "bytes": 1642844
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "durer",
+  "name": "뒤러의 자화상",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/durer.png",
+  "sourceSha256": "2b772789e692ced420ecd3d010397790e3fc4344f7cd801f70dba2ab2576c49f",
+  "sourceMtimeNs": 1795660452778328400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/durer.gif",
+      "sha256": "58f2f4209bd46e6ac11b92dbfc03c658b9be29bc9a643dbefc8b7375ba9dad22"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/durer.jpg",
+      "sha256": "5a89307bf71785861c852365b033adabab04a5b9e19e902acd5316f82e1feb88"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/durer.webp",
+      "sha256": "45e0525090d00986ee93e8574e84655be7e43d5df522da3bdd4404f5819f0acd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/durer.gif",
+      "sha256": "89391d80a8212dec42f26f973d86ed002091fe093471899615761d655f44d036",
+      "bytes": 3563518
+    },
+    {
+      "file": "images/discovery-ends/durer.jpg",
+      "sha256": "9d47e38c0f57df431f1e78b934bd86b9406cbb7b7b73592dd8a6202cf461f61f",
+      "bytes": 77975
+    },
+    {
+      "file": "images/discovery-sheets/durer.webp",
+      "sha256": "7c3779934a3146ddc11385a7e218b2b7a8788063714f2b3e4ebe9265eab0b0dd",
+      "bytes": 1288356
+    }
+  ]
+}

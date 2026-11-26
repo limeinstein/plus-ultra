@@ -1,0 +1,43 @@
+{
+  "id": "bayanzag",
+  "name": "바양작 — 불타는 절벽",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/bayanzag.png",
+  "sourceSha256": "1c36592b1d12c7fe1db7359bfa522a35435e0e2a50ba11b3e00347ef2e989ace",
+  "sourceMtimeNs": 1795659649962320200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bayanzag.gif",
+      "sha256": "95e01e61fa8baa5e7ddd195ef4b66b6ec7b3fa02a64f10b661216420bf8dd1f4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bayanzag.jpg",
+      "sha256": "776a61c0da8e0446c133a44dd3f260568e439711c573f5ba7c86f7b55227f27e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bayanzag.webp",
+      "sha256": "7b149b1000cfa1916fdb3d4e451abf2722380e6f7aeec2aa5ac833e21ae4ec33"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bayanzag.gif",
+      "sha256": "31342972ef40a05bc6ef231d07f85dbf41e8335f7d98b85494d0305a39ab0b0b",
+      "bytes": 2941593
+    },
+    {
+      "file": "images/discovery-ends/bayanzag.jpg",
+      "sha256": "2b9838c9ff71871919195dda6f0ea0cfad03086b350a70eae27c173dfe65811b",
+      "bytes": 86793
+    },
+    {
+      "file": "images/discovery-sheets/bayanzag.webp",
+      "sha256": "728988069dcbf5c6be570d6306e3626a754b6a4ee71a421bf09bcb028c415315",
+      "bytes": 1387972
+    }
+  ]
+}

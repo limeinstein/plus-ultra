@@ -57,6 +57,11 @@ def frames_of(path):
 def build(gid, force=False):
     src = os.path.join(SRC, gid + '.gif')
     dst = os.path.join(DST, gid + '.webp')
+    # 보물의 옛 3D 원화를 다시 읽으면 회화 시트가 되돌아가므로 보존한다.
+    if os.path.isfile(os.path.join(ROOT, 'tools', 'discovery_painted_20261126', 'receipts', gid + '.json')):
+        if not os.path.isfile(dst):
+            raise FileNotFoundError('회화 시트 누락: tools/discovery_painted_20261126/build.py로 다시 만드세요: ' + gid)
+        return None
     if not force and os.path.exists(dst) and os.path.getmtime(dst) >= os.path.getmtime(src):
         return None
     original_color = treasure_frames(gid)

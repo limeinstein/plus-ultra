@@ -6,7 +6,7 @@ const {chromium} = require('../tools/procedural_art/node_modules/playwright-core
 const root = path.resolve(__dirname, '..'), out = path.join(root, 'artifacts/story-art-20261124');
 fs.mkdirSync(out, {recursive:true});
 (async()=>{
- const browser = await chromium.launch({executablePath:process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader']});
+ const browser = await chromium.launch({executablePath:process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=angle', '--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const errors=[], report={};
  try {
   const p=await browser.newPage({viewport:{width:1600,height:1000}});

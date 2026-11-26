@@ -1,0 +1,43 @@
+{
+  "id": "choquequirao",
+  "name": "초케키라오",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/choquequirao.png",
+  "sourceSha256": "970647b072b84116fcebdfebc220544b45fe692a8827fd382a35883352378f40",
+  "sourceMtimeNs": 1795662959309268600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/choquequirao.gif",
+      "sha256": "2f10867e6c4b57ffdca6eb1eba292c0262efbd7d799374e87e14e377fea46320"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/choquequirao.jpg",
+      "sha256": "47979faafecc64c9573f8f78b63575024c2fa282d98c09765e24fcef282b24f6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/choquequirao.webp",
+      "sha256": "f0deb481a9ed3075613e1184a024ad6478088bfc46bb165107d33306a4ff8354"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/choquequirao.gif",
+      "sha256": "8e15369339abfa362f0cc84b347e95e50088b61190a492186ef0d851d2e817d8",
+      "bytes": 3667106
+    },
+    {
+      "file": "images/discovery-ends/choquequirao.jpg",
+      "sha256": "d81178fb02f6e4953c3dbb1f18df39eecb67893f67549e31c26c92e815c0420c",
+      "bytes": 101687
+    },
+    {
+      "file": "images/discovery-sheets/choquequirao.webp",
+      "sha256": "92577c3d09b922ceb02a2393dccff10588adcf65181a877dce0ba78261d6096b",
+      "bytes": 1771658
+    }
+  ]
+}

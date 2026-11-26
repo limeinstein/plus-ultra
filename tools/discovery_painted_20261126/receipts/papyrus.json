@@ -1,0 +1,43 @@
+{
+  "id": "papyrus",
+  "name": "파피루스",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/papyrus.png",
+  "sourceSha256": "0b3e18d5f7c64295dfd8928b451d4007473ef9c1d34ec0614621ea27f922546e",
+  "sourceMtimeNs": 1795659644068341300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/papyrus.gif",
+      "sha256": "174c8f92ff86423f15e35dbfea2b7f93510e60e45907c75b87569d823a5dedb1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/papyrus.jpg",
+      "sha256": "70b4f11981f397596f81f8a1fc86b06d3e9747f2c4681b4467b7792246fd64dc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/papyrus.webp",
+      "sha256": "18dcdad965c63d6509f34cb1bc8344484cac0950c94d362a01987f54bad7d3d1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/papyrus.gif",
+      "sha256": "3a8907b8aa86e41ef8399a7d1749242ed256358f6605f9f0fd9c80139457048e",
+      "bytes": 3272543
+    },
+    {
+      "file": "images/discovery-ends/papyrus.jpg",
+      "sha256": "ccac1f4d532c5674b81f6eab6b40c6b95f7c815d62e5ecc6791b562165486a1f",
+      "bytes": 91351
+    },
+    {
+      "file": "images/discovery-sheets/papyrus.webp",
+      "sha256": "65c264d2ad0f85e62682c92653724f6804fec1df5afeba1019a738357deffec8",
+      "bytes": 1565920
+    }
+  ]
+}

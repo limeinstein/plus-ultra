@@ -1,0 +1,43 @@
+{
+  "id": "havana",
+  "name": "엘 모로 요새",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/havana.png",
+  "sourceSha256": "ffc4df005ef626a182ee6d285d14cf12b8bba0459eb4719d4c913280cdd02474",
+  "sourceMtimeNs": 1795661187012582200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/havana.gif",
+      "sha256": "8f13b119caaed06577de2f2116e813d8df5ee6483a2a5122f4ce40a354189022"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/havana.jpg",
+      "sha256": "93d6f2cb42866beeed4cc8d8b9138f9623ceb70b196db9211bfa3df265a32b93"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/havana.webp",
+      "sha256": "b08b11d6d6a262eabb4d66b298f2aea571f282a683e4e13ec1e773896ff7c26a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/havana.gif",
+      "sha256": "9d8afc27ffab04adff7af09e6087054626af411bb2c95bd78cca1ab1e7720159",
+      "bytes": 3098627
+    },
+    {
+      "file": "images/discovery-ends/havana.jpg",
+      "sha256": "abb6d8a7e022f1db7d3cd4eb0e25ffde4400e1baaa29a3aa534a1da379b03b5d",
+      "bytes": 90383
+    },
+    {
+      "file": "images/discovery-sheets/havana.webp",
+      "sha256": "b7da4ffc568490d8339aefecb7faae63d6eb8af62a9dac20ee73386eb26f52f2",
+      "bytes": 1549908
+    }
+  ]
+}

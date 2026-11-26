@@ -1,0 +1,43 @@
+{
+  "id": "broadway",
+  "name": "브로드웨이",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/broadway.png",
+  "sourceSha256": "3c6fa89f9a02d00ba1af7fb6629d6237ddfa06f48a689f566fcf2a474302bbd6",
+  "sourceMtimeNs": 1795661733631692400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/broadway.gif",
+      "sha256": "7d41b818fed9a2464921c760926ef780ffda2563793246ae32265cc3a4713163"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/broadway.jpg",
+      "sha256": "ee8beea81bb898b1c4ac4404fe14902f989496c47b6f513d4fc1f091e9571d51"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/broadway.webp",
+      "sha256": "9d2489aebc8960540cc719d6e7fc113410c6e71b7c767eb14d7753bcb38092ac"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/broadway.gif",
+      "sha256": "b0f5acbb94d1e33ecff8a1e7bc40558f69acf9b23971b018d49302a221d51f4e",
+      "bytes": 3603058
+    },
+    {
+      "file": "images/discovery-ends/broadway.jpg",
+      "sha256": "abd35a9ffef38f2eccee35ce8e8a5ad0b24e07dfd477903b1198b79195f0d788",
+      "bytes": 98642
+    },
+    {
+      "file": "images/discovery-sheets/broadway.webp",
+      "sha256": "8ad67683953a5c8e75cef06c8899994bc82a05705c85a1d1049d5059ae0d8244",
+      "bytes": 1670972
+    }
+  ]
+}

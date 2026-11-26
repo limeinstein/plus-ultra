@@ -1,0 +1,43 @@
+{
+  "id": "corkoak",
+  "name": "코르크참나무",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/corkoak.png",
+  "sourceSha256": "7648bac2a5f2c27ddb91593012baf33cd4fbc74dec5feca15a7cb129fe158f5d",
+  "sourceMtimeNs": 1795659654545404500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/corkoak.gif",
+      "sha256": "8634f49e3a925d6fc5baa02d93df0974bb14142695ade26df17f901b4a404b2e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/corkoak.jpg",
+      "sha256": "8d9857f376aebc48625326c1901d71189e5f2519963bef3ab15e35c898549091"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/corkoak.webp",
+      "sha256": "aa619d324e97a4f31922ae20a26956640f5b7714a94b3985e7204b51c60061e5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/corkoak.gif",
+      "sha256": "c4be0a2f41bf7f27bc83ed88e0f925ac5fdae3b80e2dca6143da5d0504f64bff",
+      "bytes": 3523399
+    },
+    {
+      "file": "images/discovery-ends/corkoak.jpg",
+      "sha256": "3a29947f223e0cb558f4c22454e49c2d5aa069004413efffb81ff76632838cf8",
+      "bytes": 103565
+    },
+    {
+      "file": "images/discovery-sheets/corkoak.webp",
+      "sha256": "c79046082c332c4a9c69eb9c718694065c50e76d81e9128c0029408e8f283317",
+      "bytes": 1819464
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "persepolis",
+  "name": "페르세폴리스",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/persepolis.png",
+  "sourceSha256": "fcd4bafab85758559b174d6b0404aecffb859e182b0b2989feec91170287da26",
+  "sourceMtimeNs": 1795659748607303300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/persepolis.gif",
+      "sha256": "11f8daf3c19cf694c07780edb6a65d7102d81770d51c5ae33bf30e9f3ddd89bc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/persepolis.jpg",
+      "sha256": "cfd9d26bb00914d0a81b81854cdda75af9212e737e97842212b544b0f164574d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/persepolis.webp",
+      "sha256": "68ebf4ff563cd588907bcb1110a52442076baf1279cdf9545a65f4499bebe309"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/persepolis.gif",
+      "sha256": "eb69b2a492d709a1a5a1166d1f404438612b9c84edde7098d6436d53fe8f0bdd",
+      "bytes": 3425756
+    },
+    {
+      "file": "images/discovery-ends/persepolis.jpg",
+      "sha256": "da1c3a13c76f915a3bd1c480f33c77462ae597d317bf42c10076686f431b5ad8",
+      "bytes": 87742
+    },
+    {
+      "file": "images/discovery-sheets/persepolis.webp",
+      "sha256": "5d4d5d599ca5302cf40d40caeeaab5e1b87624be94d41b7b5c7a9121466cbf09",
+      "bytes": 1494022
+    }
+  ]
+}

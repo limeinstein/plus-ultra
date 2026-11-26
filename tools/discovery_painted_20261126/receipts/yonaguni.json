@@ -1,0 +1,43 @@
+{
+  "id": "yonaguni",
+  "name": "요나구니 해저 바위 계단",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/yonaguni.png",
+  "sourceSha256": "32ac71d851b09a619ef9a75498f0085dee0f196f4c576f03a78bf68ac2ae2bc0",
+  "sourceMtimeNs": 1795661539271447400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/yonaguni.gif",
+      "sha256": "227881c020ed0918e4a860224bf11a667be2dbcd7ab9b4b8401bf0894b1551d6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/yonaguni.jpg",
+      "sha256": "7d8f4b6f918f6d814117abdb4f3f909707ded764c30521a8b2b34f0b910fff4d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/yonaguni.webp",
+      "sha256": "9a176fc4f81228055062cf6d11278c3a444418039f7aa01f86cb0399df27b6da"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/yonaguni.gif",
+      "sha256": "294a15558d72bf28433907ae2d4576dddeb1f9fd7577939a1800f1bbdbdf2ce6",
+      "bytes": 2894755
+    },
+    {
+      "file": "images/discovery-ends/yonaguni.jpg",
+      "sha256": "f5fef37b6fdbca1f0b9163046266c52fbbf583951c83692950d11cf7d48065da",
+      "bytes": 86165
+    },
+    {
+      "file": "images/discovery-sheets/yonaguni.webp",
+      "sha256": "18871c07d142df02049d12c4c004427b6f33cde18d3b466033715a413c452f7d",
+      "bytes": 1449046
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "ruhr",
+  "name": "졸버라인 탄광",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ruhr.png",
+  "sourceSha256": "37c29594d7b8e8538608b08dbb73a8b0ed37887230f18718de2d4a13cbba8061",
+  "sourceMtimeNs": 1795661526340122900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ruhr.gif",
+      "sha256": "90e8d0a47304a460023443ea1d549b2165973c8b69cac43308b03c014f7e8ffb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ruhr.jpg",
+      "sha256": "7aac5bea9af8f4a7ea3f4d766676b9a39527db2e125a77d0447fec57c4d26a4f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ruhr.webp",
+      "sha256": "3cb27162ab0e7ddb34a1637a6765cb6f4226bf35d0dedf38965f071525540a04"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ruhr.gif",
+      "sha256": "37b87a194b50e5e715ef625fb54190a54f36c9695f39c01898e583c014ea526d",
+      "bytes": 3403145
+    },
+    {
+      "file": "images/discovery-ends/ruhr.jpg",
+      "sha256": "71833eaf7f14ef9b0dbf196960d075b907df9ee16f322700ae32ad283226ef12",
+      "bytes": 91442
+    },
+    {
+      "file": "images/discovery-sheets/ruhr.webp",
+      "sha256": "04988a3b546ae20d6d79cc24d967ead4e410a8cc3a77a5b45c5650f2673622d1",
+      "bytes": 1566668
+    }
+  ]
+}

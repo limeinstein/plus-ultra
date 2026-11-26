@@ -1,0 +1,43 @@
+{
+  "id": "marasca",
+  "name": "마라스카 체리",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/marasca.png",
+  "sourceSha256": "37e2e4152cbf110053929492f1b29e0c3c397592f74bef67a002ae98335b3d6f",
+  "sourceMtimeNs": 1795659651022265100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/marasca.gif",
+      "sha256": "d4274abce4e82f8702e3409a2eb31eac57ffbaf93dfaec6516e9ae9f28389300"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/marasca.jpg",
+      "sha256": "edee1a71865b97b461172222ece89ac4c530263b05fd7d90a4c2bdf1d7009d1f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/marasca.webp",
+      "sha256": "a42233ab78a6710ea371e854414f22fcb7cde385754575b5b1e0d6bee9f4d424"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/marasca.gif",
+      "sha256": "7d99fa45c22f3aa5eae667b712787f22251d43424485c0c0639995017c2df389",
+      "bytes": 3437280
+    },
+    {
+      "file": "images/discovery-ends/marasca.jpg",
+      "sha256": "9ddc3301b4970aa0ba8a6a57747ff209369d353d41c36469768a61db7924d11f",
+      "bytes": 101043
+    },
+    {
+      "file": "images/discovery-sheets/marasca.webp",
+      "sha256": "d924b7c4aa7532541f64b44069bcf0222559b129a95bbbbfbf29cf502b994164",
+      "bytes": 1715196
+    }
+  ]
+}

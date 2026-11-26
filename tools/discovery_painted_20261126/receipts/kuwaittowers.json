@@ -1,0 +1,43 @@
+{
+  "id": "kuwaittowers",
+  "name": "쿠웨이트 타워",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kuwaittowers.png",
+  "sourceSha256": "28143d3263aeaaea74dc8209418b45f42df4f57b4477d74b76360443445811f8",
+  "sourceMtimeNs": 1795662777550341400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kuwaittowers.gif",
+      "sha256": "e66669db117ca82a7bacd0b4c444d936253b09af2d67dc211452ff6dec92ac8e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kuwaittowers.jpg",
+      "sha256": "17ea82a24c00cff7e2f52dd1c9bc3b0ab8661de2d40c1b0bae36eed21d2c77eb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kuwaittowers.webp",
+      "sha256": "9a2c6e0c75b0388a0934a46da04c37feaed7c33d73d586ed3180d63918534013"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kuwaittowers.gif",
+      "sha256": "850e555bc9959899ec4d05107c34fdb0054c190665ae46a3ee4ed00b0ceb31d1",
+      "bytes": 3069276
+    },
+    {
+      "file": "images/discovery-ends/kuwaittowers.jpg",
+      "sha256": "001e8b5ebfa190c3e66d3211fca1987acc7e04cbc485b03f679c20d638df8e35",
+      "bytes": 85538
+    },
+    {
+      "file": "images/discovery-sheets/kuwaittowers.webp",
+      "sha256": "4211e147489cb6260732bcb273dd24bb989cfe5cc7343699810f10ba6c2ea55b",
+      "bytes": 1404390
+    }
+  ]
+}

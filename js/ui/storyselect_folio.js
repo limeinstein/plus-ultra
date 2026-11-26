@@ -186,6 +186,6 @@
     function turn(step) { var n = Math.max(0, Math.min(Math.ceil(modes.length / slots) - 1, rosterPage + step)); if (n !== rosterPage) { rosterPage = n; focused = n * slots; renderRoster(); focusStory('ss-card'); } }
     function start() { if (sel < 0 || picked) return; picked = modes[sel]; win.close('go'); }
     stage.querySelector('.ss-return').onclick = function () { win.close(null); }; prev.onclick = function () { turn(-1); }; next.onclick = function () { turn(1); };
-    renderMap('world'); renderRoster(); focusStory('ss-card'); var v = await win.result; if (v === 'go' && picked) await picked.begin();
+    renderMap('world'); renderRoster(); focusStory('ss-card'); var v = await win.result; if (v === 'go' && picked) await SL.begin(picked);
   };
 })(window.G = window.G || {});

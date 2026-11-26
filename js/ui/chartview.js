@@ -68,6 +68,15 @@
     var view = !opts.center && !opts.span ? fit : { lon: opts.center ? opts.center[0] : (here ? U.clamp(here.lon, -150, 150) : 0), lat: opts.center ? opts.center[1] : (here ? here.lat : 20), span: opts.span || fit.span };
     var drawnMarks = [], hoverMark = null;   // ? 표식 (I.chartMarks가 그린 것) — 마우스를 올리면 이름, 누르면 단서 (2026-10-26)
     var crisp = null, crispKey = '', idleT = null, hover = null, hoverDisc = null, sel = opts.select != null ? G.CITY_DATA[opts.select] : null, seaSel = null, dead = false;
+    var cityImages = new Set(), cityRedraw = null, cityMarks = {};
+    function pendingCityImage(key) {
+      if (cityImages.has(key)) return;
+      cityImages.add(key);
+      G.Img.load(key).then(function () {
+        if (dead || cityRedraw != null) return;
+        cityRedraw = setTimeout(function () { cityRedraw = null; draw(); }, 40);
+      });
+    }
     function latSpan() { return view.span * H / W; }
     function clampView() {
       view.span = U.clamp(view.span, SPAN_MIN, SPAN_MAX);
@@ -124,16 +133,19 @@
       // 제독이 직접 발견한 도시 밖 유적·자연 경관만 지도에 남긴다.
       var landmarkScale = cityScale * 0.95, landmarkLabels = [];
       landmarks().forEach(function (d) {
-        var p = px(d.lon, d.lat, b); if (p[0] < -24 || p[0] > W + 24 || p[1] < -24 || p[1] > H + 24) return;
+        var foot = G.DiscoveryIcon.position(d), p = px(foot[0],foot[1],b);
+        if (p[0] < -48 || p[0] > W + 48 || p[1] < -48 || p[1] > H + 48) return;
         var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: landmarkScale, selected: d === hoverDisc });
         if (d === hoverDisc) landmarkLabels.push([d, p, mark.radius]);
       });
       // 도시: 지역별 건축 양식과 규모를 작은 실루엣으로 표시한다.
       var labels = [];
+      cityMarks = {};
       cities().forEach(function (c) {
         var p = px(c.lon, c.lat, b); if (p[0] < -12 || p[0] > W + 12 || p[1] < -12 || p[1] > H + 12) return;
         var f = G.CityInfo.flags(c, ref), visited = s.visited && s.visited[c.id];
-        var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { scale: cityScale, visited: visited, auto: f.auto });
+        var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { scale: cityScale, visited: visited, auto: f.auto, pending: pendingCityImage });
+        cityMarks[c.id] = mark;
         var r = mark.radius;
         if (f.sponsor) { var dx = p[0] + mark.width / 2, dy = p[1] + mark.top, dz = 3.6 * zk; ctx.fillStyle = '#c9a030'; ctx.strokeStyle = '#3a2a10'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(dx, dy - dz); ctx.lineTo(dx + dz, dy); ctx.lineTo(dx, dy + dz); ctx.lineTo(dx - dz, dy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
         if (f.contract) { var fx = p[0] - mark.width * 0.18, fy = p[1] + mark.top; ctx.strokeStyle = '#2a1a10'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 15); ctx.stroke(); ctx.fillStyle = '#b01e1e'; ctx.beginPath(); ctx.moveTo(fx, fy - 15); ctx.lineTo(fx - 11, fy - 11.5); ctx.lineTo(fx, fy - 8); ctx.closePath(); ctx.fill(); }
@@ -193,8 +205,8 @@
       var scale = U.clamp(Math.pow(32 / view.span, 0.25) * 0.75, 0.42, 1.15);
       cities().forEach(function (c) {
         var p = px(c.lon, c.lat, b), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y);
-        var hit = Math.max(11, G.CityIcon.metrics(c, scale).radius + 3);
-        if (d <= hit * hit && d < bd) { bd = d; best = c; }
+        var mark = cityMarks[c.id], hit = mark && mark.boxes ? 11 : Math.max(11, G.CityIcon.metrics(c, scale).radius + 3);
+        if ((d <= hit * hit || G.CityIcon.hit && G.CityIcon.hit(mark,x,y)) && d < bd) { bd = d; best = c; }
       });
       return best;
     }

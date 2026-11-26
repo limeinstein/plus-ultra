@@ -6,7 +6,7 @@ const { chromium } = require('../tools/procedural_art/node_modules/playwright-co
 const OUT = path.resolve(__dirname, '../artifacts/notice-position-20261103');
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe',
-    args: ['--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox'] });
+    args: ['--allow-file-access-from-files', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox'] });
   const errors = [];
   try {
     const p = await browser.newPage({ viewport: { width: 1600, height: 900 } });

@@ -46,6 +46,9 @@ def master_path(did: str) -> Path:
 
 
 def build_one(did: str, out_dir: Path, ends_dir: Path) -> Path:
+    # 회화로 교체한 발견물은 옛 모형·회전·조립 출력기로 덮어쓰지 않는다.
+    if out_dir.resolve() == (ROOT / 'images/discoveries').resolve() and (ROOT / 'tools/discovery_painted_20261126/receipts' / (did + '.json')).is_file():
+        return out_dir / (did + '.gif')
     source = master_path(did)
     if not source.exists():
         raise FileNotFoundError(f"시네마틱 원화 없음: {source}")

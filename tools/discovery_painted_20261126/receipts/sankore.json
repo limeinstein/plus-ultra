@@ -1,0 +1,43 @@
+{
+  "id": "sankore",
+  "name": "산코레 모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sankore.png",
+  "sourceSha256": "510d396f30594cdc7281e716e12b4c9ef9f65b34a2e1a198dc9271c55bc7c7c0",
+  "sourceMtimeNs": 1795661123018243700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sankore.gif",
+      "sha256": "5f3cc04b4f79eff18a4088b6dd33857b98541a5db8696e98121535f2078cb48c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sankore.jpg",
+      "sha256": "3d5248697e98bb00a5c39f32d3a435bf0dda1185a2183f38cd94cf8af31f2809"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sankore.webp",
+      "sha256": "dca02e7b7ce1a1cec844e173861e278f459638ead014b6e9918cf2c2b3ddf8bb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sankore.gif",
+      "sha256": "440cf8ce7be6888ecffe8de424492351f987d867eff13e77e3b9902f30060c53",
+      "bytes": 3407270
+    },
+    {
+      "file": "images/discovery-ends/sankore.jpg",
+      "sha256": "b341b0db35f47d55594ebb788e193f80287593c591daed4df7694800dd4d8ab7",
+      "bytes": 97424
+    },
+    {
+      "file": "images/discovery-sheets/sankore.webp",
+      "sha256": "f6315cafa5b681bbd3771254d84e23a757f515a1464ffd5faf1470d39e91780f",
+      "bytes": 1636404
+    }
+  ]
+}

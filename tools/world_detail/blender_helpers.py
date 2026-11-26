@@ -61,22 +61,22 @@ def make_tree(kind,seed,bark,leaves):
                     for j in range(8): fs.append((start+j*2,start+j*2+1,start+j*2+3,start+j*2+2)); mids.append(1+rng.randrange(len(leaves)))
     else:
         # 가지를 드러내고 개별 잎을 겹쳐 불규칙한 수관을 만든다.
-        for k in range(12):
-            a=k*2.399; r=rng.uniform(.22,.52); z=rng.uniform(1.0,1.65)
+        for k in range(15):
+            a=k*2.399; r=rng.uniform(.30,.72); z=rng.uniform(.75,1.6)
             end=(math.cos(a)*r,math.sin(a)*r,z)
             cylinder_between(vs,fs,mids,(.02,0,.65),end,.028,.007,0,6)
-        for k in range(42):
-            a=rng.uniform(0,TAU); rr=math.sqrt(rng.random())*.58
+        for k in range(30):
+            a=rng.uniform(0,TAU); rr=math.sqrt(rng.random())*.70
             cx,cy=math.cos(a)*rr,math.sin(a)*rr
-            cz=1.35+.42*(1-rr/.7)+rng.uniform(-.18,.18)
-            sz=rng.uniform(.15,.28)
-            for leaf_index in range(46):
+            cz=1.05+.55*(1-rr/.85)+rng.uniform(-.25,.25)
+            sz=rng.uniform(.23,.37)
+            for leaf_index in range(65):
                 th=rng.uniform(0,TAU); zz=rng.uniform(-1,1); rad=sz*rng.random()**.33
                 rr=math.sqrt(1-zz*zz)
                 c=Vector((cx+math.cos(th)*rr*rad,cy+math.sin(th)*rr*rad,cz+zz*rad*.75))
                 a=rng.uniform(0,TAU); tilt=rng.uniform(-.65,.65)
-                u=Vector((math.cos(a),math.sin(a),tilt)).normalized()*rng.uniform(.055,.09)
-                v=Vector((-math.sin(a),math.cos(a),rng.uniform(-.8,.8))).normalized()*rng.uniform(.022,.039)
+                u=Vector((math.cos(a),math.sin(a),tilt)).normalized()*rng.uniform(.07,.12)
+                v=Vector((-math.sin(a),math.cos(a),rng.uniform(-.8,.8))).normalized()*rng.uniform(.029,.051)
                 start=len(vs); vs.extend([tuple(c-u),tuple(c+v),tuple(c+u),tuple(c-v),tuple(c+Vector((0,0,.012)))])
                 mi=1+rng.randrange(len(leaves))
                 for q in range(4):fs.append((start+q,start+(q+1)%4,start+4)); mids.append(mi)

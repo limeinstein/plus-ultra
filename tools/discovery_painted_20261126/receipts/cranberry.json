@@ -1,0 +1,43 @@
+{
+  "id": "cranberry",
+  "name": "크랜베리",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/cranberry.png",
+  "sourceSha256": "9de4d262c501917264886094f33c01bbf7d2d6f9b071b2849ca6f9c8489f2441",
+  "sourceMtimeNs": 1795659658258979400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/cranberry.gif",
+      "sha256": "f9a7cc5bf5fc13dd8593e1e0b1908ccadbf32ece9ab1d9de0a4ba279a4e6464a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/cranberry.jpg",
+      "sha256": "4a0ba2a0340bb00dd71c0c758d701a21fb4932a26f6a6ca4f1e052cfcf8aed77"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/cranberry.webp",
+      "sha256": "d6cf3db92b2b5d46154cae9f8b4da9bba52f85b44847c5d2c3778a63e160dee4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/cranberry.gif",
+      "sha256": "d9ecc7881f1d6dd60b83879f161c0309fc061d4493058e1c803d86cb26d1dabe",
+      "bytes": 3755301
+    },
+    {
+      "file": "images/discovery-ends/cranberry.jpg",
+      "sha256": "a1c03d37c4104de5e67e15cb9e08d9e25de7653c0fdacde8b167cbb1d3459c9b",
+      "bytes": 121295
+    },
+    {
+      "file": "images/discovery-sheets/cranberry.webp",
+      "sha256": "04131974e1cecbb186c22588ccdc6d688d5e6067c0419c58920eabf3351261de",
+      "bytes": 2179840
+    }
+  ]
+}

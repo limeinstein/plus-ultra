@@ -1,0 +1,43 @@
+{
+  "id": "prambanan",
+  "name": "프람바난 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/prambanan.png",
+  "sourceSha256": "010b755f98107f8d213af66df64098dd0ff58eb4294a67c0d224eac229c7a85d",
+  "sourceMtimeNs": 1795661851069058400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/prambanan.gif",
+      "sha256": "8e5e3d8ebe10c43840fe9a08880823e0b0ccd68ef28f8509656b924f034d6ef6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/prambanan.jpg",
+      "sha256": "7447b530d458d168a67424e9fc38ac202377d5de2db708744ac86e53234ace27"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/prambanan.webp",
+      "sha256": "d0907dc0241589dd21810553f8d833db6369f9c6fad97833fd7337638c800c9f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/prambanan.gif",
+      "sha256": "714fdb944ee721f46262cd08b7c978b5068d08cdef077ec39664e2c824db75fb",
+      "bytes": 3418347
+    },
+    {
+      "file": "images/discovery-ends/prambanan.jpg",
+      "sha256": "3ca159916a4d7bb9cd675fe534619091776d67cfe6dcd6de3939159613869f04",
+      "bytes": 98496
+    },
+    {
+      "file": "images/discovery-sheets/prambanan.webp",
+      "sha256": "ffd771a75c0ec387f670990890fba0fb560a6d415befd06a90daf44f17789ec5",
+      "bytes": 1686530
+    }
+  ]
+}

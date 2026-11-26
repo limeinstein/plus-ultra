@@ -1,0 +1,43 @@
+{
+  "id": "harmandir",
+  "name": "하르만디르 사히브 — 감로 연못의 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/harmandir.png",
+  "sourceSha256": "7eb3e7741d3222be891fdc4d22b354887ad68ff9299cd3bd7a4fb227af0753bb",
+  "sourceMtimeNs": 1795661653437041300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/harmandir.gif",
+      "sha256": "fc6936b78197a476b2f8e0f7401cc0ec47ddc014d64eeecca823dd577b0e05e6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/harmandir.jpg",
+      "sha256": "0239c23b84c6103ca0708d48b0eeb3c0473b3197855c56232139ed6499ac4172"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/harmandir.webp",
+      "sha256": "b14d9c14b2fbc6d8d18c9227374e50642934499e7e4bce6b2c24251388692871"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/harmandir.gif",
+      "sha256": "334ff7e87c74f64b64161d73912bdc24bc11f68ace3f5d85a4ab45f0d00dfddf",
+      "bytes": 3321339
+    },
+    {
+      "file": "images/discovery-ends/harmandir.jpg",
+      "sha256": "795c8be38455ad2c71087b9a96ff0e7c7a3f20c442fe6d3583071b5ea9e24ba8",
+      "bytes": 96193
+    },
+    {
+      "file": "images/discovery-sheets/harmandir.webp",
+      "sha256": "30317f5c77faa9c3cf443b9174d039f26e5247c5627fa4aa15345fa9e761426b",
+      "bytes": 1647320
+    }
+  ]
+}

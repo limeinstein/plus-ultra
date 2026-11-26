@@ -1,0 +1,43 @@
+{
+  "id": "jeju",
+  "name": "제주도",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/jeju.png",
+  "sourceSha256": "dcc8f22b5999ce8303a9f3412cba6f5fc88255ac38f1692994524685280825c3",
+  "sourceMtimeNs": 1795659660230880900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/jeju.gif",
+      "sha256": "55ebef93513aa18534efad03b223ad6a3d5c8f505aa17508c0bf8aa4e81f5b94"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/jeju.jpg",
+      "sha256": "47c5e505717e308f2804e94ff1e6b411d93e91ae467d3be85dba9741ed7b3b4a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/jeju.webp",
+      "sha256": "3399e7792dce5e5ca00e65be6f4510847cd911b5afea9de89118973cfed62f9b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/jeju.gif",
+      "sha256": "7553bbee4e377c0c7cd9b536b20c79180edb441280f3b31f0b866cddbe296d29",
+      "bytes": 2687015
+    },
+    {
+      "file": "images/discovery-ends/jeju.jpg",
+      "sha256": "5191a9e57742062bed3fb02349b011c0cf8087838cf07d51861ccb9f16a7d950",
+      "bytes": 92320
+    },
+    {
+      "file": "images/discovery-sheets/jeju.webp",
+      "sha256": "448d30756039e28e26e7539455550d09194380584d710e5e9a806afcd045b9bc",
+      "bytes": 1596320
+    }
+  ]
+}

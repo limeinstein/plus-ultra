@@ -1,0 +1,43 @@
+{
+  "id": "cristo",
+  "name": "구세주 그리스도상",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/cristo.png",
+  "sourceSha256": "b51c9503b0048fbcce6cea0b1df880a77eed2ec3da6ec95dfb0472d88223918b",
+  "sourceMtimeNs": 1795661608173884900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/cristo.gif",
+      "sha256": "3e50ac9dc9f70d61001441269c950f0d08752b9f8c811efd509b399b330be9fd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/cristo.jpg",
+      "sha256": "c973f7ee987091a453f4c2b094902fa0faaae299def8e7315f86865d59f3d5f6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/cristo.webp",
+      "sha256": "f9bc3c85ae7208fecaad563e4eed8ff034b64ee48250f07d6f3a9276ffa68721"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/cristo.gif",
+      "sha256": "28b9343a73543d6cd0b303b9174cb7fba6339fd55ff99e2f2a72df023ec0d7e5",
+      "bytes": 3150020
+    },
+    {
+      "file": "images/discovery-ends/cristo.jpg",
+      "sha256": "e3e2bf15c749791b0bd30510c8b28cdbd8c54c5d92fb9697e7cb1459232054c8",
+      "bytes": 93701
+    },
+    {
+      "file": "images/discovery-sheets/cristo.webp",
+      "sha256": "d727777e8c059b928741ad71a810a6955ae0d253c1bc9ca5aeecc385eda5fb21",
+      "bytes": 1580824
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "giralda",
+  "name": "히랄다 탑 — 세비야 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/giralda.png",
+  "sourceSha256": "dede995dbf5de0a6f9e66cc5d5928a328d5d463c463ab2a9c38477b0d9867a8e",
+  "sourceMtimeNs": 1795661995831755200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/giralda.gif",
+      "sha256": "2f4533d38df24d30f4f8449609a1595ff2359636ade016d08fff5884e0ce3f32"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/giralda.jpg",
+      "sha256": "9c66664bb6770e8ce581d40e9f004f979ccd0c005168c202f3a3da357174d474"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/giralda.webp",
+      "sha256": "18fa8c7c30253fc04bb2c2127af935e62948707859033b02fa8a4bcc9bd96b02"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/giralda.gif",
+      "sha256": "81a5c583db0107885c78e51b6a8bdfe68e0e7d33f579167752c4ec1dbb40895f",
+      "bytes": 3552084
+    },
+    {
+      "file": "images/discovery-ends/giralda.jpg",
+      "sha256": "fe4357d7a9e3da2eeed537600fc882fd5e6f22181d59e91695038c6ba7bec400",
+      "bytes": 99442
+    },
+    {
+      "file": "images/discovery-sheets/giralda.webp",
+      "sha256": "d89d9abaf73bed584626af84f2ccfb31de8faa7e8ab5e919c80371272b767ba0",
+      "bytes": 1683666
+    }
+  ]
+}

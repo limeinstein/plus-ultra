@@ -1,0 +1,43 @@
+{
+  "id": "ankh",
+  "name": "앙크 — 생명의 열쇠",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ankh.png",
+  "sourceSha256": "7ea61c7c6188267f1b3adbe31ce2ec4a4050d9606a287b3b763b9a7e25b58323",
+  "sourceMtimeNs": 1795661904096870200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ankh.gif",
+      "sha256": "8390bb8241f440e0fe9ee0eb59bfb64738b1e7b584c673694322b1033759ea71"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ankh.jpg",
+      "sha256": "2a82b7c17f59b2f568f42cb948dfedb18ea1d585c187041eeaf7a8020fbbd251"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ankh.webp",
+      "sha256": "ae65e467c4bc5fe8f04d6149be3ed6cfd6404d9d55323719c93fcc1d76ccfd22"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ankh.gif",
+      "sha256": "017fc593bdc9ff247e80db7a5f5c60c5d8748bc0f4a21321425065f7db5d3d71",
+      "bytes": 3553938
+    },
+    {
+      "file": "images/discovery-ends/ankh.jpg",
+      "sha256": "de0e0fb470579e0435ec9d61e6b95e14bf4f99bbaf9693bdcb1425a625716e34",
+      "bytes": 88609
+    },
+    {
+      "file": "images/discovery-sheets/ankh.webp",
+      "sha256": "e38bfeccc00ec7a656f956c51cb581e9da801d196696a89cf39038d9b7e9541f",
+      "bytes": 1477080
+    }
+  ]
+}

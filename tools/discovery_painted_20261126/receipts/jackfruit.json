@@ -1,0 +1,43 @@
+{
+  "id": "jackfruit",
+  "name": "잭프루트",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/jackfruit.png",
+  "sourceSha256": "120c33a43db2c35f94a535ae64a2e20bf4c0a391c36c38c5481f963a358f8780",
+  "sourceMtimeNs": 1795659653035319300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/jackfruit.gif",
+      "sha256": "34394c47f993a167ed1767b418c9a9768c0917bc312abd4bc31b43ed3713e4a6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/jackfruit.jpg",
+      "sha256": "24e96d1523295c43b3613240fa7b47b2bde02ed0fdb21a78ec739cec2eaff965"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/jackfruit.webp",
+      "sha256": "51a3505793686f4c21f710009bcc7a8cd7993d27114d2c8c3300c96c116babdb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/jackfruit.gif",
+      "sha256": "d4ed9dd68f004ee2fd35366566d19f0ae0aabf53d5d8b637ba56d7375315b67f",
+      "bytes": 3330640
+    },
+    {
+      "file": "images/discovery-ends/jackfruit.jpg",
+      "sha256": "30b5b945f1c70c8c235129abca513ed2961b76578deadf783389c11d278c8d3d",
+      "bytes": 103351
+    },
+    {
+      "file": "images/discovery-sheets/jackfruit.webp",
+      "sha256": "03d7742e3d16076e0eb6d8acca747089b6f28140d88b23367d67b25b9865fdc2",
+      "bytes": 1724534
+    }
+  ]
+}

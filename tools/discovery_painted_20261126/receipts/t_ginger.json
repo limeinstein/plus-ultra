@@ -1,0 +1,43 @@
+{
+  "id": "t_ginger",
+  "name": "생강",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_ginger.png",
+  "sourceSha256": "4a05cfdc8ac67c9ee86c66f0dd1a867b1f387b9184e5d2f320a32b48a53092c7",
+  "sourceMtimeNs": 1795660887555564300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_ginger.gif",
+      "sha256": "ead56f5ce8f9c48e72903a2d24ef51afe3868a36e2eac93207959b966015f46e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_ginger.jpg",
+      "sha256": "6b608673e9f0d224bfc2ae62e1de398f3515dbe2078bb6434d8c6764a9b68f3b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_ginger.webp",
+      "sha256": "3cc417ec387fc0246ff97a13b1abf91a7e65344cfed8e03a60859a3a5695fb39"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_ginger.gif",
+      "sha256": "0d9ead24184c5d085d8c391aef0e98477f97553d6b9e71bfa11f04514e1c8edd",
+      "bytes": 3505189
+    },
+    {
+      "file": "images/discovery-ends/t_ginger.jpg",
+      "sha256": "2b427c750230fd89827ecb54758d7b72b45c5eff74477b95a97b514359e905f6",
+      "bytes": 93624
+    },
+    {
+      "file": "images/discovery-sheets/t_ginger.webp",
+      "sha256": "d2c916ee610421c5f3a35ac848dccc50315e144c2a97b2fa0c4f590581771971",
+      "bytes": 1579234
+    }
+  ]
+}

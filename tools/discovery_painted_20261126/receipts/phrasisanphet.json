@@ -1,0 +1,43 @@
+{
+  "id": "phrasisanphet",
+  "name": "아유타야 왓 프라 시 산펫",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/phrasisanphet.png",
+  "sourceSha256": "5f8562ac0f13df5c33d1fdc601ccc839ec9ec0ff923e74393d2739acbf3b6536",
+  "sourceMtimeNs": 1795662058257930000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/phrasisanphet.gif",
+      "sha256": "f55b049d103bcf16d4d42b6357077d86cb5001dcb77d6f04690ed179a24023ea"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/phrasisanphet.jpg",
+      "sha256": "130c715ad3d21c18f26560f786bb81b156be588e8ba8f4f801d187344f890e46"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/phrasisanphet.webp",
+      "sha256": "832f380ec5f21b8adab7ca38bf52ba1b7e2d541ceee98b4b2411fb2af0919fe1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/phrasisanphet.gif",
+      "sha256": "bd8fbfaf3ee1de903cb7279a0ff56cfbebd29694931823b06ac0286d17d7278a",
+      "bytes": 3326255
+    },
+    {
+      "file": "images/discovery-ends/phrasisanphet.jpg",
+      "sha256": "658d438b782b1787502e6edf1b2e8913b322a6877cb9cf78960b5bdee2c48c75",
+      "bytes": 96257
+    },
+    {
+      "file": "images/discovery-sheets/phrasisanphet.webp",
+      "sha256": "4d31998d28557922bad208cf772dc0b88b4a75ed644f373a0001e07f8024d57d",
+      "bytes": 1661680
+    }
+  ]
+}

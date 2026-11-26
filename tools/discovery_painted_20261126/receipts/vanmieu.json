@@ -1,0 +1,43 @@
+{
+  "id": "vanmieu",
+  "name": "하노이 문묘",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/vanmieu.png",
+  "sourceSha256": "e7a805e9417b2e8db284422c01b611ceebcd54d94fbf18d33768c96597d2abe2",
+  "sourceMtimeNs": 1795662122007267600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/vanmieu.gif",
+      "sha256": "cd6369d5d79d93a84e8f9a1bfa069ce8aa513cec27291a860dc53368b25e6762"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/vanmieu.jpg",
+      "sha256": "33ad7a8bf7eb0a579b754b24f2af6edb91746d254dfdd4e80ef45e55ef7a1c3b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/vanmieu.webp",
+      "sha256": "d7b0c812fde990afe38dcd394c00151c12210740bdc0e476019124cb25369051"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/vanmieu.gif",
+      "sha256": "dc59d05808026d59167f7e566ff5cd7f5ddf19733480d9724eca0c9fd90af2a9",
+      "bytes": 3649940
+    },
+    {
+      "file": "images/discovery-ends/vanmieu.jpg",
+      "sha256": "f336500badeb9159cd7467ff07b02f177c94c34b3f6503bbdd39c1c6c2d43c61",
+      "bytes": 95958
+    },
+    {
+      "file": "images/discovery-sheets/vanmieu.webp",
+      "sha256": "b07010713f0df7ac3da5edf5a983203ab9fc7c9eaced8a5cfa1ac46f01589be1",
+      "bytes": 1662030
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "tajmahal",
+  "name": "타지마할",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/tajmahal.png",
+  "sourceSha256": "8c7f4f83700e81d9ee1bd313e9bfee8d80d41147871570f33875aa5f0e152b4e",
+  "sourceMtimeNs": 1795659463918372800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tajmahal.gif",
+      "sha256": "89edf764f40449ca2a5f5ead4d9f8c4481e5f8441df4c475c6f32b9b292f7708"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tajmahal.jpg",
+      "sha256": "4ed8cbf47022ea9bf6459078339a717e45ce278cfe835f41493190afc96393f3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tajmahal.webp",
+      "sha256": "52ff5afc3034c768ad8adf005813fdf3429a3f2ae61b8db131b649179b3519e0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tajmahal.gif",
+      "sha256": "747800ff944f17477a28e27f641af7fbc33be9eb0045438a4c4705a8984f81d2",
+      "bytes": 3073895
+    },
+    {
+      "file": "images/discovery-ends/tajmahal.jpg",
+      "sha256": "42c20c97d789bbac7f7d7f73deac45755f435633c68346ea7b447f9df5499dc3",
+      "bytes": 80420
+    },
+    {
+      "file": "images/discovery-sheets/tajmahal.webp",
+      "sha256": "320b25683029664df87cfccbf2fa095c1dca391bf0e81b2434d3a2e0eb75b2a7",
+      "bytes": 1386790
+    }
+  ]
+}

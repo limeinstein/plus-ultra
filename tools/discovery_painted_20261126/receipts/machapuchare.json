@@ -1,0 +1,43 @@
+{
+  "id": "machapuchare",
+  "name": "마차푸차레",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/machapuchare.png",
+  "sourceSha256": "f54987ebfeedf6c2a687d8d19b34c5697a23d96ba9450db4e996c1c49c34c8cb",
+  "sourceMtimeNs": 1795659644657958600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/machapuchare.gif",
+      "sha256": "5463c68506a9b81b47eb6c480ce0ee8680f0ac8c8fd5d4bc25e948922ada4379"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/machapuchare.jpg",
+      "sha256": "20f7c82a997621e2111f22e560181621222b0e1f9f3486a2e5217564504b15ab"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/machapuchare.webp",
+      "sha256": "461b4cedc1e42a3a70b8448b080840fd17420c9ea7d1279738e8ab3545274b8e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/machapuchare.gif",
+      "sha256": "69fe4ae9161923210a372145e3da195c68a1c299fc0e1c9a67eefc6c78f80985",
+      "bytes": 2934712
+    },
+    {
+      "file": "images/discovery-ends/machapuchare.jpg",
+      "sha256": "eea49ec4e78414382063ae56a48c333792d41dca3da5c38030753cd50168399e",
+      "bytes": 89010
+    },
+    {
+      "file": "images/discovery-sheets/machapuchare.webp",
+      "sha256": "3379eff6306f4417da0666388d5a2126150dd19614182f6c27751e25b9ffb206",
+      "bytes": 1487906
+    }
+  ]
+}

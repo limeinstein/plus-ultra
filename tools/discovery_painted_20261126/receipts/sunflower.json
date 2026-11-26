@@ -1,0 +1,43 @@
+{
+  "id": "sunflower",
+  "name": "해바라기",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/sunflower.png",
+  "sourceSha256": "fb50929f83c67d080010f865fbb3322d7e47844e1044c9a0099be1b7a0a4764c",
+  "sourceMtimeNs": 1795659658494196400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sunflower.gif",
+      "sha256": "abe2f7bf53c2c7b416aac5108f7b7c7c542d030b1bf7693cf35622de0978545f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sunflower.jpg",
+      "sha256": "10d704efcf321e56f51fdaa34d8d903362bd0ae94d25208d908bce319e259c6e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sunflower.webp",
+      "sha256": "5c398c586814e64810065c4d4d714683b64481db3fb96ea4b92450601528c076"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sunflower.gif",
+      "sha256": "9176be71fc1edb99c8e6f758eb140a7bb3b800fbe7b480bc39f7411c322529da",
+      "bytes": 3247365
+    },
+    {
+      "file": "images/discovery-ends/sunflower.jpg",
+      "sha256": "b5b3d991ae7729c5ffa5c3faa8da7022f777a8da6d130adb39d11a95c1456ebb",
+      "bytes": 107620
+    },
+    {
+      "file": "images/discovery-sheets/sunflower.webp",
+      "sha256": "dd831ae0ba34165db83b5bf6c3e3036422a18821def22e5eb4085a39b2ae1084",
+      "bytes": 1825594
+    }
+  ]
+}

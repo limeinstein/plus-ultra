@@ -1,0 +1,43 @@
+{
+  "id": "amla",
+  "name": "암라",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/amla.png",
+  "sourceSha256": "db7007b8aaf66cb88f5eee9e449db7acc80ad58358176d7a8a8a24a82d1ef4b3",
+  "sourceMtimeNs": 1795659653089084000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/amla.gif",
+      "sha256": "82b1c00c5a4f72acdbf7e3b049914c1c41d5c8b9654c3c75d484b88029462952"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/amla.jpg",
+      "sha256": "db84b07f85caae1cd905e78ff69376d3d7383d62012cd471de18b0f855fb280e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/amla.webp",
+      "sha256": "fbe24c0a084a69f3a5f09d555f09fd91951451b0563a528d605371ffdd4cde23"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/amla.gif",
+      "sha256": "083e8edea71a73360e08cddd51e5c1dae4f3882145a27a50a8fff71f5727cf2e",
+      "bytes": 3558691
+    },
+    {
+      "file": "images/discovery-ends/amla.jpg",
+      "sha256": "b2e2fda689b43b7f4aa7c07b8c31a386a98444abd1284994ce622a06af7560e6",
+      "bytes": 106629
+    },
+    {
+      "file": "images/discovery-sheets/amla.webp",
+      "sha256": "6ca7a8e17a53a97314006efe0d7a6eeab93a2ed5da489493efadf613ee3e11c5",
+      "bytes": 1845280
+    }
+  ]
+}

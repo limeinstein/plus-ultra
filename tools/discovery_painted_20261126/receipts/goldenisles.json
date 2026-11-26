@@ -1,0 +1,43 @@
+{
+  "id": "goldenisles",
+  "name": "골든 아일즈",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/goldenisles.png",
+  "sourceSha256": "66a65cec134353009fb452a5d60a21dd44224bb3f44650aef96e5541b8c3dd16",
+  "sourceMtimeNs": 1795659661225103800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/goldenisles.gif",
+      "sha256": "3da98b983d5d9a19e3984ae003e8f65e98bce887a29546e650106730131579a6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/goldenisles.jpg",
+      "sha256": "a7fe5cf10b4a085359c2d75ad5318fb3b5b1993752f1945373dc9d13be671f1d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/goldenisles.webp",
+      "sha256": "a73e86f1a457c4362135f2036932ff5cfb5b346a66b9647a89f0f59a74275d10"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/goldenisles.gif",
+      "sha256": "e5077dfe5b75317c752e544f83f67ad0e9e9a4af3b7023142bea509a69c5f0ff",
+      "bytes": 3268079
+    },
+    {
+      "file": "images/discovery-ends/goldenisles.jpg",
+      "sha256": "5b86b349d1aa0fc4fae71f3d560e89b20845ace1ba13536035e479efe513e773",
+      "bytes": 101769
+    },
+    {
+      "file": "images/discovery-sheets/goldenisles.webp",
+      "sha256": "64b27834670cddf9cae95338ff69412b560ac85417efc095de5fcc3326a30d55",
+      "bytes": 1724962
+    }
+  ]
+}

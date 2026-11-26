@@ -1,0 +1,43 @@
+{
+  "id": "mingsha",
+  "name": "명사산과 초승달 샘",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/mingsha.png",
+  "sourceSha256": "e2faff69fd810f0f11a06b3cc591a00e841e6a099baf750fca175990218ee3cf",
+  "sourceMtimeNs": 1795659647540324100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mingsha.gif",
+      "sha256": "10e79883edd79747193d9cfda26f0479772f6b131f5ffab903ee6cc5972fcc7c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mingsha.jpg",
+      "sha256": "52adba17e4526d9c6dd7d79710bb34acd75f180622d34b93b0a58e0e579fd339"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mingsha.webp",
+      "sha256": "7685588039a4c89567b3e7a7f95ad9dc45af33a229cb8663933d546d4ff8a5af"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mingsha.gif",
+      "sha256": "a0b704ed07a75afa523073cd5faa07524e7c3945107c19f4f37a9203e76315a2",
+      "bytes": 2894535
+    },
+    {
+      "file": "images/discovery-ends/mingsha.jpg",
+      "sha256": "8fe86b836f7487d3b2dcb2ed40df5f79d504546e6c86a4d676069decb9fa12d9",
+      "bytes": 82195
+    },
+    {
+      "file": "images/discovery-sheets/mingsha.webp",
+      "sha256": "50241ccbe7d8b43e5268c9be9aedd9ab08146035eb90d0689cae373eaaf8b022",
+      "bytes": 1344786
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "bermuda",
+  "name": "버뮤다 삼각지대",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/bermuda.png",
+  "sourceSha256": "0a29ce123d2c2831f10da25f02863cd07db3caacea00fcfad32fefd2aad9cc72",
+  "sourceMtimeNs": 1795659644899357900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bermuda.gif",
+      "sha256": "ed248a1bfa48541ee7ee6651a9b605a4f8095dbd6217ac1935c815ca47c79f1e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bermuda.jpg",
+      "sha256": "9b3ad803aad0fee291ed474af665cc75e8b2389e20b86986b9cb7c577e82ffe3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bermuda.webp",
+      "sha256": "36224629b18051e4472b16ea0c5d94ffad2569537defb8559914e328f1b2d5fe"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bermuda.gif",
+      "sha256": "4c51617cc412ca4293560abb60846ae8142388d23060984abdc8bf0ed99fdb25",
+      "bytes": 2614337
+    },
+    {
+      "file": "images/discovery-ends/bermuda.jpg",
+      "sha256": "de4373671428b8f82a300a85ae6518dc2f5de9b3f3bf2eab046e54d002eb8234",
+      "bytes": 79623
+    },
+    {
+      "file": "images/discovery-sheets/bermuda.webp",
+      "sha256": "61a1194b0cb1d15df362a94211fd6199f373dcc12062edfdadec110e06cea0d8",
+      "bytes": 1301262
+    }
+  ]
+}

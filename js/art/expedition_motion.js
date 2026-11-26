@@ -15,8 +15,9 @@
   }
   E.preload = function (id) {
     var m = spec(id || 'walk');
-    if (!G.ExpeditionFormation || !G.ExpeditionFormation.hasArt(id || 'walk')) ['walk', 'walkFront', 'turn', 'camp'].forEach(function (action) { picture(asset(m, action)); });
+    if (!G.ExpeditionFormation || !G.ExpeditionFormation.hasArt(id || 'walk')) ['walk', 'walkFront', 'turn'].forEach(function (action) { picture(asset(m, action)); });
     if (G.ExpeditionFormation) G.ExpeditionFormation.preload(id);
+    picture(asset(m, 'camp'));
   };
   E.ready = function (id, action) {
     var m = spec(id); action = action || 'walk';
@@ -66,6 +67,13 @@
       return G.ExpeditionFormation.canDraw(u) ? G.ExpeditionFormation.draw(ctx, u, chosen, null) : [];
     }
     var im = chosen && picture(chosen.sheet);
+    if (chosen && chosen.action === 'camp') {
+      // 야영지 그림을 불러오는 동안 현재 대열의 원화도 남겨 두어 곧바로 다시 걷게 한다.
+      if (u.follow && G.ExpeditionFormation && G.ExpeditionFormation.hasArt(chosen.id)) G.ExpeditionFormation.canDraw(u);
+      var site = u.pts[0];
+      return G.Party.drawCamp(ctx, u, { x:site[0], y:site[1], leader:true, camp:true, m:{t:'person'}, heading:chosen.heading,
+        im:im, cell:chosen.sheet.cells[chosen.index], scale:E.scale(chosen.sheet, u.size || (G.FX.party || {}).size), frame:chosen.index });
+    }
     if (!im) return false;
     var cell = chosen.sheet.cells[chosen.index];
     if (!cell) return false;
@@ -77,13 +85,12 @@
     var s = u.size || (G.FX && G.FX.party && G.FX.party.size) || 1;
     var k = E.scale(chosen.sheet, s);
     if (u.ring && G.Party.ring) G.Party.ring(ctx, p[0], p[1], chosen.heading, u.moving && !u.camping, u.t || 0, s);
-    ctx.save();
-    ctx.imageSmoothingEnabled = true;
-    ctx.translate(p[0], p[1]);
-    if (chosen.flip) ctx.scale(-1, 1);
-    ctx.drawImage(im, cell[0], cell[1], cell[2], cell[3], -cell[4] * k, -cell[5] * k, cell[2] * k, cell[3] * k);
-    ctx.restore();
-    return [{ x: p[0], y: p[1], m: { t: m.kind || 'person' } }];
+    var item = { x:p[0], y:p[1], leader:true, kind:chosen.id, im:im, cell:cell, scale:k, flip:chosen.flip, phase:chosen.phase,
+      heading:chosen.heading, moving:u.moving, onFoot:chosen.id==='walk'||chosen.id==='porter',
+      rigid:chosen.id==='wagon'||chosen.id==='reindeer', water:u.wadeAt&&u.follow?u.wadeAt(u.follow.x,-u.follow.y):null,
+      m:{t:m.kind||'person'} };
+    G.Party.drawCell(ctx, u, item);
+    return [item];
   };
   if (G.Party) {
     var previousDraw = G.Party.draw, previousPreload = G.Party.preloadSprites;

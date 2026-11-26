@@ -1,0 +1,43 @@
+{
+  "id": "sipan",
+  "name": "시판 왕릉",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sipan.png",
+  "sourceSha256": "91596f252cc7aef3c6264e326f9b8d849376ce3dae87f889a69e9575491bdefa",
+  "sourceMtimeNs": 1795662994992749800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sipan.gif",
+      "sha256": "c30408c41e4c42f0f032e165e56314f1c94163e0232dca54dd61e02b734db369"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sipan.jpg",
+      "sha256": "49e011ec2c0cda8ec9b1a341cc1d8343273b050145b39ce39f637b33ceaa0a43"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sipan.webp",
+      "sha256": "696f77b7552ab03b72cb41ce514246e981cd42572ce0e17577daf76a4e36053e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sipan.gif",
+      "sha256": "7ce931db8789b789e46bf5d1f98f66c68456b7716d1c69c29f4aaccac9d54476",
+      "bytes": 3537241
+    },
+    {
+      "file": "images/discovery-ends/sipan.jpg",
+      "sha256": "ce95c538ce85f753fd734972d877ade4685549ac479c11cf07181492879a5828",
+      "bytes": 88543
+    },
+    {
+      "file": "images/discovery-sheets/sipan.webp",
+      "sha256": "cc9bda7c6ce58d7c8272aaf1704844df22335b19705c4d938fb78840a3ce9014",
+      "bytes": 1494942
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "mycenae",
+  "name": "미케네",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mycenae.png",
+  "sourceSha256": "f312bc006f6ad17abd909f251fccfbadb052cca7f52e9a02b4f1e0a2314ce303",
+  "sourceMtimeNs": 1795659445603545400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mycenae.gif",
+      "sha256": "cdd46c0d9431c35171e022bc06281411248e42e777edabe094aa0b6532766166"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mycenae.jpg",
+      "sha256": "be296fb38e5add0a113bb8644b366c209abc06eca31edd07bec5ca9dcea54407"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mycenae.webp",
+      "sha256": "740f6268c0e40085118ec8953bc25e3bd09d89bb8c96e68f115efcf0519192fd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mycenae.gif",
+      "sha256": "75de5fefc9dcf488d23e43a128d55d74f348ff4505d435a14fc7d6f551e1df62",
+      "bytes": 3602593
+    },
+    {
+      "file": "images/discovery-ends/mycenae.jpg",
+      "sha256": "e517427303275594f26618f8977df06ecd31dd2803271396c4c2fc57360d67e7",
+      "bytes": 97083
+    },
+    {
+      "file": "images/discovery-sheets/mycenae.webp",
+      "sha256": "123ad6b6ed863579b5dd4ab95c769745c6f94d13aa8a018b2b63bc76ab2845aa",
+      "bytes": 1674670
+    }
+  ]
+}

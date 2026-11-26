@@ -1,0 +1,43 @@
+{
+  "id": "yale",
+  "name": "예일 대학교",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/yale.png",
+  "sourceSha256": "8e2fdae7f1e7eff3b945abc0c2c7e11262d18a34205df238650ed1e00cac709f",
+  "sourceMtimeNs": 1795663002962775100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/yale.gif",
+      "sha256": "3227737105928dd0272f9a5705c24f55d57a91aaf207ebe8296733aa7d7b3aff"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/yale.jpg",
+      "sha256": "859c43469976433eae926979470664594e842ead46fd5c5df685f3b5f325e84b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/yale.webp",
+      "sha256": "9cde3294777200d69fcde244fe7c9406d649d72017401ec860126e1f3057202d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/yale.gif",
+      "sha256": "7df74c4200ae18e78faea16d9dc4372ffc68d5f1de32fca436abe94d8b8bae6d",
+      "bytes": 3440235
+    },
+    {
+      "file": "images/discovery-ends/yale.jpg",
+      "sha256": "e612fd2a62bc668e7ef66eeeea811e683afbe41399116679a4f35993ebe86656",
+      "bytes": 96320
+    },
+    {
+      "file": "images/discovery-sheets/yale.webp",
+      "sha256": "d8d718b59319f9e96d0b4057e2a96235c714ddeec5c65ce9e140dc7acedb2478",
+      "bytes": 1643412
+    }
+  ]
+}

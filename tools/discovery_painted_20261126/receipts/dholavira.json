@@ -1,0 +1,43 @@
+{
+  "id": "dholavira",
+  "name": "돌라비라",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/dholavira.png",
+  "sourceSha256": "fe9ae7db61585bcf09c935e8a3739f8fea92a11709f5d568f83333bcc1bcd8ae",
+  "sourceMtimeNs": 1795662592977279400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/dholavira.gif",
+      "sha256": "a6830e98dde1af6d503912c96c3bf2e21b876092c200c59c4c5cfea9be184513"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/dholavira.jpg",
+      "sha256": "557b197d77169a26a7b88e5d9ac6448844142135df48a796bf89fa5e3c46de88"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/dholavira.webp",
+      "sha256": "e71cd05bb7fcc0dfe3ed33040b95ff2a028b6f5c77fa750db051e7f2ba59f95f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/dholavira.gif",
+      "sha256": "156f5bb9a0306d3a09bff29efc9b0e862fdd4b175689f3495b7d63b076ab376e",
+      "bytes": 3501710
+    },
+    {
+      "file": "images/discovery-ends/dholavira.jpg",
+      "sha256": "a3f5ead2d2a8f4efef3d032a87d9c86fde4e92709cacb77bb7f37090ef4358db",
+      "bytes": 94081
+    },
+    {
+      "file": "images/discovery-sheets/dholavira.webp",
+      "sha256": "8caef8b43a8b2c435d94c30470a52dc8d75f4157b76d0fe039265af250495e62",
+      "bytes": 1640466
+    }
+  ]
+}

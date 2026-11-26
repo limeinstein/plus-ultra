@@ -1,0 +1,43 @@
+{
+  "id": "blacksea",
+  "name": "흑해",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/blacksea.png",
+  "sourceSha256": "a1506150e499b7cbfb95c0d94a14ab4de724da5b96224bf42e5a6e48de71be24",
+  "sourceMtimeNs": 1795659645552084000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/blacksea.gif",
+      "sha256": "634e2483723a7b944adf46243cbdac02ee165e9d37aab066c2694376340cd7fc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/blacksea.jpg",
+      "sha256": "815277eeb8b0f90883680ab8351c156cc7f25c8dd39419143c3ae4b5c295bf50"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/blacksea.webp",
+      "sha256": "32677194b31fe401b70eb09caecdfef9dd6a062883b2bbc2eba3efe0649fc65c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/blacksea.gif",
+      "sha256": "27dbd4fb0be329ca2927050d5d27a284178284b36d2763a5c8888730ef467e2c",
+      "bytes": 3247989
+    },
+    {
+      "file": "images/discovery-ends/blacksea.jpg",
+      "sha256": "53c676bbe709204a340e1a0a76b31fbece5f213f85a6e821c02e38c7eda8184c",
+      "bytes": 93688
+    },
+    {
+      "file": "images/discovery-sheets/blacksea.webp",
+      "sha256": "d45533b13a481fcd3dd81953e1a43ed2ca38872dcc275dc14c61e6939eb00645",
+      "bytes": 1605074
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "hirebenakal",
+  "name": "히레베나칼 거석 무덤",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/hirebenakal.png",
+  "sourceSha256": "8faa501a95b9ad2e03fadae8650b6e3469b05ebab774757f15d871dfdfdd226a",
+  "sourceMtimeNs": 1795662445684918100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/hirebenakal.gif",
+      "sha256": "b5df4a0e517f1d6df1ffe7aac6b6054771d746b3a724cd00ac318b22b626bb90"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/hirebenakal.jpg",
+      "sha256": "5155982a858fa12a5888ec0b0bb3c886b0b65e2443a4e1cb0f8d4850b1a43422"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/hirebenakal.webp",
+      "sha256": "05f6f18d92dd45025a42a93d9b01cd50efe42f95673ca313fd21586c9ac45935"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/hirebenakal.gif",
+      "sha256": "a9d8a422011a744938b503a900ba1e420357be12b3d1585db72666a5ef8b31b0",
+      "bytes": 3624077
+    },
+    {
+      "file": "images/discovery-ends/hirebenakal.jpg",
+      "sha256": "24ee1163283ac0f95adfa6879a758d0e083dab2118ea19d5db48002d0614c470",
+      "bytes": 103267
+    },
+    {
+      "file": "images/discovery-sheets/hirebenakal.webp",
+      "sha256": "48397cbcb298b46275c28a852f0c291a0b361865775b9521c7e9b3177a99df49",
+      "bytes": 1797986
+    }
+  ]
+}

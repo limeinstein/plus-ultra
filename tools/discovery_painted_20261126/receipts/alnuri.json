@@ -1,0 +1,43 @@
+{
+  "id": "alnuri",
+  "name": "알 누리 대모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/alnuri.png",
+  "sourceSha256": "e79540dfb353a35fc67edaaa2d21841e4c86ed125250cac05ef5005637516663",
+  "sourceMtimeNs": 1795663225050874100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/alnuri.gif",
+      "sha256": "156ec7c548edaff6b91e12f5d668adc3bb7942c5d71aa1678bb51dd5d9d182d2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/alnuri.jpg",
+      "sha256": "41d5d079b5fac2fb65593b88451efb968cbab767c1ab12d4f20416a18403e31c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/alnuri.webp",
+      "sha256": "813be998823e711c193248e3ed8e6d514278fd5446ba77844cd7630e00056d84"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/alnuri.gif",
+      "sha256": "e8410d64665711ddb09372c177469af7d641d14bf0ef75cdc200e6f08ad67c63",
+      "bytes": 3320951
+    },
+    {
+      "file": "images/discovery-ends/alnuri.jpg",
+      "sha256": "33239e93d31a9639756b71c3c2df645a2549ce6c80b21cd4ea155131062f82f1",
+      "bytes": 91070
+    },
+    {
+      "file": "images/discovery-sheets/alnuri.webp",
+      "sha256": "bc3f8aa28a073007f264050ce00673b295cb8956424e99c5c44a581c477d119b",
+      "bytes": 1558810
+    }
+  ]
+}

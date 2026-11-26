@@ -1,0 +1,43 @@
+{
+  "id": "sunuraxi",
+  "name": "수 누락시 누라게",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sunuraxi.png",
+  "sourceSha256": "15990267748f7f140c1472ef641878bbcc61e1ab7bfb14126b8c1741854763b9",
+  "sourceMtimeNs": 1795662239622026500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sunuraxi.gif",
+      "sha256": "bab96729745eb825a657469316238f4f7c4b1f05dd26f6d0f9f86c7c716512b6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sunuraxi.jpg",
+      "sha256": "ee8327420fe5e75a674e6b6654e9701c3f99b6c0736f551ef8f093ef1d540717"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sunuraxi.webp",
+      "sha256": "c8f1aa610662db0520e3378741bbc289fb122b40ff084e7184e2d0a41f8d93f7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sunuraxi.gif",
+      "sha256": "ee1bc575e69221605b3b9ffee42866d35c6a47c0d21e7577c97d59acf2ba7116",
+      "bytes": 3550023
+    },
+    {
+      "file": "images/discovery-ends/sunuraxi.jpg",
+      "sha256": "5f0ef8907299dd5daab053d9a9fd24fe29e5f20894f9c3804b206c8636b89610",
+      "bytes": 103473
+    },
+    {
+      "file": "images/discovery-sheets/sunuraxi.webp",
+      "sha256": "1d7bb994073081d55b761c7fba10164415bae6e8b32d2d2947d493996265cfa1",
+      "bytes": 1815506
+    }
+  ]
+}

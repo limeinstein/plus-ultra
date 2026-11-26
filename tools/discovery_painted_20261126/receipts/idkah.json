@@ -1,0 +1,43 @@
+{
+  "id": "idkah",
+  "name": "이드 카 모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/idkah.png",
+  "sourceSha256": "19e31466bfa4a380f701ec00028f7e831ca66e6a29f8d759e55e3ccc0e2922f9",
+  "sourceMtimeNs": 1795663293921491600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/idkah.gif",
+      "sha256": "c267b1cc53a2bee1ee6fccc5893d5813a24c7465350e534e749aba4028c9c1dc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/idkah.jpg",
+      "sha256": "c417ca3100dbc656fee01138f5b8522b0975bb6b49143b0d2af64b2bfc409591"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/idkah.webp",
+      "sha256": "a85f3d6fef02148388b5a42c169ebaafbe3bcf1897e313d3250ff5181f045dac"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/idkah.gif",
+      "sha256": "ca1471893899036118b6f313e73c60ca18b86dedefb029ae97fe3b053044f846",
+      "bytes": 3516002
+    },
+    {
+      "file": "images/discovery-ends/idkah.jpg",
+      "sha256": "1b9ce13b07bc8e8be2bc99bcb354b333a98e22e5e6430262ba95fa81933de8a7",
+      "bytes": 103490
+    },
+    {
+      "file": "images/discovery-sheets/idkah.webp",
+      "sha256": "035e05ec926a731389cd204116035a608d135431e48c65c3085145fad4102781",
+      "bytes": 1770866
+    }
+  ]
+}

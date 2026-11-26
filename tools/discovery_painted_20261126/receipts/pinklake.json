@@ -1,0 +1,43 @@
+{
+  "id": "pinklake",
+  "name": "레트바 호 (분홍 호수)",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/pinklake.png",
+  "sourceSha256": "fca65ac18ef3ead8bb863f9db033c054adb7eb58cb1e25d458b78496e021b1ac",
+  "sourceMtimeNs": 1795659645438407300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/pinklake.gif",
+      "sha256": "77c2d67a622cdb6d72ac01a2fae325b7dce1f7d0ca0a4fe7e72a112c659be364"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/pinklake.jpg",
+      "sha256": "5ab4833f7256fc6274973a2beb1c0a43c12b3c5e66e6b7c7afa4d3615c80875c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/pinklake.webp",
+      "sha256": "36b83a174a8e13af1358157c4b1de27b4d70e911e2204f85f6912945c8fb0444"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/pinklake.gif",
+      "sha256": "751faa3aac33f2d00af6d9ebd28aebfd555661d47dd6780654989a7afdc378c6",
+      "bytes": 2934498
+    },
+    {
+      "file": "images/discovery-ends/pinklake.jpg",
+      "sha256": "b2bf7c9f478c672234de82718d425f937967f643eaca6ee510f3011ffed9ce84",
+      "bytes": 91946
+    },
+    {
+      "file": "images/discovery-sheets/pinklake.webp",
+      "sha256": "0f14a2aa0b82d429181a0d29e3fb09c0bcc861a0f9ba61b213a1613281ccffd1",
+      "bytes": 1543886
+    }
+  ]
+}

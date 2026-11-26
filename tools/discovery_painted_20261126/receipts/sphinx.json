@@ -1,0 +1,43 @@
+{
+  "id": "sphinx",
+  "name": "스핑크스",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sphinx.png",
+  "sourceSha256": "9a4608cf96e454c3da3e26eaa53749dd3c8d9f3bccec0b64d6c359da7801e7db",
+  "sourceMtimeNs": 1795661847353382800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sphinx.gif",
+      "sha256": "f9cf7dc700273252635d457eceea77009590fc97e443919d88360db321aeafb8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sphinx.jpg",
+      "sha256": "14aedd932a3f8f44c04182c818c4be4aa4536aff11b6e6c5f57c649c452df04c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sphinx.webp",
+      "sha256": "26f0b864324ce583192d33e3c103acf27640066864141d32e4d450b94710cef9"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sphinx.gif",
+      "sha256": "c365561c45dc9cd60d5483c33a709eccd07dfd19a9970228c6d19a63af679ce7",
+      "bytes": 3035077
+    },
+    {
+      "file": "images/discovery-ends/sphinx.jpg",
+      "sha256": "c467e0bb784d4fc37db69e48a77d300cb910947dde87018e8b616934f1cb2299",
+      "bytes": 72928
+    },
+    {
+      "file": "images/discovery-sheets/sphinx.webp",
+      "sha256": "e550faa57c35b4fd282ea84726a98c14f514f1506799cfc1728965deb13ae748",
+      "bytes": 1167728
+    }
+  ]
+}

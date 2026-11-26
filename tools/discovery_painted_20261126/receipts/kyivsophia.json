@@ -1,0 +1,43 @@
+{
+  "id": "kyivsophia",
+  "name": "키이우 성 소피아 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kyivsophia.png",
+  "sourceSha256": "256dd50bbd02bbdf637da725cfea3707f48b6a7c61851f625896349988d81ddf",
+  "sourceMtimeNs": 1795661927982995100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kyivsophia.gif",
+      "sha256": "899b69cdacccf7098a0dffc8d96f1cc19d416b91a894cf5edbaf6f9b880a62f0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kyivsophia.jpg",
+      "sha256": "2792e5885f1b724ccedb3b176ff7beea202c0e0d551bec124fb27dced7ffa771"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kyivsophia.webp",
+      "sha256": "8eac44a2876060cceca6dace6b1e665268f6179a4c4d6b6f2f8abcf646c404d0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kyivsophia.gif",
+      "sha256": "52191b120e5d4410a54a5c4d6e29a5127140ded7ec81a2d0b63504998f32c59f",
+      "bytes": 3405621
+    },
+    {
+      "file": "images/discovery-ends/kyivsophia.jpg",
+      "sha256": "e4f188085d438ba1b9629d2441402199ab0bac41ec374749e8afcb6a52fd0227",
+      "bytes": 93821
+    },
+    {
+      "file": "images/discovery-sheets/kyivsophia.webp",
+      "sha256": "cb6830ccd90b3ee565a16e6f60621db05fe6759624828d25031dd7666deb90d4",
+      "bytes": 1585536
+    }
+  ]
+}

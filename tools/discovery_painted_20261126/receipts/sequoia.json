@@ -1,0 +1,43 @@
+{
+  "id": "sequoia",
+  "name": "자이언트 세쿼이아",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/sequoia.png",
+  "sourceSha256": "6531d401f1da423fb37158d5c0ac6bd6f3cee093d5aa17447df11d3afb77a838",
+  "sourceMtimeNs": 1795659643890945700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sequoia.gif",
+      "sha256": "a8ffcf35c2dfa86131323182bcc6e0a05ee9e1444cd2ab8f93e356ae82a5d3a9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sequoia.jpg",
+      "sha256": "1db2dff111d83ffa3cdc8c6d842ce19b5ab391c3197b675c2346a3da2c3add97"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sequoia.webp",
+      "sha256": "f13bf8e36e05d996407cb79b51afdea9faac45bbb7297fdb3b3efa5d5cae79d2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sequoia.gif",
+      "sha256": "742ee7e84cf5df40e706f051fded20fcc4099096a1f06bca2d1fff88abe5a688",
+      "bytes": 3483416
+    },
+    {
+      "file": "images/discovery-ends/sequoia.jpg",
+      "sha256": "94a3e11ed9b55953783d8822c5461078d744fd20b71d47c55d8efb85b844acf5",
+      "bytes": 98861
+    },
+    {
+      "file": "images/discovery-sheets/sequoia.webp",
+      "sha256": "c876a659edf31aac6be799c33645c30870403b5066d2a0d7ee9f3f052e4948ff",
+      "bytes": 1716662
+    }
+  ]
+}

@@ -29,7 +29,6 @@
     if (!st.fx && G.SeaFX) st.fx = G.SeaFX.create();
     if (!st.pose) st.pose = { roll: 0, pitch: 0, heave: 0 };
     if (G.Img.prefetchCrew) G.Img.prefetchCrew();     // 바다에서 말을 거는 동료들의 얼굴
-    if (arg.depart != null && G.DiscoveryGuides) G.DiscoveryGuides.depart();
     if (arg.depart != null) {
       var c = G.CITY_DATA[arg.depart];
       var dock = c.dock || [c.lat, c.lon];
@@ -38,7 +37,7 @@
       s.fleet.daysOut = 0;
       s.fleet.scurvy = Math.min(s.fleet.scurvy || 0, 10);     // 항구에서 신선한 먹을거리를 싣고 나간다
       s.sailNo = (s.sailNo || 0) + 1;                       // 출항 횟수 — 항해사에게 들을 이야기가 다시 생긴다 (js/city/tavern.js T.mateInfo)
-      s.voyage = { from: c.id, startDay: s.day, found0: s.stats.found, known0: s.known.length, marks0: Object.keys(s.marks || {}).length, wins0: s.stats.wins, gold0: s.player.gold };
+      s.voyage = { from: c.id, found0: s.stats.found, known0: s.known.length, marks0: Object.keys(s.marks || {}).length, wins0: s.stats.wins, gold0: s.player.gold };
       s.flags.fromEurope = c.region <= 3 && c.lon < 20;
       if (c.region === 10) s.flags.fromEurope = false;
       st.lastPort = c.id;
@@ -75,7 +74,7 @@
     if (G.Audio) G.Audio.music('sea');
     st.lastMini = -99;
   };
-  SEA.exit = function (next) { if (G.Wanted && G.Wanted.cancelReveal) G.Wanted.cancelReveal(); if (G.Ship3D && next !== 'battle') G.Ship3D.dispose(); if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; delete st.crewPetFlight; st.shipWater = {}; st.fx = G.SeaFX ? G.SeaFX.create() : null; if (st.unkey) st.unkey(); } };
+  SEA.exit = function (next) { if (G.Wanted && G.Wanted.cancelReveal) G.Wanted.cancelReveal(); if (G.Ship3D && next !== 'battle' && next !== 'sea') G.Ship3D.dispose(); if (G.Rain && next !== 'battle') G.Rain.leave(); if (G.SeaNews) G.SeaNews.on(false); if (G.Audio && G.Audio.travel) G.Audio.travel('sea', 0); if (st) { st.alive = false; delete st.crewPetFlight; st.shipWater = {}; st.fx = G.SeaFX ? G.SeaFX.create() : null; if (st.unkey) st.unkey(); } };
   function newRuntime() {
     return { cam: null, path: null, target: null, paused: false, speed: 1, dayAcc: 0, busy: 0, keys: {}, npcs: [], wake: [], storm: 0, stormDays: 0, calm: 0, t: 0, mouse: null, lastMini: -99, dayCount: 0, toastQ: [],
       vel: [0, 0], fx: G.SeaFX ? G.SeaFX.create() : null, pose: { roll: 0, pitch: 0, heave: 0 }, turnRate: 0, accel: 0 };
@@ -86,6 +85,7 @@
     st.vel = [0, 0]; st.path = null; st.target = null; st.dirCrs = null; st.manual = false; st.direct = false; st.pilot = false;
     st.keys = {}; st.arrows = {}; st.arrowSteer = false; st.pointerSteer = false; st.stopping = false; st.braking = false; st.cruise = false; st.thr = 0;
     st.tackTheta = 0; st.tackSide = 0; st.prog = null; st.pendingPort = null; st.turnRate = 0;
+    st.riverCourse = null;
   }
   /** 배가 뭍에 걸렸으면 곁의 물로 옮기고, 뱃머리가 뭍을 보고 있으면 가장 트인 물 쪽으로 돌린다.
       heading만 볼 때(always=false)는 배가 뭍 위에 있을 때만 움직인다. 옮겼거나 돌렸으면 true */
@@ -222,8 +222,8 @@
   // ================================================================ input
   function stagePos(e) { var r = G.Game.canvases().overlay.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 1600, (e.clientY - r.top) / r.height * 900]; }
   // st.qo: 이번 장면을 그릴 때 쓴 해일 흔들림(화면 px, js/art/quakefx.js) — 카메라(st.cam)에는 더하지 않고 그리기·클릭 변환에만
-  function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
-  function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
+  function toWorld(x, y) { var o = st.qo, lon = st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, lat = st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom; return G.Terrain ? G.Terrain.unproject(lon, lat) : [lon, lat]; }
+  function toScreen(lon, lat) { var o = st.qo, rise = G.Terrain ? G.Terrain.lift(lon, lat) : 0; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat + rise - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
   SEA.toScreen = function (lon, lat) { return toScreen(lon, lat); };
   /* 마우스 따라가기 (기본 끔 · 수첩 옆 단추나 Shift로 켬/끔, G.Ctrl)
      · 끔: 마우스를 옮겨도 배는 그대로 — 바다를 누르면 그곳까지 간다
@@ -253,6 +253,7 @@
       takeCourse(ang);
       st.pointerSteer = true; st.followArmed = true; st.pointerWant = ang; st.pointerTurning = false;
     } else {
+      if (Math.abs(U.angDiff(st.pointerWant, ang)) > 0.6) st.riverCourse = null;
       st.pointerWant = ang; st.stopping = false;
       if (!(sens().seaTurn > 0)) { st.dirCrs = ang; st.crs = ang; st.pointerTurning = false; }   // 빠르게: 곧바로
       if (st.paused) { st.paused = false; refreshBar(); }
@@ -372,6 +373,8 @@
       var l0 = S().loc;
       if (!st.arrowSteer || st.dirCrs == null || st.paused || st.stopping) takeCourse(st.paused && shipSpeed() < 0.02 ? l0.heading : (st.dirCrs != null ? st.dirCrs : l0.heading));
       st.arrowSteer = true;
+      var river = riverAt(l0);
+      st.riverCourse = river ? chooseRiverCourse(river, ang) : null;
       monsoonWarn(l0.lon + Math.cos(ang) * 15, l0.lat + Math.sin(ang) * 15);
       return true;
     }
@@ -515,7 +518,7 @@
     refreshBar(); refreshButtons();
   }
   SEA.takeCourse = takeCourse;
-  function freshCourse(crs) { st.arrowSteer = false; st.braking = false; st.dirCrs = null; st.crs = crs; st.dW = Infinity; st.xt = 0; st.tackSide = 0; st.tackTheta = 0; st.noTack = 0; st.cruise = false; st.thr = 0; }
+  function freshCourse(crs) { st.arrowSteer = false; st.braking = false; st.dirCrs = null; st.crs = crs; st.dW = Infinity; st.xt = 0; st.tackSide = 0; st.tackTheta = 0; st.noTack = 0; st.cruise = false; st.thr = 0; st.riverCourse = null; }
   /** 멈춘다: 나아가던 힘도 없앤다 (항로·침로는 남겨 둬 다시 출발할 수 있다) */
   /** 멈춘다: 돛을 거두고 남은 관성으로 미끄러지다 선다 (거의 서 있으면 곧바로). 항로·침로는 남겨 둔다 */
   function halt() {
@@ -588,9 +591,15 @@
     var pick = pickCfg().cityPickPx || 30, np = portNear(), best = null, bd = Infinity;
     knownCities().forEach(function (c) {
       var p = toScreen(c.lon, c.lat), dx = x - p[0], dy = y - p[1], d = dx * dx + dy * dy, hit = d < pick * pick;
-      var met = G.CityIcon && G.CityIcon.metrics ? G.CityIcon.metrics(c) : null;
-      if (!hit && met) hit = Math.abs(dx) <= met.width / 2 + 4 && dy >= met.top - 6 && dy <= met.base + 4;
-      if (!hit && met && labelW[c.id] && ((st.target && st.target.city === c) || c === np)) hit = dx >= met.radius && dx <= met.radius + 13 + labelW[c.id] && Math.abs(dy) <= 12;
+      var mark = st.cityMarks && st.cityMarks[c.id], label = mark && mark.label;
+      if (mark && G.CityIcon.hit && G.CityIcon.hit(mark, x, y)) {
+        hit = true;
+        d = Math.min(d, Math.pow(x - mark.anchorX, 2) + Math.pow(y - mark.y, 2));
+      }
+      if (label && x >= label[0] && x <= label[0] + label[2] && y >= label[1] && y <= label[1] + label[3]) hit = true;
+      var met = mark || (G.CityIcon && G.CityIcon.metrics ? G.CityIcon.metrics(c) : null);
+      if (!hit && met && !met.boxes) hit = Math.abs(dx) <= met.width / 2 + 4 && dy >= met.top - 6 && dy <= met.base + 4;
+      if (!hit && met && !met.boxes && labelW[c.id] && ((st.target && st.target.city === c) || c === np)) hit = dx >= met.radius && dx <= met.radius + 13 + labelW[c.id] && Math.abs(dy) <= 12;
       if (hit && d < bd) { bd = d; best = c; }
     });
     return best;
@@ -1067,7 +1076,7 @@
       if (st.manual && turnKey() && spd > 1) { spd = 1; st.handSteer = true; }
       var daysDt = dt * spd / DAY_SEC;
       var nsub = Math.max(1, Math.ceil(daysDt / 0.08)), subD = daysDt / nsub, subT = dt / nsub;
-      if (st.path && !st.direct) {
+      if (st.path && !st.direct || st.dirCrs != null && riverAt(l)) {
         // 날수뿐 아니라 이동 거리도 쪼갠다. 빠른 함대가 한 걸음에 좁은 물길·길목을 뛰어넘지 않게 한다.
         var motion = R.fleetMotion(st.crs != null ? st.crs : l.heading, curWind());
         var maxSpeed = Math.max(shipSpeed(), motion.vmg, motion.legP, motion.legM) * (1 + G.FX.clouds.tail);
@@ -1166,13 +1175,70 @@
     render(dt);
   };
 
+  function riverAt(l) {
+    var H = G.Hydro; if (!H || !H.ready) return null;
+    var q = st.riverCourse && H.at(l.lon, l.lat, st.riverCourse.route);
+    if (!H.isWater(q, l.lon, l.lat)) q = H.at(l.lon, l.lat);
+    return q && q.route && H.isWater(q, l.lon, l.lat) ? q : null;
+  }
+  function stopInRiver(text) {
+    st.path = null; st.target = null; st.dirCrs = null; st.riverCourse = null; st.prog = null;
+    st.stopping = false; st.paused = true; st.vel = [0, 0]; st.lastStep = 0;
+    refreshBar(); UI.toast(text, 'anchor');
+  }
+  function chooseRiverCourse(river, input) {
+    var dot = Math.cos(input) * river.flow[0] + Math.sin(input) * river.flow[1];
+    return { route: river.route, direction: dot < 0 ? 1 : -1 };
+  }
+  /** 강에서는 조작을 시작한 쪽(상·하류)을 기억해 굽이마다 다시 선택하지 않는다. */
+  function riverCoursePoint(l, river, cfg, profile) {
+    var H = G.Hydro, course = st.riverCourse;
+    if (!course || course.route !== river.route) {
+      var input = st.arrowSteer ? arrowAngle() : st.pointerSteer ? st.pointerWant : null;
+      if (input == null) input = st.dirCrs;
+      course = st.riverCourse = chooseRiverCourse(river, input);
+    }
+    if (course.leaving) return null;
+    var reach = U.clamp(river.half * 1.4, cfg.lookAhead[0], cfg.lookAhead[1]);
+    var from = [l.lon, l.lat], aim;
+    // 앞의 굽이를 건너뛰는 곧은 선이 물가에 걸리면 더 가까운 수로를 바라본다.
+    do {
+      aim = H.channelAhead(river, course.direction, reach);
+      if (!aim.bend || H.clear(from, aim.point, profile, null, course.route)) break;
+      reach *= 0.5;
+    } while (reach >= cfg.endReach);
+    if (aim.end && G.Geo.dist(l.lon, l.lat, aim.point[0], aim.point[1]) <= cfg.endReach) {
+      if (course.direction < 0 && course.route.parent) {
+        var parent = H.routes().find(function (route) { return route.id === course.route.parent; });
+        var junction = parent && H.at(l.lon, l.lat, parent);
+        if (H.isWater(junction, l.lon, l.lat)) {
+          st.riverCourse = { route: parent, direction: -1 };
+          st.riverSection = junction;
+          return riverCoursePoint(l, junction, cfg, profile);
+        }
+      }
+      var seaMouth = course.direction < 0 && G.Geo.baseIsSea(aim.point[0], aim.point[1], 0.2);
+      var lake = G.Terrain && G.Terrain.isLake(aim.point[0], aim.point[1]);
+      if (!seaMouth && !lake) {
+        if (!st.stopping) stopInRiver('항해할 수 있는 수로 끝에 도착했습니다.');
+        return null;
+      }
+      course.leaving = true;
+      st.dirCrs = Math.atan2(-course.direction * river.flow[1], -course.direction * river.flow[0]);
+      return null;
+    }
+    return aim.point;
+  }
   /* 조타
      · 수동(방향키): ←→를 누르는 동안 뱃머리를 돌린다. 처음엔 살짝, 누르고 있으면 제 빠르기로 (잔 조정이 쉽다).
        함대에서 가장 둔한 배의 선회력에 맞추고, 배가 거의 서 있으면 키가 잘 듣지 않는다.
      · 자동(항로·침로·숫자판): 가야 할 방위(st.crs)를 정하고, 맞바람이면 그 좌우 θ로 번갈아 뱃머리를 둔다(태킹) */
   function steer(dt, spd) {
     var s = S(), l = s.loc;
+    st.riverGuide = null; st.riverPoint = null;
+    st.riverSection = riverAt(l);
     if (st.manual) {
+      st.riverCourse = null;
       var dir = turnKey();
       if (dir) {
         st.turnHeld = (st.turnHeld || 0) + dt;
@@ -1183,22 +1249,44 @@
       return;
     }
     st.turnHeld = 0;
-    var crs = null, dW = Infinity;
+    var crs = null, dW = Infinity, point = null;
+    var river = (st.path && !st.direct || st.dirCrs != null) ? st.riverSection : null, cfg = FXS().riverGuide;
+    var profile = river && G.Hydro.fleetProfile(), from = river && [l.lon, l.lat];
+    if (!river || st.path) st.riverCourse = null;
     while (st.path && st.pathI < st.path.length) {
       var wp = st.path[st.pathI];
       var dx = G.Geo.wrapLon(wp[0] - l.lon), dy = wp[1] - l.lat;
       var d = Math.sqrt(dx * dx + dy * dy);
       // 한 걸음보다 가까우면 들른 것으로 친다 (빠른 배속에서 길목을 맴돌지 않도록)
-      var rad = Math.max(0.07, (st.lastStep || 0) * 1.2);
-      if (st.pathI === st.path.length - 1 && st.target && st.target.city) rad = Math.max(rad, 0.15);   // 항구 앞 마지막 길목은 넉넉히 (부두가 물가에 붙어 있어도 닿게)
-      if (d < rad) {
+      var rad = river ? U.clamp(river.half * 0.5, cfg.waypoint[0], cfg.waypoint[1]) : Math.max(0.07, (st.lastStep || 0) * 1.2);
+      var next = st.path[st.pathI + 1];
+      if (!next && st.target && st.target.city) rad = Math.max(rad, river ? cfg.waypoint[1] : 0.15);
+      if (d < rad && (!river || !next || d <= cfg.endReach || G.Hydro.clear(from, next, profile))) {
         st.pathI++; st.repath = 0; st.xt = 0;
         if (st.pathI >= st.path.length) { arrived(); return; }
         continue;   // 새 길목의 방향을 이 걸음부터 쓴다. 이전 침로로 만의 물가를 향하지 않는다
       }
       crs = Math.atan2(dy, dx); dW = d;
+      if (river) {
+        point = wp;
+        // 코앞의 굽이 다음 쪽을 미리 바라본다. 현재 길목 반경 안에서만 모서리를 둥글게 돈다.
+        if (next && d < rad * 2) {
+          var sx = G.Geo.wrapLon(next[0] - wp[0]), sy = next[1] - wp[1], span = Math.hypot(sx, sy);
+          if (span > 0) {
+            var k = Math.min(1, (rad * 2 - d) * 0.25 / span), ahead = [G.Geo.wrapLon(wp[0] + sx * k), wp[1] + sy * k];
+            if (G.Hydro.clear(from, ahead, profile)) point = ahead;
+          }
+        }
+      }
       break;
     }
+    if (river && !st.path && st.dirCrs != null) point = riverCoursePoint(l, river, cfg, profile);
+    if (point) {
+      var sx = G.Geo.wrapLon(point[0] - l.lon), sy = point[1] - l.lat;
+      st.riverGuide = profile; st.riverPoint = point; st.tackTheta = 0;
+      crs = Math.atan2(sy, sx); dW = Math.hypot(sx, sy);
+    }
+    if (st.paused) return;
     if (crs == null && st.dirCrs != null) crs = st.dirCrs;
     if (crs == null) return;
     st.crs = crs; st.dW = dW;
@@ -1280,7 +1368,7 @@
     var Lb = Math.min(lenPx / z, 0.45 * WV.seaSwell()), cst = WV.coast(lon, lat), t = st.t;
     var h = WV.hull(function (x, y) { return WV.sea(x, y, t, wind, pxD, cst); }, lon, lat, heading, Lb, Lb * 0.5);
     var ch = K.chop || 0;
-    var river = G.Hydro && G.Hydro.ready && G.Hydro.at(lon,lat), calm = river && G.Hydro.isWater(river,lon,lat) ? .10 : 1;
+    var river = G.Hydro && G.Hydro.ready && G.Hydro.at(lon,lat), calm = river && G.Hydro.isWater(river,lon,lat) || G.Terrain&&G.Terrain.inlandWater(lon,lat) ? .10 : 1;
     return { roll: (h.roll + ch * h.lr) * K.roll * calm, pitch: (h.pitch + ch * h.lp) * K.pitch * calm, heave: h.heave * K.heave * calm };
   }
   function arrived() {
@@ -1306,7 +1394,7 @@
     st.sailT = (st.sailT || 0) + days;
     if (st.noTack > 0) st.noTack -= days;
     var wind = curWind(), k0 = (st.storm > 0 ? 0.6 : 1) * (st.slowDays > 0 ? 0.7 : 1) * (G.Rain ? G.Rain.speedK() : 1), v = 0, m = null;   // 비: 대책에 따라 조금 느려진다 (js/systems/searain.js)
-    var h = l.heading, pathLimit = Infinity;
+    var h = l.heading, pathLimit = Infinity, riverGuide = !st.stopping && st.riverGuide;
     // ---------------- 목표 속력 (돛·바람이 주는 힘) — 실제 속력은 선체의 관성으로 이것을 뒤따른다
     if (st.stopping) {
       v = 0;
@@ -1325,7 +1413,7 @@
     } else if (st.path || st.dirCrs != null) {
       var crs = st.crs != null ? st.crs : h;
       m = R.fleetMotion(crs, wind);
-      var tack = m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0) && !st.arrowSteer && !st.pointerSteer && !portApproach() && tackAllowed(crs, m.theta);   // 방향키·마우스로 몰 때는 지그재그 없이 가리킨 쪽으로 · 설정 「맞바람 지그재그」
+      var tack = !riverGuide && m.theta > 0.05 && (st.dW == null || st.dW >= TACK_MIN) && !(st.noTack > 0) && !st.arrowSteer && !st.pointerSteer && !portApproach() && tackAllowed(crs, m.theta);   // 방향키·마우스로 몰 때는 지그재그 없이 가리킨 쪽으로 · 설정 「맞바람 지그재그」
       st.upwind = m.theta > 0.05;
       if (tack) {
         if (!st.tackTheta || !st.tackSide) st.tackSide = st.tackSide || (m.legP >= m.legM ? 1 : -1);
@@ -1346,7 +1434,7 @@
       var off = Math.abs(U.angDiff(h, crs + (st.tackTheta ? st.tackSide * st.tackTheta : 0)));
       if (st.dW != null && st.dW < 0.6 && off > 0.6) v *= U.clamp(st.dW / 0.6, 0.35, 1);
       // 빠른 배도 길목보다 작은 반경으로 돌게 한다. 목표 속력만 낮추면 감속 관성 때문에 계속 원을 그린다.
-      if (st.path && !st.direct && !st.tackTheta && off > P.pathTurnAngle) {
+      if (!riverGuide && st.path && !st.direct && !st.tackTheta && off > P.pathTurnAngle) {
         pathLimit = Math.max(P.stopSpeed, st.dW * 2.6 * DAY_SEC * turnAbility() * P.pathTurnBrake / off);
         v = Math.min(v, pathLimit);
       }
@@ -1355,14 +1443,21 @@
     }
     v *= k0;
     // 강의 물살만 상·하류에 반영한다. 바다의 항해 속력·날짜 환산은 그대로다.
-    var river = G.Hydro && G.Hydro.ready && G.Hydro.at(l.lon,l.lat);
-    if (river && river.route && G.Hydro.isWater(river,l.lon,l.lat) && v > 0) {
+    var river = st.riverSection;
+    if (river && v > 0) {
       var flow = Math.cos(h)*river.flow[0]+Math.sin(h)*river.flow[1], rk=G.BALANCE.waterways;
       v *= flow>=0 ? 1+flow*(rk.downstream-1) : 1+flow*(1-rk.upstream);
     }
     // 구름길을 따라 순풍을 탔다 (손으로 몰든 자동항해든 — 맞바람 지그재그 다리는 바람과 어긋나 받지 못한다)
     var tail = !st.stopping && v > 0 ? cloudTail(h, wind) : 0;
     st.tail = tail; v *= 1 + tail;
+    if (riverGuide) {
+      var angle = Math.abs(U.angDiff(h, st.crs)), limits = P.riverGuide.turnAngles;
+      // 급한 굽이·되돌리기에서는 뱃머리를 먼저 돌린 뒤 속력을 붙인다.
+      var aligned = U.clamp((limits[1] - angle) / (limits[1] - limits[0]), 0, 1);
+      v *= aligned;
+      pathLimit = Math.min(st.dW / Math.max(days, 1e-4), aligned > 0.999 ? Infinity : v);
+    }
     // ---------------- 관성: 선체 앞뒤 방향은 가속·감속 시간으로, 옆 방향 미끄러짐은 물의 저항으로 줄어든다
     var hx = Math.cos(h), hy = Math.sin(h), vel = st.vel || (st.vel = [0, 0]);
     var fw = vel[0] * hx + vel[1] * hy, lt = -vel[0] * hy + vel[1] * hx;
@@ -1386,6 +1481,20 @@
     var dist = sp * days;
     st.lastStep = dist;
     if (dist <= 0) return;
+    if (riverGuide) {
+      var cx = Math.cos(st.crs), cy = Math.sin(st.crs), gx = l.lon + cx * dist, gy = l.lat + cy * dist, from = [l.lon, l.lat];
+      var channel = st.riverCourse && st.riverCourse.route;
+      // 강둑에 닿으면 옆으로 미는 대신 아직 배가 지날 수 있는 만큼만 앞으로 나아간다.
+      while (!G.Hydro.clear(from, [gx, gy], riverGuide, null, channel)) {
+        dist *= 0.5;
+        if (dist < 0.0001) { stopInRiver('이 함대가 더 지나갈 수 있는 수로가 없습니다.'); return; }
+        gx = l.lon + cx * dist; gy = l.lat + cy * dist;
+      }
+      st.lastStep = dist; st.lat = 0; st.fwd = dist / days;
+      vel[0] = cx * st.fwd; vel[1] = cy * st.fwd;
+      step(gx, gy, dist); st.prog = null;
+      return;
+    }
     var nx = l.lon + Math.cos(md) * dist, ny = l.lat + Math.sin(md) * dist;
     if (!st.manual && st.tackTheta && m && !sailWater(nx, ny, 0.2)) {
       // 지그재그 다리가 뭍에 걸렸다: 반대쪽 다리로 돌리고, 이번 걸음은 가야 할 방위대로 (곧 또 걸리면 한동안 지그재그 없이)
@@ -2160,6 +2269,7 @@
     if (G.SeaBar) G.SeaBar.refresh(hudEl.bar);
     var s = S(), l = s.loc;
     var tgt = st.target ? (st.target.city ? st.target.city.name + U.j(st.target.city.name, '으로/로').slice(st.target.city.name.length) + (st.paused ? ' 가던 길에 멈춤 — Space·출발로 이어 가기' : (st.autoOn ? ' 자동항해 중' : st.pilot ? ' 바닷길 따라 항해 중' : ' 항해 중')) : (st.paused ? '목적지 가던 길에 멈춤 — Space·출발로 이어 가기' : '목적지로 항해 중'))
+      : st.riverCourse && !st.riverCourse.leaving && st.dirCrs != null ? U.esc(st.riverCourse.route.name) + (st.riverCourse.direction > 0 ? ' 상류로' : ' 하류로') + (st.paused ? ' — Space·방향키로 출발' : ' 이동 중 · Space 정지')
       : st.dirCrs != null ? (st.paused ? U.dirName(st.dirCrs) + '쪽 침로 — Space·방향키로 출발' : st.stopping ? U.dirName(st.dirCrs) + '쪽 침로' : U.dirName(st.dirCrs) + '쪽으로 항해 중 · ' + (st.pointerSteer ? '마우스를 따라 조타 중 (' + G.Keys.label('mouseFollow').replace(/^(왼쪽|오른쪽) /, '') + ' 끔)' : st.arrowSteer && arrowAngle() != null ? U.dirName(arrowAngle()) + '쪽으로 뱃머리를 돌리는 중' : '방향키를 누르고 있으면 그쪽으로 뱃머리가 돌아감') + ' · Space 정지')
       : st.manual ? (st.paused ? '수동 조타 — ↑ 돛을 펴고 출발 · ←→ 제자리에서 뱃머리 · Space 순항' : st.cruise ? '수동 조타(순항) — ←→ 뱃머리 · ↓·Space 멈춤' : '수동 조타 — ↑ 누르는 동안 나아가고 떼면 서서히 멈춤 · Space 순항')
       : (st.paused ? (helmMode() ? '정지 — 스페이스로 다시 출발(항구 곁에서는 정박)' : followOn() ? '정지 — 마우스 따라가기 켬: 가려는 쪽 바다를 누르면 따라갑니다 · 방향키로도 출발 · 탐색 가능' : '정지 — 바다를 누르거나 방향키로 출발 · 탐색 가능') : followOn() ? '표류 중 — 가려는 쪽 바다를 누르면 마우스를 따라갑니다' : '표류 중 — 바다를 누르면 그곳까지 갑니다 · 마우스 따라가기는 ' + G.Keys.label('mouseFollow').replace(/^(왼쪽|오른쪽) /, ''));
@@ -2183,6 +2293,7 @@
     ctx.setTransform(k, 0, 0, k, 0, 0);
     var s = S(), l = s.loc, z = st.cam.zoom;
     if(G.TerrainArt)G.TerrainArt.draw(ctx,st.cam,toScreen,l);
+    drawCities(ctx);
     // 작은 일거리 — 해도 작성 목표 해역
     var tk = s.contract && s.contract.task;
     if (tk && tk.kind === 'survey' && !tk.done) {
@@ -2214,10 +2325,12 @@
       var tp = toScreen(st.target.lon, st.target.lat);
       ctx.strokeStyle = '#ffe6b0'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(tp[0], tp[1], 9 + Math.sin(st.t * 4) * 2, 0, 7); ctx.stroke();
     } else if (st.dirCrs != null) {
-      // 숫자판 침로: 가야 할 방위를 점선으로
-      var c0 = toScreen(l.lon, l.lat), c1 = toScreen(l.lon + Math.cos(st.dirCrs) * 2.5, l.lat + Math.sin(st.dirCrs) * 2.5);
-      ctx.strokeStyle = 'rgba(255,245,220,.6)'; ctx.lineWidth = 2; ctx.setLineDash([6, 7]);
-      ctx.beginPath(); ctx.moveTo(c0[0], c0[1]); ctx.lineTo(c1[0], c1[1]); ctx.stroke(); ctx.setLineDash([]);
+      var aim = st.riverCourse && !st.riverCourse.leaving ? st.riverPoint : [l.lon + Math.cos(st.dirCrs) * 2.5, l.lat + Math.sin(st.dirCrs) * 2.5];
+      if (aim) {
+        var c0 = toScreen(l.lon, l.lat), c1 = toScreen(aim[0], aim[1]);
+        ctx.strokeStyle = 'rgba(255,245,220,.6)'; ctx.lineWidth = 2; ctx.setLineDash([6, 7]);
+        ctx.beginPath(); ctx.moveTo(c0[0], c0[1]); ctx.lineTo(c1[0], c1[1]); ctx.stroke(); ctx.setLineDash([]);
+      }
     }
     // 항적·물보라 (배가 실제로 지나간 바다에 남는다)
     if (st.shipWater && G.SeaFX) Object.keys(st.shipWater).forEach(function(key) {
@@ -2303,7 +2416,6 @@
       if (!(G.Ship3D && G.Ship3D.draw(ctx, bx, by, ha, lenS, lk, st.t + si))) A.shipTop(ctx, bx, by, ha, lenS, lk, st.t + si);
       if (G.VoyageFX) G.VoyageFX.drawSpray(st, ctx, bx, by, ha, lenS, si);   // 속력을 낼 때 선수 물보라
     }
-    drawCities(ctx);
     if (G.Disaster && G.Disaster.drawSea) G.Disaster.drawSea(ctx, toScreen, st.cam.zoom, st.t, fontFam());   // 알려진 재해의 움직이는 그림 (해일·화산 …)
     if (G.VoyageFX) G.VoyageFX.drawSky(st, ctx, pp, l.heading, SP, toScreen);      // 모항 배웅 갈매기
     if (G.CrewPets) G.CrewPets.drawFlight(st, ctx, pp, SP);   // 동물 사건이 모두 끝난 뒤 기함 위를 돌고 돌아오는 앵무새
@@ -2398,30 +2510,36 @@
     }
     ctx.restore();
   }
-  /** 도시 표시 (배 그림 위에 그려 배가 커도 가려지지 않게) */
+  /** 도시 모형은 함대 아래에 그려 좁은 항구에서 배를 가리지 않게 한다. */
   function drawCities(ctx) {
     var s = S();
     var refPort = G.Routes ? G.Routes.origin() : null, nearPort = portNear();
+    if (G.CityIcon.beginModels) G.CityIcon.beginModels();
+    st.cityMarks = {};
     ctx.textAlign = 'left';
     // 도시 밖 유적·자연 경관은 제독이 직접 발견한 뒤부터 작은 투명 모형으로 남는다.
     if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
-      var p = toScreen(d.lon, d.lat); if (p[0] < -60 || p[0] > 1660 || p[1] < -60 || p[1] > 960) return;
+      var foot = G.DiscoveryIcon.position(d), p = toScreen(foot[0],foot[1]);
+      if (p[0] < -100 || p[0] > 1700 || p[1] < -100 || p[1] > 1000) return;
       G.DiscoveryIcon.draw(ctx, d, p[0], p[1], {zoom:st.cam.zoom});
     });
     knownCities().forEach(function (c) {
       var p = toScreen(c.lon, c.lat);
-      if (p[0] < -60 || p[0] > 1660 || p[1] < -30 || p[1] > 930) return;
+      if (p[0] < -130 || p[0] > 1730 || p[1] < -130 || p[1] > 1030) return;
       var visited = s.visited && s.visited[c.id], fl = G.CityInfo.flags(c, refPort);
-      var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { visited: visited, auto: fl.auto });
-      var r2 = mark.radius;
+      var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { visited: visited, auto: fl.auto, zoom: st.cam.zoom });
+      st.cityMarks[c.id] = mark;
+      var right = mark.right == null ? p[0] + mark.radius : mark.right, ay = mark.y == null ? p[1] : mark.y;
       if (fl.sponsor) { var dx = p[0] + mark.width / 2, dy = p[1] + mark.top, dz = 5; ctx.fillStyle = '#d9b040'; ctx.strokeStyle = '#3a2a10'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(dx, dy - dz); ctx.lineTo(dx + dz, dy); ctx.lineTo(dx, dy + dz); ctx.lineTo(dx - dz, dy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
       if (fl.contract) { var fx = p[0] - mark.width * 0.18, fy = p[1] + mark.top; ctx.strokeStyle = '#f2e7cc'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 20); ctx.stroke(); ctx.fillStyle = '#c0281e'; ctx.beginPath(); ctx.moveTo(fx, fy - 20); ctx.lineTo(fx - 14, fy - 15.5); ctx.lineTo(fx, fy - 11); ctx.closePath(); ctx.fill(); }
       // 이름은 가고 있는 곳과 곁의 항구만 (나머지는 마우스를 올리면)
       if ((st.target && st.target.city === c) || c === nearPort) {
         ctx.font = (c.size >= 3 ? '700 17px ' : '600 15px ') + fontFam();
         var tw = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width);
-        ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(p[0] + r2 + 3, p[1] - 11, tw + 10, 21);
-        ctx.fillStyle = '#f2e7cc'; ctx.fillText(c.name, p[0] + r2 + 8, p[1] + 5);
+        var lx = right + 4, ly = ay - 11;
+        mark.label = [lx, ly, tw + 10, 21];
+        ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(lx, ly, tw + 10, 21);
+        ctx.fillStyle = '#f2e7cc'; ctx.fillText(c.name, lx + 5, ly + 16);
       }
     });
   }

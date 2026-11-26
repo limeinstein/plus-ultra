@@ -1,0 +1,43 @@
+{
+  "id": "durian",
+  "name": "두리안",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/durian.png",
+  "sourceSha256": "47f65add55aeee2ab305089e211e9b2583df2bfee071b7f58153aefa51d88516",
+  "sourceMtimeNs": 1795659653464164100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/durian.gif",
+      "sha256": "74b2f9e3307876b41e24dc603afacf871c7218f0e67470234275759234d0b1d9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/durian.jpg",
+      "sha256": "93e4eeb0f3db8e9a2eaffc5145467d6f7eaea93ca6fe9ba0ea9fe117636132ee"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/durian.webp",
+      "sha256": "a7101cb5ab70ec395d5303aef7f94297847804d4323a3f68361fa8c34245ec99"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/durian.gif",
+      "sha256": "8f533fd5488b4c17e6fe28a58f507b84567ce42845c51dd85b7491d614741468",
+      "bytes": 3687770
+    },
+    {
+      "file": "images/discovery-ends/durian.jpg",
+      "sha256": "117e06f5ae732175e46b7f19767c474fc168a5315a9dea3ce65b8b91a5fa326c",
+      "bytes": 108996
+    },
+    {
+      "file": "images/discovery-sheets/durian.webp",
+      "sha256": "3a250e856e0aaf8f6a7f8101a6e813c167c76065e248c5001a3169232e06da17",
+      "bytes": 1898688
+    }
+  ]
+}

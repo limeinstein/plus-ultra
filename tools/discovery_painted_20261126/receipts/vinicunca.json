@@ -1,0 +1,43 @@
+{
+  "id": "vinicunca",
+  "name": "무지개산 비니쿤카",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/vinicunca.png",
+  "sourceSha256": "cef98fecad7835573aff5b3274d63d8990c67d9c609fefd58315540d32bfbbec",
+  "sourceMtimeNs": 1795659645222039500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/vinicunca.gif",
+      "sha256": "bc107e4087a34429ee9d78c7a44a82937bdb67e027bdb5fc4851495571195225"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/vinicunca.jpg",
+      "sha256": "4d2af24a55300453fd42ecdaa81c1f98e9c8ea823cbb87134a73a6cc771fce42"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/vinicunca.webp",
+      "sha256": "b00067898f0d79d9cd11d8f71b8739c05a81460415e0024f6f20e6cf9175a3cf"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/vinicunca.gif",
+      "sha256": "98fa7da66a009bc0cba94c1c622dfd49f82dfeed3d8de942bc51f59f42427773",
+      "bytes": 3137492
+    },
+    {
+      "file": "images/discovery-ends/vinicunca.jpg",
+      "sha256": "024a19438c1825bc1c562e585de4f7fdfdf0b2ffaaa927d3e16358e3c3b694a6",
+      "bytes": 92966
+    },
+    {
+      "file": "images/discovery-sheets/vinicunca.webp",
+      "sha256": "3a400648c56c5d1a15bd049ef7c619963947dc6296a8be10f521aa56052a26dc",
+      "bytes": 1580944
+    }
+  ]
+}

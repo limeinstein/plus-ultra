@@ -1,0 +1,43 @@
+{
+  "id": "ft_cuzco",
+  "name": "태양 축제의 이방인",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ft_cuzco.png",
+  "sourceSha256": "53049c2c16e2b364fa151d689e7d7babaf5e587bf20aa9e5a15e024a8992d4e7",
+  "sourceMtimeNs": 1795662484899726400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ft_cuzco.gif",
+      "sha256": "cd76911011565fb6fe99609284d2b097957948bd67d23da9a457c17de0984d52"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ft_cuzco.jpg",
+      "sha256": "e0dc7a14ac9a6e8484100ebb0d4376a42e3584851f9e1441baf2bc64bae160bc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ft_cuzco.webp",
+      "sha256": "11681028cff02c1fd430233132b36145dbe91fade62c50d28c2673b55511a30d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ft_cuzco.gif",
+      "sha256": "a2f01d673477d9c882b597cb3690e436fe8f6e0ce2517b0bc541eac76a662ad4",
+      "bytes": 3631657
+    },
+    {
+      "file": "images/discovery-ends/ft_cuzco.jpg",
+      "sha256": "57274c50c245ceeea1cb86c4ba1c46cbf873789ebcdd6a5eccb65a7242ef9ff9",
+      "bytes": 101410
+    },
+    {
+      "file": "images/discovery-sheets/ft_cuzco.webp",
+      "sha256": "6898b13f08ecd15f332d6c0cc6fb533b2ff6b9b33bef9efbe8d4eb897a4ba422",
+      "bytes": 1733754
+    }
+  ]
+}

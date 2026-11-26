@@ -1,0 +1,43 @@
+{
+  "id": "brihadeeswarar",
+  "name": "브리하디스와라 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/brihadeeswarar.png",
+  "sourceSha256": "fcdaee4f5ecde49718c7a9d45faf997391bc4f818e5b56be118341aac828786b",
+  "sourceMtimeNs": 1795661272751293600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/brihadeeswarar.gif",
+      "sha256": "04bdc95925df3f094a3fa433550d778e0dde83d6a626c3c4be9420105e9b865d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/brihadeeswarar.jpg",
+      "sha256": "e1ab4313ec094dbbd699f7530986d637fcd71c84a2241321f6a842db8c910293"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/brihadeeswarar.webp",
+      "sha256": "95f1d9921ef91ad35c07beffbc9fcf902fb260aef0ca9590d4d1fa63a5e46e26"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/brihadeeswarar.gif",
+      "sha256": "39a56abd79379c841a32d08e60f5ca61b9b1b0de367ad3cebf0fe14065ebc391",
+      "bytes": 3349246
+    },
+    {
+      "file": "images/discovery-ends/brihadeeswarar.jpg",
+      "sha256": "166c5a2367903b45a5e46278dd1a58f651383ec978909dd89771c99949ca28ff",
+      "bytes": 96375
+    },
+    {
+      "file": "images/discovery-sheets/brihadeeswarar.webp",
+      "sha256": "184ba4b88b1567b9b7dfbe9c30504d8134be775f75c2a5e80a541ae555963172",
+      "bytes": 1652110
+    }
+  ]
+}

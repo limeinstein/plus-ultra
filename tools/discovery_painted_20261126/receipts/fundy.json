@@ -1,0 +1,43 @@
+{
+  "id": "fundy",
+  "name": "펀디 만의 큰 조수",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/fundy.png",
+  "sourceSha256": "0da599c77403eb7bc36ef0da25cf93cae88c85186983a5d19376645c08d10bc9",
+  "sourceMtimeNs": 1795659657014268100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/fundy.gif",
+      "sha256": "52c30e6973bbbfc7733305959c0dcd537912d746445490f4fd8777d8ba7fce09"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/fundy.jpg",
+      "sha256": "f783e38342a01a935a73b897ba576d064804eb4dadc2939d49ae8b7d38d665bb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/fundy.webp",
+      "sha256": "21bf29a189a0fc4a2acab686c6984838d45251c2ee3a4314174a97a1e894b29b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/fundy.gif",
+      "sha256": "6b631f8a199fd1d6d7b1ac6bedc65cbc2711a04b49dc19af8fb7ec75239b692d",
+      "bytes": 2971472
+    },
+    {
+      "file": "images/discovery-ends/fundy.jpg",
+      "sha256": "df823af107592d21cb67dd44bd201ae4e78b525eec9f513b409e889c0a6d38a4",
+      "bytes": 86720
+    },
+    {
+      "file": "images/discovery-sheets/fundy.webp",
+      "sha256": "9b37355e9c97bcfae395691eecffa3cf6a5530cbdce4bfc86eb28890b5124f60",
+      "bytes": 1460958
+    }
+  ]
+}

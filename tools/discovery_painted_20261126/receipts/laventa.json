@@ -1,0 +1,43 @@
+{
+  "id": "laventa",
+  "name": "라 벤타의 거대 석두",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/laventa.png",
+  "sourceSha256": "1ebac481e08d7fbc966736b6c3a3c60b92ff8dcccbb02d46433585e4a66a2ed4",
+  "sourceMtimeNs": 1795662800672525800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/laventa.gif",
+      "sha256": "35ca4598f17c497521a55b7cc9b74da98e2cb1352355fc28bb54469efe33998e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/laventa.jpg",
+      "sha256": "e8e9878936fc7b19dc4dcb3615a744141a4647428583f268ef13ddb88f71c340"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/laventa.webp",
+      "sha256": "5e9bb9010352d6858d1bd75711dbde2044a8d6091252520217d842a0e08ab08e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/laventa.gif",
+      "sha256": "3371b4245d3f701352a8d0d01180a47e0a7ba93d40bba38fa56a39695496e659",
+      "bytes": 3650926
+    },
+    {
+      "file": "images/discovery-ends/laventa.jpg",
+      "sha256": "908a667b01a771a92fa17affb9236fa11a57d952258db9fb90e255eb749bea6d",
+      "bytes": 97957
+    },
+    {
+      "file": "images/discovery-sheets/laventa.webp",
+      "sha256": "8146c3e818478910651dc7c8ebb4f45d11d4d2d38aea93ac5e77345b789d7c8e",
+      "bytes": 1709270
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "septizodium",
+  "name": "셉티조디움",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/septizodium.png",
+  "sourceSha256": "cdd4751a324071566799153886f351658dcabbaf3bf12b5857fcab523fae767c",
+  "sourceMtimeNs": 1795663099062518600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/septizodium.gif",
+      "sha256": "6e641f2face036376493a743777c0baa2a0043b734c8d754c11dcef73a62ea82"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/septizodium.jpg",
+      "sha256": "38d6f9c3fb0b574a721d35b34c357f4ea1fde9af0564d06ea20ec5cd14962978"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/septizodium.webp",
+      "sha256": "e1429abc9a99589eb61aecc2a6431710821d09784d6574494d8535f5c3c32e11"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/septizodium.gif",
+      "sha256": "125a8f0c7b7c15528c2d22609c55bd54db6b0217376aa46e64b92dda4097b932",
+      "bytes": 3807817
+    },
+    {
+      "file": "images/discovery-ends/septizodium.jpg",
+      "sha256": "47c7a9ac3e356e132241dd2e225fb60fdd654c0bd218465572c28fc4c689708b",
+      "bytes": 101256
+    },
+    {
+      "file": "images/discovery-sheets/septizodium.webp",
+      "sha256": "705304990aa60973bc2d5ff08fbb7f2e1e9648b5240d693706cb2a0300c853f6",
+      "bytes": 1805182
+    }
+  ]
+}

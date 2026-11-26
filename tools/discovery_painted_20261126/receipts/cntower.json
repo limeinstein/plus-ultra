@@ -1,0 +1,43 @@
+{
+  "id": "cntower",
+  "name": "CN 타워",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/cntower.png",
+  "sourceSha256": "1539f935a64c711a2c8d7a7993cb2005cf773307f6eda1e22680e646eb23044d",
+  "sourceMtimeNs": 1795661477090990200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/cntower.gif",
+      "sha256": "ab41ebf84cad602764277cabd38bc1ac05e1ed73afb86f2b1e5c501a4211ad8c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/cntower.jpg",
+      "sha256": "a8462ab4414329a3a6c6b3f6d232f43fb671c6d4d590f503ba631434e53807e2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/cntower.webp",
+      "sha256": "de4ed0864ad4780caa3ebd26576cbf19df66e95bed5fa13c528ae0e6f90ac0cc"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/cntower.gif",
+      "sha256": "8c5a7a045a0f632fa5900e796abfcb10e822e0db5f9350adc68e4d5bbb9e67a4",
+      "bytes": 2987287
+    },
+    {
+      "file": "images/discovery-ends/cntower.jpg",
+      "sha256": "87a3547356b49a7eaa45d3d87c97c7f84784cb5185baf6ed367f1cb7aa7381c3",
+      "bytes": 86834
+    },
+    {
+      "file": "images/discovery-sheets/cntower.webp",
+      "sha256": "787fac14e7ec91fc65024e88b9263da66d30b999ff1ba1f0cfd3a2f10b61d4cc",
+      "bytes": 1436578
+    }
+  ]
+}

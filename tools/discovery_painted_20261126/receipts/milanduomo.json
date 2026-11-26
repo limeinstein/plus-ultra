@@ -1,0 +1,43 @@
+{
+  "id": "milanduomo",
+  "name": "밀라노 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/milanduomo.png",
+  "sourceSha256": "f6b2c1bdff7653a8dd94fbecbc59583c0b820d2fec2f3ad2bc34ff7e0642c92d",
+  "sourceMtimeNs": 1795662136218820500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/milanduomo.gif",
+      "sha256": "a60b7d4522c0d56fe792a6ff8031e88044ca796b9883a65567121a11b2b7d536"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/milanduomo.jpg",
+      "sha256": "d18f3fb891e5accfbf661e21e226aa4fb82e0fd9f182d3ce17715f4c0ab9fbb8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/milanduomo.webp",
+      "sha256": "f5f6d1ac4e3532189c0496bc457e4af37cebf7bb9308171d3fc510df6a20291a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/milanduomo.gif",
+      "sha256": "480931bc71dcad5db8325d90bbf4ed220e4a9d36bee32cbfa4d83de713e80f61",
+      "bytes": 3789799
+    },
+    {
+      "file": "images/discovery-ends/milanduomo.jpg",
+      "sha256": "403d345693ad3c24244dda05889681dfcc33950c9a718ffca9779a15c6a52d2a",
+      "bytes": 98258
+    },
+    {
+      "file": "images/discovery-sheets/milanduomo.webp",
+      "sha256": "c9b777e5424e8502782b6c4a2f0ce00c7c89217427d02b5d0f1eff58ae2bb34f",
+      "bytes": 1734250
+    }
+  ]
+}

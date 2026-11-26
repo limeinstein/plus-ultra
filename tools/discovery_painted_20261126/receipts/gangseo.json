@@ -1,0 +1,43 @@
+{
+  "id": "gangseo",
+  "name": "강서대묘",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/gangseo.png",
+  "sourceSha256": "3ab631f456b013a5b89345f45d039ed45ae9876edf171d27f81005facce1b2e1",
+  "sourceMtimeNs": 1795661454000876000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/gangseo.gif",
+      "sha256": "b3fc04ded52fa1bfa7214780f4bb762ccb88a0f4e65b8e88fc7ce452120f5cbb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/gangseo.jpg",
+      "sha256": "f0015864fc993e7c18f057db8f1f60dada2cd21b952b32841edc151891502c28"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/gangseo.webp",
+      "sha256": "5e152fd204aec3a59976fcece7d279d4f95bce20cbb661a9c398fe870c38d4df"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/gangseo.gif",
+      "sha256": "c615e7e18f0eabb36d3f9917fe3f5e06a29080c6c0a5856d61555920ade75c1e",
+      "bytes": 3634034
+    },
+    {
+      "file": "images/discovery-ends/gangseo.jpg",
+      "sha256": "9d885e73fafcaf8b5713deff855038bc3ca3e37a47bcb0221f9edc3eb2211b5b",
+      "bytes": 97304
+    },
+    {
+      "file": "images/discovery-sheets/gangseo.webp",
+      "sha256": "6184f03b812128c50b4458f1485bae046fe779aa5af421daceaa0b051c06d7a4",
+      "bytes": 1651178
+    }
+  ]
+}

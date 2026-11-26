@@ -12,13 +12,13 @@ const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 (async function () {
-  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
+  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
   const errors = [];
   try {
     const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
     await page.addInitScript(() => { const raf = window.requestAnimationFrame.bind(window); window.requestAnimationFrame = cb => window.__noRaf ? 0 : setTimeout(() => raf(cb), 200); });
     page.on('pageerror', e => errors.push(e.message));
-    page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load|net::|ERR_FILE/.test(m.text())) errors.push('console: ' + m.text()); });
+    page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
     await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.PlantTrade && G.PlantTrade.hooked, null, { timeout: 120000 });
     const r = await page.evaluate(async () => {

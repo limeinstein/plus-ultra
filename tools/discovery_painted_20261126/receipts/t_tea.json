@@ -1,0 +1,43 @@
+{
+  "id": "t_tea",
+  "name": "차",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_tea.png",
+  "sourceSha256": "0c5c76c07fa2bb31b8b1dc41587c73888160f907dc9ed9b88c54637661b7a99b",
+  "sourceMtimeNs": 1795660552083313400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_tea.gif",
+      "sha256": "50167ee9365fedb7ab40398ecc537e029908f7f6be482c97dc580de9eeb5dc59"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_tea.jpg",
+      "sha256": "b47f17445b66ffda65cef87097945c49585e6a8f105f9f48a441e34ce34259c4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_tea.webp",
+      "sha256": "be335e43b7b9c56c254765b44d76fd27bc2791623e164e2eb1f2389d3ad95259"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_tea.gif",
+      "sha256": "acffdbbb5094e6c958bfa8a73d4adec1d2946440791262e2b372ab8a49c9fa4f",
+      "bytes": 3614594
+    },
+    {
+      "file": "images/discovery-ends/t_tea.jpg",
+      "sha256": "0dacb13d524fe4be22b8473ae6385b1cd10d13ee62529bcabfaaac867de2e6c3",
+      "bytes": 99414
+    },
+    {
+      "file": "images/discovery-sheets/t_tea.webp",
+      "sha256": "a3b6f80a93897112e04e4d9f525cdf3c11dc40ecea76da6b102f993036057322",
+      "bytes": 1700082
+    }
+  ]
+}

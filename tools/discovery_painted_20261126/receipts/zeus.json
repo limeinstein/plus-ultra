@@ -1,0 +1,43 @@
+{
+  "id": "zeus",
+  "name": "올림피아의 제우스 상",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/zeus.png",
+  "sourceSha256": "01c60b0aaac8749b3040a23c749fb5ff640d4e422b6079b79462c97d186c6f7d",
+  "sourceMtimeNs": 1795660858675209000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/zeus.gif",
+      "sha256": "a32efc9d0e24ed716f133a4c9fc906bb06ff85c8a46b1107455bb23b32d4465a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/zeus.jpg",
+      "sha256": "b828d3b3ca5b4dda5214b06a6c866b0587d0db0cd3cc25198d8097ada65244f9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/zeus.webp",
+      "sha256": "f58e14a120db942a09c468c8bea140bca1381315f3f86aa2c5c3ba607e9e3b48"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/zeus.gif",
+      "sha256": "f1d8318aa7c2d09063efd5971d0bbcb99f075141dcc4572109cee25fac1d4bd1",
+      "bytes": 3521488
+    },
+    {
+      "file": "images/discovery-ends/zeus.jpg",
+      "sha256": "be1fa395549f63b0779307294e46d066a901eb32c59feb7b23766e8a685a17e0",
+      "bytes": 102614
+    },
+    {
+      "file": "images/discovery-sheets/zeus.webp",
+      "sha256": "9759e58d30421c9d6feaef2fc9df562b70f32482695a3f8b6bdcfb5368716a04",
+      "bytes": 1797674
+    }
+  ]
+}

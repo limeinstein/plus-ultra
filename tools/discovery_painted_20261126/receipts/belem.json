@@ -1,0 +1,43 @@
+{
+  "id": "belem",
+  "name": "벨렝 탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/belem.png",
+  "sourceSha256": "032486816f373f92a1b3f3a6596fb2a5f5a74464461f1989c9b4438772bb0c7d",
+  "sourceMtimeNs": 1795661091207160900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/belem.gif",
+      "sha256": "d22dab14dc9d55e05be433d0179cd9c66fd6e579ae80c5ca0fe57d2769d8f742"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/belem.jpg",
+      "sha256": "330b6e6e3213bc2661cb716f2546030ae945adb9932396488135aa04ae612aa9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/belem.webp",
+      "sha256": "7aac002b8b372f6896aa4cdb732e4ea84d1c0112990d992383d4f74128d58f39"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/belem.gif",
+      "sha256": "a22cda7a8d167199e68f73ae7826a95f64b239b0b5f835ddfd66816ba605e363",
+      "bytes": 3229910
+    },
+    {
+      "file": "images/discovery-ends/belem.jpg",
+      "sha256": "cbcc41d73ae1a3a2668abce5653740943ab578c324cca6303cf5d19c3e7b0ce4",
+      "bytes": 92620
+    },
+    {
+      "file": "images/discovery-sheets/belem.webp",
+      "sha256": "dd5ea30f8482aa4bfc945469899fa46bc7a0c3030199cfb353131ae4287d72dc",
+      "bytes": 1557516
+    }
+  ]
+}

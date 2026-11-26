@@ -1,0 +1,43 @@
+{
+  "id": "tanum",
+  "name": "타눔 암각화",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/tanum.png",
+  "sourceSha256": "a2337f1cb7142fad3edc604a2f7ef6a75108983c975d21102215d2feb3a1379d",
+  "sourceMtimeNs": 1795662201593510900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tanum.gif",
+      "sha256": "f01081addaf81a3d88161ab1711a687510609f2bb4ad3a5b709512ef84353c87"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tanum.jpg",
+      "sha256": "f0711c88ce9590054a3cb87723bd6e92167cacf851c9f332d8964bf5baa95cc3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tanum.webp",
+      "sha256": "f4bb04440914aeb2dbc03752b4934057733a69a28df7cf393e32875933609257"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tanum.gif",
+      "sha256": "bc8e67944577b42edf7e14f0b42b02bcbd3de30a414c822b5c54fd81c06bcb88",
+      "bytes": 3707135
+    },
+    {
+      "file": "images/discovery-ends/tanum.jpg",
+      "sha256": "d73e8c5e13d37e08f8a556d55f5f3fe8256c68d3e6c0ae90df1eaae91a52c974",
+      "bytes": 103688
+    },
+    {
+      "file": "images/discovery-sheets/tanum.webp",
+      "sha256": "b5ef3fe71bc81216c9291b43d7ef2790cf8a67479d23a50c373276a6a7b1fadc",
+      "bytes": 1845930
+    }
+  ]
+}

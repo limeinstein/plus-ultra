@@ -1,0 +1,43 @@
+{
+  "id": "xihu",
+  "name": "서호",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/xihu.png",
+  "sourceSha256": "18d5140be2ed519b233aaa0f7d8685a3ce71d70a741ee3713921ee9f99919dfb",
+  "sourceMtimeNs": 1795659646644231500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/xihu.gif",
+      "sha256": "7ac907ab81663dfa32bcebca76b0d1779df40ee10187e16afabf0e991e7d0c35"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/xihu.jpg",
+      "sha256": "35d759a4701b344f8e29e4dc1f6353d1d58ef3cd067213ced77c8d7f734ed747"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/xihu.webp",
+      "sha256": "2e33c26ff8a4a8adda4f7083b35cd673928108b254bff494391ca2d2f1596354"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/xihu.gif",
+      "sha256": "9821f3b0c52c9dfd5cbc5ad967554e0825450541aaa5d68727b2b452de24e24a",
+      "bytes": 3157457
+    },
+    {
+      "file": "images/discovery-ends/xihu.jpg",
+      "sha256": "d1f4bc0a11cde7c39fd1067bbd059bec256e00ea4dd121ecd2788c9db847dff9",
+      "bytes": 84830
+    },
+    {
+      "file": "images/discovery-sheets/xihu.webp",
+      "sha256": "25df14161a908c58de08150f3aee4670a847cf9037d41b2cd23617dcec0c194e",
+      "bytes": 1432066
+    }
+  ]
+}

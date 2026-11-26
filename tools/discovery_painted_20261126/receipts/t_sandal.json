@@ -1,0 +1,43 @@
+{
+  "id": "t_sandal",
+  "name": "백단",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_sandal.png",
+  "sourceSha256": "4dc39e13c135837d78c1476de4e9c1273196e955c6bf87bd1fd05798d0827bc0",
+  "sourceMtimeNs": 1795660901200194500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_sandal.gif",
+      "sha256": "4721d3e103739e8e02cbac340a781b1392f17a8068523882a85cf389a99aebde"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_sandal.jpg",
+      "sha256": "771e2ec043edd4487d4887e44b700a906a72150937ed5b94c5082e3573327a6f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_sandal.webp",
+      "sha256": "6f5363bf54cd063ea690a9b76aa608bd820b8d000cbe0fd0b996767fe09ccac5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_sandal.gif",
+      "sha256": "01a9a40a75a14d4257a178f6b38e365f72ee4a920048b61d6b470ae7ef1a8520",
+      "bytes": 3518491
+    },
+    {
+      "file": "images/discovery-ends/t_sandal.jpg",
+      "sha256": "476b290720371cfea4d97396c2e79a9a3fc0fe3b61445e874840819e1c5a5e27",
+      "bytes": 98933
+    },
+    {
+      "file": "images/discovery-sheets/t_sandal.webp",
+      "sha256": "d298780c21f78452fced58a0c2c93728600bc424622dd9c7e4ffa6e1ce795e1d",
+      "bytes": 1702660
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "bosphorusbridge",
+  "name": "보스포루스 대교",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/bosphorusbridge.png",
+  "sourceSha256": "3441851537255550421ed3556acc3d2208e72d1f32497bc3a8b03756e0d62162",
+  "sourceMtimeNs": 1795662846019430400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bosphorusbridge.gif",
+      "sha256": "5e9d45cc41faef2b19448e54e3bfa2a38d04a5f665e16975297a17cc52aa6432"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bosphorusbridge.jpg",
+      "sha256": "417571e8f6ad63cd9ced006f19403027a23f8f5d7b507b16f479aa27644583dc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bosphorusbridge.webp",
+      "sha256": "ee44d1cb47dde84a222f17e2c4b41e38ba58118ef7100640036802ee2616ee6e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bosphorusbridge.gif",
+      "sha256": "e0fa15beb2a16ab19113c3589d2387fcf559df1dfef6bd90c952477f7b542589",
+      "bytes": 3337468
+    },
+    {
+      "file": "images/discovery-ends/bosphorusbridge.jpg",
+      "sha256": "bb647f816952c648ea085345c11a69603ad5d43ede9d06f7173c8d216054e468",
+      "bytes": 95364
+    },
+    {
+      "file": "images/discovery-sheets/bosphorusbridge.webp",
+      "sha256": "8450049bd974bf12ebea94eaf6761a89b2e5c02f7abdeb70114fa05b49160f5b",
+      "bytes": 1611640
+    }
+  ]
+}

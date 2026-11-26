@@ -1,0 +1,43 @@
+{
+  "id": "langya",
+  "name": "낭야대 — 서복의 출항지",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/langya.png",
+  "sourceSha256": "6a00b8cb8ba1613c446d83b231feb6c2e2d416e987eafc5c8d6b8ec7b900935f",
+  "sourceMtimeNs": 1795661640557445200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/langya.gif",
+      "sha256": "2d00397e527555e2be22a75435929e041e7064234063cab5fee3ca68d2d11a8d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/langya.jpg",
+      "sha256": "4c7a6a970a99b2d266795638489ad85d33488888ad7b10da4dd220e220b3c9dd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/langya.webp",
+      "sha256": "72edb5c61fb8109f517cd4adf2f191ceb8a1ea8137e21b9d2c69b16686249d8b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/langya.gif",
+      "sha256": "466fadc3db8847df493308c68b7a71ab1cdb98f3bbdb1a16610f1f3c7c031d4f",
+      "bytes": 3490563
+    },
+    {
+      "file": "images/discovery-ends/langya.jpg",
+      "sha256": "953a04bf20f086926451f296bd4981b7dec2cd6b7e60d06d150f21b44971ed23",
+      "bytes": 98360
+    },
+    {
+      "file": "images/discovery-sheets/langya.webp",
+      "sha256": "b9038c39cbe1a8468d5765eca19ab98f341a28f040cbf75027f9cd50b79c2978",
+      "bytes": 1695432
+    }
+  ]
+}

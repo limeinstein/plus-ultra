@@ -1,0 +1,43 @@
+{
+  "id": "mojave",
+  "name": "모하비 사막",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/mojave.png",
+  "sourceSha256": "fe160de7c64c3e7df445e5dad7f8594a38ecec11d86e9da1f94ebe01c013df21",
+  "sourceMtimeNs": 1795659646393217600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mojave.gif",
+      "sha256": "010dd60b104b9572d33b404212438329b279c69a181e179a99af78bfbc5b66ad"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mojave.jpg",
+      "sha256": "dbcfeb5388eaa99cbe249cc706a7e38c777b574def8b90137005c46253bff873"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mojave.webp",
+      "sha256": "d2b127d4dc1a55d7dce145236927bcf35c9344bdbf5a4f61e5f88d59dde3a979"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mojave.gif",
+      "sha256": "237c0e2fb0a124095be720b314269d1d1cf14da07f2c1e59139497c2cf5c3e9c",
+      "bytes": 2960712
+    },
+    {
+      "file": "images/discovery-ends/mojave.jpg",
+      "sha256": "370612fed9ae8110a43610814cb7e7bd54c36c00b1f9b7ea004511e9e56da7c8",
+      "bytes": 101156
+    },
+    {
+      "file": "images/discovery-sheets/mojave.webp",
+      "sha256": "649225e0ca90dabcb5b27d8505c8e9ae0022e4d69f2da4a2a6447af3f4edfbff",
+      "bytes": 1734424
+    }
+  ]
+}

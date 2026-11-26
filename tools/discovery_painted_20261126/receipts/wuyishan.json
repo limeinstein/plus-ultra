@@ -1,0 +1,43 @@
+{
+  "id": "wuyishan",
+  "name": "무이산 아홉 굽이 시내",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/wuyishan.png",
+  "sourceSha256": "3da6a3010da80b1e76c021cff99b078e54c327ebab4c583e2e56afaef4426c61",
+  "sourceMtimeNs": 1795659646907177400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/wuyishan.gif",
+      "sha256": "057499f05267bc49b0e33de5f2b66d2850be18bbd6d65427b6b0b676fd77caef"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/wuyishan.jpg",
+      "sha256": "6978ef74c3799ac2aaddcb71eaee8492d7020a8573f76bb135a8a14336088521"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/wuyishan.webp",
+      "sha256": "b81f324a9b6059658583b3be7f83a6fddc5d733d23021d1802db571e401c0b94"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/wuyishan.gif",
+      "sha256": "3ef1fe3faafb11c5340ba157004b04364fbe4ccc17fc955994f5b63ca5950392",
+      "bytes": 3222574
+    },
+    {
+      "file": "images/discovery-ends/wuyishan.jpg",
+      "sha256": "ccd5b27f0cdfc023f44024685c0f58a75be40fedbf9594528cde3e8294df6448",
+      "bytes": 88597
+    },
+    {
+      "file": "images/discovery-sheets/wuyishan.webp",
+      "sha256": "fdc96ff6adf83d5623e2289a45fe08d1fab795c68e1b5e69849ce87724197f1e",
+      "bytes": 1490950
+    }
+  ]
+}

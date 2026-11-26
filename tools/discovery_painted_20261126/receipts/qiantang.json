@@ -1,0 +1,43 @@
+{
+  "id": "qiantang",
+  "name": "전당강 해일",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/qiantang.png",
+  "sourceSha256": "9e92cec11059cdbf08943be5724bf3b95e22e062e914ca241a911ea402ce139e",
+  "sourceMtimeNs": 1795659647179743400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/qiantang.gif",
+      "sha256": "f0b87cd0c47ece203bfff877132d184c5c14d4a60883b109f7b7f66ab8e19bf4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/qiantang.jpg",
+      "sha256": "ecb3b42dde29c77da4e3d231d163d8d56637ce1b2ec3ea655202acc74535b48a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/qiantang.webp",
+      "sha256": "e8a72df1c9c454a42ac3666bf9db9152b5e54d8b5803453c381bc81201641739"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/qiantang.gif",
+      "sha256": "51bd9aca5000096cea60a6c1bb32566dcc52b2522f9053cb82601a4578e0abcc",
+      "bytes": 3597545
+    },
+    {
+      "file": "images/discovery-ends/qiantang.jpg",
+      "sha256": "5374b3d09ab6bf5a7384475bb688fc27699b64b1f4e2e96f6c8d49e3bdb9bad3",
+      "bytes": 92252
+    },
+    {
+      "file": "images/discovery-sheets/qiantang.webp",
+      "sha256": "76ad2cf6ae6713011350d1872643eaa18f8a2bbff6b6eb9fa41618ce067af314",
+      "bytes": 1600090
+    }
+  ]
+}

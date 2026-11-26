@@ -1,0 +1,43 @@
+{
+  "id": "rakubowl",
+  "name": "라쿠 찻사발",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/rakubowl.png",
+  "sourceSha256": "a62bd4e9a8f70ee1e33acdf121cfafd9dc736be78256274969b1be27ae689ced",
+  "sourceMtimeNs": 1795660217904400500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/rakubowl.gif",
+      "sha256": "af0b8680f3b8c9bf4500c2e81230fc57ed780b2241757182d2ee792d9387d110"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/rakubowl.jpg",
+      "sha256": "d764a24fde1238614cea633acd644b03927c45da1d626fdb27bec3bdd2600a71"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/rakubowl.webp",
+      "sha256": "e4eb28a8826559b610514c49bf9c06550b4a23547b8a6dba4a41fd9858e9efb8"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/rakubowl.gif",
+      "sha256": "8c83dd31985338b2594542a36c461c165336a1bea861aec00ce3d1f0c7f19631",
+      "bytes": 3229933
+    },
+    {
+      "file": "images/discovery-ends/rakubowl.jpg",
+      "sha256": "d38fb5a936d625dbf12f5b016ed8decca03398195d521a4b98e78188f8cd315d",
+      "bytes": 81507
+    },
+    {
+      "file": "images/discovery-sheets/rakubowl.webp",
+      "sha256": "9ae25ae936ba60f769f2c9330ec21de5f796a3b135541d222721830608ba1b74",
+      "bytes": 1346294
+    }
+  ]
+}

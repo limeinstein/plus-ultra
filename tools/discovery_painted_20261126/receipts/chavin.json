@@ -1,0 +1,43 @@
+{
+  "id": "chavin",
+  "name": "차빈 데 우안타르",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/chavin.png",
+  "sourceSha256": "b0842b0b015b573752079b70116766df3ee1cd946a0974e79ec7d1bfbb6289bd",
+  "sourceMtimeNs": 1795662714874645800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/chavin.gif",
+      "sha256": "eb6ec8bce9ae56c3645038b9d269e268db53a76eb719063027c993bcecd1514c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/chavin.jpg",
+      "sha256": "abd93a01888d8571d04c09f5a6888b6cb99613a5f21b12aaf928322207cc02ca"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/chavin.webp",
+      "sha256": "838a6d0fe07e6a3f29af3e87df1b3d70c1c5ee9a27e4155defa34f06c1878a83"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/chavin.gif",
+      "sha256": "fb1c4d5f4f17d1f1d6438c102dd0f4f595f275631a564ed551b974a6e9fb13fb",
+      "bytes": 3523794
+    },
+    {
+      "file": "images/discovery-ends/chavin.jpg",
+      "sha256": "7bbe187037d77da9bbda1d07f876cb0914d8c22ea9da3c889c69627dfc1a446d",
+      "bytes": 96823
+    },
+    {
+      "file": "images/discovery-sheets/chavin.webp",
+      "sha256": "7d6d6e7e1455c7fdcd22eb0cb412e28f2e8a70851c855897095ebab470edacaa",
+      "bytes": 1690184
+    }
+  ]
+}

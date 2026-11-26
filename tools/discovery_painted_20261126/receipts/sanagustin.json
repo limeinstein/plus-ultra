@@ -1,0 +1,43 @@
+{
+  "id": "sanagustin",
+  "name": "산 아구스틴 교회",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sanagustin.png",
+  "sourceSha256": "cc387b14cefeb70ad9ee36f0efb87b3fa91fa0fbd1bdb068a38062f21830bdb2",
+  "sourceMtimeNs": 1795661983248782900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sanagustin.gif",
+      "sha256": "394507227ecb13fa9856c5980748cc8a751bf720ec451919b39f64903658faa8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sanagustin.jpg",
+      "sha256": "1bc7d0d263b907042ce5e6d555a1fd6f1e79953de30806fc01f6d39102f9a2e8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sanagustin.webp",
+      "sha256": "e0df091512c213b0c87007722e3651fcbd58d01231fb77097e4b475fd8652638"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sanagustin.gif",
+      "sha256": "2a7e1991668e37f00add49a11bb3b66aa37e054c9ed577dffcb923bca369b2a0",
+      "bytes": 3634889
+    },
+    {
+      "file": "images/discovery-ends/sanagustin.jpg",
+      "sha256": "95825dea9be89aea96a047029aaa27d6603bf9fe9fe445c8cf4cc63c0f18a199",
+      "bytes": 95974
+    },
+    {
+      "file": "images/discovery-sheets/sanagustin.webp",
+      "sha256": "e2b26073e95d26d3ccd9425dd0dbb2554ec43b82f62ff192f317cda2023c3cc4",
+      "bytes": 1672040
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "lakevan",
+  "name": "반 호수",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/lakevan.png",
+  "sourceSha256": "8addca893b36d546e535caed21dc352c167221907f35535459af5d4d6189075c",
+  "sourceMtimeNs": 1795659650099852700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/lakevan.gif",
+      "sha256": "43adf531a17adc1f6d692ca74b4b5ea62614050dd79aca431b76b97b7947a92f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/lakevan.jpg",
+      "sha256": "17c75c99ff508b9349a536f385249b41e7cb95962f62acfb86217f999a03d6e7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/lakevan.webp",
+      "sha256": "9c442e30794127ad607277b0e011c2e9b3fcf9aa497b2eb4c3b727c44bd9b985"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/lakevan.gif",
+      "sha256": "8a27c4a2eff5f8e8e10fc60b71fb01ad1eddddc5fc146c9f0366102cdbb2b20b",
+      "bytes": 2569243
+    },
+    {
+      "file": "images/discovery-ends/lakevan.jpg",
+      "sha256": "1cc63cf84d6d7ee606941ad06a70ecf2619bf458a78a523354eb8df968575e90",
+      "bytes": 73747
+    },
+    {
+      "file": "images/discovery-sheets/lakevan.webp",
+      "sha256": "20f5c4c5f416c62153bf9c1a749e63b316e68963d8e6b63c1118062bf0b1f5c6",
+      "bytes": 1187326
+    }
+  ]
+}

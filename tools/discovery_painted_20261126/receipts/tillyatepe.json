@@ -1,0 +1,43 @@
+{
+  "id": "tillyatepe",
+  "name": "틸리야 테페 — 황금 언덕",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/tillyatepe.png",
+  "sourceSha256": "95cef604c089fa4d7f4fe2b5e470d002acd8047617b098df2c8d45c1e305fa2c",
+  "sourceMtimeNs": 1795662539618079300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tillyatepe.gif",
+      "sha256": "207581c53fea3e739661f40a07f29a09383a706a729abce3be00691a15650405"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tillyatepe.jpg",
+      "sha256": "11c13bcbf147341edd09bb970087eef5642ea38167372eed1f36056385cb3c81"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tillyatepe.webp",
+      "sha256": "fbe9200e0f83ac9d180681de2daca17afa098554e2b3eb04bfdc9409366d00a4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tillyatepe.gif",
+      "sha256": "f914f63370acf81c0f2d2dce3d2d5ee6b7357160a87fc023276144eb108bc6c2",
+      "bytes": 3465826
+    },
+    {
+      "file": "images/discovery-ends/tillyatepe.jpg",
+      "sha256": "86eca278fb86cbd9a863512e554adf50c2ff5d9c6e7b66087f6fb9c9b59cb217",
+      "bytes": 100501
+    },
+    {
+      "file": "images/discovery-sheets/tillyatepe.webp",
+      "sha256": "d916e62f2f65528b959db93bba918ae86489c16bb47913ea0105d9d429f754d8",
+      "bytes": 1740266
+    }
+  ]
+}

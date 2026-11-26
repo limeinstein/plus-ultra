@@ -225,7 +225,7 @@
     ctx.beginPath(); ctx.moveTo(-23, -24); ctx.bezierCurveTo(-24, -44, 22, -44, 21, -24); ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.strokeStyle = 'rgba(120,100,70,.55)'; for (var i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(i * 8.5, -24); ctx.quadraticCurveTo(i * 8.5 + 0.5, -40, i * 8.5, -39.5); ctx.stroke(); }
     // 마부
-    ctx.save(); ctx.translate(22, -24); rider(ctx, { coat: '#6a3a2a', hat: 'brim' }, o, {}); ctx.restore();
+    if (!o.parked) { ctx.save(); ctx.translate(22, -24); rider(ctx, { coat: '#6a3a2a', hat: 'brim' }, o, {}); ctx.restore(); }
     // 끌채
     ctx.strokeStyle = '#4a3018'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(22, -14); ctx.lineTo(40, -17); ctx.stroke();
     ctx.restore();
@@ -251,7 +251,7 @@
     ctx.fillStyle = '#b8a07a'; rr(ctx, -20, -19, 14, 7.5, 3); ctx.fill(); ctx.stroke();
     ctx.fillStyle = '#6a5038'; rr(ctx, -7, -16, 22, 4.5, 2); ctx.fill(); ctx.stroke();
     // 앉은 사람
-    for (var i = 0; i < (people || 1); i++) { ctx.save(); ctx.translate(2 + i * 10, -13); rider(ctx, { coat: i ? '#5a4a3a' : '#2a3a5a', hat: 'fur', item: i === 0 && o.leader ? 'flag' : null, flag: o.flagColor }, o, {}); ctx.restore(); }
+    for (var i = 0; i < people; i++) { ctx.save(); ctx.translate(2 + i * 10, -13); rider(ctx, { coat: i ? '#5a4a3a' : '#2a3a5a', hat: 'fur', item: i === 0 && o.leader ? 'flag' : null, flag: o.flagColor }, o, {}); ctx.restore(); }
     ctx.strokeStyle = 'rgba(40,24,10,.8)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(20, -9); ctx.lineTo(34, -20); ctx.stroke();
     ctx.restore();
   }
@@ -277,7 +277,7 @@
     ctx.fillStyle = '#9a2a20'; rr(ctx, -16, top - 3, 26, 5, 2); ctx.fill(); ctx.stroke();                          // 깔개
     ctx.fillStyle = '#c89a30'; ctx.fillRect(-15, top + 2, 24, 3);
     ctx.fillStyle = '#7a4a24'; rr(ctx, -12, top - 12, 18, 10, 2); ctx.fill(); ctx.stroke();
-    ctx.save(); ctx.translate(-3, top - 9); rider(ctx, { coat: '#2a3a5a', hat: 'brim', item: o.leader ? 'flag' : null, flag: o.flagColor }, o, {}); ctx.restore();
+    if (!o.parked) { ctx.save(); ctx.translate(-3, top - 9); rider(ctx, { coat: '#2a3a5a', hat: 'brim', item: o.leader ? 'flag' : null, flag: o.flagColor }, o, {}); ctx.restore(); }
     ctx.fillStyle = '#b83a28'; ctx.beginPath(); ctx.moveTo(-14, top - 22); ctx.quadraticCurveTo(-3, top - 30, 8, top - 22); ctx.lineTo(8, top - 20); ctx.lineTo(-14, top - 20); ctx.closePath(); ctx.fill(); ctx.stroke();
     ctx.strokeStyle = '#5a3a1e'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(-12, top - 20); ctx.lineTo(-12, top - 11); ctx.moveTo(6, top - 20); ctx.lineTo(6, top - 11); ctx.stroke();
     legE(-15, 0.75, true); legE(13, 0.25, true);
@@ -291,7 +291,7 @@
     ctx.fillStyle = rgb(col, 0.82); ctx.strokeStyle = OUT; ctx.beginPath(); ctx.ellipse(hx - 6, hy + 1, 7, 9, -0.2 + (mv ? Math.sin(TAU * ph * 2) * 0.08 : 0), 0, TAU); ctx.fill(); ctx.stroke();
     ctx.fillStyle = '#140c06'; ctx.beginPath(); ctx.arc(hx + 3, hy - 3, 1, 0, TAU); ctx.fill();
     // 코끼리 몰이꾼 (목 위)
-    ctx.save(); ctx.translate(hx - 5, hy - 9); rider(ctx, { coat: '#e8dcc4', hat: 'turban', skin: '#8a5a3a' }, o, {}); ctx.restore();
+    if (!o.parked) { ctx.save(); ctx.translate(hx - 5, hy - 9); rider(ctx, { coat: '#e8dcc4', hat: 'turban', skin: '#8a5a3a' }, o, {}); ctx.restore(); }
     ctx.restore();
   }
 
@@ -326,7 +326,7 @@
 
   /* 한 대원을 (x,y)에 그린다. f = 바라보는 쪽(±1), s = 크기 */
   function member(ctx, m, x, y, f, s, st) {
-    var o = { phase: st.phase + (m.poff || 0), moving: st.moving, t: st.t, gait: st.gait, dist: st.dist, leader: m.leader, flagColor: st.flag };
+    var o = { phase: st.phase + (m.poff || 0), moving: st.moving, t: st.t, gait: st.gait, dist: st.dist, parked: m.parked, leader: m.leader, flagColor: st.flag };
     ctx.save(); ctx.translate(x, y); ctx.scale(f * s, s);
     if (m.t === 'person') {
       var po = {}; for (var k in m.o) po[k] = m.o[k];
@@ -352,7 +352,7 @@
     } else if (m.t === 'sled') {
       shadow(ctx, 12, 0, 40, 3.5);
       ctx.save(); ctx.translate(44, -2); beast(ctx, { sp: 'reindeer', ci: 1, phase: o.phase + 0.35, moving: o.moving, gait: 'trot', t: o.t }); ctx.restore();
-      sled(ctx, o, m.people);
+      sled(ctx, o, m.parked ? 0 : m.people || 1);
       ctx.save(); ctx.translate(47, 1); beast(ctx, { sp: 'reindeer', ci: 0, phase: o.phase, moving: o.moving, gait: 'trot', t: o.t }); ctx.restore();
       ctx.strokeStyle = 'rgba(40,24,10,.7)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(22, -8); ctx.lineTo(56, -24); ctx.stroke();
     }
@@ -454,10 +454,147 @@
     return [it];
   }
 
+  // 발을 딛는 순간의 튀는 물과 하류로 밀리는 작은 파문을 물 표면에 그린다.
+  function wadingRipples(ctx, it, look, size, step) {
+    var water = it.water, kick = it.moving ? 1 - step : 0;
+    var reach = Math.min(look.ripple * size * (.5 + .5 * water.immersion), water.shorePx * .85);
+    if (reach < 1) return;
+    var flow = water.flow, drift = reach * step * .35, x = it.x + flow[0] * drift, y = it.y - flow[1] * drift;
+    ctx.save(); ctx.lineWidth = .9 * size;
+    ctx.strokeStyle = 'rgba(212,235,222,' + (.18 + .38 * kick).toFixed(3) + ')';
+    ctx.beginPath(); ctx.ellipse(x, y, reach * (.7 + .3 * step), reach * .29, 0, .10, Math.PI - .18); ctx.stroke();
+    if (kick > 0) {
+      ctx.strokeStyle = 'rgba(182,224,212,' + (.42 * kick).toFixed(3) + ')';
+      ctx.beginPath(); ctx.ellipse(x, y + reach * .22, reach, reach * .37, 0, .2, Math.PI - .2); ctx.stroke();
+      var rise = size * look.splash * Math.sin(step * Math.PI) * water.immersion;
+      ctx.fillStyle = 'rgba(227,244,228,' + (.8 * kick).toFixed(3) + ')';
+      for (var i = -1; i <= 1; i++) {
+        ctx.beginPath(); ctx.ellipse(x + i * reach * .62, y - rise * (1 - .27 * Math.abs(i)), size, size * .65, 0, 0, TAU); ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
+  /** 발 위치를 중심으로 오르막에 몸을 싣고, 수레는 바퀴 축을 중심으로 기운다. */
+  P.drawCell = function (ctx, u, it) {
+    var cell = it.cell, im = it.im, k = it.scale;
+    if (!cell || !im) return;
+    var fx = FXP(), cfg = fx.effort, look = fx.wading, water = look && it.water, size = u.size || fx.size || 1;
+    var effort = cfg && it.moving && !u.camping ? Math.max(u.effort || 0, water ? water.effort : 0) : 0;
+    var shear = 0, pitch = 0, heightScale = 1, step = (it.phase || 0) * 2 % 1, sink = 0;
+    if (effort > 0) {
+      var grade = (u.grade || 0) * Math.cos(it.heading - u.head), hx = Math.cos(it.heading);
+      if (it.rigid) {
+        var bump = it.kind === 'reindeer' ? cfg.sledPitch : cfg.wagonPitch;
+        pitch = hx * (Math.sin(step * TAU) * bump * effort - grade * cfg.slopePitch);
+      } else {
+        var load = it.onFoot ? 1 : it.kind === 'elephant' ? cfg.elephantLoad : cfg.riderLoad;
+        var descent = Math.max(0, -grade);
+        var lean = (effort * cfg.roughLean * (1 - descent) + Math.max(0, grade) * cfg.climbLean - descent * cfg.descentLean) * load;
+        if (water) lean += water.immersion * look.brace * load;
+        shear = hx * lean;
+        if (water) shear -= water.flow[0] * water.immersion * look.currentLean * load;
+        var plant = (1 + Math.cos(step * TAU)) * .5;
+        heightScale += Math.sin(it.heading) * lean * .28 - effort * load * (cfg.crouch + plant * cfg.plantStep);
+      }
+    }
+    if (water) {
+      var raised = it.moving ? Math.sin(step * Math.PI) * look.stepLift : 0;
+      sink = size * (it.rigid ? look.wheelSink : it.onFoot ? look.footSink : look.mountSink) * water.immersion * (1 - raised);
+    }
+    it.lean = shear; it.pitch = pitch; it.heightScale = heightScale; it.sink = sink;
+    var ox = -cell[4] * k, oy = -cell[5] * k, w = cell[2] * k, h = cell[3] * k;
+    var pad = Math.max(Math.abs(oy), Math.abs(oy + h)) * Math.abs(shear), rise = Math.max(Math.abs(ox), Math.abs(ox + w)) * Math.abs(pitch);
+    var x = it.x + (it.flip ? -ox - w : ox) - pad, top = it.y + oy * heightScale + sink - rise;
+    var bottom = top + h * heightScale + 2 * rise;
+    if (sink > 0) bottom = Math.min(bottom, it.y);
+    function paint(target) {
+      target.save();
+      if (sink > 0) {
+        target.beginPath(); target.rect(x - 1, top - 1, w + 2 * pad + 2, bottom - top + 1); target.clip();
+      }
+      target.translate(it.x, it.y + sink);
+      if (effort > 0) target.transform(1, pitch, -shear, heightScale, 0, 0);
+      if (it.flip) target.scale(-1, 1);
+      target.drawImage(im, cell[0], cell[1], cell[2], cell[3], ox, oy, w, h);
+      target.restore();
+    }
+    if (u.cover) {
+      it.covered = u.cover(ctx, it, [x, top, w + 2 * pad, bottom - top], paint);
+    } else paint(ctx);
+    if (sink > 0) wadingRipples(ctx, it, look, size, step);
+  };
+
+  // 야영 중에는 내린 탈것을 불가 옆 마른 땅에 세운다.
+  function parkedMount(u, camp, size, look) {
+    var id = u.mount && u.mount.id;
+    if (!id || id === 'walk' || id === 'porter' || !u.campGround) return null;
+    var modelType = id === 'wagon' ? 'cart' : id === 'reindeer' ? 'sled' : id === 'elephant' ? 'elephant' : 'beast';
+    var m = P.compose(u.mount, u.party, u.draft, u.region).find(function (m) { return m.t === modelType; });
+    if (!m) return null;
+    m.rider = null; m.parked = true;
+    var k = size * look.parkScale, front = (ext(m, 0) + 9) * k, back = (ext(m, 1) + 9) * k;
+    var height = (modelType === 'elephant' ? 80 : modelType === 'sled' ? 62 : 57) * k;
+    var art = look.restArt[id], im = art && G.Img && G.Img.get(art.key);
+    if (art && !im && G.Img) G.Img.want(art.key);
+    for (var i = 0; i < look.parking.length; i++) {
+      var slot = look.parking[i], face = slot[0] < 0 ? -1 : 1;
+      var x = camp.x + slot[0] * size, y = camp.y + slot[1] * size;
+      if (!u.campGround(x, y) || !u.campGround(x + face * front * .79, y) || !u.campGround(x - face * back * .72, y)) continue;
+      return { x:x, y:y, face:face, onFoot:false, parked:id, m:m, k:k, art:art, im:im,
+        bounds:[x - (face > 0 ? back : front), y - height, front+back, height + 6*k] };
+    }
+    return null;
+  }
+
+  P.drawCamp = function (ctx, u, camp) {
+    var fx = FXP(), look = fx.camp, size = u.size || fx.size || 1, parked = look && parkedMount(u, camp, size, look);
+    function paintMount() {
+      function paint(target) {
+        if (!parked.im) {
+          member(target, parked.m, parked.x, parked.y, parked.face, parked.k, { t:u.t || 0, phase:0, moving:false, dist:0 });
+          return;
+        }
+        var c = parked.art.cell, h = parked.art.height * parked.k, w = h * c[2] / c[3];
+        target.save(); target.translate(parked.x, parked.y); target.scale(parked.face, 1);
+        shadow(target, 0, 0, w * .49, 3 * parked.k);
+        target.drawImage(parked.im, c[0], c[1], c[2], c[3], -w / 2, -h, w, h); target.restore();
+      }
+      if (u.cover) parked.covered = u.cover(ctx, parked, parked.bounds, paint);
+      else paint(ctx);
+    }
+    if (look) {
+      var radius = look.fireLight * size, y = camp.y - 12 * size;
+      var light = ctx.createRadialGradient(camp.x, y, 0, camp.x, y, radius);
+      light.addColorStop(0, 'rgba(250,146,49,' + (.19 + .045 * Math.sin((u.t || 0) * 11)).toFixed(3) + ')');
+      light.addColorStop(1, 'rgba(250,146,49,0)');
+      ctx.fillStyle = light; ctx.fillRect(camp.x - radius, y - radius, 2 * radius, 2 * radius);
+    }
+    if (parked && parked.y < camp.y) paintMount();
+    if (camp.im) P.drawCell(ctx, u, camp);
+    else {
+      function paintTent(target) {
+        target.save(); target.translate(camp.x, camp.y); target.scale(size, size);
+        shadow(target, 0, 0, 26, 7);
+        target.strokeStyle = '#463a29'; target.fillStyle = '#b7a380'; target.lineWidth = 1.25;
+        target.beginPath(); target.moveTo(-27, -4); target.lineTo(-11, -35); target.lineTo(13, -39);
+        target.lineTo(29, -10); target.lineTo(6, -3); target.closePath(); target.fill(); target.stroke();
+        target.fillStyle = '#604c35'; target.beginPath(); target.moveTo(-27, -4); target.lineTo(-11, -35); target.lineTo(6, -3); target.closePath(); target.fill();
+        target.fillStyle = '#f4a54c'; target.beginPath(); target.ellipse(13, -4, 4, 4.5 + 1.6 * Math.sin((u.t || 0) * 13), 0, 0, TAU); target.fill();
+        target.restore();
+      }
+      if (u.cover) camp.covered = u.cover(ctx, camp, [camp.x-30*size,camp.y-40*size,60*size,49*size], paintTent);
+      else paintTent(ctx);
+    }
+    if (parked && parked.y >= camp.y) paintMount();
+    return parked ? [camp, parked] : [camp];
+  };
+
   /** 대장 발밑의 고리 (조종하는 부대 표시 · 나아가는 쪽 갈매기표 · 멈추면 숨 쉬듯) */
-  P.ring = function (ctx, x, y, head, moving, t, s) {
+  P.ring = function (ctx, x, y, head, moving, t, s, contrast) {
     s = s || 1;
     var rx = 24 * s, ry = 9 * s, a = moving ? 0.5 : 0.32 + 0.18 * Math.sin(t * 2.4);
+    if (contrast && FXP().cover) a = Math.max(a, FXP().cover.ringAlpha);
     ctx.save();
     ctx.strokeStyle = 'rgba(10,8,4,' + (a * 0.6).toFixed(3) + ')'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.ellipse(x, y, rx, ry, 0, 0, TAU); ctx.stroke();
     ctx.strokeStyle = 'rgba(255,222,150,' + a.toFixed(3) + ')'; ctx.lineWidth = 2; ctx.setLineDash(moving ? [] : [8, 6]); ctx.lineDashOffset = -t * 6;

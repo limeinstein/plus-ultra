@@ -1,0 +1,43 @@
+{
+  "id": "gangotri",
+  "name": "강고트리 빙하 — 소의 입",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/gangotri.png",
+  "sourceSha256": "009679f0dc12c8448fe9f698636bf095917d782130091549fb6d950994d7f471",
+  "sourceMtimeNs": 1795659647751309700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/gangotri.gif",
+      "sha256": "721066f451360823fc0929df64e7c721e7d72085ce88bcd29182db11896220e0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/gangotri.jpg",
+      "sha256": "d15f3e9a97cfd31ac082c1d8ffa4d28bb353b79a41cb8c37b7765690d406b886"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/gangotri.webp",
+      "sha256": "cad17856039024aa754c40a3c35516bc93983b51a67cdfd7cc0d77eb24923b3d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/gangotri.gif",
+      "sha256": "6cd9dba5a49203d51ff148928482271bb9e91f82c085bda09c65e04938dce6e5",
+      "bytes": 3557963
+    },
+    {
+      "file": "images/discovery-ends/gangotri.jpg",
+      "sha256": "db7dfc1f88657be8c8441937b23767d7051e6b7b6cc2cc3a6f6e936c2b07dbf7",
+      "bytes": 98341
+    },
+    {
+      "file": "images/discovery-sheets/gangotri.webp",
+      "sha256": "ee354235988dea95b77e1ab56dd8a5f3833496cb107107ba9af1c66d3b030299",
+      "bytes": 1746266
+    }
+  ]
+}

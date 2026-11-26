@@ -2,7 +2,7 @@
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('assert/strict'),{pathToFileURL}=require('url'),{chromium}=require('playwright');
 const root=path.resolve(__dirname,'..'),out=process.env.OUT||path.join(root,'artifacts/discovery-stories-20261123');fs.mkdirSync(out,{recursive:true});
-(async()=>{const b=await chromium.launch({args:['--no-sandbox','--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader']});const errors=[];
+(async()=>{const b=await chromium.launch({args:['--no-sandbox','--allow-file-access-from-files','--use-gl=angle', '--use-angle=swiftshader','--enable-unsafe-swiftshader']});const errors=[];
 try{const p=await b.newPage({viewport:{width:960,height:540}});p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text())});await p.addInitScript(()=>{localStorage.setItem('pu.lang','ko');requestAnimationFrame=cb=>cb.name==='loop'?0:setTimeout(()=>cb(performance.now()),16)});
 await p.goto(pathToFileURL(path.join(root,'index.html')).href,{waitUntil:'domcontentloaded',timeout:120000});await p.waitForFunction(()=>window.G?.Game?.sceneName==='title',null,{timeout:120000});
 const result=await p.evaluate(async()=>{

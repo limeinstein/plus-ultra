@@ -1,0 +1,43 @@
+{
+  "id": "laocoon",
+  "name": "라오콘 군상",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/laocoon.png",
+  "sourceSha256": "3749fffa95b427bd463d42629a58822452299db1f0b5b35f25ef6182b4bb80fe",
+  "sourceMtimeNs": 1795660886234633200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/laocoon.gif",
+      "sha256": "a8700db9bc2b275e53bda65904ea7870d995b96f0b3f1120847620889e53aa2c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/laocoon.jpg",
+      "sha256": "ffa63394a556315c217358bbc5e7e882b87dd35345d450c1f02dfe8653a7c7cd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/laocoon.webp",
+      "sha256": "43092fd42dfeed115337a173476cfe06d859e154e5c4c088a1ef3cb35717efd6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/laocoon.gif",
+      "sha256": "1542232420f6229a566adca6c3217f29be7e1a00843f1a8ea10f6f1cb01a19eb",
+      "bytes": 3566609
+    },
+    {
+      "file": "images/discovery-ends/laocoon.jpg",
+      "sha256": "9b84a3d93b3d8e3af7ed753fb739e1e6dfac949cc512aceaf8b570dcad0e246d",
+      "bytes": 78000
+    },
+    {
+      "file": "images/discovery-sheets/laocoon.webp",
+      "sha256": "8bdf81a218126c3fd18b337e58aa244277adcbf4a49618c97b4dbed07dc49246",
+      "bytes": 1303532
+    }
+  ]
+}

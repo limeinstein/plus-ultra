@@ -1,8 +1,9 @@
 /* ---------------------------------------------------------------- 불러오는 그림 (js/ui/loader.js) — 검은 화면 대신 도는 지구와 배 */
-#boot-loader { position: fixed; inset: 0; z-index: 100000; display: none; align-items: center; justify-content: center; pointer-events: none; opacity: 0; transition: opacity .45s ease;
+#boot-loader { position: fixed; inset: 0; z-index: 100000; display: none; align-items: center; justify-content: center; pointer-events: none; opacity: 0; transition: opacity var(--bl-fade, .45s) ease;
   background: radial-gradient(ellipse 60% 70% at 50% 46%, #1b2433 0%, #111720 55%, #090c12 100%); }
-#boot-loader.on, #boot-loader.out { display: flex; }
-#boot-loader.on { opacity: 1; pointer-events: auto; }
+#boot-loader.on, #boot-loader.out, #boot-loader.pending { display: flex; }
+#boot-loader.pending { pointer-events: auto; }
+#boot-loader.on { opacity: 1; pointer-events: auto; transition-duration: 0s; }
 #boot-loader.dim { background: rgba(6,8,12,.72); }            /* 장면 사이: 뒤 화면이 조금 비치게 */
 #boot-loader .bl-box { display: flex; flex-direction: column; align-items: center; gap: 10px; transform: translateY(-2vh); }
 #boot-loader .bl-img { width: min(42vh, 360px); height: min(42vh, 360px); object-fit: contain; image-rendering: auto; filter: drop-shadow(0 10px 30px rgba(0,0,0,.55)); }

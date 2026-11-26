@@ -1,0 +1,43 @@
+{
+  "id": "t_pearl",
+  "name": "진주",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_pearl.png",
+  "sourceSha256": "7f54a825cbf82a16c9779a8f58bbae541de72843a6abb20a760656d0835a8800",
+  "sourceMtimeNs": 1795660932403021600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_pearl.gif",
+      "sha256": "486f016f42a15c667927b2001dd95dd64a058d0f0ef0e73de1c554a339a0b4fa"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_pearl.jpg",
+      "sha256": "abd4eb6166fef4c76b3177890235c26b740c89808259a0f3e1ee0257ff1e91df"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_pearl.webp",
+      "sha256": "fea5cca133f7de6959ec16e2c08e669afdaae4448b6ae275f79a46a8e2fe495d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_pearl.gif",
+      "sha256": "7807943a12664fe0632715cd480132b9a4e9a87e99e769f69eb2f3b6d761b223",
+      "bytes": 3534603
+    },
+    {
+      "file": "images/discovery-ends/t_pearl.jpg",
+      "sha256": "712f32f7af84b91daf08d352bd4deb16955a98ed2390610639718e38554b4d3c",
+      "bytes": 102645
+    },
+    {
+      "file": "images/discovery-sheets/t_pearl.webp",
+      "sha256": "8ed611dc0d77629305365dec4add0eed19a4cfa4cd2602ec11cef88e18a50c1a",
+      "bytes": 1776268
+    }
+  ]
+}

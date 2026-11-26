@@ -1,0 +1,43 @@
+{
+  "id": "stcrown",
+  "name": "성 이슈트반의 왕관",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/stcrown.png",
+  "sourceSha256": "416ac52890e192e859689f362aea866f5554e5538a4ceba26b2abb7724a2f4ae",
+  "sourceMtimeNs": 1795659943710021800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/stcrown.gif",
+      "sha256": "b059faab6bf00035e6224c8a4e96985d01ca624b3c8617faaba72cfe34e7425d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/stcrown.jpg",
+      "sha256": "379fe966c8127e06732320029412b5a914498359aa854e271e09e85c93664548"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/stcrown.webp",
+      "sha256": "199bab3351ba2513c7bc50b46325828a2545d1fa2181a07e80d826d5cd90dac6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/stcrown.gif",
+      "sha256": "e6468482b524785c7daa856aa14a7ad3097f0a07aec56e65bd6a7615e3650682",
+      "bytes": 3484082
+    },
+    {
+      "file": "images/discovery-ends/stcrown.jpg",
+      "sha256": "04568708d7fde838b3818ce34c8bd5c2fa8fc16c6efe69ab6ad770090c4b8033",
+      "bytes": 88769
+    },
+    {
+      "file": "images/discovery-sheets/stcrown.webp",
+      "sha256": "f43841c549602827bdf2d8a3c53b0451c7713d2a937e642672d1a77e3eb83c47",
+      "bytes": 1510816
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "eyjafjalla",
+  "name": "에이야프얄라요쿨",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/eyjafjalla.png",
+  "sourceSha256": "cf70fe69a1aa6b54393b31ff6d408ae8e0c31159583c49a696f6f23a2c60db35",
+  "sourceMtimeNs": 1795659644393841500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/eyjafjalla.gif",
+      "sha256": "b4201c3f61c8da4aed3985c317103ba44419a969d2f22ee10fa5e14d5f8da98b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/eyjafjalla.jpg",
+      "sha256": "7b1e550b75c05bbcfff49d4955a98a5cc914585b31e6840b96c1fa27d781a934"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/eyjafjalla.webp",
+      "sha256": "24867f2a7652c3e364225451871ea58cb9de467a2d7cc4503f140e48051bfd26"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/eyjafjalla.gif",
+      "sha256": "d06e7825813f8cb44f15ea57bc7f743abd87bf6b34b251b48747ca6bb31545a8",
+      "bytes": 2938716
+    },
+    {
+      "file": "images/discovery-ends/eyjafjalla.jpg",
+      "sha256": "73fe5fd537ab3d83ad7344d1e0313cd462aa8b329bb43a2613a0c59d8b6e4671",
+      "bytes": 86906
+    },
+    {
+      "file": "images/discovery-sheets/eyjafjalla.webp",
+      "sha256": "dec98dc02b47720ff5bb107bca7e12919a790aa710a96a883d9883121f5eee1f",
+      "bytes": 1450478
+    }
+  ]
+}

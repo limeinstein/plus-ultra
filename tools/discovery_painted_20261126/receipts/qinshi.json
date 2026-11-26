@@ -1,0 +1,43 @@
+{
+  "id": "qinshi",
+  "name": "진시황릉",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/qinshi.png",
+  "sourceSha256": "7999a7af871dc7d048bc6a9a2eab3b70104e38e47e95581177a7ac6f8932152a",
+  "sourceMtimeNs": 1795660014661531100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/qinshi.gif",
+      "sha256": "ffcf2d98493dd5e21a9b1ad485da8bd5259768b7589ef01274b9516ada31ed1c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/qinshi.jpg",
+      "sha256": "df22ec0455c2594ecaeed37301f785002445f79be0faf170e474da8c2c339f1c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/qinshi.webp",
+      "sha256": "5014d62b6763e0cbb310e39bb4be28b9b45773e2cd8a453c3a1b18dbbca8b532"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/qinshi.gif",
+      "sha256": "d4bbc8028a267e4996286e16ef377d72d313a23850f0e5a5d50457d9ef2c5c24",
+      "bytes": 3230861
+    },
+    {
+      "file": "images/discovery-ends/qinshi.jpg",
+      "sha256": "c3679cb36e8666b3bde26d2c9cc6a5fae859530d755e7dd71bc38c499eec29cb",
+      "bytes": 88360
+    },
+    {
+      "file": "images/discovery-sheets/qinshi.webp",
+      "sha256": "ba252ccfc3856ad7dc39762f09b8045cbf3f3b8c1a9c0cbd2597b084562dab71",
+      "bytes": 1508794
+    }
+  ]
+}

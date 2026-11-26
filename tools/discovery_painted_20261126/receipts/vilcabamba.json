@@ -1,0 +1,43 @@
+{
+  "id": "vilcabamba",
+  "name": "빌카밤바 — 마지막 잉카의 피난처",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/vilcabamba.png",
+  "sourceSha256": "586d9446b2794835d134579d5bbfdc8ba4a951dd70c91b4a65eb585208de06ff",
+  "sourceMtimeNs": 1795661745941578500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/vilcabamba.gif",
+      "sha256": "8d4115f4dfda4848394e46ff5bd7df24ef9e70066d24ad7d254ee68c0d06754e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/vilcabamba.jpg",
+      "sha256": "87fa1b5d5f1e7ed3d10bebde263fbc74ae5afbd9093f8a756c1495025b6ef988"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/vilcabamba.webp",
+      "sha256": "e31092124c682a1c7d9e89991d6f1f034c60284cf0f1b24ec141616b206345ed"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/vilcabamba.gif",
+      "sha256": "e584e4c3ddfb6fd4826fce6f9cfd1646604e9ea78a16ba4b2e04feece3ce1c2d",
+      "bytes": 3661331
+    },
+    {
+      "file": "images/discovery-ends/vilcabamba.jpg",
+      "sha256": "ed3c3492cba7d300b7925c8ee536774473f4d5982fe95cddd7c7fc500ffb82f5",
+      "bytes": 104232
+    },
+    {
+      "file": "images/discovery-sheets/vilcabamba.webp",
+      "sha256": "1b3468c9ef4ad4f952a28ee757dcaff8b1669120e23eca138a1af788e2676fed",
+      "bytes": 1855652
+    }
+  ]
+}

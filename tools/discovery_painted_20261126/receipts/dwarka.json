@@ -1,0 +1,43 @@
+{
+  "id": "dwarka",
+  "name": "드와르카 — 크리슈나의 가라앉은 도읍",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/dwarka.png",
+  "sourceSha256": "694e47c153ec6307dc54810e4662001bbbf9cbb134b7c65e8201f03fc7accc25",
+  "sourceMtimeNs": 1795661736016028400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/dwarka.gif",
+      "sha256": "38a61e1029223d0d12a4b6cddf23f251ac88c3d11d22ba3a05ecf37d3e90c814"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/dwarka.jpg",
+      "sha256": "755b75990372412b6042d167541003117d7eceba0342bc4fb8586a7d03a68c4c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/dwarka.webp",
+      "sha256": "e1e3c688a1c510272b41cc45127787bd3ae85e3be5bf82b8e96f12d3f30739a1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/dwarka.gif",
+      "sha256": "dcfaf68eac8154349e10b8dfe2f1796376d26c8c79343d6c09c36b583ddd1099",
+      "bytes": 2984153
+    },
+    {
+      "file": "images/discovery-ends/dwarka.jpg",
+      "sha256": "c9a2d249ca4b8e6a31612c1dda61962f18bc770b8ca67a167a10d492363ca14c",
+      "bytes": 84614
+    },
+    {
+      "file": "images/discovery-sheets/dwarka.webp",
+      "sha256": "787d5659cc0e7c69dca4522410ac7de7cca10d51890ca54e082df66bc521406e",
+      "bytes": 1444170
+    }
+  ]
+}

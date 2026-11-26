@@ -1,0 +1,43 @@
+{
+  "id": "hammurabi",
+  "name": "함무라비 법전 비석",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/hammurabi.png",
+  "sourceSha256": "c7222232bc49c2a0e023568126bd08ab959e2835a34772466864e469e4f13d93",
+  "sourceMtimeNs": 1795660532911285100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/hammurabi.gif",
+      "sha256": "57f4edec6988c80bc354eafc7a4f10c08e4993f64f1940c6c74e6535c741cb76"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/hammurabi.jpg",
+      "sha256": "9555e312a2ff809d72138e561fb7fefbb6a3817165b374b42c852ff180e9d58a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/hammurabi.webp",
+      "sha256": "afa19f89400507611b9ee5b0479de6e252cf754d55b7893202726df11f6bc279"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/hammurabi.gif",
+      "sha256": "fb2862001bbd024f34615f5422e7a821c0939990e5f4cd98158d89e792694117",
+      "bytes": 3551152
+    },
+    {
+      "file": "images/discovery-ends/hammurabi.jpg",
+      "sha256": "03f27360140bf587bb6d315ba6a425cde8fe7ac9ea8b6d31f0f94e0b20928392",
+      "bytes": 90592
+    },
+    {
+      "file": "images/discovery-sheets/hammurabi.webp",
+      "sha256": "89ef0384e7dd8d2edc269e259890f07dcf13b823292ded683c920b1fdf6484cc",
+      "bytes": 1540282
+    }
+  ]
+}

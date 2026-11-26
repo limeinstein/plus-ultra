@@ -1,0 +1,43 @@
+{
+  "id": "saraibatu",
+  "name": "사라이 바투 — 금장 칸국의 도읍",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/saraibatu.png",
+  "sourceSha256": "914f7eeb0469dc380ee29dccaf43b71cc8e5e2ad86bc812386f0d8345fcf596d",
+  "sourceMtimeNs": 1795663163372921200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/saraibatu.gif",
+      "sha256": "a7174af78fc50c3f6aa028065b06f228448213c5e20fa37e34b8d71226050feb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/saraibatu.jpg",
+      "sha256": "47730bd8c5bbc059ae06f9bb69531e35895b9f94fc5441b7c230490cd355523d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/saraibatu.webp",
+      "sha256": "9dd698863163dab7bd407556bd849452f23260a5c8ec30d144bfb4c56c40d3ae"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/saraibatu.gif",
+      "sha256": "7fd5924a71ce47fe39d7d5c0d7a0b4c80fd55e6d56c429da52f69bbdbfe6375b",
+      "bytes": 3355931
+    },
+    {
+      "file": "images/discovery-ends/saraibatu.jpg",
+      "sha256": "d4cf2886a9731fc21cead8ee10477f8c36e2b4a72908d63896840b9e75046008",
+      "bytes": 92543
+    },
+    {
+      "file": "images/discovery-sheets/saraibatu.webp",
+      "sha256": "ff8721512f42c5b708b81ee8134157496fc345e1fa281f8a48d6115812b96493",
+      "bytes": 1600156
+    }
+  ]
+}

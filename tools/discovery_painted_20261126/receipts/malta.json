@@ -1,0 +1,43 @@
+{
+  "id": "malta",
+  "name": "몰타",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/malta.png",
+  "sourceSha256": "906f0759436870abd35aac18cd12adee0b5b7d00109a3a38cad330fb892c5eac",
+  "sourceMtimeNs": 1795659660697980400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/malta.gif",
+      "sha256": "99eb47d02a7e3154931e7ed5182bf97ea6e983974b7bbc0f30f38a2ee86795b4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/malta.jpg",
+      "sha256": "eb938c687795633bc9f54623bec1a882a0830514495425852ffdedb5c5890f85"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/malta.webp",
+      "sha256": "4599e14a9e814b6a39baab3dde4de69b386515b81fd3221f45269ea6d30ae535"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/malta.gif",
+      "sha256": "4244dba98ef4904e7f9fa4428f66d91ec1394749357b7e2f13e9309c8e246348",
+      "bytes": 2853510
+    },
+    {
+      "file": "images/discovery-ends/malta.jpg",
+      "sha256": "d9ef3ebfea6b2702278bff7411212fa765b17ed28f2ab0b5a5913c1c550af6f5",
+      "bytes": 94423
+    },
+    {
+      "file": "images/discovery-sheets/malta.webp",
+      "sha256": "994b0aefbeb9f1e159f10448144661a3475d1b734894c948668d89a67b69b0a4",
+      "bytes": 1595556
+    }
+  ]
+}

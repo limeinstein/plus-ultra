@@ -1,0 +1,43 @@
+{
+  "id": "azalea",
+  "name": "약산 진달래",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/azalea.png",
+  "sourceSha256": "a3a467f24c1c9cd6c4365bc990d200b60188a370748dfa68f3c543964e63a14f",
+  "sourceMtimeNs": 1795659654316148600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/azalea.gif",
+      "sha256": "9d8d13c4b1d110cb9a7008cae72e4f3b01a079ba5f6f9aa4640582e8649a9176"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/azalea.jpg",
+      "sha256": "7ab9658869b017636fc4ad7b7bf5416eae0e56593e5f173f201b9d2a862ff885"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/azalea.webp",
+      "sha256": "c61e4aa9094d716813208dce4f24c039e7332581d7f7282a4d8b447f0efe3c33"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/azalea.gif",
+      "sha256": "2cebb2b3d9e78fb73f3bb3e3956c8b112c131b5da0eb42a5dbfa957649551e7c",
+      "bytes": 3383905
+    },
+    {
+      "file": "images/discovery-ends/azalea.jpg",
+      "sha256": "c26d266299c5e8cfa4e8da53d297258816e5a79ab6272d02e1d19f24fd202316",
+      "bytes": 98429
+    },
+    {
+      "file": "images/discovery-sheets/azalea.webp",
+      "sha256": "94f7682f3638a972b7c03964d83916552a511746c6b65ed3db8fcf7120983cee",
+      "bytes": 1636270
+    }
+  ]
+}

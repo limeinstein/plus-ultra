@@ -27,6 +27,8 @@ def move_to(o,c):
  c.objects.link(o);o.hide_render=False;o.hide_viewport=False
 groups=[];frames=[]
 def render(c,key,size,target,scale):
+ if '--waterfalls-only' in sys.argv and key not in ['wonder-iguazu','wonder-gullfoss','wonder-nachi','wonder-pamukkale']:
+  frames.append({'id':key,'size':size,'collection':c.name});return
  if '--mountains-only' in sys.argv and (not key.startswith('wonder-') or c.name.endswith('형태 모델')):
   frames.append({'id':key,'size':size,'collection':c.name});return
  for cc in groups:cc.hide_render=cc!=c
@@ -72,7 +74,10 @@ for fi,form in enumerate(forms):
     roots=mesh('맹그로브 버팀뿌리',vs,fs,[bark]);move_to(roots,c)
   o.name='지역 수종 '+form;move_to(o,c);tree_sources[form]=o
   render(c,'tree-'+form+'-'+str(variant),256,(0,0,1.05),2.8)
+for cc in groups:cc.hide_viewport=cc!=groups[0];cc.hide_render=cc!=groups[0]
+camera((0,0,1.05),2.8)
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'regional-vegetation.blend'),compress=True)
+for cc in groups:cc.hide_viewport=False
 
 rock=mat('풍화된 회색 암벽',(.14,.13,.105),(.34,.32,.27),3,bump=.055)
 red=mat('붉은 사암 층리',(.16,.068,.032),(.43,.20,.095),3,bump=.05)
@@ -131,7 +136,7 @@ for d in json.loads((OUT/'mountain-heights.json').read_text(encoding='utf-8')):
 
 for ident in ['uluru','roraima','zhangjiajie','canyon','iguazu','gullfoss','nachi','pamukkale','reef','bluehole','redwood','seongsan','mapuavaea','flowers']:
  c=group('자연경관 / '+ident+' / 형태 모델');groups.append(c);rng=random.Random(59)
- disk(c,'자연경관 바탕',2.8,.015,sand if ident in ['uluru','canyon','reef','bluehole','flowers'] else grass)
+ if ident not in ['iguazu','gullfoss']:disk(c,'자연경관 바탕',2.8,.015,sand if ident in ['uluru','canyon','reef','bluehole','flowers'] else grass)
  if ident in ['uluru','roraima','zhangjiajie','canyon']:
   if ident=='uluru':
    # 둥근 한 덩어리, 세로 빗물 홈. 원뿔을 쓰지 않는다.
@@ -145,18 +150,48 @@ for ident in ['uluru','roraima','zhangjiajie','canyon','iguazu','gullfoss','nach
     before=set(bpy.data.objects);make_cliff(x,y,rng.uniform(1.4,3.4) if ident=='zhangjiajie' else rng.uniform(.7,1.6),.30 if ident=='zhangjiajie' else .85,.4 if ident=='zhangjiajie' else .8,k,rock if ident=='zhangjiajie' else red,lambda x,y:0)
     for o in set(bpy.data.objects)-before:move_to(o,c)
     if ident=='zhangjiajie':tree(c,'pine',x,y,2.2,.17,k)
- elif ident in ['iguazu','gullfoss','nachi','pamukkale']:
-  disk(c,'물받이 소',2.3,.025,water)
-  tiers=7 if ident=='pamukkale' else 2
-  for k in range(tiers):
-   z=.25+k*(.18 if tiers>2 else .75);r=2.3-k*.17
-   o=disk(c,'단층과 석회 테라스',r,z,white if tiers>2 else rock);o.scale.y=.65;o.location.y=.6
-   o=disk(c,'계단 안의 얕은 물',r*.89,z+.015,water);o.scale.y=.58;o.location.y=.6
-   for j in range(16 if ident=='iguazu' else 7):
-    x=(j/(15 if ident=='iguazu' else 6)*2-1)*r*.85;y=-math.sqrt(max(0,r*r-x*x))*.60+.6
-    w=.055 if ident=='iguazu' else .09;mesh0=mesh('낙수',[(x-w,y,z),(x+w,y,z),(x+w*.9,y-.12,max(.03,z-.9)),(x-w*.9,y-.12,max(.03,z-.9))],[(0,1,2,3)],[white]);move_to(mesh0,c)
-  for k in range(40):
-   a=rng.uniform(0,math.tau);r=rng.uniform(2.2,2.7);tree(c,'tropical' if ident=='iguazu' else 'pine',math.cos(a)*r,math.sin(a)*r,.05,rng.uniform(.22,.4),k)
+ elif ident in ['iguazu','gullfoss']:
+  from blender_waterfalls import build_waterfall
+  build_waterfall(c,ident,tree)
+ elif ident in ['nachi','pamukkale']:
+  falling=mat('갈라져 흐르는 자연 낙수',(.25,.43,.39),(.76,.85,.78),14,rough=.3,bump=.008)
+  if ident=='pamukkale':
+   def limestone(x,y):
+    z=.1+max(0,y+2.4)*.34;step=math.floor((z+.045*math.sin(x*4+y*2))*7)/7
+    return .05+step*min(1,max(0,(2.8-math.hypot(x,y))/.25))
+   ground(c,limestone,[white],n=140)
+   for k in range(30):
+    x,y=rng.uniform(-1.9,1.9),rng.uniform(-1.9,1.9);o=disk(c,'불규칙한 석회 온천 못',rng.uniform(.18,.49),limestone(x,y)+.008,water);o.scale.y=.55;o.location.x=x;o.location.y=y
+  else:
+   # 인공 댐처럼 균등한 기둥을 세우지 않고, 굽은 단층에 붙은 불규칙 낙수를 만든다.
+   tall=ident=='nachi';fall_h=2.8 if tall else 1.35
+   def cliffline(t):return (math.sin(t)*(1.70 if not tall else .65),math.cos(t)*1.2+.20)
+   def plateau(x,y):
+    rr=math.sqrt((x/1.7)**2+((y-.2)/1.2)**2)
+    h=fall_h if rr>1 and (y>-.75 or abs(x)>1.1) else .04
+    return h*min(1,max(0,(2.8-math.hypot(x,y))/.35))+.025*math.sin(x*16+y*13)
+   cliff=ground(c,plateau,[grass,rock],n=160)
+   for face in cliff.data.polygons:face.material_index=0 if face.normal.z>.65 else 1
+   pool=disk(c,'물보라가 모이는 깊은 소',1.70,.06,water);pool.scale.y=.80;pool.location.y=.1
+   # 상단의 좁은 급류는 절벽 뒤에서 이어진다.
+   o=mesh('절벽으로 이어지는 급류',[(-.55,2.4,fall_h+.02),(.60,2.4,fall_h+.02),(.55,1.3,fall_h+.02),(-.48,1.3,fall_h+.02)],[(0,1,2,3)],[water]);move_to(o,c)
+   count=14 if tall else 135
+   for k in range(count):
+    t=rng.uniform(-.28,.28) if tall else -2.5+5*k/(count-1)+rng.uniform(-.025,.025)
+    x,y=cliffline(t);w=rng.uniform(.025,.095) if not tall else rng.uniform(.018,.06);vs=[];fs=[];top=fall_h+rng.uniform(-.03,.035)
+    for j in range(9):
+     f=j/8;z=top*(1-f)+.08*f;out=.04+f*f*.11;wx=w*(1+.45*math.sin(f*13+k));xx=x+math.sin(t)*out;yy=y+math.cos(t)*out
+     vs.extend([(xx-math.cos(t)*wx,yy+math.sin(t)*wx,z),(xx+math.cos(t)*wx,yy-math.sin(t)*wx,z)])
+    for j in range(8):fs.append((j*2,j*2+1,j*2+3,j*2+2))
+    o=mesh('폭과 갈래가 다른 물줄기',vs,fs,[falling]);move_to(o,c)
+   for k in range(70):
+    t=rng.uniform(-.3,.3) if tall else rng.uniform(-2.5,2.5);x,y=cliffline(t);r=rng.uniform(.025,.10)
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1,radius=r,location=(x+rng.uniform(-.13,.13),y+rng.uniform(-.13,.13),.09+rng.uniform(0,.10)));o=bpy.context.object;o.scale.z=.25;o.data.materials.append(white);move_to(o,c)
+   for k in range(60):
+    if ident=='gullfoss':continue
+    x,y=rng.uniform(-2.55,2.55),rng.uniform(-1.8,2.5)
+    if math.hypot(x,y)>2.65 or plateau(x,y)<.6:continue
+    tree(c,'tropical' if ident=='iguazu' else 'pine',x,y,plateau(x,y)+.03,rng.uniform(.23,.38),k)
  elif ident in ['reef','bluehole','mapuavaea','seongsan']:
   disk(c,'푸른 얕은 물',2.6,.03,water)
   if ident=='bluehole':
@@ -177,8 +212,9 @@ for ident in ['uluru','roraima','zhangjiajie','canyon','iguazu','gullfoss','nach
    a=rng.random()*math.tau;r=math.sqrt(rng.random())*2.6;x,y=r*math.cos(a),r*math.sin(a)
    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1,radius=.045,location=(x,y,.05));o=bpy.context.object;o.scale.z=.4;o.data.materials.append(sand);move_to(o,c)
  c['source']='첨부 자연경관 PDF의 형태 참고; 절벽·폭포는 미술용 모형, 측량 복제 아님'
- render(c,'wonder-'+ident,512,(0,0,1.1),7.6 if ident!='redwood' else 9.5)
-for cc in groups:cc.hide_render=True
+ render(c,'wonder-'+ident,512,(0,0,.75 if ident in ['iguazu','gullfoss'] else 1.1),6.2 if ident in ['iguazu','gullfoss'] else 7.6 if ident!='redwood' else 9.5)
+for cc in groups:cc.hide_render=' / fuji / ' not in cc.name;cc.hide_viewport=cc.hide_render
+camera((0,0,1),7.6)
 sc['production']='tools/world_detail/blender_assets.py';sc['palette']='같은 지역 녹색, 명암 편차 7% 이내'
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'natural-landmarks.blend'),compress=True)
 (OUT/'frames.json').write_text(json.dumps(frames,ensure_ascii=False,indent=2),encoding='utf-8')

@@ -1,0 +1,43 @@
+{
+  "id": "samarra",
+  "name": "사마라 대모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/samarra.png",
+  "sourceSha256": "aaa71d404c97b139ed93cd3a46563b4d74433fdbc551ddf29c9c031b89b52c3c",
+  "sourceMtimeNs": 1795661214387797900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/samarra.gif",
+      "sha256": "280533b9c0d8765d3f4fa3414bc432d64e2918456231cb65a850bdc1657321b9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/samarra.jpg",
+      "sha256": "e34a19f3cfbda183ce093af7f1c5337030a011477cb17127c47b536822e6415a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/samarra.webp",
+      "sha256": "99d94b989cc1723fff451b6f5ea871ecb68e3249eea4684ccc97759b8ff93c04"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/samarra.gif",
+      "sha256": "a03cb308264a5107d94f157ac5ee2c3df3b74b71c4eacccd8bee7fb87a5e7e89",
+      "bytes": 3172581
+    },
+    {
+      "file": "images/discovery-ends/samarra.jpg",
+      "sha256": "19b3a718ddb32aa41a4e6edeae34302ec888d73c6d21a43bbd1e7ea176325797",
+      "bytes": 90395
+    },
+    {
+      "file": "images/discovery-sheets/samarra.webp",
+      "sha256": "a44f73dfbd003a47cd98a4c0078a44b4ac650825833a4c0ea07a4a8176cf750e",
+      "bytes": 1525342
+    }
+  ]
+}

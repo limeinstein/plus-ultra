@@ -1,0 +1,43 @@
+{
+  "id": "cornell",
+  "name": "코넬 대학교",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/cornell.png",
+  "sourceSha256": "bbebf84d8659e8b2f1d3d7c922a9b2840f8acaa218ea7c917956d7ba4e486423",
+  "sourceMtimeNs": 1795663198206406800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/cornell.gif",
+      "sha256": "abef06c76101153df3cb48590ff3737025f644784a76d3b889781fa2a7b67038"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/cornell.jpg",
+      "sha256": "c8371a96b63c110f96e6e02d38bf960c0a37d59f0c13555eb137b86a9b11c7a2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/cornell.webp",
+      "sha256": "a077aef80573373e39c83ffa8479279dfcfb526827363f6cf9fa7978e0c4ca09"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/cornell.gif",
+      "sha256": "d1c61f0bbec2631c54fbb6a3b57d2bc7bff9bedb95d378e1c811ed56daf9fa86",
+      "bytes": 3362942
+    },
+    {
+      "file": "images/discovery-ends/cornell.jpg",
+      "sha256": "145c1e45861327816b74619caef727011b3dd20075321d01a13cd6a301f76c5e",
+      "bytes": 97079
+    },
+    {
+      "file": "images/discovery-sheets/cornell.webp",
+      "sha256": "5a180e33b79460ba563856258c76f4df71f44ef0247161844e437847b904f3d5",
+      "bytes": 1673432
+    }
+  ]
+}

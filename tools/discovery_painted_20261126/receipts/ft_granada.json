@@ -1,0 +1,43 @@
+{
+  "id": "ft_granada",
+  "name": "사자의 뜰에 새긴 글자",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ft_granada.png",
+  "sourceSha256": "21ffa56b3490b73e3edeca116d146d74c46517b1428de069aba6c489bae9e75b",
+  "sourceMtimeNs": 1795662379034791400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ft_granada.gif",
+      "sha256": "f65e2389130c93873c894b5710a1e5368cf3ab593c13c2846a03ee26db57836f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ft_granada.jpg",
+      "sha256": "bcb3b47b9d337935403959229c4df11d6e1cc762b1fa9a44c61baea7e5c6f49a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ft_granada.webp",
+      "sha256": "0aa1fe453560f972d88844649cae0cdd0ea01b1707a3663816debb8e2ee27d15"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ft_granada.gif",
+      "sha256": "cc82aa6c639d2bc2cae9508e2743b7683de268194268e90b7051c13d0897f17d",
+      "bytes": 3425994
+    },
+    {
+      "file": "images/discovery-ends/ft_granada.jpg",
+      "sha256": "da3ee115adca97fd67857d65c01e6dd4c2ab47693e095f1317a52b5a283a171c",
+      "bytes": 87387
+    },
+    {
+      "file": "images/discovery-sheets/ft_granada.webp",
+      "sha256": "af51a7f0afcc3d248fb16b8368a052b107cbf2e8c6e8325fe2f620879e256289",
+      "bytes": 1469130
+    }
+  ]
+}

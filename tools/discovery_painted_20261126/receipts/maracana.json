@@ -1,0 +1,43 @@
+{
+  "id": "maracana",
+  "name": "마라카낭 경기장",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/maracana.png",
+  "sourceSha256": "46c9afd63923b4ec28a742967e0fc89fbbc0bd4554290c842a717394783ee344",
+  "sourceMtimeNs": 1795661640998565800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/maracana.gif",
+      "sha256": "57c16028b2e033463b9b1ae97b218867091a0247b03f91d2036e46ef22677bbd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/maracana.jpg",
+      "sha256": "507ea3f3465b49fd16f4513d4b5342f3e351cb62a1ed1a6cb4ab7cbf0c6e49a1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/maracana.webp",
+      "sha256": "0b817562770b547c942e0068492942489c5cd0de96b37cbd844d1f4f9248afba"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/maracana.gif",
+      "sha256": "29bf3953c4cc1beda7b1c6f15a0666f2a399996872daabeb8a00d4f12f8b7809",
+      "bytes": 3502982
+    },
+    {
+      "file": "images/discovery-ends/maracana.jpg",
+      "sha256": "a725728d5c33d5c513af7713a3f0537491ccec1ddf28c42ba2b864fadd7fbb12",
+      "bytes": 99082
+    },
+    {
+      "file": "images/discovery-sheets/maracana.webp",
+      "sha256": "758d8a1e245c43c293645bcbb763760ea38efe1011cc05ad7694da9ef7cd6402",
+      "bytes": 1719878
+    }
+  ]
+}

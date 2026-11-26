@@ -1,0 +1,43 @@
+{
+  "id": "bamboo",
+  "name": "사가노 대나무숲",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/bamboo.png",
+  "sourceSha256": "6077115bf1b28f3fbb0a50696b5e0ff57f9c28c08e267955b4250b71749c38b8",
+  "sourceMtimeNs": 1795659654150445500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bamboo.gif",
+      "sha256": "e4c4d13955c20e58ae184250ad58fd140f8fc5a79e2cdf4fdd893191a791906d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bamboo.jpg",
+      "sha256": "2d0fb3bb741b627969b4aad28878955a24e47fc597b79d6ebc5f6c6ee4950bab"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bamboo.webp",
+      "sha256": "6209a4c5f432cbda9f16b566c74c519558f29e2f1ccf3c2c7856db30853a73d9"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bamboo.gif",
+      "sha256": "1ccbc15092c27767ee1a194a5209ec4a93ed139e8d773f949c3176c38a988e71",
+      "bytes": 3645696
+    },
+    {
+      "file": "images/discovery-ends/bamboo.jpg",
+      "sha256": "aa6130aaf16a0a4e130bad770abac66f760a60d08dcf40d5b0532b660cd91a1c",
+      "bytes": 100645
+    },
+    {
+      "file": "images/discovery-sheets/bamboo.webp",
+      "sha256": "39f2a5e53a3d8c1ad132eeba6f8e44a485430e449b0802c7b0e18bfef7e85e0b",
+      "bytes": 1754896
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "ganghwadolmen",
+  "name": "강화 부근리 고인돌",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ganghwadolmen.png",
+  "sourceSha256": "e60cf613b80b07d11d754c6dd8ce01a7e8352a6411b7c0ddd2107e5794b03847",
+  "sourceMtimeNs": 1795662706489713200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ganghwadolmen.gif",
+      "sha256": "b0fb00799fca19a63774c741a46cade2a5b4cb9ae6fcebd91a101d2fa4fba754"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ganghwadolmen.jpg",
+      "sha256": "c6fa6c5260f1db94eb5ea8776c959ad4bbebd686e13d2a4e2656ab684b783b97"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ganghwadolmen.webp",
+      "sha256": "1ae90e8919a2408bc062f67da28796273ede5985f564ee69eebba945fc40acd3"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ganghwadolmen.gif",
+      "sha256": "83554537e4e9630efab08df5aabaab8a4cac7063668d7744f6d880f699a6d646",
+      "bytes": 3264648
+    },
+    {
+      "file": "images/discovery-ends/ganghwadolmen.jpg",
+      "sha256": "6af9a76ac33b87f47914b6897aaaaddc69296f1065bbec0b23373592f1187c2a",
+      "bytes": 96070
+    },
+    {
+      "file": "images/discovery-sheets/ganghwadolmen.webp",
+      "sha256": "060965f3138f38a55e686252151ba545509466151babf73bd1549e5947a25f0b",
+      "bytes": 1627266
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "hukou",
+  "name": "호구 폭포",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/hukou.png",
+  "sourceSha256": "a0588a91a03c74d07d09a28d915709575adb4704bebfac18152eb7774b8c0a66",
+  "sourceMtimeNs": 1795659647063658900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/hukou.gif",
+      "sha256": "dbb8e1dc5fb50bb1122041044965374bf3598025aed5a093a259448168c59247"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/hukou.jpg",
+      "sha256": "bd892613f0401796d015562b50ee3f7df4f093d7d31097b5038aa2e2e5b12209"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/hukou.webp",
+      "sha256": "7d6ed5ea33499009be991fd75b933ccec0116814c0c205d13d6812a362c084fb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/hukou.gif",
+      "sha256": "26e07fe2f40e17f0a0783e7a509bb0552f42671478bb480bdbd1accab7b68d51",
+      "bytes": 3460754
+    },
+    {
+      "file": "images/discovery-ends/hukou.jpg",
+      "sha256": "eaa14ae655b1efc4ebe8a6fd8a9465647a795b63fbf837f9ee0cac4054fd223f",
+      "bytes": 90231
+    },
+    {
+      "file": "images/discovery-sheets/hukou.webp",
+      "sha256": "5eb5a3cd72b29f5173d68f235fda694130d747cf9b070aa95541de850c68c86d",
+      "bytes": 1570040
+    }
+  ]
+}

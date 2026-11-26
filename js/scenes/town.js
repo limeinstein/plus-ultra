@@ -469,8 +469,6 @@
       st.bgCv = cv;
     }
     st.items.forEach(function (it) {
-      it.tag = plaqueCanvas(it.name, false);
-      it.tagOn = plaqueCanvas(it.name, true);
     });
     st.tod = null;
   }
@@ -1262,13 +1260,7 @@
     // 주인공 (그림이 있을 때만)
     drawHero(ctx, cam);
     folks.forEach(function (f) { if (f.y > heroY) G.StreetFolk.draw(ctx, f, cam, st.hover === f); });
-    // 건물 이름표
-    st.items.forEach(function (it) {
-      var x = it.x - cam;
-      if (x + it.w < -60 || x > W + 60) return;
-      var on = st.hover === it || st.focus === it || st.near === it, tag = on ? it.tagOn : it.tag;
-      ctx.drawImage(tag, Math.round(x + it.w / 2 - tag.width / 2), Math.round(it.base - it.h - 16 - (it.lift || 0) - tag.height));
-    });
+    // 건물 위의 상시 이름표는 그리지 않는다. 오른쪽 건물 메뉴와 문 앞의 입장 안내를 쓴다.
     // 새로 선 건물: 금빛 테두리 빛과 반짝이 (T.highlight)
     if (st.fresh && performance.now() < st.fresh.until) {
       var ft0 = (performance.now() - st.fresh.t0) / 1000;

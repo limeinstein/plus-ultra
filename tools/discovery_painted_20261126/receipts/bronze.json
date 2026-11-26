@@ -1,0 +1,43 @@
+{
+  "id": "bronze",
+  "name": "은·주의 청동기",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/bronze.png",
+  "sourceSha256": "beb8b51abedd40ced3d914689bedc9ebd17995fcbd7842ef39b2dcf7a91ef2e5",
+  "sourceMtimeNs": 1795659838001183500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bronze.gif",
+      "sha256": "9f8bdd55fe69c17b8d3b077f2fbebd6c478ed44e2a48c74bedf1344e318db2cb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bronze.jpg",
+      "sha256": "4a4e436af6780adc006b8c1b50fa9a24d0afab0e7afef4b660400e79fa31dc84"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bronze.webp",
+      "sha256": "a036058c7b6b3e7e60b21009fcecf9665e31c69eb8e68a1faf8647b1e50dcfb7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bronze.gif",
+      "sha256": "0c534868a633a1213626e6c80fd92a0143e1744d75b321626b78924b3d67d445",
+      "bytes": 3462264
+    },
+    {
+      "file": "images/discovery-ends/bronze.jpg",
+      "sha256": "c52ef97578f2b2b36ebfd494172d0cbffee888f1a1093eb092e6392ed687621d",
+      "bytes": 85376
+    },
+    {
+      "file": "images/discovery-sheets/bronze.webp",
+      "sha256": "270de710e951ed41634f03bcda4b716ce8711f6a46090b869f85563a734875ed",
+      "bytes": 1428354
+    }
+  ]
+}

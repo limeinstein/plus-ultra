@@ -1,0 +1,43 @@
+{
+  "id": "wisdom",
+  "name": "지혜의 집",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/wisdom.png",
+  "sourceSha256": "022a9de7c289e0e05f9ef19862ca67c73196a6f018d1ed22d2693d79bbcad8b8",
+  "sourceMtimeNs": 1795661053275144400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/wisdom.gif",
+      "sha256": "134856ee6b47441d12cbde51541e0daf8cb1a9940eab15c39fe506297f6dfcb0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/wisdom.jpg",
+      "sha256": "767660fffd1dd7c9e8e9028345a4e0292ec24a9b37aab7cf65e15216fcd6820d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/wisdom.webp",
+      "sha256": "24eeb1484b0e6b606d26fd455864c991d474c2f43f7ed00969bfd84aca21a574"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/wisdom.gif",
+      "sha256": "9353a75f503e494643e4f7523be4000e2b9f21a269bf3471c6756cfd34293b4a",
+      "bytes": 3508120
+    },
+    {
+      "file": "images/discovery-ends/wisdom.jpg",
+      "sha256": "8c13206f6fc31bd7a658a6d8d9e7b42ad87f209bf5dd8be0eaa4b702b135a691",
+      "bytes": 99140
+    },
+    {
+      "file": "images/discovery-sheets/wisdom.webp",
+      "sha256": "9c9d8cbfc4df286254c260a5240f807472fe4acc476723dad755cb9125bec0d0",
+      "bytes": 1690440
+    }
+  ]
+}

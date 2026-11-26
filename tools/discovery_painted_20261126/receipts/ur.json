@@ -1,0 +1,43 @@
+{
+  "id": "ur",
+  "name": "우르의 지구라트",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ur.png",
+  "sourceSha256": "7d0496a4bd654a53a106a808cb1c93362fdd15364f20e5d0446aeb736897da86",
+  "sourceMtimeNs": 1795660317003182300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ur.gif",
+      "sha256": "96a735e4d7aa45a999ceb832dbd7651eba19f5f9a8c5cc8db1ec3c9ac08bdf0f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ur.jpg",
+      "sha256": "99e35756562363df2d60093934d5ba9ef32548657c1f8aa8d41dac397c4abbba"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ur.webp",
+      "sha256": "0be903cc2e708c93ec216ddba56a73951f358bbc50aba7c95ee4420a20de1581"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ur.gif",
+      "sha256": "50952b576c555b0b01a0bc8bb75bf36b6cc6fa20e5602e134f7b2bc5e8316c5f",
+      "bytes": 3396268
+    },
+    {
+      "file": "images/discovery-ends/ur.jpg",
+      "sha256": "af53dfa825cafce739eb8caedac5a8f56655acb19ee842657f5f994d654665d3",
+      "bytes": 89606
+    },
+    {
+      "file": "images/discovery-sheets/ur.webp",
+      "sha256": "c1828566781d43165464fd0ecc7e45a3a3d81c6fb287a7b9b7a171107022fff4",
+      "bytes": 1515960
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "montstmichel",
+  "name": "몽생미셸",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/montstmichel.png",
+  "sourceSha256": "9bf54a929c17499c409cc48ffc320e9c39d67201b9aafc7d2781083a6005c4d4",
+  "sourceMtimeNs": 1795660074659260500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/montstmichel.gif",
+      "sha256": "6aa205829d7e95dd9f07bf69b941276d281d6851e9dbe66eadcfa25ce706eaed"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/montstmichel.jpg",
+      "sha256": "a7b0d74d79aa8787bc81560c82609863e203610565fa14dcae6d6e3e260163a1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/montstmichel.webp",
+      "sha256": "accbd5bfa936d537540450e1e1e7ebfb225a2b0dedac947a5a8797120207e131"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/montstmichel.gif",
+      "sha256": "d26ca00cdbeab932f35a4db7edaf84e2c560e5c074d95bdb37de68e72d4a2690",
+      "bytes": 2970961
+    },
+    {
+      "file": "images/discovery-ends/montstmichel.jpg",
+      "sha256": "1eba65d344d542671f2fca58ccd17f123dbdfa37782bb79b50486f8e1a7a7668",
+      "bytes": 81232
+    },
+    {
+      "file": "images/discovery-sheets/montstmichel.webp",
+      "sha256": "d48ed84e8640e3e2dc40460024bac627d80df21e9bc06a62084e189b2f2315eb",
+      "bytes": 1403026
+    }
+  ]
+}

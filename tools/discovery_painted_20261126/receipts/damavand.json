@@ -1,0 +1,43 @@
+{
+  "id": "damavand",
+  "name": "다마반드산",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/damavand.png",
+  "sourceSha256": "88212b36fde7831cb1aa9428ae92a6e5ead077083b0f75643f72e4be6c7e0bda",
+  "sourceMtimeNs": 1795659647890456400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/damavand.gif",
+      "sha256": "a4ea1cfd450e9d829f870e9561c2d7d857e187d1cbca209a5c692fd505762858"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/damavand.jpg",
+      "sha256": "a75eeaed9f555a9aa3fd077ce96fab6fbc533ee885cac09a4b3e57a2dcd04539"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/damavand.webp",
+      "sha256": "88812b5a935731d99415d1de1762dd0bf4c882e6bfa1aa5f9e3845a87aa2ece2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/damavand.gif",
+      "sha256": "158e05d736685a00c0e3e4a614f70e5414c29bf8d4f2d800b3e60b9d1cbf02ef",
+      "bytes": 2982972
+    },
+    {
+      "file": "images/discovery-ends/damavand.jpg",
+      "sha256": "27d6f8e91650afe2e8cc315db508636e737cff40949fb7ad7132f349c8b4381c",
+      "bytes": 88267
+    },
+    {
+      "file": "images/discovery-sheets/damavand.webp",
+      "sha256": "69a2f81d7f960913c7aaba575bb1f474721fa6c1ebc051632cbd4c77221bddcf",
+      "bytes": 1501428
+    }
+  ]
+}

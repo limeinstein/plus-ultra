@@ -1,0 +1,43 @@
+{
+  "id": "penglai",
+  "name": "봉래산 — 신선의 섬",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/penglai.png",
+  "sourceSha256": "af496abc0ad1b7d2897e2dd18db27b76231415ee0047c3f8012afa8ffe9bcc30",
+  "sourceMtimeNs": 1795659649087113500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/penglai.gif",
+      "sha256": "41993ed47b7465c013624e8a0da5e47b18f355194a555c720ebcb18013cb3a54"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/penglai.jpg",
+      "sha256": "4faf57a3f6924ad7f8f36ab8c67801341f82ad0ade5008cff81e949da56eeb43"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/penglai.webp",
+      "sha256": "62a059509dbe06e3444e54aa33f21e94100ce4e20aaf58a38fe957989ffab565"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/penglai.gif",
+      "sha256": "d33fbf935d80c653cd8b70254af016e1c0d8ac2f618fed81276d6b39154c3eb8",
+      "bytes": 3141480
+    },
+    {
+      "file": "images/discovery-ends/penglai.jpg",
+      "sha256": "a2dfd7256e5b1b92ae5dd2cf702c61432aafdd70f34374889716bb21f210e77b",
+      "bytes": 83473
+    },
+    {
+      "file": "images/discovery-sheets/penglai.webp",
+      "sha256": "f3d0ebf4ff63a2f9a019791a7b4031eccdbd3bb03cec0fb4835e44411c1dd08b",
+      "bytes": 1434938
+    }
+  ]
+}

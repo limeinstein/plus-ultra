@@ -1,0 +1,43 @@
+{
+  "id": "apricot",
+  "name": "아르메니아 살구",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/apricot.png",
+  "sourceSha256": "2aff2b4216801a995905fcc71f166a6d4f07a4b60a68244db7a0e1e92030ac34",
+  "sourceMtimeNs": 1795659652863041100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/apricot.gif",
+      "sha256": "8afe7e1eff8dd17f34429d38ef2f04e0f580b650b61bd024735f77695ab60f9d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/apricot.jpg",
+      "sha256": "b9399e8da46240398a9dcf052e753739f6d0add0e76683e015bd06585fc6d20b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/apricot.webp",
+      "sha256": "915bcab372c4d78c76e332c789e777fa29f23eb934094e2212d733a67ca5b573"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/apricot.gif",
+      "sha256": "6b39ab5060b34e3671f98a2a3ee205f60acad0a2071ba1b3b068a988f56cb51f",
+      "bytes": 3318101
+    },
+    {
+      "file": "images/discovery-ends/apricot.jpg",
+      "sha256": "5378d59fab3181b6e12bef4d1142e1e4103dc2b980f58bcfd12631940de3ea41",
+      "bytes": 106012
+    },
+    {
+      "file": "images/discovery-sheets/apricot.webp",
+      "sha256": "cb64615e01130c0ca1342248a306f40b92807557659f793d87b219f5eb507934",
+      "bytes": 1806282
+    }
+  ]
+}

@@ -32,7 +32,9 @@ Mixkit·Pixabay 라이선스는 소리 파일을 따로 떼어 배포·판매하
 - **Electron**(설치판) — MIT License. Chromium 등 구성 요소의 라이선스는 설치 폴더의 `LICENSE.electron.txt` · `LICENSES.chromium.html`.
 
 ## 지도·자료
-- **Natural Earth** 50m — 공개 저작물 (https://www.naturalearthdata.com)
+- **Natural Earth** 50m 해안선 및 1:10m 강·자연 호수 — 공개 저작물 (https://www.naturalearthdata.com). 새 수로는 원본 강 굽이와 게임용 하구 연결을 함께 썼으며 현대 저수지는 호수에서 제외했습니다.
+- **NOAA NCEI, ETOPO 2022** — 공개 고도 자료의 60각초 전 세계판을 축소·지역 추출했습니다. [자료 안내](https://www.ncei.noaa.gov/products/etopo-global-relief-model), [자료 DOI](https://doi.org/10.25921/fd45-gt74). 실제 지형의 바탕이며 강 수심을 보증하는 수로 측량 자료는 아닙니다.
+- **Ecoregions 2017 © RESOLVE** — Dinerstein, E. et al. (2017), *An Ecoregion-Based Approach to Protecting Half the Terrestrial Realm*, BioScience 67(6): 534–545. [원본·이용 조건](https://ecoregions.world/), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), [논문](https://doi.org/10.1093/biosci/bix014). 경계를 4096×2048 격자로 단순화하고 14개 생물군계로 분류했습니다. 1480년의 숲 분포를 측량한 자료는 아닙니다. 기존 식물 발견물의 지역 수종 조사와 결합해 게임용 수목 배치를 만들었습니다.
 - **UNESCO 세계유산센터** — CC BY-SA 3.0 IGO. **위키백과** — CC BY-SA 4.0. 이 자료를 바탕으로 한국어로 새로 쓴 글(`js/data/heritage.js`)도 같은 조건(CC BY-SA)으로 공개합니다.
 - **위키미디어 공용 사진** — 발견 그림이 참고한 원본 사진입니다(게임 그림은 사진을 참고해 새로 그린 것). 사진마다 작가·라이선스·원본 주소를 발견 카드와 도감의 「실제 자료」에 적었고, CC BY-SA 사진을 참고한 그림은 같은 조건으로 공개합니다.
 - **The Met · Smithsonian Open Access** — CC0. **GBIF.org · OBIS** — CC BY 4.0.

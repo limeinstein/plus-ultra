@@ -1,0 +1,43 @@
+{
+  "id": "torrespaine",
+  "name": "토레스 델 파이네",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/torrespaine.png",
+  "sourceSha256": "9c3f936670a98334f2e5f10cbcbd194b619230496d90ef4d04206c82503a5d20",
+  "sourceMtimeNs": 1795659645334421600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/torrespaine.gif",
+      "sha256": "af6fedf138895f227a4042562c3830e12df3da25c53b4a405d03b1a6d154dc29"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/torrespaine.jpg",
+      "sha256": "28cc3c720fd2fe069b036b760b79109638b29a4eb50b7ce62ab51c4be5fe268b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/torrespaine.webp",
+      "sha256": "eb38abb8abe44fd3d7bcc3907ca6da53eedaaaea8b970f436878a7568ddc17e1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/torrespaine.gif",
+      "sha256": "14bd8c284e9ad9f2bffb911768d959328c16ec48dedcceb36658b7aaf8aa5fcd",
+      "bytes": 2964453
+    },
+    {
+      "file": "images/discovery-ends/torrespaine.jpg",
+      "sha256": "722263f3ff418eded6331633b79b628b82208dd1a5d9f42a9e59a230d16e2bc1",
+      "bytes": 97667
+    },
+    {
+      "file": "images/discovery-sheets/torrespaine.webp",
+      "sha256": "76784b73cbc82913ad68c8875e7591da94b068af921a3e9378a29a238b04f7cb",
+      "bytes": 1676308
+    }
+  ]
+}

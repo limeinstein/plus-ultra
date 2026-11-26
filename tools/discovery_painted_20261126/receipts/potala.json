@@ -1,0 +1,43 @@
+{
+  "id": "potala",
+  "name": "포탈라궁",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/potala.png",
+  "sourceSha256": "35a021cade18bba02045e431de51fa4c47710d22fc37bac420e5f27b47d7b839",
+  "sourceMtimeNs": 1795659559187583200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/potala.gif",
+      "sha256": "936c825b89820017ed9d1da9f4ea679aafb175b6059f822c35981b2713160fc1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/potala.jpg",
+      "sha256": "35195fc66e52e15d92f9b283a609553bc4dad009e6b84b5a25d4865a352918e0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/potala.webp",
+      "sha256": "f90f86723c146d0ae85c15074968aa14ea967fc18fccd06936c962d59fa2f953"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/potala.gif",
+      "sha256": "dc99155003e850cdc09aedfe6de098cb34336b2f5759af40885b0a4793a2bcbc",
+      "bytes": 3491097
+    },
+    {
+      "file": "images/discovery-ends/potala.jpg",
+      "sha256": "39d9fa0a82b3f1ef56f5a373e5d68d9cc7ae123e845c980c0ceac0598bb4daf2",
+      "bytes": 99891
+    },
+    {
+      "file": "images/discovery-sheets/potala.webp",
+      "sha256": "dbac31fb7f76bdf6730de158ade7646f72fee3057a3e77c111844d648ebbbb7a",
+      "bytes": 1746386
+    }
+  ]
+}

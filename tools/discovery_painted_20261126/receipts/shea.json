@@ -1,0 +1,43 @@
+{
+  "id": "shea",
+  "name": "시어나무",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/shea.png",
+  "sourceSha256": "0dbd7c1882f6707b9d12af090a6e9fc7fcb66bef6d7d095e11ce9188c5f22b48",
+  "sourceMtimeNs": 1795659652681198600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/shea.gif",
+      "sha256": "37822dcc8e61fa0b1e89a6ee5f65c23e94e0b1cdc1d0732866dc3923edfd99a2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/shea.jpg",
+      "sha256": "c73e1187b20800c0ca4e497f91f42fa6a9a43343ca9e711e65c13e8f9f1d8e71"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/shea.webp",
+      "sha256": "8d9158531da564458bf52aafe6a750e3263777f1a35bfd1a53ff604875fc5dac"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/shea.gif",
+      "sha256": "a1ad523c92df603432bdc70ee046031d79e1348d69e7c2d3ad2688728b716e81",
+      "bytes": 3452081
+    },
+    {
+      "file": "images/discovery-ends/shea.jpg",
+      "sha256": "c4a08fed2d80d3fc71f776dbbbfbd2d42efb8ffed9d6fc86fa4d7497bea30930",
+      "bytes": 110797
+    },
+    {
+      "file": "images/discovery-sheets/shea.webp",
+      "sha256": "dbfd5633dc92f3979c0a3e21f16c0911e31148ddda220d739cd2cffb2e4a1641",
+      "bytes": 1944522
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "t_pepper",
+  "name": "후추",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_pepper.png",
+  "sourceSha256": "e9c4fe10cab520023d4d7e27511581fa6fbf3863aa04e1f190f4737948bcc9e8",
+  "sourceMtimeNs": 1795660790924292200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_pepper.gif",
+      "sha256": "792070b2b42befe238f732cca648171307ab46f02f5d67f89b7d75ef608390ad"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_pepper.jpg",
+      "sha256": "d11df7ca0953d59ec0b066ce1108df75ac2d9d582924b6cbd5c3042583186944"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_pepper.webp",
+      "sha256": "80bd3fe9847c9a2ed328fe5b0d3cc410c85fd0b1df4563f3f6942ec2235be9b2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_pepper.gif",
+      "sha256": "2d46317e372c3c2581fe58f9ebf69ba6cad5ac78281da555a2d0e05a41f32541",
+      "bytes": 3615141
+    },
+    {
+      "file": "images/discovery-ends/t_pepper.jpg",
+      "sha256": "3d7bb2633c1dd5c98e029c51cec7702c8a8da784f37fa8db8eda285684fff337",
+      "bytes": 100433
+    },
+    {
+      "file": "images/discovery-sheets/t_pepper.webp",
+      "sha256": "e71c941aa3046c22322547e57108782efb3cc57eee641f3938009627153e4cac",
+      "bytes": 1739708
+    }
+  ]
+}

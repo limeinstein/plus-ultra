@@ -1,0 +1,43 @@
+{
+  "id": "barringer",
+  "name": "배린저 운석 구덩이",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/barringer.png",
+  "sourceSha256": "178607e155ef98ff1b52d94e28a61336ef07cfc79680a74b260626e49ad986df",
+  "sourceMtimeNs": 1795659644996266400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/barringer.gif",
+      "sha256": "65df0ff73a82ff9baa62d77426cf9904f5f0ce0d9fa4a823b4dd3eacb561d772"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/barringer.jpg",
+      "sha256": "3182c3ad121f057a258b5a0614f17f81232f496b3f07db89e68a53c219d9f52f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/barringer.webp",
+      "sha256": "07a0476e00f4beb4699e89b399b4ea26aae910cd13684b181a7fb970f84557c9"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/barringer.gif",
+      "sha256": "512d8536accff2c28dfe66717a1d9f957d31cd04396c969f5c5325648a4f1d71",
+      "bytes": 2854975
+    },
+    {
+      "file": "images/discovery-ends/barringer.jpg",
+      "sha256": "662fd1579d6120665733122e1ed03507b3d195330bba52fed26e88b9018576d9",
+      "bytes": 91029
+    },
+    {
+      "file": "images/discovery-sheets/barringer.webp",
+      "sha256": "1b00ea76a0bc03202da0d2b73e0e8027c6671a20297fe59780045502cb9d32ef",
+      "bytes": 1558026
+    }
+  ]
+}

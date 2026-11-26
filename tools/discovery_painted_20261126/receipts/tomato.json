@@ -1,0 +1,43 @@
+{
+  "id": "tomato",
+  "name": "토마틀",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/tomato.png",
+  "sourceSha256": "540a54c764ce559a06ce749d464d8666c33facd876502dc7f092367dd6c7e01e",
+  "sourceMtimeNs": 1795659653951486400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tomato.gif",
+      "sha256": "48187f7b0bf985fb00e286f85659ff6eaed7420408c59322428ee520422ea900"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tomato.jpg",
+      "sha256": "c42577f4a28c8e2ce606cb4ae60e1eb5d6d20f53e49692f3151291516d588e5e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tomato.webp",
+      "sha256": "eaec6d919fe3f59a15a74c4931316946ee4ed98bbaf5941d715117b37c724756"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tomato.gif",
+      "sha256": "6746723180999fba3e8ddcb7810292161f2f8c7f1f12a287533307919bbe7db4",
+      "bytes": 3320399
+    },
+    {
+      "file": "images/discovery-ends/tomato.jpg",
+      "sha256": "34df3d56fd2222c0bfb8e9a2b09b5b4b919c25383e84ef4c10fe40ecfc613242",
+      "bytes": 101758
+    },
+    {
+      "file": "images/discovery-sheets/tomato.webp",
+      "sha256": "6aca35e1d950116462bedf944144b665e6e842559579ef0d021aa88c6d38a8e5",
+      "bytes": 1742998
+    }
+  ]
+}

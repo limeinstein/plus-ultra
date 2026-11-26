@@ -1,0 +1,43 @@
+{
+  "id": "mammothcave",
+  "name": "매머드 동굴",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/mammothcave.png",
+  "sourceSha256": "c62af1a06118e0d47241c29003d027bde3d768fffaa03f2196b0522e15d7ad05",
+  "sourceMtimeNs": 1795659656890775600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mammothcave.gif",
+      "sha256": "cb0ce7619c5cd4a2ca5694f38d1c4982810bb75ff795c26dd9bdfb595c80ca0b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mammothcave.jpg",
+      "sha256": "22558a66773e8369a6470f7c2c85057c3822f69b83fcb265bf2df4e66fb0f667"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mammothcave.webp",
+      "sha256": "636a439f5a9ad0f78cfef6aca66b341a2170604daa8ea78f00ed889fc5e93863"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mammothcave.gif",
+      "sha256": "4d495dbbb656b2c24e90e52199f23d5ee8500d252d9c0e45090614f5650862e4",
+      "bytes": 3861848
+    },
+    {
+      "file": "images/discovery-ends/mammothcave.jpg",
+      "sha256": "726748e4a0a4c54cf3eca76760e3c12615d68c2747ec775a98c47a7a11eb708e",
+      "bytes": 97299
+    },
+    {
+      "file": "images/discovery-sheets/mammothcave.webp",
+      "sha256": "95767e9107356ed6c461627a7c8e925c12230b4a32cfda626cc05ff8038c2dc3",
+      "bytes": 1710696
+    }
+  ]
+}

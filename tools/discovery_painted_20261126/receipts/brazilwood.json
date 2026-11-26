@@ -1,0 +1,43 @@
+{
+  "id": "brazilwood",
+  "name": "파우브라질",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/brazilwood.png",
+  "sourceSha256": "8a5558eeda87ebdd9944346d414ac6feeffcf27c2f123b6b7029aa64252ef747",
+  "sourceMtimeNs": 1795659656491370600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/brazilwood.gif",
+      "sha256": "75d50c54e683fd36157f565007ddf915865e3cffa119dfc8396590168f00bb03"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/brazilwood.jpg",
+      "sha256": "b73bd433422724b2d767ec2bc6c5eab572d911b2a15ad0982760c5f0a1da4a97"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/brazilwood.webp",
+      "sha256": "ef997b0d6cc660606bb208a35f13373dc0f6296c8b1c11032a2818f0b90b83d0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/brazilwood.gif",
+      "sha256": "975675be5cf9ac0e5b4f6e67c08fc5eb5696415b564530cedd2f2d03bf73b532",
+      "bytes": 3560007
+    },
+    {
+      "file": "images/discovery-ends/brazilwood.jpg",
+      "sha256": "993676ae33fc7c631ef29e8c61e6e7af68519038c99b874aa157ef846f7d73c2",
+      "bytes": 109006
+    },
+    {
+      "file": "images/discovery-sheets/brazilwood.webp",
+      "sha256": "173fc26badb6571c108388258372348df5a957fd08b69ec2d207163f88cd2526",
+      "bytes": 1889992
+    }
+  ]
+}

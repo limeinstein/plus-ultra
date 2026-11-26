@@ -7,7 +7,8 @@ ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'artifacts/world-detail-20261125/blender'
 OUT.mkdir(parents=True,exist_ok=True)
 old=ROOT.parent/'output/terrain-reference-20261125/build_reference_examples.py'
-(Path(__file__).parent/'blender_helpers.py').write_text(old.read_text(encoding='utf-8').split('def build_scene(')[0],encoding='utf-8')
+helper=Path(__file__).parent/'blender_helpers.py'
+if not helper.exists():helper.write_text(old.read_text(encoding='utf-8').split('def build_scene(')[0],encoding='utf-8')
 meta=json.loads((OUT.parent/'before/world-meta.json').read_text(encoding='utf-8'))['nature']
 ids={'fuji':.14,'kilimanjaro':.30,'everest':.23,'matterhorn':.13,'machapuchare':.16,'vihren':.16,'torrespaine':.18,'vinicunca':.13,'kailash':.19,'kinabalu':.17,'damavand':.20,'yulong':.18}
 data=[]

@@ -1,0 +1,43 @@
+{
+  "id": "venusmilo",
+  "name": "밀로의 아프로디테",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/venusmilo.png",
+  "sourceSha256": "5982bad7835892ca5de71c36b572273cdcc480b1c6bca3ec35c62282fbcda34e",
+  "sourceMtimeNs": 1795660865647036100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/venusmilo.gif",
+      "sha256": "3fced766d7181d0f8963183864a0d3760d54bd2c84e0226ee965aa2746632446"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/venusmilo.jpg",
+      "sha256": "3f754f58e4ab5be8b8d3d70ddb14876f8f54a35a92817a454a586b586a456e51"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/venusmilo.webp",
+      "sha256": "d39e15748aabac2de78835084133d483651780c1a0059b19d962e56fb03c3c54"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/venusmilo.gif",
+      "sha256": "f15d73c370893ed245f46319f32b71d4403308f315b27ad533cd3284e3edc7f6",
+      "bytes": 3511236
+    },
+    {
+      "file": "images/discovery-ends/venusmilo.jpg",
+      "sha256": "a675b8f53e6ec40bbaae6f81f19dc5a88c267148e608e1a42365cc516f83dd56",
+      "bytes": 71821
+    },
+    {
+      "file": "images/discovery-sheets/venusmilo.webp",
+      "sha256": "f6c3cb8bab0d58b790a770d904d9b1aa3e54f0fc8c2e50a81cad53b38d3c34d1",
+      "bytes": 1134784
+    }
+  ]
+}

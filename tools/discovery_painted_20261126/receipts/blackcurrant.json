@@ -1,0 +1,43 @@
+{
+  "id": "blackcurrant",
+  "name": "블랙커런트",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/blackcurrant.png",
+  "sourceSha256": "138ef8e7273fae7e459c4eaf92d1d7be9a163d14dd5aa4608709ab00bb80e2d8",
+  "sourceMtimeNs": 1795659650519247000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/blackcurrant.gif",
+      "sha256": "fcb70fc5b816ad67518cc789ebe030b3243df3736bf6c0ad679c58f833866dc8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/blackcurrant.jpg",
+      "sha256": "ae91b70c8704c99c24383aa48e9056e61ae4b3ac092aefe75aad7f33e4b81332"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/blackcurrant.webp",
+      "sha256": "a09b4df692e2bb4159341f4fc43959a1c00b74de4afb69b9c05043c576c858fe"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/blackcurrant.gif",
+      "sha256": "7ddef33b5a6e93e7d825bc80128ac33810ae89bb15582f2507b994fa3f78bc8e",
+      "bytes": 3546346
+    },
+    {
+      "file": "images/discovery-ends/blackcurrant.jpg",
+      "sha256": "3000a5ab091d59e321261978aca7db1bbbcefdb40ae05b3183b3a57ab3c603f3",
+      "bytes": 107300
+    },
+    {
+      "file": "images/discovery-sheets/blackcurrant.webp",
+      "sha256": "e88e07e56364cfe04c0b2fcae37d85b4ca30f3b53217223e7e20b72ace5973b3",
+      "bytes": 1860108
+    }
+  ]
+}

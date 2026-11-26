@@ -1,0 +1,43 @@
+{
+  "id": "rujmelhiri",
+  "name": "루즘 엘 히리",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/rujmelhiri.png",
+  "sourceSha256": "d65c2b4b8e259a3679ce481a416c031f6c3464db27c4022a72d2ae7e4dd5b3ca",
+  "sourceMtimeNs": 1795662347292658600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/rujmelhiri.gif",
+      "sha256": "d52fbe07098b4f0b16fabea6977ab92d4ff956f3057f3cd201b8a8fa184bd14f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/rujmelhiri.jpg",
+      "sha256": "faab8bf6c90e23206acb881e6f2e21187961fbecdf1c38cad4ad68d32299a1de"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/rujmelhiri.webp",
+      "sha256": "254df5f0e52a533ee928688e5389107870ca33bdd088f1028b5b691e711136dc"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/rujmelhiri.gif",
+      "sha256": "2cd3b164ffb65c26879ce1c345c9f7eb143168b4b228ddf461459b81edbe1914",
+      "bytes": 3381392
+    },
+    {
+      "file": "images/discovery-ends/rujmelhiri.jpg",
+      "sha256": "a2b7daa4937693fcf2022e84b726449c191e324ff9c93c63c63857e9f72be64e",
+      "bytes": 96596
+    },
+    {
+      "file": "images/discovery-sheets/rujmelhiri.webp",
+      "sha256": "1cbb902d65635a5c661cdc70511ee365ddeaff60f9f32a7f9f2ab55f336e250e",
+      "bytes": 1672788
+    }
+  ]
+}

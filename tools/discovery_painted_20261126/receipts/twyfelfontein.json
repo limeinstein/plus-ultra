@@ -1,0 +1,43 @@
+{
+  "id": "twyfelfontein",
+  "name": "트위펠폰테인 암각화",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/twyfelfontein.png",
+  "sourceSha256": "55c7d5b0bdab4172673080bda00005c77f6e805d04982beee1919032214bfc80",
+  "sourceMtimeNs": 1795662503225294700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/twyfelfontein.gif",
+      "sha256": "7e1b282b33e5421a31185da9be27312a426425ffff2a4987b157ec1a96828737"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/twyfelfontein.jpg",
+      "sha256": "5f43c74ee5878c3fb3dabae86f50ca33ced8fd675ca60f79a8ab22fc618c5d94"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/twyfelfontein.webp",
+      "sha256": "70fc0f3221eb961016ea123c33be304d9297049707d2a691ba3c5647256e0d03"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/twyfelfontein.gif",
+      "sha256": "4f161f67d7dd91a3516ef68e406c51d9514d9821e321ff156c45a80690b913f3",
+      "bytes": 3639167
+    },
+    {
+      "file": "images/discovery-ends/twyfelfontein.jpg",
+      "sha256": "9bf010f2be91db5dcfd40cb3c6333f31bdcc0395d98cf1e08354330afe150ffd",
+      "bytes": 98344
+    },
+    {
+      "file": "images/discovery-sheets/twyfelfontein.webp",
+      "sha256": "3281e7dc69c44b40a32c788d0f4a795743583129b875cc0f1a993285174ce9e5",
+      "bytes": 1688452
+    }
+  ]
+}

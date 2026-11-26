@@ -19,8 +19,8 @@ DISC_CATS = ['geo', 'nature', 'ruin', 'treasure', 'creature', 'people', 'trade']
 # 기존 원본을 보존하면서 검증된 교체본을 게임의 기존 키로 사용한다.
 # scan() 뒤에 적용해야 manifest 재생성·웹 빌드에서도 연결이 되돌아가지 않는다.
 PREFERRED_FILES = {
-    'ui/wanted/parchment': 'ui/wanted/parchment-20261121.png',
     'ui/wanted/board': 'ui/wanted/board-20261121.png',
+    'ui/wanted/parchment': 'ui/wanted/parchment-20261121.png',
     'portraits/rivals/진주 눈물 소교': 'portraits/rivals/ref39049-39045/진주 눈물 소교.webp',
     'portraits/rivals/진주 눈물 소교_half': 'portraits/rivals/ref39049-39045/진주 눈물 소교_half.webp',
     'portraits/rivals/안개섬 모이라': 'portraits/rivals/ref39049-39045/안개섬 모이라.webp',
@@ -501,6 +501,15 @@ def valid_keys(d):
     for butterfly in ('morpho glasswing monarchwinter lunamoth eightyeight swallowtail emeraldswallow birdwing sasakia atlasmoth deadleaf bhutanglory sunsetmoth cometmoth giantswallow motherpearl peacockbf').split():
         k['effects/butterflies/' + butterfly] = '나비·나방 무리 · 비행 스프라이트 시트'
     k['story/photo'] = '이야기 모드 · 아버지의 사진'
+    for prefix, people in (
+        ('npc/gs_', 'EA YK RB RD GS HM NR DA MG TM MO CR YA YE JS JS99 SL NU SC'.split()),
+        ('npc/jh_', 'Y JG_child ED MQ RG BW'.split()),
+        ('mates/gs_', 'eleonore marieke bram lucas yusuf jin kwame pieter'.split()),
+        ('mates/jh_', 'smith william conan jane lucia kofi mariam chenlei'.split()),
+        ('sponsors/', ['gs_vos', 'jh_killigrew'])):
+        for person in people:
+            for suffix in ('', '_half'):
+                k['portraits/' + prefix + person + suffix] = '이야기 인물 · 전용 초상'
     for cut in ('prologue', 'qufu', 'longmen', 'todaiji', 'lisbon', 'atlantis', 'malindi', 'hook', 'jina', 'gyeonwoo', 'jiknyeo', 'tarzan', 'rochefort', 'hook_piano'):
         k['song/cuts/' + cut] = '바닷길 노래 · 사건 원화'
     for region in ('kr', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'):
@@ -572,7 +581,7 @@ def write_manifest(found):
 
 def is_valid(key, keys):
     family_age = re.match(r'^portraits/family/(?:[a-z0-9_]+/)?(?:son|daughter)_age(?:5|10|15|20|40)(?:_v[1-5])?(?:_half)?$', key)
-    return key in keys or family_age or key.startswith(('portraits/player/', 'portraits/player-aged/', 'portraits/player-elderly/', 'portraits/player-ages-20261123/', 'portraits/courtiers/', 'portraits/building-managers/', 'portraits/gardeners/', 'interiors/royal-gardens/', 'landmarks/', 'map-discoveries/', 'characters/',
+    return key in keys or family_age or key.startswith(('map-cities/', 'map-ruins/', 'portraits/story-player/', 'gold/cuts/', 'jhook/cuts/', 'portraits/player/', 'portraits/player-aged/', 'portraits/player-elderly/', 'portraits/player-ages-20261123/', 'portraits/courtiers/', 'portraits/building-managers/', 'portraits/gardeners/', 'interiors/royal-gardens/', 'landmarks/', 'map-discoveries/', 'characters/',
                                           'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'figureheads/', 'relics/', 'relic-kinds/',
                                           'discovery-ends/', 'discovery-sheets/', 'duel/', 'street-folk/', 'npc-walk/', 'guide/', 'masterworks/'))  # 유물 사진은 tools/heritage, 유적 GIF 마지막 장면은 tools/ruin_gifs/end_frames.py
 

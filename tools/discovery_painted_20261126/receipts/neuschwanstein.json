@@ -1,0 +1,43 @@
+{
+  "id": "neuschwanstein",
+  "name": "노이슈반슈타인 성",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/neuschwanstein.png",
+  "sourceSha256": "aae48fafe05a1133883ef6c270fb87dd4b49b7fe911b1ee0203011c10efceb75",
+  "sourceMtimeNs": 1795661353502256700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/neuschwanstein.gif",
+      "sha256": "e56942c34ca077224a3fd69f7f64f95889934ee60de6b9cdd0ad334fb2d3d98b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/neuschwanstein.jpg",
+      "sha256": "eb0d4635788ca7477258ce215da24f8b7d9795bfc2799ea66842690b8321c339"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/neuschwanstein.webp",
+      "sha256": "b5721dcc1da0835e365fabf75619325ae25e06e05cc6146ba4043cb9d041db1a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/neuschwanstein.gif",
+      "sha256": "5326eb77f1b55f6f16f8134f7966747e2ba44fb80d19000166807dc541fea5c6",
+      "bytes": 3404267
+    },
+    {
+      "file": "images/discovery-ends/neuschwanstein.jpg",
+      "sha256": "6e1d210e0f8ed24a9cee89f3b7dd161855a7609e494637b615aadc85bcbd5ca0",
+      "bytes": 99511
+    },
+    {
+      "file": "images/discovery-sheets/neuschwanstein.webp",
+      "sha256": "dc89e1e661cd8d59a24473e5c6dfdb45a389f48a7f18a2c1388322d8a8bdbde0",
+      "bytes": 1726084
+    }
+  ]
+}

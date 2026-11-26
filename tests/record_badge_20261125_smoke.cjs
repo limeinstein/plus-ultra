@@ -5,11 +5,11 @@ const {pathToFileURL}=require('node:url');
 const {chromium}=require('../tools/procedural_art/node_modules/playwright-core');
 const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'artifacts/record-badge-20261125');fs.mkdirSync(OUT,{recursive:true});
 (async()=>{
- const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader']});
+ const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=angle', '--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  let p;const errors=[],report={layouts:[]};
  try{
   p=await browser.newPage({viewport:{width:1600,height:900}});p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-  await p.addInitScript(()=>{localStorage.clear();localStorage.setItem('pu.lang','ko');localStorage.setItem('pu.uiSize','normal');const raf=window.requestAnimationFrame.bind(window);window.requestAnimationFrame=cb=>cb.name==='loop'?setTimeout(()=>raf(cb),150):raf(cb);});
+  await p.addInitScript(()=>{localStorage.clear();localStorage.setItem('pu.lang','ko');localStorage.setItem('pu.uiSize','normal');const raf=window.requestAnimationFrame.bind(window);window.__recordClockHeld=0;window.requestAnimationFrame=cb=>{if(cb.name==='loop'){window.__recordClockHeld++;return 0;}return raf(cb);};});
   await p.goto(pathToFileURL(path.join(ROOT,'index.html')).href,{waitUntil:'domcontentloaded',timeout:120000});await p.waitForFunction(()=>window.G&&G.Game&&G.Game.sceneName==='title',null,{timeout:120000});
   await p.evaluate(async()=>{
    await G.Game.ensureGeo();G.Nav.init();const s=G.Game.state=G.State.newGame({name:'선장',nation:'PT',job:'explorer',age:24,birth:{m:1,d:1},st:{str:60,int:60,mar:60,cha:60},sk:{},lg:[],diff:'normal'});
@@ -28,7 +28,15 @@ const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'artifacts/record-bad
   });
   assert.equal(report.purchase.hasItem,true);assert.equal(report.purchase.paid,report.purchase.price);assert.ok(report.purchase.record);assert.ok(report.purchase.record.text.includes(report.purchase.desc));assert.equal(report.purchase.busy,false);
   assert.ok(!report.purchase.toasts.some(t=>t.includes(report.purchase.name)||t.includes('단서를 얻었다')));
-  assert.equal(await p.locator('.record-badge').innerText(),'새 기록 '+report.purchase.unread+'건');
+  assert.equal(await p.locator('.record-number').textContent(),String(report.purchase.unread));
+  await p.mouse.move(800,100);
+  assert.equal(await p.locator('.record-tooltip').isVisible(),false,'평소에는 기록 문구를 숨긴다');
+  await p.locator('.record-badge').hover();
+  assert.equal(await p.locator('.record-tooltip').innerText(),'새 기록 '+report.purchase.unread+'건');
+  assert.equal(await p.locator('.record-tooltip').isVisible(),true,'마우스를 올릴 때만 기록 건수 문구');
+  await p.screenshot({path:path.join(OUT,'badge-tooltip-hover.png')});await p.mouse.move(800,100);
+  assert.equal(await p.locator('.record-tooltip').isVisible(),false);
+  assert.equal(await p.evaluate(()=>G.Town.runtime().items.every(it=>!it.tag&&!it.tagOn)),true,'상시 건물 이름표를 만들지 않는다');
   const sources=await p.evaluate(()=>{
    const text='같은 내용을 서로 다른 곳에서 들은 기록 시험';
    const a=G.Records.add('evidence',{text,source:'술집'}),b=G.Records.add('evidence',{text,source:'후원자'}),again=G.Records.add('evidence',{text,source:'술집'});
@@ -78,7 +86,7 @@ const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'artifacts/record-bad
   // 이미 읽은 기록의 보관 한도를 넘겨도 미열람 원문은 삭제하지 않는다.
   const retention=await p.evaluate(()=>{const k=G.BALANCE.notice,keep=k.recordKeep;k.recordKeep=1;const before=G.Records.items().filter(e=>!e.read).map(e=>e.id);G.Records.add('history',{text:'미열람 보존 확인'});const after=G.Records.items().map(e=>e.id);k.recordKeep=keep;return before.every(id=>after.includes(id));});assert.equal(retention,true);
   await p.setViewportSize({width:1600,height:900});await p.evaluate(()=>{G.Game.setUiSize('normal');G.Game.go('city',{cityId:0,load:true});});await p.waitForFunction(()=>!G.UI.busy()&&!G.Scenes.city.isBusy());
-  await p.locator('.record-badge').click();await p.getByRole('button',{name:'모두 읽음',exact:true}).click();assert.equal(await p.evaluate(()=>G.Records.unread()),0);await p.keyboard.press('Escape');assert.equal(await p.locator('.record-badge').innerText(),'기록함');
+  await p.locator('.record-badge').click();await p.getByRole('button',{name:'모두 읽음',exact:true}).click();assert.equal(await p.evaluate(()=>G.Records.unread()),0);await p.keyboard.press('Escape');assert.equal(await p.locator('.record-number').isVisible(),false);assert.match(await p.locator('.record-badge').getAttribute('aria-label'),/^기록함/);
   await p.locator('.notice-btn').click();await p.getByRole('button',{name:'증거·역사 기록함',exact:true}).click();await p.waitForSelector('.record-browser');await p.keyboard.press('Escape');
   assert.deepEqual(errors,[]);report.errors=errors;fs.writeFileSync(path.join(OUT,'report.json'),JSON.stringify(report,null,2));console.log('통과: 실제 증거 구매·역사 발생·배지·대화 보호·원문/그림·읽음·저장 복원·3장면/4크기·콘솔 오류 0');
  }catch(e){if(p){console.error(await p.evaluate(()=>document.querySelector('#ui').innerText.slice(-1700)).catch(()=>''));await p.screenshot({path:path.join(OUT,'failure.png')}).catch(()=>{});}throw e;}

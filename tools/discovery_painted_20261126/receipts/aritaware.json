@@ -1,0 +1,43 @@
+{
+  "id": "aritaware",
+  "name": "아리타 채색 자기",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/aritaware.png",
+  "sourceSha256": "ff21432b238b1cbfd7ee2b2ce8cbb42a7cc8b9ab29c684e1bb9275541b7471b9",
+  "sourceMtimeNs": 1795660195664932000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/aritaware.gif",
+      "sha256": "13426452e361f50fea1fd4550e95c9b9d40828031ab3173e3aeb8128dafe8086"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/aritaware.jpg",
+      "sha256": "8daea11eed531142292db9d97a8c8dfe63e50108dd044241eb51032961ca5d4f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/aritaware.webp",
+      "sha256": "db3d21e632c87b258328949f8d172392027b30e5eba6e2ba06094f5ce5d5bc6a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/aritaware.gif",
+      "sha256": "f4381c9f166da3f063a3b989abf7350d13e21f7014296bd1da22b46abdd75ea8",
+      "bytes": 3653833
+    },
+    {
+      "file": "images/discovery-ends/aritaware.jpg",
+      "sha256": "a68963675b2d73bb3f99343192fa108589ab64db2b58cba9c15d497d992d8b01",
+      "bytes": 95092
+    },
+    {
+      "file": "images/discovery-sheets/aritaware.webp",
+      "sha256": "8410c5a4371146af52a06fcbef2a8f6d67b84d1c9d98689f382e10ee3b04fb25",
+      "bytes": 1613742
+    }
+  ]
+}

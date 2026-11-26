@@ -11,6 +11,12 @@
   'use strict';
   var U = G.U, UI = G.UI;
   var SL = G.StorySelect = {};
+  SL.begin = async function (story) {
+    if (!G.Game.renderer) {
+      await G.Loader.during('항해를 준비하는 중…', function () { return G.Game.prepareRenderer(); });
+    }
+    return story.begin();
+  };
   G.STORY_MODES = [
     { id: 'photo', hero: '마테우스 다 코스타', title: '아버지의 사진', city: 0, page: 'eu', year: '1480년 · 리스본', bg: '#2f6b3a', dx: -171, dy: -196,
       face: 'portraits/player/navigator_white', half: 'characters/player_half_navigator_white',
@@ -282,6 +288,6 @@
     SL._go = goPage; // 시험용
     setPage(0); focus(0);
     var v = await win.result;
-    if (v === 'go' && picked) await picked.begin();
+    if (v === 'go' && picked) await SL.begin(picked);
   };
 })(window.G = window.G || {});

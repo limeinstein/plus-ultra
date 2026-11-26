@@ -1,0 +1,43 @@
+{
+  "id": "jogfalls",
+  "name": "게르소파 폭포",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/jogfalls.png",
+  "sourceSha256": "2d9e57689f7a77e3c817679922d774d873bfa110eafea31c5365e01e13b42927",
+  "sourceMtimeNs": 1795659647814029600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/jogfalls.gif",
+      "sha256": "19096b450eae740eb39631c5c4511af33bd5ade5a7ecd3e4bc1089e3760cc381"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/jogfalls.jpg",
+      "sha256": "b3c4f9643de96e957d96bf132bd77dbf42210c7c4fbf8e1290847f0d4d81f8cf"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/jogfalls.webp",
+      "sha256": "98f8df00c1ecfd02f583d33d84156e2719591d90068dcb0b65f5751c4589467a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/jogfalls.gif",
+      "sha256": "a6a0a391520f85f8d5412e26b6a30c3c0ce7e424bd7dab4acfe5453ba5c4ffde",
+      "bytes": 3637796
+    },
+    {
+      "file": "images/discovery-ends/jogfalls.jpg",
+      "sha256": "d4442d7b4a91c561ffa592da58dfeaaf96d880efb6e45d0cb4a6008dfa6a2ad9",
+      "bytes": 92935
+    },
+    {
+      "file": "images/discovery-sheets/jogfalls.webp",
+      "sha256": "f71a28b83d52f4c1bd0965829e3cfee48411fe1aa2f2a48df1d5f2b6390dec3b",
+      "bytes": 1621450
+    }
+  ]
+}

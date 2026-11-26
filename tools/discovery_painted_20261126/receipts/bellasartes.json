@@ -1,0 +1,43 @@
+{
+  "id": "bellasartes",
+  "name": "멕시코 예술궁전",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/bellasartes.png",
+  "sourceSha256": "c816a299f278895b401ee3f13fd65050c4d83af3b1331d0edada9b7709d10819",
+  "sourceMtimeNs": 1795661352207651000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bellasartes.gif",
+      "sha256": "f0ed294534197a9194d934df114914d814c9bc19d3761901dc75c55f6cd181b3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bellasartes.jpg",
+      "sha256": "2a1d9d3b244c1046af2e382a217629f883740f2a27602a6c0532ab8d144efb70"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bellasartes.webp",
+      "sha256": "efc3dfc1f445591e79405fdf3bd784fe046d295a4428951ac7542e0b1e66f7d2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bellasartes.gif",
+      "sha256": "dd17d2843bc5935bf34b63796bf92e41ab71945caa5c38c96ac975e43bf6e5ec",
+      "bytes": 3481469
+    },
+    {
+      "file": "images/discovery-ends/bellasartes.jpg",
+      "sha256": "a301cc2c697fb33075db62de82e698692e743e71f91b86dc17c228be5c57186e",
+      "bytes": 98198
+    },
+    {
+      "file": "images/discovery-sheets/bellasartes.webp",
+      "sha256": "c56434c8f8f75532d5a3fd89e7c2f0760bdf80e6f43e0cfeb6e6070112b02ad4",
+      "bytes": 1680916
+    }
+  ]
+}

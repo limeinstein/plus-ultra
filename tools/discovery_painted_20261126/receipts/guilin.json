@@ -1,0 +1,43 @@
+{
+  "id": "guilin",
+  "name": "계림 산수 — 이강의 봉우리",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/guilin.png",
+  "sourceSha256": "2256244906a1c8e75724b127eefdbfa53e3d024b6a4cf4d6ab1a61e96cb0a9fd",
+  "sourceMtimeNs": 1795659646551498900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/guilin.gif",
+      "sha256": "a501608a83e8af765bc2542a633d013c0c15dde376527581027fcc7d4cacffbb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/guilin.jpg",
+      "sha256": "104d3bad672a7fa27087c4b8c629fbf64ce4fa35bf6696399a0c1e6cf462be37"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/guilin.webp",
+      "sha256": "3c751a7acfc72b06ce386915a5e469d84e059e1698124ee86fa012141f02558c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/guilin.gif",
+      "sha256": "eca43d1c4aeac0983f06cec8608109e2309a9a6bbd7c251598c3992666b9fd78",
+      "bytes": 3171231
+    },
+    {
+      "file": "images/discovery-ends/guilin.jpg",
+      "sha256": "725e9b197cf4c2d0fe14bad73e317111f6ea129384e37b7b98493e5f1c259279",
+      "bytes": 87512
+    },
+    {
+      "file": "images/discovery-sheets/guilin.webp",
+      "sha256": "c3a3914eb1752af585257315938213d2aa4578d66ca472a63ffbdc061794f962",
+      "bytes": 1508918
+    }
+  ]
+}

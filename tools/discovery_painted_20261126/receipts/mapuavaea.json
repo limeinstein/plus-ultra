@@ -1,0 +1,43 @@
+{
+  "id": "mapuavaea",
+  "name": "마푸아 바에아 분수 바위",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/mapuavaea.png",
+  "sourceSha256": "76452d8b6208c8a463d0ebca911edaf9622a973bdf9df3190297e1d56585bd9c",
+  "sourceMtimeNs": 1795659644847308000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mapuavaea.gif",
+      "sha256": "d6b074cd69b75609d920cf5a79526560065f237f0e0c16a4aeb10d80adfe3271"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mapuavaea.jpg",
+      "sha256": "2c7c055b5cfc4b29b1a8bfcd40d53f5b6871f6e0f4338c0817a8d05b3d14b0a7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mapuavaea.webp",
+      "sha256": "113ebaf862f7d462cf843b6518253885f5fe27eb96622127d93cdb09fa8b59bd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mapuavaea.gif",
+      "sha256": "dda0ac3326afaa02e6fa5b072670c876fb8f6ab820e8308c9f424e282017516e",
+      "bytes": 2930772
+    },
+    {
+      "file": "images/discovery-ends/mapuavaea.jpg",
+      "sha256": "ea05513ff9010f6d06738b93ad5d764b380e030474af1e00a3a528a10e1980da",
+      "bytes": 96917
+    },
+    {
+      "file": "images/discovery-sheets/mapuavaea.webp",
+      "sha256": "1d578ca1e43896405d8845afb8dcb569b9137073df2be8f24e8a29a2e1d62125",
+      "bytes": 1677150
+    }
+  ]
+}

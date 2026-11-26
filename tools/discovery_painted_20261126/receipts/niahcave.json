@@ -1,0 +1,43 @@
+{
+  "id": "niahcave",
+  "name": "니아 대동굴",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/niahcave.png",
+  "sourceSha256": "58c89452ce8252f07f5f1d44544f5af82398fc89e66bf5fe5cbdbdac00575961",
+  "sourceMtimeNs": 1795662634020342300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/niahcave.gif",
+      "sha256": "68813889e45492640577436ba3def752a845cbd2c7d7bd2a094e6fe6df26b867"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/niahcave.jpg",
+      "sha256": "9de8dbcabd9ab91ef8612f89a262d3c0fd2f8e0770f479528d4fce81e3f1cba2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/niahcave.webp",
+      "sha256": "70a58ef875e9ed4977e55128cc1819d2e087667087b25cb0b6d696c7c4522774"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/niahcave.gif",
+      "sha256": "c19287978f7a54b0f242057491a10d00400353d6d0f0324d239e7de8a1b0f4d2",
+      "bytes": 3768515
+    },
+    {
+      "file": "images/discovery-ends/niahcave.jpg",
+      "sha256": "90d93928245423735a3e2b0c5cabb485d05a6b3d8f596525c5518fbe7586ca4e",
+      "bytes": 98789
+    },
+    {
+      "file": "images/discovery-sheets/niahcave.webp",
+      "sha256": "745fcb43fa443e0bb6dea45da52e9c0d33b3ceca21cb14f5095a90b58d032fe7",
+      "bytes": 1737464
+    }
+  ]
+}

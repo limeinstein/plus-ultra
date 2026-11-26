@@ -1,0 +1,43 @@
+{
+  "id": "iznikware",
+  "name": "이즈니크 튤립 접시",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/iznikware.png",
+  "sourceSha256": "831245d2cbb6ff5765ed44c5278357dcadf9ea72fc9e30c523a1d65490b17e07",
+  "sourceMtimeNs": 1795660143510395700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/iznikware.gif",
+      "sha256": "1aa1301db5ac48f4599033ef9b77ff201bb66471753970fb1a7f4068b54974a9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/iznikware.jpg",
+      "sha256": "69fc6c5ebb45488c6a4a43a5712bc86e5f5c8fef87d9f11dae7c505ef898efcf"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/iznikware.webp",
+      "sha256": "b91f740b9f4e0ab8aaa2781493e9aa1162e3e4c729d2389de8510aafba4e27ac"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/iznikware.gif",
+      "sha256": "87f9da77d88ef6241269917d361d20f75b8304b413e6d02c24bf5541cb574a27",
+      "bytes": 3605349
+    },
+    {
+      "file": "images/discovery-ends/iznikware.jpg",
+      "sha256": "b722982ca179e691a734d43771b303b3843fdfeef41eb39ced25630f0237f46d",
+      "bytes": 108706
+    },
+    {
+      "file": "images/discovery-sheets/iznikware.webp",
+      "sha256": "ff404db3361c4a7391d51338119a532087fc04610687dd7f12d93a558ceb9916",
+      "bytes": 1824280
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "phuket",
+  "name": "푸켓",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/phuket.png",
+  "sourceSha256": "5b18e4c0448b4a471abcffe3b2823b6da571de47f6cbe7c5eeea6a529e26045f",
+  "sourceMtimeNs": 1795659658690333200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/phuket.gif",
+      "sha256": "8b1374cfb2e2038f7059b2e61ade30ca63b37547cad2aa6f3ef23c948e824736"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/phuket.jpg",
+      "sha256": "43ab2e3ccf9f95b9dc18d119a9de57f0f65415f60cdc2def2acd05ac042abcd8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/phuket.webp",
+      "sha256": "9f29044f15f0b735d0e31889f4253ec12daf61d48fc5d3d8ca38ea43bd8fbda2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/phuket.gif",
+      "sha256": "6ee483aa9fe739539d86cfd5e74383d211d65f61e6d9c5da4553863a70ca939b",
+      "bytes": 3013763
+    },
+    {
+      "file": "images/discovery-ends/phuket.jpg",
+      "sha256": "eb03f0fcac3dbb6c8953e9ba3af04882eb7bdb33aadfb1b0d2d2b785b0cd165c",
+      "bytes": 104748
+    },
+    {
+      "file": "images/discovery-sheets/phuket.webp",
+      "sha256": "1a61ca2453d3e7a349e4703ce334a9b501fcc1e181e8844c138510721afe4ab2",
+      "bytes": 1852782
+    }
+  ]
+}

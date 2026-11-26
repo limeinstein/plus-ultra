@@ -1,0 +1,43 @@
+{
+  "id": "goldenbarrel",
+  "name": "금호 선인장",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/goldenbarrel.png",
+  "sourceSha256": "b0c4054eadcf8d7cee9a6b38edee4842b0bd74da5f1853bb7658a36b8b7d9a91",
+  "sourceMtimeNs": 1795659656575553100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/goldenbarrel.gif",
+      "sha256": "1bd72084e4f1e9252f89b49f833c5ed28ba3eda5549ee38fa4506972df4b586b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/goldenbarrel.jpg",
+      "sha256": "b7fd00d69ee85c72c12c1022371c449a565fc3e1e9b0269ab0116736896ed239"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/goldenbarrel.webp",
+      "sha256": "54a7aec81c8264cfc69c595a55b79b4434fea4519314f5e75c3a5ac09bc0c4b4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/goldenbarrel.gif",
+      "sha256": "70b6b53ce9c26798aa2738ba1850a2288f8aef604f2d3a3f7782b13f71e65717",
+      "bytes": 3304968
+    },
+    {
+      "file": "images/discovery-ends/goldenbarrel.jpg",
+      "sha256": "a54c0db3d9aa3d01d637792507e51981d84a8c6c9fcda6ae0cd5ff2ede0dc05d",
+      "bytes": 94854
+    },
+    {
+      "file": "images/discovery-sheets/goldenbarrel.webp",
+      "sha256": "3f3bca981d65f53307c46a3b07e5f59c9eb499cb46c89a8f578ba584dd9a0c66",
+      "bytes": 1636440
+    }
+  ]
+}

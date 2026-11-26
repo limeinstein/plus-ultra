@@ -1,0 +1,43 @@
+{
+  "id": "seismo",
+  "name": "후풍지동의",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/seismo.png",
+  "sourceSha256": "d2986df3d69e54fe88c189c9a5384a7c0338efaafd333701df8fae1fd1db79a3",
+  "sourceMtimeNs": 1795659891670339300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/seismo.gif",
+      "sha256": "71200b18b17d56fec87abe28cc56ed76bfa2ac741ca22a3ff20af7a82d161e59"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/seismo.jpg",
+      "sha256": "df77ead3d143711acdec05fc22f87f615bdd8cfe9413ec579d41076c26b48355"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/seismo.webp",
+      "sha256": "00e35d6cb300ebf454bb928b1ac95ff7ba9d58013f90d0a6bebe1d499f44e043"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/seismo.gif",
+      "sha256": "378ecf40a153c6a3a9028a0d8c3c25c3bffa31c0419b54bfb7c4f2daf586bea5",
+      "bytes": 3328003
+    },
+    {
+      "file": "images/discovery-ends/seismo.jpg",
+      "sha256": "e4d25b5e0765b47a359d5b50c25319ed2d6510333f7c5f5022ddd6faa21bc083",
+      "bytes": 84779
+    },
+    {
+      "file": "images/discovery-sheets/seismo.webp",
+      "sha256": "4f89415a2f231ec8c7193ab8e9b7be3ecb05a9b2f3690d2415ae408b87dbe608",
+      "bytes": 1430030
+    }
+  ]
+}

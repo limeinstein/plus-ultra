@@ -1,0 +1,43 @@
+{
+  "id": "mapungubwe",
+  "name": "마풍구브웨",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mapungubwe.png",
+  "sourceSha256": "ee73ae75cd809121a73914120ee91c6dd804e1a03d2c3afa33a77ab15c02cf11",
+  "sourceMtimeNs": 1795662323231538500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mapungubwe.gif",
+      "sha256": "757a24fb679700e7d16fd7009ce18f32ab1fa88153ecb714f04442f54205389b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mapungubwe.jpg",
+      "sha256": "39a49301920f1f641fc573b6fab28a6921fd981be1a0faa30986755b7e455b04"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mapungubwe.webp",
+      "sha256": "755c6459850775d9d7c6af857491f6a9e59754447c15ef99d9be6d57cf44b4f1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mapungubwe.gif",
+      "sha256": "a8fa45e80c90f7554b4000d37172bc8a76292faa8aa0a3b30a8f25164b105ae0",
+      "bytes": 3535586
+    },
+    {
+      "file": "images/discovery-ends/mapungubwe.jpg",
+      "sha256": "640b1d88dfc9685555a5e75f4c01f7223ffa5a613b333a1e054d78d3501002b1",
+      "bytes": 101396
+    },
+    {
+      "file": "images/discovery-sheets/mapungubwe.webp",
+      "sha256": "296085af4344da5cc3fd5f40746b86c8a69ff74629fcc3cc81e9c9907eb6ae9b",
+      "bytes": 1759452
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "palenque",
+  "name": "팔렝케",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/palenque.png",
+  "sourceSha256": "27e38786f83dd862403225282d300025d495928a646cc9f16a76f0919c2fbd67",
+  "sourceMtimeNs": 1795662123775870100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/palenque.gif",
+      "sha256": "293ed93d456f9b11151aa0ca5caf620f9325c8d60165d74928ec5641ae6864d0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/palenque.jpg",
+      "sha256": "9f542b5b5c1a98af9cea2d89d2b8affb8179b99f5ade8ec17570156cd0b452e6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/palenque.webp",
+      "sha256": "707715e97270933f05d88f17b269a609c99013e7fb71b986f2e308883efbe210"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/palenque.gif",
+      "sha256": "3ae19da541bcbcb3722c82e062cacc9071bdec072cfd98444b1b11c44da5659d",
+      "bytes": 3753451
+    },
+    {
+      "file": "images/discovery-ends/palenque.jpg",
+      "sha256": "288d9b63782c33e67744b8380794d90904230e8ef85ca43d2f7ff88aef56133e",
+      "bytes": 104713
+    },
+    {
+      "file": "images/discovery-sheets/palenque.webp",
+      "sha256": "7781598c76edce660781debdee3dca067ed2eca0d485db5998f45a9ecbfd8405",
+      "bytes": 1863192
+    }
+  ]
+}

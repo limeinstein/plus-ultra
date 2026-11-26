@@ -1,0 +1,43 @@
+{
+  "id": "amazon",
+  "name": "아마존 강",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/amazon.png",
+  "sourceSha256": "5318efc0c26c1388ef36ae7827bbb42801e38998e9abb618608bead4d2a3e245",
+  "sourceMtimeNs": 1795659645608641900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/amazon.gif",
+      "sha256": "f6cd8785e6dd965e7972a8f4de5a699366ffa63f486e0aa3f7b31057ee7ba99f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/amazon.jpg",
+      "sha256": "a3c34ed3a3a2a127a9e00b98e3b58c4687e13c57b5dce994eaf67428748c1cc4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/amazon.webp",
+      "sha256": "249ead239630abcb0ff6eb1ee95c76ce54d8fefe1951e45fd4131f1dc408a206"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/amazon.gif",
+      "sha256": "b0d635120628e736a914a9346f0f760c34bb81b3090a996962efab0080f9671e",
+      "bytes": 3108045
+    },
+    {
+      "file": "images/discovery-ends/amazon.jpg",
+      "sha256": "51616e41c752ab54e10d17b288b5a6018944781b548563e2b92ad19b9ed339b6",
+      "bytes": 106135
+    },
+    {
+      "file": "images/discovery-sheets/amazon.webp",
+      "sha256": "dd802d6254e7ea17d5e5e701960c464b01ef5568e9352e80b5c5a67a7647b6a1",
+      "bytes": 1852260
+    }
+  ]
+}

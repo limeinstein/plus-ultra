@@ -1,0 +1,43 @@
+{
+  "id": "nefertiti",
+  "name": "네페르티티 흉상",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/nefertiti.png",
+  "sourceSha256": "da53bdcb3721e30be2c285e860a3dc045e9e7f27607fef23be609b8279933eac",
+  "sourceMtimeNs": 1795660503610481900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nefertiti.gif",
+      "sha256": "ce049df238548933aa15a78b05a2844abd1ea88d7812621ddd206650fedff25b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nefertiti.jpg",
+      "sha256": "d0efa4fe67ba14cdb7de09a78a3da37101cd6c6244d7bdb16aa10acf96e712e7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nefertiti.webp",
+      "sha256": "00a533864f5e1e84b0ef5e8118088aa9644f03e26c29ecb93152a88ee9b47956"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nefertiti.gif",
+      "sha256": "c72f2c95e8e8361c7137030e3736c73f972106c8d80df064c148da11ceef735e",
+      "bytes": 3407231
+    },
+    {
+      "file": "images/discovery-ends/nefertiti.jpg",
+      "sha256": "49df5bfcd07db3bd068e732c6a36cf6bcad7ec53fed4ffec34e5539e1e33b1ed",
+      "bytes": 86639
+    },
+    {
+      "file": "images/discovery-sheets/nefertiti.webp",
+      "sha256": "4ec0d0467235de33865cb8fc62f18366eed53e85e4416f5afd6b4725788ce5ae",
+      "bytes": 1435200
+    }
+  ]
+}

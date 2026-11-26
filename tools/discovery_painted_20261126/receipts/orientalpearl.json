@@ -1,0 +1,43 @@
+{
+  "id": "orientalpearl",
+  "name": "동방명주 탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/orientalpearl.png",
+  "sourceSha256": "4ad8135235de34beae5cb117d9a7d517faf22c77594aa56321e3af7944f3667a",
+  "sourceMtimeNs": 1795662813049954600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/orientalpearl.gif",
+      "sha256": "ea313d61827fbffb5be8889e9b5e98914571ad50dafa7fa337948caf5d3de19a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/orientalpearl.jpg",
+      "sha256": "ce7064f7d4078dbc393782c2142f3d0e1214c976de1ba08ebb9f87c3aa1b0bd5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/orientalpearl.webp",
+      "sha256": "f5e188209a212249b85135d4e1f8c44f5aa5f75b3a4b26de2e3dfad4eaf05dfc"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/orientalpearl.gif",
+      "sha256": "da2f4e53f6622f0d2eeef50a079e9b996cd25343b86d67c6801f0f8f33b017bd",
+      "bytes": 3228838
+    },
+    {
+      "file": "images/discovery-ends/orientalpearl.jpg",
+      "sha256": "54d84e95ce35f333674894f82ecf4a751a111e39663591512a3097bcd5eb2b05",
+      "bytes": 86385
+    },
+    {
+      "file": "images/discovery-sheets/orientalpearl.webp",
+      "sha256": "0b61c032ef4a2658063a4bc53752dfc24d87c5213fb2170d8014adf0593dca17",
+      "bytes": 1468830
+    }
+  ]
+}

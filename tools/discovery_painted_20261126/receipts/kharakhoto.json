@@ -1,0 +1,43 @@
+{
+  "id": "kharakhoto",
+  "name": "카라호토 — 검은 성",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kharakhoto.png",
+  "sourceSha256": "28505597676403e22dc2a87c9ec8e743fba71371042871e6a29d3991ee8ebe2c",
+  "sourceMtimeNs": 1795662530371580100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kharakhoto.gif",
+      "sha256": "8bf9bf274d9bcd4a254970310814d0f6c742ab63276f488e0070c5b4791d992f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kharakhoto.jpg",
+      "sha256": "0509edc69487f868a8c0c008e1253ea84b98ba7fe969206b0d75b28039b26a61"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kharakhoto.webp",
+      "sha256": "2569919188772d893de319bdd060447627ed693d30c17f38c59f5431dabc782c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kharakhoto.gif",
+      "sha256": "4afc8954a4afd99c6e1eb6af59cd42efb992a6e6cd52e19809ff2aa5153fe74c",
+      "bytes": 2931803
+    },
+    {
+      "file": "images/discovery-ends/kharakhoto.jpg",
+      "sha256": "90a430b9241b4a13c8747251ac969ccfb7a3ca58f8a07996a8acc26f68924cc5",
+      "bytes": 86121
+    },
+    {
+      "file": "images/discovery-sheets/kharakhoto.webp",
+      "sha256": "7a5edff608792e24585b1e5bdb44e60319c54037db3b66991cc6be1ec63dcf23",
+      "bytes": 1446118
+    }
+  ]
+}

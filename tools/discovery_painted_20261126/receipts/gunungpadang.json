@@ -1,0 +1,43 @@
+{
+  "id": "gunungpadang",
+  "name": "구눙 파당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/gunungpadang.png",
+  "sourceSha256": "8cd1d3fb3a4d94844cb71c8d7ae7d5417edbe08815eb567fd1a6cedf6af4801f",
+  "sourceMtimeNs": 1795662569474261800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/gunungpadang.gif",
+      "sha256": "9538b2d1cc92cf7fe3a3121147a413bdcbb0ffbd795f21dc95b4332bf98c20c5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/gunungpadang.jpg",
+      "sha256": "12a84bbf518d8564c89ecd59bb6fbbf05f8be0796ab4ebd16fdb01cae8cd718c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/gunungpadang.webp",
+      "sha256": "d99d0a5715c6e3ef94d9f23efa8f949dad0e39b8d53ef25b7f73f82405de13d6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/gunungpadang.gif",
+      "sha256": "428b97d0deacadcfec75ef08eadbdd1540ff791b569f90201d0f65b678c2191e",
+      "bytes": 3681071
+    },
+    {
+      "file": "images/discovery-ends/gunungpadang.jpg",
+      "sha256": "88ec3f6cb6879a22de836a3576ce4383db78c9b48e39c8c94dd95d2b54aed20c",
+      "bytes": 99285
+    },
+    {
+      "file": "images/discovery-sheets/gunungpadang.webp",
+      "sha256": "f321896eac1ac5c7514ff52db96e9dc2378b5f5e338d4ffb7fb9547dab9d0167",
+      "bytes": 1733232
+    }
+  ]
+}

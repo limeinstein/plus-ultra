@@ -1,0 +1,43 @@
+{
+  "id": "somnath",
+  "name": "솜나트 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/somnath.png",
+  "sourceSha256": "4a3ff624ac49ded5de38b8155536f79305c802806fdf794d307721c823a504cf",
+  "sourceMtimeNs": 1795663196416031100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/somnath.gif",
+      "sha256": "af44a74c20659230680c21dbb8e6f7720b5749c125da54844e9598914ddd6ec5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/somnath.jpg",
+      "sha256": "97df6097a1acebed1ddc5c2c9742556a529fff995785c5f8e8dd42c045510fbf"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/somnath.webp",
+      "sha256": "ec4632b38393bc00ba46b56846863f7b6816b2919ac0447ed995c4756dc73ee2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/somnath.gif",
+      "sha256": "8fdce5949a47d56d475c50616f6918cd2dc7575065d3b8f762df3609befa48be",
+      "bytes": 3184211
+    },
+    {
+      "file": "images/discovery-ends/somnath.jpg",
+      "sha256": "0f71605c97c10b54d45eef772fc44ed885970bdaf672e9a883685ee9b777a76f",
+      "bytes": 85605
+    },
+    {
+      "file": "images/discovery-sheets/somnath.webp",
+      "sha256": "99b6187f173d26d7801c6131e1616a5c0ddbc09058aa58f9208c876736031e93",
+      "bytes": 1463176
+    }
+  ]
+}

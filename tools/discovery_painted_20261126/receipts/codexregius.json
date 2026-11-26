@@ -1,0 +1,43 @@
+{
+  "id": "codexregius",
+  "name": "왕의 사본 — 『에다』 노래책",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/codexregius.png",
+  "sourceSha256": "5749d39c57c2bc43fa863d490ab63f1c2e02193aa3959c2ce4e4cff32dc2281e",
+  "sourceMtimeNs": 1795663219716869300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/codexregius.gif",
+      "sha256": "207562efb796ffe09e82189a952f26d6442f00e0a0644dda9d2fa676cfe181ff"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/codexregius.jpg",
+      "sha256": "42bbe2cb7233501cd405846c46edef0fcf0e8faf3ca2a66cf27d16623a26dfbe"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/codexregius.webp",
+      "sha256": "6463305c5fde7c49de085c90fd01f73fe2086912ac602c7bf05515ee7399f6a5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/codexregius.gif",
+      "sha256": "6d02540e9f5040bd3295f952eb165d8b1ff15151b25b0f12131bf0d3f43a9050",
+      "bytes": 3615101
+    },
+    {
+      "file": "images/discovery-ends/codexregius.jpg",
+      "sha256": "dd7a62cd6062466e27eb0773fd6bdf4f6fcb82117a1d4e3569f48c6b9596b2e0",
+      "bytes": 89817
+    },
+    {
+      "file": "images/discovery-sheets/codexregius.webp",
+      "sha256": "9fd6c7acf254a366760d285ce1b8def2528c1dc620b5fbe3402e0fb93c0ad851",
+      "bytes": 1549014
+    }
+  ]
+}

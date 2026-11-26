@@ -1,0 +1,43 @@
+{
+  "id": "qutb",
+  "name": "쿠트브 미나르",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/qutb.png",
+  "sourceSha256": "355dcf9c467f109735ef2e78798570219a9340431640e718b5a0762d04b7f449",
+  "sourceMtimeNs": 1795659491819346100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/qutb.gif",
+      "sha256": "6ce777d637fc8a11bb8e27901b3a5262afe17a0e56dadf1c0bb27117e95386af"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/qutb.jpg",
+      "sha256": "dfcbed41b5dc2c63f1c348915e163ec4696364ade6383d5dafca8bafc314408e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/qutb.webp",
+      "sha256": "de698b1e723ecc7898e4e9f6369d2a5731c9627e043a6ae66f23e78c75a6cc16"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/qutb.gif",
+      "sha256": "ba78e12df34183c674db4ec721406fd39a3a0ef9e97574f37a6e0e4eeb835cd8",
+      "bytes": 3331616
+    },
+    {
+      "file": "images/discovery-ends/qutb.jpg",
+      "sha256": "3bdc6e933a53c808790cdeb73c8bca971ccfef693b901c2bd0d8005be30d7bbb",
+      "bytes": 91105
+    },
+    {
+      "file": "images/discovery-sheets/qutb.webp",
+      "sha256": "ea0760618ed6847bb3b775fcd6b04b69ff8d650eca538ec96d531859368bec59",
+      "bytes": 1520444
+    }
+  ]
+}

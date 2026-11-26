@@ -1,0 +1,43 @@
+{
+  "id": "nemrut",
+  "name": "넴루트산의 신상",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/nemrut.png",
+  "sourceSha256": "c10bdc502e8bb58f366cf55702275f8dcc17badb208980a76cbf14e5de79ccf7",
+  "sourceMtimeNs": 1795662126587797500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nemrut.gif",
+      "sha256": "43af56b872922431a0d72b6a4467106db66fee6a48fead58911590e1ef3e446f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nemrut.jpg",
+      "sha256": "cdca3f95c9dccecf22950268c1ac384a4eaddbf7dcfed334e9aeb98412f4a31d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nemrut.webp",
+      "sha256": "cc7b005ba9f1ec72c1295f834747307145e8adcb2eb68e27e1c6d7085d80e937"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nemrut.gif",
+      "sha256": "619cd06d192643863dfd531365b4d9e4c095222e29ffcfa7ccea3ffcb2b67fe3",
+      "bytes": 3561616
+    },
+    {
+      "file": "images/discovery-ends/nemrut.jpg",
+      "sha256": "60f3af50a1b84d5ac9b307a8d0cc9120cd13de9e0c603d16786837e6a357b2d6",
+      "bytes": 90737
+    },
+    {
+      "file": "images/discovery-sheets/nemrut.webp",
+      "sha256": "0ff29766315eecff99ae8390e47120f57cafb8a1d394b669dbbd351b93c7e223",
+      "bytes": 1585296
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "lemon",
+  "name": "아말피 레몬",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/lemon.png",
+  "sourceSha256": "26246558ee7b719b0904ef6315f95ebad8be0dbaba6d1d18bc57a39a793a5132",
+  "sourceMtimeNs": 1795659650794164100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/lemon.gif",
+      "sha256": "ee6fc0cec8bb400e188c3620ba582d357830da787eb2feb6c71b0a9cf64cdfcf"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/lemon.jpg",
+      "sha256": "8e953216113bd82d7f48f95de92ece94be799946ddc1ca09ba84574fd3bcd701"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/lemon.webp",
+      "sha256": "f7bcb45fd0fe0c9cbf9252a3e16835bbdf1f68b99a4db06174a45d43581326d4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/lemon.gif",
+      "sha256": "22d1a0f43c7c940db303c7b0e79c28acc30a2bb024945574d151b39903d02e5b",
+      "bytes": 3383550
+    },
+    {
+      "file": "images/discovery-ends/lemon.jpg",
+      "sha256": "3585df0ed902c61c3f4a290991222b97455562133fdf71ee8e959ef63fb7ac56",
+      "bytes": 102225
+    },
+    {
+      "file": "images/discovery-sheets/lemon.webp",
+      "sha256": "3d9824c3e8a71fb3d50ed6f88d07f8d8462f14f93bd2f2d1d65bb98f3b829543",
+      "bytes": 1720876
+    }
+  ]
+}

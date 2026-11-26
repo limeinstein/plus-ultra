@@ -1,0 +1,43 @@
+{
+  "id": "kohinoor",
+  "name": "코이누르 다이아몬드",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kohinoor.png",
+  "sourceSha256": "d97180c33a11c68018147f15457e289cd685017cc0e97c7f31c5073987cdb6e5",
+  "sourceMtimeNs": 1795660146831793300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kohinoor.gif",
+      "sha256": "3e3c525ee0d0acbda02c42f58ac5e17d2032b55827774d79167e473d12decb72"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kohinoor.jpg",
+      "sha256": "0cfc3480700af94d90becb311c678aa1963a61041cc96af7db3a921e610577d0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kohinoor.webp",
+      "sha256": "8a0c7e347c736ef5cf2a942d5ec3d1b5b7a18c50029dfa88dd72c7e680abe54a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kohinoor.gif",
+      "sha256": "5f5ef7a0de99a400cba526b6687ded228e2a8269c3aca5d390ff7fd86bf7dbcb",
+      "bytes": 3478559
+    },
+    {
+      "file": "images/discovery-ends/kohinoor.jpg",
+      "sha256": "544ef64b47733715cd24e9e50b0e499d6c26a14d8b429cde22bca2a26cec6d0b",
+      "bytes": 92839
+    },
+    {
+      "file": "images/discovery-sheets/kohinoor.webp",
+      "sha256": "f2c535a0619dafa0cb7cdf7df479e98d213b7dd8805c9a7121b458ad94526125",
+      "bytes": 1583216
+    }
+  ]
+}

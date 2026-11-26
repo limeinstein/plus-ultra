@@ -1,0 +1,43 @@
+{
+  "id": "trelleborg",
+  "name": "트렐레보르 원형 요새",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/trelleborg.png",
+  "sourceSha256": "ea5eda8b6412a63bacdbddd68419f721efab2916a1325c7d1feede22e8cbd590",
+  "sourceMtimeNs": 1795662375737740500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/trelleborg.gif",
+      "sha256": "97a7236e21e5872244a0573598abcaf6ca5b9742f69490de1dc5312ea35d23f4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/trelleborg.jpg",
+      "sha256": "ba9bade3ed5b9a1a4c4ffd7d336d0352f6c8036a4b1ee75a6c2abaf6b001c0db"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/trelleborg.webp",
+      "sha256": "314dbe2b0752ae4e0ec96178a86973654ea2f7cded710753490f997708a92141"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/trelleborg.gif",
+      "sha256": "a2694c1d468f16120081f8c7d59408d00fbac4ef87ddb8eb7b7451b20248b090",
+      "bytes": 3240571
+    },
+    {
+      "file": "images/discovery-ends/trelleborg.jpg",
+      "sha256": "2aab1822b90fd7329e2ed687b9309049e385d8913a46b7969dbd6fd2f214cc6e",
+      "bytes": 91161
+    },
+    {
+      "file": "images/discovery-sheets/trelleborg.webp",
+      "sha256": "c3124c82b3c2aa574c5f1b5ccd3f5d61a264da54c859abede2382d1243a9ca70",
+      "bytes": 1552518
+    }
+  ]
+}

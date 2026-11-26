@@ -1,0 +1,43 @@
+{
+  "id": "iss",
+  "name": "국제 우주 정거장",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/iss.png",
+  "sourceSha256": "9c2b4564a77d305da95f33ad5f6d14fdf453e7dd9bd9aacbe3a0349ca1a7733f",
+  "sourceMtimeNs": 1795661447129216300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/iss.gif",
+      "sha256": "7a404ca58c4f68bfa23d79bbe11431984c0fc7b34b0a5e096177a282fecdbf4a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/iss.jpg",
+      "sha256": "e5eeed4b45889aafaa9b3bf52b0dfb4535ac27e28c630803e4d99ea74a4569dd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/iss.webp",
+      "sha256": "63a08cfd9a2fae0552bcc5b6df4789be1b18ff29a6d797fdfe8d1a8e9c6e9c14"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/iss.gif",
+      "sha256": "7f2cc944f588750f1537b78b39272133f1adcc986b5c7f567d4a9ea555770939",
+      "bytes": 2947470
+    },
+    {
+      "file": "images/discovery-ends/iss.jpg",
+      "sha256": "f30b9d65d9cb5228863b7039144f94598bc0662ed6b5e2987dc88bce45692020",
+      "bytes": 72142
+    },
+    {
+      "file": "images/discovery-sheets/iss.webp",
+      "sha256": "7119d62049b68d0c80ffe3db522732a049ce340b725de772fa00b74758c00d15",
+      "bytes": 1102776
+    }
+  ]
+}

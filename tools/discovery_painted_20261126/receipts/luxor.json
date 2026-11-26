@@ -1,0 +1,43 @@
+{
+  "id": "luxor",
+  "name": "룩소르 신전",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/luxor.png",
+  "sourceSha256": "337df549ca214dbe4b9ef0fea792fb9ef643bec040abfea0e909f4ccede2d317",
+  "sourceMtimeNs": 1795661879890591800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/luxor.gif",
+      "sha256": "09779a2a933d37f6d85cd760ae8ff5ac46b6e3a0e85e35e2b285ad8e4f0723fb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/luxor.jpg",
+      "sha256": "c658393694fb75fa8fba53313ebd78be176790ab9909232307bee056726c0d70"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/luxor.webp",
+      "sha256": "3a39e2c40a00ae685b3744738c82d8533bf27ee05f827c5fbbc1a1da5e1617a4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/luxor.gif",
+      "sha256": "1c822490700c6b62e63f1e81ec813b2c8f2866955b616cb769d149c1813a425d",
+      "bytes": 3432253
+    },
+    {
+      "file": "images/discovery-ends/luxor.jpg",
+      "sha256": "ddb1e4f06106c088882c81b2553dae877af586795539cdc37b9bfe4a9a75e666",
+      "bytes": 91579
+    },
+    {
+      "file": "images/discovery-sheets/luxor.webp",
+      "sha256": "8d364f6cafb1703888acdc66875a56e05826af80a2028c6ab1f43c027fc51e83",
+      "bytes": 1578462
+    }
+  ]
+}

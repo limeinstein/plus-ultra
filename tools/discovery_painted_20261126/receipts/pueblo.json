@@ -1,0 +1,43 @@
+{
+  "id": "pueblo",
+  "name": "푸에블로 보니토",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/pueblo.png",
+  "sourceSha256": "867de2cd98f361826c4f77a7adf30190d4bbd47f7ae512e12f9488a895e72552",
+  "sourceMtimeNs": 1795659621737913000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/pueblo.gif",
+      "sha256": "6220a4e126b9ee004297d14dda9f263789561c16addab439467bd02f0c0c2c94"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/pueblo.jpg",
+      "sha256": "2233798bc6317c476619c13b35a2dc4540cc9408c04cb0284500f12496b0e7bb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/pueblo.webp",
+      "sha256": "28e761f80db11302f8cd13faaac969d7fb2850ae9398d73de3e7020433b4e10d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/pueblo.gif",
+      "sha256": "e499f6599355b2ccbaff9b8cec3501be2285ff7f5af19f90af9f9ff121048ed1",
+      "bytes": 3587995
+    },
+    {
+      "file": "images/discovery-ends/pueblo.jpg",
+      "sha256": "c7f38d5947299f0340d029da48ec982e80c9a9769e54ff8bf95f87d123a99b51",
+      "bytes": 99379
+    },
+    {
+      "file": "images/discovery-sheets/pueblo.webp",
+      "sha256": "75bd7923b9942df294e2fa488719ee1204d16f817a88803783e2b708db55db00",
+      "bytes": 1748562
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "jebelshams",
+  "name": "자발 샴스 협곡",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/jebelshams.png",
+  "sourceSha256": "abe9cc1a4eb430af860586bfe1ed5e89ad382360952088a8888c6fb123965313",
+  "sourceMtimeNs": 1795659650175614400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/jebelshams.gif",
+      "sha256": "6c317465b4a0bd823c898a2ff638c9236654a28ae855210df3f9aeeee180b1a8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/jebelshams.jpg",
+      "sha256": "951d288962941e77de11a89886b9beb8754d62639f9f82fb6fbec2b65e1b30ef"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/jebelshams.webp",
+      "sha256": "874bf752fa8f07512e015b8e3414da890bc1a456f42456705b9f0c9e4f4b50eb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/jebelshams.gif",
+      "sha256": "87f24814abaf101e81726a9b11da8bf6b9dfb5731c07425c874c3fb2a2880c2a",
+      "bytes": 3109506
+    },
+    {
+      "file": "images/discovery-ends/jebelshams.jpg",
+      "sha256": "dd77e9407319b9e51cfb6a2d27f1a31d87711fe7632496d2b103a697c33a1399",
+      "bytes": 93077
+    },
+    {
+      "file": "images/discovery-sheets/jebelshams.webp",
+      "sha256": "bfe23f496dac8622a1cbeb5a1b58e984e07ee667f3bd9a6f08beb8696106b745",
+      "bytes": 1613540
+    }
+  ]
+}

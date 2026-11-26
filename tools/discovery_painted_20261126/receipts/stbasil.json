@@ -1,0 +1,43 @@
+{
+  "id": "stbasil",
+  "name": "성 바실리 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/stbasil.png",
+  "sourceSha256": "078c886022dc2e8904a45ea1f43de2bf4f30c8d7e79e9d7bbc4867946ba82d49",
+  "sourceMtimeNs": 1795660996363916700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/stbasil.gif",
+      "sha256": "4adff4e571bb11a8058cdae3b127d978353e87fecf367e3bd23ea5148b0be51a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/stbasil.jpg",
+      "sha256": "0bbe17e747825d231ae0bfdd4c3ef4593fea69dbc1eaf412a9c1227ec31b4921"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/stbasil.webp",
+      "sha256": "b3f4b00d5b098906e99b66874509e5c6b815c18bd7c7427a59836b00d9de0dc4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/stbasil.gif",
+      "sha256": "f177200483e545eaa28867e9533021bf0d414040fc83c187dafb60d861d83ec4",
+      "bytes": 3317101
+    },
+    {
+      "file": "images/discovery-ends/stbasil.jpg",
+      "sha256": "79c8e3fc7bfcee6ce6fb5d8dd4afe2ed7788d5d6d7f516e31b3bece60c8069bd",
+      "bytes": 91595
+    },
+    {
+      "file": "images/discovery-sheets/stbasil.webp",
+      "sha256": "da37538f3d437f41affdcfef3344c747a2cca7b72299093be133d533c92aa8e1",
+      "bytes": 1564090
+    }
+  ]
+}

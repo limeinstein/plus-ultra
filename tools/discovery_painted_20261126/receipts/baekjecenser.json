@@ -1,0 +1,43 @@
+{
+  "id": "baekjecenser",
+  "name": "금동대향로",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/baekjecenser.png",
+  "sourceSha256": "408b241f94b304063a3430632cd9512aedc861c7ef3701a72f97f697a4e512ad",
+  "sourceMtimeNs": 1795660050098925500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/baekjecenser.gif",
+      "sha256": "939c1508733fb80668ec102b8e85cd45f57d7cbcbe0e524745b9bf7bbf5ea2e0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/baekjecenser.jpg",
+      "sha256": "9560ca65dec3e136faf691565d311be7b151d249a56b5061027072a24d1d584c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/baekjecenser.webp",
+      "sha256": "ddd3e40a6d95999bdc6e3562d9c9a3afe3d3317fe50154a0ad34f3727610da81"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/baekjecenser.gif",
+      "sha256": "fb56347a02d9c74cf0bcd89158f9aad15d3050afc33631bf35103fd9c0802d0b",
+      "bytes": 3402108
+    },
+    {
+      "file": "images/discovery-ends/baekjecenser.jpg",
+      "sha256": "70868b9ece58afc4a4ab957160479bdcb640775fd528330b493241dd0659991f",
+      "bytes": 88641
+    },
+    {
+      "file": "images/discovery-sheets/baekjecenser.webp",
+      "sha256": "6dc7669f95fc050c054acf762894c9996198525381dfb6166faadefcb3157808",
+      "bytes": 1494412
+    }
+  ]
+}

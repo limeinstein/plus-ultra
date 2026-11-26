@@ -1,0 +1,43 @@
+{
+  "id": "adamspeak",
+  "name": "스리파다 (아담의 봉우리)",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/adamspeak.png",
+  "sourceSha256": "f6b9d6895c4d3036f26e81cf1aa7137e0c9211dad109ca97e404f3c63c654096",
+  "sourceMtimeNs": 1795659644525557600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/adamspeak.gif",
+      "sha256": "110b14a03ac072ded5e358a5669f8c5bc947fbdc96915314a72daad4be365d6f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/adamspeak.jpg",
+      "sha256": "fb03a1ce2ec1565c2ee9991d5ea4d290aff8e1e29c49a159c0af061eaeb8a835"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/adamspeak.webp",
+      "sha256": "14108e17258e8e366db9a391ef983486841ca627b0843cb05c403e52183aacba"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/adamspeak.gif",
+      "sha256": "cf38d73715d2386757e69c617d4ca643f6f257af2119e9d9c53336a062cf1fa2",
+      "bytes": 2822068
+    },
+    {
+      "file": "images/discovery-ends/adamspeak.jpg",
+      "sha256": "ad2afc96068187907c8aa2c339f2d77f2b14633cfd51aa2db04a78fe27e861c5",
+      "bytes": 88196
+    },
+    {
+      "file": "images/discovery-sheets/adamspeak.webp",
+      "sha256": "ef5ad01f39531864a50dda5185de7d5bbd518df622ffc6cacf4c158770baf483",
+      "bytes": 1487460
+    }
+  ]
+}

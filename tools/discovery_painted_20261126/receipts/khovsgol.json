@@ -1,0 +1,43 @@
+{
+  "id": "khovsgol",
+  "name": "홉스골 호수",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/khovsgol.png",
+  "sourceSha256": "c5f089fdd55a6ef4fc054e3037fcf5374da02861b7f8c628f7326c84e1087e0b",
+  "sourceMtimeNs": 1795659649901194700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/khovsgol.gif",
+      "sha256": "c4ce037c5c9caea41687a6589a91af19c566472c3d7d74cc50ab23fdb25a62ae"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/khovsgol.jpg",
+      "sha256": "6a71068f534dcb289a5c6fa3031eda0728bb6c769c076b39bad0c175a8ddbb4c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/khovsgol.webp",
+      "sha256": "729343d4e09c5f05aded48c10a02813613a0fe4117a36c42fd2e6111771f31de"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/khovsgol.gif",
+      "sha256": "21222931b433ac569745e1a94fc3b6f5b4980984840b01192927cf3c45842e60",
+      "bytes": 2365541
+    },
+    {
+      "file": "images/discovery-ends/khovsgol.jpg",
+      "sha256": "a6e804eba192fa84a48e7d0a7c46c4f5c51a970fb9ec9686f78610b1bbdfd85f",
+      "bytes": 70261
+    },
+    {
+      "file": "images/discovery-sheets/khovsgol.webp",
+      "sha256": "9384cf2e8e06f5332e54cd85eafbcc548ac988deca8190c3c31e1f752f4e5e21",
+      "bytes": 1135118
+    }
+  ]
+}

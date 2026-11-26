@@ -1,0 +1,43 @@
+{
+  "id": "capri",
+  "name": "카프리",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/capri.png",
+  "sourceSha256": "0d2312210fd9e4e9d93a9b3ecf624f1ee71f80617061df1b4131ea8f64ddda98",
+  "sourceMtimeNs": 1795659660633677100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/capri.gif",
+      "sha256": "f9944e0380609460001afacb83b2930d8b36d4674beaaef826b955401e89f103"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/capri.jpg",
+      "sha256": "ade8a7f291b0f410054d3ab9e0c72ed1a38f868e257b5d1e7cb6d48fd16fd596"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/capri.webp",
+      "sha256": "00467fff00fe949e1a9db5cd9c2f4695d6d3ed15b4ea4abff34a2daf75bd2a1d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/capri.gif",
+      "sha256": "952db9387af5853dfae9fab672523a2cf300ae7bd4b0f16f81d9bdb42a99ec77",
+      "bytes": 3101145
+    },
+    {
+      "file": "images/discovery-ends/capri.jpg",
+      "sha256": "aa0569be56008349c26f1ca67bd8cbac20ed760508fa6dd942d8c44ca5afefdd",
+      "bytes": 99785
+    },
+    {
+      "file": "images/discovery-sheets/capri.webp",
+      "sha256": "5f88167fa7d3dead17ab83586239e35af82b6672d687d17a7e0d293c878784b7",
+      "bytes": 1713388
+    }
+  ]
+}

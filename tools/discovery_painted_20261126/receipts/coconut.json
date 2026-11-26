@@ -1,0 +1,43 @@
+{
+  "id": "coconut",
+  "name": "실론 코코넛",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/coconut.png",
+  "sourceSha256": "a6e064446517c239c9dd0e8a049e25f0e8cbc84b50733eb0d2e18178066b9f0a",
+  "sourceMtimeNs": 1795659653122128700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/coconut.gif",
+      "sha256": "916cdfa0e852f3e64217ccaf15c7de05b006560410262d3c2b9b50a782bfaafb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/coconut.jpg",
+      "sha256": "bc4bbd546f22954198556c613978bdda6f0d4c3846fac58ce401c36d2a2202c8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/coconut.webp",
+      "sha256": "4e2f8d953f7eee1ff995bac370cbbf728abf75071eebb7fd06c2e55b7fa083ca"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/coconut.gif",
+      "sha256": "06a64249b2b94de38898de3471920d3dd2fdf8401ee9c0c52708ccd582f52bb3",
+      "bytes": 2934910
+    },
+    {
+      "file": "images/discovery-ends/coconut.jpg",
+      "sha256": "912b72ca1bca31c24b4440d284d80013af656a84873c5214f9b4195133f16b99",
+      "bytes": 86055
+    },
+    {
+      "file": "images/discovery-sheets/coconut.webp",
+      "sha256": "b4d86cc274ff838b0b13fae93c74d84d3238326ea7bce962a6facf52cdb0eaf0",
+      "bytes": 1413654
+    }
+  ]
+}

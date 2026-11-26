@@ -1,0 +1,43 @@
+{
+  "id": "edom",
+  "name": "셀라 — 에돔의 바위 요새",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/edom.png",
+  "sourceSha256": "9a27b830a1edda01983a3fed102095974152dfdb90927313b6ca6f234b994f1f",
+  "sourceMtimeNs": 1795660259302890400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/edom.gif",
+      "sha256": "aff1410d79f91f08d7cddc5a5ef792c77a3dd38d89bfa47c52012ff862b7d7af"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/edom.jpg",
+      "sha256": "bbfafc39f9a756e1addd9ad1b6e5f80851e19b8ab0c5694327b06af3ec2789d2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/edom.webp",
+      "sha256": "7408939cb68d5bfb25b60ea85210598f0b09561373d6d8714c9b7fb2944186f7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/edom.gif",
+      "sha256": "205590159a8e7e0b8ab2f675821cd5ac2175a608cdff148bda961051921283a1",
+      "bytes": 3497001
+    },
+    {
+      "file": "images/discovery-ends/edom.jpg",
+      "sha256": "4a629b4449ceb3242452301c3bb8e10521a39fb068165d14b90d89a0317e3cd7",
+      "bytes": 98231
+    },
+    {
+      "file": "images/discovery-sheets/edom.webp",
+      "sha256": "ff45debde5af1b3c5741132544bed12e05b7e8c19cd2a92a69e129797065cd55",
+      "bytes": 1733096
+    }
+  ]
+}

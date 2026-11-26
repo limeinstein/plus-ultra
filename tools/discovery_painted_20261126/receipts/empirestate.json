@@ -1,0 +1,43 @@
+{
+  "id": "empirestate",
+  "name": "엠파이어 스테이트 빌딩",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/empirestate.png",
+  "sourceSha256": "9b1b130669c5b3d0095149a539b212d7bafa7753c4fa22d2b63dde555e9736dd",
+  "sourceMtimeNs": 1795662997987747400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/empirestate.gif",
+      "sha256": "7b37feade690b0738e2e2f6dd19787d55fdec4507ede3172a2ab41ec07c94f1c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/empirestate.jpg",
+      "sha256": "ff12ec726e886572566732706f15efd50ce5e68aba07561dce9e5520f2e59967"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/empirestate.webp",
+      "sha256": "6f8c0d877c6ba838d8f7b15aeb602ee3fe24473ca71a1e9c86040a14c35bda33"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/empirestate.gif",
+      "sha256": "a8d505907792e8298ff7fd0de6e5a84f4ba3c338ad1d97d08a4a4f6f052d53c2",
+      "bytes": 3062336
+    },
+    {
+      "file": "images/discovery-ends/empirestate.jpg",
+      "sha256": "1cdfd9bbf546643b2bb4cf62d46cd6dd035a63de87d6c76826c9f086ec50ee7b",
+      "bytes": 90049
+    },
+    {
+      "file": "images/discovery-sheets/empirestate.webp",
+      "sha256": "8facc14322dabddff8d314188852dba951534f4ffec92aaaae12d3a24fe00a14",
+      "bytes": 1512164
+    }
+  ]
+}

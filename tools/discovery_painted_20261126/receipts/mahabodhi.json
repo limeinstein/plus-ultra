@@ -1,0 +1,43 @@
+{
+  "id": "mahabodhi",
+  "name": "마하보디 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mahabodhi.png",
+  "sourceSha256": "11e858f2f77f35414c0ce7a455f1fcb47c3355c514fe1838b9defef55496bc9d",
+  "sourceMtimeNs": 1795660821484768300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mahabodhi.gif",
+      "sha256": "7000984fb9faa6e28704cbf40a4b1a26480f5860a35be9598cc4be79b5b1a0ce"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mahabodhi.jpg",
+      "sha256": "783328968fc63bb4ed4118d6a9024628de48128baccad827a01311363329bfcd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mahabodhi.webp",
+      "sha256": "6cb70063a8a98e758784d0118f3b7a6b07f8138408a30a4296ec07c0d43f04b5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mahabodhi.gif",
+      "sha256": "0d0964aa7d481291e2d420352cc3c11af9dd8373b68d8da25d2469d7f38342be",
+      "bytes": 3590219
+    },
+    {
+      "file": "images/discovery-ends/mahabodhi.jpg",
+      "sha256": "b05cbeacb0f9f7cbdb27e9525070d8aadaf87c9880d52bf704b3c63c3b8b52b3",
+      "bytes": 105896
+    },
+    {
+      "file": "images/discovery-sheets/mahabodhi.webp",
+      "sha256": "f0de7d98f1054343ffe4898cf4001d9c890e4395645b0822aa693dc331b907c5",
+      "bytes": 1842598
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "phongnha",
+  "name": "퐁냐 동굴",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/phongnha.png",
+  "sourceSha256": "e141216fa42ae4d3e9b483199d486c73a7626d9521344ed5bb8aea6211ca7545",
+  "sourceMtimeNs": 1795659649400644900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/phongnha.gif",
+      "sha256": "3f7be36e6f0048f52dce925dd80588e6643a15b5515d087cc3e4bc59a5ea68bd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/phongnha.jpg",
+      "sha256": "2eee2f89e3128e08b839566ee6861efb808c82ea1fecf5c4d96b34e4652748e4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/phongnha.webp",
+      "sha256": "3ea3b15e2ff5f390e5caf7e5f67d57ad7882b1f47126f5ef1e70509b002cbed1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/phongnha.gif",
+      "sha256": "a5ed3a2daf6968538702bf9b8db0b6d260b697608c069a5b7b7633b458e01cb2",
+      "bytes": 3292409
+    },
+    {
+      "file": "images/discovery-ends/phongnha.jpg",
+      "sha256": "4f363d4dadcdbd1180ce67bdf779e49ead4e749a0aeaeeff947d42bc00010c1a",
+      "bytes": 97169
+    },
+    {
+      "file": "images/discovery-sheets/phongnha.webp",
+      "sha256": "52e3e841ec8010c545d403f46f9a2371579b9a0eabe3620beb96b346200240ee",
+      "bytes": 1700868
+    }
+  ]
+}

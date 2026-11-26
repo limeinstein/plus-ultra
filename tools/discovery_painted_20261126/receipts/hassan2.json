@@ -1,0 +1,43 @@
+{
+  "id": "hassan2",
+  "name": "하산 2세 모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/hassan2.png",
+  "sourceSha256": "5a5ca32baa2db65582878015eb1cdee22f8aa0c5efb18a13eb92cdd11bd8da31",
+  "sourceMtimeNs": 1795662899245998000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/hassan2.gif",
+      "sha256": "38e1cdac9f620363dfc739d0532a577916b596a018624d08e1e8c0965abfab7e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/hassan2.jpg",
+      "sha256": "2010b841867c5f658c0562cf25b2800d0ac694063a21cde7c73e8d58447bf618"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/hassan2.webp",
+      "sha256": "71699f6bd4025b92da3f7968ddd6a04c2ac4597059368c5a2e7e375d2b4ffe74"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/hassan2.gif",
+      "sha256": "ab8f7d978e5ccf829b9af806b9d9c563bdd87dc6f2d00a248329c88f32051ffa",
+      "bytes": 2807620
+    },
+    {
+      "file": "images/discovery-ends/hassan2.jpg",
+      "sha256": "f1e1399b4723e0d995e57a5602acbd9d9a9fc56327dc39e0ae1d8ecb0032ca36",
+      "bytes": 74938
+    },
+    {
+      "file": "images/discovery-sheets/hassan2.webp",
+      "sha256": "b2b6203aba7791ac00047c38571c94d0d24f38cebbcdcd107515cee8c88b9a21",
+      "bytes": 1238330
+    }
+  ]
+}

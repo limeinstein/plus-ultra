@@ -1,0 +1,43 @@
+{
+  "id": "bromo",
+  "name": "브로모 화산",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/bromo.png",
+  "sourceSha256": "f8b2e50cbb697342b6647e5514ff2d5b16cf0a7a38b79bafae8d0ee69582f570",
+  "sourceMtimeNs": 1795659649455636700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bromo.gif",
+      "sha256": "813e0b80e13d35c6c1a01a353443087b6fef7c182abeb5a6dd20e9de630f2f53"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bromo.jpg",
+      "sha256": "6e6b9ad929f0364036c6c83f4409a3c3ceac93e4ba1ebe3c7b88727da322f4b4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bromo.webp",
+      "sha256": "ced26cf226cd6527b63e1b4089d90ce83f35f1716e89055589f24c6b5dedcc43"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bromo.gif",
+      "sha256": "1c84771203e59d6d31d4207c6a0d5dc59317b028660754109dfd626d376db4c4",
+      "bytes": 2387483
+    },
+    {
+      "file": "images/discovery-ends/bromo.jpg",
+      "sha256": "c6a0160836d7c421ab42c6f11f3887bc55c60de76e3273ca34edfde82aa5c181",
+      "bytes": 69926
+    },
+    {
+      "file": "images/discovery-sheets/bromo.webp",
+      "sha256": "67da1c181b53e0c2388b966314c07c214cd7964a56ff74b45af5cb91f93615fe",
+      "bytes": 1094762
+    }
+  ]
+}

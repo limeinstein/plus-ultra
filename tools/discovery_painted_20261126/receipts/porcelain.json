@@ -1,0 +1,43 @@
+{
+  "id": "porcelain",
+  "name": "남경 대보은사 유리탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/porcelain.png",
+  "sourceSha256": "d0a28759fc03335012351ab9bf3639977463950f4491ccc3635fab13b1d640ac",
+  "sourceMtimeNs": 1795661075601743100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/porcelain.gif",
+      "sha256": "7a52bcf4c7125d1c8f8674d037116cde5a0d941dbb1f7ac251ca56fd97ac1a1e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/porcelain.jpg",
+      "sha256": "f5c84750b51316a6bc6e63fd03b437b8dc19d6f037ae5c4962c2cec280a8d28b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/porcelain.webp",
+      "sha256": "5d107267954c594f6a7f039c49a881dee0db67718fa0c21ebad205da6c2bca7b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/porcelain.gif",
+      "sha256": "8fafaab8651fcce005a460c1b5bedb822ff644e23d9d02d4dc6af8d405bb6a64",
+      "bytes": 3233835
+    },
+    {
+      "file": "images/discovery-ends/porcelain.jpg",
+      "sha256": "3601af7b9d5ce17ae9109361a9276dbce5eff4c3702105e7f323dfc5db084e1b",
+      "bytes": 92560
+    },
+    {
+      "file": "images/discovery-sheets/porcelain.webp",
+      "sha256": "742efad028be2f545100b6c01b178e37c8b3953efa60b388586c5c2f15979f69",
+      "bytes": 1556840
+    }
+  ]
+}

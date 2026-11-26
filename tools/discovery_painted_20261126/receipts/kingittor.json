@@ -1,0 +1,43 @@
+{
+  "id": "kingittor",
+  "name": "킹기토르수아크 룬 돌",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kingittor.png",
+  "sourceSha256": "7f701b5237f0400e164f031a41fcf8820879ebad773a871357ec161c70dee7f6",
+  "sourceMtimeNs": 1795661820221526500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kingittor.gif",
+      "sha256": "17439670a9c1358d1deb841881d1f26d73a5b52cc54716025f8f56418b2aba21"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kingittor.jpg",
+      "sha256": "a7e694550eec24ff3fd1a466982e050fbbc5418b3ca32eb5df95e839d90f44a2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kingittor.webp",
+      "sha256": "63000f2b4c331e67771cb122ac143cc93a01571fce3dd9bb5ca3c4c0eb78aaca"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kingittor.gif",
+      "sha256": "4c204640cf0fbeba2017c7978600db98b7cb22ea793ff46bd90535f5d82f6fd3",
+      "bytes": 3527508
+    },
+    {
+      "file": "images/discovery-ends/kingittor.jpg",
+      "sha256": "a881059a72ad722bb85ce681280e444a96367e452ab6f63fc63a79ad5c5efb2a",
+      "bytes": 83372
+    },
+    {
+      "file": "images/discovery-sheets/kingittor.webp",
+      "sha256": "0aef1b886ca03e60e50eecc99d58152d24cf7c76dcf65b26d3f74a7a5156de3d",
+      "bytes": 1413980
+    }
+  ]
+}

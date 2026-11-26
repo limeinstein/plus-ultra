@@ -222,6 +222,9 @@ def shared_palette(frames: list[Image.Image]) -> Image.Image:
 
 
 def build_one(did: str) -> Path:
+    # 회화로 교체한 발견물은 옛 모형·회전·조립 출력기로 덮어쓰지 않는다.
+    if OUT.resolve() == (ROOT / 'images/discoveries').resolve() and (ROOT / 'tools/discovery_painted_20261126/receipts' / (did + '.json')).is_file():
+        return OUT / (did + '.gif')
     source = SOURCES / f"{did}.png"
     with Image.open(source) as raw:
         src = raw.convert("RGB")

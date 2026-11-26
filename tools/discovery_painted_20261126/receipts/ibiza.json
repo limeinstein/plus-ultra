@@ -1,0 +1,43 @@
+{
+  "id": "ibiza",
+  "name": "이비자",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/ibiza.png",
+  "sourceSha256": "3eea9b2746b017d052aca1d0ea493afec73aeb5677b6b68d9e5a0afd1889acca",
+  "sourceMtimeNs": 1795659660384095600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ibiza.gif",
+      "sha256": "5d4b243a3dce2d89eee568a0621efcc2deee543ad2877a6d0968f8bb2c708fa9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ibiza.jpg",
+      "sha256": "d8eb6211d91172f41394e1337642cc3ce54c9dcf6dd5e3ad83902e018b4ce95a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ibiza.webp",
+      "sha256": "0633278935998e9bb0386692d5b597cb6031f3a1c7e99fd651d70a9a82107c1f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ibiza.gif",
+      "sha256": "a7058a70016de068bf758fe49274fa3fd4b50f0d242035c4ce0d811bd0a4dcbb",
+      "bytes": 2786335
+    },
+    {
+      "file": "images/discovery-ends/ibiza.jpg",
+      "sha256": "24035bcd0ed960907d1d01835d10f31b8aee8dfc027f98896ee8549b9856a686",
+      "bytes": 96503
+    },
+    {
+      "file": "images/discovery-sheets/ibiza.webp",
+      "sha256": "15ea345f7811a9b483f4b8cc4351a76b33bfb83a49a3136a753196dd4e1d8f6d",
+      "bytes": 1643242
+    }
+  ]
+}

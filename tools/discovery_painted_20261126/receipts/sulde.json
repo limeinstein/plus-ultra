@@ -1,0 +1,43 @@
+{
+  "id": "sulde",
+  "name": "칭기즈 칸의 흰 술데",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sulde.png",
+  "sourceSha256": "3b69a337bc0bfb049c3432ddb7226490e87d41196d4cd648827fd8d70827c909",
+  "sourceMtimeNs": 1795663138318863000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sulde.gif",
+      "sha256": "e5d8d79c778defc59bd4a39ebdeb082d34bdff53f575b43dc713ced17395ccf5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sulde.jpg",
+      "sha256": "e6bfb6c9e3899c56e458155ed86e4d3c6697f0d94947ab36d84c37dbbbbed621"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sulde.webp",
+      "sha256": "74d4d7819af269b42fc2df962097d4ae003733553fba49ec5cef9783a72de456"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sulde.gif",
+      "sha256": "755bc6caf56f06dddfeea1cf461ad31d5396603d8a02ecbfe82c2704f177f789",
+      "bytes": 3712550
+    },
+    {
+      "file": "images/discovery-ends/sulde.jpg",
+      "sha256": "77e5a74587dccebee5986057ecf1aa3bfb42135dec00a56d70e82e685831f2e0",
+      "bytes": 92886
+    },
+    {
+      "file": "images/discovery-sheets/sulde.webp",
+      "sha256": "f1e5ad909450330c8f4c822b65e89937ad67a119949abb8375b812be99f33638",
+      "bytes": 1582664
+    }
+  ]
+}

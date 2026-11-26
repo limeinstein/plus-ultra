@@ -1,0 +1,43 @@
+{
+  "id": "sanfelipe",
+  "name": "산펠리페 데 바라하스 요새",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sanfelipe.png",
+  "sourceSha256": "9ef604ecce9ddc9fb203e336abe1f9dcdbb50a7ed80f5ca112958ded46252bbb",
+  "sourceMtimeNs": 1795663006290685900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sanfelipe.gif",
+      "sha256": "c5f1b64fcead13f54865b3b2a936844b8b428c166cf913e3617818909224b854"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sanfelipe.jpg",
+      "sha256": "61ab651679e415f4ef2201f90fc21ffb4e04e0b6667e551cba0e39ffb7f885bf"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sanfelipe.webp",
+      "sha256": "63b3399185531a33d7a52d514dc9063198912648fed50c91a5ce886d4c0e5b6f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sanfelipe.gif",
+      "sha256": "5a60b75c22e161a289c199db2da8504ac9118596e569413ac5aa9bacdccab044",
+      "bytes": 3420183
+    },
+    {
+      "file": "images/discovery-ends/sanfelipe.jpg",
+      "sha256": "39109de580827a81544de5b4c32ea1c0d43ce04459f3434a87ab05abc0211f8a",
+      "bytes": 93445
+    },
+    {
+      "file": "images/discovery-sheets/sanfelipe.webp",
+      "sha256": "bad748456fc4f2f953892ba6750be1dc5f676edb190cce1073f9737f95f5c39e",
+      "bytes": 1612018
+    }
+  ]
+}

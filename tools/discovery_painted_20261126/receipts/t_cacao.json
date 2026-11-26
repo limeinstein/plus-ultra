@@ -1,0 +1,43 @@
+{
+  "id": "t_cacao",
+  "name": "카카오",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_cacao.png",
+  "sourceSha256": "68db2fb775605064e31fab03cbf3e56fd590bd39b75938c547d0dd68e8f9dcdf",
+  "sourceMtimeNs": 1795660576375584400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_cacao.gif",
+      "sha256": "1832fb6b953d6fdd268279c87c6577bb87ab7f4920a8e5979f64f3fe83150de6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_cacao.jpg",
+      "sha256": "5f22cacb5fc72fbb62ced89e55d993de69da098c481b3f4c9faa3fea2530ac57"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_cacao.webp",
+      "sha256": "b93582393cfdd187395d8813693857d0db26745ef82adb8e465742574e3f2e06"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_cacao.gif",
+      "sha256": "524d9c6f4f1f106d7fdf281ad5419df36f8952bc819454be69f07f76d38b43dd",
+      "bytes": 3638916
+    },
+    {
+      "file": "images/discovery-ends/t_cacao.jpg",
+      "sha256": "25ae9f0d1e8385a88496a509251354f795ee2d166235584de0efafd49ac5998f",
+      "bytes": 98911
+    },
+    {
+      "file": "images/discovery-sheets/t_cacao.webp",
+      "sha256": "a07f2f6673175b213be9de7ba77fec9819555cb906f56ac4886320c7efa1ed4b",
+      "bytes": 1670742
+    }
+  ]
+}

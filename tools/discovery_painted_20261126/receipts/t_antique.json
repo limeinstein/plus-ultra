@@ -1,0 +1,43 @@
+{
+  "id": "t_antique",
+  "name": "골동품",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_antique.png",
+  "sourceSha256": "f28c90b779063401366ddaf6260391a70543226679d69de584ee08d7f15972d9",
+  "sourceMtimeNs": 1795660747913232700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_antique.gif",
+      "sha256": "64c9cbc55d14b14e1360260e2dbac2842229109c929e0fef1737c83f4bc44b09"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_antique.jpg",
+      "sha256": "841c428ab9e53fa966c171f6cf1c9b929aacd2e3f73be66ad10cf909d3566e0a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_antique.webp",
+      "sha256": "fe9f2c9350cee7529d01e214493e078d65d0fd70294146bcf483125af7405446"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_antique.gif",
+      "sha256": "0b1cdd5b66b71d434828abb9536cc506efba4ce826612dc2d87f137cbfb6c07b",
+      "bytes": 3787509
+    },
+    {
+      "file": "images/discovery-ends/t_antique.jpg",
+      "sha256": "2b587987aa8ecc2ec369d3cb11e82a24715913c907b0adf4605303c53ab64a7c",
+      "bytes": 96504
+    },
+    {
+      "file": "images/discovery-sheets/t_antique.webp",
+      "sha256": "a8d348e17a8233c7691800cf69642556138cef334a60dd151857db35353a8dbb",
+      "bytes": 1669050
+    }
+  ]
+}

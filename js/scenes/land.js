@@ -2,6 +2,7 @@
 (function (G) {
   'use strict';
   var U = G.U, UI = G.UI, R = G.R, A = G.Art;
+  var CAMP_DRY_MESSAGE = '물 위에서는 야영할 수 없습니다. 마른 땅으로 이동하십시오.';
   var L = {};
   G.Scenes.land = L;
   var DAY_SEC = 1.3;
@@ -201,6 +202,7 @@
     if (!el.city || !st) return;
     if (!arguments.length) near = cityNear();
     var l = S().loc, base = atBase();
+    refreshCampButton(l);
     el.city.classList.toggle('disabled', !near);
     el.city.title = near ? near.name + '에 들어간다' : '가까운 도시에 들어간다';
     var backHtml = G.icon('anchor') + '<span class="sb-command-label">' + (base ? (l.base.type === 'ship' ? '배에 승선' : '도시 복귀') : '출발지 복귀') + '</span>';
@@ -223,17 +225,31 @@
     UI.hud.set('terr', (TERR[t] || TERR.grass).name);
     if(G.Hydro&&G.Hydro.ready){var e=G.Hydro.landEffect(l.lon,l.lat),fresh=G.Hydro.freshwater(l.lon,l.lat);UI.hud.tip('terr',e.river?e.river.name+' · '+(e.bridge?'다리·나루: 도하 벌칙 없음':e.reason||'도하 속력 '+Math.round(e.speed*100)+'%'+(e.risk?' · 짐승·짐 손실 위험 '+Math.round(e.risk*1000)/10+'%':''))+(fresh?' · 식수 보충 가능':''):fresh?fresh.name+' 부근: 식수 보충 가능':'실제 고도와 지역 식생에 따른 지형');}
     var sk = t === 'sea' ? 'grass' : t, sp = M.speed(mt, sk, l.party), su = M.suit(mt.id, sk);
+    if(G.Hydro&&G.Hydro.ready){var crossingEffect=G.Hydro.landEffect(l.lon,l.lat);if(crossingEffect.river)sp*=crossingEffect.speed;}
     UI.hud.set('mount', mt.id === 'walk' ? '도보' : M.get(mt.id).name + ' ×' + sp.toFixed(1) + ' <small class="suit ' + su.cls + '">' + su.mark + '</small>', mt.id !== 'walk' && su.cls === 'bad');
     UI.hud.set('gold', H.gold());
   }
   function pos(e) { var r = G.Game.canvases().overlay.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 1600, (e.clientY - r.top) / r.height * 900]; }
   L.refreshHud=refreshHud;
   // st.qo: 이번 장면을 그릴 때 쓴 지진 흔들림(화면 px, js/art/quakefx.js). 카메라(st.cam)에는 더하지 않고 그리기·클릭 변환에만 넣는다
-  function toScreen(lon, lat) { var o = st.qo; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
+  function toScreen(lon, lat) { var o = st.qo, rise = G.Terrain ? G.Terrain.lift(lon, lat) : 0; return [800 + G.Geo.wrapLon(lon - st.cam.lon) * st.cam.zoom + (o ? o[0] : 0), 450 - (lat + rise - st.cam.lat) * st.cam.zoom + (o ? o[1] : 0)]; }
   L.toScreen = toScreen;
-  function toWorld(x, y) { var o = st.qo; return [st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom]; }
+  function toWorld(x, y) { var o = st.qo, lon = st.cam.lon + (x - (o ? o[0] : 0) - 800) / st.cam.zoom, lat = st.cam.lat - (y - (o ? o[1] : 0) - 450) / st.cam.zoom; return G.Terrain ? G.Terrain.unproject(lon, lat) : [lon, lat]; }
   // 편대의 표시 위치만 확인한다. 선장의 실제 이동·지형 판정과는 별개다.
   function expeditionGround(x, y) { var p = toWorld(x, y); return walkable(p[0], p[1]); }
+  function dryCampGround(lon, lat) {
+    return Math.abs(lat) < 90 && G.Geo.isLand(lon, lat) && !(G.Terrain && G.Terrain.ready && G.Terrain.isLake(lon, lat));
+  }
+  function campGround(x, y) { var p = toWorld(x, y); return dryCampGround(p[0], p[1]); }
+  function refreshCampButton(l) {
+    var button = el.camp, disabled = !dryCampGround(l.lon, l.lat);
+    if (button.disabled === disabled && button.title) return;
+    button.disabled = disabled;
+    button.classList.toggle('disabled', disabled);
+    button.setAttribute('aria-disabled', String(disabled));
+    button.tabIndex = disabled ? -1 : 0;
+    button.title = disabled ? CAMP_DRY_MESSAGE : '현재 위치에서 야영합니다.';
+  }
   /* 마우스 따라가기 (기본 끔 · 수첩 옆 단추나 Shift, G.Ctrl): 끔이면 누른 곳까지 걷고, 켬이면 가려는 쪽을 한 번 누른 뒤로는
      마우스를 옮기는 대로 발걸음이 돈다(조작 감도만큼 차츰). 도시·표식을 누르면 예전처럼 그리로 간다 */
   function followOn() { return !!(G.Ctrl && G.Ctrl.follow()); }
@@ -306,7 +322,21 @@
     kiCache = G.CITY_DATA.filter(function (c) { return set[c.id] && R.cityExists(c); });
     return kiCache;
   }
-  function cityAt(x, y) { var best = null, bd = Infinity; knownInland().forEach(function (c) { var p = toScreen(c.lon, c.lat), d = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y), hit = Math.max(24, G.CityIcon.metrics(c, 1.15).radius + 5); if (d <= hit * hit && d < bd) { bd = d; best = c; } }); return best; }
+  function cityAt(x, y) {
+    var best = null, bd = Infinity;
+    knownInland().forEach(function (c) {
+      var p = toScreen(c.lon, c.lat), d = Math.pow(p[0] - x, 2) + Math.pow(p[1] - y, 2);
+      var mark = st.cityMarks && st.cityMarks[c.id], label = mark && mark.label;
+      var hit = d <= Math.pow(mark && mark.boxes ? 24 : Math.max(24, G.CityIcon.metrics(c, 1.15).radius + 5), 2);
+      if (G.CityIcon.hit && G.CityIcon.hit(mark, x, y)) {
+        hit = true;
+        d = Math.min(d, Math.pow(x - mark.anchorX, 2) + Math.pow(y - mark.y, 2));
+      }
+      if (label && x >= label[0] && x <= label[0]+label[2] && y >= label[1] && y <= label[1]+label[3]) hit = true;
+      if (hit && d < bd) { bd = d; best = c; }
+    });
+    return best;
+  }
   function landmarkAt(x, y) { return G.DiscoveryIcon ? G.DiscoveryIcon.at(G.DiscoveryIcon.visible(), toScreen, x, y, 1.15, st.cam.zoom) : null; }
   function cityNear() { var s = S(), l = s.loc, best = null, bd = 0.3; G.CITY_DATA.forEach(function (c) { if (Math.abs(c.lat - l.lat) >= bd || !R.cityExists(c)) return; var d = G.Geo.dist(l.lon, l.lat, c.lon, c.lat); if (d < bd) { bd = d; best = c; } }); return best; }
   function atBase() { var s = S(), l = s.loc, b = l.base; return G.Geo.dist(l.lon, l.lat, b.lon, b.lat) < (b.type === 'ship' ? 0.45 : 0.3); }
@@ -400,12 +430,18 @@
         }
       }
       }
-      if (!st.trail.length || G.Geo.dist(st.trail[st.trail.length - 1][0], st.trail[st.trail.length - 1][1], l.lon, l.lat) > 0.02) { st.trail.push([l.lon, l.lat, st.t]); if (st.trail.length > 400) st.trail.shift(); }
+      if (!st.trail.length || G.Geo.dist(st.trail[st.trail.length - 1][0], st.trail[st.trail.length - 1][1], l.lon, l.lat) > 0.02) {
+        st.trail.push([l.lon, l.lat, st.t, G.TerrainArt&&G.TerrainArt.trailSoilAt(l.lon,l.lat)]);
+        if (st.trail.length > 400) st.trail.shift();
+      }
       st.dayAcc += days;
       if (st.dayAcc >= 1) { st.dayAcc -= 1; runDay(); }
     }
     if ((l.lon !== px0 || l.lat !== py0) && G.Hydro&&G.Hydro.ready) G.Hydro.movedLand(s,[px0,py0],[l.lon,l.lat]);
-    if (l.lon !== px0 || l.lat !== py0) G.State.surveyChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
+    if (l.lon !== px0 || l.lat !== py0) {
+      refreshCampButton(l);
+      G.State.surveyChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
+    }
     animate(dt, px0, py0);
     var dxc = G.Geo.wrapLon(l.lon - st.cam.lon), kc = 1 - Math.exp(-dt * 3);
     st.cam.lon = G.Geo.wrapLon(st.cam.lon + dxc * kc); st.cam.lat += (l.lat - st.cam.lat) * kc;
@@ -435,18 +471,61 @@
   /* 걸음 리듬: 간 거리(화면 px)를 걸음 폭으로 나눠 걸음 주기를 돌린다 — 빨리 가면 걸음도 빨라지지만 FX.party.maxStepHz를 넘지 않는다.
      멈추면 대원들이 모이고(gather), 짐승은 풀을 뜯는다. 발밑에서는 지형마다 먼지·눈·풀잎이 인다 */
   var STRIDE = { walk: 20, porter: 20, donkey: 22, horse: 40, camel: 46, llama: 24, yak: 30, wagon: 34, elephant: 50, reindeer: 36 };
+  // 같은 물가 판정으로 각 대원의 발 위치를 읽고, 물가부터 강 가운데까지 잠기는 깊이를 잇는다.
+  function expeditionWade(lon, lat) {
+    var hydro = G.Hydro, look = G.FX.party.wading;
+    if (!look || !hydro || !hydro.ready) return null;
+    var e = hydro.landEffect(lon, lat), river = e.river;
+    if (!river || !e.allowed || e.bridge || e.frozen || river.signed >= 0) return null;
+    var channel = U.clamp(-river.signed / river.half, 0, 1);
+    var depth = U.clamp((river.depth || look.creekDepth) / look.kneeDepth, 0, 1);
+    var immersion = depth * channel * (2 - channel);
+    return { immersion: immersion, shorePx: -river.signed * st.cam.zoom, flow: river.flow,
+      effort: Math.min(1, .34 + .32 * (1 - e.speed) + .42 * immersion) };
+  }
+  // 실제 진행 방향의 고도차와 그 자리에 적용되는 지형을 읽어 보행 자세에 쓴다.
+  function animateEffort(l, dx, dy, moved, dt, cfg) {
+    var view = st.effort || (st.effort = { value:0, grade:0, target:0, targetGrade:0, next:0 });
+    var walking = moved > .02;
+    if (walking) {
+      var x = dx / moved, y = dy / moved;
+      if (st.t >= view.next || x * view.x + y * view.y < .8) {
+        var sample = cfg.probe, grade = 0;
+        if (G.Terrain && G.Terrain.ready) {
+          var a = G.Terrain.sample(l.lon - x * sample, l.lat - y * sample).elevation;
+          var b = G.Terrain.sample(l.lon + x * sample, l.lat + y * sample).elevation;
+          var rise = (b - a) * .0000765 / (2 * sample);
+          grade = Math.sign(rise) * U.clamp((Math.abs(rise) - cfg.grade[0]) / (cfg.grade[1] - cfg.grade[0]), 0, 1);
+        }
+        var terrain = G.Geo.terrain(l.lon, l.lat), rough = cfg.terrain[terrain] || 0;
+        if (terrain === 'forest' || terrain === 'jungle') {
+          var kind = G.Mounts.get(MT().id).look.kind;
+          rough *= cfg.forestMount[kind] || 1;
+        }
+        var water = terrain === 'river' && expeditionWade(l.lon, l.lat);
+        view.target = Math.max(rough + (1 - rough) * Math.abs(grade), water ? water.effort : 0);
+        view.targetGrade = grade; view.next = st.t + cfg.sampleEvery; view.x = x; view.y = y;
+      }
+    } else view.next = 0;
+    var k = 1 - Math.exp(-dt * cfg.ease);
+    view.value += ((walking ? view.target : 0) - view.value) * k;
+    view.grade += ((walking ? view.targetGrade : 0) - view.grade) * k;
+    return view.value;
+  }
   function animate(dt, px0, py0) {
     var l = S().loc, z = st.cam.zoom, FP = (G.FX && G.FX.party) || {};
     var dx = G.Geo.wrapLon(l.lon - px0) * z, dy = (l.lat - py0) * z, moved = Math.hypot(dx, dy);
     if (moved > 60) moved = 0;                                  // 순간 이동(도시에서 다시 나올 때)
-    var s = FP.size || 1, stride = (STRIDE[MT().id] || 20) * s;
-    st.gph += Math.min(moved / stride, (FP.maxStepHz || 2.2) * dt);
+    var cfg = FP.effort, effort = cfg ? animateEffort(l, dx, dy, moved, dt, cfg) : 0;
+    var s = FP.size || 1, stride = (STRIDE[MT().id] || 20) * s * (1 - effort * (cfg ? cfg.strideShorten : 0));
+    var cadence = (FP.maxStepHz || 2.2) * (1 - effort * (cfg ? cfg.cadenceDrop : 0));
+    st.gph += Math.min(moved / stride, cadence * dt);
     st.gdist += moved / s;
     st.movT = moved > 0.02 ? 0.3 : Math.max(0, (st.movT || 0) - dt);
     st.pxs = (st.pxs || 0) + (moved / Math.max(dt, 1e-3) - (st.pxs || 0)) * Math.min(1, dt * 3);   // 화면에서 초당 움직인 거리 (뛰기·질주 그림을 고른다)
     var mv = st.movT > 0;
     if (G.Audio && G.Audio.travel) {
-      var travelKind = MT().id === 'wagon' ? 'wagon' : MT().id === 'horse' ? 'horse' : MT().id === 'walk' && (st.fastDays > 0 || (st.pxs || 0) > 55) ? 'run' : 'walk';
+      var travelKind = MT().id === 'wagon' ? 'wagon' : MT().id === 'horse' ? 'horse' : MT().id === 'walk' && (!cfg || effort < cfg.walkOnly) && (st.fastDays > 0 || (st.pxs || 0) > 55) ? 'run' : 'walk';
       G.Audio.travel(travelKind, mv ? Math.min(1, 0.25 + (st.pxs || 0) / 80) : 0);   // 숨소리·말발굽·마차 바퀴
     }
     if (G.Audio && G.Audio.amb && Date.now() >= (st.ambAt || 0)) {   // 배경 소리: 땅에 따라 새·밀림 · 야영하는 밤엔 부엉이 · 가끔 짐승·새 소리 (0.4초마다)
@@ -797,7 +876,8 @@
     msgs.forEach(function (m) { UI.toast(m.text, m.icon); });
   }
   async function camp() {
-    var s = S(), l = s.loc, f = s.fleet;
+    var s = S(), l = s.loc, f = s.fleet, campState = st;
+    if (!dryCampGround(l.lon, l.lat)) { UI.toast(CAMP_DRY_MESSAGE, 'tent'); return; }
     st.busy++;
     st.camping = true;
     try {
@@ -882,8 +962,8 @@
       // 같은 곳을 맴돌며 야영하면 윌슨·표류기 (js/systems/castaway.js)
       if (v && G.Castaway && G.Game.scene === L && S().loc.mode === 'land') { await G.Castaway.afterCamp(); refreshHud(); }
     } catch (e) { console.error(e); }
-    st.camping = false;
-    st.busy = Math.max(0, st.busy - 1);
+    campState.camping = false;
+    campState.busy = Math.max(0, campState.busy - 1);
   }
   function landRepairCfg() { var k = (G.BALANCE && G.BALANCE.landRepair) || {}; return { days: k.days || 2, perDay: k.perDay == null ? 0.07 : k.perDay, perSkill: k.perSkill == null ? 0.04 : k.perSkill, crewFloor: k.crewFloor == null ? 0.3 : k.crewFloor, fatigue: k.fatigue == null ? 3 : k.fatigue }; }
   /** 야영지에서 배를 고친다: 배가 보이는 물가에 대원들이 내려가 자재로 판자를 갈고 틈을 메운다.
@@ -1162,25 +1242,33 @@
     var cv = G.Game.canvases().overlay, ctx = cv.getContext('2d'), k = G.Game.overlayScale || 1;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.setTransform(k, 0, 0, k, 0, 0);
     var ff = fontFam();
-    if(G.TerrainArt)G.TerrainArt.draw(ctx,st.cam,toScreen,l);
+    var soilTrail=G.TerrainArt&&G.TerrainArt.drawSoilTrail(ctx,st.trail,st.cam,toScreen,st.t);
+    var cover = G.TerrainArt && G.TerrainArt.draw(ctx, st.cam, toScreen, l);
     // base marker
     var bp = toScreen(l.base.lon, l.base.lat);
     if (G.LandSea) G.LandSea.draw(ctx, toScreen, st.cam.zoom, st.t, ff);   // 바다를 오가는 배들 (내 배보다 아래)
     if (l.base.type === 'ship') { var bsh = S().fleet.ships[0], blk = bsh ? A.shipLook(bsh.type, { sails: bsh.sails, flag: '#1d3f7a' }) : { sails: ['sq', 'lat'], hull: '#5a3a22', cross: true }; blk.furl = 1; A.shipTop(ctx, bp[0], bp[1], 0.5, G.Scenes.sea.shipPx ? G.Scenes.sea.shipPx() * 0.85 : 80, blk, st.t); }
     if (G.AnimalTracking) G.AnimalTracking.draw(ctx, toScreen, 'land', l.lon, l.lat, st.t);
-    // 직접 발견한 도시 밖 유적·자연 경관은 소도시 정도 크기의 투명 모형으로 표시한다.
+    // 직접 발견한 도시 밖 유적·자연 경관의 발치를 지도 지면에 맞춘다.
     if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
-      var p = toScreen(d.lon, d.lat); if (p[0] < -60 || p[0] > 1660 || p[1] < -60 || p[1] > 960) return;
+      var foot = G.DiscoveryIcon.position(d), p = toScreen(foot[0],foot[1]);
+      if (p[0] < -100 || p[0] > 1700 || p[1] < -100 || p[1] > 1000) return;
       var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: 1.15, zoom: st.cam.zoom });
-      ctx.font = '600 14px ' + ff; var key = 'disc:' + d.id, tw = labelW[key] || (labelW[key] = ctx.measureText(d.name).width), lx = p[0] + mark.radius + 3;
+      ctx.font = '600 14px ' + ff; var key = 'disc:' + d.id, tw = labelW[key] || (labelW[key] = ctx.measureText(d.name).width), lx = p[0] + (mark.right == null ? mark.radius : mark.right) + 3;
       ctx.fillStyle = 'rgba(20,14,8,.58)'; ctx.fillRect(lx, p[1] - 10, tw + 9, 19); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(d.name, lx + 4, p[1] + 4);
     });
     // 내륙 도시도 항해·해도와 같은 투명 문화권 모형으로 표시한다.
+    if (G.CityIcon.beginModels) G.CityIcon.beginModels();
+    st.cityMarks = {};
     knownInland().forEach(function (c) {
-      var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;
-      var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { scale: 1.15, visited: s.visited && s.visited[c.id] });
-      ctx.font = '700 16px ' + ff; var tw = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width), lx = p[0] + mark.radius + 4;
-      ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(lx, p[1] - 11, tw + 10, 21); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name, lx + 5, p[1] + 5);
+      var p = toScreen(c.lon, c.lat); if (p[0] < -130 || p[0] > 1730 || p[1] < -130 || p[1] > 1030) return;
+      var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { zoom: st.cam.zoom, scale: 1.15, visited: s.visited && s.visited[c.id] });
+      ctx.font = '700 16px ' + ff;
+      var tw = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width);
+      var lx = (mark.right == null ? p[0] + mark.radius : mark.right) + 4, ly = (mark.y == null ? p[1] : mark.y) - 11;
+      mark.label = [lx,ly,tw+10,21];
+      st.cityMarks[c.id] = mark;
+      ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(lx,ly,tw+10,21); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name,lx+5,ly+16);
     });
     // contract zone
     var ct = s.contract && G.DISC[s.contract.disc];
@@ -1205,10 +1293,10 @@
     if (G.Guardian) G.Guardian.draw(ctx, toScreen, st.cam.zoom, st.t, ff);   // 쫓아오는 「?」 · 가까워지면 거대한 짐승의 모습
     // 지나온 길도 발자국과 같이 사라진다. 편대가 따라갈 경로 기록은 지우지 않는다.
     ctx.lineWidth = 2; ctx.setLineDash([3, 6]);
-    var lastP = null;
+    var lastP = null, lastSoil = false;
     st.trail.forEach(function (t) {
       var p=toScreen(t[0],t[1]),fade=G.Party.trackFade(t[2]==null?Infinity:st.t-t[2]);
-      if(fade&&lastP&&Math.abs(p[0]-lastP[0])+Math.abs(p[1]-lastP[1])<80){ctx.strokeStyle='rgba(90,40,20,'+(.3*fade).toFixed(3)+')';ctx.beginPath();ctx.moveTo(lastP[0],lastP[1]);ctx.lineTo(p[0],p[1]);ctx.stroke();}lastP=p;
+      if(fade&&lastP&&!(soilTrail&&lastSoil&&t[3])&&Math.abs(p[0]-lastP[0])+Math.abs(p[1]-lastP[1])<80){ctx.strokeStyle='rgba(90,40,20,'+(.3*fade).toFixed(3)+')';ctx.beginPath();ctx.moveTo(lastP[0],lastP[1]);ctx.lineTo(p[0],p[1]);ctx.stroke();}lastP=p;lastSoil=t[3];
     });ctx.setLineDash([]);
     var mt = MT(), terrNow = G.Geo.terrain(l.lon, l.lat), psz = (G.FX && G.FX.party && G.FX.party.size) || 1;
     var tp = [toScreen(l.lon, l.lat)];tp[0][2]=st.t;
@@ -1220,15 +1308,25 @@
     if (G.Quake && st.qo) G.Quake.drawLand(ctx, toScreen, toWorld, st.cam.zoom);
     // 흔들리는 땅 위에서 탐험대는 조금 늦게 따라가 휘청인다 (그림만 — 실제 자리·발밑 먼지 자리는 그대로)
     if (st.qo && G.Quake) { var stg = G.Quake.stagger(st.qo); tp = tp.map(function (q) { return [q[0] + stg[0], q[1] + stg[1]]; }); }
-    // 탐험대 모형: 발밑 먼지 → 고리 → 줄지어 선 대원들
+    // 발밑 먼지와 대원들 뒤에, 조종하는 대장의 발표시를 한 번 그린다.
     var pp = tp[0], mvg = (st.movT || 0) > 0;
+    var effort = st.effort && st.effort.value || 0, walkOnly = G.FX.party.effort && effort >= G.FX.party.effort.walkOnly;
     G.Party.drawFx(ctx, st.pfx, toScreen);
-    st.unitItems = G.Party.draw(ctx, { ring: 1, pts: tp, head: l.heading, moving: mvg, camping: !!st.camping, phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style, gather: st.gather, face: st.face, flag: '#1d3f7a', gait: mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk', fast: (st.pxs || 0) > ((G.FX && G.FX.sprites && G.FX.sprites.partyFastPx) || 70), terr: terrNow, cache: st.unit, canStand: expeditionGround, follow: { x: l.lon, y: -l.lat, zoom: st.cam.zoom, wrap: 360 } });
+    st.unitItems = G.Party.draw(ctx, { pts: tp, head: l.heading, moving: mvg && !st.camping, camping: !!st.camping, campGround:campGround,
+      phase: st.gph, dist: st.gdist, t: st.t, mount: mt, party: l.party, draft: mt.draft, region: mt.style,
+      gather: st.gather, face: st.face, flag: '#1d3f7a', gait: !walkOnly && mt.id === 'horse' && (st.mk || 1) > 2.1 ? 'trot' : 'walk',
+      fast: !walkOnly && (st.pxs || 0) > (G.FX.sprites.partyFastPx || 70), terr: terrNow,
+      effort: effort, grade: st.effort && st.effort.grade || 0, cover: cover, wadeAt: expeditionWade, cache: st.unit, canStand: expeditionGround,
+      follow: { x: l.lon, y: -l.lat, zoom: st.cam.zoom, wrap: 360, lift: G.Terrain && G.Terrain.lift,
+        canStand: walkable, trail: st.trail, trailCount: tp.length - 1 } });
+    var covered = !st.unitItems.length || st.unitItems.some(function (m) { return m.covered; });
+    G.Party.ring(ctx, pp[0], pp[1], l.heading, mvg && !st.camping, st.t, psz, covered);
     // 도시 이름은 탐험대 위에 (가려지지 않게)
     knownInland().forEach(function (c) {
-      var p = toScreen(c.lon, c.lat); if (p[0] < -50 || p[0] > 1650 || p[1] < -50 || p[1] > 950) return;
-      if (Math.abs(p[0] - pp[0]) > 160 || Math.abs(p[1] - pp[1]) > 90) return;
-      ctx.font = '700 16px ' + ff; var tw2 = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width), lx2 = p[0] + G.CityIcon.metrics(c, 1.15).radius + 4; ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(lx2, p[1] - 11, tw2 + 10, 21); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name, lx2 + 5, p[1] + 5);
+      var mark = st.cityMarks[c.id], label = mark && mark.label;
+      if (!label || Math.abs(label[0] - pp[0]) > 160 || Math.abs(label[1] - pp[1]) > 90) return;
+      ctx.font = '700 16px ' + ff; ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect.apply(ctx,label);
+      ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name,label[0]+5,label[1]+16);
     });
     // status
     if ((st.f = (st.f || 0) + 1) % 8 === 0 && el.status) {
@@ -1237,7 +1335,9 @@
       var tN = G.Geo.terrain(l.lon, l.lat), tK = tN === 'sea' ? 'grass' : tN, M = G.Mounts, mt2 = MT();
       var su2 = M.suit(mt2.id, tK), how = mt2.id === 'walk' ? '도보' : M.get(mt2.id).name + ' ' + mt2.n + (mt2.id === 'porter' ? '패' : mt2.id === 'wagon' || mt2.id === 'reindeer' ? '대' : '필');
       var effTxt = mt2.id === 'walk' ? '' : ' — 걸음 ×' + M.speed(mt2, tK, l.party).toFixed(1) + ' · 피로 ×' + M.fatigue(mt2, tK, l.party).toFixed(2) + (M.cover(mt2, l.party) < 1 ? ' (짐승이 모자라 효과가 ' + Math.round(M.cover(mt2, l.party) * 100) + '%)' : '') + ' · 이 땅 <span class="suit ' + su2.cls + '">' + su2.mark + '</span>';
-      var statusHtml = (st.paused ? '<b>⏸ 정지</b> · ' : '') + (st.dir ? U.dirName(Math.atan2(st.dir[1], st.dir[0])) + '쪽으로 걷는 중' + (st.pointerWalk ? ' (마우스를 따라감)' : '') + ' · Space 정지' : st.path ? '클릭한 곳으로 이동 중 — 도착하면 정지' : followOn() ? '마우스 따라가기 켬 — 가려는 쪽 땅을 누르면 따라 걷습니다' : '땅을 누르면 그곳까지 걷습니다 · 방향키로도 걷습니다') + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
+      var walkStatus = st.dir ? U.dirName(Math.atan2(st.dir[1], st.dir[0])) + '쪽으로 걷는 중' + (st.pointerWalk ? ' (마우스를 따라감)' : '') + ' · Space 정지' : st.path ? '클릭한 곳으로 이동 중 — 도착하면 정지' : followOn() ? '마우스 따라가기 켬 — 가려는 쪽 땅을 누르면 따라 걷습니다' : '땅을 누르면 그곳까지 걷습니다 · 방향키로도 걷습니다';
+      var activity = st.camping ? '<b>야영 중</b>' : (st.paused ? '<b>⏸ 정지</b> · ' : '') + walkStatus;
+      var statusHtml = activity + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
       refreshDestinations(near);
       if (el.status._landHtml !== statusHtml) { el.status._landHtml = statusHtml; el.status.innerHTML = statusHtml; }
     }

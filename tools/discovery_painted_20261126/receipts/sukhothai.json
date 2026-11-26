@@ -1,0 +1,43 @@
+{
+  "id": "sukhothai",
+  "name": "수코타이 왓 마하탓",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sukhothai.png",
+  "sourceSha256": "ef48d5dc9579648c8482cd97de00d64f4b4fedf2cd2e008d8a5317e178950303",
+  "sourceMtimeNs": 1795662026015817700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sukhothai.gif",
+      "sha256": "57a779ecaab44582d16ba674a1ca83b15adefe2ab3bcc64dc245fb04a9591c93"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sukhothai.jpg",
+      "sha256": "0bcbe00fb4fb5024ac29b5dcf51b4836a8258e41e0204e947ed314849ae6723a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sukhothai.webp",
+      "sha256": "88d6b8cce0674a532851c7a9c8182764dff69cff7c04f5825b518980c0c6ecf5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sukhothai.gif",
+      "sha256": "5575bf19dc743afd86d37bf62f78c56e580bfe9398eb5daed3a544f2b8345b33",
+      "bytes": 3616410
+    },
+    {
+      "file": "images/discovery-ends/sukhothai.jpg",
+      "sha256": "ec02daaf1f1691b8f892179e944c2537edfa7c755ee6c7585da7f3844c3944fc",
+      "bytes": 104796
+    },
+    {
+      "file": "images/discovery-sheets/sukhothai.webp",
+      "sha256": "b807cc65c29dbb67150c3d2d173b42ba033fcc33e770720437c44bf09d780be4",
+      "bytes": 1807444
+    }
+  ]
+}

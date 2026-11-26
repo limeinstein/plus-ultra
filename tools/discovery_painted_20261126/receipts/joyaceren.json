@@ -1,0 +1,43 @@
+{
+  "id": "joyaceren",
+  "name": "호야 데 세렌",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/joyaceren.png",
+  "sourceSha256": "d10b7e667b331b9a4cbd0bf93f93a972d261ddc41082b4e6fdad1762058274bf",
+  "sourceMtimeNs": 1795663158513256900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/joyaceren.gif",
+      "sha256": "cbde30915e7fe6a107c92a4e023493535395b3073d5a1bbbbae91c0b25ba693a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/joyaceren.jpg",
+      "sha256": "dfb2dba42c51903ffd7d606326dc14523ff1f3fe33a84114dff04df3d8463e38"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/joyaceren.webp",
+      "sha256": "0d77fa02ead8c312c00357b2a64342bb6888623858a6622d084814e457e0f6e7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/joyaceren.gif",
+      "sha256": "1700fa6f1e7af881e4689507c9122eddf43477c8cdfd846ca07ef3011ac3daac",
+      "bytes": 3740221
+    },
+    {
+      "file": "images/discovery-ends/joyaceren.jpg",
+      "sha256": "bf7cde9fe0efd212cd221c6a7f55fe13a4d31704dbe4febb3eb91e0fa5c372bf",
+      "bytes": 102102
+    },
+    {
+      "file": "images/discovery-sheets/joyaceren.webp",
+      "sha256": "4efedfd0727a9537477dedb0668be3a5a21f93b4d3f84c1cb3962271f60bbe30",
+      "bytes": 1837242
+    }
+  ]
+}

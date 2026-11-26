@@ -1,0 +1,43 @@
+{
+  "id": "marib",
+  "name": "마리브 댐과 해의 신전",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/marib.png",
+  "sourceSha256": "5136591b692a3036dcabc69a81e0b2b1e7d46e08178c21d2f95be7984417f9d6",
+  "sourceMtimeNs": 1795661726315981400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/marib.gif",
+      "sha256": "0520c6ac53d12e07b23c6174c56262d258ea8eabea6f9c8434d10d08f9d6b0bf"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/marib.jpg",
+      "sha256": "5801270af86689a14e8c98ae6101b01a34ecb37a5c769b5d71b0f6cca49713f9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/marib.webp",
+      "sha256": "fa32dc23e8ada6b9267d74c5f75f34b2066e5a210944b1a0fd489567cb56e2ff"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/marib.gif",
+      "sha256": "cf4eb4f47f3f1ec68a2557acdb75eac287492b34b6e16b16c23d5c6f0b6b244d",
+      "bytes": 3464329
+    },
+    {
+      "file": "images/discovery-ends/marib.jpg",
+      "sha256": "8ea29ad7206bb58ddd9e568a8b14ce5954283a62eec6422943841987ca02e761",
+      "bytes": 102899
+    },
+    {
+      "file": "images/discovery-sheets/marib.webp",
+      "sha256": "67a4d1f1481adb67a1aa0420ed0918d7b7d3a1a8aaa8f34e73ff5caa86dd8ecd",
+      "bytes": 1781688
+    }
+  ]
+}

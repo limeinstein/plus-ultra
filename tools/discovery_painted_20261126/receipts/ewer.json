@@ -1,0 +1,43 @@
+{
+  "id": "ewer",
+  "name": "은 주전자",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ewer.png",
+  "sourceSha256": "a8b9e6ed2e50985be07d34ab47108459fe63d6fb3ffc8b8a59c9d04acca6c058",
+  "sourceMtimeNs": 1795659858496080300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ewer.gif",
+      "sha256": "0e4a48c7cd09ab5dbb0dc26454101d7b0ffe2320385f377ef4df455b4b9ee205"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ewer.jpg",
+      "sha256": "975c8ad02d797930e2566da3ac0587e10a7b5d35d7c2704848e15b7a7e79e6c7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ewer.webp",
+      "sha256": "a9b93c07d4cb99516d9ac57ce1da4a5876b6ac2c65a4b9c1f1b4878e97a35c9b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ewer.gif",
+      "sha256": "eb4c01eef940de0b7dc898515557a449775980b6439b9c05b5096a34447f0ce6",
+      "bytes": 3616313
+    },
+    {
+      "file": "images/discovery-ends/ewer.jpg",
+      "sha256": "401ac40e989540ca212d8a810aa8c7bdf94b9dd04f2c29e5c0cbf22c3bda0629",
+      "bytes": 94672
+    },
+    {
+      "file": "images/discovery-sheets/ewer.webp",
+      "sha256": "1906ffd74775f21587effd4eb668896aff56ac321a1d97480246b9b25b30b61d",
+      "bytes": 1606964
+    }
+  ]
+}

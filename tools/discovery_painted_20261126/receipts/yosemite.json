@@ -1,0 +1,43 @@
+{
+  "id": "yosemite",
+  "name": "요세미티 계곡",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/yosemite.png",
+  "sourceSha256": "136797f753a03920b40c8fa031a0858861fd491c7390541562f177eef8289b05",
+  "sourceMtimeNs": 1795659656629322100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/yosemite.gif",
+      "sha256": "9609b1f354787e6dc6e038a1b8fda93fc431f4fb2f12091ff93de7b3f757e39f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/yosemite.jpg",
+      "sha256": "23c307a6a5fd6300dca24ba7423fdb4fd6f0792415060f0415de452a21bef02d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/yosemite.webp",
+      "sha256": "f538c0724e181a0449d79c6f1da495f16b5c4fe4142f47395b533dd32b2c016d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/yosemite.gif",
+      "sha256": "13daf3cfc7e96c7a59b98d41f412283d94a23ad5e37175c50dcfc0d28fdf0878",
+      "bytes": 3245670
+    },
+    {
+      "file": "images/discovery-ends/yosemite.jpg",
+      "sha256": "3235d61209d8ae43b57a87ae242c62ed6246f2f3577c5b4ac62cd4e0cb81d628",
+      "bytes": 100897
+    },
+    {
+      "file": "images/discovery-sheets/yosemite.webp",
+      "sha256": "722e1c9feeebd2fca75ec7fc27fd88443c9ba15b0224dde2260991039ecf3743",
+      "bytes": 1769964
+    }
+  ]
+}

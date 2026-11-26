@@ -1,0 +1,43 @@
+{
+  "id": "catalhoyuk",
+  "name": "차탈회위크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/catalhoyuk.png",
+  "sourceSha256": "1cf0ebea3d1068251683f1e299bdeee2f737bd838f46875b76e60e5f4b63c97b",
+  "sourceMtimeNs": 1795662387273285400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/catalhoyuk.gif",
+      "sha256": "4f17b75047a24e321c76765b9a55a6a7289bf8ffba850621127be8de1a73404c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/catalhoyuk.jpg",
+      "sha256": "85010148cf3bb8eb797f56b4d9daaf6ce776f6dfdbfc54e5e1857e0cdca9475f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/catalhoyuk.webp",
+      "sha256": "79feb3f16ffcd0c54d5060266f5b97ddbbd77e6d5074e90f407095a43df1fb4d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/catalhoyuk.gif",
+      "sha256": "910188b33ad609bcaf1e5b3739bf61136cd97633a767466edbdb2fc8f0d697f5",
+      "bytes": 3459456
+    },
+    {
+      "file": "images/discovery-ends/catalhoyuk.jpg",
+      "sha256": "16438473885cbb23e5be004664903ce2cbf8fd38c6a90dc502c66e2dd291eb83",
+      "bytes": 96242
+    },
+    {
+      "file": "images/discovery-sheets/catalhoyuk.webp",
+      "sha256": "972ccd8da4520ea09cc2731966bcb254237b7bb6f8e5087247d87a5030cdb1ad",
+      "bytes": 1688104
+    }
+  ]
+}

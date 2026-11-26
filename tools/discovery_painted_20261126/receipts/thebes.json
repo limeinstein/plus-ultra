@@ -1,0 +1,43 @@
+{
+  "id": "thebes",
+  "name": "카르나크 아몬 대신전",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/thebes.png",
+  "sourceSha256": "0098b9b5ea0646a4cd869fb2d8f661084cb4855da2750d503f969ad7a11caaac",
+  "sourceMtimeNs": 1795659648925299100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/thebes.gif",
+      "sha256": "01c86a138b0c059fe98446784a9f1587d0a7d30ecb06e4138a7019cac76cb612"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/thebes.jpg",
+      "sha256": "fe1361423ecab9208919cd0b9f0f8df686fd59db64a629735632e227a1b825cb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/thebes.webp",
+      "sha256": "e1c698cbdff671b5c45069c979ded1e46c08c3328ce4334bcdf9a9204f69e042"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/thebes.gif",
+      "sha256": "9b43e962f6f93bf1c4fe366c4af8058a32677af1f6f1313b4b1a3439d1215b58",
+      "bytes": 3614558
+    },
+    {
+      "file": "images/discovery-ends/thebes.jpg",
+      "sha256": "5b5d67dd778ecf5a064f239bc4db54d6f26db3aee0145b144bb5d821d336633c",
+      "bytes": 94493
+    },
+    {
+      "file": "images/discovery-sheets/thebes.webp",
+      "sha256": "b8f8add619445a4e5bf3c582d717abd9e1eb8a2912716eb45e8ca264de5d36d8",
+      "bytes": 1565930
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "kabayan",
+  "name": "이바로이의 불 미라",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kabayan.png",
+  "sourceSha256": "e25d514c6865551def0271f735032482ef7a016c5030f754499a8b5b9f6fd7d9",
+  "sourceMtimeNs": 1795662618376102500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kabayan.gif",
+      "sha256": "a324ff9ab8527770a94cf1887113649e463c94f8ae9058dce91e76cd714359a9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kabayan.jpg",
+      "sha256": "f62f82de1a2e410e4b7581fd35f310d7ba092ddc3139fd3beabed9417f3f31d1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kabayan.webp",
+      "sha256": "f6bae093432b8a306f90781af77564aefa91de13223e90e7556c88f755a3f7fd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kabayan.gif",
+      "sha256": "a4068d8c70a2275437f6fc1933d38d09eabadf86998a787f15a32831b3f335e4",
+      "bytes": 3767279
+    },
+    {
+      "file": "images/discovery-ends/kabayan.jpg",
+      "sha256": "0118cb5187adbb786d14806eaa6044564f2bd13374a7ea4b61369d0a64bfc096",
+      "bytes": 103786
+    },
+    {
+      "file": "images/discovery-sheets/kabayan.webp",
+      "sha256": "361dc82049adf501d3317708a74bfa8dfe161de0e3aa6f24405e83c2c683085b",
+      "bytes": 1832224
+    }
+  ]
+}

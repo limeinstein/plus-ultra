@@ -1,0 +1,43 @@
+{
+  "id": "tamarind",
+  "name": "타마린드",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/tamarind.png",
+  "sourceSha256": "f2e87e87325eff3ce5c755afdde47843544513015c1c2ada9b3796193c739fb9",
+  "sourceMtimeNs": 1795659653062345500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tamarind.gif",
+      "sha256": "66a4da12d6b0e934538c3dcce9b6ef0fe613b711323243166255e92fdba683c8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tamarind.jpg",
+      "sha256": "7b77cae4749ccd2eb6bd56aac90b8d1a605ff78f2e01ad7118380343db314683"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tamarind.webp",
+      "sha256": "10c67b6e6ecd01d0cbeb02465e2771232f5005579b6db51012a2cb5d5078bc41"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tamarind.gif",
+      "sha256": "91e61985a37522c7928d66a16cce509658c357ae7db3d2b7595107366c4d3d10",
+      "bytes": 3440177
+    },
+    {
+      "file": "images/discovery-ends/tamarind.jpg",
+      "sha256": "bbf1a67279863edc94fac8f96483560ddad1bfade86ee6b9fa4bbdf3abf93dc5",
+      "bytes": 99364
+    },
+    {
+      "file": "images/discovery-sheets/tamarind.webp",
+      "sha256": "21375df4b08b9d06322b9fcccc7495097519e30caa81eb05edcdb91bad94a7f5",
+      "bytes": 1726034
+    }
+  ]
+}

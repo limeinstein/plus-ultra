@@ -1,0 +1,43 @@
+{
+  "id": "putuo",
+  "name": "보타산 — 관음의 섬",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/putuo.png",
+  "sourceSha256": "3a5ee493624b093f5377a50e4bb4dcf501d6c234b77d2f9df5eb96ae0556b54a",
+  "sourceMtimeNs": 1795659647356188600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/putuo.gif",
+      "sha256": "92cecebd7ecda503bf18e80a4c936749fc3bfa4f7526d5daea832b13717f0716"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/putuo.jpg",
+      "sha256": "ea5e248c9ab43533f9febcb9ca758b82e1179093c35796249a0e2ce21bdacf92"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/putuo.webp",
+      "sha256": "502cfdabf176a7ed1fae2d8c5a75b7062ca3bc060f606cf9b298eeef23a5d53e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/putuo.gif",
+      "sha256": "1bd2482f50f2f0dc3ecaf52c0a1d83c4dd9c0bad3b47ccb6d2f9cc7aa2935c02",
+      "bytes": 3095766
+    },
+    {
+      "file": "images/discovery-ends/putuo.jpg",
+      "sha256": "c39c0067cbf9330c5d8b987dba426df1e0c72144af1260e44a56de06c718a780",
+      "bytes": 85460
+    },
+    {
+      "file": "images/discovery-sheets/putuo.webp",
+      "sha256": "adf33ddecbba48eb7b18e8d6f23c542c783a450d763e5ea6b5c12166c24c7942",
+      "bytes": 1445578
+    }
+  ]
+}

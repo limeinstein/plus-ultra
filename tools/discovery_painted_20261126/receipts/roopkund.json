@@ -1,0 +1,43 @@
+{
+  "id": "roopkund",
+  "name": "로프쿤드 — 해골 호수",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/roopkund.png",
+  "sourceSha256": "dacb27cd129714845a4cf4f12b103a40751397723c86259ca6dab9d1625e167b",
+  "sourceMtimeNs": 1795662523804266700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/roopkund.gif",
+      "sha256": "48844084c4667198154f2525f69b9b1ccd452576e51a12be6246f3e9749d5d41"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/roopkund.jpg",
+      "sha256": "6e4d5c1169b29267fa17f8a443a1349bc7e07cb0796da55e21ff2a6ae3a421ee"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/roopkund.webp",
+      "sha256": "4b9fb1291652b89950a72c449c51c57815723f6c299e6b9cde04c5ffe4a77449"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/roopkund.gif",
+      "sha256": "097f188258e5486aaf4ccdb7765481383d06b54c1c3d77842729745c20a192d8",
+      "bytes": 3460519
+    },
+    {
+      "file": "images/discovery-ends/roopkund.jpg",
+      "sha256": "587cb65bad2312f86c5d77b5ab7f7e14459b1a3a4e43ea406a41d3d937599774",
+      "bytes": 94823
+    },
+    {
+      "file": "images/discovery-sheets/roopkund.webp",
+      "sha256": "9b952eaf35870a0cb0df20b11aefbd273b2e37144f2d06004e1a9b9f297dc436",
+      "bytes": 1648996
+    }
+  ]
+}

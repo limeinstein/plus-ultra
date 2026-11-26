@@ -1,0 +1,43 @@
+{
+  "id": "baalbekstones",
+  "name": "바알베크의 거석",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/baalbekstones.png",
+  "sourceSha256": "85955b775403ef5390fa59d7fa5a9ba64bb1a95d630019f33ecf050b90d2d258",
+  "sourceMtimeNs": 1795662413346910900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/baalbekstones.gif",
+      "sha256": "25c82ee9d386ef43955644533e0dc603d1ac0c9c0fee2ec3abecf7147693eb42"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/baalbekstones.jpg",
+      "sha256": "15a7d59301b068353f8a58edd9fd4acdb908a994d41b915264449e69f1c40575"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/baalbekstones.webp",
+      "sha256": "0f90fe60aa60a26df12875f718838f020a3f0a312b552189d9f793a65b9ca496"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/baalbekstones.gif",
+      "sha256": "87a1e47e099c39516e25995567b94223023ffe14a8fb2417f5d020aa5a14893e",
+      "bytes": 3529991
+    },
+    {
+      "file": "images/discovery-ends/baalbekstones.jpg",
+      "sha256": "191ef947294be9f7323857e59523abca7b1a677ff38e2875f8af47e222e44885",
+      "bytes": 100789
+    },
+    {
+      "file": "images/discovery-sheets/baalbekstones.webp",
+      "sha256": "7249af2c66bd19e372f6d55788d1db40cc443a244ccc9dc95b5de43a395c887f",
+      "bytes": 1768360
+    }
+  ]
+}

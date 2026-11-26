@@ -1,0 +1,43 @@
+{
+  "id": "lejre",
+  "name": "레이레 — 덴마크 첫 왕들의 전당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/lejre.png",
+  "sourceSha256": "5f39a7eddac0c7b78c42ab71d09c4c7b4fef0da8e825f69100f3ab9a90a73718",
+  "sourceMtimeNs": 1795663187418813300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/lejre.gif",
+      "sha256": "bd6068463bc4e43cae8645f50755b166cdf748207f9b5bb4bb150e573c509f5d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/lejre.jpg",
+      "sha256": "86c8ddff5a4f6bb77429439535b29f250bb8016371e865f6cb664b8e1a0c7925"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/lejre.webp",
+      "sha256": "0fd217fee1ed26d95421fa07eb7bb25ba8d40b27a436f5a59901331be3d39bcd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/lejre.gif",
+      "sha256": "27dd04a45f5cc5f08389b601ece9d8e9d5674b700e11faa0ca50e73e4ebe3a59",
+      "bytes": 3406119
+    },
+    {
+      "file": "images/discovery-ends/lejre.jpg",
+      "sha256": "9953958fd2ab70cc524c7c2cd0405ade04e0596760cf0d8dfe0546e37ab0d9bf",
+      "bytes": 94972
+    },
+    {
+      "file": "images/discovery-sheets/lejre.webp",
+      "sha256": "8335d11cf0386b114f08481a8b8e80d59b363a24c1dc0a977a9118ced7266682",
+      "bytes": 1639078
+    }
+  ]
+}

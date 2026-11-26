@@ -1,0 +1,43 @@
+{
+  "id": "escorial",
+  "name": "엘 에스코리알",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/escorial.png",
+  "sourceSha256": "e0374001ffe0595d4731bfb233f5e1a6b0296e5dddb4feed1060d25fb52badbc",
+  "sourceMtimeNs": 1795661132239599500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/escorial.gif",
+      "sha256": "7fbbc637a29dbe8072aa92653fb8d0e9f4fbf5e2f8024902af3e8990a426c954"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/escorial.jpg",
+      "sha256": "605cd37210189c594da79343a40dbe38d7b9f9c25bb32b1f27e92dc3fb0a2cdd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/escorial.webp",
+      "sha256": "fe9bc21c671da11cdc02907c2425cc19f08820dfa7d31404bb3e81c93454d43c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/escorial.gif",
+      "sha256": "9c2834b155d6dfb9f95516634ea068cf1dccdea9d115baf136e1ffed56d84ef1",
+      "bytes": 3339688
+    },
+    {
+      "file": "images/discovery-ends/escorial.jpg",
+      "sha256": "d31a1b8a1033c21747a84718b1c7df266c2345a0c70cf9045c9da402374a19c5",
+      "bytes": 94641
+    },
+    {
+      "file": "images/discovery-sheets/escorial.webp",
+      "sha256": "4866f8fc77841969f7267407da6de854b0b4db8491d48b7a71b6408e20f68ffe",
+      "bytes": 1625136
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "biosphere",
+  "name": "몬트리올 바이오스피어",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/biosphere.png",
+  "sourceSha256": "3d8c60bba1e7efbebe4c9652835b82c7d6a922fbd4e9c2bf40230afdfcef2704",
+  "sourceMtimeNs": 1795661424887261700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/biosphere.gif",
+      "sha256": "bb3473941491e999468f3228b579eac656d1dcec70f5b3283f740503c20d8e2f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/biosphere.jpg",
+      "sha256": "ebbcd671442c13d650ae70c20910e6bb55dae63ce8b5e3b938dc425747bb15d8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/biosphere.webp",
+      "sha256": "5a2d907a0afb6ca43d745c55002f96e79b00bca17fb61ff4707bc8b2b6a6a0f7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/biosphere.gif",
+      "sha256": "c95d0f8d7bfc83d668f03de4015fd71f08eb0dd75f30f210ddc51905c17a841b",
+      "bytes": 3444564
+    },
+    {
+      "file": "images/discovery-ends/biosphere.jpg",
+      "sha256": "5d231b15693fa01a81665aef281d5649af6e58876cafcc298ce70979f477a0c3",
+      "bytes": 99876
+    },
+    {
+      "file": "images/discovery-sheets/biosphere.webp",
+      "sha256": "010922b124ff623cfdef20a1f2f67084aca5cf7c1d4304dcdf040c871ccf156f",
+      "bytes": 1721964
+    }
+  ]
+}

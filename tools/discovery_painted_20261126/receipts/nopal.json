@@ -1,0 +1,43 @@
+{
+  "id": "nopal",
+  "name": "노팔",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/nopal.png",
+  "sourceSha256": "b71c537c0e8a8bda064fb67704b5ff093f23c3b918ab61dc840373e812b8ddc0",
+  "sourceMtimeNs": 1795659656516198900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nopal.gif",
+      "sha256": "046cb88fa4a647836354bf6fd03cf70b1446b70317021aa882e5889b293e9c8c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nopal.jpg",
+      "sha256": "ab944aadb108d013053db37273807c9475a8d19318c1a69bcc91f7daa8df16c9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nopal.webp",
+      "sha256": "3c0b1bd6649ba2d934249687323163bdb51c07802b22ad161d8db843899a1e85"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nopal.gif",
+      "sha256": "f9d30ae1a7e7ae1c13b2f32afe285e1f5a96286df7581bab0f59aa14cdafb284",
+      "bytes": 3295181
+    },
+    {
+      "file": "images/discovery-ends/nopal.jpg",
+      "sha256": "5e2fb512a11bf76e9ea8d5462eb832fc92dcf151b65725642dd4c9ccb68eb9b2",
+      "bytes": 96317
+    },
+    {
+      "file": "images/discovery-sheets/nopal.webp",
+      "sha256": "2d7efc9354e6f978a6090d4f49d2d786bd7b14fbfc7911bbc981d70e6b9c3d38",
+      "bytes": 1667936
+    }
+  ]
+}

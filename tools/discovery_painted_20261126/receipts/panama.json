@@ -1,0 +1,43 @@
+{
+  "id": "panama",
+  "name": "파나마 운하",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/panama.png",
+  "sourceSha256": "17f572a3c25def7665d1b64acb405ca91bac0fe4da8d58c1d5e5060b439d15aa",
+  "sourceMtimeNs": 1795661558065233000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/panama.gif",
+      "sha256": "c300d32021b5c0bc8500aeb7509942cfd2d1859e24ee812565ba5cd984df33ce"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/panama.jpg",
+      "sha256": "20f66066efe4bfeb86fb19dbb1ad29da63cad9ba358425b7a4af6106a222ee1d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/panama.webp",
+      "sha256": "efb05cebbfd2c9fa83a1c0d7a6587d7216f6d433a72e954d1ce3e12193d680a8"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/panama.gif",
+      "sha256": "bcc6bfb5d728a4e898eba385efc06c2d1eefb1688cef3870151375e1f79ce64f",
+      "bytes": 3527802
+    },
+    {
+      "file": "images/discovery-ends/panama.jpg",
+      "sha256": "a02643f725dbe270c7b63b87f1fcd5e14d7b690cd8b54a1ad5f0886699756f3d",
+      "bytes": 99157
+    },
+    {
+      "file": "images/discovery-sheets/panama.webp",
+      "sha256": "6f2ee287d3b4e4ea9de3bbcb20d903e46581bc71a6a410b3216a2122a930e4ba",
+      "bytes": 1704322
+    }
+  ]
+}

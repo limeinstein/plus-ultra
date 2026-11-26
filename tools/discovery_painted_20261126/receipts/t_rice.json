@@ -1,0 +1,43 @@
+{
+  "id": "t_rice",
+  "name": "쌀",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_rice.png",
+  "sourceSha256": "a6ce14f73f5bcfe819a7cad55aa904d5ac6cc39952126484d26f32876884a0ed",
+  "sourceMtimeNs": 1795660692681676800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_rice.gif",
+      "sha256": "8cba0e96a855f7ce409c0911b447d3faf0156c6ade6a0eecde2a41b16db65c25"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_rice.jpg",
+      "sha256": "8c88d2666b61814d7fcd413889e83f04683f26fe39de8d52f418a6ae480dcbd6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_rice.webp",
+      "sha256": "490d87fb2c4c10b22dafabc1b5b3d27d47008058a561c354788cfd76b5efa312"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_rice.gif",
+      "sha256": "44705b566c4234022c311a77600ba7ef6163f8e2e6cc8d31e7853115e65014ba",
+      "bytes": 3511793
+    },
+    {
+      "file": "images/discovery-ends/t_rice.jpg",
+      "sha256": "18f810c17ffdb89a011d7f468c34a836a8b2249498313bb06ff0a939825299db",
+      "bytes": 100584
+    },
+    {
+      "file": "images/discovery-sheets/t_rice.webp",
+      "sha256": "e8290c1857c58e1d20048be057946f17b7350fbd72410318be9972a59a4d87c8",
+      "bytes": 1763670
+    }
+  ]
+}

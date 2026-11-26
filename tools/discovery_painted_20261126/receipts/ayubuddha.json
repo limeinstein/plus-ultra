@@ -1,0 +1,43 @@
+{
+  "id": "ayubuddha",
+  "name": "아유타야의 불두",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ayubuddha.png",
+  "sourceSha256": "2032961f57ce44b1d63385ecea9b6a678d686bdbb5fed76ab4d2050c7b1e25c8",
+  "sourceMtimeNs": 1795659564300576100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ayubuddha.gif",
+      "sha256": "c286adb1a305e36f54f7a7f37481c2f5ed55b7cf64a59c6c8cb36dff94e4388e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ayubuddha.jpg",
+      "sha256": "c0699f80eadbf9f052fd8f8bea4c76ae21f605db4c2800a49e501f66011af643"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ayubuddha.webp",
+      "sha256": "8dbdff3ef4f056020075db0f856268a0ca0c8afb85bbbe5483f596cd4a5b5b83"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ayubuddha.gif",
+      "sha256": "fa248ae5b79e1e3e83074387218d5bbd056b403d8696618b681e5e7aa1317e6e",
+      "bytes": 3813400
+    },
+    {
+      "file": "images/discovery-ends/ayubuddha.jpg",
+      "sha256": "6f534c09eccc4c0f0801a8d392fc775150562f34590acea7aef404051a494129",
+      "bytes": 102856
+    },
+    {
+      "file": "images/discovery-sheets/ayubuddha.webp",
+      "sha256": "a7df81c9d00b0156e2f18a4cf68a1a661b9313162d0719cd97e75dcd0f9d954a",
+      "bytes": 1802242
+    }
+  ]
+}

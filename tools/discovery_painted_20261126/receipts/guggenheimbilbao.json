@@ -1,0 +1,43 @@
+{
+  "id": "guggenheimbilbao",
+  "name": "빌바오 구겐하임 미술관",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/guggenheimbilbao.png",
+  "sourceSha256": "0205dde8a017e06d5be7e366da05c6b30a6b0056977f5c7d149e75742524c920",
+  "sourceMtimeNs": 1795662927801265000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/guggenheimbilbao.gif",
+      "sha256": "66787e4d3a3a8d4adac1988442a85d234afeac56a9f43ed8c7ae8e934c8bd721"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/guggenheimbilbao.jpg",
+      "sha256": "89f9e279c121b5cc6eccadd87f7dfe4702c1a471d8878ce8a7d41af8484f053c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/guggenheimbilbao.webp",
+      "sha256": "ec7a753e031fa386d6c1c520887df3bacd804b5c47771f660730b23cddc6fec1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/guggenheimbilbao.gif",
+      "sha256": "f9ecb0888359641ceb9707da75833720c4788681cbf58d24a8471ff19c805d2f",
+      "bytes": 3324700
+    },
+    {
+      "file": "images/discovery-ends/guggenheimbilbao.jpg",
+      "sha256": "796b35b02e73a1ac7c0ed3cb4cd249c197eccb34a8e7a7b3632d6af07961ff03",
+      "bytes": 91270
+    },
+    {
+      "file": "images/discovery-sheets/guggenheimbilbao.webp",
+      "sha256": "a4307ade5584ed0cfaddd149bb99c8d75887eeb12c7f080181d2bd6fff715d1d",
+      "bytes": 1564038
+    }
+  ]
+}

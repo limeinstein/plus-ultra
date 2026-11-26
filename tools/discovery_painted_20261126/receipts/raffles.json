@@ -1,0 +1,43 @@
+{
+  "id": "raffles",
+  "name": "래플스 호텔",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/raffles.png",
+  "sourceSha256": "23963901460ec487cc3ec926edbf319871f093739d876d938886fe141839c55a",
+  "sourceMtimeNs": 1795662989296023700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/raffles.gif",
+      "sha256": "0442b4da0babd28a53af9c08df88f9e5e37863c5713b87a4a752050164243662"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/raffles.jpg",
+      "sha256": "634855383764f4f60f58fe4c5de6602a53bdc56279ca193d864603cad2db760a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/raffles.webp",
+      "sha256": "f34df12cdc2f5e2db3d16a05321be0041f50c791d86e67928e107bc411cc9181"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/raffles.gif",
+      "sha256": "9854f4ab405327e520f51ef269ed9159580e4468d631e27d215685a13b85597e",
+      "bytes": 3677300
+    },
+    {
+      "file": "images/discovery-ends/raffles.jpg",
+      "sha256": "d27e134a8e11b3d0f1c884a1c23145dd76092caa7a13e854c2d2eedef95cd0e4",
+      "bytes": 102712
+    },
+    {
+      "file": "images/discovery-sheets/raffles.webp",
+      "sha256": "5d3440a61dbb3c05b2e8b23a8031b80c0205da22905837714c90d0dcda26ff39",
+      "bytes": 1783340
+    }
+  ]
+}

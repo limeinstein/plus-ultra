@@ -1,0 +1,43 @@
+{
+  "id": "boracay",
+  "name": "보라카이",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/boracay.png",
+  "sourceSha256": "793f3bdd09cca49a7365bc0161e3dabfa61ff3b075de69840ac40e93a07d505c",
+  "sourceMtimeNs": 1795659658925940600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/boracay.gif",
+      "sha256": "7e290de94b62565b1d05cf8b4fa0f92ebdb20eb5cfbef8e8d0e1f6595a5f172f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/boracay.jpg",
+      "sha256": "45d599f82d597b3b0d2f1f48611b1091f7ef80f5fb3243a61b92213e1ba8a61f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/boracay.webp",
+      "sha256": "edc4bf20425698a24bd3b431f51004265236e384448f2bb1e9d7a07a6217f844"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/boracay.gif",
+      "sha256": "a8fb6a30adf59e127fe6d72bf8ed79e8f86d9080ebbe6a09abc7ecc9fbf1d19f",
+      "bytes": 2761759
+    },
+    {
+      "file": "images/discovery-ends/boracay.jpg",
+      "sha256": "c07041710b59f85ddab43b3c329d905634f3ec0e0b51f7496ead5d236ef81ff2",
+      "bytes": 93941
+    },
+    {
+      "file": "images/discovery-sheets/boracay.webp",
+      "sha256": "ea12ea32b731ed34d025b2aed7944da499871b7ed930b4818817646f657ab9d0",
+      "bytes": 1605916
+    }
+  ]
+}

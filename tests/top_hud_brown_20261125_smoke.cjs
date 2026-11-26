@@ -11,7 +11,7 @@ const KEYS={
   land:['date','lat','lon','days','party','cost','fat','discipline','terr','mount','contract','gold']
 };
 (async()=>{
-  const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader']});
+  const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=angle', '--use-angle=swiftshader','--enable-unsafe-swiftshader']});
   let page;const errors=[],report={layouts:[],values:[]};
   try{
     page=await browser.newPage({viewport:{width:1600,height:900}});

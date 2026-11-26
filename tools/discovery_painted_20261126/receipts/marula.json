@@ -1,0 +1,43 @@
+{
+  "id": "marula",
+  "name": "마룰라",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/marula.png",
+  "sourceSha256": "63073e933a3c992e11a84cdf2b7912dc1c5f9cab1deb78c82054ac7710ff3dfd",
+  "sourceMtimeNs": 1795659651290211700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/marula.gif",
+      "sha256": "59785ad147dd06927ca3554537e881a33e82af00bc3b884a80c39b277babc358"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/marula.jpg",
+      "sha256": "5ee604aa77fd7d715fa71186406d1356bafb20ece5f28b1da8d49352aae999aa"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/marula.webp",
+      "sha256": "becf41597b641e1f5929915e345840597f94b3a42c0126735da8f430c57a81d7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/marula.gif",
+      "sha256": "cfca97c1bf63bdc04038d3e0986bff46e5c20a43d00ca82bc4070d48975fdc18",
+      "bytes": 3275285
+    },
+    {
+      "file": "images/discovery-ends/marula.jpg",
+      "sha256": "25d55bc1457ca79339bee0a72d3f7e4a3954dd8734272c3d8dea453f29434c45",
+      "bytes": 103401
+    },
+    {
+      "file": "images/discovery-sheets/marula.webp",
+      "sha256": "316bd76cd09eaf8d259d644e367c76ac3b9b44834cc4c3b989f6f38a1c07f78e",
+      "bytes": 1795460
+    }
+  ]
+}

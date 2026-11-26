@@ -1,0 +1,43 @@
+{
+  "id": "mayacodex",
+  "name": "마야 그림 문서",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mayacodex.png",
+  "sourceSha256": "df97fd7e02dca6b6809d1d6215a5098cda7c3f1b752850fb27c05d8151c1cb6b",
+  "sourceMtimeNs": 1795660421162421000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mayacodex.gif",
+      "sha256": "8442e95aefa406ad741343e47b2ee28e0463022058c302387593a6a964dad20d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mayacodex.jpg",
+      "sha256": "bdd26a46759aaa7a3cef7c7af65b157ed63eda8a19be3536f2e6126d43111e83"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mayacodex.webp",
+      "sha256": "2b326b6853d4ecd250cccf9bd19fa31ce2a04ce8a943015b9793e2c129f177b5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mayacodex.gif",
+      "sha256": "b2e97733288cf32cbfb8901d7220862abd1ca630a597159328c154abfd3edd3c",
+      "bytes": 3651522
+    },
+    {
+      "file": "images/discovery-ends/mayacodex.jpg",
+      "sha256": "4ddc57be22082b6609f7dcbdd82466b8a9eaef12c1777617bce705662ef1a813",
+      "bytes": 100172
+    },
+    {
+      "file": "images/discovery-sheets/mayacodex.webp",
+      "sha256": "f4cce4ce4eaacea68475e31f3f05b77d5dcce993c74de6c2512987c0304e0fb2",
+      "bytes": 1760560
+    }
+  ]
+}

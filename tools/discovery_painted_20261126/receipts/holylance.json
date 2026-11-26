@@ -1,0 +1,43 @@
+{
+  "id": "holylance",
+  "name": "성창",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/holylance.png",
+  "sourceSha256": "152421a36349694b1697324eec6b5dbb57948244204d7cf8642e68dee92f7f17",
+  "sourceMtimeNs": 1795660192687252900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/holylance.gif",
+      "sha256": "8a9f0c91ba60cccb784494ad064c22398670433ab1f4188da56b1767a00ade3a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/holylance.jpg",
+      "sha256": "a8c01d8d9388eac3410359bdb3aca39161d8343fe27bfda53c976ae6aae2293f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/holylance.webp",
+      "sha256": "218364b1d235d1d0f74bfdef2daee2ed63fcf6e7c345c4fbf7d392e16e9a7a94"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/holylance.gif",
+      "sha256": "22627afb7b4b946502782e4292cb37f0f22799bea84b3ab2722226263a17c71b",
+      "bytes": 3629759
+    },
+    {
+      "file": "images/discovery-ends/holylance.jpg",
+      "sha256": "103198febfc9fa986799b5e4d457678176eadb24217cefc9c800171843e506f6",
+      "bytes": 93653
+    },
+    {
+      "file": "images/discovery-sheets/holylance.webp",
+      "sha256": "d9b97321420d9c0ba3ddf05f9f918df91f27f4ffbf592004453e90ed8273afe1",
+      "bytes": 1581336
+    }
+  ]
+}

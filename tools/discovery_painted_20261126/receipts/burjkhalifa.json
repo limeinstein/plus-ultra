@@ -1,0 +1,43 @@
+{
+  "id": "burjkhalifa",
+  "name": "부르즈 할리파",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/burjkhalifa.png",
+  "sourceSha256": "68696d6d7ebe0c2c86c4ab1023eb5e1910e63b00ea5ccd850a567830f6568c87",
+  "sourceMtimeNs": 1795662064069664000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/burjkhalifa.gif",
+      "sha256": "8736d7ad56d829be5397b5d1010368392cef1d8cfb785bd52883f41b8694edde"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/burjkhalifa.jpg",
+      "sha256": "081c8abfc82980b2a89cca5ba7d8c7eb74a9af1154b280f6e9c4a7f7f6328619"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/burjkhalifa.webp",
+      "sha256": "c07723101bbc9fc884343bc9020da86ae6ae11c1e6310ca23c782d538d2a3aba"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/burjkhalifa.gif",
+      "sha256": "d5d20af94279b97706f8f6ee313f516d41045925c30111d849616c85f54bbe59",
+      "bytes": 2848333
+    },
+    {
+      "file": "images/discovery-ends/burjkhalifa.jpg",
+      "sha256": "847d74d8603642c4f56b150506fa8fe9d0814ec397aebb8f097bcf9e71bb8fd8",
+      "bytes": 73012
+    },
+    {
+      "file": "images/discovery-sheets/burjkhalifa.webp",
+      "sha256": "0509080e6af4601039cfe19e29e6d98d07c345d0818216b3c6f40736c5a6c3db",
+      "bytes": 1118182
+    }
+  ]
+}

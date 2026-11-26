@@ -1,0 +1,43 @@
+{
+  "id": "yria",
+  "name": "이리아의 디오니소스 성역",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/yria.png",
+  "sourceSha256": "87963599e9c52aee9d1f410e815946a5cd31f11a91919c08a151970a046b9d60",
+  "sourceMtimeNs": 1795663327990185900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/yria.gif",
+      "sha256": "8d8dfd52fca658e4480d10464ad1f150ba4d21a2110dcce43c2cc28b92c2dbc3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/yria.jpg",
+      "sha256": "c22602d6e1b7fa9da0de9c912ef8fcd9fd73576b9202973a3797693f24799acb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/yria.webp",
+      "sha256": "f1ab88ed17a026448a1d88421c73876488127c0808e2ab587f0b393bd8a0eb7b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/yria.gif",
+      "sha256": "50891502f684f8747c45d6b4b314ae39a946bc2e2652111e7297586a1766a031",
+      "bytes": 3723565
+    },
+    {
+      "file": "images/discovery-ends/yria.jpg",
+      "sha256": "120e5c8e6d8bf61771e02accd65bd8b18462b594c4d44cb45b77e040eb15fc28",
+      "bytes": 105978
+    },
+    {
+      "file": "images/discovery-sheets/yria.webp",
+      "sha256": "b591acfa23fb02062e414fe40f2672c9e4bbb81a875ece4755378f21e4519d72",
+      "bytes": 1853526
+    }
+  ]
+}

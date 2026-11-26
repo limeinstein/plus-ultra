@@ -1,0 +1,43 @@
+{
+  "id": "guanyublade",
+  "name": "관우의 청룡언월도",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/guanyublade.png",
+  "sourceSha256": "a2f8ecd346a0c07281d439ee0506a8f937ff2a8b188a368f2010b48a839ee7a1",
+  "sourceMtimeNs": 1795660091953377000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/guanyublade.gif",
+      "sha256": "9dae2e0e244fbf1ed5b78b5853f884dbba2d432dd5e45f2626667146384fcb1d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/guanyublade.jpg",
+      "sha256": "2ef05927a3f861a656431b7228444e83d1f2c83ccd58699433fd7f527cf3bda1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/guanyublade.webp",
+      "sha256": "15a9bb210b3cdbb941c9a685fcf2d31fbe661f6376eac7b48cd082f4f54b8983"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/guanyublade.gif",
+      "sha256": "a101986626ba604d65a82e77eb52a1550d152b3fd08d864f35ae5935c186a10b",
+      "bytes": 3354101
+    },
+    {
+      "file": "images/discovery-ends/guanyublade.jpg",
+      "sha256": "0e2b4fd7f13e833668d00f968414ae4c88853242ad0431a9d6ae7883308db454",
+      "bytes": 84767
+    },
+    {
+      "file": "images/discovery-sheets/guanyublade.webp",
+      "sha256": "aba2b3cd9b3eff88e9998451789dfaa8860abf8f474816a858dc9c0881a596d2",
+      "bytes": 1416564
+    }
+  ]
+}

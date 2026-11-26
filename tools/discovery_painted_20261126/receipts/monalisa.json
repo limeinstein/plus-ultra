@@ -1,0 +1,43 @@
+{
+  "id": "monalisa",
+  "name": "모나리자",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/monalisa.png",
+  "sourceSha256": "7b49f6b0dd3b449fa86179f77b2600212d7b6667edd591f25491500ebf9f01a8",
+  "sourceMtimeNs": 1795660442236038000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/monalisa.gif",
+      "sha256": "b8031d5c9e2f13c6c5dc1d2bbc5e4e3c26b000c90f478479508c6cf64228f362"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/monalisa.jpg",
+      "sha256": "b083ab5082269719d01408d367eec5b4325cbdb1b90fde3e3372060a0a8d726f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/monalisa.webp",
+      "sha256": "82949fddcfc5c746cde810d39bc41924360cbff63002130f4c1310ee7a691043"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/monalisa.gif",
+      "sha256": "0cfe33cb099a15720cd9c6d8a00872fa5b3125fe02b72ee91acb6b97c0bf41d6",
+      "bytes": 3306355
+    },
+    {
+      "file": "images/discovery-ends/monalisa.jpg",
+      "sha256": "8af0f7e6bbbb981fdc792186a0bf776343109a0769b8979ed64bf9222705ee9d",
+      "bytes": 79983
+    },
+    {
+      "file": "images/discovery-sheets/monalisa.webp",
+      "sha256": "12ef328f43b195f9fa3b60174069df550d0f0dd5c50450f80aab92f3cb7bc519",
+      "bytes": 1312944
+    }
+  ]
+}

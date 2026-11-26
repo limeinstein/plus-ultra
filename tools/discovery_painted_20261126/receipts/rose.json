@@ -1,0 +1,43 @@
+{
+  "id": "rose",
+  "name": "다마스크 장미",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/rose.png",
+  "sourceSha256": "828d04f8617acda344614b3779ac7824610d7ca530dd778a5ef53e2d4c918dd9",
+  "sourceMtimeNs": 1795659654451973400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/rose.gif",
+      "sha256": "613892a277fe9d957fca4182ba86f201f5f4431093047bbfae353e8525ff5a38"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/rose.jpg",
+      "sha256": "b66907ad6bf04899d527ee3005eac2c1b385ff2e44808d51acdd6efe83682a88"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/rose.webp",
+      "sha256": "d5e07b229c21683e658159d44eb1303395383df5d3ed191828d73806ede069a6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/rose.gif",
+      "sha256": "b201a52e6abfc5d848c44c1cf8f6bd1d80a8abf6136457c0e3ac4a1f2d0d9660",
+      "bytes": 3337725
+    },
+    {
+      "file": "images/discovery-ends/rose.jpg",
+      "sha256": "ef9eacf142eb4e496b0a7d35328217c38bd86316a5b9b0860115e3c681f49469",
+      "bytes": 99573
+    },
+    {
+      "file": "images/discovery-sheets/rose.webp",
+      "sha256": "c107efac5cd578bc393883ceff9099b6aaf3512c4c28310c53a1a5fb32576bdd",
+      "bytes": 1724468
+    }
+  ]
+}

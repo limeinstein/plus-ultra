@@ -1,0 +1,43 @@
+{
+  "id": "kasubi",
+  "name": "카수비 왕릉",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kasubi.png",
+  "sourceSha256": "d6d49e367179803339e2030c386f81d0f451bb69533c8dd5b550e2bdc93530f2",
+  "sourceMtimeNs": 1795661677177638500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kasubi.gif",
+      "sha256": "8a0ebc777e1342267419449342588c5b803cede79cd563c927d332f2a2acfbeb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kasubi.jpg",
+      "sha256": "8a2296755e0df72ca3d3f56acb0c2ce8312bdb28afbdbcf8344ef7351d2ae825"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kasubi.webp",
+      "sha256": "66b2b1d0b4d28267ebdfe4082d4f69f4018ce51bfe787387e59c30f6e1e1ddf2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kasubi.gif",
+      "sha256": "1581454bbcf21d6fb2379ca1d250d0adb5c7c7a12197969a7791c3381feeb02d",
+      "bytes": 3348266
+    },
+    {
+      "file": "images/discovery-ends/kasubi.jpg",
+      "sha256": "96aec387153588835fab4e77c1671c97fdfbe9b6d76db481a4f66e2b29b6eb5f",
+      "bytes": 91970
+    },
+    {
+      "file": "images/discovery-sheets/kasubi.webp",
+      "sha256": "2fa296f6245e53794bb3d65a44982d865bb119bc12fb104779717569d4ecb405",
+      "bytes": 1555928
+    }
+  ]
+}

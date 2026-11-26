@@ -1,0 +1,43 @@
+{
+  "id": "santorini",
+  "name": "산토리니",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/santorini.png",
+  "sourceSha256": "6dddf92bea84e300b77fbc5217666ef37f4125d1d398f89ca05c3738513d683c",
+  "sourceMtimeNs": 1795659660751089000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/santorini.gif",
+      "sha256": "85ed5b41bdecdea2f726100f7d83b126c1bd353672eda8aac8f637b6bc3517d0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/santorini.jpg",
+      "sha256": "f8f769577c15f75ce4347931be678125680484529934a0a7a463db29f630ea97"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/santorini.webp",
+      "sha256": "e0dcbe8a55eb0c93be5f44d89454fefac92d2bf0117dccc188f50d3b7214bfa2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/santorini.gif",
+      "sha256": "32a808555f498e9ed68b339a8e760dc31fb99fb8f01245a64a602eb8a0500bb9",
+      "bytes": 2746633
+    },
+    {
+      "file": "images/discovery-ends/santorini.jpg",
+      "sha256": "3fca2e898a33e9ba9a242e44d3d1daf61b682675df6564bd0b84da99d17198d9",
+      "bytes": 81471
+    },
+    {
+      "file": "images/discovery-sheets/santorini.webp",
+      "sha256": "e4ddc6f0aece0ea2ae4629a9520f50c09e79f952de787073a4fd6b4ed7c7ffa8",
+      "bytes": 1355322
+    }
+  ]
+}

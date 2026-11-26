@@ -1,0 +1,43 @@
+{
+  "id": "oceanomonaco",
+  "name": "모나코 해양 박물관",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/oceanomonaco.png",
+  "sourceSha256": "50e150f997348e716c1ed4cee39e464af587faaec5bd794abb71e4e9bdac8b2d",
+  "sourceMtimeNs": 1795662815117337700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/oceanomonaco.gif",
+      "sha256": "a854f37091e0c428656de5d5faad43c6db443e30c846f188bd444b650c76a1cc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/oceanomonaco.jpg",
+      "sha256": "386270050a7d945d903990dead4f68862d2806de96fd5ee46de5d8055981a0da"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/oceanomonaco.webp",
+      "sha256": "8251c486326042a4b583d5e7a09b4d9bcb9190cf94bedd028d98efba043d35ea"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/oceanomonaco.gif",
+      "sha256": "c87246a17cb703e619356c864479b037a58bd2f6292003ef9345bd6836ccbf58",
+      "bytes": 3624671
+    },
+    {
+      "file": "images/discovery-ends/oceanomonaco.jpg",
+      "sha256": "b8989295e60299de77006c1f2cd8ef88d4a611a035712c39cdded89f4855a470",
+      "bytes": 103692
+    },
+    {
+      "file": "images/discovery-sheets/oceanomonaco.webp",
+      "sha256": "c7d3278748c56edd05cd37b663dafead703d820e14d0fce86128a16f702a5f4d",
+      "bytes": 1798256
+    }
+  ]
+}

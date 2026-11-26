@@ -1,0 +1,43 @@
+{
+  "id": "mauritius",
+  "name": "모리셔스",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/mauritius.png",
+  "sourceSha256": "c69521ed48054a594bf3df606cf2b1c0f3f9fb686c913d0568a3a51af165ea51",
+  "sourceMtimeNs": 1795659659401950500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mauritius.gif",
+      "sha256": "deb8bef08abb2fb540386218da561c712777f71879ad5d8584cd048b6a8e1a7a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mauritius.jpg",
+      "sha256": "b1d06dc4b46480c54b219150037ddebd96605db6515e0a206b4a8c17ca3eb5e6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mauritius.webp",
+      "sha256": "b2733bed68868b49ba08f48cb6baf0be185278ecec1b0504a8fa0ebdfa6bc670"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mauritius.gif",
+      "sha256": "68a26da5ad8dd35257d2cbbf99e7551a2f9651463d3f8a1cd43454c31bb5e675",
+      "bytes": 2803389
+    },
+    {
+      "file": "images/discovery-ends/mauritius.jpg",
+      "sha256": "1995b173f26c72d8c3e6d2cc58363cd970e8de5aaf6d72160c2630757982bdb9",
+      "bytes": 96838
+    },
+    {
+      "file": "images/discovery-sheets/mauritius.webp",
+      "sha256": "ae4625c499a4c6679d5f7f05349f9a46449dc5e62d241c8db89ff058800cf0d0",
+      "bytes": 1649068
+    }
+  ]
+}

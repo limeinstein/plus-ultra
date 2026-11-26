@@ -1,0 +1,43 @@
+{
+  "id": "joatinga",
+  "name": "주아팅가 해안",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/joatinga.png",
+  "sourceSha256": "527036be96248495e21fd46b78e7c34bb89ec5c33e3362ecb6b25fa03182a422",
+  "sourceMtimeNs": 1795659645170410700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/joatinga.gif",
+      "sha256": "d7d58903e41caa58b76b1dd005d519c38c64ff310f46e474b8d540526a4b56e5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/joatinga.jpg",
+      "sha256": "40b837244e8961b0546d1e387b4cafef02625898debea48cd3ae45bfcaf29e73"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/joatinga.webp",
+      "sha256": "86e555c84d91cfd6f5863a7d1366a0ac1c3f82da7f285fb8dcd65f78c419585b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/joatinga.gif",
+      "sha256": "ce5fbd47625198057e647e86abd8705f3a0c71198b43f1c5379526ab1c6fdbfb",
+      "bytes": 2987422
+    },
+    {
+      "file": "images/discovery-ends/joatinga.jpg",
+      "sha256": "f00f69ff0736fa6524ffd8e43adfee648a2b900b8873eb8f4d5da5a7233e3da6",
+      "bytes": 98480
+    },
+    {
+      "file": "images/discovery-sheets/joatinga.webp",
+      "sha256": "d7267ad89f76fd5f09102ed77d28bcd9229a2e2ad57fb75affbbf943a13850d8",
+      "bytes": 1713760
+    }
+  ]
+}

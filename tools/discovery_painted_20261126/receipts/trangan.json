@@ -1,0 +1,43 @@
+{
+  "id": "trangan",
+  "name": "짱안의 바위 숲",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/trangan.png",
+  "sourceSha256": "b52bbdc6e89c07c9571ba06df5d0ce54fbe6d0744bc94d7a1bda829ee0682ed6",
+  "sourceMtimeNs": 1795659645365518100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/trangan.gif",
+      "sha256": "e8671074303a5a85b59dce8159fc85f77e4d30154e87617840c4ccd7b8aad929"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/trangan.jpg",
+      "sha256": "2576ba35ea95cbd5ba315d70078e89200a018ed3ffd6219f65a6cb6153b69acd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/trangan.webp",
+      "sha256": "239f22cafd28c19d6548dce6daff07f0bcf757904203a33173af510f12935341"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/trangan.gif",
+      "sha256": "b4d426e003357970f6c37769c7b73d5d43b64a252b5ced3ef7402228afe67257",
+      "bytes": 3118528
+    },
+    {
+      "file": "images/discovery-ends/trangan.jpg",
+      "sha256": "ccbb8fb82c86acbe242cf534080a4e08c1c93fc1216a3a4038f55934625e0981",
+      "bytes": 100000
+    },
+    {
+      "file": "images/discovery-sheets/trangan.webp",
+      "sha256": "58beeedf9c02ca022960d2b85f960426e6e79da683dc38aba42564246d37edb9",
+      "bytes": 1759792
+    }
+  ]
+}

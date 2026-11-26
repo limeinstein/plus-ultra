@@ -1,0 +1,43 @@
+{
+  "id": "qinghaihu",
+  "name": "청해호 — 쿠쿠노르",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/qinghaihu.png",
+  "sourceSha256": "31d1873aa7124817ce7098535b3d82788943848dcd15b8c08ae2e046fb55acda",
+  "sourceMtimeNs": 1795659647450637000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/qinghaihu.gif",
+      "sha256": "dc4e52e98d179108b7499e6ea44d3a558a5f49f9e4eac0e2e10f9db2f4e71423"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/qinghaihu.jpg",
+      "sha256": "7d3654ddf1265fd4983caa120ac77327026779fdb62a2d90449eee074a732f03"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/qinghaihu.webp",
+      "sha256": "10a06e64165bbd998ea8407dbfc8887d45c13ad70f03809dc90c8c7266d0930b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/qinghaihu.gif",
+      "sha256": "6fbebadeff826754003980e0457cd7c8dba0b0e0eeecc697a7168ed69f9e043a",
+      "bytes": 2587123
+    },
+    {
+      "file": "images/discovery-ends/qinghaihu.jpg",
+      "sha256": "37017a921a860694f2a9a4f72a3443e39a5caafde985f9e438eae6164a944508",
+      "bytes": 85664
+    },
+    {
+      "file": "images/discovery-sheets/qinghaihu.webp",
+      "sha256": "53af4dbfbd4adee332c10a8861c4020e23e6858c4be98b07278ebcc550cad12d",
+      "bytes": 1446566
+    }
+  ]
+}

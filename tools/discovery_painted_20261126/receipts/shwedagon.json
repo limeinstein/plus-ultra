@@ -1,0 +1,43 @@
+{
+  "id": "shwedagon",
+  "name": "쉐다곤 파고다",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/shwedagon.png",
+  "sourceSha256": "13e1bb22a170ae1b2355573511d8493cc0c2fce33d06b3041c678d1aa89f194e",
+  "sourceMtimeNs": 1795659535949789400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/shwedagon.gif",
+      "sha256": "17016a77e84b9e685ad55e4b10f748350187322600b847ac4bc294a387d471e1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/shwedagon.jpg",
+      "sha256": "e612fe6a8e5188ac339515bc4b7e1d654f343bf91eb0cda0c0c387bcb6d4bd35"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/shwedagon.webp",
+      "sha256": "9d5ce1fe1c683a1b13accfd78a54eb3829dcdfd27ff68baab71c2223371d5ff9"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/shwedagon.gif",
+      "sha256": "7b6787ba74531016df916c7f5c9948c05fa325b4bf410f4d9cd11848a0931ee8",
+      "bytes": 3175695
+    },
+    {
+      "file": "images/discovery-ends/shwedagon.jpg",
+      "sha256": "dc8f2f025b9b0614ea54347f2ddb00ce32dc2f9c77b90e7c6ca17c3cbca8c22e",
+      "bytes": 91476
+    },
+    {
+      "file": "images/discovery-sheets/shwedagon.webp",
+      "sha256": "8174abcc42e235bc0f7a7fab4af9a7dd70e3e9dd3a3130422d5c3ab63df692a6",
+      "bytes": 1516000
+    }
+  ]
+}

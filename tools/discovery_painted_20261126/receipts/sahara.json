@@ -1,0 +1,43 @@
+{
+  "id": "sahara",
+  "name": "사하라 사막",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/sahara.png",
+  "sourceSha256": "170e1730f9ad83e30b4ab66e4fd6f4d5a1989cccff245ba5ecdf116ea7dc7727",
+  "sourceMtimeNs": 1795659645466790700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sahara.gif",
+      "sha256": "4265457c3394d4f707da35b5beb62d1559ce14b7d6919056c1fd9684107053fe"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sahara.jpg",
+      "sha256": "3b65596ebaa8402ab7140a027d927672523f004491c806c41800deed19194dc9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sahara.webp",
+      "sha256": "a85513b1fed19dd18e0b921410080f5847414031451ed40c6ac60caf08250995"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sahara.gif",
+      "sha256": "235b2420360cf14f30f2a77f3e8b854c3b8536ba7f8155938dd3bf2554916bf2",
+      "bytes": 2589194
+    },
+    {
+      "file": "images/discovery-ends/sahara.jpg",
+      "sha256": "78bc20de07faaf0b1f75b19c25234791155d47fd9b54f24a083c5f186f36a3a0",
+      "bytes": 90465
+    },
+    {
+      "file": "images/discovery-sheets/sahara.webp",
+      "sha256": "d570fb62fe5d52cdc4d4e2d9312cfe808560caa0860c1a7ae635b21bc8d56bdd",
+      "bytes": 1486692
+    }
+  ]
+}

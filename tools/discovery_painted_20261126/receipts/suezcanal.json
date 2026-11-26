@@ -1,0 +1,43 @@
+{
+  "id": "suezcanal",
+  "name": "수에즈 운하",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/suezcanal.png",
+  "sourceSha256": "d8b117909fc86ee3892f9fea60ad63fe6443c791bebb890824011505154a2a2c",
+  "sourceMtimeNs": 1795662823591098600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/suezcanal.gif",
+      "sha256": "d26824ff5ec14d31b59bfbc0932efb1504aed6a96576b43e08551ff4ca582470"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/suezcanal.jpg",
+      "sha256": "251c1c3b78a2a78260eb3c90483b02d1c8d6cee39755f39de78e0f8e091cb1b4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/suezcanal.webp",
+      "sha256": "573b15fac0b265465133b4bbcf2a4ebd7b69065bedd49f03fb063b91eee3dde7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/suezcanal.gif",
+      "sha256": "dd00a46c854abb10f973a876d1c3c0502f2cae235fa8fee8f142ce314eccf172",
+      "bytes": 3012375
+    },
+    {
+      "file": "images/discovery-ends/suezcanal.jpg",
+      "sha256": "457b02f36f6b9962ec4ca9e4347f575e18c0b04b2266f7b9956a4ad0a3dba915",
+      "bytes": 88813
+    },
+    {
+      "file": "images/discovery-sheets/suezcanal.webp",
+      "sha256": "4fd2b54933aca41ba4ca4a282e39b2dc3f6d6e4c988bc70d2701ed1d1f941c30",
+      "bytes": 1521026
+    }
+  ]
+}

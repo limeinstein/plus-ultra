@@ -1,0 +1,43 @@
+{
+  "id": "kings",
+  "name": "왕가의 계곡",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kings.png",
+  "sourceSha256": "d3de16718defeb5eb1a99c89bb07bdd6369aacd051f490f1f616e08d3d325773",
+  "sourceMtimeNs": 1795659617623987200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kings.gif",
+      "sha256": "efbb97c247a66e16dbe739ac3c3bfe8dee86558eb3f6a06d4c8b747faa1d8124"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kings.jpg",
+      "sha256": "3f33673c6ee409e1fca72b4694552109c8be38b25958325c8f8846e930b0cfcc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kings.webp",
+      "sha256": "920b68a922ffcfc55541491f956fd530820d64cc549e2b737989bc7a4ab761f6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kings.gif",
+      "sha256": "711b13c27caf1fc9c6f2e38382351fb5027e9cd283d8b297b54d4a49738240d6",
+      "bytes": 3565371
+    },
+    {
+      "file": "images/discovery-ends/kings.jpg",
+      "sha256": "c046ed9c112d864c3fa993f0ee99f0e308c770b2bf9321445466ff6489976ee0",
+      "bytes": 92371
+    },
+    {
+      "file": "images/discovery-sheets/kings.webp",
+      "sha256": "1a9178ef84e61ad6b39df9fe8822b7239214aa91ba47f0714b23905d94c1ec01",
+      "bytes": 1568276
+    }
+  ]
+}

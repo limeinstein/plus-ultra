@@ -1,0 +1,43 @@
+{
+  "id": "shambhala",
+  "name": "샴발라 — 숨은 왕국",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/shambhala.png",
+  "sourceSha256": "dfbb2431cdff14f1cb9b872beaa76eff811df133c201aa101559028aa9d5e773",
+  "sourceMtimeNs": 1795661931214969300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/shambhala.gif",
+      "sha256": "2389b4744b1a323b7a48028ae8a3f24d1bb24e75fec22e1728b08dc36ebc0c92"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/shambhala.jpg",
+      "sha256": "d304dfe64e486356e3d4aefcee167f61463ca22ba061744322e5319a178e2aaa"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/shambhala.webp",
+      "sha256": "7a46bccf8329ff301dd9b1c21fc38c001974031be75e83f7dbec25fb32c70250"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/shambhala.gif",
+      "sha256": "894f6927f6b1f49152a8dba47019882a8f689613d7ae33ad54c4ded313ab629d",
+      "bytes": 3601081
+    },
+    {
+      "file": "images/discovery-ends/shambhala.jpg",
+      "sha256": "9f1352f186bbccad09ede80cab60390828fc750640c6da2164ba0842e69489d8",
+      "bytes": 107371
+    },
+    {
+      "file": "images/discovery-sheets/shambhala.webp",
+      "sha256": "e3c18b69a38adec66170c13dc421c30327353095fb9a58db16fb68e83a1ca97b",
+      "bytes": 1892550
+    }
+  ]
+}

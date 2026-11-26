@@ -1,0 +1,43 @@
+{
+  "id": "qufu",
+  "name": "곡부 공묘",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/qufu.png",
+  "sourceSha256": "d9ea5a368ec2ce3e25639869df58076589d23d6ce6c2ae45126526f876c26913",
+  "sourceMtimeNs": 1795661496118076700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/qufu.gif",
+      "sha256": "c97cf5b518f323aa44446ad51af72acdd43e42086e255f0f28af1ba1cdeeb0d4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/qufu.jpg",
+      "sha256": "d6498ee61b6213e0440a9ea6cbdf1bcecb9d0481c6eeca48788c633bad798ffc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/qufu.webp",
+      "sha256": "c4cf66d933067d4bc2705af3f85050aad962bac95913f8a1f70cef719499d13b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/qufu.gif",
+      "sha256": "e2ddbf61131d478543ff80f10a3ecb68e91d33d96ad7311354c9b2d3f7a2688e",
+      "bytes": 3583393
+    },
+    {
+      "file": "images/discovery-ends/qufu.jpg",
+      "sha256": "24e17ee203140ab7e3436b7fa8d32111f8e2a6c26624fcd00283a7a63f1d7f6a",
+      "bytes": 102371
+    },
+    {
+      "file": "images/discovery-sheets/qufu.webp",
+      "sha256": "26e999d4928816506716e73752357b2c9c8c7e1fd9a0e83b5abdecdd4097d6d8",
+      "bytes": 1796356
+    }
+  ]
+}

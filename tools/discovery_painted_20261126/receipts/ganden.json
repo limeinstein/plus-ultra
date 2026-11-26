@@ -1,0 +1,43 @@
+{
+  "id": "ganden",
+  "name": "간덴 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ganden.png",
+  "sourceSha256": "09bc900d35091e1d444643078e30ab0751ef993a47ec6f7fdd5238aae2f6a91b",
+  "sourceMtimeNs": 1795662022592273600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ganden.gif",
+      "sha256": "e8d0a0dbe973a0f3874bdd7ac0be191a79ccd280c0c53163b41b0da07c1eb282"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ganden.jpg",
+      "sha256": "b0093001c03d10d63fff6ef4814baa35443aecf632a5cde3aebb22da212c02da"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ganden.webp",
+      "sha256": "7a2a774ccc0d0e546842943ea2c934b1313bb38ecd296e6ee54bcce1d8449d3e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ganden.gif",
+      "sha256": "98ccc31f3cb62a5b9f4ed03b7c1c1d8c9a1b11f1cc79f6260a2bf7edecc89684",
+      "bytes": 3626330
+    },
+    {
+      "file": "images/discovery-ends/ganden.jpg",
+      "sha256": "84fde8a0030fa4a7be3454515b3bc690e115589c28cbdf2ad12f2c22c9411e4e",
+      "bytes": 100631
+    },
+    {
+      "file": "images/discovery-sheets/ganden.webp",
+      "sha256": "3fd9a6882a51683fd4d8b6b044585f0b3d0d1ccdfe872e0ff8b059155317520d",
+      "bytes": 1787668
+    }
+  ]
+}

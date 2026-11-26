@@ -13,6 +13,11 @@
   function mount(ctx){return ctx&&ctx.mount||state()&&state().loc&&state().loc.mount||{id:'walk',n:0};}
   function pixels(lon,lat){return [(wrap(lon)+180)/360*detail.W-.5,(90-lat)/180*detail.H-.5];}
   function atChannel(x,y,c){x=((x%detail.W)+detail.W)%detail.W;y=clamp(y,0,detail.H-1);return detail.raw[(y*detail.W+x)*4+c];}
+  T.coarseHeight=function(lon,lat){
+    var q=pixels(lon,lat),x=Math.floor(q[0]),y=Math.floor(q[1]),a=q[0]-x,b=q[1]-y;
+    function h(x,y){return atChannel(x,y,0)*256+atChannel(x,y,1)-12000;}
+    return(h(x,y)*(1-a)+h(x+1,y)*a)*(1-b)+(h(x,y+1)*(1-a)+h(x+1,y+1)*a)*b;
+  };
   T.sample=function(lon,lat){
     if(!detail)return {elevation:0,biome:0,lake:false};
     var q=pixels(lon,lat),x=Math.floor(q[0]),y=Math.floor(q[1]),a=q[0]-x,b=q[1]-y;
@@ -32,15 +37,52 @@
   T.texture=function(){return detail&&detail.raw;};
   T.patches=function(){return patches;};
   function lakeField(lon,lat){if(!detail)return 0;var q=pixels(lon,lat),x=Math.floor(q[0]),y=Math.floor(q[1]),a=q[0]-x,b=q[1]-y;return(atChannel(x,y,3)*(1-a)+atChannel(x+1,y,3)*a)*(1-b)+(atChannel(x,y+1,3)*(1-a)+atChannel(x+1,y+1,3)*a)*b;}
-  T.isLake=function(lon,lat){return lakeField(lon,lat)>128;};
+  T.isLake=function(lon,lat){return lakeField(lon,lat)>128||T.oasisDistance(lon,lat)<0;};
   T.nearLake=function(lon,lat){return lakeField(lon,lat)>96;};
   T.size=function(){return detail?{W:detail.W,H:detail.H}:null;};
   T.biome=function(lon,lat){if(!detail)return 0;var q=pixels(lon,lat);return atChannel(Math.floor(q[0]+.5),Math.floor(q[1]+.5),2);};
+  T.heightLimits=function(lat){var k=G.BALANCE.terrainLevels,i=Math.abs(lat)>k.latNorth?0:Math.abs(lat)>k.latTemperate?1:2;return {tree:k.tree[i],snow:k.snow[i],mountain:k.mountain};};
+  T.snowCover=function(lon,lat,biome){var k=G.BALANCE.terrainLevels.seasonalSnow,b=biome==null?T.biome(lon,lat):biome;if(!k||Math.abs(lat)<k.latitude||b!==11&&b!==6)return 0;var m=date().m;if(lat<0)m=(m+5)%12+1;var threshold=1-k.cover[m-1],v=G.Geo.vnoise((lon+180)*k.scale+17,(lat+90)*k.scale+9),a=clamp((v-threshold)/k.feather,0,1);return a*a*(3-2*a);};
+  T.inlandWater=function(lon,lat){if(!T.ready)return false;var f=G.FX&&G.FX.terrainWorld;return !!(f&&f.inlandWaterRegions.some(function(r){return lon>r[0]&&lon<r[2]&&lat>r[1]&&lat<r[3];})&&G.Geo.baseSdf(lon,lat)<=0);};
+  var liftCache=new Map();
+  T.invalidateProjection=function(){liftCache.clear();};
+  // 산의 겉보기 높이만 투영한다. 세계 좌표·이동 거리·수로 판정은 유지한다.
+  T.lift=function(lon,lat){
+    var f=G.FX&&G.FX.terrainWorld;if(!T.ready||!f||!f.enabled)return 0;
+    var key=(Math.round(wrap(lon)*1e5)+18000000)*18000001+Math.round(lat*1e5)+9000000;
+    if(liftCache.has(key))return liftCache.get(key);
+    var s=G.Geo.sdf(lon,lat)/(4096/360);if(s<=f.reliefShoreStart){liftCache.set(key,0);return 0;}
+    // 투영은 완만한 큰 지형을 쓰고 세부 능선은 실제 고도 음영으로 보인다. 겹침·접힘을 막는다.
+    var cell=f.reliefCell,x=Math.floor(lon/cell)*cell,y=Math.floor(lat/cell)*cell,a=(lon-x)/cell,b=(lat-y)/cell;
+    var h=(T.coarseHeight(x,y)*(1-a)+T.coarseHeight(x+cell,y)*a)*(1-b)+(T.coarseHeight(x,y+cell)*(1-a)+T.coarseHeight(x+cell,y+cell)*a)*b;
+    var lift=Math.min(f.reliefMax,Math.max(0,h-f.reliefBase)*f.reliefLift,Math.max(0,s-f.reliefShoreStart)*f.reliefShoreSlope);
+    liftCache.set(key,lift);if(liftCache.size>24000)liftCache.delete(liftCache.keys().next().value);return lift;
+  };
+  T.project=function(lon,lat){return[lon,lat+T.lift(lon,lat)];};
+  T.unproject=function(lon,lat){if(T.lift(lon,lat)<=0)return[lon,lat];var y=lat;for(var i=0;i<12;i++)y+=(lat-T.lift(lon,y)-y)*.65;return[lon,y];};
+  T.slope=function(lon,lat,elevation){var h=elevation==null?T.sample(lon,lat).elevation:elevation,dx=T.sample(lon+.025,lat).elevation-h,dy=T.sample(lon,lat+.025).elevation-h;return Math.hypot(dx,dy)/.025*.0000765;};
+  var coastSites=null,coastGrid=Object.create(null);
+  var microSites=null;
+  T.microSites=function(){if(microSites)return microSites;microSites=[];(G.LANDSCAPE_MICRO||[]).forEach(function(r){var d=(G.DISCOVERIES||[]).find(function(d){return d.id===r.discovery;});if(d)microSites.push(Object.assign({},r,{lon:d.lon+(r.offset?r.offset[0]:0),lat:d.lat+(r.offset?r.offset[1]:0),name:d.name}));});return microSites;};
+  T.oasisDistance=function(lon,lat){var a=T.microSites(),best=4;for(var i=0;i<a.length;i++){var r=a[i],dx=wrap(lon-r.lon)*Math.cos(lat*degrees)/1.15,dy=(lat-r.lat)*1.2;best=Math.min(best,Math.hypot(dx,dy)-r.radius);}return best;};
+  T.coastSites=function(){
+    if(coastSites)return coastSites;var types=G.COAST_ART_TYPES||{};
+    coastSites=(G.DISCOVERIES||[]).filter(function(d){return d.resort||d.id==='waikiki'||d.id==='joatinga';}).map(function(d){
+      var type=1;if((types.cove||[]).indexOf(d.id)>=0)type=2;else if((types.volcanic||[]).indexOf(d.id)>=0)type=4;else if((types.temperate||[]).indexOf(d.id)>=0||Math.abs(d.lat)>35)type=3;
+      return{id:d.id,name:d.name,lon:d.lon,lat:d.lat,radius:Math.min(1.1,Math.max(.4,(d.r||.5)*1.25)),type:type};
+    });coastSites.forEach(function(r){var xr=r.radius/Math.max(.12,Math.cos(r.lat*degrees));for(var y=Math.floor(r.lat-r.radius);y<=Math.floor(r.lat+r.radius);y++)for(var x=Math.floor(r.lon-xr);x<=Math.floor(r.lon+xr);x++){var key=Math.floor(wrap(x+.01))+':'+y;(coastGrid[key]||(coastGrid[key]=[])).push(r);}});return coastSites;
+  };
+  T.coastAt=function(lon,lat){if(!coastSites)T.coastSites();var best={strength:0,type:0},sites=coastGrid[Math.floor(wrap(lon))+':'+Math.floor(lat)]||[];for(var i=0;i<sites.length;i++){var r=sites[i],dx=wrap(lon-r.lon)*Math.cos(lat*degrees),dy=lat-r.lat,k=clamp(1-Math.hypot(dx,dy)/r.radius,0,1);k=k*k*(3-2*k);if(k>best.strength)best={strength:k,type:r.type,id:r.id};}return best;};
+  T.rockForm=function(lon,lat,elevation){var p=G.LANDSCAPE_PROFILES||[];for(var i=0;i<p.length;i++){var b=p[i].box;if(lon>=b[0]&&lon<=b[1]&&lat>=b[2]&&lat<=b[3])return p[i].rock;}var h=elevation==null?T.sample(lon,lat).elevation:elevation;return h>G.BALANCE.terrainLevels.snow[Math.abs(lat)>55?0:Math.abs(lat)>35?1:2]?'snowridge':'granite';};
+  T.formationFor=function(id){return(G.LANDSCAPE_FORMATIONS||[]).find(function(r){return r.discovery===id;});};
   T.landClass=function(lon,lat){
     var d=T.sample(lon,lat),c=original.climate(lon,lat),h=d.elevation,b=d.biome;
     if(c.ice>.6||h>4200&&Math.abs(lat)>55)return 'ice';
-    if(h>3600)return 'snow';
-    if(h>1400)return 'mountain';
+    var limits=T.heightLimits(lat);
+    if(h>limits.snow)return 'snow';
+    if(T.snowCover(lon,lat,b)>G.BALANCE.terrainLevels.seasonalSnow.terrainThreshold)return 'snow';
+    if(h>limits.mountain&&T.slope(lon,lat,h)>G.BALANCE.terrainLevels.mountainSlope)return 'mountain';
+    if(T.oasisDistance(lon,lat)<G.BALANCE.terrainLevels.oasisGreen)return 'grass';
     if(b===13)return 'desert';
     if(b===1||b===2||b===3||b===14)return 'jungle';
     if(b===4||b===5||b===6)return 'forest';
@@ -51,16 +93,17 @@
   };
   T.species=function(lon,lat){
     var d=T.sample(lon,lat),p=G.REGIONAL_VEGETATION||[],choices=[];
-    for(var i=0;i<p.length;i++){var r=p[i],b=r.box;if(lon>=b[0]&&lon<=b[1]&&lat>=b[2]&&lat<=b[3]&&r.biomes.indexOf(d.biome)>=0)choices.push(r);}
+    for(var i=0;i<p.length;i++){var r=p[i],b=r.box;if(lon>=b[0]&&lon<=b[1]&&lat>=b[2]&&lat<=b[3]&&r.biomes.indexOf(d.biome)>=0){if(r.id==='palm'){var q=H.at(lon,lat);if(!q||q.signed>rules().freshRadius)continue;}choices.push(r);}}
     if(choices.length)return choices[Math.floor(hash(Math.floor(lon*20),Math.floor(lat*20))*choices.length)%choices.length];
-    return {id:d.biome===6?'boreal':d.biome===1?'tropical':'oak',form:d.biome===6||d.biome===5&&d.elevation>500?'pine':d.biome===1?'tropical':'oak',name:'지역 숲'};
+    var form=d.biome===6||d.biome===3||d.biome===5&&d.elevation>500?'pine':d.biome===1?'tropical':(d.biome===7||d.biome===9)&&lon>-20&&lon<55?'acacia':'oak';
+    return {id:form,name:'지역 숲',form:form};
   };
   function add(a,b,r,index,nav){
     var dx=wrap(b[0]-a[0]),dy=b[1]-a[1];if(Math.abs(dx)>30||Math.hypot(dx,dy)<.00001)return;
     var s={a:a,b:[a[0]+dx,b[1]],dx:dx,dy:dy,r:r,index:index,nav:nav};var id=segments.length;segments.push(s);
-    var pad=nav?r.displayHalf+.25:.12;
+    var pad=nav?r.displayHalf+.25:.26,xpad=pad/Math.max(.12,Math.cos(Math.max(Math.abs(a[1]),Math.abs(b[1]))*degrees));
     for(var y=Math.floor(Math.min(a[1],b[1])-pad);y<=Math.floor(Math.max(a[1],b[1])+pad);y++)
-      for(var x=Math.floor(Math.min(a[0],a[0]+dx)-pad);x<=Math.floor(Math.max(a[0],a[0]+dx)+pad);x++){
+      for(var x=Math.floor(Math.min(a[0],a[0]+dx)-xpad);x<=Math.floor(Math.max(a[0],a[0]+dx)+xpad);x++){
         var k=key(x+.01,y+.01);(grid[k]||(grid[k]=[])).push(id);
       }
   }
@@ -72,14 +115,16 @@
   function section(s,t){
     var r=s.r,progress=s.nav?(r.lengths?(r.lengths[s.index]+(r.lengths[s.index+1]-r.lengths[s.index])*t)/r.total:(s.index+t)/Math.max(1,r.pts.length-1)):.5;
     var w=s.nav?r.displayHalf*(1-.52*progress):r.half;
-    return {half:w,progress:progress,width:s.nav?r.width[0]+(r.width[1]-r.width[0])*progress:Math.max(8,25*(8-r.rank)),
-      depth:s.nav?r.depth[0]+(r.depth[1]-r.depth[0])*progress:0,turn:s.nav?r.turn*(1-.35*progress):0};
+    var depth=s.nav?r.depth[0]+(r.depth[1]-r.depth[0])*progress:0,turn=s.nav?r.turn*(1-.35*progress):0;
+    if(s.nav&&r.harborUntil!=null&&progress<=r.harborUntil){depth=Math.max(depth,rules().harborDepth);turn=Math.max(turn,rules().harborTurn);}
+    return {half:w,progress:progress,width:s.nav?r.width[0]+(r.width[1]-r.width[0])*progress:Math.max(8,25*(8-r.rank)),depth:depth,turn:turn};
   }
-  H.at=function(lon,lat){
+  H.at=function(lon,lat,route){
     var ids=grid[key(lon,lat)],best=null,bd=1e9;
     if(!ids)return null;
     for(var i=0;i<ids.length;i++){
-      var s=segments[ids[i]],p=project(s,lon,lat),v=section(s,p.t),sd=p.distance-v.half;
+      var s=segments[ids[i]];if(route&&s.r!==route)continue;
+      var p=project(s,lon,lat),v=section(s,p.t),sd=p.distance-v.half;
       if(sd<bd&&sd<.20){bd=sd;best={id:s.r.id||'',name:s.r.name||'개울',route:s.nav&&!s.r.strait?s.r:null,strait:!!s.r.strait,segment:s,index:s.index,t:p.t,point:p.point,
         signed:sd,half:v.half,width:v.width,depth:v.depth,turn:v.turn,progress:v.progress,
         flow:[-s.dx/Math.hypot(s.dx,s.dy),-s.dy/Math.hypot(s.dx,s.dy)]};}
@@ -89,6 +134,16 @@
   H.isWater=function(q,lon,lat){
     if(!q)return false;
     return q.signed<=0;
+  };
+  // 가장 가까운 수로 지점에서 상류(+1)나 하류(-1) 쪽으로 굽이를 따라 재는 거리.
+  H.channelAhead=function(q,direction,reach){
+    var pts=q.route.pts, from=q.point, first=q.index+(direction>0?1:0), i=first;
+    for(;i>=0&&i<pts.length;i+=direction){
+      var to=pts[i],dx=wrap(to[0]-from[0]),dy=to[1]-from[1],length=Math.hypot(dx,dy);
+      if(length>reach)return {point:[wrap(from[0]+dx*reach/length),from[1]+dy*reach/length],bend:i!==first,end:false};
+      reach-=length;from=to;
+    }
+    return {point:from,bend:i-direction!==first,end:true};
   };
   H.season=function(q,lon,lat,ctx){
     var d=date(ctx),k=rules(),m=d.m||1;
@@ -111,8 +166,9 @@
     for(var i=0;i<list.length;i++){var b=list[i].box;if(lon>=b[0]-.1&&lon<=b[2]+.1&&lat>=b[1]-.1&&lat<=b[3]+.1)return list[i];}
     return {name:'호수'};
   }
-  H.canSail=function(lon,lat,profile,ctx){
+  H.canSail=function(lon,lat,profile,ctx,channel){
     var q=H.at(lon,lat),lake=T.isLake(lon,lat);
+    if(channel&&!H.isWater(q&&q.route===channel?q:H.at(lon,lat,channel),lon,lat))return false;
     if(lake&&!(q&&q.route&&H.isWater(q,lon,lat))){var l=lakeInfo(lon,lat);if(!l||!l.route||H.season(null,lon,lat,ctx).frozen)return false;}
     if(q&&H.isWater(q,lon,lat)){
       if(q.strait)return true;
@@ -123,15 +179,17 @@
     if(lake)return !!lakeInfo(lon,lat).route;
     return original.isSea(lon,lat,.2);
   };
-  H.crossing=function(lon,lat,q){
+  H.crossingOpen=function(c,ctx){var d=date(ctx),y=d.y||state()&&state().date.y||1480,city=c.city||{};return G.R&&G.R.cityExists?G.R.cityExists(city,{y:y,m:d.m,d:d.d}):!city.founded||city.founded<=y;};
+  H.crossing=function(lon,lat,q,ctx){
     if(!q||!q.route)return null;var r=q.route,list=r.crossings||[];
-    for(var i=0;i<list.length;i++)if(G.Geo.dist(lon,lat,list[i].lon,list[i].lat)<.26)return list[i];
+    for(var i=0;i<list.length;i++)if(H.crossingOpen(list[i],ctx)&&G.Geo.dist(lon,lat,list[i].lon,list[i].lat)<.26)return list[i];
     return null;
   };
   H.landEffect=function(lon,lat,ctx){
+    if(T.isLake(lon,lat))return {allowed:false,speed:0,risk:0,river:null};
     var q=H.at(lon,lat);if(!q||!H.isWater(q,lon,lat))return {allowed:original.sdf(lon,lat)>0,speed:1,risk:0,river:null};
     if(q.strait)return {allowed:false,speed:0,risk:0,river:null};
-    var se=H.season(q,lon,lat,ctx),m=mount(ctx),id=m.id||m,bridge=H.crossing(lon,lat,q),k=rules();
+    var se=H.season(q,lon,lat,ctx),m=mount(ctx),id=m.id||m,bridge=H.crossing(lon,lat,q,ctx),k=rules();
     if(bridge)return {allowed:true,speed:1,risk:0,river:q,bridge:bridge};
     if(se.frozen)return {allowed:true,speed:id==='reindeer'?2.6:1.05,risk:id==='reindeer'?0:.008,river:q,frozen:true};
     if(se.flood)return {allowed:false,speed:0,risk:0,river:q,flood:true,reason:'불어난 강물 때문에 지금은 건널 수 없습니다.'};
@@ -153,6 +211,7 @@
     return length;
   };
   H.freshwater=function(lon,lat){
+    var springs=T.microSites();for(var i=0;i<springs.length;i++){var r=springs[i],dx=wrap(lon-r.lon)*Math.cos(lat*degrees)/1.15,dy=(lat-r.lat)*1.2;if(Math.hypot(dx,dy)<r.radius+r.freshRadius)return{name:r.name+'의 샘'};}
     var l=lakeInfo(lon,lat);if(l&&lakeField(lon,lat)>=128-rules().freshRadius*G.Geo.TEX_PER_DEG*16&&!/Caspian|Aral|Dead|Salt/i.test(l.name))return {name:l.name||'호수'};
     var q=H.at(lon,lat);if(q&&q.signed<rules().freshRadius&&(!q.route||q.progress>.12))return {name:q.name};
     return null;
@@ -181,9 +240,9 @@
       break;
     }
   };
-  H.clear=function(a,b,profile,ctx){
+  H.clear=function(a,b,profile,ctx,channel){
     var dx=wrap(b[0]-a[0]),dy=b[1]-a[1],n=Math.max(1,Math.ceil(Math.hypot(dx,dy)/.012));
-    for(var i=0;i<=n;i++)if(!H.canSail(a[0]+dx*i/n,a[1]+dy*i/n,profile,ctx))return false;
+    for(var i=0;i<=n;i++)if(!H.canSail(a[0]+dx*i/n,a[1]+dy*i/n,profile,ctx,channel))return false;
     return true;
   };
   function projectRoute(r,p){
@@ -299,9 +358,14 @@
       var a=r.pts[j-1],p=r.pts[j];if(Math.max(a[0],p[0])<b[0]||Math.min(a[0],p[0])>b[2]||Math.max(a[1],p[1])<b[1]||Math.min(a[1],p[1])>b[3])continue;
       var n=Math.max(1,Math.ceil(G.Geo.dist(a[0],a[1],p[0],p[1])/.02));for(var k=0;k<=n;k++){var x=a[0]+(p[0]-a[0])*k/n,y=a[1]+(p[1]-a[1])*k/n;if(x>=b[0]&&x<=b[2]&&y>=b[1]&&y<=b[3]&&T.isLake(x,y)){l.route=r.id;break;}}
     }});});
-    (G.CITY_DATA||[]).forEach(function(c){if(!c.port)return;var q=H.at(c.lon,c.lat);if(q&&q.route&&q.signed<.22)q.route.crossings.push({id:c.id,name:c.name,lon:q.point[0],lat:q.point[1]});});
-    geo.sdf=function(lon,lat){var base=original.sdf(lon,lat),q=H.at(lon,lat);return q?Math.min(base,q.signed*geo.TEX_PER_DEG):base;};
-    geo.sdfRaw=function(lon,lat){var base=original.sdfRaw(lon,lat),q=H.at(lon,lat);return q?Math.min(base,q.signed*geo.TEX_PER_DEG):base;};
+    (G.CITY_DATA||[]).forEach(function(c){
+      var best=null,bd=.26;routes.forEach(function(r){var p=projectRoute(r,[c.lon,c.lat]),d=Math.hypot(wrap(c.lon-p.point[0])*Math.cos(c.lat*degrees),c.lat-p.point[1]);if(d<bd){bd=d;best={r:r,p:p};}});if(!best)return;
+      var r=best.r,p=best.p;r.crossings.push({id:c.id,city:c,name:c.name,lon:p.point[0],lat:p.point[1]});
+      // 기존 항구에서 산 큰 배나 옛 일지의 함대가 갇히지 않도록 항구까지의 본류를 확보한다.
+      if(c.port&&!r.parent){var progress=(r.lengths[p.index]+(r.lengths[p.index+1]-r.lengths[p.index])*p.t)/r.total;r.harborUntil=Math.max(r.harborUntil||0,Math.min(1,progress+rules().harborProgressPad));}
+    });
+    geo.sdf=function(lon,lat){var base=Math.min(original.sdf(lon,lat),T.oasisDistance(lon,lat)*geo.TEX_PER_DEG),q=H.at(lon,lat);return q?Math.min(base,q.signed*geo.TEX_PER_DEG):base;};
+    geo.sdfRaw=function(lon,lat){var base=Math.min(original.sdfRaw(lon,lat),T.oasisDistance(lon,lat)*geo.TEX_PER_DEG),q=H.at(lon,lat);return q?Math.min(base,q.signed*geo.TEX_PER_DEG):base;};
     geo.isLand=function(lon,lat){return geo.sdf(lon,lat)>0;};
     geo.isSea=function(lon,lat,margin){var q=H.at(lon,lat);if(q&&H.isWater(q,lon,lat)||T.isLake(lon,lat))return H.canSail(lon,lat,{draft:1,beam:3,turn:28});return original.isSea(lon,lat,margin);};
     geo.canWalk=H.canWalk;

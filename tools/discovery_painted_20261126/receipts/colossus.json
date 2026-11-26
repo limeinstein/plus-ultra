@@ -1,0 +1,43 @@
+{
+  "id": "colossus",
+  "name": "로도스의 거상",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/colossus.png",
+  "sourceSha256": "1606a891861c371ab94da1c53194c558e55d48d903732fc0551204b72a6c675e",
+  "sourceMtimeNs": 1795660805062963800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/colossus.gif",
+      "sha256": "312d5c53caa77c2176b1a0230f29553d08ec21b77594ad0c4df69429cb63a338"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/colossus.jpg",
+      "sha256": "c7db2958e5fd82e157b2eef2406236dd05d74c3df52cfe8cd3274c17b3bd7be0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/colossus.webp",
+      "sha256": "28bbaf017889163bc498087a8dbbd08d32a00127de8f63ff97369b7aa994658e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/colossus.gif",
+      "sha256": "d5fc1464bc5561b6072a9d0bff63d0fd15813517f8f99c22b1e384f0d9288a61",
+      "bytes": 3342281
+    },
+    {
+      "file": "images/discovery-ends/colossus.jpg",
+      "sha256": "050eeb601eb37b8d310c2db0b1fde35d05c8bf5a12e25634618c39c49b48bf58",
+      "bytes": 94839
+    },
+    {
+      "file": "images/discovery-sheets/colossus.webp",
+      "sha256": "dda5e8442c148c002d35add5816fc5bac6bdd46724f6b4d09ee38c16948778e5",
+      "bytes": 1623576
+    }
+  ]
+}

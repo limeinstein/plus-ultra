@@ -1,0 +1,43 @@
+{
+  "id": "phangnga",
+  "name": "팡아 만",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/phangnga.png",
+  "sourceSha256": "c8a43baab9d9b1ae6b28bd7c538ac271cfa3fbbd3311c0dc347a1c041a9aab2f",
+  "sourceMtimeNs": 1795659649611240100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/phangnga.gif",
+      "sha256": "b388ecb28312b8b209948ee84acc301e8019e7b7b9e59e1a17ccfc1c45877f88"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/phangnga.jpg",
+      "sha256": "9a87b3b27975cd2a4f7cc0ccc970ea598b419530be745e0e897b7754f6d1ca4b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/phangnga.webp",
+      "sha256": "63f0dc460c832ba4285ef4a461547bf7cfa69bfd4a8ed8bd4df00fda455223e6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/phangnga.gif",
+      "sha256": "ff75673eb15d4471f19e7b3cd59964a3c508c055e25794c495c7454d0fd68255",
+      "bytes": 2801462
+    },
+    {
+      "file": "images/discovery-ends/phangnga.jpg",
+      "sha256": "b7b6c0451de7d04bc3fdce64a41fea075ca5bc8404c6c5f23dd8f55cc9ca3e6f",
+      "bytes": 88578
+    },
+    {
+      "file": "images/discovery-sheets/phangnga.webp",
+      "sha256": "4284b5e8104fdc5b47ecbd4f4a8ebf8e37114bf6ff764cd29cc69b58b2e31911",
+      "bytes": 1457510
+    }
+  ]
+}

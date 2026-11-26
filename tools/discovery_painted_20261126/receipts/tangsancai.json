@@ -1,0 +1,43 @@
+{
+  "id": "tangsancai",
+  "name": "당삼채 낙타",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/tangsancai.png",
+  "sourceSha256": "cbc20ece3740365715f31cfc3bd8ac188d97d9f4bbbd7969284d291b9c98fe0a",
+  "sourceMtimeNs": 1795660067969244400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tangsancai.gif",
+      "sha256": "609c44d208e1aa205d7a17a4523d6a8c5fc731c25cfc228b637f565b6f81d483"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tangsancai.jpg",
+      "sha256": "9955afcdd7af2d9acecc7a47c327c27b71b0e81ca6d107c6721cdca4eee4f673"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tangsancai.webp",
+      "sha256": "28a88c7234c1cf51bd1e4b78250239e1613754ef9b051031179c3a1e4f634117"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tangsancai.gif",
+      "sha256": "88b0cd39f318eda98c2188d54363c3c52800b03c8f21c3e4692b59184560da4f",
+      "bytes": 3475944
+    },
+    {
+      "file": "images/discovery-ends/tangsancai.jpg",
+      "sha256": "f8f077804080f5503a213d07f5167677bf0b6b124f68ad074302fbe856743a61",
+      "bytes": 83167
+    },
+    {
+      "file": "images/discovery-sheets/tangsancai.webp",
+      "sha256": "c4a78054592407ef5a8f10a047f5bd3cf94f72e91f10e7beefc49caea651a6c6",
+      "bytes": 1392978
+    }
+  ]
+}

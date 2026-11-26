@@ -1,0 +1,43 @@
+{
+  "id": "gullfoss",
+  "name": "굴포스",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/gullfoss.png",
+  "sourceSha256": "ac51b1532abe9e9fed905b5b2addd9029f969624f2ce6a8843d406b28c5a28d3",
+  "sourceMtimeNs": 1795659644359609800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/gullfoss.gif",
+      "sha256": "ae961b7541466285f368e28e61e6bf7e4f7d45bb805af5bced333883c9d9f47c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/gullfoss.jpg",
+      "sha256": "622a339f6b9ffa0883c696c21b444551fc09ef59da467d995770500f0f172f3d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/gullfoss.webp",
+      "sha256": "60766ab7e92058163cc8c761f22f5a19b1657657d32b3a2049063c687e7b1792"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/gullfoss.gif",
+      "sha256": "43583d681d079b034146a16c51896bb678792ffaf0515595fef71bd43607ebce",
+      "bytes": 3306826
+    },
+    {
+      "file": "images/discovery-ends/gullfoss.jpg",
+      "sha256": "8bd0cc9a0d383d842b071aeadd4ec221bb020a19ab46bb91d386d5301004dab0",
+      "bytes": 93471
+    },
+    {
+      "file": "images/discovery-sheets/gullfoss.webp",
+      "sha256": "275db8645e6e7df3c3ffb12c5424922c11983a55c3db956aabb8c72fda133366",
+      "bytes": 1597266
+    }
+  ]
+}

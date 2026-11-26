@@ -1,0 +1,43 @@
+{
+  "id": "lanting",
+  "name": "난정서",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/lanting.png",
+  "sourceSha256": "13c19147755401fca0c0737f8e46c4377f41d2502970c00afe9aac256942c10b",
+  "sourceMtimeNs": 1795660314915697900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/lanting.gif",
+      "sha256": "025a33aa0f59847e71b2cf4b1a08902459431784be165fb012573d4623c0ca5d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/lanting.jpg",
+      "sha256": "c00297814f25aae4f975522d5dbc64ce152b6d9d02a93b96f7d55e33fcf2d848"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/lanting.webp",
+      "sha256": "41049393bd2a0b846c9389f218f019c8b98637d9c8980c82e4722066a72d4c6e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/lanting.gif",
+      "sha256": "5b14e0aded52c4cbb28fff108115f49e31760f86c460e6ddfdebdbf552aa9ec8",
+      "bytes": 3617445
+    },
+    {
+      "file": "images/discovery-ends/lanting.jpg",
+      "sha256": "c0842e393621adaf67ea39a8b12a6e85abd90a507c77477f127857cf31e3aee1",
+      "bytes": 97813
+    },
+    {
+      "file": "images/discovery-sheets/lanting.webp",
+      "sha256": "9fcb2008fd872c8606a6d4f18dd901a33f53267fc7333dbfeb46f833ce9815cf",
+      "bytes": 1682414
+    }
+  ]
+}

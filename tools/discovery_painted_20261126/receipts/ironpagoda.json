@@ -1,0 +1,43 @@
+{
+  "id": "ironpagoda",
+  "name": "우국사 철탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ironpagoda.png",
+  "sourceSha256": "8b54a5c11c2d66844231a758ccab32a14824bb84549e5d953379a1c9c0271505",
+  "sourceMtimeNs": 1795661960962260200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ironpagoda.gif",
+      "sha256": "c1bc80425308d4f62ff164f718d63a1faac8bdec0c9cbd3ba21ea473424800e6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ironpagoda.jpg",
+      "sha256": "6251cb1f6dd8a876c94e217958cfab268c7d11b90ffd1537cf443ad41ead17a0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ironpagoda.webp",
+      "sha256": "b29b29d5b4a759e71ee7c7f40eba2b0904ee99d0fbbc9dc61be6c205f2d30afa"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ironpagoda.gif",
+      "sha256": "78a21b24aa47ae56f30e582205a86ff1128213bda41b2caa1eefe970e4315ec5",
+      "bytes": 3322788
+    },
+    {
+      "file": "images/discovery-ends/ironpagoda.jpg",
+      "sha256": "dc54f77f6f54cdb42bdbf218bc0dfc37431a83336b0f84d12414d2fae1798502",
+      "bytes": 92655
+    },
+    {
+      "file": "images/discovery-sheets/ironpagoda.webp",
+      "sha256": "b7dd68583ca42c873a4a81c6e741a55e1b54c0b3a3bc0e21eceba1a046c2c23b",
+      "bytes": 1600160
+    }
+  ]
+}

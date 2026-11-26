@@ -1,0 +1,43 @@
+{
+  "id": "sanmarcos",
+  "name": "카스티요 데 산마르코스",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sanmarcos.png",
+  "sourceSha256": "7a5569fe52f2852d7f45482174d71d33af97b690684e7ea66ad915d8b042a3f7",
+  "sourceMtimeNs": 1795663038726576000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sanmarcos.gif",
+      "sha256": "7e5035350590a095e156bf74763d91aca3cddc6b3f31e84bdaf11d82cbdb9ac4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sanmarcos.jpg",
+      "sha256": "a05307bccbe6bb8d671fe07df58e40210702bed50aa98d6e975be4dc260e81b4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sanmarcos.webp",
+      "sha256": "4fc8065368156fb0cf8931618810e9bb8a4f01db93cfa9251ba478ecaea444f0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sanmarcos.gif",
+      "sha256": "c11747a1937d9e374e8482ce29ba7439b8f5a51f58779be336931674a1c8bec3",
+      "bytes": 3262544
+    },
+    {
+      "file": "images/discovery-ends/sanmarcos.jpg",
+      "sha256": "5644e29e133d89f51ea4b640673c62c58c4c56e07b585d5b83f1dacfa60befc1",
+      "bytes": 91646
+    },
+    {
+      "file": "images/discovery-sheets/sanmarcos.webp",
+      "sha256": "e1e0ab3a9dda6608e8fa44f2b59af4c5d7c8ca96c85052b4407ecea76477a915",
+      "bytes": 1579370
+    }
+  ]
+}

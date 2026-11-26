@@ -8,7 +8,7 @@ fs.mkdirSync(out,{recursive:true});
 const rows=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/story-plant-proof-20261125.json'),'utf8'));
 const {chromium}=require(path.join(root,'tools/procedural_art/node_modules/playwright-core'));
 (async()=>{
- const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader']});
+ const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=angle', '--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const errors=[];
  try{
   const page=await browser.newPage({viewport:{width:1100,height:800}});

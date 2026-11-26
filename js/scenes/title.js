@@ -4,7 +4,7 @@
   var U = G.U, UI = G.UI, A = G.Art;
   var T = {};
   G.Scenes.title = T;
-  T.version = '0.352';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
+  T.version = '0.353';   // 배포할 때 tools/web_release.py가 0.001씩 올린다
   var bg = null;
   var bootPending = false;   // 처음 열 때의 불러오는 그림이 아직 준비 단계를 밟는 중 (타이틀을 떠나면 바로 걷는다 — T.exit)
 
@@ -62,23 +62,26 @@
     bNew.classList.add('disabled'); bLoad.dataset.wait = '1'; if (bCont) bCont.classList.add('disabled');
     var ld = wrap.querySelector('.loading');
     // 보조 저장소(IndexedDB)의 일지도 읽은 뒤에 이어하기·불러오기를 정한다 (localStorage가 지워졌어도 남아 있을 수 있다)
-    /* 처음 열 때(불러오는 그림이 떠 있을 때): 게임을 할 수 있을 때까지 그림을 걷지 않는다 (2026-10-18)
-       예전에는 지도·저장·글꼴만 기다리고 그림을 걷은 뒤 바다 셰이더를 컴파일해, 첫 화면(오프닝)이 뜬 채 몇 초씩 멈춰 있었다 —
-       이제 ① 지도(해도) ② 바다 셰이더 ③ 타이틀 그림까지 그림이 떠 있는 동안 마치고, 그다음 단추를 켜고 그림을 걷는다. 단계마다 글이 바뀐다. */
+    /* 해도·저장·표지를 읽으면 단추를 켠다. 셰이더는 항해를 시작하기 전까지 뒤에서 준비한다. */
     var LD = G.Loader, boot = !!(LD && LD.shown()), stepMs = (G.FX && G.FX.loader && G.FX.loader.titleWaitMs) || 20000;
     function step(t) { if (bootPending && LD) LD.text(t); return LD && LD.frames ? LD.frames(2) : Promise.resolve(); }
     function cap(p, ms) { return Promise.race([p, new Promise(function (r) { setTimeout(r, ms); })]); }
-    if (boot) { bootPending = true; window.PU_BOOT_DONE = true; var bc = document.querySelector('#boot-loader .bl-count'); if (bc) bc.textContent = ''; step('해도를 펼치는 중…'); }   // 받은 파일 수(index.html)는 여기서 그친다
+    var shaders, cover;
+    if (boot) {
+      bootPending = true; window.PU_BOOT_DONE = true;
+      var bc = document.querySelector('#boot-loader .bl-count'); if (bc) bc.textContent = '';
+      LD.text('해도와 수로를 준비하는 중…');
+      shaders = Game.compileRenderer();
+      if (G.Img && G.Img.resolve && G.Img.has(G.Img.pick(G.Img.chain.title()))) cover = cap(G.Img.resolve(G.Img.chain.title()), stepMs);
+    }
     Promise.all([Game.ensureGeo(), G.State.ready, document.fonts && document.fonts.ready ? Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 2500); })]) : null]).then(async function () {
       if (boot && bootPending) {
-        await step('바다를 그리는 중…');
-        try { if (Game.ensureRenderer()) Game.renderer.warmShaders(); } catch (e) { console.warn(e); }   // 첫 항해가 멈칫하지 않게 — 그림이 떠 있는 동안
-        await step('첫 화면을 꾸미는 중…');
-        try { if (G.Img && G.Img.resolve && G.Img.has(G.Img.pick(G.Img.chain.title()))) await cap(G.Img.resolve(G.Img.chain.title()), stepMs); } catch (e) { console.warn(e); }
+        if (shaders) Game.prepareRenderer();
+        else { await step('바다를 그리는 중…'); await Game.prepareRenderer(); }
+        try { if (bootPending && cover) { LD.text('첫 화면을 꾸미는 중…'); await cover; } } catch (e) { console.warn(e); }
         if (Game.sceneName === 'title' && bg) Game.setScene(bg);   // 받은 타이틀 그림으로 다시 그린다
       }
       ld.classList.add('done');
-      if (!boot) setTimeout(function () { try { if (Game.ensureRenderer()) Game.renderer.warmShaders(); } catch (e) { console.warn(e); } }, 600);
       if (!bCont && G.State.latestAutoSlot()) { bCont = btn('이어하기', 'sail', cont, 'navy'); menu.insertBefore(bCont, menu.firstChild); bNew.classList.remove('navy'); if (bTut) bTut.classList.remove('navy'); }
       if (bTut) bTut.classList.remove('disabled');
       if (bStory) bStory.classList.remove('disabled');

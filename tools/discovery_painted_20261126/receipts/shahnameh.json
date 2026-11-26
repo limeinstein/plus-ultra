@@ -1,0 +1,43 @@
+{
+  "id": "shahnameh",
+  "name": "타흐마스프의 샤나메",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/shahnameh.png",
+  "sourceSha256": "a52c64ac0d61d4e661a77173381822b4cc21e349e04d2023eafafedf4391ddef",
+  "sourceMtimeNs": 1795660743018957200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/shahnameh.gif",
+      "sha256": "a7bc816a6828a63a946f0d4c8163aee93627a5830538712b2df7d54fe6b9c70a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/shahnameh.jpg",
+      "sha256": "ff85b455791530f6a9e8609cdac0e526e584158931499a3fae0ab1284ab69b1a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/shahnameh.webp",
+      "sha256": "aa49a7805fe0ededb1ffde0aaaf23f9ddb744e71b782f48da6ad021cc53c3c79"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/shahnameh.gif",
+      "sha256": "8efccf3c85b9d81895f693bc9e5cb7e1640bfc934ca35685dc30ea7e2ceb3630",
+      "bytes": 3769738
+    },
+    {
+      "file": "images/discovery-ends/shahnameh.jpg",
+      "sha256": "c5f495a9212b7402f6dae1a783ffc5d0415a55828b3c85fe564921eeeebdbe3b",
+      "bytes": 109813
+    },
+    {
+      "file": "images/discovery-sheets/shahnameh.webp",
+      "sha256": "5d706bc246bd4fc527f397222c40d6dd14321b3f28f84d90a68967be1533cf44",
+      "bytes": 1882538
+    }
+  ]
+}

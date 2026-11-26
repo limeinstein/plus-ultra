@@ -1,0 +1,43 @@
+{
+  "id": "blackprince",
+  "name": "흑태자의 루비",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/blackprince.png",
+  "sourceSha256": "e9525e1a9114dc144629119f6d81bf12d0b14f72adf21f152389ac663afe4fca",
+  "sourceMtimeNs": 1795660265369276300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/blackprince.gif",
+      "sha256": "553a979f096c2084e958219cb6696b175ddeb5294b30405e959dec65435484ec"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/blackprince.jpg",
+      "sha256": "3a72f15051a737583977da9cc2282292052f99e2e2d300ee7c98ee1f5fc889a6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/blackprince.webp",
+      "sha256": "b3baaee7e3326069aa821b739e5ca0941f1684fc884c8f36186f7a717ac2e4ec"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/blackprince.gif",
+      "sha256": "ef036d27848164554f1ae074a450fbdf39402458efab6be4fd4219eaee61cada",
+      "bytes": 3554944
+    },
+    {
+      "file": "images/discovery-ends/blackprince.jpg",
+      "sha256": "7e102cdf2c7aca6274958ce729455c126e4892e7758219a5d11c4da47e01ca5d",
+      "bytes": 88119
+    },
+    {
+      "file": "images/discovery-sheets/blackprince.webp",
+      "sha256": "a1f52356e4c36697515da76c71bc87c3fc9c3b2020a0a5e96b2b95235724cf78",
+      "bytes": 1486592
+    }
+  ]
+}

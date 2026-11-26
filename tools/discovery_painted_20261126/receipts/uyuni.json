@@ -1,0 +1,43 @@
+{
+  "id": "uyuni",
+  "name": "우유니 소금 사막",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/uyuni.png",
+  "sourceSha256": "3990797d905ba857827bf31b01a11f38195e8ded843c69075241db6a1fc3a19a",
+  "sourceMtimeNs": 1795659645635427400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/uyuni.gif",
+      "sha256": "57737d5a9f73bb1abd059d20cbd8e5afc0db2136de6b2a19a1988886bad9df2c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/uyuni.jpg",
+      "sha256": "eb44b2e30e8fcd3b41f5f9fe3c8530015aa5fc9a79f411efb337238cc71813fc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/uyuni.webp",
+      "sha256": "642396da879ce784a12e352c6878ca9f78135386399643e52e0e8117a1770b75"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/uyuni.gif",
+      "sha256": "b68f3b2dbf25e48165ddbe27701f3b98cdd511c6a0ed6e5ff2a38fcf2fe9cf49",
+      "bytes": 3049201
+    },
+    {
+      "file": "images/discovery-ends/uyuni.jpg",
+      "sha256": "461054cf24cbf494259917587afcb6450912d5240941c2d935f99133097d0994",
+      "bytes": 92959
+    },
+    {
+      "file": "images/discovery-sheets/uyuni.webp",
+      "sha256": "009b51f3a7ddc168592d1b84a8adbd83d0a3a05b8e62bc4b40c353c8e94ada83",
+      "bytes": 1534480
+    }
+  ]
+}

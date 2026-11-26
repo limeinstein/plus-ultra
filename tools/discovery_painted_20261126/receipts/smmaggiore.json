@@ -1,0 +1,43 @@
+{
+  "id": "smmaggiore",
+  "name": "산타 마리아 마조레 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/smmaggiore.png",
+  "sourceSha256": "23dabc08d7666e25cb88fa722db90b8cf9bf17fcae77ff9108b03afeef4cdab5",
+  "sourceMtimeNs": 1795661815426439700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/smmaggiore.gif",
+      "sha256": "a576d28f2fd90535e7a2f0d97e854deed7b5e1cb84c7d3d4b4ebf46abbf39a00"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/smmaggiore.jpg",
+      "sha256": "72ce148f73f64b0de56d60608ffa7e338ecbe4b799bb56720650e02e00bb0dfc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/smmaggiore.webp",
+      "sha256": "1accddb45ae99a2ecd99ed0c993657414180ecaf32c01366eb2e010a8162a5ee"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/smmaggiore.gif",
+      "sha256": "eed2cfe2e57ca90038c506aef8ba2252e0c58dd896bee8ea2006a607ace62dec",
+      "bytes": 3522851
+    },
+    {
+      "file": "images/discovery-ends/smmaggiore.jpg",
+      "sha256": "1466329c741fab137b43cab7428e6b223285ba974243ae34ce270c7946962bba",
+      "bytes": 98799
+    },
+    {
+      "file": "images/discovery-sheets/smmaggiore.webp",
+      "sha256": "29f050352e21a9aa0264dd4d014fe2aa047bb9256b383ca3c9d519f645d13d67",
+      "bytes": 1703292
+    }
+  ]
+}

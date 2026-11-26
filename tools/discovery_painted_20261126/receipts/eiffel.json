@@ -1,0 +1,43 @@
+{
+  "id": "eiffel",
+  "name": "에펠탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/eiffel.png",
+  "sourceSha256": "bc4bb97021cdd2d1c91820233cd56d9ce0233e1df5f5a5154be63243a498f237",
+  "sourceMtimeNs": 1795661324868765900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/eiffel.gif",
+      "sha256": "e5e3ab624428b757b741dcd99b254500c2ca20350d202ef3e255f5d7208491c3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/eiffel.jpg",
+      "sha256": "d2985902d3cac543150665fc532c6bc6df88b03d8ee9a243985a7f6ac76600e6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/eiffel.webp",
+      "sha256": "eac52917c08d13f69dcb712f9d791d0e451f3211c6e3706fb6074676d18bcc7e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/eiffel.gif",
+      "sha256": "5e8366485b5b77d1848dcc72297e247c6bc0defbee5bc5cb62b6057cd2a0529a",
+      "bytes": 3499508
+    },
+    {
+      "file": "images/discovery-ends/eiffel.jpg",
+      "sha256": "6e0c3e9a3c675a847716deed83a9863a2c695b01af77608c10240198c6063a49",
+      "bytes": 96606
+    },
+    {
+      "file": "images/discovery-sheets/eiffel.webp",
+      "sha256": "4e4da4c0007b138b992992ad9b5cd6d7954b530f9467936f2225d3ff93aac5cc",
+      "bytes": 1669344
+    }
+  ]
+}

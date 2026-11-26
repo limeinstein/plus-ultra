@@ -1,0 +1,43 @@
+{
+  "id": "jujube",
+  "name": "산둥 대추",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/jujube.png",
+  "sourceSha256": "56595d059fde3c6e9bc0d879888bd36ae76c3b6e0367fbd466f01b4fee072a30",
+  "sourceMtimeNs": 1795659653245770200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/jujube.gif",
+      "sha256": "865a5accf27cad75c0b9a5820b342b644574b7562201f7dbdb1082b38d436800"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/jujube.jpg",
+      "sha256": "3d74417cbb8243bd1f723ba2d33eed4ff8e43f8198974403a25d95b296654fd2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/jujube.webp",
+      "sha256": "8806f7e545aba12ccaa68ae05bb436138f1a69cdf0e8f7fb2aba10f3b011ac86"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/jujube.gif",
+      "sha256": "d29b9b09402342a086aafa45feaa7ce3ce2ba4f32807b976d98cb4c3a98f5e93",
+      "bytes": 3558670
+    },
+    {
+      "file": "images/discovery-ends/jujube.jpg",
+      "sha256": "f60030989152f8fbdc286e300e911710f41af9fecab1366b5f93e86604e6645b",
+      "bytes": 107706
+    },
+    {
+      "file": "images/discovery-sheets/jujube.webp",
+      "sha256": "8e0e9d470fff207be071478a426bc4134528fde0a9e296dc92dd235f0ccf5796",
+      "bytes": 1873254
+    }
+  ]
+}

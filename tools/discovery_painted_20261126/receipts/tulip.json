@@ -1,0 +1,43 @@
+{
+  "id": "tulip",
+  "name": "랄레",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/tulip.png",
+  "sourceSha256": "db230d02d9cb8184ba4784a3a2a19255265962db19cfe2cddf25395459744eee",
+  "sourceMtimeNs": 1795659654412221100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tulip.gif",
+      "sha256": "0af5b2779b5835fb1ba187ddb8f4969c257321b7dcd1c0d17febdeec487aef2a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tulip.jpg",
+      "sha256": "d2f905c1c6cb409390e2c277aab857d1c41e758a1216a1cda64b43ce765c8295"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tulip.webp",
+      "sha256": "db7e96ecafdc8f4124033c6b5bbd8342b310fc23c203dd47f8ec8ff521f17bf3"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tulip.gif",
+      "sha256": "260c2e7f4026a2f99ad3a70b8f987b2f75eb9e1566cf693db90d3e957c1f2948",
+      "bytes": 3164791
+    },
+    {
+      "file": "images/discovery-ends/tulip.jpg",
+      "sha256": "ba1dda84b82fb193d0d2e6270027b0669e4ec221306016a354d5f882718d8433",
+      "bytes": 93648
+    },
+    {
+      "file": "images/discovery-sheets/tulip.webp",
+      "sha256": "65922b6ce46b057d582d0df93f26f8e6e6b770884eda6d3f14b2fb7732a2918c",
+      "bytes": 1546496
+    }
+  ]
+}

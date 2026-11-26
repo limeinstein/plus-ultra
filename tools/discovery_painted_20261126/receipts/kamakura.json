@@ -1,0 +1,43 @@
+{
+  "id": "kamakura",
+  "name": "가마쿠라 대불",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kamakura.png",
+  "sourceSha256": "47794ad51f28911a038f77e9e49c5ea5eb64b04ffefc8c2456b101d6fe3cdae8",
+  "sourceMtimeNs": 1795661091613377800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kamakura.gif",
+      "sha256": "04824cacd2d28246589675b781e8e99f71605c09692b3bad2a05b1487291104a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kamakura.jpg",
+      "sha256": "1b8b4f0fe74a4053c83bf89bfd307c884744750252ea039cf5c10cb239df7e61"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kamakura.webp",
+      "sha256": "3f09b132748370ee6f7458a514101b8f937eee00a8042dae46b8bced2aaf8940"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kamakura.gif",
+      "sha256": "316db406f7703a3de8bb50535c0ec991fccd962eea59022f4aa75a7a4d7276a3",
+      "bytes": 3622779
+    },
+    {
+      "file": "images/discovery-ends/kamakura.jpg",
+      "sha256": "89f4e42b9577365f41e1c055e7583a3142f72cc3b9375b72171b780048c47864",
+      "bytes": 86155
+    },
+    {
+      "file": "images/discovery-sheets/kamakura.webp",
+      "sha256": "0ac1f52d63399e4d17259a8f3e2c9fe0058d33f261b42864a4432f8975ca82b4",
+      "bytes": 1494394
+    }
+  ]
+}

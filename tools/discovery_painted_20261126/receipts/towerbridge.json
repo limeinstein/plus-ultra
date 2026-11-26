@@ -1,0 +1,43 @@
+{
+  "id": "towerbridge",
+  "name": "타워 브리지",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/towerbridge.png",
+  "sourceSha256": "e43faf127b7516ae5e3a336808645ced3a642f200fda5405480d2bb63b47cc36",
+  "sourceMtimeNs": 1795662704360863300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/towerbridge.gif",
+      "sha256": "610b06bf5b444c66028c9cf4d432f5dc116c7e28f5fb9541c353f07884be3948"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/towerbridge.jpg",
+      "sha256": "26a1eb802743c39c51b130adefb3d2d40e02de1cd0545be6fcfc590cab0c691f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/towerbridge.webp",
+      "sha256": "723feef67b66015c1f7f8c62a17fbe97b655f9ba054d88d47c3b168e5149454f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/towerbridge.gif",
+      "sha256": "53ed64409d37dd41e43af978390e953147031bb1a466c49a54b181252e842781",
+      "bytes": 3499692
+    },
+    {
+      "file": "images/discovery-ends/towerbridge.jpg",
+      "sha256": "bc6aa0f2e71164c362a7e777dfa2b874fb7c954f7268c1ec77c905517993bcc1",
+      "bytes": 94014
+    },
+    {
+      "file": "images/discovery-sheets/towerbridge.webp",
+      "sha256": "f9e9e3b770d230fa18eb79bafb8f17b79276f67b023319255e465a7ec9a0ec2e",
+      "bytes": 1605266
+    }
+  ]
+}

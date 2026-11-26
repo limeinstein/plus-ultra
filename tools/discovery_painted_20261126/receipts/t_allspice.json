@@ -1,0 +1,43 @@
+{
+  "id": "t_allspice",
+  "name": "올스파이스",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_allspice.png",
+  "sourceSha256": "46510c030542c4280a36009bd013fb6dc8b2cd4db723c9cfcd87b170d3e8cc18",
+  "sourceMtimeNs": 1795660909725695000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_allspice.gif",
+      "sha256": "2728c83725feef2c7da65724eafe564a4a8729eba42ffdfa0f2395ff4593675b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_allspice.jpg",
+      "sha256": "89dcbbef677de7358c922b896bfaf2d51899afdfc0c55b47c148e58faebec481"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_allspice.webp",
+      "sha256": "e351194172a3e5140c576fdffd3d1edb7058281b12e07f7c0f310432b4f67b16"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_allspice.gif",
+      "sha256": "5cef91d43341509e4e536e8570f481c14da80914ec8a5312ff6b90fa1014db76",
+      "bytes": 3538111
+    },
+    {
+      "file": "images/discovery-ends/t_allspice.jpg",
+      "sha256": "14011baecaf0b75690672040b729ee051c37b3780e5a0df12e25ddf2b3602f5a",
+      "bytes": 99409
+    },
+    {
+      "file": "images/discovery-sheets/t_allspice.webp",
+      "sha256": "d59434e0ef94f8d3d8f043e53b998bcdcf330192057368c7f887a0cf5bfc88dc",
+      "bytes": 1705030
+    }
+  ]
+}

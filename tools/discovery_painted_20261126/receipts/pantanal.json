@@ -1,0 +1,43 @@
+{
+  "id": "pantanal",
+  "name": "판타날",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/pantanal.png",
+  "sourceSha256": "311011408a248bb3fa2e04eecd2ca65853e059919c2644b4abce94db007ca7f6",
+  "sourceMtimeNs": 1795659657935241800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/pantanal.gif",
+      "sha256": "d06c0b7c7b78d875baf9ead8d8f9a35a62783eb05b41f7ca71a3adc661cdb3cc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/pantanal.jpg",
+      "sha256": "4a79026c6aa1db73fff501a655f61954ea7bebacc7f5d4bd9db2041dee2d0ce9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/pantanal.webp",
+      "sha256": "b9e2ec132147ed1458bc8704f86929e28e2d86d5d5d8aa0bad5af27bd07e6f42"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/pantanal.gif",
+      "sha256": "2b7ffb485952179969d8ec9a88c64b61c61091c25f5a13b4709ca5432b6aa893",
+      "bytes": 3387032
+    },
+    {
+      "file": "images/discovery-ends/pantanal.jpg",
+      "sha256": "2e70f276e4e6b44b052b0d3d7c8b0329647972fa938456d959e26ec519b583c1",
+      "bytes": 103381
+    },
+    {
+      "file": "images/discovery-sheets/pantanal.webp",
+      "sha256": "4ad121d26e288af694a36ac9e412991ae056c21792bd2a093b54ef5e864dd68a",
+      "bytes": 1761666
+    }
+  ]
+}

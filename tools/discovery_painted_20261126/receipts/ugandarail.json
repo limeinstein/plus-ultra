@@ -1,0 +1,43 @@
+{
+  "id": "ugandarail",
+  "name": "우간다 철도 (차보 다리)",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ugandarail.png",
+  "sourceSha256": "2d8249ae7aa46df4adde3bf50d1895c589baecd58597ff096b17d3aeadd83cb9",
+  "sourceMtimeNs": 1795662799994805400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ugandarail.gif",
+      "sha256": "4a90ae16cea92de0ecd3f554ae14874dc8b2e465488988cb458095bebcf56554"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ugandarail.jpg",
+      "sha256": "42cedfd14f13d5c2ebe8a01e8ecd273715fb7b2b8d65fff6531a487ae7b4d81f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ugandarail.webp",
+      "sha256": "535b25bafae129d1dc09659749a85bf3c370cb9891a8710972096f32f4e7a49f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ugandarail.gif",
+      "sha256": "0b65261bf63a4929ea7bfc140306d24921264975c1f2049a699a03eea258e4e4",
+      "bytes": 3456990
+    },
+    {
+      "file": "images/discovery-ends/ugandarail.jpg",
+      "sha256": "0612eb5578a25d098b7dcd56aa7ea122a0d6e22cf9b4a2122c43c768ef7b58a2",
+      "bytes": 97032
+    },
+    {
+      "file": "images/discovery-sheets/ugandarail.webp",
+      "sha256": "b535c042edc174ad408d5e5685127157ff493466d8422d55aa98af8b71c137f2",
+      "bytes": 1705494
+    }
+  ]
+}

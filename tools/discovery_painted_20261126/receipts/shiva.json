@@ -1,0 +1,43 @@
+{
+  "id": "shiva",
+  "name": "시바 신상",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/shiva.png",
+  "sourceSha256": "8816fbeb31cdc97f3102870c727903f6051c7cdf56a7ee42289c58c1d433dda7",
+  "sourceMtimeNs": 1795659880387772400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/shiva.gif",
+      "sha256": "a243a8c5404825c2e3c3ca9a25b88e9a05e879b53885a3b6507296821a181a1f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/shiva.jpg",
+      "sha256": "cfc227d73c2d1645d1f7b5ba31b3e6ce6d145545653ac6b579ff64c6b454c6df"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/shiva.webp",
+      "sha256": "558f0e1a531163714a933ec5cc5d459c4182ae9d16e2a5169650aaad09308ad9"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/shiva.gif",
+      "sha256": "81a81e653a42af860b6f37cc2484936ed53ac5423d9aea00103a324589daad54",
+      "bytes": 3567779
+    },
+    {
+      "file": "images/discovery-ends/shiva.jpg",
+      "sha256": "da41009050d397b5b4f22d011a7f6ace4d1031922414d822c7cf59aa39d274b9",
+      "bytes": 90335
+    },
+    {
+      "file": "images/discovery-sheets/shiva.webp",
+      "sha256": "544cd4fbf32fc455d84e7e0e1ac44ca6bede0eb94f6dfcc5f8fd18391ea94711",
+      "bytes": 1522574
+    }
+  ]
+}

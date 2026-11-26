@@ -1,0 +1,43 @@
+{
+  "id": "goldelephant",
+  "name": "황금 코끼리",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/goldelephant.png",
+  "sourceSha256": "cd1475f2eff5fa845ae8b3ad59707e8d7e63bcb395c6e84000e23c875278fe67",
+  "sourceMtimeNs": 1795659798080377800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/goldelephant.gif",
+      "sha256": "6326b2968e688fe60476c1567594d7b84c4d91e8ec7ebff8b3a2d4241f478888"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/goldelephant.jpg",
+      "sha256": "4e06dfe38a8e533332746603e582fe1f01482646bf7e2de0975277f91f4e9476"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/goldelephant.webp",
+      "sha256": "42aba4e9096bfc46a120e68101f10e0f05cf2c2d950727b8efbf1c529d2ea12f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/goldelephant.gif",
+      "sha256": "53bdac948e2b3a60d25811ac660dacac886756402c7af935cd5e53c96722e99d",
+      "bytes": 3564609
+    },
+    {
+      "file": "images/discovery-ends/goldelephant.jpg",
+      "sha256": "696aea00297d7af077bd01241b3fca35186af03a8a040df08ddb645376ae1fd4",
+      "bytes": 90286
+    },
+    {
+      "file": "images/discovery-sheets/goldelephant.webp",
+      "sha256": "7e15fc23bdf74abde252fdb0f076aad437f33bbfca25ec07964f31f727dc89b7",
+      "bytes": 1547200
+    }
+  ]
+}

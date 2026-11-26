@@ -1,0 +1,43 @@
+{
+  "id": "siosepol",
+  "name": "시오세 다리",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/siosepol.png",
+  "sourceSha256": "bb54ec427cba896c1dd2d53daa5072130578fdc7adfa712b9bd1e345ec271834",
+  "sourceMtimeNs": 1795661794288093900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/siosepol.gif",
+      "sha256": "9422ce00ba832b465bdbc654816579be6d0b9b4dec6447b52c3722c4261b0ba2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/siosepol.jpg",
+      "sha256": "716dddf0be46c4e012b1b85c5d1940e0b1a92e71bd7fb90eff495c763268eaa5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/siosepol.webp",
+      "sha256": "5fc7c0b5488f32351eb41d52cbde8343edea938ce76845383a3b94e8ffd7a2fd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/siosepol.gif",
+      "sha256": "f0f51c58e46cc28110e91a85b85393e8f1f0c42a4866a6444c44997f6e3f0774",
+      "bytes": 3383245
+    },
+    {
+      "file": "images/discovery-ends/siosepol.jpg",
+      "sha256": "68090fd23c77d7637923809bc3f3e212b7a7dd33e186107e974415ccad507126",
+      "bytes": 100354
+    },
+    {
+      "file": "images/discovery-sheets/siosepol.webp",
+      "sha256": "a576a2917f92086b94115b60139ba6ddb9526df7e471bab8d93710fc66af735a",
+      "bytes": 1693550
+    }
+  ]
+}

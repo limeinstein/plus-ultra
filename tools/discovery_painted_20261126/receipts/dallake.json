@@ -1,0 +1,43 @@
+{
+  "id": "dallake",
+  "name": "달 호수 — 카슈미르의 낙원",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/dallake.png",
+  "sourceSha256": "11cce31de64b6bad54a9f029f464c2d462e2f935f8998cfdd671aee8a3ed25e9",
+  "sourceMtimeNs": 1795659647719274300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/dallake.gif",
+      "sha256": "15d1b1ccae0aa956b238bf934060e4b75e3266c52d216acfdb8a382ecfa56156"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/dallake.jpg",
+      "sha256": "8708d4360fc19633eed5841594aca2102d4e3b1ad985d0adbee8fe48bbb25abd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/dallake.webp",
+      "sha256": "5e7072a084920bc670531427310acdbc50940cf5192347604283632c8d1a8e51"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/dallake.gif",
+      "sha256": "2ff72f7d3dbe68288151f649bf52eb0a4910e39d51150feefee7cf05075f308f",
+      "bytes": 3315436
+    },
+    {
+      "file": "images/discovery-ends/dallake.jpg",
+      "sha256": "d215378e1a8ec5aeef4a82555543d5a0fa3d9d78b29a17a6f433c44c5311375c",
+      "bytes": 95388
+    },
+    {
+      "file": "images/discovery-sheets/dallake.webp",
+      "sha256": "9047db623a40f1ee01003a31c55161e51d2c22136c665c8dedf9d75470104feb",
+      "bytes": 1655674
+    }
+  ]
+}

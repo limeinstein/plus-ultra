@@ -1,0 +1,43 @@
+{
+  "id": "sarnath",
+  "name": "녹야원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sarnath.png",
+  "sourceSha256": "d22e134df082415fadfb45494130e1e55879a6f1ec142f1bba4ee5cb183481b9",
+  "sourceMtimeNs": 1795661438310178900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sarnath.gif",
+      "sha256": "3b2001d37406f49efbda1da4e171c83a95fcc8e1eb1b25f8652ca927fe1a4f67"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sarnath.jpg",
+      "sha256": "6809bea3aef5cc881b52ec46544487c5b5b6e8ad17e61a53f38ff3e9f97edcc0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sarnath.webp",
+      "sha256": "78472d440e3cc611b772f18a422937228b7ced58b2380f98c01d9bfa3cb193f3"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sarnath.gif",
+      "sha256": "493fd10c8fabe88d239211c380aeac57f3e082c7fe5d60e3bfc177c8da31f442",
+      "bytes": 3267452
+    },
+    {
+      "file": "images/discovery-ends/sarnath.jpg",
+      "sha256": "2e9a5d5cc0796f0b7929558409b7f7a7748dbfc6de3dd3de50c9169f492a7c33",
+      "bytes": 97913
+    },
+    {
+      "file": "images/discovery-sheets/sarnath.webp",
+      "sha256": "405b81e223419273a424e4c3de6e7e2efb403a7d40213afec49951a98e69973f",
+      "bytes": 1664368
+    }
+  ]
+}

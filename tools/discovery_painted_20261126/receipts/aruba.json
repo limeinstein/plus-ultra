@@ -1,0 +1,43 @@
+{
+  "id": "aruba",
+  "name": "아루바",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/aruba.png",
+  "sourceSha256": "93ad2b3ee96f9fbac1c4bce5c453b9f440b1b5dadcbf2d31834a6c08711858c8",
+  "sourceMtimeNs": 1795659661188910700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/aruba.gif",
+      "sha256": "bc39790f61cf440ccba340a91330884bc2e16e98b20cb7c8eb5c451e5ab0e178"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/aruba.jpg",
+      "sha256": "45b354a849b62636a2d05f4ce94a9ad6c279b99b6c57fa93c1e5631b883b569b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/aruba.webp",
+      "sha256": "7d3d9bce8405e6d75bbef8276ffeac197ecc633e00ca2343c5ef2a06f78f4b06"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/aruba.gif",
+      "sha256": "b7b914f577f55329a5b915366de9f1de46e4dc7609119ca1ba2767fbef0eee36",
+      "bytes": 3029962
+    },
+    {
+      "file": "images/discovery-ends/aruba.jpg",
+      "sha256": "eb623a6911752dc90f4493558c7db936d84a51ddd1de53dd72e283661903c96a",
+      "bytes": 106796
+    },
+    {
+      "file": "images/discovery-sheets/aruba.webp",
+      "sha256": "4d930ee0c1d85a51e9c99d9cae2a2996e23ff9c7be6dbbc7dd5ad0e7e7032f74",
+      "bytes": 1857288
+    }
+  ]
+}

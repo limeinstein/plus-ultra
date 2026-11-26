@@ -1,0 +1,43 @@
+{
+  "id": "nabtaplaya",
+  "name": "나브타 플라야의 돌 고리",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/nabtaplaya.png",
+  "sourceSha256": "ff60e13cd760fc56e4e9ac18e97cc7fc4f331dc6fb1f95406f0c4b1020ab82f4",
+  "sourceMtimeNs": 1795662393120528200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nabtaplaya.gif",
+      "sha256": "aa9a58111804f6a82655ea32e1f82c74fe90e40bc88379b72f646ff1b7465a71"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nabtaplaya.jpg",
+      "sha256": "fc596c348ba66d35a1b53c2dfbe2f37db39b2881d6111b15fc0169a2cc100e91"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nabtaplaya.webp",
+      "sha256": "8291be77ef52bc785eea9185dd7922d1c3dfe5e5f030d76788a3112276ef35b0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nabtaplaya.gif",
+      "sha256": "cd96de41a8170ea88b2e476f41787974800dfb372a1b8e741764c8526c17f80e",
+      "bytes": 3366321
+    },
+    {
+      "file": "images/discovery-ends/nabtaplaya.jpg",
+      "sha256": "8b9bf0ff751679c2b0361eff6a3ea06778f4c5aca995a2fff3da9f5ca361c22e",
+      "bytes": 89922
+    },
+    {
+      "file": "images/discovery-sheets/nabtaplaya.webp",
+      "sha256": "64c57392c51caedfe8d5062cccc8b970c3d77375504bd0a5045d2f7724e63411",
+      "bytes": 1545618
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "ft_delhi",
+  "name": "쇠기둥에 적힌 이름",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ft_delhi.png",
+  "sourceSha256": "411533feeb211ddb63881822ddc7d0e57da3c5ae9ca4d4cf56cae419d7caad4b",
+  "sourceMtimeNs": 1795662606873520700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ft_delhi.gif",
+      "sha256": "a1d8e425a39f9342292a84dfd5c51a5b811291ce64dcbc5004607d5e6b226814"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ft_delhi.jpg",
+      "sha256": "93779ef6099a0dd9299bf4e69f6d095c79c6d027cfbebb42cdc03c8e71a12580"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ft_delhi.webp",
+      "sha256": "43754da006021e9df2224ca39f03fe5da5be2fbe410a158a0d056511203391f5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ft_delhi.gif",
+      "sha256": "aa3966f1488f6dfe46c394547703337007189a8bf64362e6149b1361afea87fe",
+      "bytes": 3467483
+    },
+    {
+      "file": "images/discovery-ends/ft_delhi.jpg",
+      "sha256": "5730a4e442e0cf073086fef3c2e30820a963941d7a3e9442b09e88e2be1d9ea7",
+      "bytes": 93129
+    },
+    {
+      "file": "images/discovery-sheets/ft_delhi.webp",
+      "sha256": "8aaec7e16405aa8079442fb37e57c4cfd8450adb4cea3685293ad864029e5e7c",
+      "bytes": 1527052
+    }
+  ]
+}

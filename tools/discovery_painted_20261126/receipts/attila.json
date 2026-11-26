@@ -1,0 +1,43 @@
+{
+  "id": "attila",
+  "name": "아틸라의 세 겹 관",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/attila.png",
+  "sourceSha256": "ec327b85297da13c115455f69757eccbfe9ac02f19029c462cf0b4d91ed8d3c5",
+  "sourceMtimeNs": 1795663406607079700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/attila.gif",
+      "sha256": "be80ba4e3c8da116555a4a81a1343e55227ba7a7eeac3624e3b21325a661a693"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/attila.jpg",
+      "sha256": "505d436a0c80eb8403effb15937e2305cc318258e18de829a2ef3337d42a2bd0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/attila.webp",
+      "sha256": "663dc496da38996fd1d65830342dc0b49ba23f0eba4b4899e00432af85074356"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/attila.gif",
+      "sha256": "41054483841fcf4536740f5ad47aa628c463e78681ca3c764e78111673e7bdec",
+      "bytes": 3544996
+    },
+    {
+      "file": "images/discovery-ends/attila.jpg",
+      "sha256": "7d50ee87a57d384a692bcea8f1e7ae7238a978649ee59369629138fb6b466653",
+      "bytes": 89072
+    },
+    {
+      "file": "images/discovery-sheets/attila.webp",
+      "sha256": "1f6249c42fdba888800ff2011aba980fe51be2d9506ed32b231c33a1bf1deb8e",
+      "bytes": 1514262
+    }
+  ]
+}

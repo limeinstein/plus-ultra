@@ -1,0 +1,43 @@
+{
+  "id": "igboukwu",
+  "name": "이그보우쿠우 청동기",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/igboukwu.png",
+  "sourceSha256": "56c8f486d6989bccf2959428851d3f9761006af372207f1ca54f085c25767b0e",
+  "sourceMtimeNs": 1795662326010020900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/igboukwu.gif",
+      "sha256": "47b239b58713ddf318ef23737eee492eb371b3dc51f59e3916f8013a9ce7b03f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/igboukwu.jpg",
+      "sha256": "bd771d57c655bbf6b0d9a3c259876448207da81fd5693100733d69fe6c8f7e48"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/igboukwu.webp",
+      "sha256": "f23a02ba124a4035768847f40308510dba90e4f59a1afc9125cd33f3bb668e82"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/igboukwu.gif",
+      "sha256": "f4e4c7e66b1330528931525c6e2243e2047bfc8d03e8b4e6e60b7fd986537f75",
+      "bytes": 3700307
+    },
+    {
+      "file": "images/discovery-ends/igboukwu.jpg",
+      "sha256": "aec26949e37572554cc2010240eae9251f6ad15e4654dd501607acbe20645cd8",
+      "bytes": 99661
+    },
+    {
+      "file": "images/discovery-sheets/igboukwu.webp",
+      "sha256": "685f11f89198ee391f7338d809deed349d3b73457b0ad9a767ea8899fd0923cd",
+      "bytes": 1752332
+    }
+  ]
+}

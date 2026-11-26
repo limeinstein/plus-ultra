@@ -1,0 +1,43 @@
+{
+  "id": "rila",
+  "name": "릴라 수도원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/rila.png",
+  "sourceSha256": "09d3b7c1f1dcea695e25a4f04c2a68c35b49e5ce765ea7a3c9647be21e60f18e",
+  "sourceMtimeNs": 1795660953731334300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/rila.gif",
+      "sha256": "207b5a2ee0297ff0e2ad8160b1bdc7eb4e3b8d9943c5d300e89cbe7b6c750780"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/rila.jpg",
+      "sha256": "047e8ff9dc26c08c0b0aa58f52726e3df632b22f0a87b64d35329aa53efe7cc0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/rila.webp",
+      "sha256": "39f297e964bdc3997914b5576d29b1fd89c4c088400482eb41ea8ea107f098ac"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/rila.gif",
+      "sha256": "3a35dcc423f6002950c253b8e7864686aea59d6953a71f3475260ec1bd835738",
+      "bytes": 3648067
+    },
+    {
+      "file": "images/discovery-ends/rila.jpg",
+      "sha256": "4460ff65582e3e13616ee2dd8e734d70ddbfa629cf78d83c5d4fec82892f50c5",
+      "bytes": 100277
+    },
+    {
+      "file": "images/discovery-sheets/rila.webp",
+      "sha256": "1051dbe00e7df7ae1284591171fc80b1a1a58cf8453f40d0c1fe1e4dd74e6254",
+      "bytes": 1777090
+    }
+  ]
+}

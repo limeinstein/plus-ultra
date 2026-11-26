@@ -1,0 +1,43 @@
+{
+  "id": "askia",
+  "name": "아스키아의 무덤",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/askia.png",
+  "sourceSha256": "04fd8e74ffd468673c404eb83071aad0f0617ae1b40c3a38b99ba7c4252ad815",
+  "sourceMtimeNs": 1795661123912851800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/askia.gif",
+      "sha256": "2d67a4f14b8c31f8a075191317bca8d8e286bcc82ead50fe0ed81b4b57b3955c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/askia.jpg",
+      "sha256": "2f5759f5c414fd298c21da55bfc36b18ca9971c399c708d295f058b0e277b694"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/askia.webp",
+      "sha256": "c6208e8882ac3c64ac29cc32c32e375dc1a8d7b0f97822a8ca5f4e2bb67379a2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/askia.gif",
+      "sha256": "b772b7aba94276af4f5418cb0c0a5389035a98424ebd959c38daaab0b902a277",
+      "bytes": 3242710
+    },
+    {
+      "file": "images/discovery-ends/askia.jpg",
+      "sha256": "a4a20d583159736d91d5264a20bd8b5efde93c7eb116e1c7f9d554166623b532",
+      "bytes": 90211
+    },
+    {
+      "file": "images/discovery-sheets/askia.webp",
+      "sha256": "3ef01b7e2b59b3e13d432301673d4ac297d1b085f92316e1caecb40e9de4c50a",
+      "bytes": 1520210
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "sukuh",
+  "name": "수쿠 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sukuh.png",
+  "sourceSha256": "955f15778c412108687cb6106572d20212f6d018847447cd198453c421a9c41d",
+  "sourceMtimeNs": 1795662143907692700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sukuh.gif",
+      "sha256": "0a3b3278ca0d3688e038919c395e0c0ba458fe29b8d466b9568b6556a97ecac9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sukuh.jpg",
+      "sha256": "c9f2941632cb87abb16738696517df5caaac6007e0ab5c9b6006698fa091a995"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sukuh.webp",
+      "sha256": "00113e764b16b3259678a1a385d05f4d26800954316c3b347f9e77e1c23b3025"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sukuh.gif",
+      "sha256": "72b2c2eb667881d8efce64d42118a49493fe40fad498aa0de74115838638b909",
+      "bytes": 3618073
+    },
+    {
+      "file": "images/discovery-ends/sukuh.jpg",
+      "sha256": "50f8d5c2ecc25149020116ca08b1c7877f34c80a2caf7e2dee26dd3e0e3b095d",
+      "bytes": 98016
+    },
+    {
+      "file": "images/discovery-sheets/sukuh.webp",
+      "sha256": "68ca70d06e552ed8141ac6a18095f724344518a948ae7b554378d5b943cf5787",
+      "bytes": 1723816
+    }
+  ]
+}

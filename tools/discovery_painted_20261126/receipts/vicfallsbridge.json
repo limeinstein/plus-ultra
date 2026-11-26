@@ -1,0 +1,43 @@
+{
+  "id": "vicfallsbridge",
+  "name": "빅토리아 폭포 다리",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/vicfallsbridge.png",
+  "sourceSha256": "396231b6de500305520a813720fd234534895e77c32265aa8b4a67125ed4df89",
+  "sourceMtimeNs": 1795662877659406300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/vicfallsbridge.gif",
+      "sha256": "10cc74bafc99a9fa0011cd15eb48d08e492a7ea5be4ed81dadf47152c4b11974"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/vicfallsbridge.jpg",
+      "sha256": "4251b6f36e56f2bce2d5e16ba806f36fd9fa9fdde25a7c0d4c76196ecc06339e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/vicfallsbridge.webp",
+      "sha256": "1f9b81fce436a8446cf5fbc53185b74aad9a28f1c4563f7fda861234a8965d7b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/vicfallsbridge.gif",
+      "sha256": "b95595b2f8a53ac54a5a20fa2fab2a2ae4bfb802b3d405999776218be27acea1",
+      "bytes": 3438476
+    },
+    {
+      "file": "images/discovery-ends/vicfallsbridge.jpg",
+      "sha256": "48fe6ab2b773bf434c140a886561b841a209766e279af05770b17b55d6f10a9f",
+      "bytes": 90060
+    },
+    {
+      "file": "images/discovery-sheets/vicfallsbridge.webp",
+      "sha256": "0aa85b80d7232fd5eb0110febe72530429ca44992fd112bc1980ce0c5b5c18a8",
+      "bytes": 1528992
+    }
+  ]
+}

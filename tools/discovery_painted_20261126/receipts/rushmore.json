@@ -1,0 +1,43 @@
+{
+  "id": "rushmore",
+  "name": "러시모어 산",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/rushmore.png",
+  "sourceSha256": "b86c1b4a7ddb80d056bc153a6eb79a02fea94e3561c3d2c52fb7bf68119d697b",
+  "sourceMtimeNs": 1795661367213222000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/rushmore.gif",
+      "sha256": "e49755f34072f3ca67532f56aece5cf2d112615432103a6529c0bcf8876b7c63"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/rushmore.jpg",
+      "sha256": "02c1737d5d75d33ac9bb70c5a7e5e11995a441fc03d4e16cd145f9520b85dc52"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/rushmore.webp",
+      "sha256": "46449c9d471f6b564adfc0303cc68f463a0b1cc092ab182511c1a2769da41e2e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/rushmore.gif",
+      "sha256": "26b8caa2c3af129e06dc52975a350a1b8b13c8c9812caedc009b2cfe4ded44e2",
+      "bytes": 3605195
+    },
+    {
+      "file": "images/discovery-ends/rushmore.jpg",
+      "sha256": "cf594f0119b61184c85fdd4a9fbd7470572aadae2324212d5e5a37131b5bec9a",
+      "bytes": 100047
+    },
+    {
+      "file": "images/discovery-sheets/rushmore.webp",
+      "sha256": "d68dae511ba7dc8e9fe469e0d891d47cbc6bab9571c7febb334a96fc0f145b9a",
+      "bytes": 1752154
+    }
+  ]
+}

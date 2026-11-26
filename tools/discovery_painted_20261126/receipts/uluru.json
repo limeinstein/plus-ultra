@@ -1,0 +1,43 @@
+{
+  "id": "uluru",
+  "name": "울루루",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/uluru.png",
+  "sourceSha256": "19024b8403f5fa8df4ee7fc1193c35bb5f5467efb75e40e3ccf47ca918114e37",
+  "sourceMtimeNs": 1795659643673153600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/uluru.gif",
+      "sha256": "237b30aaad3095c4accaba70828c3074890e5fb214ea939d1b0312f0c469f263"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/uluru.jpg",
+      "sha256": "31a8b4ab66c73bf32533d9f9818f86cb18cdd22c3b200da10df5767bf3474b60"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/uluru.webp",
+      "sha256": "48f873ba6f77becea206acd1ec50b3492aef0412829a7e80c0a925dec25c7328"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/uluru.gif",
+      "sha256": "3f2103e3bc268aa4f0693008db97f7d7b165c94b30330735d2c7f90e59e6314f",
+      "bytes": 2893015
+    },
+    {
+      "file": "images/discovery-ends/uluru.jpg",
+      "sha256": "1e42a9887ecf53e8ec87599321a0408855a36a27bc406722a2a87edfd87848f3",
+      "bytes": 91184
+    },
+    {
+      "file": "images/discovery-sheets/uluru.webp",
+      "sha256": "d98878b236808f29dcd1ecde43a06fef62f5960cc58bd45b8689e81257db863a",
+      "bytes": 1566650
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "shabwa",
+  "name": "유향 길의 성채 샤브와",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/shabwa.png",
+  "sourceSha256": "c7f977a6617d1fcdec90dd8af7b8853be72cc4d0103799638ce0d0386bcca0b0",
+  "sourceMtimeNs": 1795661683901296800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/shabwa.gif",
+      "sha256": "423d2bf3b0ffbc621fc6c6bb1080ce6a8dde1f51c284180fdada682f45d33acc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/shabwa.jpg",
+      "sha256": "add7d01827b5ef49132b9c8bd27070dd8bcac82d3260db78743be127d00f1e24"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/shabwa.webp",
+      "sha256": "20ce688be14b01d0198d96b5648b1eee12922c9705f6f82f9276cb12ada9126f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/shabwa.gif",
+      "sha256": "3826248d55290bd9f0d94cdec4a70a50cb8365ad8133c693d6016d941a8d1a5a",
+      "bytes": 3612898
+    },
+    {
+      "file": "images/discovery-ends/shabwa.jpg",
+      "sha256": "9506438c6feaaa603114f31c54835e0ceaa78ef0b31226fbb95fff42a0a3c055",
+      "bytes": 94121
+    },
+    {
+      "file": "images/discovery-sheets/shabwa.webp",
+      "sha256": "811f1d1bdd880bb1684dcda25cdfcc01d62ea2b6ba8ce81d0fdd7168bd969a0d",
+      "bytes": 1618100
+    }
+  ]
+}

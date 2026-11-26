@@ -1,0 +1,43 @@
+{
+  "id": "qianling",
+  "name": "건릉",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/qianling.png",
+  "sourceSha256": "94ca9dc702693ab62055116f635f5b6fa5c550c7415e93bc225316e2182c2564",
+  "sourceMtimeNs": 1795660285454225500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/qianling.gif",
+      "sha256": "e3c37e886b7862d644f7f25ad5d93a54b2291de5557a8582ce08ad8c311b7527"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/qianling.jpg",
+      "sha256": "0436046aaca6ff3e6233b7cb092d2af76158d9a7fcd8a446ffc622fc6e97cc6f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/qianling.webp",
+      "sha256": "655980e7f2d9d0098ce368f0c5fb7db34d17514062343245e0e8d5f00f65c9c6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/qianling.gif",
+      "sha256": "8495f30bb4f45da634f45a6537e90331956c383630e16f36774ecfd559edd2f2",
+      "bytes": 3466005
+    },
+    {
+      "file": "images/discovery-ends/qianling.jpg",
+      "sha256": "3732e0c169ad54c5b7022468b73369afd1a70dcfdaa41b761869ae97f1132bec",
+      "bytes": 91269
+    },
+    {
+      "file": "images/discovery-sheets/qianling.webp",
+      "sha256": "6868648ef3df0eda834d0ae7fd8868eb8d80ec5f0f60fd78dff1c1b6207709e8",
+      "bytes": 1560154
+    }
+  ]
+}

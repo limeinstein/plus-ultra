@@ -1,0 +1,43 @@
+{
+  "id": "t_musk",
+  "name": "사향",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_musk.png",
+  "sourceSha256": "a64d5822bc4a786c34a4029e818623bb481d1a4a5e45e6c277b86dae81ef2043",
+  "sourceMtimeNs": 1795660829670539800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_musk.gif",
+      "sha256": "200987d20a975a06fefcb803a6a1f5a0308ea9060b07934c134de03f707d12d9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_musk.jpg",
+      "sha256": "0903d240d2b3e1ca829598931b74ea17df68a03b55e51581865c217d124625d5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_musk.webp",
+      "sha256": "76475b13ba8a8e4423a0e37180e39242a2618edbc64b0b51e338f38a9ff9c8b7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_musk.gif",
+      "sha256": "d086f81fe609b5bb076cac746eb98d706e7eefb5a54e6433d776ce0a7cf6153f",
+      "bytes": 3670373
+    },
+    {
+      "file": "images/discovery-ends/t_musk.jpg",
+      "sha256": "f7dab63941e281ebc36203eda160aef98160de04b48ce7ed020f592a2a1391b8",
+      "bytes": 98046
+    },
+    {
+      "file": "images/discovery-sheets/t_musk.webp",
+      "sha256": "6cea46f09dd37e7d22fc64533da1e20865b764bf7e2ec7901d3aaea7eca9050a",
+      "bytes": 1702086
+    }
+  ]
+}

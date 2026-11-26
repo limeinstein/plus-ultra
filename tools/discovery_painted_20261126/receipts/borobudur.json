@@ -1,0 +1,43 @@
+{
+  "id": "borobudur",
+  "name": "보로부두르",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/borobudur.png",
+  "sourceSha256": "5ccb5ec7d8a8995888e092d259971466f3e297ef0c9fbda09d524860e032e214",
+  "sourceMtimeNs": 1795660044783786700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/borobudur.gif",
+      "sha256": "44f71fb044fb667b9fd367b277bc1a3c16255208b9d89ed835049cdb468adaa1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/borobudur.jpg",
+      "sha256": "408bb06f51526cda6b14f4b1791ab520b95780088e8ece48381cb47fd78d9a6a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/borobudur.webp",
+      "sha256": "e509d63e3817ce296853d9e204053e74cb28ec45a20b0ddf27ff512efc3fa861"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/borobudur.gif",
+      "sha256": "3a6a59202671a6a35929b8415e0eb6c68f575346197a4286334d166089f6e131",
+      "bytes": 3522130
+    },
+    {
+      "file": "images/discovery-ends/borobudur.jpg",
+      "sha256": "1144eb633167199acc88e585f40a7f28c30de67e46a7b5ba664ce603cb3245f3",
+      "bytes": 95453
+    },
+    {
+      "file": "images/discovery-sheets/borobudur.webp",
+      "sha256": "62838bbbcfc5cc0fda53c661426655eca0591cad1f5f22ec6f8d8ff4fc7b383c",
+      "bytes": 1641488
+    }
+  ]
+}

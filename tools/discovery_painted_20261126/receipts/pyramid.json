@@ -1,0 +1,43 @@
+{
+  "id": "pyramid",
+  "name": "사카라의 계단식 피라미드",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/pyramid.png",
+  "sourceSha256": "1cbe746033c997c6cbc7d60dd240b2b9e86aabb99e4465656e5b23fb42fd34ed",
+  "sourceMtimeNs": 1795659588941890600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/pyramid.gif",
+      "sha256": "446f45b13c1bcf13b7ddd80421246d2995b3e94e7e927169fa686ed1c44bb9ea"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/pyramid.jpg",
+      "sha256": "1b706c2f23575b2864bb8bf791c94b940c7b6ca523d8fd3981af20875289019b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/pyramid.webp",
+      "sha256": "f2a81d1415bf920dbba3eacb175a76f153743e518564092abbeea5203b65c91a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/pyramid.gif",
+      "sha256": "2bcc95de04b32fa8dcd0b83921f7b93d851f8987dad18d92707549953555fe39",
+      "bytes": 3363512
+    },
+    {
+      "file": "images/discovery-ends/pyramid.jpg",
+      "sha256": "23ac190f2c1230896a2376c6a14087e173736a2dacce7e63faa9c0a935d7e561",
+      "bytes": 85231
+    },
+    {
+      "file": "images/discovery-sheets/pyramid.webp",
+      "sha256": "b9e30011f932ec0f0b2a7610c64d9d71319a7a99f6b93e881d1751ca8a52d3f2",
+      "bytes": 1449288
+    }
+  ]
+}

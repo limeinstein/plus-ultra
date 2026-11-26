@@ -1,0 +1,43 @@
+{
+  "id": "t_ivory",
+  "name": "상아",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_ivory.png",
+  "sourceSha256": "99d31c02e3e8ef80c93857b1c83f6f69fc35a94444a3ece933038e5c1afea2a2",
+  "sourceMtimeNs": 1795661006426888000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_ivory.gif",
+      "sha256": "82bd3465f6328276b6cb431c434889eda2878366949cd6232f14917493addec0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_ivory.jpg",
+      "sha256": "c148bb0cd1f8884db4f260f9c9e768ab1358c0cb731a4dbba19bc2db3a2e933b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_ivory.webp",
+      "sha256": "6d08446fefa0047ac6e30209af0760682c87624a376caba312b07b0aec7748b6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_ivory.gif",
+      "sha256": "4d3c57ad0922de26420a8fee18d9ba18b6992163d76f0e1f24b23b1efdebaa5a",
+      "bytes": 3694378
+    },
+    {
+      "file": "images/discovery-ends/t_ivory.jpg",
+      "sha256": "a131c499e5a73c37a6178521e85200068067a49714310c858a5fd17356e97722",
+      "bytes": 97929
+    },
+    {
+      "file": "images/discovery-sheets/t_ivory.webp",
+      "sha256": "69e90bdc5dc3e8f3460e78dc6cddff9f1420c546fba9786abc8297d41a3afc85",
+      "bytes": 1672332
+    }
+  ]
+}

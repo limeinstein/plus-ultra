@@ -1,0 +1,43 @@
+{
+  "id": "ft_cairo",
+  "name": "카이로의 얼음 장수",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ft_cairo.png",
+  "sourceSha256": "da40c9668d714a803274fd1ccb7907fcd967c6b3c03ffdae6b7ee683c9d539c6",
+  "sourceMtimeNs": 1795662408758282100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ft_cairo.gif",
+      "sha256": "ba41e067aa13b63134038d4c303909c7abe17ef3d1aa0eb94b5c114c6757eb23"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ft_cairo.jpg",
+      "sha256": "e4d263f5b74ada19a31ca58a7f0bd1fe693311832204925eec74858ac9ff54ab"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ft_cairo.webp",
+      "sha256": "1465e68ed0bfedb72e4e30ca19f3cfac27af41751abee9bdcd368c8645798d44"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ft_cairo.gif",
+      "sha256": "28c3a4dd9636269a9a1be3b1a96bfd60da26074f85f7739df9282ee2467745c4",
+      "bytes": 3693606
+    },
+    {
+      "file": "images/discovery-ends/ft_cairo.jpg",
+      "sha256": "f5fcd601ea63c43d67e881afcbec34149d8e6769a709e39dfbb14ff2558b74e7",
+      "bytes": 92906
+    },
+    {
+      "file": "images/discovery-sheets/ft_cairo.webp",
+      "sha256": "f79085d5059c885fa52a4fa22f113f501b7fd2b72395a211d0b68d09509f736e",
+      "bytes": 1590556
+    }
+  ]
+}

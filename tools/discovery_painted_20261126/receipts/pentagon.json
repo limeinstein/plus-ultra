@@ -1,0 +1,43 @@
+{
+  "id": "pentagon",
+  "name": "펜타곤",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/pentagon.png",
+  "sourceSha256": "b77ca68d22a32d1f7a0518e14bc13539434211ff451e198d7f57dd67bd547694",
+  "sourceMtimeNs": 1795661760475293700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/pentagon.gif",
+      "sha256": "e2289c346ab5b3bbe601f89af29065df2e32ed0c518b18ccadf3f79c729a0494"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/pentagon.jpg",
+      "sha256": "d7f72a7b309b5011490c1d3a071b6e94e91d00231d19351f8f2a8e90be5316ea"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/pentagon.webp",
+      "sha256": "f52d9ba3e422263aac07eafbe2d2c4d2c360f750efa94adb4ca41590f8afa4b4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/pentagon.gif",
+      "sha256": "24fced7543b47b08e62a4f3cd7dce00d9a69ab720b0ef95ec95182e65a052802",
+      "bytes": 3199336
+    },
+    {
+      "file": "images/discovery-ends/pentagon.jpg",
+      "sha256": "5c35ed05743a58e5b3c1d1ae8e1c69451d6cb434f3b1543666d09c0c58548d4d",
+      "bytes": 97919
+    },
+    {
+      "file": "images/discovery-sheets/pentagon.webp",
+      "sha256": "1e0c0bd03687cdec1d54a57c290c41bbefb36b7696f50554c4cf7779ab388f40",
+      "bytes": 1681274
+    }
+  ]
+}

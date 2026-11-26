@@ -36,8 +36,13 @@ for(const river of G.Hydro.routes()){
  checked.push({id:river.id,segments:river.pts.length-1,blocked});
 }
 console.log(JSON.stringify({routeContinuity:checked}));assert(checked.every(r=>!r.blocked.length),'선정한 하류의 모든 선분이 작은 탐험선으로 이어진다');
+const nile=G.Hydro.routes().find(x=>x.id==='nile'),rosetta=G.TERRAIN_DETAIL.rivers.find(x=>x[0]==='Rosetta Branch')[2];
+assert(nile.connected && G.Geo.baseIsSea(...nile.pts[0],.2),'로제타 하구가 지중해까지 열린다');
+assert(rosetta.every(p=>nile.pts.some(q=>G.Geo.dist(...p,...q)<.00001)),'로제타 지류 지도 중심선이 공용 수로에 이어진다');
+const nilePath=G.Hydro.path(nile.pts[0],nile.pts.at(-1),()=>null,profile);
+assert(nilePath&&nilePath.length>100,'나일강 굽이를 따라 바다에서 상류까지 길을 잡는다');
 // 좁은 강의 표시 거리장도 같은 폭이다. 특히 고위도에서 경도 축 폭이 잘리지 않아야 한다.
-for(const id of ['amazon','northerndvina','thames']){
+for(const id of ['amazon','northerndvina','thames','nile']){
  const river=G.Hydro.routes().find(x=>x.id===id),p=river.pts[Math.floor(river.pts.length/2)],side=256,span=1.5,tex=G.Hydro.raster(...p,span,span,side);let max=0,n=0;
  for(let y=10;y<side-10;y+=9)for(let x=10;x<side-10;x+=9){
   const lon=p[0]-span/2+(x+.5)*span/side,lat=p[1]-span/2+(y+.5)*span/side,q=G.Hydro.at(lon,lat),o=(y*side+x)*4;
@@ -62,3 +67,4 @@ assert(G.Terrain.isLake(103.9,13)&&G.Hydro.canSail(103.9,13,profile),'연결된 
 const lakePath=G.Hydro.path(mekong.pts[3],[103.9,13],()=>null,profile);assert(lakePath&&lakePath.length>2,'바다와 연결된 강에서 호수 안까지 자동항해');
 assert(!G.Hydro.canSail(33,-.5,profile),'수로로 연결하지 않은 빅토리아 호수 진입 금지');
 console.log('CONNECTED_LAKE_NAVIGATION_OK');
+module.exports={G};

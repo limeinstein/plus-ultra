@@ -1,0 +1,43 @@
+{
+  "id": "rasmohammed",
+  "name": "라스 무하마드 산호초",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/rasmohammed.png",
+  "sourceSha256": "76bec67595d5b4cd74db0c5b6ef0baa221cd06b0b74763e3ed3f17ad726b7533",
+  "sourceMtimeNs": 1795659650148175900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/rasmohammed.gif",
+      "sha256": "f4cb69adc053c4383423a45c9524f163c4771cfcd6c8118baef84ecae8381a9b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/rasmohammed.jpg",
+      "sha256": "9aa1b5441f5ab2fb9e559722579ea95cce546082d6402343e9a59045002b4e24"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/rasmohammed.webp",
+      "sha256": "2d785788b2a8295ed34c1b1dd8911b835f944070121ea4dbd9de3fca7a3b3236"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/rasmohammed.gif",
+      "sha256": "0ecd45c0984e80066ef2fb8ebaef38d55112aaf5bf17e9f3ee142f076841cc35",
+      "bytes": 2770081
+    },
+    {
+      "file": "images/discovery-ends/rasmohammed.jpg",
+      "sha256": "279c09f59ccb28b9da0e6731114df2c54a9693e7115bbb5cf9b738e70ae7eff0",
+      "bytes": 94663
+    },
+    {
+      "file": "images/discovery-sheets/rasmohammed.webp",
+      "sha256": "8246ff5145efb2926358c72b4ad1836e294d72cc942326f3fcec924deda9f1ff",
+      "bytes": 1589416
+    }
+  ]
+}

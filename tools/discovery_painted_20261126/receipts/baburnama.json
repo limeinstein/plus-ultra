@@ -1,0 +1,43 @@
+{
+  "id": "baburnama",
+  "name": "바부르나마 세밀화",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/baburnama.png",
+  "sourceSha256": "c1c5f2b813d9190282feba672d53cfc52cc734440b5352c7210fbde1457d410e",
+  "sourceMtimeNs": 1795660713301635300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/baburnama.gif",
+      "sha256": "16a56f3405f0ccf217a9d728823dbc3f1d554c98c0d14a8274e5e71e5885d405"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/baburnama.jpg",
+      "sha256": "cdb8f041fab27ea5c808224a662b95536b50c9297d2fc3e8501d4cb55ccfcdde"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/baburnama.webp",
+      "sha256": "7454e59b1c3f773b72122743226fded0ef71d4872771e2e0a88b728717586ecb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/baburnama.gif",
+      "sha256": "5c5a9ec0ec85cffdce3aa8a040e05881002159451988308b34bebf9bd6c18bb3",
+      "bytes": 3862229
+    },
+    {
+      "file": "images/discovery-ends/baburnama.jpg",
+      "sha256": "2f2ee76751d8c32906e30b62440cbcf26c8ef33d3f18c0012b5684cba5f38f91",
+      "bytes": 109280
+    },
+    {
+      "file": "images/discovery-sheets/baburnama.webp",
+      "sha256": "8e8aecc2dde8e7f586617abeb9728c345b48b261ffbaff1c0148cf625e04f2ff",
+      "bytes": 1922182
+    }
+  ]
+}

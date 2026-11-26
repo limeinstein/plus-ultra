@@ -1,0 +1,43 @@
+{
+  "id": "madeira",
+  "name": "마데이라 섬",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/madeira.png",
+  "sourceSha256": "7c50950a46b2193b7155f97fa9631f8714e95777113ce681abb1cc0b16de66e1",
+  "sourceMtimeNs": 1795659660779209800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/madeira.gif",
+      "sha256": "d79329c877bbbf879378bffb3de607eadef256dfd0596fe54400b267107ccf5e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/madeira.jpg",
+      "sha256": "72991581a02e639f10a8b39f1b4c259bb862a3228233da9369cd0df29e722de6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/madeira.webp",
+      "sha256": "306ea044f6b5c64dfaec07c4ded2c613a20d61ab8815e4d0704a9152d6fdc198"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/madeira.gif",
+      "sha256": "2ae1e823d55ab368c3ee097f892ff0418b09157dd5f6a597a430a641e9a91cfd",
+      "bytes": 3438702
+    },
+    {
+      "file": "images/discovery-ends/madeira.jpg",
+      "sha256": "535a9de56844a78c5c22eb70995ae4c67eda3d64f2c324d1ae527c8f0c37568f",
+      "bytes": 109773
+    },
+    {
+      "file": "images/discovery-sheets/madeira.webp",
+      "sha256": "45f55d82d1190d0bfa7a926815c813348b968172e0574640019222fe9d5937ab",
+      "bytes": 1926542
+    }
+  ]
+}

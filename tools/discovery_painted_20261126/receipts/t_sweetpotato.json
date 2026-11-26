@@ -1,0 +1,43 @@
+{
+  "id": "t_sweetpotato",
+  "name": "고구마",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_sweetpotato.png",
+  "sourceSha256": "d8f99747ca12c93027a67897ffd354072b3df48f77bbda40b8cef067dabb805f",
+  "sourceMtimeNs": 1795660691000407700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_sweetpotato.gif",
+      "sha256": "2a2ec8da3ffd5df1e98ed207378fc6b6052956cc6dc0812cdd551314efa1bfce"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_sweetpotato.jpg",
+      "sha256": "99187e8598a48c6ddca03401a55fe0ef62756d3311252f60cc25f17d93558f83"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_sweetpotato.webp",
+      "sha256": "5b4dcbe318c4d9a3886a0c3c2cef8e71129548d367bbb47525bd8bfd0ba27ad6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_sweetpotato.gif",
+      "sha256": "842960f2385b5e9558d103ed9c9420b55760b724ecc885fb26a1be0609dd7144",
+      "bytes": 3451430
+    },
+    {
+      "file": "images/discovery-ends/t_sweetpotato.jpg",
+      "sha256": "106af4b59011336b55ab4f64cb0fc47d1db9ffd8af563c570cefc48c401c5828",
+      "bytes": 102407
+    },
+    {
+      "file": "images/discovery-sheets/t_sweetpotato.webp",
+      "sha256": "ed5cf19b9ffaaf01065f483a51aa9454b435f6061c0941d01fcdc09c5f6e7b77",
+      "bytes": 1743812
+    }
+  ]
+}

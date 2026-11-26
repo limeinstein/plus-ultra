@@ -1,0 +1,43 @@
+{
+  "id": "nazca",
+  "name": "나스카 지상화",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/nazca.png",
+  "sourceSha256": "e4b98a3309ae62b1f2bf3d3a92ff5dbd605181359cbba8075969ec9128cb752a",
+  "sourceMtimeNs": 1795660114696849100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nazca.gif",
+      "sha256": "6e83ebdb11d4b422c1c10505edb3eb6b866978a073c4ec39a59e94213f7ae299"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nazca.jpg",
+      "sha256": "cdcc053923c9e13242ff7a4e946841ce948d401e95f5e9a7d10d5f292e472070"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nazca.webp",
+      "sha256": "44f1082ad7dbc8f613057e471e52f20b908626578f85d9d42f515f326620a2e2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nazca.gif",
+      "sha256": "29b8437e11b62f3571195384cf13b4da620a5e48a5bd27fe5eeaf1741d902670",
+      "bytes": 3411811
+    },
+    {
+      "file": "images/discovery-ends/nazca.jpg",
+      "sha256": "dc30915a2bf76c8795c178fc104329532752feb422b48002b086b72769946105",
+      "bytes": 83956
+    },
+    {
+      "file": "images/discovery-sheets/nazca.webp",
+      "sha256": "eb33734ff11f580c0e4ea77a1bd0922ca4b0d7a665dac62cdd9aff2d293ccc67",
+      "bytes": 1423238
+    }
+  ]
+}

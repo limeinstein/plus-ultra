@@ -28,6 +28,8 @@ outColor=vec4(waterCol(p-vec2(180,90),p,uDepth,vec2(1,0),100.0,vec4(.72,.5,.5,0)
    gl.texParameteri(gl.TEXTURE_2D_ARRAY,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);gl.texParameteri(gl.TEXTURE_2D_ARRAY,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D_ARRAY,gl.TEXTURE_WRAP_S,gl.REPEAT);gl.texParameteri(gl.TEXTURE_2D_ARRAY,gl.TEXTURE_WRAP_T,gl.REPEAT);
    function u(n,...v){const loc=gl.getUniformLocation(pr,n);gl['uniform'+v.length+'f'](loc,...v);}
    gl.uniform1i(gl.getUniformLocation(pr,'uOcean'),3);
+   // 본편 _uploadUniforms와 같은 잡음·이웃 반복 한도. 독립 GLSL 검사도 기본값 0으로 나누지 않는다.
+   gl.uniform1i(gl.getUniformLocation(pr,'uNoiseOctaves'),6);gl.uniform1i(gl.getUniformLocation(pr,'uNeighborRadius'),1);
    u('uRes',640,360);u('uZoom',650);u('uTime',1.3);u('uWind',.65,.3);u('uCloud',.15);u('uStorm',0);
    u('uW0',w.shelf,w.wave,w.whitecap,w.glint);u('uW1',...w.shallow,w.foam);u('uW2',...w.deep,0);u('uW3',...w.lagoon,0);u('uW4',...w.abyss,w.rough);u('uW5',w.flow,w.ripple,w.crest,0);
    u('uOptics',o.ior,o.transmission,o.specular,o.roughness);u('uAbsorption',...o.absorption,o.depth);u('uOceanFlow',o.bump,o.tile,o.drift,o.foam);u('uOceanTime',b.frames,b.seconds);
@@ -66,6 +68,7 @@ outColor=vec4(waterCol(p-vec2(180,90),p,uDepth,vec2(1,0),100.0,vec4(.72,.5,.5,0)
    const data=G.OceanBaked;delete G.OceanBaked;r._uploadTextures();const fallback=read(0);G.OceanBaked=data;
    return {baked,restored,fallback,glError:gl.getError()};
   });
+  fs.writeFileSync(path.join(OUT,'optics-probe-latest.json'),JSON.stringify(report,null,2));
   assert.equal(report.data.bytes,report.data.expected);assert(report.data.normalLevels>30);assert(report.data.foamLevels>30);
   for(const key of ['animation','bump','ior','roughness','specular','transmission','absorption'])assert(report[key]>.001,key+' 결과가 바뀌지 않음');
   assert(report.seam<report.animation,'시간 반복 경계에서 수면이 튐');

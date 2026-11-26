@@ -1,0 +1,43 @@
+{
+  "id": "qeswachaka",
+  "name": "케스와차카 풀 다리",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/qeswachaka.png",
+  "sourceSha256": "e3d0e51a256c272c6306b8d86c4f718e00de01fa513cd8e3e1a7a5722e551434",
+  "sourceMtimeNs": 1795661713240762400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/qeswachaka.gif",
+      "sha256": "fb698508bf146f4b08d3c383c9490ddf7714ef0d8eebe872abf399c81a852d14"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/qeswachaka.jpg",
+      "sha256": "6cdcfd437bd0fa25d982f0613590522852f1def8886662dc02ea429e01b2398f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/qeswachaka.webp",
+      "sha256": "466ad231bf0b94ed9f5695c3974de20b046f4d275d85368a51c3e9bbf3ce106a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/qeswachaka.gif",
+      "sha256": "e3032d01705a2bdb08f617fee48e1c9dd886eed65b33c75c83b50bc3c5303bec",
+      "bytes": 3814339
+    },
+    {
+      "file": "images/discovery-ends/qeswachaka.jpg",
+      "sha256": "39acdbb85e6865ea395263612590cfcbdbf12a9eaba007fdf72d33aec561ac80",
+      "bytes": 98717
+    },
+    {
+      "file": "images/discovery-sheets/qeswachaka.webp",
+      "sha256": "0a20011545da01d7ea4c2d711d2078074ad912e16590919da0f96db74e3e8fca",
+      "bytes": 1722928
+    }
+  ]
+}

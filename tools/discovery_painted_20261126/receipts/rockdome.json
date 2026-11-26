@@ -1,0 +1,43 @@
+{
+  "id": "rockdome",
+  "name": "바위의 돔",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/rockdome.png",
+  "sourceSha256": "169c49b5481b0b389424349f63e308b98cb7ac155900e7e3f852f682257cac73",
+  "sourceMtimeNs": 1795659702250190200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/rockdome.gif",
+      "sha256": "680fc346521a0558afb1e6e8cf536998d49ac5c5ade6e27e779297d23ebedb4d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/rockdome.jpg",
+      "sha256": "93a21d6c92b8eb1f932c458b21719ad1705b85a77291acfd4f18bf6753ebb956"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/rockdome.webp",
+      "sha256": "554674da73222f787e4d08a9ae92c2c261be77bd8b31af8a97ad00a86301476b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/rockdome.gif",
+      "sha256": "ac54bcf5b8e8d2a3e65fb9a851ab21fc81bc05dbdf760b6eb99593a47a5fe087",
+      "bytes": 3272574
+    },
+    {
+      "file": "images/discovery-ends/rockdome.jpg",
+      "sha256": "db447c1736c2c8103999d48ae3d4dddb8b8daedca13d4960a87b6fba02c6f5ce",
+      "bytes": 94571
+    },
+    {
+      "file": "images/discovery-sheets/rockdome.webp",
+      "sha256": "1490ab95b75d521721c37e884cab5a0c3aa66dcf1519e1f179d0695dbc36af2e",
+      "bytes": 1585062
+    }
+  ]
+}

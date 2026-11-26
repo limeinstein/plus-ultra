@@ -1,0 +1,43 @@
+{
+  "id": "nalanda",
+  "name": "날란다 대학",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/nalanda.png",
+  "sourceSha256": "70d1522591c8b2bb3eff77de7cf3f7a9a314bfdbcdfdb70e36006ee0521fdddf",
+  "sourceMtimeNs": 1795660822368136600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nalanda.gif",
+      "sha256": "58e3e3e6899120eb264d74e6428b79a9e065dcff17b38871debf176d20c29a62"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nalanda.jpg",
+      "sha256": "d8e56fbe664d7f1e6848c7bcfb7762efef55b8a2aac735d53b1e2e72610e0353"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nalanda.webp",
+      "sha256": "8f9569ebfda0d38f8eadfd0ff0e3f707c220ef16fb277bfecf6843f4cd1c6250"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nalanda.gif",
+      "sha256": "59c896509a7da2172dfffbbff05dfa3120404004c26ecb9748a621af6d9bffe0",
+      "bytes": 3519990
+    },
+    {
+      "file": "images/discovery-ends/nalanda.jpg",
+      "sha256": "aa07ce78636d652df24b4457df7c3dbca7b338c9f4e9bdd53f845784db7b754e",
+      "bytes": 94825
+    },
+    {
+      "file": "images/discovery-sheets/nalanda.webp",
+      "sha256": "092bff68b856122341149157d53c11d5ed7cdb8e5cc7b7e42e23ea159524b5a8",
+      "bytes": 1639186
+    }
+  ]
+}

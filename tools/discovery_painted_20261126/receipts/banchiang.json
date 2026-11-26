@@ -1,0 +1,43 @@
+{
+  "id": "banchiang",
+  "name": "반치앙",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/banchiang.png",
+  "sourceSha256": "d327799ee563a4d7f0b06994f08fdea38dbbb605bbc7a209a1c0ddc08debe86d",
+  "sourceMtimeNs": 1795662643091971400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/banchiang.gif",
+      "sha256": "2c1c61f0c92d4f1d9b7023d3bc9d9bb781052e122da839de7b639123e42a68fc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/banchiang.jpg",
+      "sha256": "9abe7ed9a3299e5a560b67cdee32299fc56e8d21a35a9188dcf4a030b2ccc7e6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/banchiang.webp",
+      "sha256": "864deea5ba27f845829a735a6f42cc60aba981315eb62db1c9968c2cf19d06d9"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/banchiang.gif",
+      "sha256": "9b93ddc13941a768e33e2f228f4c99810d6d7660ef0b83a1406825b7877130b9",
+      "bytes": 3663014
+    },
+    {
+      "file": "images/discovery-ends/banchiang.jpg",
+      "sha256": "84f60f10d5219d6ea294378150fec2685b5d5070dbc34295e060a8978583f541",
+      "bytes": 105461
+    },
+    {
+      "file": "images/discovery-sheets/banchiang.webp",
+      "sha256": "3620930f0aa4e771eed58c2c0cdbc859fd251a8744d0555bb4061ff5aaa312ec",
+      "bytes": 1867520
+    }
+  ]
+}

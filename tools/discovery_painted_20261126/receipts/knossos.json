@@ -1,0 +1,43 @@
+{
+  "id": "knossos",
+  "name": "크노소스",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/knossos.png",
+  "sourceSha256": "fd4943df34a808c48d519ab1c450f673db96b6ac39ec42052403dcbd862afe1d",
+  "sourceMtimeNs": 1795659561393259200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/knossos.gif",
+      "sha256": "a44b37fe74d0106cea4d928489222f6216326656e89a635bc9c83ba9e9402dfd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/knossos.jpg",
+      "sha256": "72bf67fd937fbb55e5b3fa91bd239dd7f5355105fb8623dd568d10c4599a4713"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/knossos.webp",
+      "sha256": "bfceb6c33c189110fa293fe63df6b5d149683c96a45888ed9d469b5144d40020"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/knossos.gif",
+      "sha256": "4fa3df3b89c85cddfbbd0576a5375b08e93b32f3cefc2dc80a67ec9c1dbe7b3e",
+      "bytes": 3517305
+    },
+    {
+      "file": "images/discovery-ends/knossos.jpg",
+      "sha256": "026ad83e45006f15d2cb885e36da5c21d609d3b6c2d471857e2e8261747bab37",
+      "bytes": 100079
+    },
+    {
+      "file": "images/discovery-sheets/knossos.webp",
+      "sha256": "8e58ae16b1f0c97912d09a7cd778da455752b11f3df50012c457a28a729b07b7",
+      "bytes": 1728970
+    }
+  ]
+}

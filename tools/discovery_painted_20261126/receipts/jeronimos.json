@@ -1,0 +1,43 @@
+{
+  "id": "jeronimos",
+  "name": "제로니무스 수도원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/jeronimos.png",
+  "sourceSha256": "56c99768418265ba40fa1cc2d33f179eb4b580e4a99ef3a51807071429721353",
+  "sourceMtimeNs": 1795661964367400300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/jeronimos.gif",
+      "sha256": "79cf568806d9ab89a62ba79923346c3a8c40aa835e77161ca4eb994141484281"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/jeronimos.jpg",
+      "sha256": "a99c85cf6a1098bb7d250ab4a1f4f02350742317c2932621303fe7fa2f1319a8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/jeronimos.webp",
+      "sha256": "905bddd4b6ace8c4dc869b79e66ad8d78bb2c9b07ffa9039de071b5be91af241"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/jeronimos.gif",
+      "sha256": "4e7f0f9e0871c82e1b4a1ad639dc4fb33a2e58dc2f4e9b19be92e1e27ce45f0c",
+      "bytes": 3635400
+    },
+    {
+      "file": "images/discovery-ends/jeronimos.jpg",
+      "sha256": "f0c440057bb71444657cabd25067a37ee4d5db837044303ea0921a2923fdca06",
+      "bytes": 101197
+    },
+    {
+      "file": "images/discovery-sheets/jeronimos.webp",
+      "sha256": "f7aaa2a258745649d0f88886fbcce82661e1236fd6010bceadddae70e546a994",
+      "bytes": 1786234
+    }
+  ]
+}

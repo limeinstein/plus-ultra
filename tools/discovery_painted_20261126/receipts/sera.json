@@ -1,0 +1,43 @@
+{
+  "id": "sera",
+  "name": "세라 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sera.png",
+  "sourceSha256": "80e7174300551b041fd6e7626b995f2b0fcf2eff895f5f1168954a191c6b0f13",
+  "sourceMtimeNs": 1795661961165212800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sera.gif",
+      "sha256": "7849de4df9d3e32d8fb223573f91dbde80396142c41ffb22bee96c839da7cd1d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sera.jpg",
+      "sha256": "63660872d9b55a459bc036c84f87fc361f87a23bf65a32b2e9c7df005851988f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sera.webp",
+      "sha256": "ea126b00347ddc7e8efe699659328592b75df57f5c515e899e2ea92d9b4acbdb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sera.gif",
+      "sha256": "651343fa922eae92f5727667bee866a3bf96b1f08da9268df035527ac8f8514d",
+      "bytes": 3633637
+    },
+    {
+      "file": "images/discovery-ends/sera.jpg",
+      "sha256": "dd45b826dbf44352699b512fdebe7f70f937124538a8a36cdef944c33fe31a07",
+      "bytes": 105872
+    },
+    {
+      "file": "images/discovery-sheets/sera.webp",
+      "sha256": "230624041ad2036ac5dc71e0025522b139fef21493041a21af53abc181435b88",
+      "bytes": 1805598
+    }
+  ]
+}

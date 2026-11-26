@@ -1,0 +1,43 @@
+{
+  "id": "tamgaly",
+  "name": "탐갈리 암각화",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/tamgaly.png",
+  "sourceSha256": "edfdcaac4432f927fe48c1541f4d379aff9a4b748c39cf994aad6c9138d815c0",
+  "sourceMtimeNs": 1795662574259345900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tamgaly.gif",
+      "sha256": "d4534afeb1bcf6dae669b2c18efcc19c59fef79de9ca6ca20d46a7be8091e97a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tamgaly.jpg",
+      "sha256": "d9b79474945cf4ba3ea1a77fb64c8f28f93784831cb9494f79f5160b6dcc7cde"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tamgaly.webp",
+      "sha256": "fa4fa672a5ea1c5904d84ddf7ae31eeab4f8ba0771191a2ef3eeb39a5ab24482"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tamgaly.gif",
+      "sha256": "6f91ec571920662099b60da94c743a1f3c4161df0b6e3df559ed403ffe066c01",
+      "bytes": 3702145
+    },
+    {
+      "file": "images/discovery-ends/tamgaly.jpg",
+      "sha256": "2d6e19bb786bb5a5c018d2444da89e59b87fe750e391aa9c4c98b6750deefe0a",
+      "bytes": 99237
+    },
+    {
+      "file": "images/discovery-sheets/tamgaly.webp",
+      "sha256": "9b91cb55b8663d0f9859925bc51c71c6e26052d04be19ee5dcc1238de02a3a4b",
+      "bytes": 1732150
+    }
+  ]
+}

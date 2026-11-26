@@ -1,0 +1,43 @@
+{
+  "id": "matterhorn",
+  "name": "마터호른",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/matterhorn.png",
+  "sourceSha256": "719f3a6d33abf44e56b3bf998efeb3112b9a938ee17969aba70924d55dd57dab",
+  "sourceMtimeNs": 1795659644277453400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/matterhorn.gif",
+      "sha256": "755605fa8f2fd230e9750c18ee527f0f1610feb32af0c971958c641dd923986f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/matterhorn.jpg",
+      "sha256": "10022e13131671a15d24b338c5f09f349f9500504df309669c7bc730a66871f1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/matterhorn.webp",
+      "sha256": "0cf1439317b0b2251be617ff38730a51f26b0161ea2cebc0edad1eff352e05a3"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/matterhorn.gif",
+      "sha256": "ce9e76c2165b485adbd4e8a94c324618e8c081e648397b4fd60162961090a553",
+      "bytes": 2995934
+    },
+    {
+      "file": "images/discovery-ends/matterhorn.jpg",
+      "sha256": "87f44fafe363abc45d14d3695ff769d3a4746d03c6085f09876d18c5ffdf3e2e",
+      "bytes": 85872
+    },
+    {
+      "file": "images/discovery-sheets/matterhorn.webp",
+      "sha256": "d477937833662da729909c521a047e6e255b80b68ccbe6e5f426fe05de501374",
+      "bytes": 1452852
+    }
+  ]
+}

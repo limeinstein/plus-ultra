@@ -1,0 +1,43 @@
+{
+  "id": "mohenjo",
+  "name": "모헨조다로",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mohenjo.png",
+  "sourceSha256": "cf58ffcaa07a566fd3da9489e63a2ff7feaf1c2fd820ec6d38df0d7b1da2e55b",
+  "sourceMtimeNs": 1795659778444870800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mohenjo.gif",
+      "sha256": "391e75fb083543b8b5257f60ebe71cb685f8f666ef464eb873bce689ec751134"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mohenjo.jpg",
+      "sha256": "fe2ee85fd66deab7fb57f68a66b4af49cf28d727263e421544019180744b27a0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mohenjo.webp",
+      "sha256": "296c065c05d4adf7984cfd08f89cb6bf388c2407984dacee5708411e0432fc84"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mohenjo.gif",
+      "sha256": "793c6721f4f7bf6d8c3f3e64268585d147db791e855feab063ea26c9d884f1da",
+      "bytes": 3438827
+    },
+    {
+      "file": "images/discovery-ends/mohenjo.jpg",
+      "sha256": "f584f85d6948b4442376448b9d3da52a856dbd1ff7b8bfe105233d220e30e5e1",
+      "bytes": 93145
+    },
+    {
+      "file": "images/discovery-sheets/mohenjo.webp",
+      "sha256": "b8dba4fac54e550679e32f73a60142d4f73d07422761403f00de78ab70915728",
+      "bytes": 1599346
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "fiji",
+  "name": "피지 제도",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/fiji.png",
+  "sourceSha256": "9e6eb558aa7e880e6e555128a7a3ebb57f12dacee833fa227a8701d7a0146ac6",
+  "sourceMtimeNs": 1795659661554369500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/fiji.gif",
+      "sha256": "5a11a7b2f136522a7dc1b74ed61da129de8c6d4ed02fc6412b5d6004fd9a1451"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/fiji.jpg",
+      "sha256": "81b70eb14253fd7205a37db918b5905f75230990915826e1d263c6a6c031cd2b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/fiji.webp",
+      "sha256": "f1005e34f9a1bf2291613c59d275011540adb7b01e95758364dc108f50994cd1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/fiji.gif",
+      "sha256": "a934766468412788ceb1a0358229c67db80d1e658860ce3b6ac62f288b739745",
+      "bytes": 2916869
+    },
+    {
+      "file": "images/discovery-ends/fiji.jpg",
+      "sha256": "95a3eee80f492149f1e5f49365604bdff59b83f4fac121050681da036b4b7cdf",
+      "bytes": 99788
+    },
+    {
+      "file": "images/discovery-sheets/fiji.webp",
+      "sha256": "751fc517f5985e78d2253bb778a0760c28277ea50f092fa7286f5b4f58b7a69e",
+      "bytes": 1715098
+    }
+  ]
+}

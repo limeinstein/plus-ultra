@@ -1,0 +1,43 @@
+{
+  "id": "benin",
+  "name": "베냉 청동판",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/benin.png",
+  "sourceSha256": "b20bcc0b7c3272256994360c781657301d080015426e8e758c91b0f86e1dc469",
+  "sourceMtimeNs": 1795660392719707100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/benin.gif",
+      "sha256": "8fba4f319c5fd2aaf8e4e48a88d39de16d8293c3cced9741f04b21858de43bfd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/benin.jpg",
+      "sha256": "d67fc2dcc4ebfa04fab658cd6fe5ddb2e1c72f896b029bc996afff4cd6516f2d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/benin.webp",
+      "sha256": "61074cae0ae40dae27d6ab97147d08c9dfec8543d127dafc485abadeba238c2d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/benin.gif",
+      "sha256": "49770648d839cc327fecca074b878d053275576bca2a022983901b0f99beeafc",
+      "bytes": 3772190
+    },
+    {
+      "file": "images/discovery-ends/benin.jpg",
+      "sha256": "3c2e2c3d33b626beb3101c01d36dafa7ed5491ca8b6029326e0b66af64c442d4",
+      "bytes": 95239
+    },
+    {
+      "file": "images/discovery-sheets/benin.webp",
+      "sha256": "e50fe5c198c379421df279eaddb291570d03bcaef417b5e69dbb35170e6d9719",
+      "bytes": 1636352
+    }
+  ]
+}

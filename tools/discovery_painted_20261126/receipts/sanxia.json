@@ -1,0 +1,43 @@
+{
+  "id": "sanxia",
+  "name": "장강 삼협",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/sanxia.png",
+  "sourceSha256": "2bd57f3b7e9863503d69a6cbb50479521cc4a3f5d8d10842d98fe67f012a1f1d",
+  "sourceMtimeNs": 1795659646984203100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sanxia.gif",
+      "sha256": "27c2b715a6bd5399b326dfee6aeeaf714e12a8203c7a7a4e0ef3c538d0b65a38"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sanxia.jpg",
+      "sha256": "150c238bd4c2ad4f18642d4b084ebbc3a16771e4f18f3da37916ef72f8488a18"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sanxia.webp",
+      "sha256": "4c7838b251c0b385badd281494d381e4f9cd5cfd62905574eb12692bbcbc19a1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sanxia.gif",
+      "sha256": "56ed7c75c1b2b6ddb97a6124ae76df8fbd24c659b487879817f257ce60bc8f8e",
+      "bytes": 3578811
+    },
+    {
+      "file": "images/discovery-ends/sanxia.jpg",
+      "sha256": "9d0e750ebe430bc40ce935c37ed6e09d4b917c7ccc942c191e3427c67b34681b",
+      "bytes": 94231
+    },
+    {
+      "file": "images/discovery-sheets/sanxia.webp",
+      "sha256": "c66c7a5098230dd33163ea4b9753521fb2f49363df08c550ccf5585bec2f6ebf",
+      "bytes": 1630270
+    }
+  ]
+}

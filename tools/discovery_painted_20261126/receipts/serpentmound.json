@@ -1,0 +1,43 @@
+{
+  "id": "serpentmound",
+  "name": "뱀 모양 흙언덕",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/serpentmound.png",
+  "sourceSha256": "af9a1480b935cec8a0e4a17c38e68f48a19ca6a7e7ccb4360ee9ff9d8b5ed6ba",
+  "sourceMtimeNs": 1795660899754209100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/serpentmound.gif",
+      "sha256": "9a1738b15ea72f4241c4f6559d710100ac06c30326e871717c27bfeed5ee20c0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/serpentmound.jpg",
+      "sha256": "1fee30aca67bb40bac49024d72d9dace158b4c6798e6ce8ba647ca23e4f601b7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/serpentmound.webp",
+      "sha256": "7c8b91306d0efbf6efe9a446b57530c8aa9f515d0d3fe8599eea6f4875152074"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/serpentmound.gif",
+      "sha256": "dff96a65d57bee307f11eedb380df37498ca7120efe2b4633f4781a6fe34b629",
+      "bytes": 3565875
+    },
+    {
+      "file": "images/discovery-ends/serpentmound.jpg",
+      "sha256": "d193dcb64518f8f5e80e99584bdee782bc3987fbce1c67dc8a6d45c079674151",
+      "bytes": 101567
+    },
+    {
+      "file": "images/discovery-sheets/serpentmound.webp",
+      "sha256": "43728bad2cd332fc49cf477de5ae091f9de8cbd9418df232383cb23263931ec1",
+      "bytes": 1742124
+    }
+  ]
+}

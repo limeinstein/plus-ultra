@@ -1,0 +1,43 @@
+{
+  "id": "datepalm",
+  "name": "바스라 대추야자",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/datepalm.png",
+  "sourceSha256": "7055801d4c10be800e5090ebaff27e20247f8fb14a2ee4b0e3c98506d21722e9",
+  "sourceMtimeNs": 1795659652802068900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/datepalm.gif",
+      "sha256": "31805f326d292be189aebbb00e736ffd7540126512348e4301eacce01b0efa5c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/datepalm.jpg",
+      "sha256": "a34ab577b46f3c9b848f2558c0a370a924651b4c8afe3c13523764b79cf6c28f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/datepalm.webp",
+      "sha256": "5030724a6bd31896280c804cf12fe437d893cca73a4b2025dd0dac6760f8f318"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/datepalm.gif",
+      "sha256": "a84ddc65e3fc0bad9030d9034d54637136557147c1589967ffc05ddcdbb501a1",
+      "bytes": 3153579
+    },
+    {
+      "file": "images/discovery-ends/datepalm.jpg",
+      "sha256": "7890afedfc4be75f43308a79055640eaa207e3129e09488a0fe4edce3fca8dea",
+      "bytes": 92759
+    },
+    {
+      "file": "images/discovery-sheets/datepalm.webp",
+      "sha256": "511bd20e13b354cdf850b5e5811a6e6500dfa808acca7e6b1d5ce9e6d0ba35b3",
+      "bytes": 1572000
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "t_banana",
+  "name": "바나나",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_banana.png",
+  "sourceSha256": "a0f37e7a823a268d52182aff965a2a279932376dceaab2f0083a4598dcc4752d",
+  "sourceMtimeNs": 1795660658062015000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_banana.gif",
+      "sha256": "3b9d6c3f12369216609f01be6837570cda36005fef420daf8eca65ede7b920ae"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_banana.jpg",
+      "sha256": "0d448e338aa633e2c5456f5c3162b94d1ae085bf69805f0b977c4d1fc12226c5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_banana.webp",
+      "sha256": "287dc88883a3d9acac6b7fe77f206df1b53c7bf5f51e1876a43236070db5272f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_banana.gif",
+      "sha256": "fa857b2fbee788744679cab36faf5d29f4317e49634029d0b41ddf4f26787646",
+      "bytes": 3511291
+    },
+    {
+      "file": "images/discovery-ends/t_banana.jpg",
+      "sha256": "9dbcd42260ec959711dd4696ddd314e61ae598449405acbc89aba1541cf4f45d",
+      "bytes": 99122
+    },
+    {
+      "file": "images/discovery-sheets/t_banana.webp",
+      "sha256": "2fa3414014222eedac969b94015b01f6247ab3c5767675260663630401997a69",
+      "bytes": 1629172
+    }
+  ]
+}

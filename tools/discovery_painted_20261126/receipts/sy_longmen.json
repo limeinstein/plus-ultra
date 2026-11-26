@@ -1,0 +1,43 @@
+{
+  "id": "sy_longmen",
+  "name": "용문석굴",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sy_longmen.png",
+  "sourceSha256": "ecb2de30f545cd5e69e8a8633df09fc9c43f667ad10872388cf708306b2b8e40",
+  "sourceMtimeNs": 1795663170189139700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sy_longmen.gif",
+      "sha256": "c25e6ce2c4512b07eb9d0c2c6557da7a3fbb659d3f29c2ed1f5103f83747f84a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sy_longmen.jpg",
+      "sha256": "a20cb5345174790544e6fd1a375288a6c646cbe964653bace902269ce08194d6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sy_longmen.webp",
+      "sha256": "2b9b77f77d5987e581e25050bf9f1c92025297cd6ddba047217d2405f6f5a314"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sy_longmen.gif",
+      "sha256": "14a3f936f83930cf4677462d81fac9ebed4f99d7301bc7fda55b22b62a6597b3",
+      "bytes": 3660100
+    },
+    {
+      "file": "images/discovery-ends/sy_longmen.jpg",
+      "sha256": "fa1dfcde987135f58c9e5a5ad1c9909ec0834b70d1d3cad0a441928b8e7fead0",
+      "bytes": 96488
+    },
+    {
+      "file": "images/discovery-sheets/sy_longmen.webp",
+      "sha256": "6a697b321f7e910f1ebab77b0c864c212f815ba6bae0b66a45d62ac221ef54ba",
+      "bytes": 1704416
+    }
+  ]
+}

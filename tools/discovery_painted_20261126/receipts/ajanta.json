@@ -1,0 +1,43 @@
+{
+  "id": "ajanta",
+  "name": "아잔타 석굴 벽화",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ajanta.png",
+  "sourceSha256": "e0841dc39eb9c4b21577623c5a920d30c9b59926993c99f6c985dc94b3262468",
+  "sourceMtimeNs": 1795660256673223800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ajanta.gif",
+      "sha256": "1546621ba059635a6158d08f469fa7e4b344ae5ee9c04ddd2d0d28ac52752fab"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ajanta.jpg",
+      "sha256": "24f39a02138c1b7bed9b64fcbcf1020e594dde86094d732357986d581fa2d52f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ajanta.webp",
+      "sha256": "68943bd900761cf3d1d0b7b2bffa4bd5b2086ff828c504760fd8429aa2e6b13d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ajanta.gif",
+      "sha256": "1a8a4f87dc2e8d8e9c3945bed5745dd725f8ba22b66a072148f3f48a03fa7421",
+      "bytes": 3615015
+    },
+    {
+      "file": "images/discovery-ends/ajanta.jpg",
+      "sha256": "59858a7b924c016a1699ddafd0cf64d352f0ddaca8321be241700bd20da082b3",
+      "bytes": 92739
+    },
+    {
+      "file": "images/discovery-sheets/ajanta.webp",
+      "sha256": "2c89a6c5aa20b2e1b09eb33a99c0335728d53a846babf88abc2df9493cc3fe55",
+      "bytes": 1594320
+    }
+  ]
+}

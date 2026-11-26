@@ -1,0 +1,43 @@
+{
+  "id": "mysorepalace",
+  "name": "마이소르 궁전",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mysorepalace.png",
+  "sourceSha256": "90064e321a5f6e8971d3c13bf7aea0f83d59e7dff096febff612c3e2cd716625",
+  "sourceMtimeNs": 1795662882575305600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mysorepalace.gif",
+      "sha256": "c0b737e1780f55528b1efe38f98a0eabbaa92013582ee3984c08aa798a0b4260"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mysorepalace.jpg",
+      "sha256": "1de96d6a678f58d99089b7cba0895b128e733288c7b577d59f697ad6f74e33e5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mysorepalace.webp",
+      "sha256": "3627126410ca33c06948bbcc7d0b167f9e4aa8068365157b57415c8fe49cce6d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mysorepalace.gif",
+      "sha256": "f2598a05cf9deacf7f55c4f8ce12639de9a529f8aebb4dbf470fc0e40800d67a",
+      "bytes": 3608944
+    },
+    {
+      "file": "images/discovery-ends/mysorepalace.jpg",
+      "sha256": "d316b63b928bbeb41dfbad72ca80401784fb42ae40ae36b6d200e70a9416f237",
+      "bytes": 104785
+    },
+    {
+      "file": "images/discovery-sheets/mysorepalace.webp",
+      "sha256": "bfe08e07e209a44aebc667152e8b4ed53119b6f25f54215a817930fca243c572",
+      "bytes": 1779922
+    }
+  ]
+}

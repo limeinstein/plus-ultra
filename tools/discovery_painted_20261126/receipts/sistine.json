@@ -1,0 +1,43 @@
+{
+  "id": "sistine",
+  "name": "시스티나 성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sistine.png",
+  "sourceSha256": "66b23ca13b0fe92b5cada9c3793fa7c9092bab40a6af5125ec78626e79030769",
+  "sourceMtimeNs": 1795661108340172400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sistine.gif",
+      "sha256": "d574bc4ef4f4226e9077b560baa98d6fd6062985d4a6b706f52559ca2f36e549"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sistine.jpg",
+      "sha256": "fc8bc89b5bb9102fef5a75f17c3e465e8c9951a9837d263ae279c5014b03d9fc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sistine.webp",
+      "sha256": "51b92718cf2938ef1915ee8290c83754654aad047aa3b0e75b0197bc2b7bfb3d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sistine.gif",
+      "sha256": "678de7d2b3b9bf17fe243d2d036d7def898c1ba8446843e9bb9ef04a22a1d9c2",
+      "bytes": 3399591
+    },
+    {
+      "file": "images/discovery-ends/sistine.jpg",
+      "sha256": "170a3b198b37c9d24c66d2e64868e911928694c554474cd0c12aefb6c82d98cf",
+      "bytes": 87269
+    },
+    {
+      "file": "images/discovery-sheets/sistine.webp",
+      "sha256": "8dc539efcd635151a7485bb600ca0a6d6725c47e5e1f2230db4bc65d6fe7b953",
+      "bytes": 1490474
+    }
+  ]
+}

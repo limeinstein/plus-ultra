@@ -1,0 +1,43 @@
+{
+  "id": "yoshimihyakuana",
+  "name": "요시미 백혈",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/yoshimihyakuana.png",
+  "sourceSha256": "abf19b14b0eea08ff0fbdd6871d3848f7aa86e27832e51b616c480f01690b03f",
+  "sourceMtimeNs": 1795662668689639500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/yoshimihyakuana.gif",
+      "sha256": "26f022fde074c4286a49a4696d9429ef9a59a9aa77d9e403d95b7664c38f51e6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/yoshimihyakuana.jpg",
+      "sha256": "c45f46c16e792e9659d7bcf8e2e69e74e9e2ac88fa529d8913afc7295779f179"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/yoshimihyakuana.webp",
+      "sha256": "af6e407612345b3aed09c8954b0ac880810705bdac4a7383a83b93b27ae2a093"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/yoshimihyakuana.gif",
+      "sha256": "b2e73a4a8ed0710b6a028bf008ee1b77e2024999e43348d74ea389dc9e35d0ec",
+      "bytes": 3929641
+    },
+    {
+      "file": "images/discovery-ends/yoshimihyakuana.jpg",
+      "sha256": "4c2c9eb2395f830c60f02e2a4c960639228428f6f2ac6649145436fe2c4de7b1",
+      "bytes": 103909
+    },
+    {
+      "file": "images/discovery-sheets/yoshimihyakuana.webp",
+      "sha256": "84e9b299e6e44effc21da13c39f69e4e11cd65e07ef94d275ef22f20abb0168d",
+      "bytes": 1826294
+    }
+  ]
+}

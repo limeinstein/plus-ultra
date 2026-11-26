@@ -1,0 +1,43 @@
+{
+  "id": "plainofjars",
+  "name": "항아리 평원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/plainofjars.png",
+  "sourceSha256": "3b7cb6453e531ccfe0c78780aab71117b7d2da794f8a4a269bc2bd050c19bd59",
+  "sourceMtimeNs": 1795661916951060700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/plainofjars.gif",
+      "sha256": "d5a89ff196f8bc309a14dc2232b985ab5c3f9fbdf298a68f97c99179d7c3ceb7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/plainofjars.jpg",
+      "sha256": "4adf932cf84756cf87e0f7811d9afe2c6a3ed19b425699b4aef1e9a18a229df9"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/plainofjars.webp",
+      "sha256": "30bd98a4c48a3ed5d6cc0873dc9724986ed889e7f286f3f726b254250bb02c40"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/plainofjars.gif",
+      "sha256": "6c3db3754f8f9b440c754a91bf11c88e36e418aed7176e1000350788b7233389",
+      "bytes": 3437347
+    },
+    {
+      "file": "images/discovery-ends/plainofjars.jpg",
+      "sha256": "ca3bb6d8b3601b19593a42446f8a810fce2f0c2c338047d3a045bd140fe09d0d",
+      "bytes": 95180
+    },
+    {
+      "file": "images/discovery-sheets/plainofjars.webp",
+      "sha256": "078339e3c84182d00b7cd0ca01c7b6a456ca9dfd0dc785712f704e531b58cf69",
+      "bytes": 1650018
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "cedars",
+  "name": "레바논 삼나무 숲",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/cedars.png",
+  "sourceSha256": "26e7badf26b70fce163995814b6cab4a53005f10b0ece9a181c9ac31f477c60f",
+  "sourceMtimeNs": 1795659647850556000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/cedars.gif",
+      "sha256": "9ed4aca7c6e2304b6090865b5e1103371a436cca5526e3760585b80f022182c1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/cedars.jpg",
+      "sha256": "a119a8327859714a59583675c5f7c3f161eef2ce317ad966f46fcf45c88e373b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/cedars.webp",
+      "sha256": "f0dbe60f7e9f7e79e68916f779f24d33c5b603a2b7e23c5ace7cea73deae6097"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/cedars.gif",
+      "sha256": "54edcbb4ec81b375e1e91f19873bf0881d9e770ccc3a1937a9508901bde1f91c",
+      "bytes": 3469577
+    },
+    {
+      "file": "images/discovery-ends/cedars.jpg",
+      "sha256": "b32e537fcfea814550e18a79ff943453c443badab5ed96481ba5fcdae32c53e6",
+      "bytes": 102056
+    },
+    {
+      "file": "images/discovery-sheets/cedars.webp",
+      "sha256": "0f5146d3cd241f14a5e49e0d08650d03111bd8859a5474905036f73671fd6a33",
+      "bytes": 1816162
+    }
+  ]
+}

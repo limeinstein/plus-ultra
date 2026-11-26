@@ -1,0 +1,43 @@
+{
+  "id": "madurai",
+  "name": "미낙시 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/madurai.png",
+  "sourceSha256": "41ce06158c1757fb74e75f40682ff213e2ff50ca21f7b370dd4f7cf2e79aebf0",
+  "sourceMtimeNs": 1795659514879703600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/madurai.gif",
+      "sha256": "c4b7d23645c2cca5fae36bff2e407dc99b70c17bec3c0351d5e8715f25cd9a33"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/madurai.jpg",
+      "sha256": "022e62213f5e96f096c3d8cc445c040666fe616ec864d8675c091f82bd3dd79e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/madurai.webp",
+      "sha256": "5c30ca1777fdad18459b313ea8aec9e71ed8dcafc19bd24ef7563db216005859"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/madurai.gif",
+      "sha256": "eee7cc6ab22c29aa8577ef9ae0c74998ee30a70c8f37a464d2b15895c8fa1192",
+      "bytes": 3579276
+    },
+    {
+      "file": "images/discovery-ends/madurai.jpg",
+      "sha256": "19ea3c06279529ea8a8fb2dbdc59548436df78516a66c799bfe364713daddabe",
+      "bytes": 101364
+    },
+    {
+      "file": "images/discovery-sheets/madurai.webp",
+      "sha256": "60c75a66403b59808229d63420d0c5f229a3e9e4ff5c0ca3040e8f310cd301f2",
+      "bytes": 1753836
+    }
+  ]
+}

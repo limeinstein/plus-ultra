@@ -1,0 +1,43 @@
+{
+  "id": "moctezuma",
+  "name": "목테수마의 깃털관",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/moctezuma.png",
+  "sourceSha256": "9c48ca7e64b2814234a566981d35ebf6e19363e11ac283cd07ee64af0f45ae53",
+  "sourceMtimeNs": 1795660361895728500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/moctezuma.gif",
+      "sha256": "5f5dcac886803c60a4194bed7fdca5d6e0d5f3feb5e3e46e298e828807333298"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/moctezuma.jpg",
+      "sha256": "ef2ead6e963d36cdede7e2237f00ec74b92898baa7d200bbc8df590b4b2f834c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/moctezuma.webp",
+      "sha256": "33777cf8db17b529b4667b5eeebf3385ee428a6ce1457e5b6cb3735009457ab9"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/moctezuma.gif",
+      "sha256": "633a8b4d0719e9133f799f719607e07a00fd89efbf6a275a9440769f03330a21",
+      "bytes": 3468098
+    },
+    {
+      "file": "images/discovery-ends/moctezuma.jpg",
+      "sha256": "6f7b014c773110b5754afa8dc75ae7ef1957630f28dc622cd358c2c0d770ba48",
+      "bytes": 95809
+    },
+    {
+      "file": "images/discovery-sheets/moctezuma.webp",
+      "sha256": "572159129f7c0e857c902d5b1c4ff4cdb51bd9ea0aa3ce843d603df5e6d72232",
+      "bytes": 1625154
+    }
+  ]
+}

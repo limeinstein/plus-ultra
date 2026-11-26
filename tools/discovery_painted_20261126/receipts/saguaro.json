@@ -1,0 +1,43 @@
+{
+  "id": "saguaro",
+  "name": "사와로",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/saguaro.png",
+  "sourceSha256": "000ed7f92aaf02ac49d40e5f8f3c6026ba213894153fc1ec0921f912feb339b3",
+  "sourceMtimeNs": 1795659656544456000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/saguaro.gif",
+      "sha256": "b492513260c3a23f439c913a0d5c65ea2a044a6989cd7a3ee0311691b7ad67ef"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/saguaro.jpg",
+      "sha256": "26816adcd4c30cb8814ee82fd5aca3dc23c91ad902a1e564a0f0cbdc32b7f92d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/saguaro.webp",
+      "sha256": "0e9958cd7eb4c009593ceada027e9b3b0096f4d20da6977a36afad5c5ac06d11"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/saguaro.gif",
+      "sha256": "5006320b9b0c86401839fd4f4af86576158157e87c49b9b4a974001f4820bdb7",
+      "bytes": 2769635
+    },
+    {
+      "file": "images/discovery-ends/saguaro.jpg",
+      "sha256": "96daefd607f77ebfe34b8780e7a85b04f474795c26d5f606474a39b2ef75aadc",
+      "bytes": 80614
+    },
+    {
+      "file": "images/discovery-sheets/saguaro.webp",
+      "sha256": "5053ac3d369cd5d5ca617c26fca469eff1a7e853c5d9f66e64fe207da573b640",
+      "bytes": 1302918
+    }
+  ]
+}

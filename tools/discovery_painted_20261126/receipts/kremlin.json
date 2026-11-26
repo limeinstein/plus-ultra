@@ -1,0 +1,43 @@
+{
+  "id": "kremlin",
+  "name": "크렘린",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kremlin.png",
+  "sourceSha256": "a0434579cfc9743283da92f3e7184855bb3251477f98f3aee8cdb4e446c2f77b",
+  "sourceMtimeNs": 1795661027170150100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kremlin.gif",
+      "sha256": "9f0a87ff9f569edb39a8b29f8a7151049a8d7ef44b54786998a831185e0f6b29"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kremlin.jpg",
+      "sha256": "6739155874f8e6240f14e020831874d1e33c5075e6ffc874ba1c64760e06f88b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kremlin.webp",
+      "sha256": "8fd04b432b1af54243bfe0025eb697375e1a642e5f8963d9aa5543fd355f8d96"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kremlin.gif",
+      "sha256": "b15e8817bed15dda50bca8d2dc6f0a08e6c8a8d029137563a619624c1ef32f17",
+      "bytes": 3302896
+    },
+    {
+      "file": "images/discovery-ends/kremlin.jpg",
+      "sha256": "331838a44215b5326da44259fdcab6a1c0fac65adbd2a1ff68467bde430c3ecd",
+      "bytes": 98153
+    },
+    {
+      "file": "images/discovery-sheets/kremlin.webp",
+      "sha256": "9ea7edae499da43e23b0005b92e725eeeecc77ce8c02bb636d00bb74b2ce5364",
+      "bytes": 1687566
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "namsantower",
+  "name": "N서울타워",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/namsantower.png",
+  "sourceSha256": "669abc6077feabebab569da8677b48ae4406cd7ecea20b60ef549831ebf25527",
+  "sourceMtimeNs": 1795662823551029500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/namsantower.gif",
+      "sha256": "7be36cb6a7a61ac9cb75881e6db19733d3138c08c57d2cd3935002dfd99d1cab"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/namsantower.jpg",
+      "sha256": "f17ffcb1266c3be3864d814e53e20648f4c39f95966eaeb531ec18bdf8c20e32"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/namsantower.webp",
+      "sha256": "e26fcef7f14ff91e6bca0d219d3629c59a541eaedeb30e464239b6731c9984f2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/namsantower.gif",
+      "sha256": "a36ab0b39b9e914f5f807025ccf4e1797b1fcee7e5ff3a699a64f41f74f7e71f",
+      "bytes": 3190277
+    },
+    {
+      "file": "images/discovery-ends/namsantower.jpg",
+      "sha256": "ca42ca105b9424d05eab146681c0d3034a3ab91b7580f35f91543c30be5d732a",
+      "bytes": 82460
+    },
+    {
+      "file": "images/discovery-sheets/namsantower.webp",
+      "sha256": "49265a9b4739ee3e3afbbc8347031d08dd4c501a2c631b825b0ef392e7705466",
+      "bytes": 1357702
+    }
+  ]
+}

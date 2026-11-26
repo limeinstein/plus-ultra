@@ -1,0 +1,43 @@
+{
+  "id": "ft_hanyang",
+  "name": "아버지의 편지",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ft_hanyang.png",
+  "sourceSha256": "e52aabfe4e1954ce25fdf51d7e23b538f6fa7847d7c8b2e776d44fe0755c6b1f",
+  "sourceMtimeNs": 1795662575089985200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ft_hanyang.gif",
+      "sha256": "fe7077ca8ed8a9a384b2faa066476c10ec21ac0100d9cee2b42ed932c8ccc98e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ft_hanyang.jpg",
+      "sha256": "43289191b22369ab1c72f466c79c5087f5e630fabc6dc62395c28d212ba33ce0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ft_hanyang.webp",
+      "sha256": "293894f823de72e361750cfd87a22dca2997d416420b3e21da0fafd8c84edc27"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ft_hanyang.gif",
+      "sha256": "f28d68704d86c93218b8ebcb28a807b92cf7ea761d19ee8ae5f78bd6eaeb5c1c",
+      "bytes": 3431324
+    },
+    {
+      "file": "images/discovery-ends/ft_hanyang.jpg",
+      "sha256": "d6175b062f04b7ce37f2d9da084f683a7bdb2814666f9c008ac480b2a0d33228",
+      "bytes": 89640
+    },
+    {
+      "file": "images/discovery-sheets/ft_hanyang.webp",
+      "sha256": "eb2626e2c09460870e102f95abdd4ff2256dd1b91a55027ebe59d8fffd505200",
+      "bytes": 1516230
+    }
+  ]
+}

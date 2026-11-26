@@ -1,0 +1,43 @@
+{
+  "id": "ft_sakai",
+  "name": "제비와 박씨 이야기",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ft_sakai.png",
+  "sourceSha256": "2b60d46c178098a770b7aad5dcdd19974fa0013c4707a819dedb0e957edfba23",
+  "sourceMtimeNs": 1795662543328204300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ft_sakai.gif",
+      "sha256": "4d84eeb799aee88dac3ec45eeddde13f7833df6a5bc31a2a21ea102c6c3aa9aa"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ft_sakai.jpg",
+      "sha256": "d183b7a1394077cdc9342fc2afa0ebf2329365c1a790c2b29ff892590de455fd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ft_sakai.webp",
+      "sha256": "c6cd82830a5e0efc1575c52edc4589325c5cdc6143a5240318ee5a97f991913e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ft_sakai.gif",
+      "sha256": "a3bdc9d2218d50d54027fc19530d207f6fe528837123b634ab4c929ef2095a14",
+      "bytes": 3443238
+    },
+    {
+      "file": "images/discovery-ends/ft_sakai.jpg",
+      "sha256": "265c00ed6a418ca5262484d7792bc44d79a574a16ba7432d93cf4c093d4cad96",
+      "bytes": 96808
+    },
+    {
+      "file": "images/discovery-sheets/ft_sakai.webp",
+      "sha256": "9e2c9d806eaf5e2a512b86d907d641b88721503a00224bea8fa81cdb1ffb469a",
+      "bytes": 1609984
+    }
+  ]
+}

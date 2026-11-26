@@ -1,0 +1,43 @@
+{
+  "id": "filippovka",
+  "name": "필리포프카의 황금 사슴",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/filippovka.png",
+  "sourceSha256": "7c073d567b6780de6c728911d428cb8c6efc2e58e8a57c5e362d4a129871d9a9",
+  "sourceMtimeNs": 1795663440586775600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/filippovka.gif",
+      "sha256": "4e6b51dd38a2c8d22f332beb69cc3c414205fdd1e81bfbac20d7ce355851920f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/filippovka.jpg",
+      "sha256": "f9448728c9659e4b1e1ddddc98251c531d73a2408d5cd65302610cc2ecfd458e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/filippovka.webp",
+      "sha256": "9af585e30dc68a3bb75cffa6a17ee4c6318349edf125b63764aadaff8b529376"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/filippovka.gif",
+      "sha256": "7672c722f7b13910abd9cdc077d88be1f045fe278da071e5455025fc43a956b7",
+      "bytes": 3529018
+    },
+    {
+      "file": "images/discovery-ends/filippovka.jpg",
+      "sha256": "657e2f06995cebdb384c2cd9f8d4b13512edea559fc41b0788f25925dd57dec6",
+      "bytes": 86804
+    },
+    {
+      "file": "images/discovery-sheets/filippovka.webp",
+      "sha256": "847e1cd0c5bbc49d045fa95c436a44ad603e6f839bf4b90c5d0a7809610b4f71",
+      "bytes": 1467238
+    }
+  ]
+}

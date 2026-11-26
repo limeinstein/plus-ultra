@@ -1,0 +1,43 @@
+{
+  "id": "threegorges",
+  "name": "싼샤 댐",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/threegorges.png",
+  "sourceSha256": "b20c2f0c85edca0204605252cc5cd1735497aa4b477c7973e1c7aaff05b16b7f",
+  "sourceMtimeNs": 1795661560984471100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/threegorges.gif",
+      "sha256": "54dd994c441926b43bfd1f06635202941c7174d99ded6181a393a2772c1a0856"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/threegorges.jpg",
+      "sha256": "03830b97e1bb35cb8d52c002e14fa777779c5c07141e49fbc32b4aa19a97ad0d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/threegorges.webp",
+      "sha256": "a71d26ee14584aedeff1565a7b3f4fe31f078e4fe272008419442788fec062e3"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/threegorges.gif",
+      "sha256": "59f1f64fbcf4c4ebbbb32d6623d577c7b1b5262cdf76e75b61785ab58838ed16",
+      "bytes": 3173068
+    },
+    {
+      "file": "images/discovery-ends/threegorges.jpg",
+      "sha256": "879896c6dd7bf5f2a985f253e86e1f8ed132bf3df874be52e113a5c3a603d9ed",
+      "bytes": 90335
+    },
+    {
+      "file": "images/discovery-sheets/threegorges.webp",
+      "sha256": "2b56f05f3ce0e26bad0a821f2489ee74e201408eee158ee08d5de7642e05febb",
+      "bytes": 1542736
+    }
+  ]
+}

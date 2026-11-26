@@ -1,0 +1,43 @@
+{
+  "id": "topkapi",
+  "name": "톱카프 궁전",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/topkapi.png",
+  "sourceSha256": "41c75338ea2ad3b7b9aeddabfc59aefdd103d6420a1acabed2d97354a1ab1edf",
+  "sourceMtimeNs": 1795661711850932600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/topkapi.gif",
+      "sha256": "baab3b8af2eecc8cba0352ac80a282372b2ec2760f347be7aaea22f926567d40"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/topkapi.jpg",
+      "sha256": "bc72f129c7492a0b9f0c8565f0d0f74ae0fa991fe38a636259a78b2392015b8a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/topkapi.webp",
+      "sha256": "e4c6973d5add32efe4e2df70531efa1b1d5d6fbc2077b4c255e4f68c833c4a12"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/topkapi.gif",
+      "sha256": "88d9b43b1f1bfccd1083fc4b638e8015f6e41f1a807e22a855e1e25fb40e1fab",
+      "bytes": 3521786
+    },
+    {
+      "file": "images/discovery-ends/topkapi.jpg",
+      "sha256": "28136811b5472d4d940917f256627176751d9c6772525ec3186927e8c4b1ada7",
+      "bytes": 103988
+    },
+    {
+      "file": "images/discovery-sheets/topkapi.webp",
+      "sha256": "1534b2fd8ef4ca74f0b33936e97f69f7044d5ee3fa7a9868e1e980ac0631423e",
+      "bytes": 1791296
+    }
+  ]
+}

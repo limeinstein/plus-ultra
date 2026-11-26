@@ -1,0 +1,43 @@
+{
+  "id": "aleppomosque",
+  "name": "알레포 대모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/aleppomosque.png",
+  "sourceSha256": "ca86c71ad46b7b2a60c3a5b24b68f619a13f5a59740612d44e270ee2ff0ae935",
+  "sourceMtimeNs": 1795663038754411100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/aleppomosque.gif",
+      "sha256": "4eb432e734871eab59cec043de34fcb2f48f0a25a3a6a15c58a99da0a5725c44"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/aleppomosque.jpg",
+      "sha256": "6d2446c6217ecdee661ff42ae0c6d6aeba228fb5334a249404b83b2a3a3c5ba0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/aleppomosque.webp",
+      "sha256": "f5be3a06ab8925f83d6d9996118348d574479e6cc9d54fd536b75c379510776f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/aleppomosque.gif",
+      "sha256": "a4df389f46f44634a5fed9869ef8c62bf20c2441b126a37e047e4c84259cbc3e",
+      "bytes": 3379266
+    },
+    {
+      "file": "images/discovery-ends/aleppomosque.jpg",
+      "sha256": "8851c3f1304471ab79992c61cd8c78ba3c9b578a71a4354613832256703d6728",
+      "bytes": 96207
+    },
+    {
+      "file": "images/discovery-sheets/aleppomosque.webp",
+      "sha256": "08b9814867d826a57351a7c6f1ff3f1acb84b606ca4bbaf9e518d6308e1a78d4",
+      "bytes": 1643484
+    }
+  ]
+}

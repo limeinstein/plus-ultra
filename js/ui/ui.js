@@ -256,6 +256,7 @@
   }
   UI.notebookKey = notebookKey;
   function routeKey(e) {
+    if (G.Loader && G.Loader.busy && G.Loader.busy()) return true;
     if (screenShortcutKey(e)) return true;
     if (notebookKey(e)) return true;
     for (var i = keyHandlers.length - 1; i >= 0; i--) if (keyHandlers[i](e) === true) return true;
@@ -585,7 +586,7 @@
     return new Promise(function (resolve) {
       fadeEl.classList.add('on');
       setTimeout(function () {
-        var LD = G.Loader, mine = false, lt = setTimeout(function () { if (LD && !LD.shown()) { mine = true; LD.show('', { dim: true }); } }, (((G.FX && G.FX.loader) || {}).fadeAfter) || 350);
+        var LD = G.Loader, mine = false, lt = setTimeout(function () { if (LD && !LD.busy()) { mine = true; LD.show('', { dim: true }); } }, (((G.FX && G.FX.loader) || {}).fadeAfter) || 350);
         Promise.resolve(fn && fn()).then(function () {
           // 새 장면의 첫 화면이 검은 막 뒤에서 그려진 다음에 걷는다 (막을 걷은 뒤 멈칫하지 않게)
           requestAnimationFrame(function () { requestAnimationFrame(function () {

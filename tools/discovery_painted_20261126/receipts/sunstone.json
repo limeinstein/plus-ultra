@@ -1,0 +1,43 @@
+{
+  "id": "sunstone",
+  "name": "아즈텍 태양의 돌",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sunstone.png",
+  "sourceSha256": "f2bef41d770c257e8d4c8ca5fb80df3b937779237d4b38964fccfe90849ea4a2",
+  "sourceMtimeNs": 1795660380292186400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sunstone.gif",
+      "sha256": "69262f395f595a349f8cdb107840d4b493c9ccf252673654dc0f165f5b864eca"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sunstone.jpg",
+      "sha256": "38e785661f0d5a8265c282543be812ab15540d8fb14b3bd510563e34b0462d3b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sunstone.webp",
+      "sha256": "100de8d197e3559d3f23fceb71e29a3fe5b803cef7c38d1efbc14fefe9dc895b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sunstone.gif",
+      "sha256": "e016103ceb0544e8086d7bc400ecffdadfac5e0d2842a40ab5fa9042cfa69da7",
+      "bytes": 3969168
+    },
+    {
+      "file": "images/discovery-ends/sunstone.jpg",
+      "sha256": "cafb428203748e7e2da5eebc91cbcbe87f7fd49e4bbd0878552657919b4cbff6",
+      "bytes": 94417
+    },
+    {
+      "file": "images/discovery-sheets/sunstone.webp",
+      "sha256": "36d72c73d572442ea7c1247619f81c838bfb13702efca254f881774fabdf924a",
+      "bytes": 1684966
+    }
+  ]
+}

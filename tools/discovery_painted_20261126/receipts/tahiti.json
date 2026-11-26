@@ -1,0 +1,43 @@
+{
+  "id": "tahiti",
+  "name": "타히티",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/tahiti.png",
+  "sourceSha256": "452c92dd22c5c0127f2ef0fd04e41aa89c06905bc1671f06b0dd33089f78f96b",
+  "sourceMtimeNs": 1795659661624087600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tahiti.gif",
+      "sha256": "6bccf828be78f570de11225d89a2297839a62a3d9ad43e678e2aa7550af799b1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tahiti.jpg",
+      "sha256": "f1edb48db9c5a409e2e823caaec2e1983701dd0f002d413b1cc80820db22094b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tahiti.webp",
+      "sha256": "c20b274bb6e25fba18f9a034a4104c72ec5fdaf226bcb964b36ba9061efbddfa"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tahiti.gif",
+      "sha256": "3bd5ebe3fe23290195ab857ee46b68356cc8263f7e884562c0575f6a2f58019f",
+      "bytes": 2924240
+    },
+    {
+      "file": "images/discovery-ends/tahiti.jpg",
+      "sha256": "8c67c06164fc239304b2a224fee8bba1acd552bd6aac566bef55e85df895ed8b",
+      "bytes": 97153
+    },
+    {
+      "file": "images/discovery-sheets/tahiti.webp",
+      "sha256": "ce793a173c1446fae7f608ed3ab0667a2d068c4e14380e44ca5c25c96d1fcef1",
+      "bytes": 1664780
+    }
+  ]
+}

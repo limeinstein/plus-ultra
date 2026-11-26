@@ -1,0 +1,43 @@
+{
+  "id": "uppsala",
+  "name": "감라 웁살라 — 신들의 무덤 언덕",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/uppsala.png",
+  "sourceSha256": "743ecd23ef1dbdb4bc02afea2c44ed828c9ca6447e336804061dcf971b85c7ec",
+  "sourceMtimeNs": 1795663071478529300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/uppsala.gif",
+      "sha256": "4ed6e044366cd36178dbc7bd34496a2f31a158c8ba3847fe5dbb165ce903149b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/uppsala.jpg",
+      "sha256": "dfd1630a482a311467c717d6629e79c3be67b5b5f579a654e11f955fa2d57e93"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/uppsala.webp",
+      "sha256": "9b50b91f012563bab5622c0d9b68483eb736868b72bffcc570839d61e8310427"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/uppsala.gif",
+      "sha256": "a95cc136d08f03c5718fcc186227b512ec66bb4c3569d69cbae22c494467a5a9",
+      "bytes": 3515672
+    },
+    {
+      "file": "images/discovery-ends/uppsala.jpg",
+      "sha256": "264eaaf0f9c1b457098d17085ba2f1d188c28ffbc10e5f6331ba47ecc4e42c86",
+      "bytes": 96575
+    },
+    {
+      "file": "images/discovery-sheets/uppsala.webp",
+      "sha256": "5e35cb3ea1c81b5a7d2b2216d8894fea93cd92c4a31e9eb0a9a2584c59bd4d09",
+      "bytes": 1667632
+    }
+  ]
+}

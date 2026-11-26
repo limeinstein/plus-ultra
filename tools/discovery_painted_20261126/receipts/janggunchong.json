@@ -1,0 +1,43 @@
+{
+  "id": "janggunchong",
+  "name": "장군총",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/janggunchong.png",
+  "sourceSha256": "13f7daf1039ba869f82d1ec2d23787265b206255648c09de3f9ce405741821d3",
+  "sourceMtimeNs": 1795662728569295200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/janggunchong.gif",
+      "sha256": "8eb4c6cf3ad930592f1ceb4588736a95acff05fb78374442ca931e6ad2a58f3b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/janggunchong.jpg",
+      "sha256": "f18834e94b0314bc5cf960622f7e44e318e1f6dc453814b3c7d76f81564975db"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/janggunchong.webp",
+      "sha256": "a1baca8e6510565a8b966d85792eef1b07e85882a0a193e7d538b2fe51bffbe6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/janggunchong.gif",
+      "sha256": "539762a13f5ecd8af743ae84b4ac1a5f1a086533999974ea302baece43654390",
+      "bytes": 3377808
+    },
+    {
+      "file": "images/discovery-ends/janggunchong.jpg",
+      "sha256": "7f63a8b2f0cabca251208cedfea894d489df894c9e160ee89d5ca4824103fbae",
+      "bytes": 95005
+    },
+    {
+      "file": "images/discovery-sheets/janggunchong.webp",
+      "sha256": "00b96919b73ef91e1f906b43be528492ee74f6325d1e66b02c448f2c03c2b069",
+      "bytes": 1647302
+    }
+  ]
+}

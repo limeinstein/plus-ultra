@@ -1,0 +1,43 @@
+{
+  "id": "t_cinnamon",
+  "name": "계피",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_cinnamon.png",
+  "sourceSha256": "51a4f2ec823bcb2b5bdccab2a10a335d58922cf6e84d298b7300efc667ae8745",
+  "sourceMtimeNs": 1795660868025082700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_cinnamon.gif",
+      "sha256": "2d567bd3d6f69c639f45653ab6f66fd6a0a2e1692d6704f9ac1f0d3cb2ee9d4b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_cinnamon.jpg",
+      "sha256": "bd47439f1ee9299cdb2aa1cf314b5215f829ddfd24054d938bebb546ee90c7cb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_cinnamon.webp",
+      "sha256": "13211500071105549f111f0af25b89d5af112ad32f61cf50f81d2d07e08a6a0a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_cinnamon.gif",
+      "sha256": "8bbd02654842fd0f4bcc9e2e5f27188a6580fd8cbcbb8da14960523339a89fc8",
+      "bytes": 3513596
+    },
+    {
+      "file": "images/discovery-ends/t_cinnamon.jpg",
+      "sha256": "0097797c90900f9d33f4bed2f4ac939c18e29c7df7f5c1f0069f8d03f4befb25",
+      "bytes": 98795
+    },
+    {
+      "file": "images/discovery-sheets/t_cinnamon.webp",
+      "sha256": "0dcd92f0dfe6e75f484b600565929b5b9d95ac0ec98ccd8c605b2ea989ca0e64",
+      "bytes": 1672214
+    }
+  ]
+}

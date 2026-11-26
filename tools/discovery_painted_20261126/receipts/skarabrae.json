@@ -1,0 +1,43 @@
+{
+  "id": "skarabrae",
+  "name": "스카라 브레",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/skarabrae.png",
+  "sourceSha256": "f5fb72750043feede72a7a5239cf9e4e28bbd15e918675c6390be4eb694dc94a",
+  "sourceMtimeNs": 1795662267328206400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/skarabrae.gif",
+      "sha256": "4c87979447fd6353e3df7b1da064aaaeb143b98e5e9a8e3a2e1ee421b0f2fbc4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/skarabrae.jpg",
+      "sha256": "b247a586d65ada862879383bf33c5970df9ac8b465ed51dde1a180592ee4e948"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/skarabrae.webp",
+      "sha256": "299e38088da25c5fc907c96623fbb59aced0b93731474ccb7493d1f97fdf6ffc"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/skarabrae.gif",
+      "sha256": "c67b978bbdf0fa7c061749a72718225bbe0541bc2c87c87f635851e4add7e6f7",
+      "bytes": 3394459
+    },
+    {
+      "file": "images/discovery-ends/skarabrae.jpg",
+      "sha256": "b653ea891553a5ab61492628626e5c77dfe7546eb6df74dcfb019226f07482b2",
+      "bytes": 90211
+    },
+    {
+      "file": "images/discovery-sheets/skarabrae.webp",
+      "sha256": "d6cced3413083c4a1ccf33249ddaf75bef4332b8cb04e236107b0b88cb20b42a",
+      "bytes": 1561488
+    }
+  ]
+}

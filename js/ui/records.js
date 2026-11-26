@@ -27,16 +27,17 @@
     var items = R.items(), n = R.unread(), text = n ? '새 기록 ' + n + '건' : '기록함';
     b.hidden = !items.length; b.classList.toggle('has-unread', n > 0);
     b.setAttribute('aria-label', text + ' — 증거와 역사 기록 열기');
-    var t = b.querySelector('span'), changed = t.textContent !== text;
-    t.textContent = text;
+    var t = b.querySelector('.record-number'), tip = b.querySelector('.record-tooltip'), number = n ? String(n) : '';
+    var changed = t.textContent !== number || tip.textContent !== text;
+    t.textContent = number; t.hidden = !n; tip.textContent = text;
     if (changed && G.UI.fitHud) G.UI.fitHud();
   };
   R.mount = function (hud) {
     if (!hud || hud.querySelector('.record-badge')) { R.refresh(); return; }
     var anchor = hud.querySelector('.notice-btn'); if (!anchor) return;
-    var b = U.el('button', 'record-badge', G.icon('scroll') + '<span></span>');
+    var b = U.el('button', 'record-badge', G.icon('scroll') + '<span class="record-number" aria-hidden="true"></span><span class="record-tooltip" id="record-badge-tip" role="tooltip"></span>');
     b.style.setProperty('--record-font', G.FX.recordBadge.font + 'px'); b.style.setProperty('--record-height', G.FX.recordBadge.height + 'px');
-    b.type = 'button'; b.title = '새 증거·단서와 역사 기록 — 눌렀을 때만 원문과 그림을 엽니다';
+    b.type = 'button'; b.setAttribute('aria-describedby', 'record-badge-tip');
     b.setAttribute('aria-live', 'polite'); b.setAttribute('aria-atomic', 'true');
     b.onclick = function (e) { e.stopPropagation(); if (!G.UI.busy()) R.open(); };
     b.addEventListener('keydown', function (e) {

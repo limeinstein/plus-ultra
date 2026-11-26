@@ -1,0 +1,43 @@
+{
+  "id": "whitedesert",
+  "name": "백사막 (파라프라)",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/whitedesert.png",
+  "sourceSha256": "f09cfbe04a21368e45d32365a7c1150d0b96541e586e3c609e4eca23d79e93bf",
+  "sourceMtimeNs": 1795659650057286000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/whitedesert.gif",
+      "sha256": "89225224f44a3783a55b06519216ffad1095270f095cf6cb8d4bac980279184c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/whitedesert.jpg",
+      "sha256": "3168b45652d365ae87fbd708fc647a0392fee12e3edf4d1ef2c76e039f542503"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/whitedesert.webp",
+      "sha256": "5c15ba8d5c7e2447b6732f483662e58948edcd2488833caa50277c8436264745"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/whitedesert.gif",
+      "sha256": "939b051b6eef0d0bade1092b2091f7c08c11ba6fca7709a94e53af84682ac4dc",
+      "bytes": 2830828
+    },
+    {
+      "file": "images/discovery-ends/whitedesert.jpg",
+      "sha256": "7e9cd3494bfeee3e12ac54718fd29ea9c0e0fd5a94f35d809e64253045d0c7c0",
+      "bytes": 75518
+    },
+    {
+      "file": "images/discovery-sheets/whitedesert.webp",
+      "sha256": "5f781f808d42556d332cb9fc077bfd7f87db4c221785ac7b83efaea3498c2233",
+      "bytes": 1169126
+    }
+  ]
+}

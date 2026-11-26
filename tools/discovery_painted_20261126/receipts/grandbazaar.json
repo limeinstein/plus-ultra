@@ -1,0 +1,43 @@
+{
+  "id": "grandbazaar",
+  "name": "그랜드 바자르",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/grandbazaar.png",
+  "sourceSha256": "84d7e05a49e131d75f000a737f17b16084d246f04db41e0b890a5d2d7a5417af",
+  "sourceMtimeNs": 1795661164770630500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/grandbazaar.gif",
+      "sha256": "03a9edc578460effd4e368bacb36e02b56a737fa9ce0f16d33a09025d47760af"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/grandbazaar.jpg",
+      "sha256": "d02bc52faf4d12c083a8c52f3f5cef88345bb4059d671c8185b2aea89ccf80a8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/grandbazaar.webp",
+      "sha256": "bb4e750097abf762911a4bc9bc185b3edf724287478bff72af1ea2344582b87d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/grandbazaar.gif",
+      "sha256": "2fbb63936e9434b680b50c2b0b32dd959cc44ca1a127c5f9f8a9a595a87a7e9d",
+      "bytes": 3867865
+    },
+    {
+      "file": "images/discovery-ends/grandbazaar.jpg",
+      "sha256": "df551af7bc90887dcb9b4249236581e7c7aef16a5eedc472dc8001f1660028a2",
+      "bytes": 105287
+    },
+    {
+      "file": "images/discovery-sheets/grandbazaar.webp",
+      "sha256": "ef210f85df23426ecd9def95d249a1487a5412e5ab0658a31e19a94f3a65358c",
+      "bytes": 1810280
+    }
+  ]
+}

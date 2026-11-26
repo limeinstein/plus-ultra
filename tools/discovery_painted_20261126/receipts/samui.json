@@ -1,0 +1,43 @@
+{
+  "id": "samui",
+  "name": "코사무이",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/samui.png",
+  "sourceSha256": "c9fbb7026c5db3efe5da14c65f05fb473933f5441dea2133ea677f0a58ad2fd6",
+  "sourceMtimeNs": 1795659658652062600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/samui.gif",
+      "sha256": "0c825cb82e2849d23b07a3a1e998cd2f58443e40c54ac5341e0c03111c940af3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/samui.jpg",
+      "sha256": "e81ee81794a6f66e901098a9b0b08454a3f60270ed693c918fdb1e1f69a4a421"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/samui.webp",
+      "sha256": "c0adb08ab2c9e459a9ed5ea350de1675472868bf9a48a0926ebd9aaffd6c2ac0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/samui.gif",
+      "sha256": "7c0957b63cb507a8539d63b387036f964e086b5197f1f7eaa190ad486516132d",
+      "bytes": 2775662
+    },
+    {
+      "file": "images/discovery-ends/samui.jpg",
+      "sha256": "780e051aaac2fd4b9f3f0481a957b2c2f000a67fa2972539476947a5a097e921",
+      "bytes": 95543
+    },
+    {
+      "file": "images/discovery-sheets/samui.webp",
+      "sha256": "58ac52a3c81bd862eea8c4be633057a655b167735ea2171c4759e09abdea016c",
+      "bytes": 1630964
+    }
+  ]
+}

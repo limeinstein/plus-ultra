@@ -1,0 +1,43 @@
+{
+  "id": "seabuckthorn",
+  "name": "비타민나무",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/seabuckthorn.png",
+  "sourceSha256": "6ed59c292bb32ca94f17d3cc9a5196bfb8f148bac9e1820361e2b3274c1a90c0",
+  "sourceMtimeNs": 1795659653380803800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/seabuckthorn.gif",
+      "sha256": "a2ab2b14fb2458ed49cecff27a72c848e859e43871cb947420c7465497606438"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/seabuckthorn.jpg",
+      "sha256": "61bfa278e7dd2715c572ae2344f64369dd99466483704229d8e0d4d2bdf9d370"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/seabuckthorn.webp",
+      "sha256": "1531e0c0ad2a6b4568b1787aeedf03273db9e07ccf21a0e285d324a462fb16e7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/seabuckthorn.gif",
+      "sha256": "8f87833b23a645f736b8c7246e2fea7ab77bba26fef502f199b00a3c802fe062",
+      "bytes": 3545509
+    },
+    {
+      "file": "images/discovery-ends/seabuckthorn.jpg",
+      "sha256": "77a2a83ce8df18c7d8180e8d49fb3bf95f006b75496ce5eff7567d379bf12998",
+      "bytes": 105045
+    },
+    {
+      "file": "images/discovery-sheets/seabuckthorn.webp",
+      "sha256": "693cea65e26f106ad91fc34be7fe5aa53c4af6cb5f5fc683394f17186178d04d",
+      "bytes": 1778600
+    }
+  ]
+}

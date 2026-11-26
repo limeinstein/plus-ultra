@@ -1,0 +1,43 @@
+{
+  "id": "rubber",
+  "name": "파라고무나무",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/rubber.png",
+  "sourceSha256": "efe2b4b4e4c5e7f67bc961a7950766dafd9f2e383fd4aab5d2b179a30f13bfd7",
+  "sourceMtimeNs": 1795659643858320400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/rubber.gif",
+      "sha256": "99b9deb6d0faf93e87166efd18dfc4f692736a6f3192faf9118fff1cada56b23"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/rubber.jpg",
+      "sha256": "978d79334a41e8a4f568ec1ad735ee5ea68a687913e66ce2d51a3d0be329cce0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/rubber.webp",
+      "sha256": "4cd4b8628e533f913fceec463926c866ec58f5088157a84dbda2f698c4c2c6fb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/rubber.gif",
+      "sha256": "2ae3d933fcd54c0f2eff8db7317bd9fd297b93a4fd6d24fc879fc7ecf86ac848",
+      "bytes": 3684329
+    },
+    {
+      "file": "images/discovery-ends/rubber.jpg",
+      "sha256": "5582a269a65b8879ceb98b746ab4183c6a48a79eded8512c1938ea275edd6a87",
+      "bytes": 107623
+    },
+    {
+      "file": "images/discovery-sheets/rubber.webp",
+      "sha256": "3ab2f56e7b18321930f7d2f136adfd57cacb25e4f87fc90d7582b3d6ddf063bd",
+      "bytes": 1891598
+    }
+  ]
+}

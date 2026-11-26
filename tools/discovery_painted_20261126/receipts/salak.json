@@ -1,0 +1,43 @@
+{
+  "id": "salak",
+  "name": "살락",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/salak.png",
+  "sourceSha256": "5c5f4f7946d62d5181d68060e91c41627aaa17fbad8f060b0cf0157528f1e6b8",
+  "sourceMtimeNs": 1795659653628396100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/salak.gif",
+      "sha256": "49d1ac3cb741fc04cc3992110bdad8566031137ca3ffb9b7bb37fadc88ac4405"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/salak.jpg",
+      "sha256": "3136e72cd572a6806c12538eef8e4db5ac3e843cc42265efe2a1d94ebcf8235e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/salak.webp",
+      "sha256": "21c0946898ae9d9f9653d372c8cbd70833eed0dbed615b6016d97d03f154914f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/salak.gif",
+      "sha256": "bec43cd9361a13e97bd9a3f3c54c78624d110234a1520d4c590ecdf8cd39439c",
+      "bytes": 3718605
+    },
+    {
+      "file": "images/discovery-ends/salak.jpg",
+      "sha256": "c5c57673015d2a0a45e7156fcf6bef1f1b823b7449d0fe313bc818bc8b1a034d",
+      "bytes": 108750
+    },
+    {
+      "file": "images/discovery-sheets/salak.webp",
+      "sha256": "354867503e3abebb8c81114870cc7a871cea66a2e18e28b1ce55857322043ddf",
+      "bytes": 1885460
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "briteiros",
+  "name": "시타니아 드 브리테이루스",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/briteiros.png",
+  "sourceSha256": "0117222bc012c86fb0d220a860521294fdaea8971355f5ae906697b69954e3ef",
+  "sourceMtimeNs": 1795662643988960400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/briteiros.gif",
+      "sha256": "649c669918f1bd13e132ed9a8a0a08abe5a0e039b02cdbc06751b4180083ac44"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/briteiros.jpg",
+      "sha256": "bb85c4af9d3b12963b1d4fa1f1078d6b1bdd6a110885f863a6939183c2c4e8e7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/briteiros.webp",
+      "sha256": "fb7825b5a096b76ea86aed449e72971b785184bf3015662f7578e50c44f8ce0c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/briteiros.gif",
+      "sha256": "191f2c9c50fd6ff26ff047295c02f742d7152d2714f6a0b11fcb6554f6290e80",
+      "bytes": 3726553
+    },
+    {
+      "file": "images/discovery-ends/briteiros.jpg",
+      "sha256": "6c73db675978d87a0d8bf3b814488710800ddfed9fbde1cc23d45e84758ddd07",
+      "bytes": 103564
+    },
+    {
+      "file": "images/discovery-sheets/briteiros.webp",
+      "sha256": "0c7861f548e28c7e3136891f484d30b55a364528ab1a737e5cf86567017c5e13",
+      "bytes": 1820858
+    }
+  ]
+}

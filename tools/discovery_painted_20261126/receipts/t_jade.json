@@ -1,0 +1,43 @@
+{
+  "id": "t_jade",
+  "name": "비취",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_jade.png",
+  "sourceSha256": "fb81a3229848f414aec72fa8848f680701fa4d3de2b8158b6d66287651148bec",
+  "sourceMtimeNs": 1795660953696612100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_jade.gif",
+      "sha256": "392def28220ce136edc1bcc70c5d60c87cf0417821186f24eeae37d36034a27d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_jade.jpg",
+      "sha256": "88a57a4abe761df223a6ad8e4cc1bbf4b07154706a7030b75386e6c893a67638"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_jade.webp",
+      "sha256": "4910658d65f9dab85d7b0b773bbcb299adcfd4d828592739409028abc7bda20e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_jade.gif",
+      "sha256": "060b7d65e792897393b51675d4d9079e5bd95189cef4c59755996bdda14fd1b8",
+      "bytes": 3401762
+    },
+    {
+      "file": "images/discovery-ends/t_jade.jpg",
+      "sha256": "dbafb843dd942161fec31937dc5189be64c42563bbec043cfcdccb6e2842810d",
+      "bytes": 87764
+    },
+    {
+      "file": "images/discovery-sheets/t_jade.webp",
+      "sha256": "1c4a7e861c1fe7ee2ff9ed46ac9003c776f486978a920e0ab9cd290ae56e520d",
+      "bytes": 1475782
+    }
+  ]
+}

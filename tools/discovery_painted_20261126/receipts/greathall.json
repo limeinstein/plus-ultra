@@ -1,0 +1,43 @@
+{
+  "id": "greathall",
+  "name": "인민대회당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/greathall.png",
+  "sourceSha256": "944eca2ef0fce715154a55dbe298263cff4c91e508a0de6992c41eec18094e2c",
+  "sourceMtimeNs": 1795662872610601300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/greathall.gif",
+      "sha256": "e05f74746f6272a18119b6d5b9bdf5749ebc67b295fe7990a43771ab88687a7d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/greathall.jpg",
+      "sha256": "5c4b2c54207885e7d2e2cdba870334442af724fdd5a51e4276eefe19fcafc4df"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/greathall.webp",
+      "sha256": "701728e9d24a5c1543ed4ac092a8cc46027482289f63fa85ccba561e518c95a7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/greathall.gif",
+      "sha256": "db8539f8c157353b15dd4aa4b637712c5e6082a2d986cc6921cd46e1c92be319",
+      "bytes": 3456282
+    },
+    {
+      "file": "images/discovery-ends/greathall.jpg",
+      "sha256": "5b08ad3d44fbcdfe209b77395df07a00924c044cc4168db3e150fb2e807c5cdb",
+      "bytes": 95641
+    },
+    {
+      "file": "images/discovery-sheets/greathall.webp",
+      "sha256": "7ad7a21562658816eb16431b67677628ad2427926b72c2b5f4561d66112fbfa6",
+      "bytes": 1635006
+    }
+  ]
+}

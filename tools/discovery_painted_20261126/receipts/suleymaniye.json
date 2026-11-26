@@ -1,0 +1,43 @@
+{
+  "id": "suleymaniye",
+  "name": "쉴레이마니예 모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/suleymaniye.png",
+  "sourceSha256": "6a67c6f9cde90ff24fc5aee57b15cec00fb3baef4f4fb956e65a2e4ca5d0589a",
+  "sourceMtimeNs": 1795662323701315900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/suleymaniye.gif",
+      "sha256": "b805a4e18193d91bdc71e0576e897c99e3c2931b2f10f41e13e8d844507b89b7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/suleymaniye.jpg",
+      "sha256": "2530788659e0f2437f13a4898ae600f277cd251a38108d80504f2e02b0201694"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/suleymaniye.webp",
+      "sha256": "b4d3475f1d0fb198a3c8487d82b5c18a206829b16a76553bc792603db83477f6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/suleymaniye.gif",
+      "sha256": "d11c30c885883e65b6ee52141018adf5526635ea0725fa8859d76abc796cff95",
+      "bytes": 3522694
+    },
+    {
+      "file": "images/discovery-ends/suleymaniye.jpg",
+      "sha256": "40956403117e7799101b44e67d9fc9afe055005fe4322ed4643bddf69de91f0c",
+      "bytes": 101674
+    },
+    {
+      "file": "images/discovery-sheets/suleymaniye.webp",
+      "sha256": "81850e4cb9c296240d7d24a48e8669f9bcd429ab34db58c83b9df7ed5b594fe8",
+      "bytes": 1739708
+    }
+  ]
+}

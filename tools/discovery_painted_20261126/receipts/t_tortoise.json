@@ -1,0 +1,43 @@
+{
+  "id": "t_tortoise",
+  "name": "별갑",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_tortoise.png",
+  "sourceSha256": "a35ee6db6087c7999217d38c243946b6f68131771328ba4febed6b389dbd2a36",
+  "sourceMtimeNs": 1795661058322303800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_tortoise.gif",
+      "sha256": "7341ef0665ed2a6afc80cf24bbe71ef1b8b39a2a83d3a38036a014febf23a9ea"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_tortoise.jpg",
+      "sha256": "c6962d565380ff42b4b77965e5edba4fb37809a4d51af1e15fa537b6ef054fac"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_tortoise.webp",
+      "sha256": "bd465cc2665ac528e59332db0a763f2503447ecd0ae8d432c6e08150fe5e64ce"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_tortoise.gif",
+      "sha256": "6fc0bc34e051c63952a44fe5cee38d8931f858ac78ead008b3609b3c6e802a4b",
+      "bytes": 3554578
+    },
+    {
+      "file": "images/discovery-ends/t_tortoise.jpg",
+      "sha256": "4666c976358cf767c2e5dadc08e119177fddbd0c5754785f920cfd4d59361f67",
+      "bytes": 93341
+    },
+    {
+      "file": "images/discovery-sheets/t_tortoise.webp",
+      "sha256": "cbaffb35e9191b7982cfbf35d64a5ab70926e149e0eb10e5ffd6d343f0e90479",
+      "bytes": 1574562
+    }
+  ]
+}

@@ -9,14 +9,14 @@ const { chromium } = require('../tools/procedural_art/node_modules/playwright-co
 (async () => {
   const browser = await chromium.launch({
     executablePath: process.env.BROWSER_EXE || 'C:/Program Files/Google/Chrome/Application/chrome.exe',
-    args: ['--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox']
+    args: ['--allow-file-access-from-files', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox']
   });
   const errors = [];
   try {
     const page = await browser.newPage({ viewport: { width: 640, height: 360 } });
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.route('https://fonts.googleapis.com/**', r => r.fulfill({ body: '', contentType: 'text/css' }));
+
     await page.addInitScript(() => { window.requestAnimationFrame = () => 0; });
     await page.goto(pathToFileURL(path.resolve(__dirname, '../index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Scenes.sea, null, { polling: 100 });

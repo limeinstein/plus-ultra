@@ -1,0 +1,43 @@
+{
+  "id": "zhangjiajie",
+  "name": "장자제의 돌기둥 숲",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/zhangjiajie.png",
+  "sourceSha256": "f041f055c6123497a67dd906330e2882a5b1d31afcdcc5a1d0437af853b832fe",
+  "sourceMtimeNs": 1795659644703531200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/zhangjiajie.gif",
+      "sha256": "e5aa20c85f4cfe2536753273b0fa0fada89aeb8d78bc853d515916bf8051ee8f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/zhangjiajie.jpg",
+      "sha256": "cdce062cc84bb35282780cec7180515db2ea4b6043858cb46bda2d42930c5f03"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/zhangjiajie.webp",
+      "sha256": "e0d492e493714d6deca051ed28f03bd0710bf03fc8c6b3323a5a56da0dacf191"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/zhangjiajie.gif",
+      "sha256": "c8ae374769234f707773cc4cb52945b2aeecd6d31a2a4248672c957771b8234b",
+      "bytes": 3417428
+    },
+    {
+      "file": "images/discovery-ends/zhangjiajie.jpg",
+      "sha256": "6927a16be29878a3f103f5d8befe9bd63244dd69e7e707bff4cfa81e605e5521",
+      "bytes": 95061
+    },
+    {
+      "file": "images/discovery-sheets/zhangjiajie.webp",
+      "sha256": "7f7ca4cd71d3318d5f94677d99155ff400940d161c8f0563765212551ea9dbc8",
+      "bytes": 1655442
+    }
+  ]
+}

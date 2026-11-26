@@ -10,10 +10,11 @@ const CHROME = [process.env.BROWSER_EXE, 'C:\\Program Files\\Google\\Chrome\\App
 function ok(value, text) { if (!value) throw new Error(text); console.log('  ✓ ' + text); }
 
 (async function () {
-  const browser = await chromium.launch({ executablePath: CHROME, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ executablePath: CHROME, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const errors = [], page = await browser.newPage({ viewport: { width: 960, height: 540 } });
   page.on('pageerror', e => errors.push(e.stack));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+
   await page.addInitScript(() => {
     // 게임 시간만 직접 움직인다. 불러오기·그림 준비가 쓰는 프레임은 그대로 둔다.
     const raf = window.requestAnimationFrame;
@@ -21,7 +22,7 @@ function ok(value, text) { if (!value) throw new Error(text); console.log('  ✓
   });
   fs.mkdirSync(OUT, { recursive: true });
   try {
-    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href));
+    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title');
     const saved = await page.evaluate(async () => {
       const s = G.Game.state = G.State.newGame({ name: '해전 저장 시험', nation: 'PT', job: 'explorer', age: 22, birth: { m: 1, d: 1 }, st: { str: 50, int: 50, mar: 50, cha: 50 }, sk: {}, lg: [], diff: 'normal' });

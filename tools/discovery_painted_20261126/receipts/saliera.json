@@ -1,0 +1,43 @@
+{
+  "id": "saliera",
+  "name": "첼리니의 소금 그릇",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/saliera.png",
+  "sourceSha256": "1d6b7160f93b0a630b4b0e26c0bb2d840d834c2dda9159330af494ea792b4851",
+  "sourceMtimeNs": 1795660939744009200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/saliera.gif",
+      "sha256": "9a6a5cc9fbb73db231fd1c6ee87e2c0203446a4c7604b06806556358a3553274"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/saliera.jpg",
+      "sha256": "40e4803532f2f55669aca04f9614972705f9be888e4b81165377fed97a7547a1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/saliera.webp",
+      "sha256": "2cb0d694681689449640f642df088bc9d95aa7c564e7f07f648d94d28e3626f4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/saliera.gif",
+      "sha256": "1e88aca9736d2ad1a864c74bcef7a6b2d8422d499a66fc7459c6e855d0166e4b",
+      "bytes": 3189039
+    },
+    {
+      "file": "images/discovery-ends/saliera.jpg",
+      "sha256": "d287787a1df2b7ce1ad313d79eaa30eae8de62dfd386053817bed25c33fb1270",
+      "bytes": 86779
+    },
+    {
+      "file": "images/discovery-sheets/saliera.webp",
+      "sha256": "e8548e000345c2798d9cef812f7d66afaa46461e0141d66689176b0176bf03a1",
+      "bytes": 1451678
+    }
+  ]
+}

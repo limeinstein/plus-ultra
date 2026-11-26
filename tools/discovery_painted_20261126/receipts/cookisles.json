@@ -1,0 +1,43 @@
+{
+  "id": "cookisles",
+  "name": "쿡 제도",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/cookisles.png",
+  "sourceSha256": "c9c73a3cb3dc39cdf1d40aa4cbec12aa330f05604fe1872b3b9ead9928044779",
+  "sourceMtimeNs": 1795659661738950700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/cookisles.gif",
+      "sha256": "f6d1b70dec30cd8e78b7f6d54002b6db15761658332e9c8ea8db69cbfbd0d131"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/cookisles.jpg",
+      "sha256": "6e6028fc1848db13d91b8990b7bc0e97a0d009a15f0ce1f72c212c5c0afc040d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/cookisles.webp",
+      "sha256": "2183b6987e38ed96bec48017e6fd1e3db2440f506eb6fd36dd6e070f0bb964e3"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/cookisles.gif",
+      "sha256": "44a2204375388efb40459b522abe50925ae9f5448e112cb2910a6945edb0b8e4",
+      "bytes": 2621007
+    },
+    {
+      "file": "images/discovery-ends/cookisles.jpg",
+      "sha256": "8a69809f585df8fe826ea33d9a01a1e11b534bafd9f88cababac095567adfc4c",
+      "bytes": 88312
+    },
+    {
+      "file": "images/discovery-sheets/cookisles.webp",
+      "sha256": "ab7e03b3150b0846b7b77baf63c4a94056c347b57e1f2dcafeed5810433237bd",
+      "bytes": 1483762
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "carnivplant",
+  "name": "네펜테스",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/carnivplant.png",
+  "sourceSha256": "3615c1c5e49778db888aaaa16b508ee72826c644860096e16f6d38eba381f6a6",
+  "sourceMtimeNs": 1795659644139059600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/carnivplant.gif",
+      "sha256": "118ff7a978f4177728ce369a1ede16e73fd21ed6377822658255484698f6f297"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/carnivplant.jpg",
+      "sha256": "32fcf0383e29e86376d31b51c3765070cb2f0d205cc22dccf1e764054adf3660"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/carnivplant.webp",
+      "sha256": "f061e571ef0f7b85fbd5d2b3f7896883e3ca5f25d88a061fe7b6a440a0a031a1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/carnivplant.gif",
+      "sha256": "b059cba7f86928615df6cbe28f5ae8e87f3ee030e0b83d1bf45784f3fbf176a8",
+      "bytes": 3476525
+    },
+    {
+      "file": "images/discovery-ends/carnivplant.jpg",
+      "sha256": "4858b86c57ce450ef0618ba8e341e253b662ce5e0a93d077ff1eceae82d1a6ed",
+      "bytes": 101607
+    },
+    {
+      "file": "images/discovery-sheets/carnivplant.webp",
+      "sha256": "2d1f9851a7784cf749860f28ae6d115503d5a2572a5a55c43172457f51b02bf9",
+      "bytes": 1726834
+    }
+  ]
+}

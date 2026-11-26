@@ -1,0 +1,43 @@
+{
+  "id": "tokyostation",
+  "name": "도쿄역",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/tokyostation.png",
+  "sourceSha256": "77fd9a8b3f9db3e7a9544e6221341332c17d0da567334ad2e522209255e67bd0",
+  "sourceMtimeNs": 1795662861633342700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tokyostation.gif",
+      "sha256": "3e47d95171172684c5ab719e462017a70cdb906efd34aacea1de141fe933ca31"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tokyostation.jpg",
+      "sha256": "c3b26696eaa2bd4b9ee3dc0cd044d73b72b3a65498b29a6ca9b2135b2fe3d645"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tokyostation.webp",
+      "sha256": "1083bc3ac86705b6fffd169cd2e46a7d6b8ff41827545fa8342605430cc5f8ae"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tokyostation.gif",
+      "sha256": "4dac69bb4de967857ac7fbe18d60c32532f1c51d00569939a4a574143d7a7a26",
+      "bytes": 3301446
+    },
+    {
+      "file": "images/discovery-ends/tokyostation.jpg",
+      "sha256": "b7c62823097bddcbfd7728d497d9b10114e861541ccf5f59318800f860ad9a8a",
+      "bytes": 97796
+    },
+    {
+      "file": "images/discovery-sheets/tokyostation.webp",
+      "sha256": "ddd34b6e1eed121e16ee13abfe2f0291df34ec460b6b6f2ca940b11bb961a192",
+      "bytes": 1706630
+    }
+  ]
+}

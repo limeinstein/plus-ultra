@@ -1,0 +1,43 @@
+{
+  "id": "sfsalvador",
+  "name": "상프란시스쿠 성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sfsalvador.png",
+  "sourceSha256": "679bcf8983a551a39172d9359bfa33f9b9b297c8b4d6fd1b7bafed2c4006344d",
+  "sourceMtimeNs": 1795662970827719600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sfsalvador.gif",
+      "sha256": "7acfce2abe233fcff6ae97194bedbe9af971c08c7b4f0023465932f3781af8a5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sfsalvador.jpg",
+      "sha256": "98032b4dc1e1b6926a4fe163a19cce367f3f4d358124d3d5854553b8303341e5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sfsalvador.webp",
+      "sha256": "c32083b92361f0a0f9fa02ef4b46e4ba29468ab9bbe94053a5b9579d34879f57"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sfsalvador.gif",
+      "sha256": "edd32d9b410500cd8ebb68f8700c3c98222c2a8eea086e126d18d107191823fd",
+      "bytes": 3330216
+    },
+    {
+      "file": "images/discovery-ends/sfsalvador.jpg",
+      "sha256": "d5de6a8c794c73a94de4a7ca5a02bb1497ca74ca6beca4b0113db8a878d104be",
+      "bytes": 91576
+    },
+    {
+      "file": "images/discovery-sheets/sfsalvador.webp",
+      "sha256": "c34eb168ed0b4ceabf76fbd7c940834c1838686f499ee048c913f4e4d30c52f4",
+      "bytes": 1536814
+    }
+  ]
+}

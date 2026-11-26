@@ -1,0 +1,43 @@
+{
+  "id": "novosibopera",
+  "name": "노보시비르스크 오페라 발레 극장",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/novosibopera.png",
+  "sourceSha256": "66fc20009a163994e7ee7c2d61fafa542584882b2147252f47d9043445462a6f",
+  "sourceMtimeNs": 1795662939563948700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/novosibopera.gif",
+      "sha256": "119d15fa10dd742d32b68efb0c414d612462ee8db50d6f92c5f91a56bb2a4d40"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/novosibopera.jpg",
+      "sha256": "f67e63bf4df34b29a58d3dd57fe80d2ccd7999f0f54476a924697e3ffcb3e838"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/novosibopera.webp",
+      "sha256": "b57b74b7f0684810d4cc911f0c7e42037e7a7a9c42068b68a848f97cafb70772"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/novosibopera.gif",
+      "sha256": "99f7ac11792ab7d59d0afc14644b24fd2075afeb11678125100da2a37c947575",
+      "bytes": 3406172
+    },
+    {
+      "file": "images/discovery-ends/novosibopera.jpg",
+      "sha256": "4ed766d5d71b9ad4895f7627afdc471bec778dd8cb4d45a7287f7fa94adfac92",
+      "bytes": 92652
+    },
+    {
+      "file": "images/discovery-sheets/novosibopera.webp",
+      "sha256": "c90ac24f6389cad1bcf178fce06fd09651fc88b9155e243b5dfc545452be1b21",
+      "bytes": 1564302
+    }
+  ]
+}

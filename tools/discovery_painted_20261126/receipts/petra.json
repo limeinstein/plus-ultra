@@ -1,0 +1,43 @@
+{
+  "id": "petra",
+  "name": "페트라",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/petra.png",
+  "sourceSha256": "af987545e7fb629b1434b03e0771c9ed1691b39446a960dc980518965411d1ff",
+  "sourceMtimeNs": 1795660401762164200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/petra.gif",
+      "sha256": "6c769cd595f410ada6dc6485ea6c0d541fefee6087253f5b944c47069be4066e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/petra.jpg",
+      "sha256": "7abf8d0f7fe4c339fa3a528f6b00ab5c7970cd73b1f090938c65f00a3e14fb0d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/petra.webp",
+      "sha256": "303e171d8971d82dfa5d68bffeb489aa2398ec397134115de7e608b8007fd9d1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/petra.gif",
+      "sha256": "7f1f42453a86d9ee8255ed6a7f63c89c0b2576fcd43ba5d57759c44e71d265ce",
+      "bytes": 3451291
+    },
+    {
+      "file": "images/discovery-ends/petra.jpg",
+      "sha256": "b57427c01854b491b27cbb50beaca9f4a526fae4cd7550d4478a06ec25410c48",
+      "bytes": 93388
+    },
+    {
+      "file": "images/discovery-sheets/petra.webp",
+      "sha256": "ffed8d23d0bd5ee950b28ddd8ddbd38c9aaef16b01cd7fdf4c3fd537dec1a887",
+      "bytes": 1594378
+    }
+  ]
+}

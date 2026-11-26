@@ -1,0 +1,43 @@
+{
+  "id": "madrono",
+  "name": "마드로뇨",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/madrono.png",
+  "sourceSha256": "db47d2debc3b0bb012bc7f00024ed5f681e412a93cf5f07b68c264bfcb1a942f",
+  "sourceMtimeNs": 1795659650312276900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/madrono.gif",
+      "sha256": "a063f1019b933bbd643afc463debff11aeba0abd0604352c68aee0399f8a8a9b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/madrono.jpg",
+      "sha256": "53673ebbca1fdd2939aeffec8d7d371b6a8e3f0fab06957581fd84c8cf8ba80d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/madrono.webp",
+      "sha256": "e2b866fa99b109f027750438053dfaba31ebd7459485fbfe6acf98c23d8dcc3e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/madrono.gif",
+      "sha256": "2393d19943b10997b4d06d106fb8f8b3a52ef09049f85fcb0d9713bbfa353d82",
+      "bytes": 3568099
+    },
+    {
+      "file": "images/discovery-ends/madrono.jpg",
+      "sha256": "bb7e74e44e308dba36d790ca1f6a2978229b73c3c8e22b06dcd00ca411126ec7",
+      "bytes": 107163
+    },
+    {
+      "file": "images/discovery-sheets/madrono.webp",
+      "sha256": "d14fc7ff33409d504e23141da0a75d3de1f56c7c6fe51925cf2d3789cd6ddfe5",
+      "bytes": 1849486
+    }
+  ]
+}

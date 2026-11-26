@@ -1,0 +1,43 @@
+{
+  "id": "srilanka",
+  "name": "스리랑카",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/srilanka.png",
+  "sourceSha256": "ae803605b86c21d37508f03bf2c634b91f64d3b875e8968af0c60bc228787c4d",
+  "sourceMtimeNs": 1795659659245893000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/srilanka.gif",
+      "sha256": "3e6c5be535bc4fa3211578be53f663010e113f5761c16889bdfc365a7bf969fb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/srilanka.jpg",
+      "sha256": "950358af02ef7875ac21e6a08b1793b34733947687ed4b2d878323c993d98237"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/srilanka.webp",
+      "sha256": "abadc3889a5e5f1344814b9ced4d0a45af729c9d901f720cd0de949459130cbc"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/srilanka.gif",
+      "sha256": "e35944c1e0023266582518ae6a6e1de4feb3cbaab909ac66b8d4ad058036f9f4",
+      "bytes": 2830518
+    },
+    {
+      "file": "images/discovery-ends/srilanka.jpg",
+      "sha256": "bc9e1d51d828c31e92853b29a6fa01917d571ca2afd13f1f6b69b14856ebfc13",
+      "bytes": 96184
+    },
+    {
+      "file": "images/discovery-sheets/srilanka.webp",
+      "sha256": "0c491738064f5d08dca19e7b780766e4bba0806653e4254302915bd68149a17f",
+      "bytes": 1634030
+    }
+  ]
+}

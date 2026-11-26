@@ -1,0 +1,43 @@
+{
+  "id": "biskupin",
+  "name": "비스쿠핀",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/biskupin.png",
+  "sourceSha256": "035b9b5c54294380010c5bb2ac6742d48671339b5545ec079f5aa43c7e3f4d91",
+  "sourceMtimeNs": 1795662344083577300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/biskupin.gif",
+      "sha256": "06c85b0cf45b523ae11e7c9a58f8d46a10127044fe2f4421c571dbcada2df715"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/biskupin.jpg",
+      "sha256": "d3a3631e2f4fcf740988572f30e100ec90acedfe06ab4e20598cc12d36765ca6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/biskupin.webp",
+      "sha256": "4c64508546f3f3bc619c2b383e25ea1114c636fd114431fdc4a7cf578181eeb0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/biskupin.gif",
+      "sha256": "ef72878286b18bcd142ea55980db7223be75e8ec766d58c955ff4a1fe1b03f55",
+      "bytes": 3446102
+    },
+    {
+      "file": "images/discovery-ends/biskupin.jpg",
+      "sha256": "10f5f3a4eeabd297414ea91047cb5f7e7756931b918f2699ded03b33816c2153",
+      "bytes": 99132
+    },
+    {
+      "file": "images/discovery-sheets/biskupin.webp",
+      "sha256": "7f564a162fdc73a6677affa3a3a565b1877edb63f1df413854d2a456a5a7c96f",
+      "bytes": 1704166
+    }
+  ]
+}

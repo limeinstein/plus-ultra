@@ -1,0 +1,43 @@
+{
+  "id": "petronas",
+  "name": "페트로나스 쌍둥이 탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/petronas.png",
+  "sourceSha256": "96baa99f1b1f3a3c25f2ffa6ad4f56fcc6908ffa0c08fc70915fcf40ccd08329",
+  "sourceMtimeNs": 1795662958373669400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/petronas.gif",
+      "sha256": "4da1663305ddbadaa9a4c92807680e7caa8229e5a2c51b58095c233ea5690eb2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/petronas.jpg",
+      "sha256": "c8dd32092c27e9c18eabc32cee4709f0f60548b3702b10337e4206b8c0672680"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/petronas.webp",
+      "sha256": "e37ae78570489b90ee178f7853ac2a83f90597ade63d70f6e9c5cc0ac9015d6f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/petronas.gif",
+      "sha256": "360a6a5a0904c7acae7c662ede1fcc8e10b340a6522f8d02a87603ab706e9ad7",
+      "bytes": 3219271
+    },
+    {
+      "file": "images/discovery-ends/petronas.jpg",
+      "sha256": "538ee3f5e9f9c552e4041e84e21b69fad5d8f8a1f27b2ed7a511f775320b6943",
+      "bytes": 91600
+    },
+    {
+      "file": "images/discovery-sheets/petronas.webp",
+      "sha256": "ad80dc841d76c81c9bc1dc082d7769842b5512e086a39aa02688290806b462c3",
+      "bytes": 1516448
+    }
+  ]
+}

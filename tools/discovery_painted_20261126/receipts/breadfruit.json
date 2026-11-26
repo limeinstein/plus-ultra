@@ -1,0 +1,43 @@
+{
+  "id": "breadfruit",
+  "name": "빵나무",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/breadfruit.png",
+  "sourceSha256": "bc4a4d5b08d4b2e6daebafb050961f758393cc148f90fd50e08a1a84988df5f8",
+  "sourceMtimeNs": 1795659643919478900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/breadfruit.gif",
+      "sha256": "1c5aea3c3f335a101c257e81c7d15b1cf95378275693843e27a1a53ae7c3dfff"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/breadfruit.jpg",
+      "sha256": "fea9e73637db730e135dc52de27f5ef32c6b45a73b384bcd7294bab56a33e45e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/breadfruit.webp",
+      "sha256": "9dc6336bf67c89b241e2096f6dd94b751fa322e122ee1797e5546ae1ac2704de"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/breadfruit.gif",
+      "sha256": "e4d9431340159918507e8240a467da8a582a966ba219650846418b28179ee845",
+      "bytes": 3296028
+    },
+    {
+      "file": "images/discovery-ends/breadfruit.jpg",
+      "sha256": "5ec239e757005b852285ef324d0458ab938d9b2440974d4b3a96ed18540d4ccc",
+      "bytes": 102436
+    },
+    {
+      "file": "images/discovery-sheets/breadfruit.webp",
+      "sha256": "d8a83b0917b52b6ce37704165c0fbeaaa5c213a2fd9b964332e4692f03be425b",
+      "bytes": 1735424
+    }
+  ]
+}

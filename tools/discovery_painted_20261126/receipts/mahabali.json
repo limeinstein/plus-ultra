@@ -1,0 +1,43 @@
+{
+  "id": "mahabali",
+  "name": "마하발리푸람 바닷가 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mahabali.png",
+  "sourceSha256": "099c89fe1786cc0c84588ffdc633ff276b7a3e26ae046bb2e301b3d48dd918b7",
+  "sourceMtimeNs": 1795661721899097000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mahabali.gif",
+      "sha256": "c9942015b455aa557c8e660c0bfd850cbbef9d5dc4845a0a059f6317471223a5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mahabali.jpg",
+      "sha256": "0c476fd0a72bcbcc121036ccf6ccae6e79d2d836eca834fcaddf649286ca2ab3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mahabali.webp",
+      "sha256": "78f5e57d8ca3205d5ea0988307ee34d7af49b361d987e85956a63cfa723783eb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mahabali.gif",
+      "sha256": "6b4e201d5a9bc21394f455150890f22d004cccd11e046ddcf6df2b6a89703d78",
+      "bytes": 3401507
+    },
+    {
+      "file": "images/discovery-ends/mahabali.jpg",
+      "sha256": "3549e864408e05353bbe1e2be8bdfbcfdb4ca3d7bda8683d3c0c350d58643f5b",
+      "bytes": 92474
+    },
+    {
+      "file": "images/discovery-sheets/mahabali.webp",
+      "sha256": "b308c5f31f0bc8d4f458427f7e47bd9378f2e4059a51a9b6612f642266c92834",
+      "bytes": 1575916
+    }
+  ]
+}

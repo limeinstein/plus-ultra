@@ -1,0 +1,43 @@
+{
+  "id": "penang",
+  "name": "페낭",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/penang.png",
+  "sourceSha256": "3db2eff40c6d33a0fabd5030b97ddd5784555c7b0280e596500175606164e156",
+  "sourceMtimeNs": 1795659658856333300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/penang.gif",
+      "sha256": "4fd0a7e093f6426f8f2abc9ef674954e0075957a0e69da316cb39ca804d5e1bc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/penang.jpg",
+      "sha256": "25a3473956fb7510d2eeadab7b2eb29c4a31db20e1256f23f41a5734a1c214b2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/penang.webp",
+      "sha256": "d6fc62878efcd6731ceb1b36aa05d9dfe1c10bc63da8187d91e9add7be2fd5a9"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/penang.gif",
+      "sha256": "994117d7c36fe9163cae992493415fc0c5d35476e95304e51cf0330b6ccee483",
+      "bytes": 2991544
+    },
+    {
+      "file": "images/discovery-ends/penang.jpg",
+      "sha256": "332d3d14ba97376dabb8c60b8e6254b82271edefe9858404ec9284ef9c9b5fb6",
+      "bytes": 97931
+    },
+    {
+      "file": "images/discovery-sheets/penang.webp",
+      "sha256": "505ebfd8fbf0d960ce238954e3d3bfa5b8fbadf105ff27dc4760f3e4de407f0f",
+      "bytes": 1716332
+    }
+  ]
+}

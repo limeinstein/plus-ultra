@@ -1,0 +1,43 @@
+{
+  "id": "atomium",
+  "name": "아토미움",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/atomium.png",
+  "sourceSha256": "cd8052f36ee2fff93273c59b0f85e620316bab2fe6539d1b5f9857f44b96cad0",
+  "sourceMtimeNs": 1795662753893499400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/atomium.gif",
+      "sha256": "65113a252daf00b308aca195011f8463536584e4e356f393ce8fe6b272b90e31"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/atomium.jpg",
+      "sha256": "bbc3405f55f9c5a1b2b860f5e06dd0536c75b781359a6994065dc551c0cb16ba"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/atomium.webp",
+      "sha256": "6940173939c7fc369fcc21bf41fe1a9378c7a2d90567280c083c93dfd2c3a1d5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/atomium.gif",
+      "sha256": "fd8786b0ec5de51472e806787511776397aa133959c49a74b72a0486748acab1",
+      "bytes": 3424552
+    },
+    {
+      "file": "images/discovery-ends/atomium.jpg",
+      "sha256": "9afb7c8941bce92488df968bcf45f71aec539bcf00faef4f3748612a15d84f8c",
+      "bytes": 93701
+    },
+    {
+      "file": "images/discovery-sheets/atomium.webp",
+      "sha256": "297c1b608fce9c5bad9a41f79db6837ab3ed6e172e1472aac6bbe1a4b830baed",
+      "bytes": 1550268
+    }
+  ]
+}

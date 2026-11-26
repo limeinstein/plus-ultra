@@ -1,0 +1,43 @@
+{
+  "id": "mu",
+  "name": "무 제국",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mu.png",
+  "sourceSha256": "67572bc556e62b9f36a692710acf5fb9cff2e368a96a21840ce563520bbb51e1",
+  "sourceMtimeNs": 1795659649659989000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mu.gif",
+      "sha256": "167caea2dc498b96bfc9dddad5ae955fdd15db2a8fadc3e728b30e4ae1276865"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mu.jpg",
+      "sha256": "1b5cddfb2f9b66c6b3fe11a5509c8c779ba8e37bfa1d17c53115fbd1101b378b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mu.webp",
+      "sha256": "5e3d2d994f6a90a15ca0bb2a662874b951786d82f71c3df0b62e53b4dc55daa6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mu.gif",
+      "sha256": "8efc35966b8cabe378485374195dbc90bac8331f54c4253cde6d7832ba39e47b",
+      "bytes": 3498004
+    },
+    {
+      "file": "images/discovery-ends/mu.jpg",
+      "sha256": "0edf8d2f434895d14346ace420099125cbfcebab323e62dd39805b9f3581d1df",
+      "bytes": 102222
+    },
+    {
+      "file": "images/discovery-sheets/mu.webp",
+      "sha256": "6bd2351431fc1a37d5bf0593a527e6a4e06917d2388cb2ecc843302cf83e851b",
+      "bytes": 1727756
+    }
+  ]
+}

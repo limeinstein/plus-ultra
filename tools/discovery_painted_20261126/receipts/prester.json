@@ -1,0 +1,43 @@
+{
+  "id": "prester",
+  "name": "프레스터 존의 나라",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/prester.png",
+  "sourceSha256": "5ad8b20c5c3d4ba95fe909df73093c62f770c8d15bb7185b9d2f5a1df76645ee",
+  "sourceMtimeNs": 1795660381465434900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/prester.gif",
+      "sha256": "eb15639957fbabcc6b53d1fae1e79a330e7bb1a2702fe1b61df0d08834c3f665"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/prester.jpg",
+      "sha256": "2353c0ab8b51348b1f3327da3fec6bbca1122c13b0f0d2be3315a0b0001e2a3a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/prester.webp",
+      "sha256": "bd4322c2b7983c170756c651322763228776b4b164ce5cd658b56fa29631cc6f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/prester.gif",
+      "sha256": "7ddfafe038c2250dcd6bb3b7a3cde8d9c779461effd69d965a48b065110e6544",
+      "bytes": 3603028
+    },
+    {
+      "file": "images/discovery-ends/prester.jpg",
+      "sha256": "16abad649f5608ca412d6a48f097010e01f0cc5d93a6bff11cb8a6c6a8829e8b",
+      "bytes": 96762
+    },
+    {
+      "file": "images/discovery-sheets/prester.webp",
+      "sha256": "7721ee67e8754eecfb27a9368812a300149258878c3a5f3b9123f3677226cfba",
+      "bytes": 1674818
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "mangrove",
+  "name": "맹그로브",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/mangrove.png",
+  "sourceSha256": "84e07ac2e95d17027e1eb703b2df8b115f237f7f170a8acde1f31e2d4e1095f5",
+  "sourceMtimeNs": 1795659644006738700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mangrove.gif",
+      "sha256": "466eb92af1a16b5dea51cd93bce86563ff1876dd69f3abb8bd3c98b3569e14ac"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mangrove.jpg",
+      "sha256": "b1b5f695a3431233f8dac829a5784c22f56397de948978441308cc91a36c3460"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mangrove.webp",
+      "sha256": "fa2d6da9446b24dc985bcecc3afeed3f8525894fd481844e3bd9af50fb21e293"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mangrove.gif",
+      "sha256": "d88c79f450acb46297363e7dca9d9754dcbebdc060ff3d20a3f82950d2419fca",
+      "bytes": 3259743
+    },
+    {
+      "file": "images/discovery-ends/mangrove.jpg",
+      "sha256": "66bc9cd12afc81781cb18793de7be75f3f10a3e3f6781730f5d8108ad2085a2b",
+      "bytes": 97056
+    },
+    {
+      "file": "images/discovery-sheets/mangrove.webp",
+      "sha256": "1808c16a06e34ef70cec44158f2e00602ddadc750f078605562ef014e46a2137",
+      "bytes": 1697568
+    }
+  ]
+}

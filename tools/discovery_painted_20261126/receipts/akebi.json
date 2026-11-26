@@ -1,0 +1,43 @@
+{
+  "id": "akebi",
+  "name": "아케비",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/akebi.png",
+  "sourceSha256": "1f4d1314a23cb11f498eaa28b794de7c9c345e2f2f4b2459e600c3745fd1254b",
+  "sourceMtimeNs": 1795659653793015700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/akebi.gif",
+      "sha256": "377df62e58eef5d16ab5f4f7884cb09ac8d389deda0aeaed12d6936ba83a3b49"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/akebi.jpg",
+      "sha256": "ed41a1d9cb262949b5185b7f8c6d8d8a641e5e803400b0b1bf665934a8df96b3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/akebi.webp",
+      "sha256": "19e5ed005d5605b486004a76079891871286feb587598a698978b0423b322eaf"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/akebi.gif",
+      "sha256": "cf6a1724a9eb3653eed586435aadd72f52c10416e196d1c7170bdb6353e717f6",
+      "bytes": 3583733
+    },
+    {
+      "file": "images/discovery-ends/akebi.jpg",
+      "sha256": "73faad7f1810a7d3da3278d83123f67bd90296b5e63564db1f8e8e74adacf2a2",
+      "bytes": 104146
+    },
+    {
+      "file": "images/discovery-sheets/akebi.webp",
+      "sha256": "a13be901642ca1a4b021b237b45b3c672a9f1b80d449bb04b617fd9e108b0bde",
+      "bytes": 1739344
+    }
+  ]
+}

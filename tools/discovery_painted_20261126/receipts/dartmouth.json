@@ -1,0 +1,43 @@
+{
+  "id": "dartmouth",
+  "name": "다트머스 대학",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/dartmouth.png",
+  "sourceSha256": "3198b7aed2dfdfb2334b16b74dc92f355634342de6d7d438e63fc03fb39dd733",
+  "sourceMtimeNs": 1795663165645978900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/dartmouth.gif",
+      "sha256": "9af01f6d07f94ccbaaf0f77a265bf386d21f622137d48113bec56723e7d0b4f6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/dartmouth.jpg",
+      "sha256": "80077405bd60a6f295762556cd07c9aa7383d75696ebc8aa2db620f6944d3789"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/dartmouth.webp",
+      "sha256": "6767feb759836e47b40d6ff1cf2d7de8020e9c5ad5d5545cf76f5359d01968fa"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/dartmouth.gif",
+      "sha256": "4256f10e4dc37fb730ea788dde1ab9707ced90d3b665e80656a139754dee54b7",
+      "bytes": 3878354
+    },
+    {
+      "file": "images/discovery-ends/dartmouth.jpg",
+      "sha256": "10ac82711f144536606ccc1ce134544e4899d9569f5fc34351946a203275c118",
+      "bytes": 102709
+    },
+    {
+      "file": "images/discovery-sheets/dartmouth.webp",
+      "sha256": "2c38d91a4362f6699a8dd2168f5fd4353a93891bbfbcfe4505f0b3bb71546437",
+      "bytes": 1814304
+    }
+  ]
+}

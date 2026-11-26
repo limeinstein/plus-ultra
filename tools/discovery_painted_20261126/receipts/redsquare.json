@@ -1,0 +1,43 @@
+{
+  "id": "redsquare",
+  "name": "붉은 광장",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/redsquare.png",
+  "sourceSha256": "dce565544efe401d7a1274f78d5ee699427aca40e63686a1a6c3ad78e4c99c70",
+  "sourceMtimeNs": 1795661060994551900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/redsquare.gif",
+      "sha256": "f046a1f6fdcfefc914548aa296d8716661618f1f8655fceb8686c4a3da98cf14"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/redsquare.jpg",
+      "sha256": "7e8f51e1c0aaee4b67e1033d72c363cbf82e406f3b510bed61295cb8368fb42b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/redsquare.webp",
+      "sha256": "ac007479e7f1301506a85bd8ac42a9fccf79dc4367bf36ca60da94f625493528"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/redsquare.gif",
+      "sha256": "c25ff5bb8a95aca5def5ef1bd91e18f73187a8f7533cc891d22a2dc0929166db",
+      "bytes": 3456628
+    },
+    {
+      "file": "images/discovery-ends/redsquare.jpg",
+      "sha256": "0f8534c69586e96b28827e10e502408c9b10a234c1ed3f82f2f34a3ba3ca99b9",
+      "bytes": 94846
+    },
+    {
+      "file": "images/discovery-sheets/redsquare.webp",
+      "sha256": "03b608ba5e8453d614ec29a5e604839ba8d6e488aa476f5f2700954de3553d80",
+      "bytes": 1615886
+    }
+  ]
+}

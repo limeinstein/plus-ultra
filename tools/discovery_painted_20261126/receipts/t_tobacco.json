@@ -1,0 +1,43 @@
+{
+  "id": "t_tobacco",
+  "name": "담배",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_tobacco.png",
+  "sourceSha256": "033851f26cdb2c1c2d588c36ce69cbb3ac66155390b0ec053f65234564d9c9ba",
+  "sourceMtimeNs": 1795660607499885800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_tobacco.gif",
+      "sha256": "3205231f85edaaa9331ec6bc5fa58f9668a3c55051ba80e4125af4afdd3fa849"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_tobacco.jpg",
+      "sha256": "bc280f442119048f5ab655f67a12bb75e087f06243a7f43bbc12e66f3a076075"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_tobacco.webp",
+      "sha256": "40fcb8460dbab51f19f05989fed559c18b0f318b84a62cc0c11b7daa0930b24c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_tobacco.gif",
+      "sha256": "e1a510b8869acefeb2d251c04cb163a27930fa096cfb6ad5f23a5c59db76a507",
+      "bytes": 3653064
+    },
+    {
+      "file": "images/discovery-ends/t_tobacco.jpg",
+      "sha256": "d87d058b799bf0731d226e87534cb928f8e6d7ac47af84e26c78f6fda83f6bfa",
+      "bytes": 101789
+    },
+    {
+      "file": "images/discovery-sheets/t_tobacco.webp",
+      "sha256": "0d089e8e67ba581a10a58a8f1f13363c29ca1702d240fe9e766595c4bac36a86",
+      "bytes": 1754266
+    }
+  ]
+}

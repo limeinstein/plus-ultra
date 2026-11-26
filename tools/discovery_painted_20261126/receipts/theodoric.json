@@ -1,0 +1,43 @@
+{
+  "id": "theodoric",
+  "name": "테오도리쿠스의 영묘",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/theodoric.png",
+  "sourceSha256": "9a91e17fa78bfab52825aeedb508a8a4615fcfbf619da6f7fff43948282436a6",
+  "sourceMtimeNs": 1795660983745589100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/theodoric.gif",
+      "sha256": "2191beb5ea17067ef954a9136cee1f96236be15711b55aaaa12d1c680ebb0d05"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/theodoric.jpg",
+      "sha256": "a556f7181efe3cf1b883193d2ca1366beaf2b3f01f6edc58c35452444fb02855"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/theodoric.webp",
+      "sha256": "2668325911ff6fc60e6d4b028df893384d7b4ee5fd67b585267dfe041d2d14c0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/theodoric.gif",
+      "sha256": "083571336f9e14d33f2692b00dc2418d2760a833953861b9f653b10577863173",
+      "bytes": 3389470
+    },
+    {
+      "file": "images/discovery-ends/theodoric.jpg",
+      "sha256": "3996cbd8f91f70ad9ef5c3277676d8212cdcf81e6866dd3fb74250b0bd6eb3eb",
+      "bytes": 90911
+    },
+    {
+      "file": "images/discovery-sheets/theodoric.webp",
+      "sha256": "36c67bbcfd48c27ef10800172435fa6403c1cc649134a3464fd7370416f04848",
+      "bytes": 1540076
+    }
+  ]
+}

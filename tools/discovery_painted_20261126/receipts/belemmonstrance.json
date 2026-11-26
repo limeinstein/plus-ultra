@@ -1,0 +1,43 @@
+{
+  "id": "belemmonstrance",
+  "name": "벨렝 성체 현시대",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/belemmonstrance.png",
+  "sourceSha256": "fec1f805052b8d7201a857f40773530215a9963f99e4557bbf5020b97087cb67",
+  "sourceMtimeNs": 1795660646903511100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/belemmonstrance.gif",
+      "sha256": "93f33e46e312bd34d64a534234fdb2c3f8bd4179ae722b767c7f25e0b5be78aa"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/belemmonstrance.jpg",
+      "sha256": "51be6b6f7ec7e9d63def595241de1fc8fb8dbabe0ee0beacc1b4bd182c2a3dca"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/belemmonstrance.webp",
+      "sha256": "1c39a1e53624a80f31e265159b3b2e972638f89f923f1c2e468af408efa4474b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/belemmonstrance.gif",
+      "sha256": "2245632156d6214ee51938e18c9dd6810aa921803e6c2b823d3fd4e24415a774",
+      "bytes": 3510501
+    },
+    {
+      "file": "images/discovery-ends/belemmonstrance.jpg",
+      "sha256": "760bcd9a157b406fa3e833dd65bcba52de166e8b1a910cac1aaf7be7edf675ee",
+      "bytes": 94678
+    },
+    {
+      "file": "images/discovery-sheets/belemmonstrance.webp",
+      "sha256": "3d6576c4510bb282f358ef09f7761cf14777c0058b6eb6b29e9e642a9cc8bedf",
+      "bytes": 1582818
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "welwitschia",
+  "name": "웰위치아",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/welwitschia.png",
+  "sourceSha256": "a32b0b083f37093132d392ab77f69f36be667af9df21e33ecc80dbc701c20ab8",
+  "sourceMtimeNs": 1795659643978499200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/welwitschia.gif",
+      "sha256": "fa1f29f3706da73bf495218e1ec398dbe1cdccd360607790a9a3134864c03cb0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/welwitschia.jpg",
+      "sha256": "9f6e977c49b928fc665b397f2b159fb1ccf8191706ec8c6903a214949c6d013d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/welwitschia.webp",
+      "sha256": "fdb34969a61e561df0cbe9e3dc52fa511bc28a14ad9c9e6bd508d2dac693cbcd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/welwitschia.gif",
+      "sha256": "32e5fafa978db4c6331cc3accb61f471d805ff2a0fe1649839c7b6ff42706b51",
+      "bytes": 3122024
+    },
+    {
+      "file": "images/discovery-ends/welwitschia.jpg",
+      "sha256": "c13d48dcfb55a6728118e57aa46b669bfd8fedcfb7a98e00439e9adc69e60ca2",
+      "bytes": 85428
+    },
+    {
+      "file": "images/discovery-sheets/welwitschia.webp",
+      "sha256": "f9285f8ab903fb39a923f6475901b32aa95661db9dbca17b46c371925371f804",
+      "bytes": 1410912
+    }
+  ]
+}

@@ -6,7 +6,7 @@
   G.Game = Game;
   G.Scenes = Game.scenes;
 
-  var stage, worldCanvas, overlayCanvas, sceneCanvas;
+  var stage, worldCanvas, overlayCanvas, sceneCanvas, appliedResolution;
   Game.renderer = null;
 
   // ---------------------------------------------------------------- stage scaling
@@ -76,9 +76,10 @@
   /** UI 층의 너비·높이 (UI 좌표) — 창·그림 상자를 가운데에 놓을 때 1600·900 대신 쓴다 */
   Game.uiW = function () { return 1600 / (Game.uiZoom || 1); };
   Game.uiH = function () { return 900 / (Game.uiZoom || 1); };
+  function worldResolution() { return Game.state && Game.state.settings ? (Game.state.settings.res || 1) : 1; }
   function resizeCanvases() {
     var s = Game.scale || 1, dpr = window.devicePixelRatio || 1;
-    var q = Game.state && Game.state.settings ? (Game.state.settings.res || 1) : 1;
+    var q = appliedResolution = worldResolution();
     var k = Math.min(2, s * dpr) * q;
     var w = Math.round(1600 * k), h = Math.round(900 * k);
     if (w > 2880) { h = Math.round(h * 2880 / w); w = 2880; }
@@ -121,10 +122,26 @@
     });
     return Game._geoPromise;
   };
+  Game.compileRenderer = function () {
+    if (!Game.renderer) return G.WorldRenderer.compileAhead(worldCanvas);
+  };
   Game.ensureRenderer = function () {
     if (Game.renderer) return true;
     try { Game.renderer = new G.WorldRenderer(worldCanvas); return true; }
     catch (e) { console.error(e); Game.rendererError = e.message; return false; }
+  };
+  var preparingRenderer = null;
+  Game.prepareRenderer = function () {
+    if (preparingRenderer) return preparingRenderer;
+    if (Game.renderer && Game.renderer._warmed) return Promise.resolve(true);
+    preparingRenderer = Promise.all([Game.ensureGeo(), Game.compileRenderer()]).then(async function () {
+      if (!Game.ensureRenderer()) return false;
+      Game.renderer.warmShaders();
+      await Game.renderer.finish();
+      return true;
+    }).catch(function (e) { console.warn('[준비] 바다 그림:', e); return false; })
+      .finally(function () { preparingRenderer = null; });
+    return preparingRenderer;
   };
 
   // ---------------------------------------------------------------- 미리 준비 (불러오는 그림이 떠 있는 동안)
@@ -147,28 +164,26 @@
   Game.prepare = async function (s) {
     s = s || Game.state;
     var LD = G.Loader;
-    await Game.ensureGeo();
     fit();                                          // 이 저장의 화질(settings.res)로 캔버스 크기를 맞춘 뒤에 그려 둔다
+    var ps = [], fl = s && s.fleet;
+    if (G.ShipSprite && fl) ps.push(G.ShipSprite.preload(fl.ships.map(function (sh) { return sh.type; }), 4000, true));
+    if (s.loc && s.loc.mode === 'city' && G.Scenes.city && G.Scenes.city.preloadImages && G.CITY_DATA[s.loc.city]) ps.push(G.Scenes.city.preloadImages(G.CITY_DATA[s.loc.city]));
+    var cap = ((G.FX && G.FX.loader) || {}).prepareMs || 5000;
+    var art = Promise.race([Promise.all(ps), new Promise(function (r) { setTimeout(r, cap); })]);
     if (LD) LD.text('바다와 땅을 그릴 준비를 하는 중…');
     await sleepFrame();
-    if (Game.ensureRenderer()) {
+    if (await Game.prepareRenderer()) {
       try {
-        Game.renderer.warmShaders();
-        var v = Game.warmView(s); if (v) Game.renderer.prewarm(v);
-        Game.renderer.finish();
+        var v = Game.warmView(s), renderer = Game.renderer;
+        if (v && !renderer.prepared(v)) { renderer.prewarm(v); await renderer.finish(); }
       } catch (e) { console.warn('[준비] 바다 그림:', e); }
     }
     if (LD) LD.text('배와 탐험대를 꾸리는 중…');
-    await sleepFrame();
-    var ps = [], fl = s && s.fleet;
-    if (G.ShipSprite && fl) ps.push(G.ShipSprite.preload(fl.ships.map(function (sh) { return sh.type; }), 4000, true));
     if (G.VoyageFX && G.VoyageFX.preload) G.VoyageFX.preload();
     if (G.EventFx) { G.EventFx.preload('sea'); G.EventFx.preload('land'); }
     if (G.Party && G.Party.preloadSprites) G.Party.preloadSprites((s.loc && s.loc.mount && s.loc.mount.id) || 'walk');
     if (G.Img && G.Img.prefetchCrew) G.Img.prefetchCrew();
-    if (s.loc && s.loc.mode === 'city' && G.Scenes.city && G.Scenes.city.preloadImages && G.CITY_DATA[s.loc.city]) ps.push(G.Scenes.city.preloadImages(G.CITY_DATA[s.loc.city]));
-    var cap = ((G.FX && G.FX.loader) || {}).prepareMs || 5000;
-    await Promise.race([Promise.all(ps), new Promise(function (r) { setTimeout(r, cap); })]);
+    await art;
   };
   /** 첫 장면이 화면에 나왔나: 도시는 거리·메뉴·첫 대화가 뜰 때, 바다·탐험은 몇 장면을 그린 뒤 */
   Game.sceneShown = function (ms) {
@@ -182,27 +197,38 @@
       })();
     });
   };
-  /** 불러오는 그림을 띄운 채 준비하고(Game.prepare) 첫 장면으로 들어간다 — goFn 이 장면을 연다 */
+  var launchPreparing = 0;
+  /** 빠른 장면 전환은 그대로 보여 주고, 준비가 길면 불러오는 그림을 띄운다. */
   Game.launch = function (text, goFn) {
     if (!G.Loader) { goFn(); return Promise.resolve(); }
+    var delay = (G.FX.loader || {}).launchDelayMs;
+    // 그리는 판이 새 크기로 바뀌면 준비가 끝날 때까지 기존 장면 대신 불러오는 그림을 보여 준다.
+    if (worldCanvas.style.display === 'block' && appliedResolution !== worldResolution()) delay = 0;
     return G.Loader.during(text || '항해를 준비하는 중…', async function () {
-      await Game.prepare();
+      launchPreparing++;
+      try { await Game.prepare(); } finally { launchPreparing--; }
       if (G.Loader) G.Loader.text('닻을 올리는 중…');
       goFn();
       await Game.sceneShown();
-      await G.Loader.frames(2);
-    });
+    }, { delayMs: delay });
   };
   /** 도시에 머무는 동안 그 항구 앞바다의 육지 판을 한 줄씩 그려 둔다 (출항·성문 밖 탐험이 멈칫하지 않게) */
   var pwTok = 0;
   Game.prewarmCity = function (c) {
     if (!Game.renderer || !Game.state || !c) return;
     var tok = ++pwTok, v = Game.warmView(Game.state, 'sea');
-    (function step() {
-      if (tok !== pwTok || Game.sceneName !== 'city' || !Game.renderer) return;          // 도시를 떠났으면 그만 (바다 장면이 판을 그린다)
+    if (!v) return;
+    function schedule() {
+      if (window.requestIdleCallback) window.requestIdleCallback(step);
+      else setTimeout(step, 30);
+    }
+    function step(deadline) {
+      if (tok !== pwTok || launchPreparing || Game.sceneName !== 'city' || Game.state.loc.city !== c.id || !Game.renderer) return;
+      if (deadline && deadline.timeRemaining() < 4) { schedule(); return; }
       var done = false; try { done = Game.renderer.prewarm(v, true); } catch (e) { return; }
-      if (!done) (window.requestIdleCallback || function (f) { return setTimeout(f, 30); })(step, { timeout: 120 });
-    })();
+      if (!done) schedule();
+    }
+    schedule();
   };
 
   // ---------------------------------------------------------------- scenes
@@ -229,6 +255,7 @@
   function loop(t) {
     if (!Game.frameDue(frameClock, t)) { requestAnimationFrame(loop); return; }
     var raw = (t - last) / 1000 || 0; last = t;
+    if (launchPreparing) { requestAnimationFrame(loop); return; }
     var K = LP(), dt = Math.min(K.maxDt, Math.max(0, raw));   // 오래 멈췄던 장면(탭 전환·무거운 일) 뒤에 배가 순간 이동하지 않게
     Game.time += dt;
     // 느린 프레임에서도 사용자가 고른 해상도를 유지한다. 버퍼 크기 왕복으로 생기는 끊김도 피한다.

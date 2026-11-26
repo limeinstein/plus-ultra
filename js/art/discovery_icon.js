@@ -1,5 +1,4 @@
-/* 발견한 유적·자연 경관을 항해·해도·육상 탐험 지도에 표시하는 투명 미니어처.
-   도시 안에서 찾는 발견물은 거리 화면에 있으므로 지도에는 그리지 않는다. */
+/* 발견한 유적·자연 경관을 항해·해도·육상 탐험 지도에 표시하는 투명 미니어처. */
 (function (G) {
   'use strict';
   var DI = {};
@@ -149,7 +148,29 @@
     if (G.Img && G.Img.has(key)) POS[id] = { key: key, slot: 0, cols: 1, rows: 1 };
   });
 
-  DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && POS[d.id]); };
+  function model(d) { return d && d.cat === 'ruin' && G.RUIN_MODELS && G.RUIN_MODELS[d.id]; }
+  DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && (POS[d.id] || model(d))); };
+  var groundMemo = new WeakMap();
+  DI.position = function (d) {
+    if (!model(d) || d.how !== 'land' || !G.Geo || !G.Geo.ready) return [d.lon,d.lat];
+    var memo = groundMemo.get(d);
+    if (memo) return memo;
+    var p = [d.lon,d.lat], fx = G.FX.mapRuins;
+    // 다리는 하천 위에 있고, 둑에 있는 건물의 발치만 가까운 육지로 보정한다.
+    if (d.id !== 'qeswachaka' && G.Geo.sdf(d.lon,d.lat) <= 0) {
+      for (var band=1; band<=fx.shoreBands; band++) {
+        var radius = fx.shoreStep*band, best = .025;
+        for (var i=0; i<16; i++) {
+          var a = Math.PI*i/8, lon = G.Geo.wrapLon(d.lon+radius*Math.cos(a)), lat = d.lat+radius*Math.sin(a);
+          var land = G.Geo.sdf(lon,lat);
+          if (land > best) { best=land; p=[lon,lat]; }
+        }
+        if (best>.025) break;
+      }
+    }
+    groundMemo.set(d,p);
+    return p;
+  };
   /* 지도 위에 남는 발견물 — 매 프레임 발견물 1,200여 개를 다 훑던 것(1~2ms)을 0.25초 동안 다시 쓴다 (항해 버벅임 2026-11-01) */
   var visMemo = null;
   DI.visible = function () {
@@ -169,19 +190,46 @@
       return G.Disc.foundByMe(d.id);
     });
   }
-  DI.count = function () { return Object.keys(POS).length; };
-  DI.key = function (d) { var p = d && POS[d.id]; return p ? p.key : null; };
+  DI.count = function () { return Object.keys(POS).length + Object.keys(G.RUIN_MODELS || {}).filter(function (id) {
+    return !POS[id] && G.DISC && DI.isMapLandmark(G.DISC[id]);
+  }).length; };
+  DI.source = function (d) {
+    var p = d && POS[d.id];
+    return p ? { key:p.key, slot:p.slot, cols:p.cols || COLS, rows:p.rows || ROWS } : null;
+  };
+  DI.key = function (d) {
+    var r = model(d), p = d && POS[d.id];
+    return r ? r[0] : p ? p.key : null;
+  };
 
   function request(key) { if (key && G.Img && G.Img.has(key)) G.Img.want(key); }
   DI.preload = function (list) {
     var keys = {}, jobs = [];
-    (list || DI.visible()).forEach(function (d) { var p = POS[d.id]; if (p) keys[p.key] = 1; });
+    (list || DI.visible()).forEach(function (d) { var key = DI.key(d); if (key) keys[key] = 1; });
     Object.keys(keys).forEach(function (key) { if (G.Img && G.Img.has(key)) jobs.push(G.Img.load(key)); });
     return Promise.all(jobs);
   };
 
+  function modelMetrics(r, scale, zoom) {
+    var fx = G.FX.mapRuins, tier = r[7], width = fx.chart[tier];
+    if (zoom) {
+      var t = Math.max(0, Math.min(1, (zoom-fx.zoomStart)/(fx.zoomEnd-fx.zoomStart)));
+      width = fx.width[tier] + t*(fx.close[tier]-fx.width[tier]);
+    }
+    width *= scale;
+    var height = width*r[4]/r[3], left = -r[5]*width, top = -r[6]*width;
+    return {width:width, height:height, radius:Math.max(width,height)*.46,
+      left:left, right:left+width, top:top, base:top+height};
+  }
+
   DI.metrics = function (d, scale, zoom) {
     scale = scale || 1;
+    var r = model(d);
+    if (r) return modelMetrics(r, scale, zoom);
+    if(zoom&&G.Terrain){
+      if(d.id==='siwa'&&G.Terrain.microSites().length)return{width:24,height:24,radius:14,top:-12,base:12};
+      var formation=G.Terrain.formationFor(d.id);if(formation&&G.TerrainArt){var w=Math.min(G.FX.terrainBiomes.detailMaxPx,zoom*formation.width),fm=G.TerrainArt.metrics(G.TerrainArt.formationId(formation),w);if(fm)return{width:w,height:fm.height,radius:Math.max(w,fm.height)*.46,top:-fm.height*.93,base:fm.height*.07};}
+    }
     if(zoom&&G.TerrainArt&&G.TerrainArt.has(d.id)){
       var wide=Math.min(G.FX.terrainWorld.landmarkMax,Math.max(BASE,zoom*.36))*scale;
       var m=G.TerrainArt.metrics('wonder-'+d.id,wide);
@@ -193,11 +241,38 @@
     return { width: w, height: h, radius: Math.max(12, Math.max(w, h) * 0.46), top: -h / 2, base: h / 2 };
   };
 
-  /** 발견물 좌표 (x,y)를 중심으로 투명 스프라이트 한 칸을 그린다. */
+  function drawModel(ctx, d, r, im, m, x, y, opts, scale) {
+    var px = x + m.left, py = y + m.top, cx = px + m.width*.5;
+    ctx.save();
+    var p = DI.position(d);
+    if (opts.zoom && d.how === 'land' && (!G.Geo || !G.Geo.sdf || G.Geo.sdf(p[0],p[1]) >= 0)) {
+      // 외곽은 투명이고, 건축물 아래에만 부드러운 접지 그림자를 남긴다.
+      var radius = m.width*.37, depth = Math.max(2,m.width*.087), sy = y+Math.max(0,m.base)*.56;
+      var shade = ctx.createRadialGradient(0,0,0,0,0,1);
+      shade.addColorStop(0,'rgba(27,30,23,'+G.FX.mapRuins.shadowOpacity+')');
+      shade.addColorStop(1,'rgba(27,30,23,0)');
+      ctx.save(); ctx.translate(cx,sy); ctx.scale(radius,depth); ctx.fillStyle=shade;
+      ctx.fillRect(-1,-1,2,2); ctx.restore();
+    }
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(im,r[1],r[2],r[3],r[4],px,py,m.width,m.height);
+    if (opts.selected) {
+      ctx.strokeStyle='rgba(242,215,145,.9)'; ctx.lineWidth=Math.max(1.2,1.7*scale); ctx.setLineDash([3,3]);
+      ctx.beginPath();ctx.ellipse(cx,y+Math.max(0,m.base)*.4,m.width*.48,Math.max(4,m.width*.12),0,0,Math.PI*2);ctx.stroke();
+    }
+    ctx.restore();
+    return m;
+  }
+
+  /** 발견물 좌표에 발치를 맞춰 투명 미니어처를 그린다. */
   DI.draw = function (ctx, d, x, y, opts) {
     opts = opts || {};
     var p = d && POS[d.id], scale = opts.scale || 1, met = DI.metrics(d, scale, opts.zoom);
-    if(opts.zoom&&G.TerrainArt&&G.TerrainArt.has(d.id)&&G.TerrainArt.sprite(ctx,'wonder-'+d.id,x-met.width/2,y-met.height/2,met.width,met.height))return met;
+    var r = model(d), art = r && G.Img && G.Img.get(r[0]);
+    if (art) return drawModel(ctx, d, r, art, met, x, y, opts, scale);
+    if (r) request(r[0]);
+    if(opts.zoom&&G.Terrain&&(G.Terrain.formationFor(d.id)||d.id==='siwa'&&G.Terrain.microSites().length))return met;
+    if(!r&&opts.zoom&&G.TerrainArt&&G.TerrainArt.has(d.id)&&G.TerrainArt.sprite(ctx,'wonder-'+d.id,x-met.width/2,y-met.height/2,met.width,met.height))return met;
     if (!p || !G.Img) return met;
     var im = G.Img.get(p.key);
     if (!im) { request(p.key); return met; }
@@ -221,9 +296,12 @@
   DI.at = function (list, toScreen, x, y, scale, zoom) {
     var best = null, bd = Infinity;
     (list || DI.visible()).forEach(function (d) {
-      var p = toScreen(d.lon, d.lat), hit = Math.max(14, DI.metrics(d, scale, zoom).radius + 3);
-      var dd = (p[0] - x) * (p[0] - x) + (p[1] - y) * (p[1] - y);
-      if (dd <= hit * hit && dd < bd) { best = d; bd = dd; }
+      var site = DI.position(d), p = toScreen(site[0],site[1]), m = DI.metrics(d,scale,zoom), cy = p[1]+(m.top+m.base)/2;
+      var cx = m.left == null ? p[0] : p[0]+(m.left+m.right)/2;
+      var dd = (cx-x)*(cx-x)+(cy-y)*(cy-y), hit = Math.max(14,m.radius+3);
+      var inside = m.left == null ? dd <= hit*hit :
+        x >= p[0]+m.left-3 && x <= p[0]+m.right+3 && y >= p[1]+m.top-3 && y <= p[1]+m.base+3;
+      if (inside && dd < bd) { best = d; bd = dd; }
     });
     return best;
   };

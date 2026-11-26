@@ -1,0 +1,43 @@
+{
+  "id": "wildapple",
+  "name": "톈산 야생 사과",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/wildapple.png",
+  "sourceSha256": "d1daae151093cfd0224de2b0803558ffd4fa3d5a7c19fa38e1a703c362a3b6d8",
+  "sourceMtimeNs": 1795659653328397200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/wildapple.gif",
+      "sha256": "59494881b14dffadfcc30228eb9cd22728d4e544dd73e785806059c20825ee08"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/wildapple.jpg",
+      "sha256": "1571180a30f4b76503883440c4ab84e9b9aec10365a78f4be1ca7b8299d5c858"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/wildapple.webp",
+      "sha256": "164e0f9d0052222aba1242d743cad5f127a74f1e2be07f8c650a837f62a9c7fe"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/wildapple.gif",
+      "sha256": "bb5de5d5bbff51a9863d82db78fe7c971c3735ebda929871180193281cde617d",
+      "bytes": 3528157
+    },
+    {
+      "file": "images/discovery-ends/wildapple.jpg",
+      "sha256": "24f11811b3ccf3dbb27d5c896c084567e3f8dd0f5426ca03ac97f4233f064e47",
+      "bytes": 106849
+    },
+    {
+      "file": "images/discovery-sheets/wildapple.webp",
+      "sha256": "29ee66442406716cb1d0b3e1dd76eaa112d6169c0f60a5b896f805c6cdb458fd",
+      "bytes": 1873212
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "t_herbs",
+  "name": "약재",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_herbs.png",
+  "sourceSha256": "8501757fe445b27ecb2ca35b1221bdb73d12fe936bd8a7847f304870f3843096",
+  "sourceMtimeNs": 1795661078558645300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_herbs.gif",
+      "sha256": "92a866688dfb2b455ba77df7ec98acc0f287e6afdbff5551d554678981e2645e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_herbs.jpg",
+      "sha256": "bea45a479a7e1d7522a5c4fb8d98c3794dcfc3daa7ef017302aa68f2420e26b0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_herbs.webp",
+      "sha256": "f813d94aae9376478a4945ffd4e637d5ba8d1048cde752d848227e5b957f59c8"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_herbs.gif",
+      "sha256": "98790892e79dee5d9d882840aa0eedf1a84996669368250b80ed0acc76a9ad70",
+      "bytes": 3687219
+    },
+    {
+      "file": "images/discovery-ends/t_herbs.jpg",
+      "sha256": "01663590147d5c7a9af32b62dec239dddecdc83b7880b7f1d398c3d2f2eb0e40",
+      "bytes": 99740
+    },
+    {
+      "file": "images/discovery-sheets/t_herbs.webp",
+      "sha256": "45bbfe6895c740f12ac7355c4df4e3b8940821b57ed3fdd4e02ce48b629a5d85",
+      "bytes": 1762672
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "muryeong",
+  "name": "무령왕릉",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/muryeong.png",
+  "sourceSha256": "2d648c884f6444204e119f0a64b2bfbac6e1bbe880b4f222cb0a70a92f61e2bc",
+  "sourceMtimeNs": 1795659804005735900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/muryeong.gif",
+      "sha256": "3816d18b6e3bff9aac00f20c7add3d0ed46a76a1ac6225348456c04b2ce108df"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/muryeong.jpg",
+      "sha256": "a8bcdc49c5d49e26ec786e02600a8552a6d568176c5e591dea6406b1e21e22b6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/muryeong.webp",
+      "sha256": "fcb850e524a2ce1f3d4add9170da06c07d8310973a4f667967bbe8f414ea7fa5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/muryeong.gif",
+      "sha256": "f7b2e67b8bea63e961ef143ced9405df687a464c9061e5bc3beecbe4b08c57a4",
+      "bytes": 3463738
+    },
+    {
+      "file": "images/discovery-ends/muryeong.jpg",
+      "sha256": "d4ea4212f17328cffce0f91dc9bbba31277b9aebd99c75e50960f409665fe167",
+      "bytes": 93247
+    },
+    {
+      "file": "images/discovery-sheets/muryeong.webp",
+      "sha256": "25e43c56e1516cc89efeea97e33a84910d8fb6bce139c613c42e782d0bfde447",
+      "bytes": 1615950
+    }
+  ]
+}

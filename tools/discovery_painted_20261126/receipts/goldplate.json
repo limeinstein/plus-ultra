@@ -1,0 +1,43 @@
+{
+  "id": "goldplate",
+  "name": "금은 접시",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/goldplate.png",
+  "sourceSha256": "ec25fb54a06762b33d6ea97f8a99e6a346acee53e157e088c7c7e86e137cdb18",
+  "sourceMtimeNs": 1795659840230580300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/goldplate.gif",
+      "sha256": "852a8bafd09ec146a2562776df5bff725ac9012061dd55f3b9f550af851aba24"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/goldplate.jpg",
+      "sha256": "f8ac8929deb046954ef8a88a1f77b042016a5355f0ff47c8952a54e9221f3882"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/goldplate.webp",
+      "sha256": "de4e541b5e1f029eab02d0b0387ca90b0851250415ae00e4cbb4e4a1c426ddb3"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/goldplate.gif",
+      "sha256": "5ca4f9e09df2ea7ab8908aa561abd0f4c599766118e7d93c1aaf53c1e2edebd3",
+      "bytes": 3691765
+    },
+    {
+      "file": "images/discovery-ends/goldplate.jpg",
+      "sha256": "89b2311f5efc4c5a9a25a8d488745397612ee485e259765d0af6ec0188964db9",
+      "bytes": 98419
+    },
+    {
+      "file": "images/discovery-sheets/goldplate.webp",
+      "sha256": "4c178e6a867686779d2c46b5fe7770dd76ce112d6fcacad3b43c93fdb4ce4a2f",
+      "bytes": 1727906
+    }
+  ]
+}

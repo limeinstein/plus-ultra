@@ -38,11 +38,13 @@
 })();
 </script>
 <div id="stage">
-  <canvas id="world"></canvas>
+  <canvas id="world" data-precompile></canvas>
   <canvas id="overlay"></canvas>
   <canvas id="scene"></canvas>
   <div id="ui"></div>
 </div>
+<!-- 그림 프로그램은 다른 게임 파일을 읽는 동안 GPU에서 준비한다. -->
+<script src="js/world/renderer.js"></script>
 <script src="js/core/inflate.js"></script>
 <script src="js/core/util.js"></script>
 <script src="js/core/i18n.js"></script>
@@ -321,10 +323,11 @@
 <script src="js/data/terrain_patches.js"></script>
 <script src="js/data/waterway_geometry.js"></script>
 <script src="js/data/waterways.js"></script>
+<script src="js/data/landscapes.js"></script>
 <script src="js/data/terrain_art.js"></script>
 <script src="js/world/geo.js"></script>
 <script src="js/world/terrain.js"></script>
-<script src="js/world/renderer.js"></script>
+<script src="js/art/terrain_materials.js"></script>
 <script src="js/data/ocean_baked.js"></script>
 <script src="js/world/waves.js"></script>
 <script src="js/world/nav.js"></script>
@@ -344,6 +347,9 @@
 <script src="js/art/paint.js"></script>
 <script src="js/art/city.js"></script>
 <script src="js/art/city_icon.js"></script>
+<script src="js/data/city_models.js"></script>
+<script src="js/data/ruin_models.js"></script>
+<script src="js/art/city_models.js"></script>
 <script src="js/art/terrain_art.js"></script>
 <script src="js/art/discovery_icon.js"></script>
 <script src="js/art/plant_swirl.js"></script>

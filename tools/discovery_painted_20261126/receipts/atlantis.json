@@ -1,0 +1,43 @@
+{
+  "id": "atlantis",
+  "name": "아틀란티스",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/atlantis.png",
+  "sourceSha256": "b5095d79be56837923c9970ebd2f790ee0917377ea73b2a06b786ac39465ea39",
+  "sourceMtimeNs": 1795661694701898900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/atlantis.gif",
+      "sha256": "e62fc063454a46edd17f4819a3f26957e942fbd579b29cd606b227b374fe3638"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/atlantis.jpg",
+      "sha256": "08f41d2c5a03ac0c5bf55976bf247cb650389cf0efc29d3a70cc5d9204fb5a93"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/atlantis.webp",
+      "sha256": "4554cf9773a8875190087b46714e82f897e0366b517372fbb0343b7121fe55a8"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/atlantis.gif",
+      "sha256": "abd2f9f3cd4cc0803e88a1d61bd2f98263a126bea69ee9009719e2d9ea6928f4",
+      "bytes": 3385943
+    },
+    {
+      "file": "images/discovery-ends/atlantis.jpg",
+      "sha256": "c4e9152572c6fba41b5fdf136decff10ba3d86943f6efb133a26be382190f2d2",
+      "bytes": 94375
+    },
+    {
+      "file": "images/discovery-sheets/atlantis.webp",
+      "sha256": "10ee4563d695b5a873659e54d4f318bf733d8c14f821bd9187c66543b4e4fc42",
+      "bytes": 1607084
+    }
+  ]
+}

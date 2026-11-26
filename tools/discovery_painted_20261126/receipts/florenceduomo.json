@@ -1,0 +1,43 @@
+{
+  "id": "florenceduomo",
+  "name": "피렌체 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/florenceduomo.png",
+  "sourceSha256": "250fb8216ff05ff0bf903c11ccb4369394ef0e4448cced3c5c6841f572d832aa",
+  "sourceMtimeNs": 1795661778096878900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/florenceduomo.gif",
+      "sha256": "b9a6cf36d102812d8a507e895baacabc7b8e67720a217bc49c3ac6f7c07f262e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/florenceduomo.jpg",
+      "sha256": "e1144c733eaa8cdb70a69d1bdcc53e27b55e8577537dc789374f77102081fd25"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/florenceduomo.webp",
+      "sha256": "0fa0e25eecdecae8dde13f7f03e4f4e788e5de2366fea662fc2ad61d9e87c927"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/florenceduomo.gif",
+      "sha256": "987c7bfaf40793fe6daffe747ac136f6b730e3204d09eb765f94c05c20bf2d9f",
+      "bytes": 3416935
+    },
+    {
+      "file": "images/discovery-ends/florenceduomo.jpg",
+      "sha256": "599b4cd642b2ceeba28713bfd7c35676cd1b8c241f36e0c66ff8300a7f214faf",
+      "bytes": 101469
+    },
+    {
+      "file": "images/discovery-sheets/florenceduomo.webp",
+      "sha256": "c4c954302affd08932fc455a18310197e5bf7815b543f079d90134d59b8ba201",
+      "bytes": 1777064
+    }
+  ]
+}

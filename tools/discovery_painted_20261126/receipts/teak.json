@@ -1,0 +1,43 @@
+{
+  "id": "teak",
+  "name": "말라바르 티크",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/teak.png",
+  "sourceSha256": "d2953bf31786523e9bb4356964027ff8b75fcf8d37b91dfbc1bcdf26ea96132c",
+  "sourceMtimeNs": 1795659656348043800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/teak.gif",
+      "sha256": "cfc62822b57dcb72e17a23307ea6845192a329a080b4404ced8c54432a165619"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/teak.jpg",
+      "sha256": "e218ed54e265f187506a9342843c306f6d3e09037ba723b436b49fb66f94c554"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/teak.webp",
+      "sha256": "4f8125885f691a8e601b079bcde0511d7c0d0ea39e49f43f9c1a038f2da8ca4b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/teak.gif",
+      "sha256": "7a0a964bff5c104a8aacb0d497491e0f26d511722b960d170a65eaf84822471e",
+      "bytes": 3390269
+    },
+    {
+      "file": "images/discovery-ends/teak.jpg",
+      "sha256": "bafa9df9da0dba0a486a4c488baa9fd52dcfa67b8859a8bdd8b346488f77295b",
+      "bytes": 98870
+    },
+    {
+      "file": "images/discovery-sheets/teak.webp",
+      "sha256": "2b8ae884fc4edb7af411d783deaf68b38a8d724f07bcb8a23e24d5a2565a3578",
+      "bytes": 1662122
+    }
+  ]
+}

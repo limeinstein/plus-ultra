@@ -1,0 +1,43 @@
+{
+  "id": "orchid",
+  "name": "난정의 난초",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/orchid.png",
+  "sourceSha256": "bb9238c768659a9b2887b1612db505b7f03f96883e878962b61e30178483376b",
+  "sourceMtimeNs": 1795659654072262300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/orchid.gif",
+      "sha256": "d741240975f52e64505e8c4de2aa7c2107e7618ede4eb70c2c8e565d6f5aa171"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/orchid.jpg",
+      "sha256": "0771a1d97f1d392c3441df5162df43cf75d81dd0d9e8795b804d44aadec76d4f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/orchid.webp",
+      "sha256": "2818dfa4dca95c54aa34cce19f3c7b40608a8be7f7bdae30cc78ea802a27d437"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/orchid.gif",
+      "sha256": "25269fd9d9c7130c0367eeaa6553daa4bd610e2b126d3014b2153f855923b242",
+      "bytes": 3467174
+    },
+    {
+      "file": "images/discovery-ends/orchid.jpg",
+      "sha256": "34fe8cfae74f307c34526a9750ffcc0e6bfc8bb0afa9c9ee1b529a7d3f3d5b38",
+      "bytes": 102000
+    },
+    {
+      "file": "images/discovery-sheets/orchid.webp",
+      "sha256": "8f89eff0c9d3e8a5a309518afb397c38bd1ca93403c52e64eaa199e2900c4101",
+      "bytes": 1785316
+    }
+  ]
+}

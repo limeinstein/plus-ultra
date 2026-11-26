@@ -1,0 +1,43 @@
+{
+  "id": "greatwall",
+  "name": "만리장성",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/greatwall.png",
+  "sourceSha256": "0cf8dab60fd4fcb201ae8237071ca0824db0f34f30508d8d763062e658b4c245",
+  "sourceMtimeNs": 1795659855097711900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/greatwall.gif",
+      "sha256": "ca1360a0a10a0f189181f246fb12414c050d3b4b9cf86b446b5757f99d716895"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/greatwall.jpg",
+      "sha256": "6fe4d67de110c096c68e418d260bc1b1174da7e55d3fc8f7cf837bb34e091efe"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/greatwall.webp",
+      "sha256": "f4757efce357ebcbd120096e44268d65bec466d3aab55a437a1a3a341313f837"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/greatwall.gif",
+      "sha256": "7e27e663e94ac485bf4eaaef9e63a3fe6129ce3acdcf2ead1fa97e670a0a96ad",
+      "bytes": 3333682
+    },
+    {
+      "file": "images/discovery-ends/greatwall.jpg",
+      "sha256": "3b334e9e9d9370b0eb8a63f2fc62f6cee8b9fdbe32943ee79446aa1fad725fcb",
+      "bytes": 91125
+    },
+    {
+      "file": "images/discovery-sheets/greatwall.webp",
+      "sha256": "b5616631058e24d41d05f6f221d154ca027663e3bf55cf62258ffb17e47e8cab",
+      "bytes": 1557366
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "craterlake",
+  "name": "크레이터 호수",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/craterlake.png",
+  "sourceSha256": "e40ba44df2625fbdf87370d1903ffd5b5797eb176dd0ec444bab56bec81b7c25",
+  "sourceMtimeNs": 1795659645068776600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/craterlake.gif",
+      "sha256": "dcb1cea7624841b949d11efc9ee388a9057d12e5b2378d011462907b766de6de"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/craterlake.jpg",
+      "sha256": "90c56d52f21ae50f3c21053f800982f86a199c35c714c7781b4eec6e001d9652"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/craterlake.webp",
+      "sha256": "979781134d901b6db346632cacc77f1529920e7a9e42321bc5b8d231483a9edb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/craterlake.gif",
+      "sha256": "e30684c871f64f42107b3cd7f3c9e7ed3d832d467fd85492b9a03d507783bcdf",
+      "bytes": 2644908
+    },
+    {
+      "file": "images/discovery-ends/craterlake.jpg",
+      "sha256": "e698401a361a7f88f86b6f81a7bd43ee4b908d70f700719f21e38090f5afa4aa",
+      "bytes": 89432
+    },
+    {
+      "file": "images/discovery-sheets/craterlake.webp",
+      "sha256": "da225ea4f472f304e58156faeb57b4f50e1d7eda3c7d4dc1a3c1988ec30b8b17",
+      "bytes": 1519152
+    }
+  ]
+}

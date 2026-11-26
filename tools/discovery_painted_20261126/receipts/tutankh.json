@@ -1,0 +1,43 @@
+{
+  "id": "tutankh",
+  "name": "투탕카멘의 황금 가면",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/tutankh.png",
+  "sourceSha256": "e408f03982a08b17cb6e3b9e77cd46f0f07377123b47b0b67fb85d45dc2bba6a",
+  "sourceMtimeNs": 1795659759824227600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tutankh.gif",
+      "sha256": "ba1ae3db25b9e31eb5d7576c4e9182d0df572d2c753ff455fb64b28503923271"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tutankh.jpg",
+      "sha256": "c61106d061ce6ff6becdd51978c67616441bef70e789630feaf259cd2183a60e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tutankh.webp",
+      "sha256": "73993bbc9978cb157eeeb9dec39563bea5e6dd59b5c4e3131a62d6b467ae7272"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tutankh.gif",
+      "sha256": "93ede6492ceaac08eab0da8ed263b8529d79deed8689c5da5c2dd668a37a75c8",
+      "bytes": 3488409
+    },
+    {
+      "file": "images/discovery-ends/tutankh.jpg",
+      "sha256": "276a032228156228695f8aabf11636e7c3b97a2d498857677bee41730fc90c52",
+      "bytes": 92649
+    },
+    {
+      "file": "images/discovery-sheets/tutankh.webp",
+      "sha256": "9520ebec0b1e50aa418b64eb96975bb8240c64cbb99ff7f6894d009f28e902a5",
+      "bytes": 1500434
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "goree",
+  "name": "고레 섬 — 돌아올 수 없는 문",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/goree.png",
+  "sourceSha256": "9d53e73357bc3ea478384ccfce4dd81ca8048e403ed3b9fb6f339b7659f53566",
+  "sourceMtimeNs": 1795661456073901100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/goree.gif",
+      "sha256": "0a692e160c6658b0c1394bb1cb7a5f9adaff8ed61f4d607d749f80e282105fb4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/goree.jpg",
+      "sha256": "cd8c5cf54c34349f2530eacc6a21e97b9a3ea29963f4fb131544f2e1d0682494"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/goree.webp",
+      "sha256": "823559023fe01d49b2af25501be36d94ff429e67b72c256ac2047404eac5eb18"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/goree.gif",
+      "sha256": "40497278f5277e4a58cc533b48dced9da94861243c98284f20092d05354c627e",
+      "bytes": 3466610
+    },
+    {
+      "file": "images/discovery-ends/goree.jpg",
+      "sha256": "788d02636aa245d46c6c31b4bce43d588527c5b23a38620821f587e2c8156c7e",
+      "bytes": 99502
+    },
+    {
+      "file": "images/discovery-sheets/goree.webp",
+      "sha256": "e069cf12ac5d763beb2fe58754fce93018e35a48f695a14f986660593421806e",
+      "bytes": 1722580
+    }
+  ]
+}

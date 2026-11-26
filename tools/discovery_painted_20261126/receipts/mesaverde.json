@@ -1,0 +1,43 @@
+{
+  "id": "mesaverde",
+  "name": "메사 베르데 절벽 궁전",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mesaverde.png",
+  "sourceSha256": "e1284b21d1e84875a5cfe5cf9c37c5ca969e27d06a53b7ded48992bdee73a78d",
+  "sourceMtimeNs": 1795661807259106100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mesaverde.gif",
+      "sha256": "d254bf28801ce017dc4d6e78553628286555dd7930514b1a02f13beea84d049a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mesaverde.jpg",
+      "sha256": "e631aa5f939c2daf11bc69a96361c5260eb0f8950dacdcc607e7d2f12f4a9d8f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mesaverde.webp",
+      "sha256": "da29050e98a89a2425ac795e98d51224e545ff2bd0bdad8608829db3dfd30126"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mesaverde.gif",
+      "sha256": "014ee2299d8243082796cdb7e37e9d558155a70a83404d5fc9393e65212ccf55",
+      "bytes": 3612730
+    },
+    {
+      "file": "images/discovery-ends/mesaverde.jpg",
+      "sha256": "40223898a25bbab0180f8ece821dc21132de6ecef0807f0f1073b6111bff598d",
+      "bytes": 99516
+    },
+    {
+      "file": "images/discovery-sheets/mesaverde.webp",
+      "sha256": "49c178eaf4c977d16990ca09339bda3dbb8b719069746c7d4a59eb528a2570e9",
+      "bytes": 1712718
+    }
+  ]
+}

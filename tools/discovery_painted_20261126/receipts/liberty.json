@@ -1,0 +1,43 @@
+{
+  "id": "liberty",
+  "name": "자유의 여신상",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/liberty.png",
+  "sourceSha256": "ad40c7da0b34a897fe1f3113d8273520dcd0668c766fe2d1a14c4a22b228dd95",
+  "sourceMtimeNs": 1795661305019147000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/liberty.gif",
+      "sha256": "a12d4d963ee56905feb17c38da42d7926bfbab614638fb81daacca4782dd545b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/liberty.jpg",
+      "sha256": "361779321b79739384bc038299a600b9fcaaee53ac7b776dc0ed31b4be11861f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/liberty.webp",
+      "sha256": "dbb880d053c80122c56b515470fbb00213beadd3813ac60c1ecee7aa94fcdb4e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/liberty.gif",
+      "sha256": "62cebed21c39a433bbbc1379f3e6342687e2f8f36119d7e143ef579e1b5e3ea8",
+      "bytes": 3032565
+    },
+    {
+      "file": "images/discovery-ends/liberty.jpg",
+      "sha256": "6a3d876fbc2539450af1f60db44160981405032767e766df34dae6c704ec17f7",
+      "bytes": 79813
+    },
+    {
+      "file": "images/discovery-sheets/liberty.webp",
+      "sha256": "ad5407172b06d865292ac6eeffbd4b117cb1c68f48395321d4b9c05395f16153",
+      "bytes": 1335084
+    }
+  ]
+}

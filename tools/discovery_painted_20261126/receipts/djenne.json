@@ -1,0 +1,43 @@
+{
+  "id": "djenne",
+  "name": "젠네 대모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/djenne.png",
+  "sourceSha256": "2fcdb95c1387a427ccf4e338ee32bdf85baa7a236febcaf3c2ca1af670591c1d",
+  "sourceMtimeNs": 1795660586832892400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/djenne.gif",
+      "sha256": "cdeee23adddf4d3c0ffb8198be3456dc9c25131b893233c912d7a8a2b43de2e8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/djenne.jpg",
+      "sha256": "eefac30d405893a0bc9b211750604ccaec6cecad0e397b55fcaf391c55251c3b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/djenne.webp",
+      "sha256": "9c6caf81ba0e871fc883dddbef563e86037a1ac8fb330903908f2fbd9350e23a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/djenne.gif",
+      "sha256": "8a1203233d4b6bd7086798aee3ddd47c8fdfd049058726c6d6b89fdb0e866610",
+      "bytes": 3366494
+    },
+    {
+      "file": "images/discovery-ends/djenne.jpg",
+      "sha256": "b5e3e5110e8c4bfb8dc0392ec2c2c975c08a1f258a0f3a41e86fa7092ccfaa99",
+      "bytes": 93802
+    },
+    {
+      "file": "images/discovery-sheets/djenne.webp",
+      "sha256": "97c9af6e2344245221da7f3c1ba66064c0e83497085847ab4d548aee3ef9a716",
+      "bytes": 1595226
+    }
+  ]
+}

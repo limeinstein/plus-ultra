@@ -1,0 +1,43 @@
+{
+  "id": "t_clove",
+  "name": "정향",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_clove.png",
+  "sourceSha256": "5341456a76e1204159ae1e39819606585de0a95d44f6be69c2ba144967417723",
+  "sourceMtimeNs": 1795660810413088800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_clove.gif",
+      "sha256": "bca2eda43e10357c9b5ba41e1df044b68c0def1c0e6f69693eab51748d5496d4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_clove.jpg",
+      "sha256": "a144c03ddae6e0af465b61670551467f60c31789da7dd59b9b38c512b7883f63"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_clove.webp",
+      "sha256": "7f84196f075148b5212b58319ce91b2e5662671577367e1b7f1ebd43728cca52"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_clove.gif",
+      "sha256": "b64888cbdec34c80e35a4be2f597654ced95f6aeb5241dc66d512c993b50ab4b",
+      "bytes": 3618720
+    },
+    {
+      "file": "images/discovery-ends/t_clove.jpg",
+      "sha256": "c4d50ded95cd84987b40ea3177665a051d16888ea19bb2c57fc55e30fa31666a",
+      "bytes": 100203
+    },
+    {
+      "file": "images/discovery-sheets/t_clove.webp",
+      "sha256": "ae621068521263ae39e7ddd4676e2023659e0b556f76d44d4642285867b6a0ec",
+      "bytes": 1720680
+    }
+  ]
+}

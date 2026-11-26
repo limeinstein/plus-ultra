@@ -1,0 +1,43 @@
+{
+  "id": "chilika",
+  "name": "칠리카 호수",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/chilika.png",
+  "sourceSha256": "26d79f86df55c495fe00865542c546ac10fe3277ecaf7e396d32997b3fc5a59b",
+  "sourceMtimeNs": 1795659647781348400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/chilika.gif",
+      "sha256": "f98f21ba0b6942e4462800d646e3322e7bd25dfc0dcd3533bb61675de8c1cad0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/chilika.jpg",
+      "sha256": "dc6e08ceae27b499eb535a2f035724760de5034bf94654e4339ba49579262c0a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/chilika.webp",
+      "sha256": "28e1483dc7f8529e1f23d7f8275ac3efbb323e27434f669f9a7fbc542694b4f7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/chilika.gif",
+      "sha256": "3984ec7a59189b36a772b4bed8fb52a0d187a70d40b532a38dba56b413a8ca96",
+      "bytes": 2993154
+    },
+    {
+      "file": "images/discovery-ends/chilika.jpg",
+      "sha256": "a0ca5dc159927ac64626a0ac054b909d4461c7a18626910e651ed9e4303e8a40",
+      "bytes": 89123
+    },
+    {
+      "file": "images/discovery-sheets/chilika.webp",
+      "sha256": "c8c95543754693217a3ca6fa4d3a7910d2b708ac23beee67fff821eda653d731",
+      "bytes": 1529542
+    }
+  ]
+}

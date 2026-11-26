@@ -1,0 +1,43 @@
+{
+  "id": "hypogeum",
+  "name": "할 사플리에니 히포게움",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/hypogeum.png",
+  "sourceSha256": "7813c90a263f94341998aba0672c718effe670aae1bb8935fb3dfc219cda4a30",
+  "sourceMtimeNs": 1795662217929582000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/hypogeum.gif",
+      "sha256": "1ff96ef4458cf0f16f9cb8f81b3e4366616fbd524e2678d29bb599783bb83dcc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/hypogeum.jpg",
+      "sha256": "fa45f570751325ddee60a0c2e164e989309ffac3d88be14e69270bf7311adf0f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/hypogeum.webp",
+      "sha256": "80882d71815daae9af7685b78fd914fdbe68285e705f18c381c12ff0a926a7c2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/hypogeum.gif",
+      "sha256": "4878c3e7aee42a9909b3c49aaba1d96736c5bc83185131551e46639799002170",
+      "bytes": 3658676
+    },
+    {
+      "file": "images/discovery-ends/hypogeum.jpg",
+      "sha256": "b5c0ac84f5330bd97b821dc60f54f3d05f11d93c4e128fbf04c9bdcdbe9a2908",
+      "bytes": 82683
+    },
+    {
+      "file": "images/discovery-sheets/hypogeum.webp",
+      "sha256": "897d98f238e45f58699acc8de5a5dffed052a07c16780605f574e73bed20f1d4",
+      "bytes": 1400786
+    }
+  ]
+}

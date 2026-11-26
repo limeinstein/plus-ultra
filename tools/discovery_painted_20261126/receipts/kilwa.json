@@ -1,0 +1,43 @@
+{
+  "id": "kilwa",
+  "name": "킬와 대모스크",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kilwa.png",
+  "sourceSha256": "bf7364bba7a132b627326a78764c217f930b4ef79af3f6d2fdbc7359905ac913",
+  "sourceMtimeNs": 1795661180322396900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kilwa.gif",
+      "sha256": "e4fcf9008cbdb0e5b6b0cac3073d092c9f0ba29050b03f604901cbb6166b8e95"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kilwa.jpg",
+      "sha256": "da40303faf92c0e9a8a418296b638d7f8bbeb3cf012f03b3b32cc734d068031a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kilwa.webp",
+      "sha256": "097594fddd9fcfd75336c02f89b7efb38786174ff10869e19b436c6963f75ff7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kilwa.gif",
+      "sha256": "0bef2781211e258797456a1843c2b2af3619ebe8e2b1c51432f88bff097cbfab",
+      "bytes": 3695085
+    },
+    {
+      "file": "images/discovery-ends/kilwa.jpg",
+      "sha256": "03c72cd79a07736abe5440925ab1f80f95a53d282b1c29c39c35675367b31136",
+      "bytes": 104584
+    },
+    {
+      "file": "images/discovery-sheets/kilwa.webp",
+      "sha256": "7f5a002ec34f8eb44e76493e263743b76acf616a7ad78660a29669d36a3646e4",
+      "bytes": 1820226
+    }
+  ]
+}

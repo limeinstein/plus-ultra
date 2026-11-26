@@ -1,0 +1,43 @@
+{
+  "id": "heraion",
+  "name": "사모스의 헤라 신전",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/heraion.png",
+  "sourceSha256": "c1b1f7a04c6e5fe5b050face61e2173fee0733dea175270a700cdf35ff12708a",
+  "sourceMtimeNs": 1795663363145624900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/heraion.gif",
+      "sha256": "d239602ab05658b9b6468a550902e11e15d47e64ff2c0550805bfab38d3b9ba4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/heraion.jpg",
+      "sha256": "2c456230d5795e21109f9bcf06e9923398420c8f3c27432201fc9ca0a1884b78"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/heraion.webp",
+      "sha256": "b0ea00905852633fa5eec330c73d1a48e4cb769b278bfa312689c5935c221ab2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/heraion.gif",
+      "sha256": "ded4804471e3791d65cd6c3f0e5c65307e465f553eb1a93f5f6e4ecf3b017e54",
+      "bytes": 3430593
+    },
+    {
+      "file": "images/discovery-ends/heraion.jpg",
+      "sha256": "7c334a49c4edfedf9dbddfd0105c95a6f981f866a59aed8887a5d80efc338558",
+      "bytes": 97658
+    },
+    {
+      "file": "images/discovery-sheets/heraion.webp",
+      "sha256": "1fc080099af12ef590bf983ba56d8c216de7979a9c0bdfb9a1d81b938aa5a30b",
+      "bytes": 1690638
+    }
+  ]
+}

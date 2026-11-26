@@ -1,0 +1,43 @@
+{
+  "id": "bryce",
+  "name": "브라이스 캐니언",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/bryce.png",
+  "sourceSha256": "f1a2f91ee11fd36100b6333311fb2477bdf06027a9f512ccc718262e7f76617d",
+  "sourceMtimeNs": 1795659656817570800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/bryce.gif",
+      "sha256": "907799a5311c024e4ae05051712e1b67fa723b22f3dd8bc396b225b36a9279c0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/bryce.jpg",
+      "sha256": "d3230005b067e8c48eb8932627fd65bd6a27eaa095d4ee7a9f1945acacb55e9b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/bryce.webp",
+      "sha256": "a7d6ec4a3555db20d2d666c42c86312f6a2b5cbb2512aa8ffd02c5a104c4d91c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/bryce.gif",
+      "sha256": "4a0734f6fd26098e892ea7ffe95312f5311fc5ae966b78aa497c10dc87ce0f76",
+      "bytes": 3181982
+    },
+    {
+      "file": "images/discovery-ends/bryce.jpg",
+      "sha256": "2c0f67ad6a1c25f2b00f477bdd7726e66cbe10c467242d5b5664e7e7e2d56133",
+      "bytes": 100865
+    },
+    {
+      "file": "images/discovery-sheets/bryce.webp",
+      "sha256": "54e1d56d9a031d607a05cbab8e8eedcbe594105994aa8eb24a026cb50ceddd6c",
+      "bytes": 1727156
+    }
+  ]
+}

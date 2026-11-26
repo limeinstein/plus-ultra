@@ -1,0 +1,43 @@
+{
+  "id": "angkorthom",
+  "name": "앙코르 톰 — 바욘 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/angkorthom.png",
+  "sourceSha256": "aae680822c6f01f3702f6c54f48cdc26e8839937f3b3b01619b7cb75a133e51a",
+  "sourceMtimeNs": 1795661933681404300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/angkorthom.gif",
+      "sha256": "85ae929dbcb04f6a6bd5df3de7fcf65fad6de6d85d0e54432c71d40c6c6a5bc2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/angkorthom.jpg",
+      "sha256": "17a2d0292b980fb3f5d05923a3ceb5fde83b9201efb0d773c5bd5e233c74b7b4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/angkorthom.webp",
+      "sha256": "f4126e97d5f3bbf9c2d019cfa91f52238974b517c5e0045d4d80c69fd58158fc"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/angkorthom.gif",
+      "sha256": "86900b76542362be6c5c0538217fc9150bc6559e31b652faaa7d30a2704b3107",
+      "bytes": 3823555
+    },
+    {
+      "file": "images/discovery-ends/angkorthom.jpg",
+      "sha256": "7bfdf81cd6b06387164fa2b22b1231238c6639be20da37e5c9ac4bcb001f1a6d",
+      "bytes": 105693
+    },
+    {
+      "file": "images/discovery-sheets/angkorthom.webp",
+      "sha256": "f43a5342a88da2210795239a63433a6d981aefc7f0502a84c3ff187aa1a0e410",
+      "bytes": 1869798
+    }
+  ]
+}

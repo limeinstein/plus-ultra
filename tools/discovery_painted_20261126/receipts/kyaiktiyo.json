@@ -1,0 +1,43 @@
+{
+  "id": "kyaiktiyo",
+  "name": "짜익티요 황금 바위",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kyaiktiyo.png",
+  "sourceSha256": "7858cd83b84c687c8dbadc461d1845e302f2076d0d74f02d3be8e0b141e90c14",
+  "sourceMtimeNs": 1795661991413061200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kyaiktiyo.gif",
+      "sha256": "d95ffc9550a9afae294009c3b177bdc3d57b4453bdf839c08ba9ac0ff33945b1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kyaiktiyo.jpg",
+      "sha256": "b88461b8f6ef4720d8f0093ef72d9a28e1643c2e62ab70d9c58e7a6acbe81550"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kyaiktiyo.webp",
+      "sha256": "6365cc16b6aa07082435c24a4f44bafacaa851ce480079bcc74683fce97dd4de"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kyaiktiyo.gif",
+      "sha256": "dbf4b3c28cc609814a0c80aac6a64770264ee66775123ef70cbca2840e3f7006",
+      "bytes": 3108966
+    },
+    {
+      "file": "images/discovery-ends/kyaiktiyo.jpg",
+      "sha256": "7ee6eaaf3d55023e16d6286a69b38b1aaf5626b2c0c53e18f463de5ff22c7651",
+      "bytes": 85873
+    },
+    {
+      "file": "images/discovery-sheets/kyaiktiyo.webp",
+      "sha256": "e731af4c45fbc8de92c16f973b68b5aace23ac87a62dbc13c51d30b41985bfe5",
+      "bytes": 1438486
+    }
+  ]
+}

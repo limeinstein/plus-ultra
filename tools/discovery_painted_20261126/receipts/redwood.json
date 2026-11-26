@@ -1,0 +1,43 @@
+{
+  "id": "redwood",
+  "name": "레드우드 숲",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/redwood.png",
+  "sourceSha256": "0ff56befe7f68c5369ed84c4da27b3013200e6439e6381e180d005342536ca64",
+  "sourceMtimeNs": 1795659645031343300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/redwood.gif",
+      "sha256": "1defbf78a13fa73de5b0c580ef11213850fa79afdd8e1c03f4ba852e8dd31d7c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/redwood.jpg",
+      "sha256": "5e989f0bdff4a8e547716526a5533b86b15dabcf1abcc98d4a9d3a9c5a910a30"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/redwood.webp",
+      "sha256": "f61379992261e6d3a552ac86e5a654cbfd34168e41bda8187dabecf8f5d1399a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/redwood.gif",
+      "sha256": "de695616191014682a57fec727ba22dcdfb393014d0e662a94c7527cdb50ff32",
+      "bytes": 3529869
+    },
+    {
+      "file": "images/discovery-ends/redwood.jpg",
+      "sha256": "ec2ee4ebcfa53360678ef60fcabe7f927b33b9553163f50204dffd6e7206841c",
+      "bytes": 91920
+    },
+    {
+      "file": "images/discovery-sheets/redwood.webp",
+      "sha256": "742911018b30263904a39d1136be2995bd666f25d90798deb5acb74c321db74a",
+      "bytes": 1607046
+    }
+  ]
+}

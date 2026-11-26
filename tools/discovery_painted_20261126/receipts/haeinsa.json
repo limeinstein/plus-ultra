@@ -1,0 +1,43 @@
+{
+  "id": "haeinsa",
+  "name": "해인사",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/haeinsa.png",
+  "sourceSha256": "03081b2272065cab6281573edc135e3f973ef484ec97a112dabe148cc866b52e",
+  "sourceMtimeNs": 1795661385139170200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/haeinsa.gif",
+      "sha256": "3f58ab3ad3c299bfc74d5338291f6523a551adf5b11abac1b9d8931ff127e0f3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/haeinsa.jpg",
+      "sha256": "0df5311e6b2ba75711bbb056175cc9ae49ede01916fbd836816b0f45669750e4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/haeinsa.webp",
+      "sha256": "3c9ef484ae3cf382a67622ce3e57df68534881f9f7136e02e719c4b5c164ce89"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/haeinsa.gif",
+      "sha256": "5db2ad9edd54c32dc51727445c44a503ff5466b0b8f8ba2bea98a2a6f07762a1",
+      "bytes": 3528437
+    },
+    {
+      "file": "images/discovery-ends/haeinsa.jpg",
+      "sha256": "88202d0c3ceea1d41260363516e751f4874147cf379e3f54c8c838cd251c9f52",
+      "bytes": 102195
+    },
+    {
+      "file": "images/discovery-sheets/haeinsa.webp",
+      "sha256": "7a2d59c3d10a07ae461d479be75bcf74f10fea289cc5ab6b03fb9002ca62d681",
+      "bytes": 1789604
+    }
+  ]
+}

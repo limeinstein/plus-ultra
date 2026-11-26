@@ -1,0 +1,43 @@
+{
+  "id": "anjiqiao",
+  "name": "조주 안제교",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/anjiqiao.png",
+  "sourceSha256": "e94c0a10cbe0d7afd046b990bb0f2fde3b086d441e6712b4c8b60d2e6f394363",
+  "sourceMtimeNs": 1795661581815140700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/anjiqiao.gif",
+      "sha256": "99819371bd6eebc7956b6f4d17a6e2164c0e2c73aced64b820601b156a007d36"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/anjiqiao.jpg",
+      "sha256": "9cd1363d81f569723132ee6ce70110d4c8b61f10e35b8b180fe3e54c250b7eb4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/anjiqiao.webp",
+      "sha256": "5be87c198c82a79ac7dcd1a77add2ad70cf037186d0b788c3e6edfb349119579"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/anjiqiao.gif",
+      "sha256": "38326a3a02be6b17947add166dd34a0a2aa51598ced86ea13d56aa993bcfb59c",
+      "bytes": 3494399
+    },
+    {
+      "file": "images/discovery-ends/anjiqiao.jpg",
+      "sha256": "6103d3caf267212f31ce4be5f0e1d439f53d53b9c6666c3c7e8f4192884e5153",
+      "bytes": 96669
+    },
+    {
+      "file": "images/discovery-sheets/anjiqiao.webp",
+      "sha256": "841e248fa07ada446a2dc4cccdd368d069d84142a9cbe77f2e7b8d6437d2f76b",
+      "bytes": 1692082
+    }
+  ]
+}

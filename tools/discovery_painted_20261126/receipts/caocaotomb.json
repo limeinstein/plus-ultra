@@ -1,0 +1,43 @@
+{
+  "id": "caocaotomb",
+  "name": "조조 고릉",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/caocaotomb.png",
+  "sourceSha256": "1d8035d19134510e146b872421c13e587df8373418154279ce6c339deb6f808a",
+  "sourceMtimeNs": 1795662477249457400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/caocaotomb.gif",
+      "sha256": "ed2a3dcc1320f165c57bba425847669c3c18878eac849106e4108e1609412322"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/caocaotomb.jpg",
+      "sha256": "2f909745c81d265d51d83afac3679a24efc00ccefe45b4bfc62300f3af831e26"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/caocaotomb.webp",
+      "sha256": "1514946658e8a5f1dda10739891da19d6290c46253e9b8adef192c4244f02291"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/caocaotomb.gif",
+      "sha256": "c2b1224c9417e1a2333bd5f3d502fbb0648286e5bcf9cb0ca68808c58223b1ad",
+      "bytes": 3288040
+    },
+    {
+      "file": "images/discovery-ends/caocaotomb.jpg",
+      "sha256": "9e092f5396d99d30c51ba52f28fbe149e213b630eb47bbefcaed29a6e51ac95d",
+      "bytes": 98545
+    },
+    {
+      "file": "images/discovery-sheets/caocaotomb.webp",
+      "sha256": "4ac152d6bc68ccf0accf8f2d8e9760ceb727d3de50f7c0f28c597ba961a42943",
+      "bytes": 1744998
+    }
+  ]
+}

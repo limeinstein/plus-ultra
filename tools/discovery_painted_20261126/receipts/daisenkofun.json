@@ -1,0 +1,43 @@
+{
+  "id": "daisenkofun",
+  "name": "다이센 고분",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/daisenkofun.png",
+  "sourceSha256": "733116f670f9be2d30da271da0b9cd42a826cfd55c1b908be75738a5dd10bad5",
+  "sourceMtimeNs": 1795662734853871000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/daisenkofun.gif",
+      "sha256": "229dfd0a3b7c3f1a2ac455522bd44f0f470c51b8b5d90d1f696b523f0c2bd557"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/daisenkofun.jpg",
+      "sha256": "04242b0b8a1843b976a45ac46dae35fe69db3871d0ee3f32ce47ca411b5a81f7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/daisenkofun.webp",
+      "sha256": "a63d7d8337e9291d748a12e505b9613965b834898498d1796189f6ae3340d62e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/daisenkofun.gif",
+      "sha256": "a77e922612c0258326902fcae4dbb275f94e55e931c8f01e98e2948342f21eb9",
+      "bytes": 3289213
+    },
+    {
+      "file": "images/discovery-ends/daisenkofun.jpg",
+      "sha256": "6eb2b9d98f7f75acc8e7c9eadacb6260c9873e66d34cd3e7815939b566f8a4b7",
+      "bytes": 101738
+    },
+    {
+      "file": "images/discovery-sheets/daisenkofun.webp",
+      "sha256": "71ecfbf881520e89128974d99f7e1abba6483f080151ce4eca72516f89b29756",
+      "bytes": 1754770
+    }
+  ]
+}

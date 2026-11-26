@@ -1,0 +1,43 @@
+{
+  "id": "seongsan",
+  "name": "성산일출봉",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/seongsan.png",
+  "sourceSha256": "11bb04b455a4acf2be4970f3630a142734ddbf6b145e0f610c4e92fae8eba7c4",
+  "sourceMtimeNs": 1795659644724163100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/seongsan.gif",
+      "sha256": "6b65719127172431838eb6e8f1962ca0639f19aff7e1f464707de33128897399"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/seongsan.jpg",
+      "sha256": "2073d620671f6f110741d344cab7a2a30793757f60d8815247d2f0212d67f695"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/seongsan.webp",
+      "sha256": "917d7b6355f0dbeb73feb417feea407b7d2a2bc869f0aa5895c65471948888b2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/seongsan.gif",
+      "sha256": "af369c0804ae5d0eb4b2f7651333759c7f5086bab8b33fba342026585bfc2dd3",
+      "bytes": 2557542
+    },
+    {
+      "file": "images/discovery-ends/seongsan.jpg",
+      "sha256": "2d3b7a6cf6ce8ababe78e109c17bc3fa363115784ff231067a715b9fd40f7649",
+      "bytes": 85462
+    },
+    {
+      "file": "images/discovery-sheets/seongsan.webp",
+      "sha256": "9278dddb4dc6609224be426cb4fabc820f59371272178c8898740486b358f4b4",
+      "bytes": 1439104
+    }
+  ]
+}

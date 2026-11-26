@@ -1,0 +1,43 @@
+{
+  "id": "stonepine",
+  "name": "라벤나 우산소나무",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/stonepine.png",
+  "sourceSha256": "6a03751961627dd61805206e819c0ae65f34f4e8ff5224633ddef5a7eda4237a",
+  "sourceMtimeNs": 1795659654828600700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/stonepine.gif",
+      "sha256": "15c7ce8887f2896a3919692b9dcca0cf1ffa7fc5586e88670d08b6bd48b9e707"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/stonepine.jpg",
+      "sha256": "4702b05cf0beda893f6b15e83efecd1bacef3457457c7b14b201f876079c0d21"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/stonepine.webp",
+      "sha256": "a9e875cb0ba3b4ba4175f6aa8551bba631fe466777d20e3a2c4841c269ba67db"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/stonepine.gif",
+      "sha256": "db28d7ef454a85d1aee10fcda4a458b0cf4ecab1e8910530ee1ae3f654f01fc2",
+      "bytes": 2821199
+    },
+    {
+      "file": "images/discovery-ends/stonepine.jpg",
+      "sha256": "d7442eb85949a32fb8938a2c453bf1d0beb8cc75d16d603983a47d552790c597",
+      "bytes": 81497
+    },
+    {
+      "file": "images/discovery-sheets/stonepine.webp",
+      "sha256": "5eb7af797ab6eb608b9fe98abfd403b5aaccfec689782746425bc1cdf299e589",
+      "bytes": 1350068
+    }
+  ]
+}

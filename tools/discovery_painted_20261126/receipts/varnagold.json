@@ -1,0 +1,43 @@
+{
+  "id": "varnagold",
+  "name": "바르나 황금 무덤떼",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/varnagold.png",
+  "sourceSha256": "041c927ef171f51b2fd09946512374590bd10cdd8d5b6409fc897dc5c7cea9ff",
+  "sourceMtimeNs": 1795662450664012400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/varnagold.gif",
+      "sha256": "2a2b9f2786811315e8b83971b934687bb4ff6e9d6d30f8dee7903985fe5e1c8d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/varnagold.jpg",
+      "sha256": "f9666140027dfb702da7c72247a778237fdcf74d2b120e2fb0463169e90215b3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/varnagold.webp",
+      "sha256": "6869980a4d7f24ceaa0d2c401938f870b7533ed689e4f708355b0252609eaaa2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/varnagold.gif",
+      "sha256": "508465327584b09b93493c07f0cac6ea3262a4e22219c613ca1321cbbb0c8796",
+      "bytes": 3406108
+    },
+    {
+      "file": "images/discovery-ends/varnagold.jpg",
+      "sha256": "21ce7f66cfcd3ab12927125654ab7360aacca3e082cdbf305e65d3de60eeaa21",
+      "bytes": 95964
+    },
+    {
+      "file": "images/discovery-sheets/varnagold.webp",
+      "sha256": "9d3bcb799be6ea81dc949bf4a2246b7bedc33553d7ba211adb587d25a824f055",
+      "bytes": 1659114
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "whiterose",
+  "name": "요크의 흰 장미",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/whiterose.png",
+  "sourceSha256": "2ed6d931623ac03e82921084755a3c59558ada597158d7d4b03d1a228c00e136",
+  "sourceMtimeNs": 1795659654480500900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/whiterose.gif",
+      "sha256": "5cde42e59083ae7625be85c30e4da210562f4371bf0856659fa455393ceab98c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/whiterose.jpg",
+      "sha256": "32159810135d68d16ad75e44ededd936106306f82ae1d9e692c30111c0ea17b3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/whiterose.webp",
+      "sha256": "cd848e605933d89c45850eb32a2b66ee9974b2dff33f04ed2d4abf4e1eb9adff"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/whiterose.gif",
+      "sha256": "649f56a779d04a94de459a8d13d68a6ceabda7e8625253be92f50a744daf2eb0",
+      "bytes": 3470232
+    },
+    {
+      "file": "images/discovery-ends/whiterose.jpg",
+      "sha256": "f5e1e84ff273c5d72e673479d366fdf8f9c4db12cff4be7c049e28f859d44b3c",
+      "bytes": 101584
+    },
+    {
+      "file": "images/discovery-sheets/whiterose.webp",
+      "sha256": "4160bc640e51991dda9c439a58038c2defdf79dbd7ab93008b9457d560a31dca",
+      "bytes": 1766218
+    }
+  ]
+}

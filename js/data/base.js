@@ -1091,10 +1091,12 @@
   G.SHIP_NAMES = ['산티아고', '산마르코', '산안토니오', '산마르틴', '산세바스찬', '산조르디', '아르메리아', '루이자', '카타리나', '콘세프시온', '블랑카', '에레오노라', '요한나', '테레사', '디니스', '산타마리아', '후아나', '아순시온', '콘스탄시아', '베렌게라', '트리니다드', '빅토리아', '에스페란사', '산가브리엘', '산라파엘', '베리오', '핀타', '니냐', '플로르 데 라 마르', '보아 비아젱'];
 
   // 강의 통행·계절·보급. 폭과 수심은 강별 자료의 게임용 값이며 해상 속력은 바꾸지 않는다.
+  G.BALANCE.terrainLevels={latNorth:55,latTemperate:35,mountain:1400,mountainSlope:.18,oasisGreen:.075,tree:[1000,2100,3200],snow:[2100,3300,4500],
+    seasonalSnow:{latitude:55,cover:[.92,.92,.82,.66,.48,.20,.05,.04,.18,.42,.72,.90],scale:8,feather:.18,terrainThreshold:.55}};
   G.BALANCE.waterways = { freezeLatitude:54, winterMonths:[12,1,2], floodDays:7,
     freshRadius:0.18, refillDays:1.0, riverBaseSpeed:0.34, upstream:0.76, downstream:1.18,
-    cargoLoss:0.035, crossingCooldown:1,
+    cargoLoss:0.035, crossingCooldown:1, harborDepth:8, harborTurn:600, harborProgressPad:.04,
     mounts:{walk:[.58,.22,.035],porter:[.66,.30,.02],horse:[.86,.58,.02],elephant:[.94,.74,.012],
       wagon:[.28,.035,.13],donkey:[.58,.30,.05],camel:[.60,.34,.045],llama:[.58,.32,.04],yak:[.68,.43,.025],reindeer:[.48,.18,.05]},
-    shipDraft:{galleon:4.4,lgalleon:5.2,carrack:4.5,lcarrack:5.4,line:5.6}, shipWidthSafety:2.2, shipTurnSafety:2.6 };
+    shipDraft:{galleon:4.4,lgalleon:5.2,carrack:4.5,lcarrack:5.4,shipline:5.6}, shipWidthSafety:2.2, shipTurnSafety:2.6 };
 })(window.G = window.G || {});

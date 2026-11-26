@@ -1,0 +1,43 @@
+{
+  "id": "victoriaterminus",
+  "name": "빅토리아 터미너스",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/victoriaterminus.png",
+  "sourceSha256": "b169c42904f894baac90d035235b166902b52b01b8d589a4b30ceae502caa1eb",
+  "sourceMtimeNs": 1795662807113958000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/victoriaterminus.gif",
+      "sha256": "2f454efda41f4f026e306a4a1aed659c0c89dc48c564aff5725c6dd19094ea38"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/victoriaterminus.jpg",
+      "sha256": "270fec9cbc137f29ba84134aad2456a75938145af21818769d7e53a8805bf9fd"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/victoriaterminus.webp",
+      "sha256": "7a2b0d8ce52afa937d394704707850e8b824e63544aa79f27f8780c24d126023"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/victoriaterminus.gif",
+      "sha256": "0f5b373ed2e5959768b4fab325d0d2d8528a265372275c310079b6b3daefaabe",
+      "bytes": 3841422
+    },
+    {
+      "file": "images/discovery-ends/victoriaterminus.jpg",
+      "sha256": "f1203ab50e189c5f882c4adc5f97bb2398436e41ed1a78b9766b76670fc7dcee",
+      "bytes": 103699
+    },
+    {
+      "file": "images/discovery-sheets/victoriaterminus.webp",
+      "sha256": "f4bdc109818d84e7a03ec7d25e0c9a449d4ee2727a2ce9dfaec5605588d48846",
+      "bytes": 1834044
+    }
+  ]
+}

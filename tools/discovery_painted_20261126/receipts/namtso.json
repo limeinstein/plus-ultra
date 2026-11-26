@@ -1,0 +1,43 @@
+{
+  "id": "namtso",
+  "name": "남초 호수",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/namtso.png",
+  "sourceSha256": "a7f08718100faaba0e6e4ebac6779bbdd6727cf44d7c9b23bd2cc18fe11263b6",
+  "sourceMtimeNs": 1795659649867345000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/namtso.gif",
+      "sha256": "077f6e13951ea1caa0d103e88610f735590541925d731311ec28f6e4c4ab66f8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/namtso.jpg",
+      "sha256": "3849805a2815b7f76cb93bf7d18a13055273fccdaffbd3d8e580c99a3495a41e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/namtso.webp",
+      "sha256": "b1d4c62291a5f0aaea166433ae658abff318dc1222b84698e8379bce584d4187"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/namtso.gif",
+      "sha256": "50caa9f3cf2e22b23b00b034d084d8dbae9b2281d110ce4e013900085553239f",
+      "bytes": 2195986
+    },
+    {
+      "file": "images/discovery-ends/namtso.jpg",
+      "sha256": "936f3fbc273bfc0b6e457bb3540927a5d044fa2a4fbfaeb4ab12cb6b45f12940",
+      "bytes": 63778
+    },
+    {
+      "file": "images/discovery-sheets/namtso.webp",
+      "sha256": "dbb83ddbdfe6fb211d0c01dcbf0e174b5a1751d02b2bcc5cb43cf4a22797b92c",
+      "bytes": 939346
+    }
+  ]
+}

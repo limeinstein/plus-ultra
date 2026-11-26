@@ -1,0 +1,43 @@
+{
+  "id": "glassbowl",
+  "name": "쇼소인의 흰 유리그릇",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/glassbowl.png",
+  "sourceSha256": "750669ef4c78ea01932d797da699549f49a3313544888eebe528d1db4f96c249",
+  "sourceMtimeNs": 1795659913732763000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/glassbowl.gif",
+      "sha256": "a7a396419303df99487532c0147ffc0a2e3bab32257f057666b7866359943a40"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/glassbowl.jpg",
+      "sha256": "335268dc2a52c09b1974960cc639b6c0bfa6ad6cb5b317bc9d5737ca81e80436"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/glassbowl.webp",
+      "sha256": "0523c9fb7ac3bd9e4ee0875e02ca10d9576c87b072eecae5815f09632344eaa0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/glassbowl.gif",
+      "sha256": "685ec38796191a7b9c8418a14512d76204cfa61b01fc144a82ad0205872e4fc1",
+      "bytes": 3404303
+    },
+    {
+      "file": "images/discovery-ends/glassbowl.jpg",
+      "sha256": "11675d78ae2e297edb32f73ee7d15e284617a51f2ff823cdcaf47e57d7d26df5",
+      "bytes": 88323
+    },
+    {
+      "file": "images/discovery-sheets/glassbowl.webp",
+      "sha256": "80f9a5b8b27bf1da7fb2e97a1dd00f154240d2c5fb9a2e6130a078d3ea70c345",
+      "bytes": 1490492
+    }
+  ]
+}

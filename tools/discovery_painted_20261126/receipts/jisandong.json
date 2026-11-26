@@ -1,0 +1,43 @@
+{
+  "id": "jisandong",
+  "name": "고령 지산동 고분군",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/jisandong.png",
+  "sourceSha256": "1845dca82240c11ee5b77431cae3a91bb871b7232c9d66630793d456cab344ca",
+  "sourceMtimeNs": 1795662757933715900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/jisandong.gif",
+      "sha256": "293632ca1ece01cedf4d61bf56ca42c51aff4a0d0759d941d2ae3f8f8c6b76ef"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/jisandong.jpg",
+      "sha256": "a338d54cdf343076810ef19f28fc9c62a9b413f8091d1f5acf7a9c76c53e679b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/jisandong.webp",
+      "sha256": "3752a552746b03f350e397981db9c4981beee93fd34eb804e8ee9f18b66e98e6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/jisandong.gif",
+      "sha256": "f294927e84105b4de4ff367d40d3a90dbf263c7ef1f66576286600c1f2b70769",
+      "bytes": 3253968
+    },
+    {
+      "file": "images/discovery-ends/jisandong.jpg",
+      "sha256": "3bc71ce3a5841e11136272cc2ad3eb48c5296a28e3262ee04a67d9d18aff9954",
+      "bytes": 97665
+    },
+    {
+      "file": "images/discovery-sheets/jisandong.webp",
+      "sha256": "8830ab8549a0303fa1f51203511aaf16f4981320d456b0f2d7af11bc946ad9c5",
+      "bytes": 1655492
+    }
+  ]
+}

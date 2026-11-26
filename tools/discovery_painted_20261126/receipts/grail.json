@@ -1,0 +1,43 @@
+{
+  "id": "grail",
+  "name": "아서 왕의 성배",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/grail.png",
+  "sourceSha256": "0b6a8d6b0c71e8c9d3d21743bb8248f74a7e7d4948b6372825d0d7965516d2cc",
+  "sourceMtimeNs": 1795659919488213800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/grail.gif",
+      "sha256": "6199a1b0a538f3e8de659f11a4f88234d13f297b8f982977af6da8cf81712404"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/grail.jpg",
+      "sha256": "ccbf008038a03c2a0e3afd6ff21f40d6d81aaf041544d347d542618dca0cde23"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/grail.webp",
+      "sha256": "c4113750c1c3d358a0b59cee1b3eda73af6f7cdcf1112d8d60c6f1e7a1efe61a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/grail.gif",
+      "sha256": "2b63c44e4e1f3902f3f8e5b04b001ad250ec58c1d7d659b9d822f9ec3c5c0e4f",
+      "bytes": 3647958
+    },
+    {
+      "file": "images/discovery-ends/grail.jpg",
+      "sha256": "2e340f49cb7e39a75d486bd02465e2a7b469c966848ab772c5172f16186a4021",
+      "bytes": 92828
+    },
+    {
+      "file": "images/discovery-sheets/grail.webp",
+      "sha256": "1f6fa2a5fe0b4d640141e3bf45f9b26480c2e8b2e08f4261d9ae0bff2463cbcf",
+      "bytes": 1574746
+    }
+  ]
+}

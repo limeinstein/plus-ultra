@@ -1,0 +1,43 @@
+{
+  "id": "ruware",
+  "name": "여요 청자 접시",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ruware.png",
+  "sourceSha256": "3cadab80de0031d618834207901b66cbdc46905e7e2c4cd00501516c2076fe59",
+  "sourceMtimeNs": 1795660114705853600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ruware.gif",
+      "sha256": "bad5f4118beb95b770adbb2aefcf9a883d521a3c0756caf5ae7b391e88c0dbff"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ruware.jpg",
+      "sha256": "50c0252c54a68bd46f468c0a31b555cd6efd32837598efd30c99e0029cd615a0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ruware.webp",
+      "sha256": "f69dedfab199f6c9d334113daf75d7fe2aa759759b516ad7c404d729279581f7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ruware.gif",
+      "sha256": "aa17bb8ea16453c93a139962d2050b6d60ff3d51aad25da3b7c71d9310dc0918",
+      "bytes": 3077288
+    },
+    {
+      "file": "images/discovery-ends/ruware.jpg",
+      "sha256": "8a0713322c3ad27b11398fc6500439b05cb29da5f3c1aacb582bd132d56d1cae",
+      "bytes": 73838
+    },
+    {
+      "file": "images/discovery-sheets/ruware.webp",
+      "sha256": "dfff4a248ebc57c65942ecdf5cb5b0276065abe0437cf479d4138590762d93ba",
+      "bytes": 1184012
+    }
+  ]
+}

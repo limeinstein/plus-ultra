@@ -1,0 +1,43 @@
+{
+  "id": "nachi",
+  "name": "나치 폭포",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/nachi.png",
+  "sourceSha256": "bb2834b46834d8b20c55a2f7d74ebdb05acdeca4dcae5df401985bfd104c688a",
+  "sourceMtimeNs": 1795659644760535300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nachi.gif",
+      "sha256": "d55291b1ada249b7ce881bfee046bdf38d04f90ca41d5a41af87da8170512566"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nachi.jpg",
+      "sha256": "247985fe3c6124acadcb84505baeb5f7c155a60f6acf3e01702e7bce19afd736"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nachi.webp",
+      "sha256": "0ce88191627cfaebed1c4652d4ce31145682ab5497ce51c61db93155fa2ec3b6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nachi.gif",
+      "sha256": "0a1d7649258dc299b2a45445cca17bb6d1992b4275ba16db7f64d7cadcaded18",
+      "bytes": 3604985
+    },
+    {
+      "file": "images/discovery-ends/nachi.jpg",
+      "sha256": "cff462baf28e4adc86757545460f5dbffca813678d523d9f654b2684f7ad21dc",
+      "bytes": 102123
+    },
+    {
+      "file": "images/discovery-sheets/nachi.webp",
+      "sha256": "d1c17176dcb25cd48929723a33491788e15b93341f9e2b755b3cff7a797540b0",
+      "bytes": 1821498
+    }
+  ]
+}

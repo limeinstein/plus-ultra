@@ -1,0 +1,43 @@
+{
+  "id": "prora",
+  "name": "프로라",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/prora.png",
+  "sourceSha256": "67711f94103074bd171e919076633029058131e32cc795d9a3fbbe5cb2694651",
+  "sourceMtimeNs": 1795661395968851500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/prora.gif",
+      "sha256": "5a2c697511cb7e33a9233943eb444f3522a3a4e8c8ab0e3ef1fe4538d8c36ade"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/prora.jpg",
+      "sha256": "5c1496843a6ae04abb8a0e804e5a52e873c9137a00487b6349302fa34f8c8387"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/prora.webp",
+      "sha256": "c1fab53df46890afa89b987373736de25ef83837df9929c4c94e02ea7a5cecc5"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/prora.gif",
+      "sha256": "9f744e4cbcc3359c5512b560885cab6a25d7ebffec59df8c091911d4b1165663",
+      "bytes": 3266975
+    },
+    {
+      "file": "images/discovery-ends/prora.jpg",
+      "sha256": "c887468552e3e9ce4fc0b175f7000f2bf41b01462e5bde1ea7a2eace0871e0d7",
+      "bytes": 88431
+    },
+    {
+      "file": "images/discovery-sheets/prora.webp",
+      "sha256": "02b96e2939a6263f3b163b59878ab803a1adc641545047b96ced5e91675b0414",
+      "bytes": 1505002
+    }
+  ]
+}

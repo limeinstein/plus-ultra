@@ -13,7 +13,7 @@ const { chromium } = playwright;
 const ROOT = path.resolve(__dirname, '..');
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 (async function () {
-  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));

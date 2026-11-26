@@ -1,0 +1,43 @@
+{
+  "id": "deathvalley",
+  "name": "데스 밸리",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/deathvalley.png",
+  "sourceSha256": "7d5faccd5f13a53820fe704e719db3e7fb927c7df1a4bb44bfb25d156a236779",
+  "sourceMtimeNs": 1795659656852136900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/deathvalley.gif",
+      "sha256": "76f18403eb5341f34368958521b207e4b4597140c9ffd79bf974d024df37376e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/deathvalley.jpg",
+      "sha256": "c930722b540bd4e46f760997c356f42ad3519d77212727c41ba7a21125c8a51c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/deathvalley.webp",
+      "sha256": "c45d0d402118f91808ee6f1e17f1b8e4b6ec6fc79dd9b39b6c7ab8ab2634d12e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/deathvalley.gif",
+      "sha256": "5d3ea3363d393def6416d01fbab08874ebb25041228b06865982b48198fbc530",
+      "bytes": 2847277
+    },
+    {
+      "file": "images/discovery-ends/deathvalley.jpg",
+      "sha256": "8fea67dcb9ff7211445084039294fb7892f9332c760a6b62d2537da5b7cf728d",
+      "bytes": 89304
+    },
+    {
+      "file": "images/discovery-sheets/deathvalley.webp",
+      "sha256": "d0d7bcaa0c6dfc85abfb47396b85e7f76ae872b842d8120c40d077ccda6a2388",
+      "bytes": 1506696
+    }
+  ]
+}

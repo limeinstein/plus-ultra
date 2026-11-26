@@ -1,0 +1,43 @@
+{
+  "id": "seychelles",
+  "name": "세이셸 제도",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/seychelles.png",
+  "sourceSha256": "ea53d8b8ffa67f8721a6d827223074854dc1d57ef29f2473b1974d0e90048d56",
+  "sourceMtimeNs": 1795659659350010700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/seychelles.gif",
+      "sha256": "3dd48d7c19b0d03b16b1d25a854822f3c91cb6d7134bcb5529e2562689355cd4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/seychelles.jpg",
+      "sha256": "c4adfab1f8c1abe0190a7d035a77d57e2047557ab1b2f4d8fc010566029cae97"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/seychelles.webp",
+      "sha256": "8f257622e7ffd0a7615081670c459134b05a4080139df7a311c8720489f4924c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/seychelles.gif",
+      "sha256": "7a7684f3447df318585d698c5a982bdff05ad34b1c54701afdadb98543b619b9",
+      "bytes": 2833658
+    },
+    {
+      "file": "images/discovery-ends/seychelles.jpg",
+      "sha256": "41c7a35ac3301ab05c846d3435d7e0477a50257538a8343ec7159d9c702775ef",
+      "bytes": 97378
+    },
+    {
+      "file": "images/discovery-sheets/seychelles.webp",
+      "sha256": "e8611e6030d73823f184626fd2dc903805b4839b87ece6ca7b725950ad4188b1",
+      "bytes": 1662140
+    }
+  ]
+}

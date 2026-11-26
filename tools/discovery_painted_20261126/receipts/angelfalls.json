@@ -1,0 +1,43 @@
+{
+  "id": "angelfalls",
+  "name": "케레파쿠파이 메루 (앙헬 폭포)",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/angelfalls.png",
+  "sourceSha256": "deffcebad02a3c184765142eafa09372b20c68bdd487476e11849952034bb491",
+  "sourceMtimeNs": 1795659645664942200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/angelfalls.gif",
+      "sha256": "bb54e6df881d74e3f5798aa20034ebf0003bfac754304cd7f4f6c10f0aeb86a4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/angelfalls.jpg",
+      "sha256": "bf6f9aad91164ee02d589b7b0bdafba617cabff8be40f8d5a616c2582a44026d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/angelfalls.webp",
+      "sha256": "f8841c3455364566c12148f1dfdd1c1600c92ad276fd26862c6c034dd899ef6c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/angelfalls.gif",
+      "sha256": "1a2e3dc367a1639295baf79c2d56edb00da2354f616e7b8ee413462acd547e48",
+      "bytes": 3155191
+    },
+    {
+      "file": "images/discovery-ends/angelfalls.jpg",
+      "sha256": "4367fbdf08ce26512438f0ab7ec965db47b48b302339b26c8b3222c1a8369072",
+      "bytes": 100327
+    },
+    {
+      "file": "images/discovery-sheets/angelfalls.webp",
+      "sha256": "c0553646127467c493728831bf7dc978a32e6399b5fb66d86c9676fe2c6acf73",
+      "bytes": 1741986
+    }
+  ]
+}

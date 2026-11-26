@@ -1,0 +1,43 @@
+{
+  "id": "ghentaltar",
+  "name": "어린 양에 대한 경배",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ghentaltar.png",
+  "sourceSha256": "2373d35131201ba34850e2627b29a41ceed7409f1c99bf3b228b9f4bef61b659",
+  "sourceMtimeNs": 1795660920311270600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ghentaltar.gif",
+      "sha256": "3ffdc9bfd466ce5c8a3e1e69549554c7677a7ffd28aceb183b6a6bce8acc43b3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ghentaltar.jpg",
+      "sha256": "b91654c763b6d88a0378dee1b5848b412f3aec778fc6b994796d519761d6fb9e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ghentaltar.webp",
+      "sha256": "c061225ca885053f436ed0347ceb81548627868df1c3434c91175e71b4ef8144"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ghentaltar.gif",
+      "sha256": "7a6b1939fab685eee8081973715ce4d3a0c6baa50c1b8baabdc70eeb7990381e",
+      "bytes": 3756986
+    },
+    {
+      "file": "images/discovery-ends/ghentaltar.jpg",
+      "sha256": "ebe986e301b8fc743c7e15a5a3d76d536d9a112aba3fdc3da4899b3f0708f233",
+      "bytes": 80345
+    },
+    {
+      "file": "images/discovery-sheets/ghentaltar.webp",
+      "sha256": "6e0e218962547045e6fcbcf83114981b1f3cd6a37c0c744170c075449591a850",
+      "bytes": 1317372
+    }
+  ]
+}

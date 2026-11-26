@@ -1,0 +1,43 @@
+{
+  "id": "jongmyo",
+  "name": "종묘",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/jongmyo.png",
+  "sourceSha256": "1a4694fe01479d73b2e84f1b4a56be507003c4c20ed96c5973983ef1d78f5510",
+  "sourceMtimeNs": 1795660616602193300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/jongmyo.gif",
+      "sha256": "8b8875bf4c1570d7e6f17331b0c3d17740da97cb8e0cd91e9a918fc3dc358fff"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/jongmyo.jpg",
+      "sha256": "01bbba893fc94c2aaf84fe14ad4dd766c8f649985ad569068f8ab31a75615cab"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/jongmyo.webp",
+      "sha256": "44136c11054dd9ede30c8283fd0709e76aa82aee5bcd5fa3be9200af667228b1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/jongmyo.gif",
+      "sha256": "a435ee143fad8b7e5211d1295d0615d5571c3dba86923f5634221c73590f6e3b",
+      "bytes": 3389468
+    },
+    {
+      "file": "images/discovery-ends/jongmyo.jpg",
+      "sha256": "8378838b65a87128613009f2afb17142cb5af8f0c3a38df4c82fe2ecdd833994",
+      "bytes": 96570
+    },
+    {
+      "file": "images/discovery-sheets/jongmyo.webp",
+      "sha256": "01fd5af775f79854e8395ead72d2aa143f9a3e45b201960b7422a7808226e161",
+      "bytes": 1668874
+    }
+  ]
+}

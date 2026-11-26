@@ -1,0 +1,43 @@
+{
+  "id": "casagrande",
+  "name": "카사 그란데",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/casagrande.png",
+  "sourceSha256": "61b9925986973b7e529e0bdca769a76374ab91049da08cb9f7814f95824d92e5",
+  "sourceMtimeNs": 1795662973685691000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/casagrande.gif",
+      "sha256": "a188b763e25c82abcca2fa6f22e3cee1989d4fe9a73805a31e1c6e46676adf47"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/casagrande.jpg",
+      "sha256": "7cc3b356fc4d995d9f33f868ea69b067121c723ca1bac9c3cba8b3bc77a1d66c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/casagrande.webp",
+      "sha256": "f02b2607a0deb4a60218dcae337dd8b4a6541e4debb802c0b1f8531848ac671e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/casagrande.gif",
+      "sha256": "4a8f49f0b35b276a12d8a3e7fa3ddae1fea1566b2fcbde8b02403549de8313ce",
+      "bytes": 3306255
+    },
+    {
+      "file": "images/discovery-ends/casagrande.jpg",
+      "sha256": "252cd35a674b3b84cb41d94860e83f88a6b0f440569fedd80f21fe71a19c0d11",
+      "bytes": 92200
+    },
+    {
+      "file": "images/discovery-sheets/casagrande.webp",
+      "sha256": "3618300dee99ed4137f918417f1aa8d39857f64e5c61a61ab86905d407775565",
+      "bytes": 1571316
+    }
+  ]
+}

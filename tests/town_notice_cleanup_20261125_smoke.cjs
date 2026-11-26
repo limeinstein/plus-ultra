@@ -6,14 +6,14 @@ const {chromium}=require('../tools/procedural_art/node_modules/playwright-core')
 const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'artifacts/town-notice-cleanup-20261125');
 fs.mkdirSync(OUT,{recursive:true});
 (async()=>{
- const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader']});
+ const browser=await chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=angle', '--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  let p;const errors=[],report={};
  try{
   p=await browser.newPage({viewport:{width:1600,height:900}});p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   await p.addInitScript(()=>{localStorage.clear();localStorage.setItem('pu.lang','ko');localStorage.setItem('pu.uiSize','normal');const raf=window.requestAnimationFrame.bind(window);window.requestAnimationFrame=cb=>cb.name==='loop'?0:raf(cb);});
   await p.goto(pathToFileURL(path.join(ROOT,'index.html')).href,{waitUntil:'domcontentloaded',timeout:120000});await p.waitForFunction(()=>window.G&&G.Game&&G.Game.sceneName==='title',null,{timeout:120000});
   await p.evaluate(async()=>{
-   await G.Game.ensureGeo();const s=G.Game.state=G.State.newGame({name:'선장',nation:'PT',job:'explorer',age:24,birth:{m:1,d:1},st:{str:60,int:60,mar:60,cha:60},sk:{},lg:[],diff:'normal'});
+   await G.Game.ensureGeo();await G.Game.prepareRenderer();const s=G.Game.state=G.State.newGame({name:'선장',nation:'PT',job:'explorer',age:24,birth:{m:1,d:1},st:{str:60,int:60,mar:60,cha:60},sk:{},lg:[],diff:'normal'});
    s.flags.prologue=true;s.settings.res=.35;G.State.save=()=>{};G.UI.fade=async fn=>fn();G.Scenes.city.findInside=async()=>{};
    const say=G.UI.say;G.UI.say=async()=>{};window.__restoreSay=()=>{G.UI.say=say;};G.Game.go('city',{cityId:0,load:true});
   });

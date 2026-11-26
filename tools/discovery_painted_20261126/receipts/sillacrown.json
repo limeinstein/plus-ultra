@@ -1,0 +1,43 @@
+{
+  "id": "sillacrown",
+  "name": "신라 금관",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sillacrown.png",
+  "sourceSha256": "82efe4366a2c4434fbba94e75946e4876c27e2096de772e58fc46634c36768ca",
+  "sourceMtimeNs": 1795660007099304100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sillacrown.gif",
+      "sha256": "be96c38e847aa4180306bfe92e4e9689ae0f32831c775a55dcba29de08215992"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sillacrown.jpg",
+      "sha256": "d7bf093b2c19925151216fd2ed2a2cc0788e43006ab463c024019eb54dd33c24"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sillacrown.webp",
+      "sha256": "17490f94e266141bb6c35c6e18b2006434ef3b6401a6659e4df181b5ee59ec36"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sillacrown.gif",
+      "sha256": "5818182eccc3406bbfe4bec74f6b4b07647f444ab7de9652ad23863bfe383d38",
+      "bytes": 3313075
+    },
+    {
+      "file": "images/discovery-ends/sillacrown.jpg",
+      "sha256": "44a4418d2fe5c1abf69c253e85e338f33bacdaea68cd0210cd6cb01674ca8d70",
+      "bytes": 95720
+    },
+    {
+      "file": "images/discovery-sheets/sillacrown.webp",
+      "sha256": "d0e5f26815ad971a4f699aa2a1f2f4b3315c34052ec341c17ddc2bfa66440386",
+      "bytes": 1552850
+    }
+  ]
+}

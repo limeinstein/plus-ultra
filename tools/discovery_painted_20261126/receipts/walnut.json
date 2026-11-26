@@ -1,0 +1,43 @@
+{
+  "id": "walnut",
+  "name": "페르가나 호두",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/walnut.png",
+  "sourceSha256": "be0be041e089a0f4522e21c2a855d6e5de3798e50884ee9116298cd64b0700ec",
+  "sourceMtimeNs": 1795659653353068700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/walnut.gif",
+      "sha256": "266755712299db77b5d4ed59f86333127c388da569d74fc639d092208ba22530"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/walnut.jpg",
+      "sha256": "f0c031e6d051740a8da390a459f671fb8ac837c83fc5ff47b34c2154200d1a1d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/walnut.webp",
+      "sha256": "2b9419745f77cc6513355e5d3195995bc8c57ab840a02068509e6221bf75b9bb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/walnut.gif",
+      "sha256": "debb1a483974dadb470535f90f207fcfdb8605a30403343b28dfa12506035249",
+      "bytes": 3273705
+    },
+    {
+      "file": "images/discovery-ends/walnut.jpg",
+      "sha256": "51b47aa8ebe46bd1533ce47cf83bd22076a085136d89ed5cd71ed9c05936e338",
+      "bytes": 104565
+    },
+    {
+      "file": "images/discovery-sheets/walnut.webp",
+      "sha256": "4cf343973ddc853d914a73b25a62fd7576b434347d4c38880485adae1a6468c1",
+      "bytes": 1803978
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "pazyryk",
+  "name": "파지리크 고분",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/pazyryk.png",
+  "sourceSha256": "d5a3484a7dcf727d1c2112af09307076601dbf8cfdf73fb526b12a5aad8c7f18",
+  "sourceMtimeNs": 1795662048345946700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/pazyryk.gif",
+      "sha256": "af709df6c289851854c2788058b07e76a09007a747b0d1809038c226478e45ab"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/pazyryk.jpg",
+      "sha256": "5c837abbdaaf8f898af23c28c2fe42991fffdfc5241b4e2c5fb2ea81b54e7691"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/pazyryk.webp",
+      "sha256": "ee5aef13f94cff42788c9d107af97a70bc74a125b02a435fdb3d01202d4006b4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/pazyryk.gif",
+      "sha256": "5408227934f1fef09bbaa0668cd2d5f127bb7f2abf1e53ed1ba914979dc80fed",
+      "bytes": 3673872
+    },
+    {
+      "file": "images/discovery-ends/pazyryk.jpg",
+      "sha256": "d564c50a02179ffff853d882c625e793019f86cbc54c077eb79fe5712415d6e0",
+      "bytes": 99796
+    },
+    {
+      "file": "images/discovery-sheets/pazyryk.webp",
+      "sha256": "abf74959236583fd34cc48081c2ea949681b4996ccfd56b5e7cee0254908b87e",
+      "bytes": 1770324
+    }
+  ]
+}

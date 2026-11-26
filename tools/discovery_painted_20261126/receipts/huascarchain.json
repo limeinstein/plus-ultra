@@ -1,0 +1,43 @@
+{
+  "id": "huascarchain",
+  "name": "와스카르의 황금 사슬",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/huascarchain.png",
+  "sourceSha256": "c157bac80ca762d4f99bd9a4544c48752f5e7de3b549f08d15595dc9c2cd514b",
+  "sourceMtimeNs": 1795661767366449600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/huascarchain.gif",
+      "sha256": "863e01a10af574b99a16af06ba8c7417378337d27469283cbb7657335a55c668"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/huascarchain.jpg",
+      "sha256": "b44f066375c80ce6f310195d94571ff4d73a0a325014e20305860983119a4a98"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/huascarchain.webp",
+      "sha256": "3f5bb8c3fa64fe8af829b1af5e72e80b94c95ba073d1a83ed8fb0bbd0f8d1723"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/huascarchain.gif",
+      "sha256": "3059d7cd985f12d4604779bfdfdf2296b7d33e06f48fa7b242edddc68b98d9ad",
+      "bytes": 3535859
+    },
+    {
+      "file": "images/discovery-ends/huascarchain.jpg",
+      "sha256": "3ee11683f33cc24173f12c34c80d6fde87bef31202aaa8e94697740e5a3fe62d",
+      "bytes": 96653
+    },
+    {
+      "file": "images/discovery-sheets/huascarchain.webp",
+      "sha256": "f890fc46e6455c095bdf098efae5fb84297886a03291d7cc878d46a5002cc498",
+      "bytes": 1614906
+    }
+  ]
+}

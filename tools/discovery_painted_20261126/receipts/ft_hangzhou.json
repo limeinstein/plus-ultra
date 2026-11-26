@@ -1,0 +1,43 @@
+{
+  "id": "ft_hangzhou",
+  "name": "찻집의 윷판",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ft_hangzhou.png",
+  "sourceSha256": "621f2182f0d13c64c9fa951521037cd6ca479609dcacfa59a4390b77176ea2aa",
+  "sourceMtimeNs": 1795663366311157500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ft_hangzhou.gif",
+      "sha256": "d4ca1efae4dd26e222071da239e5e66991764111ab2ea1e68a4553c728d9ace5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ft_hangzhou.jpg",
+      "sha256": "4ec3cc30c7f84987f96ec8f4f2ac1730205d962f48731288cdcdd769c1a9f9eb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ft_hangzhou.webp",
+      "sha256": "2f33923cf0e98ffb751be85cf1ef02bbcdd393259cd94a1a8cae5c72adff30fd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ft_hangzhou.gif",
+      "sha256": "523b6ed09714aaa400db91887f56124ab4f102e831a96bbfd7b3f1c3ed6e8fba",
+      "bytes": 3251997
+    },
+    {
+      "file": "images/discovery-ends/ft_hangzhou.jpg",
+      "sha256": "3d13867e2790e1607c23b85bd13d4a1de2e1b983490a040f51b9e4103441cbd4",
+      "bytes": 87152
+    },
+    {
+      "file": "images/discovery-sheets/ft_hangzhou.webp",
+      "sha256": "ce7eddac790f75c8d0e0cab102d49a104329d7a43b774129b31c8d76fb6f1a94",
+      "bytes": 1409714
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "casacontrat",
+  "name": "인디아스 통상원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/casacontrat.png",
+  "sourceSha256": "f0cf0f7cb55732e5f24be1ab852dd9bb16c86ff365cf1af61dc5c4f18bf03c45",
+  "sourceMtimeNs": 1795661085238868600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/casacontrat.gif",
+      "sha256": "7638f36a53cb0d3afe52897fab30966635752ca1475af29fe3c80fa7c231f37a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/casacontrat.jpg",
+      "sha256": "5bbca42aff7423cf9a6b4879b24aadfe20f950d5cc9cc8cb334138fd76a33e1f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/casacontrat.webp",
+      "sha256": "4f3a6230a3f89dbabac2f4c7bdb3d846051b01eeff8bd9523362727188009434"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/casacontrat.gif",
+      "sha256": "d1f22bf105bc0f44881b755aaaba827dc13364f00cca8f9fc47d593a36abcc75",
+      "bytes": 3625426
+    },
+    {
+      "file": "images/discovery-ends/casacontrat.jpg",
+      "sha256": "7f7b944cfd4f1030b594a2b2a3cff16b068cf77ed8a4dc7d4f532a3fe7205688",
+      "bytes": 100461
+    },
+    {
+      "file": "images/discovery-sheets/casacontrat.webp",
+      "sha256": "4741893566adf75c60e162c5a214a89a1e2d3fd79a3df6925892c871c5fb643a",
+      "bytes": 1740800
+    }
+  ]
+}

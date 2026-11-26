@@ -1,0 +1,43 @@
+{
+  "id": "chengde",
+  "name": "피서산장",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/chengde.png",
+  "sourceSha256": "0338446c0e6ba8e7a660f515fdef926b8748ba0869d71805a557e2548a6291c3",
+  "sourceMtimeNs": 1795661592650509600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/chengde.gif",
+      "sha256": "aeb132620ea4085a8a6eaa22c68a1da0086fe6eb82b7a88df1a6b83d2edbdf5e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/chengde.jpg",
+      "sha256": "f309de1365e25a1b780f47fa8e12bea995c74b1763b104c3f651b83ee1f5cbe4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/chengde.webp",
+      "sha256": "2e0c7107a528ed667098de2e58ef982046af3e83d37a6e2184699803368f0780"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/chengde.gif",
+      "sha256": "ddfc292ec7e358f2e49ec2973de735c1972142204a90b77bed193c4abcc41211",
+      "bytes": 3450498
+    },
+    {
+      "file": "images/discovery-ends/chengde.jpg",
+      "sha256": "b35bb8f84b999b106f6528ca500d0a740983d2e034da7d2263aee0bf2f29be12",
+      "bytes": 98051
+    },
+    {
+      "file": "images/discovery-sheets/chengde.webp",
+      "sha256": "b321820fc630418bd59bf8cde9aebe8f49da96f52a552d2bc948242dd67cab0a",
+      "bytes": 1721854
+    }
+  ]
+}

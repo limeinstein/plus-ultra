@@ -1,0 +1,43 @@
+{
+  "id": "azaditower",
+  "name": "아자디 탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/azaditower.png",
+  "sourceSha256": "6079679323e6713452137732bfe257f417441672cb82f76d1e0ae25258f146d8",
+  "sourceMtimeNs": 1795662898178415400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/azaditower.gif",
+      "sha256": "74c8d2bc3b1717cc8b4c18e85cda9b5d46950f09510bf06df4e8f5d714190974"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/azaditower.jpg",
+      "sha256": "007a49f0bbb7b2d5cf2b78107e13c2bbf5ecbbe99d2e728b6d326db73c2504f1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/azaditower.webp",
+      "sha256": "57abe4c95d0967df372eacb1637b6adf046decfa79e7a3bfedf21a78ae97e6dd"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/azaditower.gif",
+      "sha256": "c7bc73ab2bc078a8909b796e06f59d8741bac9f9ae4194e0fb42dbc0c227e078",
+      "bytes": 3241967
+    },
+    {
+      "file": "images/discovery-ends/azaditower.jpg",
+      "sha256": "b48c45a8851782d3b67c5541741008fb3cece4c959100223027b9695e502e39c",
+      "bytes": 90964
+    },
+    {
+      "file": "images/discovery-sheets/azaditower.webp",
+      "sha256": "dd6585c902ca632fb7423278946e142c35c1dbbfa17b2295062409a449e4b057",
+      "bytes": 1548764
+    }
+  ]
+}

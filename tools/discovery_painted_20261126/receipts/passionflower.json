@@ -1,0 +1,43 @@
+{
+  "id": "passionflower",
+  "name": "시계꽃",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/passionflower.png",
+  "sourceSha256": "255c15946594f32a04f7bf4b24f546794486b37c1a68142244200089c2a6cc3a",
+  "sourceMtimeNs": 1795659658624529600,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/passionflower.gif",
+      "sha256": "70bea15e82deee29319a0eb9f3d11685c95169eae4ab353a80658a833d696609"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/passionflower.jpg",
+      "sha256": "2d7c52c355db8cedc98bc8fa7bb1853f141ceb36a2267b6ae99e45a852fafc69"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/passionflower.webp",
+      "sha256": "22ce1b6f057c973874150bc99ce26d70563fe1f5ec4fa55e210b6945e3b3f7eb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/passionflower.gif",
+      "sha256": "d175fff2b38e1a1b9506a2ed3affa4176759f531df0ad813ff6fcd189384a006",
+      "bytes": 3612348
+    },
+    {
+      "file": "images/discovery-ends/passionflower.jpg",
+      "sha256": "ff90c2358af07f8b7473bb91af64ab8e6a837e7b1650c762ffd08580b3369204",
+      "bytes": 107401
+    },
+    {
+      "file": "images/discovery-sheets/passionflower.webp",
+      "sha256": "f4e1f43be0b40d6ea90b16b6ced559dce2f4b45ce72871af5796f1daf28f5f27",
+      "bytes": 1855548
+    }
+  ]
+}

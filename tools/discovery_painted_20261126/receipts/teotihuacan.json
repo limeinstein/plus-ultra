@@ -1,0 +1,43 @@
+{
+  "id": "teotihuacan",
+  "name": "테오티우아칸",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/teotihuacan.png",
+  "sourceSha256": "4dd1e3369f616d824eb4d5d667b5ec612bbca1a1a935b615fd2f8ba66dde09b9",
+  "sourceMtimeNs": 1795660875756429000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/teotihuacan.gif",
+      "sha256": "033ea4938d1a3aa70acb3a6d97e194971b82bf5bc2f9cb137ca509e3fa408142"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/teotihuacan.jpg",
+      "sha256": "449e9642d65dbfa7b768de9aa6d137cdd8a169605b8d8cbe6ff8491c986ea0f4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/teotihuacan.webp",
+      "sha256": "6b63298ed3348288837b5e04d24aaeceb155351884f8619980b34f9547b8e8ad"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/teotihuacan.gif",
+      "sha256": "57935e758eb7ba15d6651fd85c0132954f58197b0ed34ffaa19ea839cc0dad6e",
+      "bytes": 3420887
+    },
+    {
+      "file": "images/discovery-ends/teotihuacan.jpg",
+      "sha256": "9aa9135675e585773b4b9297bc9c3b150414449934ea31b55fdcfbe159514369",
+      "bytes": 103864
+    },
+    {
+      "file": "images/discovery-sheets/teotihuacan.webp",
+      "sha256": "bb3b2ca16d2a28b5d63acd4521c6ed84e9d2f94e945902057d0978e710b5310e",
+      "bytes": 1791936
+    }
+  ]
+}

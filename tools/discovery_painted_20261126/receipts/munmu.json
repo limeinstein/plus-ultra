@@ -1,0 +1,43 @@
+{
+  "id": "munmu",
+  "name": "문무대왕릉",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/munmu.png",
+  "sourceSha256": "a36b5636376d9d5d0ce47db74d43ff85dd1dcb07d14a5e7438a2084e44ac4184",
+  "sourceMtimeNs": 1795659881475503400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/munmu.gif",
+      "sha256": "9e5b69f409d9fe481ba406801f41b6111be3fcd2c32cfb87370368783fdf4055"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/munmu.jpg",
+      "sha256": "97ab7e39b80eb5e27dde058a595f292e00b9f1fad3912fbb6f66d5e648c42690"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/munmu.webp",
+      "sha256": "4a050210ad9f4f82c5fd86c707842eb61beb9b41f06da13f54da56454221feb6"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/munmu.gif",
+      "sha256": "693d48674d3f6d8809cd495c16620032eb7b9ab3279449676c938eaa072fc9bc",
+      "bytes": 3056591
+    },
+    {
+      "file": "images/discovery-ends/munmu.jpg",
+      "sha256": "8d24c594ebe34d492488a6307be8f29b6307ad87d7c010668e3dd783e39a7640",
+      "bytes": 92211
+    },
+    {
+      "file": "images/discovery-sheets/munmu.webp",
+      "sha256": "18b824966a3a943113c15993f2a128df0bca472f5118e10c7e13c9f1e7ed293c",
+      "bytes": 1584362
+    }
+  ]
+}

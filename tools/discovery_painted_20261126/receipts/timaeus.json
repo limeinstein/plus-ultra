@@ -1,0 +1,43 @@
+{
+  "id": "timaeus",
+  "name": "『티마이오스』 옛 사본",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/timaeus.png",
+  "sourceSha256": "176f206b7ac71c02b307c6d643cf3318d6e51cd9164b32859af5298b0ae0b36f",
+  "sourceMtimeNs": 1795661631015334200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/timaeus.gif",
+      "sha256": "a875893ddd726c5075237d370df755b5733a5795c69450dbfa09d64ad790d0e0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/timaeus.jpg",
+      "sha256": "e37239a3f16ab332f6664d5896e47a7fe9e6013a3c21ea01e6c16a41750cf1d0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/timaeus.webp",
+      "sha256": "124962055bb92b31c0a66e440f3bcb3783839c906f580b6a8849c94698a8e28c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/timaeus.gif",
+      "sha256": "afd40bf9d7d9b4f32161a4ef8d239ed69c4a4f55eca6b5a7822d43bad3ec3788",
+      "bytes": 3438056
+    },
+    {
+      "file": "images/discovery-ends/timaeus.jpg",
+      "sha256": "6460669f90a87b23a6cde43782c5a13687872fb1dc248dc7815792c06340aa1f",
+      "bytes": 92621
+    },
+    {
+      "file": "images/discovery-sheets/timaeus.webp",
+      "sha256": "0cfd263b28817607ca865f746c623deaab97ecfb18636f41804ae9b36f9bafa7",
+      "bytes": 1571170
+    }
+  ]
+}

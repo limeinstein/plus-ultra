@@ -1,0 +1,43 @@
+{
+  "id": "yuzu",
+  "name": "유자",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/yuzu.png",
+  "sourceSha256": "0cccb032e756c7b57b6835aea88334adbd746e5dd3fd51730fdd4283923a202c",
+  "sourceMtimeNs": 1795659653692852700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/yuzu.gif",
+      "sha256": "b66a565fae6922d2decd585c887fc669fb0f7460752a6071483c073716501faa"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/yuzu.jpg",
+      "sha256": "37dbe42184c34e09da809a3160aaa751a82f6b9c59e424d16d8496fb5c84fa4f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/yuzu.webp",
+      "sha256": "680d4a048d00638c76631363d9d11b58af1dc0c12a58bcc121d4a19545df0c39"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/yuzu.gif",
+      "sha256": "9f89e033101da41f2aee258c099bb021eedaa49ec0d22094f101b3b526b2afbc",
+      "bytes": 3370517
+    },
+    {
+      "file": "images/discovery-ends/yuzu.jpg",
+      "sha256": "0ee1b7871417bc6dd4fa6e182732a543f96c702cdec4710eb56e88cb99894048",
+      "bytes": 104058
+    },
+    {
+      "file": "images/discovery-sheets/yuzu.webp",
+      "sha256": "d791b86554b2b786fb752d51f5d7ce53ee52e49417360be007a146597b43b6ff",
+      "bytes": 1776830
+    }
+  ]
+}

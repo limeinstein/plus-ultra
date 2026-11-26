@@ -1,0 +1,43 @@
+{
+  "id": "boudhanath",
+  "name": "보다나트 스투파",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/boudhanath.png",
+  "sourceSha256": "448faf21d322f55cae7c7d2b43e76eca14afd40888ddc4c8b8e060a35a763ca8",
+  "sourceMtimeNs": 1795661188239653400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/boudhanath.gif",
+      "sha256": "e82391dc2e247251192d1b2e4f0b81764bb36449479783b0783913f63e514e3e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/boudhanath.jpg",
+      "sha256": "d7beddfe6c76bc161e2456ceca59deb25a42846f02893493e3c43bb920bdeca3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/boudhanath.webp",
+      "sha256": "a44c687cb4ba5b1d1fb71fc74722f0de7140269953bfd6967e9f2852351e0b28"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/boudhanath.gif",
+      "sha256": "9ef793c749400dfb7e8f811d3f046ba2b69ea3fc5676d86b9bf1cd3bb247f288",
+      "bytes": 3253145
+    },
+    {
+      "file": "images/discovery-ends/boudhanath.jpg",
+      "sha256": "77fb82fbfa23905ba493efd420414410318915b4ada4fd34e325310ad6c6c80b",
+      "bytes": 94201
+    },
+    {
+      "file": "images/discovery-sheets/boudhanath.webp",
+      "sha256": "503293a2a5eb56fdf6e1d9435ff7443b87decd8bcda1b8199c09b41ba0696283",
+      "bytes": 1571108
+    }
+  ]
+}

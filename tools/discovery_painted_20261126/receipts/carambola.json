@@ -1,0 +1,43 @@
+{
+  "id": "carambola",
+  "name": "카람볼라",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/carambola.png",
+  "sourceSha256": "edc9b551ef3822126986992ff010d3d0866e0b358e1a4ddfac8f03c66e2a3842",
+  "sourceMtimeNs": 1795659653599346700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/carambola.gif",
+      "sha256": "cca09a46cb5308db19bddf909536ecc65ffa359edad13f10fb15b941f95f5a24"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/carambola.jpg",
+      "sha256": "ba46ed70a4f6beb18b5a4240d9b92558583e09da238c7f7277528a64769472b2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/carambola.webp",
+      "sha256": "ba120c6de2ffd6a051c0791fd05eee5f23ab841d8e22d91fcca99e11c50fa571"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/carambola.gif",
+      "sha256": "d1043e4a84fba91dd70425f27db95a325dd38d3dc6aad79de1379ed343f8890e",
+      "bytes": 3425970
+    },
+    {
+      "file": "images/discovery-ends/carambola.jpg",
+      "sha256": "b1f26753103c9091cb5adb8bbaa6ef132d091fc4558a7eb6ef035926621ab693",
+      "bytes": 101100
+    },
+    {
+      "file": "images/discovery-sheets/carambola.webp",
+      "sha256": "4c028a404aae41f9e535eb9c4412a313cb7989a8078ecf2883a46def420cc358",
+      "bytes": 1686732
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "deadsea",
+  "name": "사해",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/deadsea.png",
+  "sourceSha256": "e2a6c7a1246e74fe943368eb2f504c5bf50defd43a826863597403f77420672e",
+  "sourceMtimeNs": 1795659645523898300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/deadsea.gif",
+      "sha256": "b736e5b1d8cb8a11fee49bd63279200ecb8475c5af42bbe18feb48b96cb6a2bf"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/deadsea.jpg",
+      "sha256": "97486fdbe0ce9a53a2addebee7efe913232b9627e830cbec18dc32657d4b6215"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/deadsea.webp",
+      "sha256": "beaa47ac53b5a535ea27e61a41872d23b4160f3946cb085c990ec2015a8b29bb"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/deadsea.gif",
+      "sha256": "3571e9fcee46b8b739ec52dc32993f526f27b1abe83c6fc830c0152b305b9ca1",
+      "bytes": 2711080
+    },
+    {
+      "file": "images/discovery-ends/deadsea.jpg",
+      "sha256": "3651dfeb17fa13f2f922982ee7fba35c7341c040c513882543b38004500c347d",
+      "bytes": 85980
+    },
+    {
+      "file": "images/discovery-sheets/deadsea.webp",
+      "sha256": "5603847b71327dd87b69d2353e5b5aaba606335a65fb9c4cf74a9f67c588bc11",
+      "bytes": 1480814
+    }
+  ]
+}

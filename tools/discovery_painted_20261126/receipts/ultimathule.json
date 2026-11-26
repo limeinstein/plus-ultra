@@ -1,0 +1,43 @@
+{
+  "id": "ultimathule",
+  "name": "피테아스의 툴레",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/ultimathule.png",
+  "sourceSha256": "ec322b23e0fca882d7705112d62531111c4afca8bfe4637f47a378c3c7025611",
+  "sourceMtimeNs": 1795659649191164800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ultimathule.gif",
+      "sha256": "949ee072386819021b98ccfec240bb4905cdb35650c8072e1a1c0be8c0c7d5da"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ultimathule.jpg",
+      "sha256": "5e2be84ae4cb41d1bb9ac35f2de8e61a9b98a49f2fea142346fb895e8ceedb0e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ultimathule.webp",
+      "sha256": "c72b73f909767d955fe28ded8f8df819192042fa665445d74ec80d67e8f825b0"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ultimathule.gif",
+      "sha256": "7ae52e70dbbcabc33edd074e8578a24e850238820fa699326340e8e0326a0a63",
+      "bytes": 3020815
+    },
+    {
+      "file": "images/discovery-ends/ultimathule.jpg",
+      "sha256": "a738c546773a53d843b0f459e2b1f4ffe53caabb34069f472718364fde98a1b5",
+      "bytes": 75442
+    },
+    {
+      "file": "images/discovery-sheets/ultimathule.webp",
+      "sha256": "15fbe9ffbf2e71e61e32a99008a2aff3c11a3e3a9c38a6960508b592ecf6dc8c",
+      "bytes": 1189354
+    }
+  ]
+}

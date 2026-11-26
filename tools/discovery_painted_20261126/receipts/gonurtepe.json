@@ -1,0 +1,43 @@
+{
+  "id": "gonurtepe",
+  "name": "고누르 테페",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/gonurtepe.png",
+  "sourceSha256": "2e9bc9acf9a3ca4fe899a0596d16ab0a5dc852bb8c8327ee85e38999d6547ae6",
+  "sourceMtimeNs": 1795662536225426800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/gonurtepe.gif",
+      "sha256": "63fe3e8dbf42385021efa41ac7871ec0fa69f0af0d774e7b29076ebdb79ec334"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/gonurtepe.jpg",
+      "sha256": "adaecd8a37e593c8933e996ffbc2c5060c58b4075d1d13e372652c0ca1991b1d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/gonurtepe.webp",
+      "sha256": "2ee34ad8670f020d9ae1264ec8496f25c82cd506cc47c21eb90678a225eee2f2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/gonurtepe.gif",
+      "sha256": "ecf8e6a381eb9616ee3deb7a128baca685a195b97d8f754f3b219d77661ebc13",
+      "bytes": 3425446
+    },
+    {
+      "file": "images/discovery-ends/gonurtepe.jpg",
+      "sha256": "550844b9adf276c3b0343e56e09f9390ed88d0ee080679f44b47949e7e368495",
+      "bytes": 90050
+    },
+    {
+      "file": "images/discovery-sheets/gonurtepe.webp",
+      "sha256": "749196565dda710b143b39adb41be0dd32a4b65bc5b1cf3b6830b028c43db351",
+      "bytes": 1515484
+    }
+  ]
+}

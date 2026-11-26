@@ -1,0 +1,43 @@
+{
+  "id": "chartres",
+  "name": "샤르트르 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/chartres.png",
+  "sourceSha256": "eff1b4f2a92b4156db8df0fd8be4ae55e82f6248a58e4df25707226748135dbe",
+  "sourceMtimeNs": 1795661808439450800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/chartres.gif",
+      "sha256": "2c7473523076d8eba6598e4784b5715dca8f3b0246fa66d45fcf450d9b3ac0df"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/chartres.jpg",
+      "sha256": "b3e4b709a587b970d3e4fc8dbe668f81a63652ce0cba525852fc5896b52f4e32"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/chartres.webp",
+      "sha256": "a73beefe092e19b56f26eb7e519d23784c03cec56961e7524187178b3a101063"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/chartres.gif",
+      "sha256": "d94a007e35aa95374dee622e060360c567418994697349dbc97949a9bd2a1c06",
+      "bytes": 3160187
+    },
+    {
+      "file": "images/discovery-ends/chartres.jpg",
+      "sha256": "9d480edb7601d63716a72a15a87ae3e7bcc9eb7911bca853dbde9de2bfb4c0b8",
+      "bytes": 94171
+    },
+    {
+      "file": "images/discovery-sheets/chartres.webp",
+      "sha256": "2f8bebbb3efb0b03a0794a4166a6f2a6a49fb67101f2683b2f7928335be42281",
+      "bytes": 1585676
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "uxmal",
+  "name": "욱스말의 마법사의 피라미드",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/uxmal.png",
+  "sourceSha256": "2698bc77286e61ce210c1a01b15912e03268d5469020194cd6322954b2b3ea76",
+  "sourceMtimeNs": 1795661834208465400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/uxmal.gif",
+      "sha256": "3c9920c0243fa86d88632d2f78f8d219c4730eab22472384b42cd4d29959609c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/uxmal.jpg",
+      "sha256": "fac71ddfad6046d150685af39a209bf8e25e8b7187dcc5422e3efaa74d6ef248"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/uxmal.webp",
+      "sha256": "694764b497f29aa5266fe62bb3b36cd6637777b9faf34149d714e765b2f142bf"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/uxmal.gif",
+      "sha256": "f7bb94a8aafdc00b1feb61ec0913743c21556efca2af078c0b8d672a1db39b72",
+      "bytes": 3544486
+    },
+    {
+      "file": "images/discovery-ends/uxmal.jpg",
+      "sha256": "14191e006e62a26d842dba043ca7e692055409a6685d73ae55873927cce80d39",
+      "bytes": 104160
+    },
+    {
+      "file": "images/discovery-sheets/uxmal.webp",
+      "sha256": "7317ff7b4d32dd58d8758fe86dfb8a786575d5a661272c72e5c535bf6ce8e9ad",
+      "bytes": 1809630
+    }
+  ]
+}

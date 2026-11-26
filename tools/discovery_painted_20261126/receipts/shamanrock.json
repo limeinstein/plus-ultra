@@ -1,0 +1,43 @@
+{
+  "id": "shamanrock",
+  "name": "올혼 섬의 샤먼 바위",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/shamanrock.png",
+  "sourceSha256": "778951422742e3f75102fcfe91b6dcb1d78a80bf5c74d82fa65b85699b5d722d",
+  "sourceMtimeNs": 1795662241200153800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/shamanrock.gif",
+      "sha256": "75d4536faa9130cfb7953b312d5731c26da72f493760c11a50388bca41bb4b86"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/shamanrock.jpg",
+      "sha256": "d92e3efcde153adb9096341d3473c28cd75e86fa753e2134ae42661ed762f8f4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/shamanrock.webp",
+      "sha256": "6519e76e8fff6afb8a7ba7709bd6d9716683b7c42b4af309c249a325e9c1c80d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/shamanrock.gif",
+      "sha256": "2ebdc62e96ebe2ee65f3952e18b9c3b5d2eb4f6e5fc6fca76c87ecebffefe864",
+      "bytes": 3484452
+    },
+    {
+      "file": "images/discovery-ends/shamanrock.jpg",
+      "sha256": "4d5ae5a8a0af885c7cccec32fa411ed42efe0c5e075d0ae72ab25d3ee11917ae",
+      "bytes": 100796
+    },
+    {
+      "file": "images/discovery-sheets/shamanrock.webp",
+      "sha256": "fe217967413a98dcecdcfedd5dcb75800f16e001683c16177de2eaae57c0a470",
+      "bytes": 1718736
+    }
+  ]
+}

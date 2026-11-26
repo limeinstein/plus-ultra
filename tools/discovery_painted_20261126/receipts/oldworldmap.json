@@ -1,0 +1,43 @@
+{
+  "id": "oldworldmap",
+  "name": "잊힌 세계의 해도",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/oldworldmap.png",
+  "sourceSha256": "49040cafd4ca1b18e9519a5d0f080b680dfbb1277443b8e8967c19e78bcc6f5e",
+  "sourceMtimeNs": 1795661828065025200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/oldworldmap.gif",
+      "sha256": "210f269338dc21ef7e50589020e38dc599dc48bd510c3fdec8c455d8de63f847"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/oldworldmap.jpg",
+      "sha256": "54bc67a51d53375b7cbb14e96d541e129071639c48560281eb11131a614b0a71"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/oldworldmap.webp",
+      "sha256": "ccaa99ecd8e3c0d8d6619904fdcfb4bfcb3efe947fe55683b652fab8cf718960"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/oldworldmap.gif",
+      "sha256": "5c1161010ad8f6d638b0a49fc4bb2fbfd82353a4db0c756cd5c95d16b85ddabc",
+      "bytes": 3481107
+    },
+    {
+      "file": "images/discovery-ends/oldworldmap.jpg",
+      "sha256": "e27a5693511d407fb6f1121b37cadc45942319c7a3352e3758b5eff4ac604471",
+      "bytes": 92935
+    },
+    {
+      "file": "images/discovery-sheets/oldworldmap.webp",
+      "sha256": "4ff55d21e04d02f34678deefbf21224cde8ac80dcc366344e4be1557b47d558d",
+      "bytes": 1585548
+    }
+  ]
+}

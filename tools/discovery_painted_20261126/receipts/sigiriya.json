@@ -1,0 +1,43 @@
+{
+  "id": "sigiriya",
+  "name": "시기리야 — 사자 바위",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sigiriya.png",
+  "sourceSha256": "173fbb02166ed86efb502770b634e2430ba7d53e984e51103382b09157089566",
+  "sourceMtimeNs": 1795662408031220600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sigiriya.gif",
+      "sha256": "7da5fd6dc7853228e846a4cd258d098a5e1a8532920423ba4557509fe1995a71"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sigiriya.jpg",
+      "sha256": "23f6c1924ad7fcc5984ce0e7cd64655aab048610e6b243b7562e37756005006f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sigiriya.webp",
+      "sha256": "45ab40e2f5c227b968113a026aee69c6fda7f5f65b84c9357c47eda769e34c93"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sigiriya.gif",
+      "sha256": "9dbdbe499af1e5757fe7e91b6516e02d2f8cac616e59bbd25e9ca5fa7d4352fd",
+      "bytes": 3590960
+    },
+    {
+      "file": "images/discovery-ends/sigiriya.jpg",
+      "sha256": "be931a251ede17d8e60218069e0d80b0ef3a93255c6d8453502c704933295db0",
+      "bytes": 104033
+    },
+    {
+      "file": "images/discovery-sheets/sigiriya.webp",
+      "sha256": "63c38812cee2e7f24de1f0d8339f21f2f022964b0f636356759adf122efa2481",
+      "bytes": 1811946
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "galleria",
+  "name": "비토리오 에마누엘레 2세 갈레리아",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/galleria.png",
+  "sourceSha256": "047c3804b3a6757d8732ad48e62c90c67946533b8e05cf49b5ede84a3d917f4f",
+  "sourceMtimeNs": 1795662733339221800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/galleria.gif",
+      "sha256": "02b55d9dbe76784b5eaa0d2402bdf55abca9533dbeb69effe6ecd5ef279fd8fa"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/galleria.jpg",
+      "sha256": "e963ff1a29f7b733da52984fcaa049d425749fafca2365d718dd57986c5cd403"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/galleria.webp",
+      "sha256": "baac40169e9102e3798c815dda8758f4be6dd3bdcc57fca9394f27a33258c865"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/galleria.gif",
+      "sha256": "4b0058222365e2ebbc651905e2613d220154f2ada8917dd756ce8c0d4d308653",
+      "bytes": 3851841
+    },
+    {
+      "file": "images/discovery-ends/galleria.jpg",
+      "sha256": "b571d5000116387f29b9d67c4cfad7c44b3e3951e7869766b087dbf3f78726a0",
+      "bytes": 99647
+    },
+    {
+      "file": "images/discovery-sheets/galleria.webp",
+      "sha256": "ae8b80474fd86d44746b51fd6cca7c2a9564cefe4d763fa40291bae35a3812c5",
+      "bytes": 1764216
+    }
+  ]
+}

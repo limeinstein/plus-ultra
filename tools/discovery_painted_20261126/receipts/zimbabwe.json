@@ -1,0 +1,43 @@
+{
+  "id": "zimbabwe",
+  "name": "그레이트 짐바브웨",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/zimbabwe.png",
+  "sourceSha256": "4e919c3f2c6725501abec3f4b755b6c148a4e91eee9aa9f4d582a2c1c42cb8b4",
+  "sourceMtimeNs": 1795660144731954800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/zimbabwe.gif",
+      "sha256": "c9b4c497dbf6ef5621f31339dda01b88733fe602988209cf3d68382b8103e6ef"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/zimbabwe.jpg",
+      "sha256": "8a2bc2d2dd1b46e0db6fca44878e3c5cae8b1bc8cad0670e6d0e3e695f4b867b"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/zimbabwe.webp",
+      "sha256": "a5475d936c75c60edc90fe573aa595d8cb94a7c1ed123e785713ccfc6b64828c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/zimbabwe.gif",
+      "sha256": "9250120416c84d4db2423dece8dbbc3d6f8be1bd7f40dcd3350e1d6463ffd44d",
+      "bytes": 3587602
+    },
+    {
+      "file": "images/discovery-ends/zimbabwe.jpg",
+      "sha256": "6b0c8b3b710d901dc5b457e385dcdacd1aa350adfb68f130361b1fcbe8bcb1f1",
+      "bytes": 103012
+    },
+    {
+      "file": "images/discovery-sheets/zimbabwe.webp",
+      "sha256": "186fa7d4ddf10f8ed1dc8b254029a4118441483c28a1a8f5537f2ec14345dab5",
+      "bytes": 1826502
+    }
+  ]
+}

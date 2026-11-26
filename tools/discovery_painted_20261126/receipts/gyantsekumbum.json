@@ -1,0 +1,43 @@
+{
+  "id": "gyantsekumbum",
+  "name": "갼체 쿰붐 탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/gyantsekumbum.png",
+  "sourceSha256": "c495bb06533b2ff1320506e79074acfb2d2238673e31c7194461167d2c5d9d00",
+  "sourceMtimeNs": 1795662085016077000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/gyantsekumbum.gif",
+      "sha256": "2000ec5e016a600d188c432ebd6f9e1f20be7898930cdcbfcdc1f003d1189ec3"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/gyantsekumbum.jpg",
+      "sha256": "ff89d96362ef70a09c808ca92242d38bebfcdd9f6961892fe92317192117625c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/gyantsekumbum.webp",
+      "sha256": "6bb89e00752252984a96ac10c7427e656ad15cb6e1d0a11af8119419b39ab0d4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/gyantsekumbum.gif",
+      "sha256": "e3aa6c7e0ffad079c5d23206477682d5831bbd3ebc34bee3226a61918fc8dc32",
+      "bytes": 3461920
+    },
+    {
+      "file": "images/discovery-ends/gyantsekumbum.jpg",
+      "sha256": "6e4d9143ce2cea10e01f1209105db1d3b559efabcc230489c3c45b46056a5b56",
+      "bytes": 96813
+    },
+    {
+      "file": "images/discovery-sheets/gyantsekumbum.webp",
+      "sha256": "1092760bcdb85de3843cc960f00e540e7ff5f74c1364a560052bbe64382134c0",
+      "bytes": 1674686
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "qinghua",
+  "name": "원나라 청화백자 큰 항아리",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/qinghua.png",
+  "sourceSha256": "169bb3b6a2ac79d54173291db96af4af23726f8c1e4fec0b5a276c5009d5e31d",
+  "sourceMtimeNs": 1795660091351185400,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/qinghua.gif",
+      "sha256": "93fd4217b2172a947dae38c1b0f962dffa9bb5c117ca71b05ec9debb2a7bebdf"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/qinghua.jpg",
+      "sha256": "de7dabf4be358ebd0b841d8b5df6aa8487abd020b1faa320f907d18e03b5c3d4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/qinghua.webp",
+      "sha256": "169633c1e2a2643399a289d9deffa74f9ae1bb8be8b7cff1e877c02e34ac24c4"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/qinghua.gif",
+      "sha256": "0903df80e088f4daad5c714228e4d2982880e67c15a06132384341db3c13225b",
+      "bytes": 3590021
+    },
+    {
+      "file": "images/discovery-ends/qinghua.jpg",
+      "sha256": "608f5826caa0d8e6e6020d77df2cfcff880b20b4304afe9277fb84683e6ebaf6",
+      "bytes": 98603
+    },
+    {
+      "file": "images/discovery-sheets/qinghua.webp",
+      "sha256": "00959df709c46cd857dc349300f945278e11ee0d3fba74bb1a8e5bf721fffcf3",
+      "bytes": 1664034
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "t_potato",
+  "name": "감자",
+  "cat": "trade",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/t_potato.png",
+  "sourceSha256": "009806dd8e970fdeea4d035b0dfc656d7d0929bddd9694c6d9fb8ade0614dea0",
+  "sourceMtimeNs": 1795660661766678200,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/t_potato.gif",
+      "sha256": "222a109665fdbf4e4f5e2178cfff75044ec76561730788bfeff26344807cf200"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/t_potato.jpg",
+      "sha256": "88dfc9c9550928b10195455f38dd52f11b54fb2b36527e2af34f9d62fdfc64b5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/t_potato.webp",
+      "sha256": "c310dcb9d5de876f30653abcafef661cfe69a7c4e032a0d2671e82fb8be44596"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/t_potato.gif",
+      "sha256": "1c71b12e9556df083ceccb1384eb3c15211b23b30c31130736f584cb0c5aeae8",
+      "bytes": 3516007
+    },
+    {
+      "file": "images/discovery-ends/t_potato.jpg",
+      "sha256": "123efd0ffaa1b4d9d34cac3666bcdd678d7bd1d323299a3d81780e8315b56fef",
+      "bytes": 102231
+    },
+    {
+      "file": "images/discovery-sheets/t_potato.webp",
+      "sha256": "36a0bcba6b3350a418e7b247676bd74f8b5fe08e9d37564ab24017c49c1ed030",
+      "bytes": 1754554
+    }
+  ]
+}

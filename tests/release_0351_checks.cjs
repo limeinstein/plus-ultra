@@ -9,6 +9,13 @@ module.exports=async function(p,{out,tag='source'}={}){
   else{const buttons=p.getByRole('button',{name:/^(확인|그대로 시작|이대로|닫기)$/});if(await buttons.count())await buttons.last().click();}
   await p.waitForTimeout(280);
  }throw Error('대화가 끝나지 않음: '+flag+' '+(await p.locator('body').innerText()).slice(-2000))}
+ // 모든 발견물에 연출이 생겼으므로 실제 그림·현장 대화를 진행한 다음 카드를 확인한다.
+ async function untilCard(limit=240){const read=[];for(let i=0;i<limit;i++){
+  if(await p.locator('.disc-card').count())return read;
+  if(await p.locator('.dialog-speech').count()){const text=await p.locator('.dialog-speech').last().textContent();if(read.at(-1)!==text)read.push(text);await p.keyboard.press('Enter')}
+  else {const buttons=p.getByRole('button',{name:/^(확인|그대로 시작|닫기)$/});if(await buttons.count())await buttons.last().click();}
+  await p.waitForTimeout(280);
+ }throw Error('발견 연출 뒤 카드가 열리지 않음: '+(await p.locator('body').innerText()).slice(-2000))}
  await p.evaluate(()=>{G.I18N.set('ko');G.State.markIntroSeen();G.Game.go('create')});
  await p.locator('.create [data-g="sex"][data-v="f"]').click();
  for(const expected of [/붉은 외투/,/꽃 댕기/,/붉은 외투/]){for(let i=0;i<20&&!expected.test(await p.locator('.look-name b').textContent());i++)await p.locator('#face').click();assert.match(await p.locator('.look-name b').textContent(),expected);}
@@ -30,8 +37,8 @@ module.exports=async function(p,{out,tag='source'}={}){
  assert((await p.locator('.notebook-win').innerText()).includes(husband.name));assert.match(await p.locator('.notebook-win').innerText(),/아기를 가짐/);await shot('female-family');await p.locator('.notebook-win>.title .x').click();
  report.saved=await p.evaluate(id=>{const s=G.Game.state,raw=G.State.serialize();G.Game.state=G.State.deserialize(raw);const q=G.Game.state;return q.player.g==='f'&&q.player.husbands.some(h=>h.id===id)&&q.player.pregSelf.dad===id&&q.player.pregSelf.told&&q.player.pregSelf.sex==='f'},husband.id);assert(report.saved);
  const discovery=await p.evaluate(()=>{const s=G.Game.state;delete s.player.pregSelf;const d=G.DISC.ds_183;s.loc={mode:'land',lat:d.lat,lon:d.lon};G.Disc.addHint(d.id,'tavern:0');window.findDone=false;window.findBefore=s.stats.found;G.Disc.find(d,'land').then(()=>findDone=true);return{id:d.id,name:d.realName||d.name}});
- await p.waitForSelector('.disc-card');assert((await p.locator('.disc-card .dname').textContent()).includes('오랑우탄'));await shot('new-discovery');
- report.discoveryLines=await drain('findDone');assert(report.discoveryLines.length>=2);
+ const beforeCardLines=await untilCard();await p.waitForSelector('.disc-card');assert((await p.locator('.disc-card .dname').textContent()).includes('오랑우탄'));await shot('new-discovery');
+ report.discoveryLines=beforeCardLines.concat(await drain('findDone'));assert(report.discoveryLines.length>=2);
  report.discovery=await p.evaluate(id=>({id,found:G.Disc.foundByMe(id),delta:G.Game.state.stats.found-findBefore,seen:G.Game.state.discStory.seen[id]}),discovery.id);assert(report.discovery.found&&report.discovery.delta===1&&report.discovery.seen.length>0);
  await p.evaluate(id=>{window.cardDone=false;G.Scenes.discoveryCard(G.DISC[id],0).then(()=>cardDone=true)},discovery.id);await p.waitForSelector('.disc-card');await p.getByRole('button',{name:'현장 이야기',exact:true}).click();
  await p.waitForSelector('.dialog-speech');await p.keyboard.press('Escape');await p.waitForSelector('.disc-card');await p.getByRole('button',{name:'확인',exact:true}).click();await p.waitForFunction(()=>cardDone);assert.equal(await p.evaluate(()=>G.Game.state.stats.found-findBefore),1);report.revisitNoReward=true;
@@ -42,7 +49,7 @@ module.exports=async function(p,{out,tag='source'}={}){
  const chorusLines=await drain('chorusDone');assert(chorusLines.some(x=>x.includes('고리')));assert(await p.evaluate(()=>G.DiscStories.plan(G.DISC.maldives).kind!=='chorus'));report.chorus={...chorus,pages:chorusLines.length,once:true};console.log(tag+' 합창 완료');
  // 925d: 실제 첫 발견의 합창 뒤에는 같은 장소의 재방문 장면이 열린다.
  await p.evaluate(()=>{const s=G.Game.state,d=G.DISC.ds_901;s.mates=[{id:'rocco',role:'first',loyal:90}].concat(s.mates.filter(m=>(s.player.husbands||[]).some(h=>h.id===m.id)).map(m=>({...m,role:'none'})));s.loc={mode:'sea',lat:d.lat,lon:d.lon};G.Disc.addHint(d.id,'tavern:0');window.returnBefore=s.stats.found;window.returnFound=false;G.Disc.find(d,'sea').then(()=>returnFound=true)});
- await p.waitForSelector('.disc-card');await drain('returnFound');assert(await p.evaluate(()=>G.Game.state.discStory.chorus.ds_901===1));
+ await untilCard();await p.waitForSelector('.disc-card');await drain('returnFound');assert(await p.evaluate(()=>G.Game.state.discStory.chorus.ds_901===1));
  const returnPlan=await p.evaluate(()=>{const r=G.DiscStories.plan(G.DISC.ds_901);return{rec:r.rec,kind:r.kind}});assert.equal(returnPlan.rec,'R901');
  await p.evaluate(()=>{window.returnCard=false;G.Scenes.discoveryCard(G.DISC.ds_901,0).then(()=>returnCard=true)});await p.waitForSelector('.disc-card');await p.getByRole('button',{name:'현장 이야기',exact:true}).click();await p.waitForSelector('.dialog-speech');await shot('return-story');const returnLines=await drain('returnCard');assert.match(returnLines.join(''),/지난번/);assert(await p.evaluate(()=>G.Game.state.discStory.seen.ds_901.some(k=>k.startsWith('R901:'))));assert.equal(await p.evaluate(()=>G.Game.state.stats.found-returnBefore),1);assert.equal(await p.evaluate(()=>G.Game.state.discStory.visits.ds_901),2);report.returnStory={...returnPlan,noReward:true,chorusOnce:true};
  // 지나가 기함 회계석에 있어야 자기 장면을 말한다. 아버지는 새 동료로 만들지 않는다.

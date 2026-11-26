@@ -1,0 +1,43 @@
+{
+  "id": "kamegaoka",
+  "name": "가메가오카",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kamegaoka.png",
+  "sourceSha256": "1726f53aae3923a8ca5d2f5a80df1d1c6f1fdc12faed505f2d8aa2842000bbec",
+  "sourceMtimeNs": 1795662612900784100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kamegaoka.gif",
+      "sha256": "d75c8accdba832fcadac53aecb907cbfffd0decd6c16f16883be0cd2ba255996"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kamegaoka.jpg",
+      "sha256": "2b2c4229bace7eed9a0d7e21395923a0ae5e482e43103b166549ed098352e290"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kamegaoka.webp",
+      "sha256": "16906918620ec63840f8655bae3fafeb4fc880205aee0e9f355c612777f7a4de"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kamegaoka.gif",
+      "sha256": "bf772f510f19126741ce53b570dd3caf488248dcb4d1870689be7af2ce221256",
+      "bytes": 3390317
+    },
+    {
+      "file": "images/discovery-ends/kamegaoka.jpg",
+      "sha256": "d63fcf07a27ec17b48b119c7beecc034674d8ab44c3a1890eab3c62adeb11fad",
+      "bytes": 88438
+    },
+    {
+      "file": "images/discovery-sheets/kamegaoka.webp",
+      "sha256": "0ea8e30263b1bc70499b3a456525fcc3e9ddd03e49faf199a7b85822f1dc83a7",
+      "bytes": 1520708
+    }
+  ]
+}

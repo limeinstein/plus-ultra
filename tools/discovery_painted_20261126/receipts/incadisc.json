@@ -1,0 +1,43 @@
+{
+  "id": "incadisc",
+  "name": "태양의 황금 원반",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/incadisc.png",
+  "sourceSha256": "8f4f79ff62060d1c0e260e3f964795d0898baf42db81364b9fda89c862489e7a",
+  "sourceMtimeNs": 1795660398165963300,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/incadisc.gif",
+      "sha256": "6cd65c8f5858889f2e06d7c4611455593b0efa90d779cb96aab5479de7036f3f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/incadisc.jpg",
+      "sha256": "17299e211f67664cff3312f02da8fb949df14c4951d03a8680b54c701a0eb1b2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/incadisc.webp",
+      "sha256": "9ac03960bbfdd68df8a61f404eaae03e1d28d20fdc068e26f649047cccbdc2ca"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/incadisc.gif",
+      "sha256": "770c2c8921eacb873eb3cb34c0698fd81fdb52d3365c86357983d30871850b89",
+      "bytes": 3514183
+    },
+    {
+      "file": "images/discovery-ends/incadisc.jpg",
+      "sha256": "a6f2647fcca698b3f226e475f8454c521fe2feb318e920124859ce4085f457be",
+      "bytes": 93388
+    },
+    {
+      "file": "images/discovery-sheets/incadisc.webp",
+      "sha256": "fced20be984fe02795facd35a8ca7f80eace316aa7872a553ffcf6431d0339e7",
+      "bytes": 1569282
+    }
+  ]
+}

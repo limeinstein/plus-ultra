@@ -1,0 +1,43 @@
+{
+  "id": "besakih",
+  "name": "브사키 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/besakih.png",
+  "sourceSha256": "91c93e50036aa3054b4521c2bc7f8e4139ada38dbc079b86d9c0238a5c7433a8",
+  "sourceMtimeNs": 1795662044858440400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/besakih.gif",
+      "sha256": "fc346f69499605ecb74fd470818236c444369ae0b066137a4a8a1afedd107fe2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/besakih.jpg",
+      "sha256": "52ef86dbf2e581e5297d4a8edfe44d112941d1216158fcb4d1b85f48433763ba"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/besakih.webp",
+      "sha256": "60767b5297891f5f1da3f9d0531c46fb60dcc130f6cb5a38a7acf9b04817b631"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/besakih.gif",
+      "sha256": "d22c3fa04a5ea37d40290e1f0545a8cb1c48cbe94475e5bbe0628d82981e9bc3",
+      "bytes": 3601223
+    },
+    {
+      "file": "images/discovery-ends/besakih.jpg",
+      "sha256": "8d0f976989037c553c1602bdb4765d89c9d685bbf70b9993504f50cfaa07036a",
+      "bytes": 101918
+    },
+    {
+      "file": "images/discovery-sheets/besakih.webp",
+      "sha256": "648e928a7aac9b393f930906c37bdb0127c35146634ac2916caf93ea4eae6360",
+      "bytes": 1784986
+    }
+  ]
+}

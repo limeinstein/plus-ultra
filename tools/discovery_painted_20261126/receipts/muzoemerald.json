@@ -1,0 +1,43 @@
+{
+  "id": "muzoemerald",
+  "name": "무소 에메랄드",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/muzoemerald.png",
+  "sourceSha256": "e92e4fc6519765855bc5156359c862af0b037276966e36b6ea37263a3cf23ef9",
+  "sourceMtimeNs": 1795660452837062900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/muzoemerald.gif",
+      "sha256": "5e41cf9bc22a5821094b3ceb31c07088419bc7e8a88b63f0399176955c29b32f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/muzoemerald.jpg",
+      "sha256": "625eeaffc0e888dc061a60b7fa507d5bba7b4c8439eda3b62add7524d9cf6f2c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/muzoemerald.webp",
+      "sha256": "178658e3f680b10eb51033a97c073a6bdf8cc676ffb8f3d47360fbed6bc27749"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/muzoemerald.gif",
+      "sha256": "3dec0de53c05420cc2f8b0d07a2b7d37c3d5717a7d009fd40bfc90d90ee06b83",
+      "bytes": 3465381
+    },
+    {
+      "file": "images/discovery-ends/muzoemerald.jpg",
+      "sha256": "8e1697317f4e03aa162dba1df1fb6248178f1d7434e375c377e49c597f42784c",
+      "bytes": 96168
+    },
+    {
+      "file": "images/discovery-sheets/muzoemerald.webp",
+      "sha256": "b043f5bc1c130c5fa97b2dd1c9971360ebade162b586f941d221b4c37791276a",
+      "bytes": 1614436
+    }
+  ]
+}

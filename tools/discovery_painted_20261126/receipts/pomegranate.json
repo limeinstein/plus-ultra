@@ -1,0 +1,43 @@
+{
+  "id": "pomegranate",
+  "name": "석류",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/pomegranate.png",
+  "sourceSha256": "259659aa2acf83226de37ac3e1ba028f29b58a78e0c39ac447acd9e3a7c0518b",
+  "sourceMtimeNs": 1795659652889110000,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/pomegranate.gif",
+      "sha256": "994181e0402a3689861dca384ba1e359673713d1949d46f467dff79e5663f177"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/pomegranate.jpg",
+      "sha256": "f5fe54258b6b67760d7344cc01ef6b0054a80894812d78bcb0c7a75bd9cdeaa6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/pomegranate.webp",
+      "sha256": "8376b009d9d23acd350bcebdf26844513eff8adefdf9ef0590a81b3a2088ed4c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/pomegranate.gif",
+      "sha256": "2ddc874d192fddf7effbbd97089f5c69adf1ed110e63ac39281d8d5192b88e3b",
+      "bytes": 3468942
+    },
+    {
+      "file": "images/discovery-ends/pomegranate.jpg",
+      "sha256": "52d51b8c6b0d8a1881ebfadbea00ca7ba7240f2243a23a4ca171c298cea727f4",
+      "bytes": 108912
+    },
+    {
+      "file": "images/discovery-sheets/pomegranate.webp",
+      "sha256": "c31bca2a402af21d1beaa0e53965a98ab6a23368f33921dbe6088868470bcfca",
+      "bytes": 1862046
+    }
+  ]
+}

@@ -9,7 +9,9 @@
   T.update=function(u,items,size){
     var state=u.cache&&u.cache.formation,space=u.follow,c=config();if(!state||!space||c.enabled===false)return;
     var history=state.tracks||(state.tracks=[]),feet=state.trackMembers||(state.trackMembers=[]),zoom=space.zoom,unit=size/zoom,time=Number(u.t)||0;
-    function push(mark){var root=state.root,p={x:u.pts[0][0]+(mark.x-root.x)*zoom,y:u.pts[0][1]+(mark.y-root.y)*zoom};if(u.canStand&&!u.canStand(p.x,p.y))return;mark.time=time;history.push(mark);}
+    function push(mark){var root=state.root,p={x:u.pts[0][0]+(mark.x-root.x)*zoom,y:u.pts[0][1]+(mark.y-root.y)*zoom};if(u.canStand&&!u.canStand(p.x,p.y))return;
+      if(u.wadeAt&&(u.wadeAt(mark.x,-mark.y)||mark.x2!=null&&u.wadeAt(mark.x2,-mark.y2)))return;
+      mark.time=time;history.push(mark);}
     items.forEach(function(it){
       var role=it.leader?G.ExpeditionFormation.variant(u):it.role,old=feet[it.index],now={x:it.worldX,y:it.worldY};
       if(!old){feet[it.index]={x:now.x,y:now.y,acc:0,count:0};return;}

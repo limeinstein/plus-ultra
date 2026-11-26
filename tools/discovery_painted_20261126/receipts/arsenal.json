@@ -1,0 +1,43 @@
+{
+  "id": "arsenal",
+  "name": "베네치아 조선소",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/arsenal.png",
+  "sourceSha256": "382104814eacf11f80b504d3bfec28404e776d648b1246afeb6aac2760e46538",
+  "sourceMtimeNs": 1795661049995505000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/arsenal.gif",
+      "sha256": "35751d28275c3f96be46b45d0d0343e246e09ac019406abf0c11a3e57ef0956c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/arsenal.jpg",
+      "sha256": "041514fa7edd8f84d613a2cf9e758a34a7b4f62138b6b09a3e55dd3f7983d64c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/arsenal.webp",
+      "sha256": "46db49546a4a31e2b023e23a43a1a6e76d8e1e70b986ac468e7ecec79037719c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/arsenal.gif",
+      "sha256": "9edbc00d5f0b78f9bc94d78ca38c0d7fa33e24825776d23f303246a9d708096a",
+      "bytes": 3585119
+    },
+    {
+      "file": "images/discovery-ends/arsenal.jpg",
+      "sha256": "22a8f1aeea7745b0791ae4ecb27fe2c7feaa0d2a4da7bb335863126c1da9ce4c",
+      "bytes": 99978
+    },
+    {
+      "file": "images/discovery-sheets/arsenal.webp",
+      "sha256": "0c8b639b9fadb9147b2f11af157cd4df00d8c91b9500676f7e731b79d95e10f2",
+      "bytes": 1752436
+    }
+  ]
+}

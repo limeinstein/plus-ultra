@@ -1,0 +1,43 @@
+{
+  "id": "hashihaka",
+  "name": "하시하카 고분",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/hashihaka.png",
+  "sourceSha256": "6b4c1d0e62195200b25f92270bdbae1905973b80dbd52c80668dc1a68e6bf077",
+  "sourceMtimeNs": 1795662637187193000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/hashihaka.gif",
+      "sha256": "ca1f338b35521beb073e8e66a117c52a23429749bdf08552643bbf4f04e61ca4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/hashihaka.jpg",
+      "sha256": "732dbb529379a8df2275ad0bf5b3111cf13abffd496e95b100490703221db613"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/hashihaka.webp",
+      "sha256": "8c966debd756c426fb625a0772e87d3a6092bbb375fa7127180865e5cb2b092b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/hashihaka.gif",
+      "sha256": "31c67a239aec64f16500dd1179a34cfe988edace12be6d0f143aeab7fff56019",
+      "bytes": 3240871
+    },
+    {
+      "file": "images/discovery-ends/hashihaka.jpg",
+      "sha256": "0dc0253441e5a28fcba229fe7745f5dc9d9bd891d335d1c5c6eb62effb428cba",
+      "bytes": 99992
+    },
+    {
+      "file": "images/discovery-sheets/hashihaka.webp",
+      "sha256": "565ec688c24890ea2b5b55ba155a128c04531c92eece4046bd98fd118daa4744",
+      "bytes": 1732582
+    }
+  ]
+}

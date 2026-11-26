@@ -1,0 +1,43 @@
+{
+  "id": "prismatic",
+  "name": "그랜드 프리즈매틱 온천",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/prismatic.png",
+  "sourceSha256": "a14bc74e98222fffeafd8f9f4dcd7b8b21987a333a6fc68f9b863e6d4fddf6b6",
+  "sourceMtimeNs": 1795659656745296700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/prismatic.gif",
+      "sha256": "c921ad6e7b1d6955b0a34ed9ebbceedb1fdec29dddd751406eb67aab1be7bdf4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/prismatic.jpg",
+      "sha256": "9efc96c5139de94454d43d013bd85b5bb6a3654022513e6b8fb59dd05843428e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/prismatic.webp",
+      "sha256": "68b3bc6ef8d8fe96f68611eb2c9ed77570a365206b8e3ec30478ac08dc3b5936"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/prismatic.gif",
+      "sha256": "52290e61823e003fe37eabf56b2fcdfe7e8432e50336d00db99c5995f967ce40",
+      "bytes": 2996182
+    },
+    {
+      "file": "images/discovery-ends/prismatic.jpg",
+      "sha256": "9041cd65c540d62fb30bbe9971dd1e521ba144a7aaac56a0e945309bdb59c45c",
+      "bytes": 96674
+    },
+    {
+      "file": "images/discovery-sheets/prismatic.webp",
+      "sha256": "ffbb7153dd771859a3ea7dafb4aeacc579a9c3675fe21ee061c6d14facaabcf1",
+      "bytes": 1683376
+    }
+  ]
+}

@@ -5,10 +5,38 @@
 (function (G) {
   'use strict';
   G.FX = {
+    cityModels: { width:[0,42,56,112], close:[0,52,70,132], chart:[0,20,29,43],
+      zoomStart:180, zoomEnd:520, zoomBands:6, search:132, shoreSearch:68, plansPerFrame:3, prepareMs:3, cachedBands:4 },
+    mapRuins: { width:[36,49,67], close:[50,68,86], chart:[28,35,41], zoomStart:165, zoomEnd:480,
+      shoreStep:.025, shoreBands:8, shadowOpacity:.19, stonehengeClearing:[.22,.15] },
     // 지역별 숲은 같은 녹색 계열 안에서 작은 명암 차이만 쓴다. 수종은 윤곽·높이로 나눈다.
-    terrainWorld: { enabled:true, atlasSide:768, relief:1.0, forestDensity:.76, nearZoom:300, farZoom:180,
-      maxTrees:1050, treeCell:.0625, treeWorld:.085, landmarkMax:220, paletteVariation:.07,
-      forest:[.19,.28,.13], boreal:[.12,.22,.16], tropical:[.13,.27,.13], mediterranean:[.27,.31,.15] },
+    terrainWorld: { enabled:true, atlasSide:768, forestDensity:.92, nearZoom:260, farZoom:140, chunkBudgetMs:4,
+      maxTrees:1800, treeCell:.047, treeWorld:.113, tropicalDensity:1.28, tropicalScale:1.13, forestCacheMargin:120,
+      groundBump:.14, rockSlope:[.23,.68], riverShallows:.039, riverBank:.023, landmarkMax:260,
+      estuaryMix:[.14,.075,.47], // 해안에서 담수색이 사라지는 거리·수로 밖 혼합 폭·바다 쪽 담수색 상한
+      reliefLift:.000025, reliefBase:250, reliefCell:.35, reliefMax:.075, reliefShoreStart:.06, reliefShoreSlope:.60,
+      bridgeMaxSpan:.16, ferryPierLength:.028, ferrySearch:1.2, ferryStep:.012,
+      inlandWaterRegions:[[-61,-4.8,-49.5,.5],[-75,44,-66,50]], inlandWaterFeather:.24 },
+    terrainBiomes:{tileDegrees:.72,materialBlend:.42,decorCell:.16,detailMaxPx:260,
+      ridgeChance:.012,ridgeWorld:.24,stoneMinSlope:.24,shrubChance:.48,shrubWorld:.060,grassChance:.31,grassWorld:.040,
+      cactusChance:.23,snowRockSlope:[.50,1.36],duneRelief:3.4,sandRipple:.035,duneTileDegrees:1.27,duneNormal:2.85,
+      plains:{tileDegrees:.49,materialBlend:.86,bankReach:.176,bankGrass:.66,
+        treeChance:{7:.15,9:.08,12:.20},treeClump:[.53,.79],grassClump:[.36,.76],reedBand:[.026,.10],grassMin:.14,
+        grassOpacity:[.61,.85],
+        trail:{nearZoom:220,width:.025,edgeOpacity:.24,soilOpacity:.62,strokeGrain:.36,waterMargin:.012},
+        tall:{opacity:[.67,.90],reedChance:.36,reedWidth:.067,miscanthusChance:.20,miscanthusWidth:.066,miscanthusBox:[100,146,23,46],
+          cropRadius:[.16,.67],cropHighest:1150,cropSlope:.19,cropFrequency:3.1,cropPatch:.54,cropChance:.74,cropWidth:.095,cropMonths:[3,4,5,6,7,8,9]}},
+      rocks:{layoutScale:[1,1,.65,.72,.81,.85,.94,.91,1.04,1.04,1.14,1.10,1.09,1.04],
+        width:{slab:.105,talus:.103,erratic:.095,cobbles:.065},banks:[.033,.080],
+        bankChance:.10, tundraChance:.05, looseChance:.075, outcropChance:.050, plainChance:.013, outcropSlope:.090},
+      vegetation:{
+        groveMix:.72, groveFrequency:1.35, junglePalm:.15, jungleHigh:.38, fanPalm:.34,
+        desertShrubTree:.48, oasisFringe:.042, oasisTreeDensity:.70, wetWillow:.64, willowBank:[.036,.17], willowElevation:1100,
+        firShare:.51, birchShare:.21, birchSlopeStart:550, beechShare:.46, forestUnderstory:.32,
+        treeScale:{beech:1.02,birch:.76,fir:.65,willow:1.0,kapok:1.13,fanpalm:.72,tamarisk:.64},
+        young:[.52,.75], mature:[.79,1.13], old:[1.16,1.35], youngShare:.19, oldStart:.88
+      }},
+    terrainCoast:{beachDegrees:.085,shallowDegrees:.22,clearDegrees:.85,palmBand:[.09,.34],palmDensity:.55,coastTreeMargin:.085},
     // 제독 얼굴상·무릎상: 40세부터 중년, 70세부터 노년 그림을 쓴다.
     heroPortraitAge: { middle: 40, elderly: 70 },
     // 마을·항해·육상 상단: 갈색 일체형 황동 틀. 글씨 크기는 기존 HUD 자동 맞춤과 함께 쓴다.
@@ -87,7 +115,7 @@
     treaty: { windowW: 1120, mapW: 900, mapH: 300, sceneKey: 'legend-events/tordesillas_council_20261108_v2' },
     // 불러오는 그림 (js/ui/loader.js): 적어도 minShow ms 보여 주고 fadeMs 에 걸쳐 걷는다 · 장면 사이 검은 막이 fadeAfter ms 넘게 걸리면 작게 띄운다 ·
     //   게임을 시작할 때 그림 받기를 기다리는 가장 긴 시간 prepareMs · 도시에 들어서 앞바다를 미리 그리기 시작하는 때 cityWarmMs
-    loader: { minShow: 450, fadeMs: 450, fadeAfter: 350, prepareMs: 5000, cityWarmMs: 1500 },
+    loader: { minShow: 450, fadeMs: 450, fadeAfter: 350, launchDelayMs: 260, launchFadeMs: 160, prepareMs: 5000, cityWarmMs: 1500 },
     // 자택 화면에 서 있는 가족 (homelife.js familyPanel): 어른 키 h, 설 자리(왼쪽·아래·너비), 옆 사람과 겹치는 비율
     homeFamily: { h: 610, width: 1150, left: 50, bottom: 0, overlap: 0.3 },
     // 기함 선실 화면 (js/ui/cabinview.js): 무대(배 그림) 크기, 오른쪽 명단 폭, 선체 속 선실 표·갑판 얼굴표 크기, 배 그림을 자르는 여백, 카드 최대 폭, 명단 높이
@@ -197,6 +225,7 @@
       arriveSlow: 0.3,    // 목적지 이만큼(°) 안에서 속력을 줄인다
       pathTurnAngle: 0.35, pathTurnBrake: 0.5, // 바닷길 선회: 이 각(rad) 이상 틀어졌으면 거리·선회력에 맞춰 관성 속력도 제한
       pathStep: 0.05,     // 바닷길을 따를 때 한 번에 나아갈 최대 거리(°). 빠른 배도 작은 길목을 놓치지 않는다
+      riverGuide: { lookAhead:[.09,.21], waypoint:[.018,.065], turnAngles:[.35,.48], endReach:.008 },
       portApproach: 2.0,  // 항구를 눌러 가는 길: 그 항구가 이만큼(°) 안이면 지그재그 없이 곧장 붙는다 (다가가는 빠르기는 같다). 0이면 끔
       openReach: 0.6,     // 설정 「맞바람 지그재그 — 먼바다에서만」: 두 다리 쪽 모두 이만큼(°)까지 바다여야 지그재그를 한다
       heave: 1.0, pitch: 1.0, roll: 1.0,  // 상하·앞뒤·좌우 흔들림 크기
@@ -244,7 +273,20 @@
       size: 1.3,          // 크기 (1 = 사람 키 약 34px — 1.3이면 사람 44px, 말 탄 대원 약 70px: 예전 탐험대의 약 2.5배)
       spacing: 1.0,       // 줄 선 대원 사이 간격
       dust: 1.0,          // 발밑 먼지·눈보라·풀잎의 양
-      maxStepHz: 2.2      // 걸음이 이보다 빨라지지 않는다 (초당 걸음 주기) — 빨리 가도 장난감처럼 종종거리지 않게
+      maxStepHz: 2.2,     // 한 초에 넘길 최대 걸음 주기
+      cover: { bucket:96, footGap:3, leader:.44, follower:.62, mount:.53, camp:.45, upperAlpha:.42,
+        ringAlpha:.86, leaderEdge:1.2, leaderEdgeColor:'rgba(245,220,164,.46)' },
+      camp: { fireLight:32, parkScale:.96,
+        parking:[[79,1],[-79,1],[76,21],[-76,21],[50,-25],[-50,-25]],
+        restArt:{horse:{key:'goods/horses',cell:[10,16,172,160],height:42},
+          elephant:{key:'creature-combat-extra24-20261117/elephant',cell:[23,85,217,153],height:55}} },
+      wading: { kneeDepth:1.6, creekDepth:.45, footSink:18, mountSink:13, wheelSink:6,
+        stepLift:.17, brace:.17, currentLean:.075, ripple:12, splash:7 },
+      effort: { probe:.026, sampleEvery:.09, ease:6, grade:[.12,.92], strideShorten:.23, cadenceDrop:.28,
+        walkOnly:.40, fileNarrow:.78, climbLean:.24, descentLean:.16, roughLean:.075, crouch:.10, plantStep:.045,
+        forestMount:{porter:.83,pack:.94,rider:1.08,cart:1.32,elephant:.70,sled:1.25},
+        riderLoad:.55, elephantLoad:.33, wagonPitch:.053, sledPitch:.036, slopePitch:.065,
+        terrain:{steppe:.04,forest:.24,jungle:.43,mountain:.52,snow:.40,ice:.48,desert:.24,tundra:.23,river:.30,frozenriver:.24} }
     },
     seaMonster: {        // 해상 괴물의 행 전환. 초 단위이며 전투 규칙을 바꾸지 않는다.
       actions: {

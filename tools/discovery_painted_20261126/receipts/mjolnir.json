@@ -1,0 +1,43 @@
+{
+  "id": "mjolnir",
+  "name": "토르의 망치 은 부적",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/mjolnir.png",
+  "sourceSha256": "00404c03192169457964df1dafeac4fa72ad304f877f3ad28bc9fdb79b4026e9",
+  "sourceMtimeNs": 1795663325531190800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mjolnir.gif",
+      "sha256": "75c3ea4bbddb174fe601d3b364fbaf6ef536d51088c1b2bb92934126824c273f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mjolnir.jpg",
+      "sha256": "ec0e36384a18bb5a4747c7c35cf37cca62488b049ee371bb2712a22711c47b0f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mjolnir.webp",
+      "sha256": "45b6d0d4a2c5987f6e606f724e766284d4c22032a4c8f846b1648827a6a6dd6d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mjolnir.gif",
+      "sha256": "df2988ef0f91fc49c53adc611ac7ecb47c217937d87ee1a0568a358a14ed34c7",
+      "bytes": 3451064
+    },
+    {
+      "file": "images/discovery-ends/mjolnir.jpg",
+      "sha256": "9dc15daf0b9191e15faeeeda64637c7967e99df0ea9530d9be7ead1d2c5ff76a",
+      "bytes": 88184
+    },
+    {
+      "file": "images/discovery-sheets/mjolnir.webp",
+      "sha256": "3d3eb87c9fb39593f7eff9b002c5470426a24084897da5380f61ab6d9bde0b78",
+      "bytes": 1531034
+    }
+  ]
+}

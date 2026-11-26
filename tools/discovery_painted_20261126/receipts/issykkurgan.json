@@ -1,0 +1,43 @@
+{
+  "id": "issykkurgan",
+  "name": "이시크 쿠르간 — 황금 인간",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/issykkurgan.png",
+  "sourceSha256": "8be4c0ddd041bbe2e4ea4e591884b72f77f8c3b82b5777913eae086dbbdb1e47",
+  "sourceMtimeNs": 1795662540646548100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/issykkurgan.gif",
+      "sha256": "6e2be3904c255e12dd511fb64530a2cca046d4c8f3f68a23beb3c8c824e9e99c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/issykkurgan.jpg",
+      "sha256": "9cd3be85739a5631e80a35b2ca6b821727614b8249cb11a28e0abdad91cc8e5d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/issykkurgan.webp",
+      "sha256": "7a60789bda27cb892e40dfda590708e52c80e6040b2234f39ed86423544d3b76"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/issykkurgan.gif",
+      "sha256": "d9e8883e03909460fb187493cc58b13783585f7c9c31bf66a0d62cbf1a2d8c77",
+      "bytes": 3375272
+    },
+    {
+      "file": "images/discovery-ends/issykkurgan.jpg",
+      "sha256": "a63fed9715e808a5a1fd748513fc2a448a3e198e2d098cc7e1a72bd0dde17892",
+      "bytes": 99330
+    },
+    {
+      "file": "images/discovery-sheets/issykkurgan.webp",
+      "sha256": "f7946b4cbfebc00bd076285bd52390b3003125ae46673fec031629a3c27b3f76",
+      "bytes": 1717762
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "siwa",
+  "name": "시와 오아시스",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/siwa.png",
+  "sourceSha256": "ba611dc0b4ae1fc4b47e480c1dfbf2494c42460260aeb3425884cb32a4010e91",
+  "sourceMtimeNs": 1795659650072398400,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/siwa.gif",
+      "sha256": "e134b7223de5afd1108810e15543816c053c9460506d858a130d651d66cc44d5"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/siwa.jpg",
+      "sha256": "826a0f2a5b0bf0f0ad153c2cd078433ebbb09ff63fd5a00c49f74b54568963b7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/siwa.webp",
+      "sha256": "1611511cd230d708a4054d14fde64250395e036d21c970eb2d49416de372087b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/siwa.gif",
+      "sha256": "d36241f82ee337354438abc54df43146a0774f9a978256914968c51b762cf40f",
+      "bytes": 2689830
+    },
+    {
+      "file": "images/discovery-ends/siwa.jpg",
+      "sha256": "8506b528ca6168073d61ea93a6e7205f07e55569a6c617e3ce7d039b9f8a04c9",
+      "bytes": 87062
+    },
+    {
+      "file": "images/discovery-sheets/siwa.webp",
+      "sha256": "4d7e11700822b70c8394f73aedf89516a699c308fe6133455229fff861b2f66c",
+      "bytes": 1433996
+    }
+  ]
+}

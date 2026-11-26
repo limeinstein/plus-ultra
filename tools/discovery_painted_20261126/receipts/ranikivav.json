@@ -1,0 +1,43 @@
+{
+  "id": "ranikivav",
+  "name": "라니 키 바브 — 왕비의 계단 우물",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ranikivav.png",
+  "sourceSha256": "7d890f4a5b880d5f2e47c1b9c398569a76dafc8a36acbd916121ce32a10c51f8",
+  "sourceMtimeNs": 1795662415691264800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ranikivav.gif",
+      "sha256": "756fc15e34897c4c1708c6cbe10cf1e66a5a6d38627b3fd826301578f33146f8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ranikivav.jpg",
+      "sha256": "038509b5af9a6ba7a273b15f676440aa2fb2bd08bb95cbd31875143b6e883491"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ranikivav.webp",
+      "sha256": "5f99844d3138a60a647405cf6c280a9fd11f0200b2fff3dd73e69b7b3cd4618f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ranikivav.gif",
+      "sha256": "06722b081daf71fb1e60a59b529854f97598304a4047101fd55136a11545d7a0",
+      "bytes": 3778910
+    },
+    {
+      "file": "images/discovery-ends/ranikivav.jpg",
+      "sha256": "4ca02e51b8a61e91d509a7fbbeb10ad5c69e28be40d5b9c9f14640c68499c06a",
+      "bytes": 100759
+    },
+    {
+      "file": "images/discovery-sheets/ranikivav.webp",
+      "sha256": "2379c2dd799414df9bd2e963b2c031dd381f430512cff7172a1174aa5c0e9f98",
+      "bytes": 1780700
+    }
+  ]
+}

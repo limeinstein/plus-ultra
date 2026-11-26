@@ -1,0 +1,43 @@
+{
+  "id": "altamira",
+  "name": "알타미라 동굴",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/altamira.png",
+  "sourceSha256": "2d963eec9791c03e65c44b384ceb4e96e54025ba80dddd1d89afd0f4e17e1fd8",
+  "sourceMtimeNs": 1795662221063762000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/altamira.gif",
+      "sha256": "c695006c29f15ab4664050cbafdb4bd3d16ab8ea6cfc4f9bb7720824cfc6092c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/altamira.jpg",
+      "sha256": "c6704c721559a28c79871ce52a088afd0f4f4d6877c383b6c7eef21913a46621"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/altamira.webp",
+      "sha256": "f42560416255168ff44f8a0697f482c767d7f149db626a4621013e2f9f1e5310"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/altamira.gif",
+      "sha256": "4ca6d9f29d4bc9d118f26c911f9a9c9d076b944dd54c6a2dccf5242796dc7c66",
+      "bytes": 3428215
+    },
+    {
+      "file": "images/discovery-ends/altamira.jpg",
+      "sha256": "6c2b0fc242afd69ba41b3edd0cf69cecb0c2c1f0862399ee93c851a6834816fb",
+      "bytes": 83368
+    },
+    {
+      "file": "images/discovery-sheets/altamira.webp",
+      "sha256": "9c267219c21713e92fd08612298ca8bb2d1e4ea683e7e46d83423b5cc27ce360",
+      "bytes": 1412644
+    }
+  ]
+}

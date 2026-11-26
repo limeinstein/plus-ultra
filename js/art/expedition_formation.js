@@ -145,13 +145,17 @@
   /** 카메라가 움직여도 대원의 위치는 지도 위에 남는다. 새 저장 필드는 만들지 않는다. */
   F.follow = function (u, chosen, size) {
     var c = cfg(), fc = c.follow, cache = u.cache || {}, space = u.follow;
+    var partyFX = G.FX && G.FX.party || {}, gaitFX = partyFX.effort, effort = gaitFX && u.effort || 0;
     var zoom = space ? space.zoom : 1, root = space ? { x: space.x, y: space.y } : { x: u.pts[0][0], y: u.pts[0][1] };
     var roles = F.roles(u), key = roles.join(':') + ':' + (space ? 'map' : 'screen'), time = Number(u.t) || 0;
     var state = cache.formation, scale = size * ((G.FX && G.FX.party && G.FX.party.spacing) || 1);
     var gap = (c.gaps || {})[(u.mount && u.mount.id) || 'walk'] || c.gaps.walk;
     var back = gap[0] * scale / zoom, side = gap[1] * scale / zoom;
     function toScreen(p) { return { x: u.pts[0][0] + (p.x - root.x) * zoom, y: u.pts[0][1] + (p.y - root.y) * zoom }; }
-    function stand(p) { var q = toScreen(p); return !u.canStand || u.canStand(q.x, q.y); }
+    function stand(p) {
+      if (space && space.canStand) return space.canStand(p.x, -p.y);
+      var q = toScreen(p); return !u.canStand || u.canStand(q.x, q.y);
+    }
     function clear(a, b) {
       if (!u.canStand) return true;
       var n = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) * zoom / fc.groundStep));
@@ -168,7 +172,13 @@
       var initial = F.constrain(F.layout(u, chosen.heading, size), u, size);
       state = cache.formation = { key: key, time: time, root: root, inputX: space ? space.x : root.x, speed: 0, width: 1, travelled: 0, trail: [[root.x, root.y]], members: [] };
       // 기존 발자국이 있으면 화면에 들어온 직후에도 실제로 걸었던 땅에서 시작한다.
-      u.pts.slice(1).forEach(function (p) { state.trail.push([root.x + (p[0] - u.pts[0][0]) / zoom, root.y + (p[1] - u.pts[0][1]) / zoom]); });
+      if (space && space.trail) {
+        for (var i = 1; i <= space.trailCount; i++) {
+          var prev = space.trail[space.trail.length - i], off = prev[0] - space.x;
+          if (space.wrap) off -= Math.round(off / space.wrap) * space.wrap;
+          state.trail.push([root.x + off, -prev[1]]);
+        }
+      } else u.pts.slice(1).forEach(function (p) { state.trail.push([root.x + (p[0] - u.pts[0][0]) / zoom, root.y + (p[1] - u.pts[0][1]) / zoom]); });
       if (state.trail.length === 1) {
         // 출발 직후 빈 이력 때문에 동료들이 모두 선장 자리로 몰리지 않게 한다.
         for (var d = fc.groundStep * size / zoom; d <= back * fc.lineSlots[roles.length - 1]; d += fc.groundStep * size / zoom) {
@@ -208,7 +218,7 @@
     if (moved > 0 && dt > 0) {
       var near = at(back), far = at(back * 2), bend = Math.abs(angle(Math.atan2(-near.dy, near.dx) - Math.atan2(-far.dy, far.dx)));
       bend = Math.max(bend, Math.abs(angle(chosen.heading - Math.atan2(-near.dy, near.dx))));
-      var width = Math.max(0, 1 - bend / fc.bendAngle);
+      var width = Math.max(0, 1 - bend / fc.bendAngle) * (1 - effort * (gaitFX ? gaitFX.fileNarrow : 0));
       // 굽은 길·물가에서는 일렬에 가까워지고, 곧고 넓은 길에서 서서히 벌어진다.
       for (var j = 1; j < roles.length; j++) {
         var q = at(back * fc.backSlots[j]), lateral = side * fc.sideSlots[j];
@@ -283,26 +293,26 @@
       if (distance <= stop || (!ford && !clear(m, next))) advance = 0;
       if (advance > 0) {
         m.x = next.x; m.y = next.y;
-        var stride = (fc.strides[roles[i + 1]] || fc.strides.foot) * size;
-        m.phase += Math.min(advance * zoom / stride, ((G.FX && G.FX.party && G.FX.party.maxStepHz) || 2.2) * dt);
+        var load = m.water ? Math.max(effort, m.water.effort) : effort;
+        var stride = (fc.strides[roles[i + 1]] || fc.strides.foot) * size * (1 - load * (gaitFX ? gaitFX.strideShorten : 0));
+        var cadence = (partyFX.maxStepHz || 2.2) * (1 - load * (gaitFX ? gaitFX.cadenceDrop : 0));
+        m.phase += Math.min(advance * zoom / stride, cadence * dt);
       }
       m.moving = advance * zoom > 0.01;
       if (!desired) { m.speed = 0; m.heading = previousHeading; m.arrived = true; }
     });
+    var lift = space && space.lift, rootLift = lift ? lift(root.x, -root.y) : 0;
     return roles.map(function (role, i) {
       var m = state.members[i], p = toScreen(m);
+      if (lift && i) p.y -= (lift(m.x, -m.y) - rootLift) * zoom;
+      m.water = space && u.wadeAt ? u.wadeAt(m.x, -m.y) : null;
       var speed = i ? m.speed : state.speed, gait = c.gait || {}, threshold = m.running ? (gait.runExitPx || 56) : (gait.runEnterPx || 70);
-      m.running = !!m.moving && (!!u.fast || speed / size >= threshold);
+      m.running = !!m.moving && !m.water && (!gaitFX || effort < gaitFX.walkOnly) && (!!u.fast || speed / size >= threshold);
       return { index: i, role: role, leader: i === 0, gender: F.gender(u, i, roles.length), x: p.x, y: p.y, heading: m.heading, phase: m.phase, moving: m.moving,
-        speed: speed, gait: !m.moving ? 'idle' : m.running ? 'run' : 'walk',
+        speed: speed, water: m.water, gait: !m.moving ? 'idle' : m.running ? 'run' : 'walk',
         worldX: m.x, worldY: m.y, m: { t: role === 'foot' || role === 'porter' ? 'person' : 'beast' } };
     });
   };
-  function drawCell(ctx, im, cell, x, y, k, flip) {
-    ctx.save(); ctx.translate(x, y); if (flip) ctx.scale(-1, 1);
-    ctx.drawImage(im, cell[0], cell[1], cell[2], cell[3], -cell[4] * k, -cell[5] * k, cell[2] * k, cell[3] * k);
-    ctx.restore();
-  }
   F.draw = function (ctx, u, chosen, captainImage) {
     if (cfg().enabled === false || chosen.action === 'camp') return false;
     var s = u.size || (G.FX && G.FX.party && G.FX.party.size) || 1, items = F.follow(u, chosen, s);
@@ -314,6 +324,9 @@
       var appearance = it.leader ? 'captain_' + kind : it.gender === 'f' ? 'female_' + kind : null;
       var sheet = appearance && crewSheets()[appearance];
       var character = F.character(u, it), onFoot = kind === 'foot' || it.leader && kind === 'porter';
+      it.onFoot = onFoot || kind === 'porter';
+      it.rigid = kind === 'wagon' || kind === 'oxwagon' || kind === 'reindeer';
+      it.kind = kind;
       var rendered = character && (onFoot ? blenderSheets()[character + '_' + it.gait] : mountSheets()[character + '_' + kind]);
       if (rendered) { sheet = rendered; appearance = onFoot ? character : character + '_' + kind; }
       // 아직 전용 제독·여성 원화가 없는 이동 수단은 같은 이동 수단의 공용 원화를 쓴다.
@@ -350,7 +363,7 @@
     });
     // 땅에서 뒤쪽인 대원부터 그려 앞뒤 가림을 맞춘다.
     items.sort(function (a, b) { return a.y - b.y || a.index - b.index; });
-    items.forEach(function (it) { drawCell(ctx, it.im, it.cell, it.x, it.y, it.scale, it.flip); });
+    items.forEach(function (it) { G.Party.drawCell(ctx, u, it); });
     return items;
   };
 })(window.G = window.G || {});

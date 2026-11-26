@@ -1,0 +1,43 @@
+{
+  "id": "menga",
+  "name": "안테케라의 멩가 고인돌",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/menga.png",
+  "sourceSha256": "14e515596a701cead41ed3ad2691b3cf2696caf5c4de6cd009d65ea5eb9c3460",
+  "sourceMtimeNs": 1795662271205816500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/menga.gif",
+      "sha256": "5ba92ac337e5b577225c0cad940f521659f890f8af9c1e515f99414b992ccc31"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/menga.jpg",
+      "sha256": "59485387fbff4ef892c9b4fcba1c9c909a312d7c1a2ab5ead2373e352e481588"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/menga.webp",
+      "sha256": "2277eb5eb96a2f24a0413360c3b9ba4ba2ad43fa28c9b62ca31a6e5f8e1a285f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/menga.gif",
+      "sha256": "27e13e618d793cafc28b4fc43e6373bce6679977c06e876a601ba8a6032ae53e",
+      "bytes": 3348424
+    },
+    {
+      "file": "images/discovery-ends/menga.jpg",
+      "sha256": "7ec5280056a3061c2d438b0db5bb534909d350928cada257350dad1392fe370f",
+      "bytes": 87546
+    },
+    {
+      "file": "images/discovery-sheets/menga.webp",
+      "sha256": "b1c330408a6cff2b5c4073a04c54ac7e26a2c8851af53c15ba75d0da6c1827ba",
+      "bytes": 1489358
+    }
+  ]
+}

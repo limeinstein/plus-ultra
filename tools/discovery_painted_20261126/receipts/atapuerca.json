@@ -1,0 +1,43 @@
+{
+  "id": "atapuerca",
+  "name": "아타푸에르카 동굴",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/atapuerca.png",
+  "sourceSha256": "f1c0ffde3693f5df49213f0d86da66c0167254d8139a6fc43c842be0f0491f8b",
+  "sourceMtimeNs": 1795662169377980700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/atapuerca.gif",
+      "sha256": "45af2148458c6ae866f58fd93d056043b6dbc481c20de1f2d54f9634c2682cc8"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/atapuerca.jpg",
+      "sha256": "cb18e103a43b1956b55d6d576a0845d9dd1bb764c0f03b4059c98a5ba1bf3f95"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/atapuerca.webp",
+      "sha256": "a8c6056959bc0af3e439644ed89812324f36464016f93ed7c43b14fd553735db"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/atapuerca.gif",
+      "sha256": "9b95136fa30ec02e143fc9bc1da45fcfccd6b1744d8fe9a38378138b2215ce10",
+      "bytes": 3764426
+    },
+    {
+      "file": "images/discovery-ends/atapuerca.jpg",
+      "sha256": "3d4ea2e5c8818c36782e48fb58f977c4235be8cf0ee284632cb5e137e46e4827",
+      "bytes": 104394
+    },
+    {
+      "file": "images/discovery-sheets/atapuerca.webp",
+      "sha256": "f88b54fcef79a748f6ac1dfee6a94e6da95956f4b5f0b64b36d04d3dea2673a6",
+      "bytes": 1866772
+    }
+  ]
+}

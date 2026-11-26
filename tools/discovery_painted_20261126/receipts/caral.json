@@ -1,0 +1,43 @@
+{
+  "id": "caral",
+  "name": "카랄",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/caral.png",
+  "sourceSha256": "817a3ccd9c520f1fbaf34e28eb238c3627961ddac62b6c0e3e096b33766ba3b6",
+  "sourceMtimeNs": 1795662745103010800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/caral.gif",
+      "sha256": "e12d5015680cd9852f7088ca0e0f7e67a9564e3c6168606e8f19d366bab4f34a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/caral.jpg",
+      "sha256": "e43085ef9903f348bf6bacb81e414fe40a2695cd84ee5eb96ded7a9b01ea6fb0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/caral.webp",
+      "sha256": "f5be11420becfdcc850b23ec257233ae55e9f54854d1eb29e9dbbe2b85d347ac"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/caral.gif",
+      "sha256": "252593b756114c4d66c9f3f269be4c53ff07f34200cf01d758b6c0ef56ddf681",
+      "bytes": 3358372
+    },
+    {
+      "file": "images/discovery-ends/caral.jpg",
+      "sha256": "d6f6d99d8bca321f5dcc973eaccb1e96a2b042f6396196139fbe5183a4bbe51c",
+      "bytes": 90473
+    },
+    {
+      "file": "images/discovery-sheets/caral.webp",
+      "sha256": "ffe142bdb890386241a4e977634f6e7fc6fb2a25eacbcec14187300963a40253",
+      "bytes": 1544548
+    }
+  ]
+}

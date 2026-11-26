@@ -1,0 +1,43 @@
+{
+  "id": "dayanta",
+  "name": "대안탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/dayanta.png",
+  "sourceSha256": "8a21e3e14f2cbf76e0dc94392f2106bf540b6d03cd1650c6804040bc9933be7d",
+  "sourceMtimeNs": 1795661552037118900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/dayanta.gif",
+      "sha256": "dd5195c4ff5934ebb821ec8086f772be0bb45f03bbcc19427d66ec86cd00b1f0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/dayanta.jpg",
+      "sha256": "e364f7332f16696bd4021266382ba9e5f0c259391432fbb10149e3300636e865"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/dayanta.webp",
+      "sha256": "ee68b55b5b0a90d94145149bc8aa08333c9093e6d92b59696a904160538d1634"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/dayanta.gif",
+      "sha256": "6ba8375385c5529abfe259c53cff3c0cdc2d2670bec4d4940af1addefd01d083",
+      "bytes": 3318338
+    },
+    {
+      "file": "images/discovery-ends/dayanta.jpg",
+      "sha256": "cd003f42ab92f6ff6a8aae9f9df9b89f06493b1904c38dd1db5fb3f4b34c96d9",
+      "bytes": 93578
+    },
+    {
+      "file": "images/discovery-sheets/dayanta.webp",
+      "sha256": "49c89a73a3bc2b34bc64afa61fc85c11096a8322860f1bf9917541d7610747df",
+      "bytes": 1577010
+    }
+  ]
+}

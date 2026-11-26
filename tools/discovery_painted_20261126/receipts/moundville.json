@@ -1,0 +1,43 @@
+{
+  "id": "moundville",
+  "name": "문드빌",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/moundville.png",
+  "sourceSha256": "5790ea3d4f64b04dc53533f1d671181d99ff8617b4918319483bb2bb0ac38e04",
+  "sourceMtimeNs": 1795662943363487800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/moundville.gif",
+      "sha256": "c688d17f4d46ce44ee330afd7878d4b161746147487b8a3bbcb6496d39a8be5a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/moundville.jpg",
+      "sha256": "8b823cf3fa0c932de1ec41d82c5905b02c5408b6b78d0b0c6bf216e383b2a4e0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/moundville.webp",
+      "sha256": "42d0e3ce35431a244a2a7f8cffbc320632feded2b01993736dde9eee0948ca8e"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/moundville.gif",
+      "sha256": "760a9e98456e3271da7ecbd6bb2010289404616d400107bb4977f8f5f87bf987",
+      "bytes": 3351951
+    },
+    {
+      "file": "images/discovery-ends/moundville.jpg",
+      "sha256": "63a6903266c6106b88be47bbd84dc95e6111159db5d41c28f51cb99a224c4e38",
+      "bytes": 96972
+    },
+    {
+      "file": "images/discovery-sheets/moundville.webp",
+      "sha256": "3377fafec5812bcb9a95a53bea484121f0c2c258fb0cef7c1106135918a5f2bf",
+      "bytes": 1677562
+    }
+  ]
+}

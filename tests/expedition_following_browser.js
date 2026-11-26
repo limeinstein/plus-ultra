@@ -5,7 +5,7 @@ let pw;try{pw=require('playwright');}catch(_){pw=require('../tools/procedural_ar
 const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'artifacts/exploration-following-20261031');
 fs.mkdirSync(OUT,{recursive:true});
 (async()=>{
- const browser=await pw.chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader','--no-sandbox']});
+ const browser=await pw.chromium.launch({executablePath:process.env.BROWSER_EXE||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--allow-file-access-from-files','--use-gl=angle', '--use-angle=swiftshader','--enable-unsafe-swiftshader','--no-sandbox']});
  const errors=[];try{
   const page=await browser.newPage({viewport:{width:1200,height:930}});
   page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});

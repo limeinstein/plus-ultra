@@ -1,0 +1,43 @@
+{
+  "id": "tiya",
+  "name": "티야 선돌",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/tiya.png",
+  "sourceSha256": "023374806fba797bbd95fe2fe79e92df7acfd31b8a94811f72eb3ffb4a883306",
+  "sourceMtimeNs": 1795662343459592500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tiya.gif",
+      "sha256": "d959f36815b7bd85e940f6124094ae8bcbae60b51c5dad07ada0c6fa2ab8a700"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tiya.jpg",
+      "sha256": "98ee4395e6787271679489bb14fb46c4ac0fbee215d0125eb55542ea4649fb3c"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tiya.webp",
+      "sha256": "718ad5c521298cbcab6827a258ed98cde5eb7d4bf5d9fe3275d033371953bd11"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tiya.gif",
+      "sha256": "1e22c85b7a3fd26555c6d5b660c14dbd6d919b0ef999a7289db6d5a39efbb33b",
+      "bytes": 3437983
+    },
+    {
+      "file": "images/discovery-ends/tiya.jpg",
+      "sha256": "cd3baabc4df41772586a0b755ef3c8cfef7b717eb2bbc607cbdb300a487c7176",
+      "bytes": 99591
+    },
+    {
+      "file": "images/discovery-sheets/tiya.webp",
+      "sha256": "ff3b90d910a5a72160f8ac4f0fbbf68c8eee2a55d03615b43fb1eb7a7835316a",
+      "bytes": 1711036
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "wenceslas",
+  "name": "성 바츨라프 왕관",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/wenceslas.png",
+  "sourceSha256": "df56baa13d1b00ac1d621797a3ce07afe3a74cb76706e54bac4c6e13fff63486",
+  "sourceMtimeNs": 1795660307009718800,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/wenceslas.gif",
+      "sha256": "77126a05a57dcc9e133e9b3144ff8237db4a6eadefd1b8697f7dbbbadcf25566"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/wenceslas.jpg",
+      "sha256": "a9c28a1eebaea8c1bbfc77985b28eb37d0cd646cc267fde9e489561f8d636c28"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/wenceslas.webp",
+      "sha256": "deda209d94e85725cef421692b4c206f90957256edd49495ae74cabf1086fe37"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/wenceslas.gif",
+      "sha256": "7269245e8ab1d0af5b7fd7e63ed813ade73d14f3b9cc701fea2c1249bb6b5783",
+      "bytes": 3463653
+    },
+    {
+      "file": "images/discovery-ends/wenceslas.jpg",
+      "sha256": "43d1d3a75ec03b119ee8469b31320b028e827bac7ad802d39546fe3183956c8c",
+      "bytes": 89151
+    },
+    {
+      "file": "images/discovery-sheets/wenceslas.webp",
+      "sha256": "8df4782e6ff1ba7dc74338bebb0deef75f51fc7bee28498b7034159d6f3243f3",
+      "bytes": 1487316
+    }
+  ]
+}

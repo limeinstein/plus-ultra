@@ -1,0 +1,43 @@
+{
+  "id": "potosimint",
+  "name": "포토시 조폐국",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/potosimint.png",
+  "sourceSha256": "43ac0498f64221e72b17bb48ed92d06a7db5c94b6e28ba3df6e96031d0370677",
+  "sourceMtimeNs": 1795663072801196700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/potosimint.gif",
+      "sha256": "2ce56ae74cd238a25b1213470eb492c078037f4c774fa18f04b9f2e1e75a1bcf"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/potosimint.jpg",
+      "sha256": "a2b93ca13e79d41b12645c1de9021015a6c5fad2cb0556865968364404b819cb"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/potosimint.webp",
+      "sha256": "816c9d3bebd006ce1b7ac985c4a6a69e0e4501673db1e83d5c1622116b3e2f99"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/potosimint.gif",
+      "sha256": "a7faedd2dc43dbe83ca825126a2cd9457f2ebb11d2ecf3ca04055e2d80bb7807",
+      "bytes": 3784510
+    },
+    {
+      "file": "images/discovery-ends/potosimint.jpg",
+      "sha256": "1be692d12a0ddbc89c0aec5bd6326cb347b818317be0c7f07d27ae7e932c7470",
+      "bytes": 96525
+    },
+    {
+      "file": "images/discovery-sheets/potosimint.webp",
+      "sha256": "6d51c96bac5dffe15bc0bfdadf54517edac4d4efb27d4e9ca7054d0d7e3ed95d",
+      "bytes": 1663102
+    }
+  ]
+}

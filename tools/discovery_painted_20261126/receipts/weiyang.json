@@ -1,0 +1,43 @@
+{
+  "id": "weiyang",
+  "name": "미앙궁",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/weiyang.png",
+  "sourceSha256": "882deec020447d0687944a4f3e26b515e19f2cfde609586b94053d698df57529",
+  "sourceMtimeNs": 1795660951146267700,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/weiyang.gif",
+      "sha256": "ea3d88ad1ff21cc713a259032293fc0fe33deb4f2518f142a9dafecdf0464cdc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/weiyang.jpg",
+      "sha256": "91531770f7fe541ad5ed7416c2ed486298761b314c0ed780a1f0137eb0a47905"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/weiyang.webp",
+      "sha256": "fcf1c45eab400ca456db29a3c50faf167b1fb0cd53b8c2eb25f15e2b079a1d47"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/weiyang.gif",
+      "sha256": "b964c5e14cb01e665965badd57abd7b53c774d48e93c1529b8fa37a97fb049b7",
+      "bytes": 3194846
+    },
+    {
+      "file": "images/discovery-ends/weiyang.jpg",
+      "sha256": "b7d3a0f86f928f61f2d3bccbdb6782976a32f1231c7d8c54293596576d8fbaff",
+      "bytes": 90342
+    },
+    {
+      "file": "images/discovery-sheets/weiyang.webp",
+      "sha256": "dbb32507d1c015ddb1782df298c1c051922443675da73b57c0d7a5ed09955a51",
+      "bytes": 1532526
+    }
+  ]
+}

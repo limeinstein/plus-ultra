@@ -1,0 +1,43 @@
+{
+  "id": "cloudberry",
+  "name": "클라우드베리",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/cloudberry.png",
+  "sourceSha256": "eca89839c02920fef1e963733e1d9329cb78ac8206604240104c9d76cd01380b",
+  "sourceMtimeNs": 1795659650418297500,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/cloudberry.gif",
+      "sha256": "6a344d53800a8a690574180fd5f61b7e8371d66369cdf8538894c221f09d3651"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/cloudberry.jpg",
+      "sha256": "ac010388e2852eacd5d035de72f2c4eec4926a401811265d9655a26b22f1bb41"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/cloudberry.webp",
+      "sha256": "a8ba4116e6ee48bf1c17de81ff5c44de5b65c3b03bd89a6f5f70d27187cb6044"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/cloudberry.gif",
+      "sha256": "61d1afd712d5b55a82a9e44063526aff61a5f055b96198a3c769a4bf24477cb7",
+      "bytes": 3079006
+    },
+    {
+      "file": "images/discovery-ends/cloudberry.jpg",
+      "sha256": "343efadd36cd756da4cf866c43fa67d0ca04d2e1d124ec38e5a65b3d10cf3e86",
+      "bytes": 92375
+    },
+    {
+      "file": "images/discovery-sheets/cloudberry.webp",
+      "sha256": "5d970ff0a586fd56dec61994e086ac7593d3321de68ad115d8f7784d50b8bbf2",
+      "bytes": 1539962
+    }
+  ]
+}

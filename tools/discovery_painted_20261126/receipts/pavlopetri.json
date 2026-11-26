@@ -1,0 +1,43 @@
+{
+  "id": "pavlopetri",
+  "name": "파블로페트리",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/pavlopetri.png",
+  "sourceSha256": "ab7dccc6798a174dca2cad15374bb545d1ae679369b6730317e0770c9d585a55",
+  "sourceMtimeNs": 1795662293480783200,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/pavlopetri.gif",
+      "sha256": "e605a00ac7cd9b7601210708584a637aff9bcd097a87678a58c8dd74c3ac5c98"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/pavlopetri.jpg",
+      "sha256": "eee9627eadf06ed085ceb30088e2a1db80529a0478de30210bca81115efa6061"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/pavlopetri.webp",
+      "sha256": "179970610675345c9d31031b644b011bd5f729e642cfb7620952c484b83af774"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/pavlopetri.gif",
+      "sha256": "03717b1dc89761c51329f4b77b4b664ef28967324739cb34626805c09856df24",
+      "bytes": 3146453
+    },
+    {
+      "file": "images/discovery-ends/pavlopetri.jpg",
+      "sha256": "a70a8b583a5ecf124ed39d325c0d1e3a30b0d488f8ce81ac0cdb000e218cfea9",
+      "bytes": 99006
+    },
+    {
+      "file": "images/discovery-sheets/pavlopetri.webp",
+      "sha256": "6da15ba449c108059450ec17d09604703ff9e2496cc8d0da48ba9f6d73c1ba6a",
+      "bytes": 1666628
+    }
+  ]
+}

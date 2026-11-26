@@ -1,0 +1,43 @@
+{
+  "id": "sagrada",
+  "name": "사그라다 파밀리아 성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sagrada.png",
+  "sourceSha256": "079dd5bd57926526af6feebfbb7900db5a22579f1c74f0985226e352014df726",
+  "sourceMtimeNs": 1795661448995117300,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sagrada.gif",
+      "sha256": "b023a946d1566a9d27416efe2c8ece23630f418cc0fab32a8ff41029d90e72a0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sagrada.jpg",
+      "sha256": "6ed094d20c4bde0f0e66db63cc5ce24c8021607fc4925c86251c382a29c7afd1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sagrada.webp",
+      "sha256": "772c60c3fec10eb90b26850669ff9cba9e234841aa3c2d98f5ad3f3bfcbb5b12"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sagrada.gif",
+      "sha256": "cd207877b7f7492d2948ee3c2ffba5985ce4cb815108b312410e15bda3aa2047",
+      "bytes": 3634219
+    },
+    {
+      "file": "images/discovery-ends/sagrada.jpg",
+      "sha256": "a6189f116bcce4c73a7652c87a9d6529f8d660f6f0075e1da96560c06735f062",
+      "bytes": 100611
+    },
+    {
+      "file": "images/discovery-sheets/sagrada.webp",
+      "sha256": "36f74761207a1bafb3f85858bf8dbe1b1b8b316426826d89e3e4e519ce61ab3a",
+      "bytes": 1754290
+    }
+  ]
+}

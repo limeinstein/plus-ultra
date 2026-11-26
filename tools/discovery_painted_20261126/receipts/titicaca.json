@@ -1,0 +1,43 @@
+{
+  "id": "titicaca",
+  "name": "티티카카 호",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/titicaca.png",
+  "sourceSha256": "6483130ba554c517d699a7927f766251185186e64f5812ac791a482502b459cd",
+  "sourceMtimeNs": 1795659657902240900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/titicaca.gif",
+      "sha256": "61f063e878f889c03d388160f43f910d9c81f77ba122a8c99be403f95ea74c9e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/titicaca.jpg",
+      "sha256": "0848d4641c40b24c46e8526c37ae1624915175e4ac7474bf02d623987dfed386"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/titicaca.webp",
+      "sha256": "dc022933059bc04cd437cb54eca1c09982454f54cb2ff1ad3613b0ec969a591f"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/titicaca.gif",
+      "sha256": "1f6cba307798c762000069906b3cc7a1ea4cc271931e4839768c4951b4c33b11",
+      "bytes": 2785426
+    },
+    {
+      "file": "images/discovery-ends/titicaca.jpg",
+      "sha256": "213a8c6c903312d7e7ee69b79357d99af8fea1d7754aa90232245c78046d8d01",
+      "bytes": 93745
+    },
+    {
+      "file": "images/discovery-sheets/titicaca.webp",
+      "sha256": "9c7a92cb13812a9980acd23ffbb271dffb2c043738607cbaedc7f05cf166f5e0",
+      "bytes": 1569412
+    }
+  ]
+}

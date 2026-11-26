@@ -1,0 +1,43 @@
+{
+  "id": "seokguram",
+  "name": "석굴암",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/seokguram.png",
+  "sourceSha256": "5c256a1d044f0a9338d7a32c8127328134272f8ae268ef2a9047e2ddf286bc01",
+  "sourceMtimeNs": 1795659937264710600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/seokguram.gif",
+      "sha256": "edf639cc08ddace98994b76775f7e21c84a3937261a3e6375c81a938bfa7060f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/seokguram.jpg",
+      "sha256": "d20b50bf2105af0ed58e07f5d0bda68ff2e8e8d958cbd3147ec7fa2cd5b1ab76"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/seokguram.webp",
+      "sha256": "b9ce59b3cd24ac07800107ee7b14c1efbaed163734b6910a278766580ba8e555"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/seokguram.gif",
+      "sha256": "db776d8c96e8e6068494bd06fef99362c48db096bf2e94988fe74e0beb9fefac",
+      "bytes": 3500929
+    },
+    {
+      "file": "images/discovery-ends/seokguram.jpg",
+      "sha256": "cfce999ebd3ac057a90eac8d540dad5486a99ce43ce632ba67fc8390caa2bc2b",
+      "bytes": 93802
+    },
+    {
+      "file": "images/discovery-sheets/seokguram.webp",
+      "sha256": "cd2118fad1fa10f285a2e09d25804878991cd37813da886e1438a1b3015b9139",
+      "bytes": 1603300
+    }
+  ]
+}

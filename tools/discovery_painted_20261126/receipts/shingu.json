@@ -1,0 +1,43 @@
+{
+  "id": "shingu",
+  "name": "신구의 서복 무덤",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/shingu.png",
+  "sourceSha256": "59fed83061767d5ec13a7d187577e23fec465709d29a57b57b7d714ea2f389c0",
+  "sourceMtimeNs": 1795661682314563800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/shingu.gif",
+      "sha256": "aad60dc6d0ffe45cf22a094e2814005688ab60478b2f98aa6afbba78f97e65e2"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/shingu.jpg",
+      "sha256": "9038e85c456dd617e7b355ec17309b7d085ad8cc1c0721648225249392a8a7fc"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/shingu.webp",
+      "sha256": "c6b4c3499cc282fd33127123d6883d729a191499e236ce97122da636dd013781"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/shingu.gif",
+      "sha256": "9413bc357ba063b42ae5b6c8d8e2c7899996c0e3afd3ba53e15000a7d2390414",
+      "bytes": 3662228
+    },
+    {
+      "file": "images/discovery-ends/shingu.jpg",
+      "sha256": "874ffd7d3a60561f8de113d3e4721b0666cc2b341e1b056593c1f4b8a2d3760f",
+      "bytes": 101209
+    },
+    {
+      "file": "images/discovery-sheets/shingu.webp",
+      "sha256": "8839d9c7f25465b2e3901dc1ad753eedc3387f9b9b196852db74c7ce7956a2d6",
+      "bytes": 1790874
+    }
+  ]
+}

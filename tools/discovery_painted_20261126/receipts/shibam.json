@@ -1,0 +1,43 @@
+{
+  "id": "shibam",
+  "name": "시밤 — 흙으로 쌓은 탑집 도시",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/shibam.png",
+  "sourceSha256": "56478103a4cc519529623fdf961eb4fd846c0dc3d4d60a2cbe77e3c57727cc2b",
+  "sourceMtimeNs": 1795661771441924500,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/shibam.gif",
+      "sha256": "7d174f77ddd27c2f4671ebed6625d7d3f646d06a63cb8b580f56d41a7f642bc6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/shibam.jpg",
+      "sha256": "ab4933e35a8a7d62fd7b30f065d8ed225c15f7429524dbe7b09bef90de330cc6"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/shibam.webp",
+      "sha256": "65d1f3436b2add8e4e37313df0c7459e0c19bc178cc5619cb4291e9d9bc51759"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/shibam.gif",
+      "sha256": "a69f1ac9de24891dc999d5792bb4a01cfe5f2d7b93daf29483b8f70041e196c6",
+      "bytes": 3451555
+    },
+    {
+      "file": "images/discovery-ends/shibam.jpg",
+      "sha256": "9f0d504d3ad67f32dfbda7a77ee4efb4ababbe055a4f83df8a0ae5c8f9b39003",
+      "bytes": 95056
+    },
+    {
+      "file": "images/discovery-sheets/shibam.webp",
+      "sha256": "9772bfcef142863579b3b7d63f1119f1e767292227cce3588c06cc4bcc4ff8eb",
+      "bytes": 1624388
+    }
+  ]
+}

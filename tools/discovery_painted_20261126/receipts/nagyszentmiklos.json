@@ -1,0 +1,43 @@
+{
+  "id": "nagyszentmiklos",
+  "name": "너지센트미클로시의 황금 그릇",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/nagyszentmiklos.png",
+  "sourceSha256": "f03f969eef170c09bcf20f1625e68f4384bf135ed64b578655b4a2b36237e191",
+  "sourceMtimeNs": 1795663502731978900,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/nagyszentmiklos.gif",
+      "sha256": "87f5f557c13b8b8d472546a9899f3ba982d2a449128fe406886efb6e8da84323"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/nagyszentmiklos.jpg",
+      "sha256": "bda11bb60566b163b5f0e9a97712abff7e9d554404260c12d436dfd36977be26"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/nagyszentmiklos.webp",
+      "sha256": "a2615f0ec7d3476365fc4b16276706eaa09cc0289fc45f82592cd047fb60482d"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/nagyszentmiklos.gif",
+      "sha256": "6fd67f5294c725866464b0bc96156d501606df6465385e473167ad934f78015d",
+      "bytes": 3614653
+    },
+    {
+      "file": "images/discovery-ends/nagyszentmiklos.jpg",
+      "sha256": "aa8655efa7b5d28e0b57b3dfdb438cbbcc3e05ded350c485d0677cce9573f313",
+      "bytes": 101036
+    },
+    {
+      "file": "images/discovery-sheets/nagyszentmiklos.webp",
+      "sha256": "cd6b5e2daf283e0173c35c4ae8d06915fcb367ddf5df06d141d47fef211470ea",
+      "bytes": 1767924
+    }
+  ]
+}

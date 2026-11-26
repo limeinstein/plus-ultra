@@ -1,0 +1,43 @@
+{
+  "id": "sikachi",
+  "name": "시카치-알랸 암각화",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/sikachi.png",
+  "sourceSha256": "936cfed7f9dc192fc5ff2b157866eba80ed2d6c694f0f0dedf901dbdf6826789",
+  "sourceMtimeNs": 1795662146121146600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/sikachi.gif",
+      "sha256": "b5bdb413afd6831587afd5291682c86506f63546269c8a4fd65d2cd34eada8ec"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/sikachi.jpg",
+      "sha256": "9b2acc84aa2b955211ee4e3e1777453e608c53defb10adfdca31386f579a1f7f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/sikachi.webp",
+      "sha256": "442139593f9c71654f1a647dcb1e7dc7be2bb9414605034b8a44a83d1c6717e2"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/sikachi.gif",
+      "sha256": "7d8ca6da5da7df733d6bf8134f390a5f2de44c80552f530db45df40cdaf9b6c6",
+      "bytes": 3757989
+    },
+    {
+      "file": "images/discovery-ends/sikachi.jpg",
+      "sha256": "45caa3701e3e24d90de92b88e6c47cd60c08c97a90638e14db093d17136af37c",
+      "bytes": 96376
+    },
+    {
+      "file": "images/discovery-sheets/sikachi.webp",
+      "sha256": "092a65c399bd39b9b5f17dbf65972cc0290f836b2ef428f2d2b598e06fdc01db",
+      "bytes": 1657654
+    }
+  ]
+}

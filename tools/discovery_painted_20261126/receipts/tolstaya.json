@@ -1,0 +1,43 @@
+{
+  "id": "tolstaya",
+  "name": "톨스타야 모길라 — 스키타이 왕의 황금 가슴걸이",
+  "cat": "treasure",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/tolstaya.png",
+  "sourceSha256": "f2f3fcd9bda2d964e873bc2550a903724c3f462a7c7472c9fa13cdf4567a6a97",
+  "sourceMtimeNs": 1795663355639299100,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tolstaya.gif",
+      "sha256": "9dd842d4fb301b80b6f24a2950db6a9cef30305b911d48f6d4ed3daae980986e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tolstaya.jpg",
+      "sha256": "7b85e1d2c29d3ec8a328d94b7f3706aab40b85271b301b10371ffbe6f43f77c7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tolstaya.webp",
+      "sha256": "6423108505a3490116cdaab9544b97c7fe9beb09eeb9d0973201b51aeb1a234c"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tolstaya.gif",
+      "sha256": "37b98e39d64b82115ac2a43769d898347a993284ced2951fc99f4f919cfdc7f6",
+      "bytes": 3677316
+    },
+    {
+      "file": "images/discovery-ends/tolstaya.jpg",
+      "sha256": "d17c82332a084017f22358d68d1246a5d7cea972a3efffa3114cf6a8363bf25e",
+      "bytes": 101415
+    },
+    {
+      "file": "images/discovery-sheets/tolstaya.webp",
+      "sha256": "83e3707e2a0b755238779624cf2221d30fb74c251bba0281ab56fb823ca34026",
+      "bytes": 1772824
+    }
+  ]
+}

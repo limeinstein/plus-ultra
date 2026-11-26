@@ -1,0 +1,43 @@
+{
+  "id": "redfort",
+  "name": "붉은 성",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/redfort.png",
+  "sourceSha256": "1e06c206d503ac93cdc866783b1c208343d45422898c5dc8d92f6762dea0f00c",
+  "sourceMtimeNs": 1795661103939115000,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/redfort.gif",
+      "sha256": "8e31c76d3b8438e081069b9be3572ffef9db2b99a7079d7a075be056747e9156"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/redfort.jpg",
+      "sha256": "ac75026d1eb6ced61657e7d819d4ef90daf5d580b4d4362a28c8d8f66709800e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/redfort.webp",
+      "sha256": "9d085aef00cd56e39c201a621909c7ba53fae8c96408dc39cf53e1a5b006494a"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/redfort.gif",
+      "sha256": "df5cee2995db1cab7adbbb3eac2203dae18789a65ec19f195112c7ef753d4b14",
+      "bytes": 3454237
+    },
+    {
+      "file": "images/discovery-ends/redfort.jpg",
+      "sha256": "6028f0e7996b7e173638ab7c11ee9bf8bf445e9526ca86630eb4cf513e6f3815",
+      "bytes": 96334
+    },
+    {
+      "file": "images/discovery-sheets/redfort.webp",
+      "sha256": "f91c41386bd9e5ae22dbf32efba1b5f613b51976ae9ece2cc97269fd30c53d7e",
+      "bytes": 1652734
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "ananda",
+  "name": "아난다 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ananda.png",
+  "sourceSha256": "5750bc63c340a1841540d60887579f5ea79cf56cf94f6a9910d6323248331454",
+  "sourceMtimeNs": 1795659731159873900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ananda.gif",
+      "sha256": "48a7605f5f79e74c56e6d661976e2577d1d839adcbd8db4568585be6007e8c54"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ananda.jpg",
+      "sha256": "c75e4cc88e435c35682fe0a20cfac798affce7f26f8a6e125cd152d9855d2486"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ananda.webp",
+      "sha256": "4c5ac240fe7f8647da2e00a4389c15245fcd8e7af0b71659d81de030e5e6c645"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ananda.gif",
+      "sha256": "c58dcb4d4a3991b7a3d9e017f852b08f7b6c843fc30ad53d93adca6ccf03f4a7",
+      "bytes": 3261864
+    },
+    {
+      "file": "images/discovery-ends/ananda.jpg",
+      "sha256": "324d67658751f62b3eeb1ef92965eee723f26ac56a27ebc20330022b9888eb73",
+      "bytes": 96386
+    },
+    {
+      "file": "images/discovery-sheets/ananda.webp",
+      "sha256": "67eca849cfeb84eb843964d689547bc1d791727723822ad35303a05571cf7c18",
+      "bytes": 1646062
+    }
+  ]
+}

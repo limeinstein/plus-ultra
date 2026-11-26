@@ -1,0 +1,43 @@
+{
+  "id": "jerichotower",
+  "name": "예리코의 돌탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/jerichotower.png",
+  "sourceSha256": "fba8b334cb3fb989d8d5637fa5b96d3e3200aebc5dba5b1c02caf7d6dbe0a353",
+  "sourceMtimeNs": 1795662437363859600,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/jerichotower.gif",
+      "sha256": "68a500df82c41ebb08478ef814865ab0368ac171eeae60c52a7ef01d52aba8d4"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/jerichotower.jpg",
+      "sha256": "abb29549481723a19d3bcc571888518d439aef25607914dd4d0dbce1212804fe"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/jerichotower.webp",
+      "sha256": "c2845fd2480db228322fe571d8ef127772c68c75380c1b7607a58ce7e958ed48"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/jerichotower.gif",
+      "sha256": "a87f47db6407934b17433856636e0f912c62876a2e66089b98653c81f3650feb",
+      "bytes": 3649862
+    },
+    {
+      "file": "images/discovery-ends/jerichotower.jpg",
+      "sha256": "44fd66b51fbc096cf7101a11a24e70f3839104566c034fdb58fb755c2917510f",
+      "bytes": 93001
+    },
+    {
+      "file": "images/discovery-sheets/jerichotower.webp",
+      "sha256": "56aa8f8242b4d3a25305d9def2cd922fb0651afac550ccd86daa6c6074225b3f",
+      "bytes": 1593696
+    }
+  ]
+}

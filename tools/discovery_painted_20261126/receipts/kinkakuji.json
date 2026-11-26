@@ -1,0 +1,43 @@
+{
+  "id": "kinkakuji",
+  "name": "금각사 (로쿠온지)",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/kinkakuji.png",
+  "sourceSha256": "dad89ca4a243dad50d7381ecd9cde73756241c2b2ddb9c251d208db18f05daa7",
+  "sourceMtimeNs": 1795662091731907100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/kinkakuji.gif",
+      "sha256": "fb73ee2eed3cd6865c1467ca0f4a1d2c3607307347db477c6f1ac718f987b84f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/kinkakuji.jpg",
+      "sha256": "2bd2f3ad4c1a9f3f190d0d909e31504f1544f8ce79a8e6f8086f526713cfaea0"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/kinkakuji.webp",
+      "sha256": "405493d66c56e3623a207da4272ed3ea0581a169ad3716111d08bdec7f369c44"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/kinkakuji.gif",
+      "sha256": "f5d10d67f256c2fe62b34980e1ec1a20269bdbbee3151c66e3adb8393a70abcf",
+      "bytes": 3396203
+    },
+    {
+      "file": "images/discovery-ends/kinkakuji.jpg",
+      "sha256": "8bd724f97b2eb9a8a8454eba0d2818b7207191d2251ebc5d11dc1617101480ed",
+      "bytes": 97727
+    },
+    {
+      "file": "images/discovery-sheets/kinkakuji.webp",
+      "sha256": "7789f4d091289098e0c879077db2792d5f5c113470190ff31a2379748d4d4d00",
+      "bytes": 1662664
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "ponagar",
+  "name": "포나가르 참 탑",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/ponagar.png",
+  "sourceSha256": "46aa71abbb458bd7ac6b3f69a2c66bef23ab34af1571740d05114fbc43f9f1e6",
+  "sourceMtimeNs": 1795662148043213100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/ponagar.gif",
+      "sha256": "39589c34295f0dfabec86aa96cc4c431c0017071cda871d486cc6c8507dbcb56"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/ponagar.jpg",
+      "sha256": "de2e0fc078d88389e0b34e51e5ff7f22b8822323c35c2202e17f7fb5c6a7f70e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/ponagar.webp",
+      "sha256": "0072b60811949556c3ce125742c974df9375f5ceac6a321f12701ec5105bb891"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/ponagar.gif",
+      "sha256": "0c3464f5b8a9637b9f0d19b2e60c9e1721af0f9d51fb0530472a674a02bfee2b",
+      "bytes": 3626216
+    },
+    {
+      "file": "images/discovery-ends/ponagar.jpg",
+      "sha256": "c6cbe54dbfcd1ec2b68fd8a3012eee4f08acfbc49dff848395324f6c194d9042",
+      "bytes": 99673
+    },
+    {
+      "file": "images/discovery-sheets/ponagar.webp",
+      "sha256": "57f3a07e532675e47e17b363aaee97e0f60d92975ee8d50dd37fd64ba1deaf21",
+      "bytes": 1722492
+    }
+  ]
+}

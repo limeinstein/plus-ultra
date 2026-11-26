@@ -1,0 +1,43 @@
+{
+  "id": "mangosteen",
+  "name": "망고스틴",
+  "cat": "creature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/mangosteen.png",
+  "sourceSha256": "c127b6bbff153ee14e2c6fab8ee4e5613f47d246d6baa254e539d71aea1ba729",
+  "sourceMtimeNs": 1795659653517270700,
+  "durationMs": 8400,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/mangosteen.gif",
+      "sha256": "188b7e9f563ec05ee95ac97c4b2897f1846fbf47dd6013bfdcbc733c8831e680"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/mangosteen.jpg",
+      "sha256": "9532041a5b642fab82ad83bdd8accc516bbc1591cfb53f071f4df929c0dd4869"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/mangosteen.webp",
+      "sha256": "a8ccb3c0bc68df729d109dd289e079cf699b6d2e8003466c1cd18ad43e420ab1"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/mangosteen.gif",
+      "sha256": "55913a38fee39ee04d86b3987200f9d6540da519a1d9a7dc40f620833b16376a",
+      "bytes": 3444463
+    },
+    {
+      "file": "images/discovery-ends/mangosteen.jpg",
+      "sha256": "ba1b76ef485ad7a7e83ad8485b8c9bcc26d21ec58b9c22050ee2c313259e096e",
+      "bytes": 105143
+    },
+    {
+      "file": "images/discovery-sheets/mangosteen.webp",
+      "sha256": "9eb81e941281ca71c1b97aabb0d760d978b449d942acfed79335eede2220b84c",
+      "bytes": 1778786
+    }
+  ]
+}

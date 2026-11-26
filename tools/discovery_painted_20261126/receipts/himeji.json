@@ -1,0 +1,43 @@
+{
+  "id": "himeji",
+  "name": "히메지 성",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/himeji.png",
+  "sourceSha256": "8570f2f3c09e59cd83ef7b6744447ae0f439ba9778d5115452688514f28a8e07",
+  "sourceMtimeNs": 1795661221807160900,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/himeji.gif",
+      "sha256": "4dd5084f2a1456ef800911ec8feb2f52d0c74eb777a31309352420b9bc889c5d"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/himeji.jpg",
+      "sha256": "003a62caa24c0fdbe5af4fea70e9adaf2ff9982a0d11262b5ac2f8fdda9227f7"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/himeji.webp",
+      "sha256": "bc1dfae820813740c77d8f9ce799a9d9a358be674ad8f1666ae2d9093d80c75b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/himeji.gif",
+      "sha256": "a9aa565821ac8f20f14d6d0addd25dfec0696594fa050570dc3e36bbc8b4c7a9",
+      "bytes": 3449231
+    },
+    {
+      "file": "images/discovery-ends/himeji.jpg",
+      "sha256": "29f56bc2f3b3929f7171e9c36b03541e97aac010e1f7d02a75cb95720f2715a1",
+      "bytes": 101007
+    },
+    {
+      "file": "images/discovery-sheets/himeji.webp",
+      "sha256": "7bd5151585d46b377380677ca313c3ee8089238dacf73c535fbc8e7276d961c0",
+      "bytes": 1769594
+    }
+  ]
+}

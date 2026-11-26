@@ -1,0 +1,43 @@
+{
+  "id": "osireion",
+  "name": "오시레이온",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/osireion.png",
+  "sourceSha256": "17794cf0257cfade2fa6565a4507ad525e0cf0797fa8b2e69243d13bf4a74512",
+  "sourceMtimeNs": 1795662414856430800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/osireion.gif",
+      "sha256": "3b7ef6f268dda2afefdb6f2081794d5ea73e1fa0841a0f820602f05efae85b36"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/osireion.jpg",
+      "sha256": "f6d87273ced018f41d04967fc4ba0cdd1fd82bb55c4a929b5c072cbcc9863a4e"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/osireion.webp",
+      "sha256": "a7968378b12a7044e9a9009795c0287f46d2f331e72a74555cabae777620d032"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/osireion.gif",
+      "sha256": "1ca5c26575925b0ad8d8099106abe760718b780b680ed8bbd30c790b3506aa00",
+      "bytes": 3255374
+    },
+    {
+      "file": "images/discovery-ends/osireion.jpg",
+      "sha256": "7b6cda401c2172e1e8de97b9592206dd4ee03f06c384bebadc2b9ece53b4ad93",
+      "bytes": 80133
+    },
+    {
+      "file": "images/discovery-sheets/osireion.webp",
+      "sha256": "a54fe510ed66507c57138eb22af8dbf8b2514d20bea1ab0d529d4e7b8a1965d6",
+      "bytes": 1339092
+    }
+  ]
+}

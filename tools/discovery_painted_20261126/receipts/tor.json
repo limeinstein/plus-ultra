@@ -1,0 +1,43 @@
+{
+  "id": "tor",
+  "name": "글래스턴베리 토르",
+  "cat": "nature",
+  "style": "2D oil/gouache",
+  "newPainting": false,
+  "source": "tools/discovery_painted_20261126/sources/tor.png",
+  "sourceSha256": "af7c8644b25c64ba7e4e953f00fce5a30ee816c2d45226600d2df93ccc9417cb",
+  "sourceMtimeNs": 1795659649139368100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/tor.gif",
+      "sha256": "fdc11dd05809427560e1748772b99764138641b8f11bfa3aed5f145b5bb6906a"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/tor.jpg",
+      "sha256": "a8ed553f5f7187770274509c4580bd414b823edf03f967f9516c09c636ca862f"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/tor.webp",
+      "sha256": "79987b68997822da843435fd828b569ce2d8eeea6d9cf10bd193c0464d81334b"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/tor.gif",
+      "sha256": "e61da92bd1693b217cbc92f8042c60e2ee156ce52c580b085fdc8f33327982c1",
+      "bytes": 2971307
+    },
+    {
+      "file": "images/discovery-ends/tor.jpg",
+      "sha256": "da25105ebdac30d8be2a6c444d1a328ca99468db2505d33e8bc94972dec22a9c",
+      "bytes": 79480
+    },
+    {
+      "file": "images/discovery-sheets/tor.webp",
+      "sha256": "de6ff2fbcb9a2f2cb12715b832393b2374e73c7580f07c534169b36e86f7a780",
+      "bytes": 1274416
+    }
+  ]
+}

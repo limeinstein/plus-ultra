@@ -1,0 +1,43 @@
+{
+  "id": "poitiers",
+  "name": "푸아티에 대성당",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/poitiers.png",
+  "sourceSha256": "b280bcef59fab4d88c9b4920b8265a65b5ccf266fb95c7e3ee5841cb94ed32cc",
+  "sourceMtimeNs": 1795660096464237800,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/poitiers.gif",
+      "sha256": "ef2420576cd161f22f47c01ff7eca6a250998cd1658f3f878f211b9175a6aaae"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/poitiers.jpg",
+      "sha256": "01b2984c1dcdd75f91722f2d072214780b56a97011341921628fb4ecdce3c644"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/poitiers.webp",
+      "sha256": "aa82fba7036d3efa9c236fcd1a830c86e65a79c810cd3f8d6920e376acb030e7"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/poitiers.gif",
+      "sha256": "3a9646ec705ad1db5c4cc418f55dc3cb93ea8389d3ca8a6c80419e6dc9f547a2",
+      "bytes": 3737207
+    },
+    {
+      "file": "images/discovery-ends/poitiers.jpg",
+      "sha256": "063c9ce44a5f6c9a749a45077cdd0bb597401e896c7c4b6bc9e57bb5b0a45b40",
+      "bytes": 97470
+    },
+    {
+      "file": "images/discovery-sheets/poitiers.webp",
+      "sha256": "8955351dbeab9e186f8c29f6152921a3e4906e0c35e1e80b27259e03204abc94",
+      "bytes": 1717348
+    }
+  ]
+}

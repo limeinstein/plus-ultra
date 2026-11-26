@@ -1,0 +1,43 @@
+{
+  "id": "baidinh",
+  "name": "바이딘 사원",
+  "cat": "ruin",
+  "style": "2D oil/gouache",
+  "newPainting": true,
+  "source": "tools/discovery_painted_20261126/sources/baidinh.png",
+  "sourceSha256": "63835a28866dc60477f90151bf0d12131cfbf35b7a7c3526c6fb7c26db21f5de",
+  "sourceMtimeNs": 1795661419562721100,
+  "durationMs": 9820,
+  "logicalFrames": 24,
+  "before": [
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discoveries/baidinh.gif",
+      "sha256": "73e0aef3249b5993424e849cb18f821038ac3642be2764ea220a148f1bea1e13"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-ends/baidinh.jpg",
+      "sha256": "005bd77035d666ad5fcb0ae7a16b648b809483fe479820adcbab602b4e20aea1"
+    },
+    {
+      "file": "tools/discovery_painted_20261126/before/images/discovery-sheets/baidinh.webp",
+      "sha256": "5f7b0f3aa6e497928fbf3b0fb7385b0e492256f86c475925af852bdd90ae0848"
+    }
+  ],
+  "files": [
+    {
+      "file": "images/discoveries/baidinh.gif",
+      "sha256": "4d585a6bd08b612f6b65a2f2121b75f4ce35d427f7e1a2f899ead9937a3981c2",
+      "bytes": 3623188
+    },
+    {
+      "file": "images/discovery-ends/baidinh.jpg",
+      "sha256": "38e2b64cd6134121fdbd4da889db18d36b63be702646d115e5e55c0d141d666d",
+      "bytes": 99708
+    },
+    {
+      "file": "images/discovery-sheets/baidinh.webp",
+      "sha256": "10c8c3bfc2f9b4c499c594f4f56a561f559c55a3ec5bc161e48840ceb4e25763",
+      "bytes": 1734768
+    }
+  ]
+}

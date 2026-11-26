@@ -51,8 +51,16 @@ for rid,name,coords in rows:
     if d<.07:adj[i].append((j,d));adj[j].append((i,d))
   result=find()
  if not result:report.append({'id':rid,'geometry':'reviewed connection, NE network discontinuity'});continue
- result=[list(p) for p in manual[:first]]+result+[list(p) for p in manual[last+1:]]
- output[rid]=result;report.append({'id':rid,'geometry':'Natural Earth 1:10m river line plus reviewed estuary connection','points':len(result)})
+ prefix=[list(p) for p in manual[:first]]
+ geometry='Natural Earth 1:10m river line plus reviewed estuary connection'
+ if rid=='nile':
+  # 로제타 지류는 하구까지 원본 지도 중심선이 있고, 카이로 북쪽에서 나일 본류와 한 점을 공유한다.
+  rosetta=next((r[2] for r in data['rivers'] if r[0]=='Rosetta Branch'),[])
+  if rosetta and rosetta[0]==result[0]:
+   prefix=rosetta[:0:-1]
+   geometry='Natural Earth 1:10m Rosetta Branch and Nile centerlines'
+ result=prefix+result+[list(p) for p in manual[last+1:]]
+ output[rid]=result;report.append({'id':rid,'geometry':geometry,'points':len(result)})
 (ROOT/'js/data/waterway_geometry.js').write_text('/* Natural Earth의 실제 강 굽이. 제작: tools/world_detail/refine_routes.py */\n(function(G){G.WATERWAY_GEOMETRY='+json.dumps(output,separators=(',',':'))+';})(window.G=window.G||{});\n',encoding='utf-8')
 (OUT/'route-geometry.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps(report,ensure_ascii=False),flush=True)
