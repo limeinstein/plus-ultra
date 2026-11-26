@@ -9,6 +9,10 @@
       zoomStart:180, zoomEnd:520, zoomBands:6, search:132, shoreSearch:68, plansPerFrame:3, prepareMs:3, cachedBands:4 },
     mapRuins: { width:[36,49,67], close:[50,68,86], chart:[28,35,41], zoomStart:165, zoomEnd:480,
       shoreStep:.025, shoreBands:8, shadowOpacity:.19, stonehengeClearing:[.22,.15] },
+    natureLandmark: { width:[38,53,68], close:[52,74,98], chart:[27,34,40], zoomStart:160, zoomEnd:490,
+      shadowOpacity:.16, bankMargin:.18, sampleStep:.023, markerMin:12, fitWidth:.33,
+      widths:[.96,.72,.54,.42,.33,.26,.20,.15,.10,.07,.04], local:[.08,.17,.28],
+      search:[.05,.10,.17,.25,.34,.45,.59,.76,.95,1.18,1.45,1.75,2.10,2.55,3.05,3.65,4.35,5.1] },
     // 지역별 숲은 같은 녹색 계열 안에서 작은 명암 차이만 쓴다. 수종은 윤곽·높이로 나눈다.
     terrainWorld: { enabled:true, atlasSide:768, forestDensity:.92, nearZoom:260, farZoom:140, chunkBudgetMs:4,
       maxTrees:1800, treeCell:.047, treeWorld:.113, tropicalDensity:1.28, tropicalScale:1.13, forestCacheMargin:120,
@@ -72,6 +76,7 @@
       portraits: { headHeight: 0.58, top: 0.01, frames: {
         'portraits/player/navigator_white': { centerX: 0.43, top: 0, height: 0.43 },
         'portraits/player/noble_scholar': { centerX: 0.54, top: 0, height: 0.43 },
+        'portraits/story-player/adrian': { centerX: 0.50, top: 0.01, height: 0.65 },
         'portraits/player/jessica': { centerX: 0.49, top: 0.09, height: 0.59, source: 'characters/player_half_jessica' },
         'characters/player_half_jessica': { centerX: 0.525, top: 0.008, height: 0.16 },
         'portraits/player/soyoung': { centerX: 0.48, top: 0.055, height: 0.60 }

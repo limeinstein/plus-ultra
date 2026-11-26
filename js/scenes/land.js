@@ -1251,9 +1251,10 @@
     if (G.AnimalTracking) G.AnimalTracking.draw(ctx, toScreen, 'land', l.lon, l.lat, st.t);
     // 직접 발견한 도시 밖 유적·자연 경관의 발치를 지도 지면에 맞춘다.
     if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
-      var foot = G.DiscoveryIcon.position(d), p = toScreen(foot[0],foot[1]);
-      if (p[0] < -100 || p[0] > 1700 || p[1] < -100 || p[1] > 1000) return;
-      var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: 1.15, zoom: st.cam.zoom });
+      var layout=G.DiscoveryIcon.screen(d,toScreen,1.15,st.cam.zoom,0,[0,0,1600,900]);
+      if(!layout)return;
+      var p=[layout.x,layout.y];
+      var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: 1.15, zoom: st.cam.zoom, layout:layout });
       ctx.font = '600 14px ' + ff; var key = 'disc:' + d.id, tw = labelW[key] || (labelW[key] = ctx.measureText(d.name).width), lx = p[0] + (mark.right == null ? mark.radius : mark.right) + 3;
       ctx.fillStyle = 'rgba(20,14,8,.58)'; ctx.fillRect(lx, p[1] - 10, tw + 9, 19); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(d.name, lx + 4, p[1] + 4);
     });

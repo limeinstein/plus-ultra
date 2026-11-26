@@ -148,12 +148,16 @@
     if (G.Img && G.Img.has(key)) POS[id] = { key: key, slot: 0, cols: 1, rows: 1 };
   });
 
+  function nature(d) { return d&&G.NATURE_LANDMARKS&&G.NATURE_LANDMARKS[d.id]; }
   function model(d) {
-    return d && d.cat === 'ruin' && ((G.RUIN_MODELS && G.RUIN_MODELS[d.id]) || (G.RUIN_ADDITIONS && G.RUIN_ADDITIONS[d.id]));
+    return nature(d)||(d && d.cat === 'ruin' && ((G.RUIN_MODELS && G.RUIN_MODELS[d.id]) || (G.RUIN_ADDITIONS && G.RUIN_ADDITIONS[d.id])));
   }
-  DI.isMapLandmark = function (d) { return !!(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && (POS[d.id] || model(d))); };
+  DI.isMapLandmark = function (d) { return !!(nature(d)||(d && (d.cat === 'ruin' || d.cat === 'nature' || d.natural) && d.how !== 'city' && (POS[d.id] || model(d)))); };
+  DI.replacesFormation = function (id) { return !!(G.NATURE_LANDMARKS&&G.NATURE_LANDMARKS[id]&&G.Disc&&G.Disc.foundByMe(id)); };
   var groundMemo = new WeakMap();
   DI.position = function (d) {
+    var r=nature(d);
+    if(r)return G.NatureLandmark.place(d,r,G.FX.natureLandmark.markerMin,1,0).point;
     if (!model(d) || d.how !== 'land' || !G.Geo || !G.Geo.ready) return [d.lon,d.lat];
     var memo = groundMemo.get(d);
     if (memo) return memo;
@@ -192,7 +196,7 @@
       return G.Disc.foundByMe(d.id);
     });
   }
-  DI.count = function () { return Object.keys(POS).length + Object.keys(Object.assign({},G.RUIN_ADDITIONS,G.RUIN_MODELS)).filter(function (id) {
+  DI.count = function () { return Object.keys(POS).length + Object.keys(Object.assign({},G.RUIN_ADDITIONS,G.RUIN_MODELS,G.NATURE_LANDMARKS)).filter(function (id) {
     return !POS[id] && G.DISC && DI.isMapLandmark(G.DISC[id]);
   }).length; };
   DI.source = function (d) {
@@ -212,13 +216,15 @@
     return Promise.all(jobs);
   };
 
-  function modelMetrics(r, scale, zoom) {
-    var fx = G.FX.mapRuins, tier = r[7], width = fx.chart[tier];
+  function modelWidth(r, scale, zoom, fx) {
+    var tier = r[7], width = fx.chart[tier];
     if (zoom) {
       var t = Math.max(0, Math.min(1, (zoom-fx.zoomStart)/(fx.zoomEnd-fx.zoomStart)));
       width = fx.width[tier] + t*(fx.close[tier]-fx.width[tier]);
     }
-    width *= scale;
+    return width*scale;
+  }
+  function modelMetrics(r, width) {
     var height = width*r[4]/r[3], left = -r[5]*width, top = -r[6]*width;
     return {width:width, height:height, radius:Math.max(width,height)*.46,
       left:left, right:left+width, top:top, base:top+height};
@@ -227,7 +233,7 @@
   DI.metrics = function (d, scale, zoom) {
     scale = scale || 1;
     var r = model(d);
-    if (r) return modelMetrics(r, scale, zoom);
+    if (r) return modelMetrics(r,modelWidth(r,scale,zoom,nature(d)?G.FX.natureLandmark:G.FX.mapRuins));
     if(zoom&&G.Terrain){
       if(d.id==='siwa'&&G.Terrain.microSites().length)return{width:24,height:24,radius:14,top:-12,base:12};
       var formation=G.Terrain.formationFor(d.id);if(formation&&G.TerrainArt){var w=Math.min(G.FX.terrainBiomes.detailMaxPx,zoom*formation.width),fm=G.TerrainArt.metrics(G.TerrainArt.formationId(formation),w);if(fm)return{width:w,height:fm.height,radius:Math.max(w,fm.height)*.46,top:-fm.height*.93,base:fm.height*.07};}
@@ -243,19 +249,47 @@
     return { width: w, height: h, radius: Math.max(12, Math.max(w, h) * 0.46), top: -h / 2, base: h / 2 };
   };
 
+  DI.layout = function(d,scale,zoom,chartZoom){
+    var r=nature(d);
+    if(!r)return {point:DI.position(d),metrics:DI.metrics(d,scale,zoom)};
+    var visual=G.NatureLandmark.place(d,r,modelWidth(r,scale||1,zoom,G.FX.natureLandmark),zoom,chartZoom);
+    var m=visual.marker?{width:5,height:5,left:-2.5,right:2.5,top:-2.5,base:2.5,radius:3}:modelMetrics(r,visual.width);
+    return {point:visual.point,metrics:m,marker:visual.marker,hidden:visual.hidden};
+  };
+
+  DI.screen = function(d,toScreen,scale,zoom,chartZoom,box){
+    // 멀리 벗어난 경관의 육지 검사는 화면에 들어올 때까지 미룬다.
+    var r=nature(d), fixed=r&&G.NatureLandmark.bakedPoint(d,r), z=zoom||chartZoom||0;
+    var p=fixed?toScreen(fixed[0],fixed[1]):toScreen(d.lon,d.lat);
+    var pad=120;
+    if(r&&!fixed&&d.how!=='sea'&&d.how!=='special'){
+      var f=G.FX.natureLandmark, local=f.local[f.local.length-1];
+      var needsBank=G.Geo&&G.Geo.ready&&(G.Geo.sdf(d.lon,d.lat)<f.bankMargin||G.Terrain.isLake(d.lon,d.lat));
+      pad+=z*(local+(needsBank?f.search[f.search.length-1]:0));
+    }
+    if(p[0]<box[0]-pad||p[0]>box[2]+pad||p[1]<box[1]-pad||p[1]>box[3]+pad)return null;
+    var view=DI.layout(d,scale,zoom,chartZoom);
+    if(view.hidden)return null;
+    if(!fixed)p=toScreen(view.point[0],view.point[1]);
+    var size=view.metrics, left=size.left==null?-size.width/2:size.left, right=size.right==null?size.width/2:size.right;
+    if(p[0]+right<box[0]-12||p[0]+left>box[2]+12||p[1]+size.base<box[1]-12||p[1]+size.top>box[3]+12)return null;
+    view.x=p[0];view.y=p[1];return view;
+  };
+
   function drawModel(ctx, d, r, im, m, x, y, opts, scale) {
     var px = x + m.left, py = y + m.top, cx = px + m.width*.5;
     ctx.save();
-    var p = DI.position(d);
-    if (opts.zoom && d.how === 'land' && (!G.Geo || !G.Geo.sdf || G.Geo.sdf(p[0],p[1]) >= 0)) {
+    var landNature=nature(d)&&d.how!=='sea'&&d.how!=='special', p=landNature?null:DI.position(d);
+    if (opts.zoom && (landNature || d.how === 'land' && (!G.Geo || !G.Geo.sdf || G.Geo.sdf(p[0],p[1]) >= 0))) {
       // 외곽은 투명이고, 건축물 아래에만 부드러운 접지 그림자를 남긴다.
       var radius = m.width*.37, depth = Math.max(2,m.width*.087), sy = y+Math.max(0,m.base)*.56;
       var shade = ctx.createRadialGradient(0,0,0,0,0,1);
-      shade.addColorStop(0,'rgba(27,30,23,'+G.FX.mapRuins.shadowOpacity+')');
+      shade.addColorStop(0,'rgba(27,30,23,'+(landNature?G.FX.natureLandmark.shadowOpacity:G.FX.mapRuins.shadowOpacity)+')');
       shade.addColorStop(1,'rgba(27,30,23,0)');
       ctx.save(); ctx.translate(cx,sy); ctx.scale(radius,depth); ctx.fillStyle=shade;
       ctx.fillRect(-1,-1,2,2); ctx.restore();
     }
+    if (nature(d)&&(d.mirage50||d.alwaysMirage)&&G.Disc&&G.Disc.mirageNow(d)&&G.Mirage&&G.Mirage.mapAlpha)ctx.globalAlpha*=G.Mirage.mapAlpha(d);
     ctx.imageSmoothingEnabled = true;
     ctx.drawImage(im,r[1],r[2],r[3],r[4],px,py,m.width,m.height);
     if (opts.selected) {
@@ -269,15 +303,21 @@
   /** 발견물 좌표에 발치를 맞춰 투명 미니어처를 그린다. */
   DI.draw = function (ctx, d, x, y, opts) {
     opts = opts || {};
-    var p = d && POS[d.id], scale = opts.scale || 1, met = DI.metrics(d, scale, opts.zoom);
+    var p = d && POS[d.id], scale = opts.scale || 1, view=opts.layout;
+    var met = view?view.metrics:DI.metrics(d, scale, opts.zoom);
+    if(view&&view.marker){
+      ctx.save();ctx.fillStyle=opts.selected?'#f9d889':'#d3b980';ctx.strokeStyle='#473922';ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore();return met;
+    }
     var r = model(d), art = r && G.Img && G.Img.get(r[0]);
     if (art) return drawModel(ctx, d, r, art, met, x, y, opts, scale);
-    if (r) request(r[0]);
+    if (r) { request(r[0]); if(opts.pending)opts.pending(r[0]); }
+    if(nature(d))return met;
     if(opts.zoom&&G.Terrain&&(G.Terrain.formationFor(d.id)||d.id==='siwa'&&G.Terrain.microSites().length))return met;
     if(!r&&opts.zoom&&G.TerrainArt&&G.TerrainArt.has(d.id)&&G.TerrainArt.sprite(ctx,'wonder-'+d.id,x-met.width/2,y-met.height/2,met.width,met.height))return met;
     if (!p || !G.Img) return met;
     var im = G.Img.get(p.key);
-    if (!im) { request(p.key); return met; }
+    if (!im) { request(p.key); if(opts.pending)opts.pending(p.key); return met; }
     var iw = im.naturalWidth || im.width, ih = im.naturalHeight || im.height;
     var cols = p.cols || COLS, rows = p.rows || ROWS;
     var col = p.slot % cols, row = Math.floor(p.slot / cols), sw = iw / cols, sh = ih / rows;
@@ -295,10 +335,12 @@
     return met;
   };
 
-  DI.at = function (list, toScreen, x, y, scale, zoom) {
+  DI.at = function (list, toScreen, x, y, scale, zoom, chartZoom) {
     var best = null, bd = Infinity;
     (list || DI.visible()).forEach(function (d) {
-      var site = DI.position(d), p = toScreen(site[0],site[1]), m = DI.metrics(d,scale,zoom), cy = p[1]+(m.top+m.base)/2;
+      var view=DI.screen(d,toScreen,scale,zoom,chartZoom,[x,y,x,y]);
+      if(!view)return;
+      var p=[view.x,view.y], m=view.metrics, cy=p[1]+(m.top+m.base)/2;
       var cx = m.left == null ? p[0] : p[0]+(m.left+m.right)/2;
       var dd = (cx-x)*(cx-x)+(cy-y)*(cy-y), hit = Math.max(14,m.radius+3);
       var inside = m.left == null ? dd <= hit*hit :

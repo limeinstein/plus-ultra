@@ -132,10 +132,12 @@
       drawnMarks = I.chartMarks(ctx, function (lon, lat) { return px(lon, lat, b); }, fs, view.span, W, H, here, {}) || [];
       // 제독이 직접 발견한 도시 밖 유적·자연 경관만 지도에 남긴다.
       var landmarkScale = cityScale * 0.95, landmarkLabels = [];
+      var chartLandmarkPx=function(lon,lat){return px(lon,lat,b);};
       landmarks().forEach(function (d) {
-        var foot = G.DiscoveryIcon.position(d), p = px(foot[0],foot[1],b);
-        if (p[0] < -48 || p[0] > W + 48 || p[1] < -48 || p[1] > H + 48) return;
-        var mark = G.DiscoveryIcon.draw(ctx, d, p[0], p[1], { scale: landmarkScale, selected: d === hoverDisc });
+        var layout=G.DiscoveryIcon.screen(d,chartLandmarkPx,landmarkScale,0,W/view.span,[0,0,W,H]);
+        if(!layout)return;
+        var p=[layout.x,layout.y];
+        var mark = G.DiscoveryIcon.draw(ctx,d,p[0],p[1],{scale:landmarkScale,selected:d===hoverDisc,layout:layout,pending:pendingCityImage});
         if (d === hoverDisc) landmarkLabels.push([d, p, mark.radius]);
       });
       // 도시: 지역별 건축 양식과 규모를 작은 실루엣으로 표시한다.
@@ -232,7 +234,7 @@
     }
     function landmarkAt(x, y) {
       var b = box(), scale = U.clamp(Math.pow(32 / view.span, 0.25) * 0.75, 0.42, 1.15) * 0.95;
-      return G.DiscoveryIcon ? G.DiscoveryIcon.at(landmarks(), function (lon, lat) { return px(lon, lat, b); }, x, y, scale) : null;
+      return G.DiscoveryIcon ? G.DiscoveryIcon.at(landmarks(),function(lon,lat){return px(lon,lat,b);},x,y,scale,0,W/view.span) : null;
     }
 
     // ------------------------------------------------ 도시 요약
@@ -341,7 +343,6 @@
     cv.style.cursor = 'grab';
     clampView(); draw();
     G.ChartArt.preload().then(function () { if (!dead) { crisp = null; CV.invalidate(); draw(); } });
-    if (G.DiscoveryIcon) G.DiscoveryIcon.preload(landmarks()).then(function () { if (!dead) draw(); });
     if (sel) showCity(sel);
     var api = { el: wrap, redraw: draw, view: view, select: showCity, marks: function () { return drawnMarks; }, showMark: showMark };
     wrap._cv = api;   // 시험용 (tests/chart_hint_marks_smoke.js)

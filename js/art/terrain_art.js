@@ -310,7 +310,7 @@
       pending.sort(function(a,b){return Math.hypot(a[0]*2+1-cam.lon,a[1]*2+1-cam.lat)-Math.hypot(b[0]*2+1-cam.lon,b[1]*2+1-cam.lat);});last={key:key,list:[],pending:pending};
     }
     var changed=false,buildStart=performance.now();while(last.pending.length){var c=last.pending.shift();last.list=last.list.concat(chunk(c[0],c[1]));changed=true;if(performance.now()-buildStart>f.chunkBudgetMs)break;}
-    if(changed){last.list=last.list.filter(function(t){return !t.formation;});(G.LANDSCAPE_FORMATIONS||[]).forEach(function(r){if(Math.abs(G.Geo.wrapLon(r.lon-cam.lon))<sx&&Math.abs(r.lat-cam.lat)<sy)last.list.push({lon:r.lon,lat:r.lat,id:A.formationId(r),size:1,worldSize:r.width,priority:-1,formation:true});});last.list.sort(function(a,b){return a.priority-b.priority;});}stats.buildMs=performance.now()-buildStart;stats.pendingChunks=last.pending.length;
+    if(changed){last.list=last.list.filter(function(t){return !t.formation;});(G.LANDSCAPE_FORMATIONS||[]).forEach(function(r){if(Math.abs(G.Geo.wrapLon(r.lon-cam.lon))<sx&&Math.abs(r.lat-cam.lat)<sy)last.list.push({lon:r.lon,lat:r.lat,id:A.formationId(r),size:1,worldSize:r.width,priority:-1,formation:true,discovery:r.discovery});});last.list.sort(function(a,b){return a.priority-b.priority;});}stats.buildMs=performance.now()-buildStart;stats.pendingChunks=last.pending.length;
     stats.candidates=last.list.length;var draw=[],cacheKey=last.key+':'+last.list.length+':'+f.treeWorld+':'+f.maxTrees,anchor=plate&&toScreen(plate.lon,plate.lat),dx=plate?anchor[0]-plate.anchor[0]:0,dy=plate?anchor[1]-plate.anchor[1]:0;
     if(!plate||plate.key!==cacheKey||plate.zoom!==cam.zoom||Math.abs(dx)>margin*.6||Math.abs(dy)>margin*.6){
     var cap=Math.round(f.maxTrees*Math.min(1,Math.pow(cam.zoom/f.nearZoom,2)));
@@ -326,7 +326,7 @@
     var formations=[],coverGrid=new Map();
     pc.fill();pc.globalAlpha=1;for(var i=0;i<draw.length;i++){
       var t=draw[i].t,p=draw[i].p,w=width(t,cam.zoom),m=A.metrics(t.id,w);if(!m)continue;
-      if(t.formation)formations.push({id:t.id,x:p[0]-w/2,y:p[1]-m.height*.93,w:w,h:m.height});
+      if(t.formation)formations.push({id:t.id,discovery:t.discovery,x:p[0]-w/2,y:p[1]-m.height*.93,w:w,h:m.height});
       else{
         var prop={id:t.id,x:p[0]-w/2,y:p[1]-m.height*.93,foot:p[1],w:w,h:m.height,opacity:t.opacity==null?1:t.opacity};
         pc.globalAlpha=prop.opacity;
@@ -339,7 +339,10 @@
     }
     var expedition=actor&&actor.mode==='land',ap=actor&&!expedition&&toScreen(actor.lon,actor.lat);
     ctx.save();ctx.globalAlpha=fade;
-    plate.formations.forEach(function(r){A.sprite(ctx,r.id,r.x+dx,r.y+dy,r.w,r.h);});
+    plate.formations.forEach(function(r){
+      if(r.discovery&&G.DiscoveryIcon&&G.DiscoveryIcon.replacesFormation(r.discovery))return;
+      A.sprite(ctx,r.id,r.x+dx,r.y+dy,r.w,r.h);
+    });
     if(ap){
       if(!scratch){scratch=document.createElement('canvas');scratch.width=1600;scratch.height=900;}
       var sc=scratch.getContext('2d');sc.clearRect(0,0,1600,900);sc.drawImage(plate.canvas,dx-margin,dy-margin);

@@ -2519,9 +2519,8 @@
     ctx.textAlign = 'left';
     // 도시 밖 유적·자연 경관은 제독이 직접 발견한 뒤부터 작은 투명 모형으로 남는다.
     if (G.DiscoveryIcon) G.DiscoveryIcon.visible().forEach(function (d) {
-      var foot = G.DiscoveryIcon.position(d), p = toScreen(foot[0],foot[1]);
-      if (p[0] < -100 || p[0] > 1700 || p[1] < -100 || p[1] > 1000) return;
-      G.DiscoveryIcon.draw(ctx, d, p[0], p[1], {zoom:st.cam.zoom});
+      var layout=G.DiscoveryIcon.screen(d,toScreen,1,st.cam.zoom,0,[0,0,1600,900]);
+      if(layout)G.DiscoveryIcon.draw(ctx,d,layout.x,layout.y,{zoom:st.cam.zoom,layout:layout});
     });
     knownCities().forEach(function (c) {
       var p = toScreen(c.lon, c.lat);

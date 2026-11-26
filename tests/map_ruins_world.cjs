@@ -61,7 +61,7 @@ fs.mkdirSync(out,{recursive:true});
       const c=G.CITY_DATA[city.city], parts=G.CityIcon.plan(c).parts;
       const cityReuse=parts.some(pr=>pr.id===city.id&&pr.art.key===models[city.id][0]);
       const initiallyHidden=!icon.visible().some(d=>d.id===sample.id);
-      const naturalLegacy=icon.key(natural).startsWith('map-discoveries/');
+      const naturalLegacy=icon.source(natural).key.startsWith('map-discoveries/');
       const eligible=set.filter(d=>d.how==='land'&&(!d.built||d.built<=1480));
       const coast=eligible.filter(d=>d.id!=='qeswachaka'&&G.Geo.sdf(d.lon,d.lat)<=0);
       const coastOnLand=coast.filter(d=>G.Geo.sdf(...icon.position(d))>0).length;
