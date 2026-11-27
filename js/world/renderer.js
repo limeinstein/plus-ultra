@@ -7,7 +7,7 @@
      · 강: 강 거리장(geo 텍스처 B)을 따라 굽이치며 하류로 갈수록 넓어지고, 강변 식생·하구 모래톱
      · 바다: 연해(모래 바닥·암초가 비침) → 대륙붕 → 심해로 깊어지는 색, 너울·풍랑·잔물결이 서로 다른 크기와 빠르기,
              해안으로 밀려와 부서지는 포말(늘 켜진 외곽선이 아님), 찬 바다의 빙산·유빙·부빙
-   육지·바다 경계(sdf + coastNoise)는 js/world/geo.js 의 판정과 같은 식이다. 빙산도 Geo.berg 와 같은 식. 조정값은 G.FX. */
+   육지·바다 경계와 빙산·유빙은 js/world/geo.js의 판정과 같은 식이다. 조정값은 G.FX. */
 (function (G) {
   'use strict';
 
@@ -86,6 +86,7 @@ uniform vec4 uW2;   // deep rgb, cloud
 uniform vec4 uW3;   // lagoon rgb, berg
 uniform vec4 uW4;   // abyss rgb (가장 깊은 바다 색), rough (먼바다일수록 거칠어지는 정도)
 uniform vec4 uW5;   // 큰 너울 청록 명암, 잔물결, 배경 물마루 선, 여분
+uniform vec4 uPackIce; // 유빙 간격의 기준 크기, 물길 폭, 피복률, 시작 위도
 uniform vec4 uSurface; // 항해/해전 법선 세기, 파면 반사, 하늘빛
 uniform vec4 uSheen;   // 반짝임 폭, 밝기 상한, 따뜻한 빛, 기본 지도 명암
 uniform vec4 uCoastSurface; // 연안 법선·명암, 먼바다 명암, 전환 거리(해안 텍셀)
@@ -630,6 +631,17 @@ vec3 landCol(vec2 ll, vec2 p, float s, float rivD, float rivC, vec2 gS, vec2 gR,
 
 `;
   var WATER = `// ================================================================= 빙산·유빙 (찬 바다에서만)
+// Geo.packIceField와 같은 유빙 경계. 얼음판 사이로 열린 바다가 이어진다.
+float packIceField(vec2 ll,vec2 p,float ice){
+  if(abs(ll.y)<uPackIce.w)return -1.0;
+  if(ll.y < -55.0)ice=smoothstep(-57.0,-67.0,ll.y+(vnoise(p*.5+3.0)-.5)*7.0);
+  float density=smoothstep(.50,.95,ice+(vnoise(p*1.2)-.5)*.25);
+  if(density<=0.0)return -1.0;
+  vec2 warped=p*uPackIce.x+(vec2(vnoise(p*.8),vnoise(p*.8+vec2(37,17)))-.5)*.32;
+  vec3 cell=voro(warped);
+  if(cell.z>density*uPackIce.z)return -1.0;
+  return (cell.y-cell.x-uPackIce.y)/(2.0*uPackIce.x);
+}
 vec4 bergs(vec2 p, float dens, out float skirt, out float shadow, out float ring){
   // 탁상 빙산(모서리 둥근 긴 네모, 평평한 윗면과 깎아지른 옆면)과 뾰족 빙산(들쭉날쭉한 덩어리). 모양 식은 Geo.berg와 같다
   skirt = 0.0; shadow = 0.0; ring = 0.0;
@@ -874,27 +886,16 @@ vec3 waterCol(vec2 ll, vec2 p, float d, vec2 gS, float rivD, vec4 cl, float pxT,
 
   // ---------------- 빙산·유빙·부빙 (찬 바다에서만)
   float Iw = cl.a;
-  // 남극해는 기후 자료의 얼음이 위도 -62°에서 끊기므로, 위도와 잡음으로 부드럽게 얼음 가장자리를 만든다
-  float Ipk = ll.y < -55.0 ? smoothstep(-57.0, -67.0, ll.y + (fbm(p*0.5 + 3.0, 3) - 0.5)*7.0) : Iw;
   float IwB = ll.y < -55.0 ? smoothstep(-57.0, -67.0, ll.y) : Iw;
   float coldW = smoothstep(0.52, 0.30, Tw);
   float bergD = (smoothstep(0.02, 0.30, IwB) + 0.3*smoothstep(62.0, 70.0, abs(ll.y))) * coldW * uW3.w * (1.0 - battle);
-  float packD = smoothstep(0.50, 0.95, Ipk + (fbm(p*1.2, 2) - 0.5)*0.25) * (1.0 - battle);
-  if (packD > 0.01) {
-    vec2 pw = p*2.6 + (vec2(fbm(p*1.7, 3), fbm(p*1.7 + 5.0, 3)) - 0.5)*1.6;
-    vec3 pv = voro(pw);
-    vec3 pv2 = voro(pw*2.3 + 7.0);
-    float crackW = mix(0.12, 0.035, packD);
-    float lead = smoothstep(crackW*0.5, crackW, pv.y - pv.x + (vnoise(p*25.0) - 0.5)*0.05);
-    float brk = smoothstep(0.85, 0.45, packD);
-    float small = step(pv2.z, packD*1.2) * smoothstep(0.03, 0.08, pv2.y - pv2.x);
-    float floe = step(pv.z, packD*1.1) * lead * mix(1.0, small, brk);
-    vec3 fc = mix(vec3(0.76,0.85,0.91), vec3(0.95,0.97,0.99), fbm(p*14.0, 3)) * (0.90 + 0.12*pv.z);
-    fc *= 1.0 - 0.07*smoothstep(0.45, 0.55, fbm(p*28.0, 2));
-    fc = mix(fc, vec3(0.62,0.72,0.80), smoothstep(0.35, 0.0, pv.z)*0.35);   // 얇은 얼음은 잿빛
-    float fl = clamp(dot(normalize(vec3(-(vec2(fbm(p*9.0,2), fbm(p*9.0+3.0,2)) - 0.5)*0.6, 1.0)), SUN), 0.0, 1.0);
-    col = mix(col, col*0.82, packD*0.4*(1.0 - floe));
-    col = mix(col, fc*(0.86 + 0.2*fl), floe);
+  float iceEdge=battle<.5 ? packIceField(ll,p,Iw) : -1.0;
+  if(iceEdge>-.024){
+    vec3 top=mix(vec3(.76,.85,.91),vec3(.95,.97,.99),fbm(p*14.0,3));
+    top*=.93+.07*vnoise(p*38.0);
+    vec3 ice=mix(vec3(.58,.75,.83),top,smoothstep(.004,.042,iceEdge));
+    col=mix(col,vec3(.12,.34,.44),.28*smoothstep(-.024,0.0,iceEdge));
+    col=mix(col,ice,smoothstep(0.0,.009,iceEdge));
   }
   if (bergD > 0.01) {
     float sk, shd, rg;
@@ -1101,6 +1102,55 @@ void main(){
   var FS_LAND = HEAD + LAND + MAIN_LAND;
   var FS_MAIN = HEAD + WATER + MAIN_COMP;
 
+  var WEATHER_LENS_VS = `#version 300 es
+layout(location=0) in vec4 aPos;
+layout(location=1) in vec4 aWater;
+const vec2 corners[6]=vec2[6](vec2(-1,-1),vec2(1,-1),vec2(-1,1),vec2(-1,1),vec2(1,-1),vec2(1,1));
+out vec2 vLocal;
+flat out vec4 vWater;
+flat out vec2 vSize;
+void main(){
+  vLocal=corners[gl_VertexID]*1.12;
+  vWater=aWater; vSize=aPos.zw;
+  float s=sin(aWater.y), c=cos(aWater.y);
+  vec2 p=aPos.xy+mat2(c,s,-s,c)*(vLocal*vSize);
+  gl_Position=vec4(p*vec2(2.0/1600.0,-2.0/900.0)+vec2(-1,1),0,1);
+}`;
+  var WEATHER_LENS_FS = `#version 300 es
+precision highp float;
+uniform sampler2D uBackdrop;
+uniform vec2 uFrame;
+in vec2 vLocal;
+flat in vec4 vWater;
+flat in vec2 vSize;
+out vec4 outColor;
+void main(){
+  float angle=atan(vLocal.y,vLocal.x+1e-6);
+  float contour=1.0+min(vWater.z,.14)*(sin(angle*5.0+vWater.w)*.67+sin(angle*8.0-vWater.w)*.33);
+  vec2 p=vLocal/contour;
+  float radius=length(p);
+  float edge=1.0-smoothstep(.89,1.0,radius);
+  if(edge<=0.0)discard;
+  vec2 uv=gl_FragCoord.xy/uFrame;
+  // 눈은 여기저기에서 빛을 흩어 놓아, 붙은 자리의 지도 윤곽을 부드럽게 흐린다.
+  if(vWater.z>=.20){
+    vec2 offset=vec2(5.4/1600.0,5.4/900.0)*(1.0-radius*.46);
+    vec3 frost=texture(uBackdrop,uv).rgb*.30;
+    frost+=texture(uBackdrop,uv+offset*vec2(1,-.84)).rgb*.24;
+    frost+=texture(uBackdrop,uv+offset*vec2(-1,-.52)).rgb*.23;
+    frost+=texture(uBackdrop,uv+offset*vec2(0,1)).rgb*.23;
+    outColor=vec4(mix(frost,vec3(.83,.91,.96),.22),edge*vWater.x);
+    return;
+  }
+  float s=sin(vWater.y), c=cos(vWater.y);
+  vec2 bend=mat2(c,s,-s,c)*(p*min(vSize,vec2(26.0,32.0))*(.16+.62*radius));
+  vec3 color=texture(uBackdrop,uv+bend*vec2(1.0/1600.0,-1.0/900.0)).rgb;
+  float rim=smoothstep(.68,.93,radius), light=dot(p,vec2(-.57,-.82));
+  color*=1.0-.24*rim*smoothstep(.05,.9,-light);
+  color=mix(color,vec3(.81,.91,.96),.23*rim*smoothstep(.53,.86,light));
+  outColor=vec4(color,edge*vWater.x);
+}`;
+
   function compile(gl, type, src) {
     var sh = gl.createShader(type);
     gl.shaderSource(sh, src); gl.compileShader(sh);
@@ -1135,7 +1185,7 @@ void main(){
 
   UNIFORMS = UNIFORMS.concat(['uOcean', 'uOptics', 'uAbsorption', 'uOceanFlow', 'uOceanTime','uTerrainDetail','uDetailSize','uDetailOn','uHydro','uHydroRect','uHydroOn','uCalendar','uTerrainPatches','uPatchRects[0]','uPatchLayers[0]','uTreeLevels','uSnowLevels','uLatitudeBands','uPatchCount','uPatchSide','uInlandRects[0]','uInlandCount','uInlandFeather','uGround','uGroundLook','uPlainLook','uSeasonSnow','uSnowFeather']);
 
-  UNIFORMS=UNIFORMS.concat(['uCoastSites[0]','uCoastCount','uCoastLook','uMicroSites[0]','uMicroCount','uOasisGreen','uBiomeRelief','uSandRipple','uDuneTexture','uReliefIterations','uNeighborRadius','uNoiseOctaves']);
+  UNIFORMS=UNIFORMS.concat(['uCoastSites[0]','uCoastCount','uCoastLook','uMicroSites[0]','uMicroCount','uOasisGreen','uBiomeRelief','uSandRipple','uDuneTexture','uReliefIterations','uNeighborRadius','uNoiseOctaves','uPackIce']);
 
   /* 두 패스:
      · 지역 해안은 기존 해안 거리·포말 위에 물빛과 모래 폭만 조정한다. 세계 좌표·파도 식은 유지한다.
@@ -1207,6 +1257,7 @@ void main(){
     this.job = null;
     this._activeHydro=null;this._warmed=false;this._vel=[0,0];this.hydroVAO=null;this.hydroBuffer=null;
     this._lastView = null;
+    this._weatherOptics = null;
     this._uploadTextures();
   };
 
@@ -1349,8 +1400,11 @@ void main(){
     var inland=landLook.inlandWaterRegions||[];gl.uniform1i(u.uInlandCount,Math.min(4,inland.length));if(inland.length)gl.uniform4fv(u['uInlandRects[0]'],new Float32Array(inland.slice(0,4).flat()));gl.uniform1f(u.uInlandFeather,landLook.inlandWaterFeather||.24);
     gl.uniform4f(u.uW0, fxv(Wt, 'shelf', 1), fxv(Wt, 'wave', 1), fxv(Wt, 'whitecap', 1), fxv(Wt, 'glint', 1));
     gl.uniform4f(u.uW1, sh[0], sh[1], sh[2], fxv(Wt, 'foam', 1));
-    gl.uniform4f(u.uW2, dp[0], dp[1], dp[2], fxv(Wt, 'cloud', 0.8));
+    gl.uniform4f(u.uW2, dp[0], dp[1], dp[2], fxv(Wt, 'cloud', 0.8) * (view.cloudOpacity == null ? 1 : view.cloudOpacity));
     gl.uniform4f(u.uW3, lg[0], lg[1], lg[2], fxv(Wt, 'berg', 1));
+    var pack=Wt&&Wt.packIce;
+    if(pack)gl.uniform4f(u.uPackIce,pack.scale,pack.gap,pack.fill,pack.latitude);
+    else gl.uniform4f(u.uPackIce,1,0,0,91);
     if (u.uW4) gl.uniform4f(u.uW4, ab[0], ab[1], ab[2], fxv(Wt, 'rough', 1));
     if (u.uW5) gl.uniform4f(u.uW5, fxv(Wt, 'flow', 0.74), fxv(Wt, 'ripple', 0.52), fxv(Wt, 'crest', 0.56), 0);
     var sf = Wt && Wt.surface, light = G.WaterLight(view);
@@ -1542,6 +1596,39 @@ void main(){
     gl.bindTexture(gl.TEXTURE_2D, cache ? cache.tex : null); gl.uniform1i(u.uCache, 2);
     if (cache) { gl.uniform2f(u.uCacheC, cache.lon, cache.lat); gl.uniform1f(u.uCacheZ, cache.zoom); gl.uniform2f(u.uCacheSize, cache.w, cache.h); }
     gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+
+  /** 지금 그린 지도 색을 GPU 안에서 복사하고 눈이 붙은 부분과 물방울을 그린다. */
+  Renderer.prototype.weatherLenses = function (data, count) {
+    var gl=this.gl, w=this.canvas.width, h=this.canvas.height;
+    if(!count||this.lost||gl.isContextLost())return false;
+    var wet=this._weatherOptics;
+    if(!wet){
+      var vertex=compile(gl,gl.VERTEX_SHADER,WEATHER_LENS_VS), program=link(gl,vertex,WEATHER_LENS_FS);
+      gl.deleteShader(vertex);checkLinked(gl,program);
+      wet=this._weatherOptics={program:program,vao:gl.createVertexArray(),buffer:gl.createBuffer(),tex:gl.createTexture(),
+        frame:gl.getUniformLocation(program,'uFrame'),backdrop:gl.getUniformLocation(program,'uBackdrop')};
+      gl.bindVertexArray(wet.vao);gl.bindBuffer(gl.ARRAY_BUFFER,wet.buffer);
+      for(var i=0;i<2;i++){
+        gl.enableVertexAttribArray(i);gl.vertexAttribPointer(i,4,gl.FLOAT,false,32,i*16);gl.vertexAttribDivisor(i,1);
+      }
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,wet.tex);
+    if(wet.w!==w||wet.h!==h){
+      wet.w=w;wet.h=h;
+      // 지도 캔버스는 알파 채널이 없는 RGB 버퍼다. 같은 색 형식으로 복사한다.
+      gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB8,w,h,0,gl.RGB,gl.UNSIGNED_BYTE,null);
+      gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+    }
+    gl.copyTexSubImage2D(gl.TEXTURE_2D,0,0,0,0,0,w,h);
+    gl.useProgram(wet.program);gl.bindVertexArray(wet.vao);gl.bindBuffer(gl.ARRAY_BUFFER,wet.buffer);
+    gl.bufferData(gl.ARRAY_BUFFER,data.subarray(0,count*8),gl.DYNAMIC_DRAW);
+    gl.uniform1i(wet.backdrop,0);gl.uniform2f(wet.frame,w,h);
+    gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+    gl.drawArraysInstanced(gl.TRIANGLES,0,6,count);
+    gl.disable(gl.BLEND);
+    return true;
   };
 
   // 수면과 3D 선박이 같은 빛 방향·색을 사용한다. 시간 진행 규칙과는 독립된 연출값이다.

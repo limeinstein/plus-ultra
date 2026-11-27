@@ -5,7 +5,7 @@ const {pathToFileURL}=require('url');
 const path=require('path'); const {chromium}=require('playwright');
 function ok(v,m){ if(!v) throw new Error(m); console.log('  ✓ '+m); }
 (async()=>{
- const b=await chromium.launch({executablePath:process.env.BROWSER_EXE||undefined,args:['--no-sandbox','--allow-file-access-from-files','--use-gl=swiftshader','--enable-unsafe-swiftshader','--disable-dev-shm-usage']});
+ const b=await chromium.launch({executablePath:process.env.BROWSER_EXE||undefined,args:['--no-sandbox','--allow-file-access-from-files','--disable-dev-shm-usage',...(process.env.HARDWARE_GL?['--use-angle=d3d11','--enable-gpu','--ignore-gpu-blocklist']:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader'])]});
  try {
  const errors=[];
  const p=await b.newPage({viewport:{width:640,height:360}});

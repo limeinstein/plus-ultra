@@ -2732,7 +2732,7 @@
     var s = S(), r = G.Game.renderer;
     var zk = (st.vz || 1) * (1 + (st.zoomK || 0));   // 화면 배율(st.vz) × 큰 명중·침몰 때 살짝 다가옴 (바다와 배를 같은 배율로)
     var bw = G.Rain ? G.Rain.weather({ cloud: 0.12, storm: 0.32 }) : { cloud: 0.12, storm: 0.32 };
-    if (r) r.draw({ lon: st.center.lon + st.cx / GEO_SCALE, lat: st.center.lat - st.cy / GEO_SCALE, zoom: GEO_SCALE * zk, battleZoom: GEO_SCALE, time: st.t, wind: [Math.cos(st.wind.dir) * st.wind.spd, Math.sin(st.wind.dir) * st.wind.spd], cloud: bw.cloud, edge: 0.0, mode: 1, dusk: 0, storm: bw.storm, quality: 1, cssWidth: 1600, origin: [st.center.lon, st.center.lat] });
+    if (r) r.draw({ lon: st.center.lon + st.cx / GEO_SCALE, lat: st.center.lat - st.cy / GEO_SCALE, zoom: GEO_SCALE * zk, battleZoom: GEO_SCALE, time: st.t, wind: [Math.cos(st.wind.dir) * st.wind.spd, Math.sin(st.wind.dir) * st.wind.spd], cloud: bw.cloud, cloudOpacity: bw.cloudOpacity, edge: 0.0, mode: 1, dusk: 0, storm: bw.storm, quality: 1, cssWidth: 1600, origin: [st.center.lon, st.center.lat] });
     var cv = G.Game.canvases().overlay, ctx = cv.getContext('2d'), k = G.Game.overlayScale || 1;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.setTransform(k * zk, 0, 0, k * zk, k * 800 * (1 - zk), k * 450 * (1 - zk));
     roughSeaArt(ctx);
@@ -2844,7 +2844,13 @@
     });
     st.fx.forEach(function (f) { if (f.kind === 'dmg') impactFx(ctx, f, 1 - f.t / f.life); });
     // 항해 중 내리던 비는 전투에 들어와도 끊기지 않는다. 화면 공간으로 그려 카메라 확대·타격 흔들림에 빗줄기가 늘어나지 않게 한다.
-    if (G.Rain && G.Rain.raining()) G.Rain.draw(ctx, st.t, st.wind.dir, false, function (x, y) { var w = toWorld(x, y); return !terrainBlocked(w[0], w[1], null); });
+    if (G.Rain) {
+      var flag = flagship(), fp = flag ? toScreen(flag.x, flag.y) : [800, 450];
+      var focus = [800 + (fp[0] - 800) * zk, 450 + (fp[1] - 450) * zk];
+      G.Rain.draw(ctx, st.t, st.wind.dir, false, function (x, y) {
+        return !terrainBlocked(st.cx + (x - 800) / (SCALE * zk), st.cy + (y - 450) / (SCALE * zk), null);
+      }, null, focus);
+    }
     drawBattleChart();
     // HUD texts
     var me = st.ships.filter(function (b) { return b.side === 'me' && b.alive; }), en = st.ships.filter(function (b) { return b.side === 'en' && b.alive; });

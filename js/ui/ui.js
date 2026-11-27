@@ -29,7 +29,7 @@
     { id: 'seaLand', label: '상륙', desc: '바다에서 해안 가까이 있을 때 상륙', optional: true },
     { id: 'seaFish', label: '낚시', desc: '바다에서 낚시', optional: true },
     { id: 'seaSearch', label: '탐색', desc: '바다에서 배를 세운 뒤 주변 탐색', optional: true },
-    { id: 'seaRain', label: '비 대책', desc: '바다에서 비가 올 때 대책 고르기', optional: true },
+    { id: 'seaRain', label: '강수 대책', desc: '바다에서 비나 눈이 올 때 대책 고르기', optional: true },
     // 수첩 단축키 (2026-10-30 사용자 요청 「수첩 단축기 넣을 수 있게 해줘」) — optional: 「없음」으로 뺄 수 있다. 수첩 탭마다의 키는 js/ui/info.js 가 G.Keys.register로 더한다
     { id: 'notebook', label: '수첩', desc: '항해 수첩 열기·닫기 — 도시·바다·육상 탐험에서 「수첩」 단추가 보일 때', optional: true }
   ];

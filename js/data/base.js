@@ -643,6 +643,14 @@
     // 육상 탐험: 대원은 배의 식량·물을 쓰지 않고 그 고장에서 사 먹고 길잡이·짐꾼 삯을 낸다 — 하루 경비(금화)
     //   (base + perMan × 대원 수) × 탈것 보정(먹이·물 덜 드는 짐승은 싸다) × (1 + thirsty × 메마른 땅)
     //   못 내면 피로 +unpaidFatigue, 대원이 desert 확률로 떠난다. 물 긷기(야영)는 water × 하루 쓰는 양 × 땅의 물 많음
+    // 항해·육상 탐험의 일일 피로와 규율, 이동 속력에 적용되는 강수 효과.
+    travelWeather: {
+      landChance: .8, campShelter: .35, seaHeavyRainDiscipline: .4,
+      snow: { polarLatitude:65, winterLatitude:44, coldTemperature:.26, winterTemperature:.52, iceCover:.65,
+        sea: { speed:[.96,.76], rest:[.85,.68], fatigue:[1.3,3.2], discipline:[.15,.8] },
+        land: { speed:[.94,.65], fatigue:[.8,2.5], discipline:[.12,.75] } },
+      rain: { land: { speed:[.97,.80], fatigue:[.35,1.6], discipline:[0,.5] } }
+    },
     // 바다 위 반란: 규율 < discipline 이고 피로 > fatigue 일 때 하루 chance 확률, 한 번 일어나면 cooldown일 동안 다시 안 일어난다 (sea.js)
     //   (예전: 규율 22 · 피로 70 · 하루 18%, 쉬는 날 없음)
     mutiny: { discipline: 15, fatigue: 80, chance: 0.06, cooldown: 40 },
@@ -926,7 +934,19 @@
       loss: { quake: [0.02, 0.07], volcano: [0.04, 0.14], landslide: [0.05, 0.15], tsunami: [0.08, 0.22], flood: [0.04, 0.12] },
       flee: 0.3, hurt: 0.35, maxLoss: 0.35, mitig: { ops: 0.08, med: 0.06 },
       detect: { quake: 0.03, volcano: 0.35, landslide: 0.25, tsunami: 0.25, flood: 0.4, sci: 0.12, survey: 0.1, hist: 0.1, nav: 0.05, histBonus: 0.2 },
-      tsuInland: 0.3, seaCoast: 0.6, ship: [0.08, 0.3], cityDays: [60, 150], relief: 120, stayFatigue: 1.2 },
+      tsuInland: 0.3, seaCoast: 0.6, ship: [0.08, 0.3], cityDays: [60, 150], relief: 120, stayFatigue: 1.2,
+      ground: { warn: .92, contact: 1.35, sample: .022,
+        quake: { warning: 1.05, life: 5.1, width: .057, reach: .95, fatigue: 14, discipline: 6, still: .5 },
+        landslide: { warning: 1.05, life: 5.8, width: .065, reach: .78, speed: .52, rocks: 19, rate: .032, fatigue: 17, discipline: 7 },
+        flood: { warning: .75, life: 6.9, width: .145, reach: .67, rainDays: .85, fatigue: 12, discipline: 5 },
+        fire: { warning: .90, life: 9.5, width: .085, reach: .49, burnDays: 3.0, spreadSpeed: .20, rate: .031, fatigue: 16, discipline: 6 },
+        volcano: { warning: 1.15, life: 13.5, width: .068, reach: 1.25, speed: .19, fatigue: 21, discipline: 9 } },
+      // 이동 재해의 속도는 °/일, 남은 시간·유예는 게임 속 날로 센다.
+      moving: { cooldown: 13, contact: 2.1,
+        tornado: { rate:.032, lat:[12,61], months:[3,10], grounds:['grass','steppe','savanna','forest','jungle'],
+          speed:[.16,.29], curve:.11, lead:[.95,1.65], warn:1.55, wrongSurface:1.1, fatigue:15, discipline:7 },
+        hurricane: { rate:.021, lat:[7,41], months:[5,11], grounds:['sea'],
+          speed:[.24,.43], curve:.065, lead:[1.8,3.15], warn:2.65, wrongSurface:5.8, fatigue:12, discipline:6, hull:.14 } } },
     // 해전 함대 명령 (js/scenes/battle.js — 기함을 뺀 배들)
     //  craneStep/craneMax: 학익진 날개 한 칸의 벌림(라디안)·가장 많이 벌리는 각 · craneR: 적에게서 사정거리의 몇 배 거리에 서는가
     //  envSpread: 우리 배들이 적을 감싼 각(라디안)이 이만큼(2척 / 3척 이상)이면 포위 · envelop: 포위한 적에게 포격 피해 + [2척, 3척 이상]

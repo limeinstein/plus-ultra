@@ -31,7 +31,7 @@ void main(){ vec2 frag = gl_FragCoord.xy; vec2 ll = uCenter + (frag - uRes*0.5)/
   const br = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader'] });
   try {
   const pg = await br.newPage();
-  pg.on('pageerror', e => console.log('ERR', e.message));
+  const errors=[];pg.on('pageerror',e=>errors.push(e.message));pg.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
   await pg.setContent('<html><body></body></html>');
   await pg.addScriptTag({ content: 'window.G={FX:{water:{wave:1}}};' });
   await pg.addScriptTag({ path: path.join(ROOT, 'js/world/waves.js') });
@@ -72,5 +72,6 @@ void main(){ vec2 frag = gl_FragCoord.xy; vec2 ll = uCenter + (frag - uRes*0.5)/
   const bad = r.filter(x => x.seaErr > x.seaMax * 0.06 || x.batErr > x.batMax * 0.06);
   console.log(bad.length ? 'FAIL' : 'OK');
   if (bad.length) process.exitCode = 1;
+  if(errors.length)throw Error(JSON.stringify(errors));
   } finally { await br.close(); }
 })();

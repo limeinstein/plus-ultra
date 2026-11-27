@@ -54,6 +54,14 @@
         young:[.52,.75], mature:[.79,1.13], old:[1.16,1.35], youngShare:.19, oldStart:.88
       }},
     terrainCoast:{beachDegrees:.085,shallowDegrees:.22,clearDegrees:.85,palmBand:[.09,.34],palmDensity:.55,coastTreeMargin:.085},
+    snowfall:{ lightCount:245, heavyCount:1100, fall:[105,535], drift:[105,710], radius:[.75,4.2],
+      gustInterval:[.28,.86], veil:[.046,.19] },
+    rainLook:{ lightCount:154, heavyCount:940, gustInterval:[.32,.92], fall:[740,2350], opacity:[.18,.63] },
+    weatherGlass:{ cloudOpacity:.10, stormShade:.29, focus:[190,128], focusOpacity:.19,
+      rain:{ count:85, rate:47, life:[.9,2.8], size:[2.4,31], opacity:.91,
+        pin:[.18,1.12], glideSize:7, gravity:545, maxFall:585, trailTime:.35, trailStep:.048,
+        splashSize:7, splashLife:[.12,.24], splashCount:10 },
+      snow:{ count:46, life:[2.8,5.9], size:[24,102], opacity:.82, meltSize:[.51,.68], meltTravel:[88,410] } },
     // 제독 얼굴상·무릎상: 40세부터 중년, 70세부터 노년 그림을 쓴다.
     heroPortraitAge: { middle: 40, elderly: 70 },
     // 마을·항해·육상 상단: 갈색 일체형 황동 틀. 글씨 크기는 기존 HUD 자동 맞춤과 함께 쓴다.
@@ -201,7 +209,8 @@
       lagoon: [0.30, 0.66, 0.63],       // 모래 바닥이 비치는 아주 얕은 물
       foam: 1.0,                        // 해안 포말
       cloud: 0.8,                       // 구름 양
-      berg: 1.0,                        // 빙산·유빙 밀도 (찬 바다에서만)
+      berg: 1.0,                        // 빙산 밀도 (찬 바다에서만)
+      packIce: { latitude: 55, scale: 1.15, gap: .46, fill: .72, clearance: .12 }, // 유빙과 물길, 선체 여유(°)
       abyss: [0.018, 0.12, 0.22],       // 가장 깊은 바다 색 — 짙은 남청색 안에서도 청록 기운이 죽지 않게 한다
       rough: 0.56,                      // 먼바다일수록 거칠어지는 정도 (물결 높이·물마루 그늘·흰 물마루). 0이면 예전처럼 어디나 같다
       flow: 0.74,                       // 큰 너울을 따라 흐르는 넓은 청록 명암 (0이면 끔)
@@ -875,6 +884,9 @@
   };
   // 자연재해 그림창 (js/art/disasterfx.js): 크기·위치는 사건 그림과 같게, shake = 지진 때 화면이 흔들리는 초
   G.FX.disaster = { on: true, w: 640, h: 280, bottom: 205, shake: 1.6 };
+  G.FX.movingDisaster = { pathDays:1.75, funnel:[70,205], eye:.12, spin:{ tornado:14.2, hurricane:1.68 }, ring:'#ffc386', warning:'#ffe1ae' };
+  G.FX.groundDisaster = { route:'#ffc88b', label:'#ffe3b8', ash:'#55504b', ember:'#ffae53',
+    sediment:'#699897', wetSand:'#8d8472', waterFoam:'#d7eee8', lava:'#f56a2a', lavaHot:'#ffe59b' };
   // 거리를 걷는 마을 사람 (js/systems/streetfolk.js · 그림 js/art/streetfolk.js): 거리에 나올 때마다 min~max명,
   //   걷는 빠르기 speed(짐승 animalSpeed) px/초, 멈춰 쉬는 시간 idle초, 바닥선 아래 깊이 depth px(멀수록 작게 scale), 말을 걸 때 제독이 서는 거리 talkGap px
   //   fps: 거리 사람만 움직일 때 거리를 다시 그리는 횟수(초당) — 낮출수록 가볍다 · imgH: 걷는 그림(380×444 한 장)을 그리는 높이 px (제독 178)

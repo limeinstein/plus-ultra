@@ -45,6 +45,26 @@
     var x = i % GW, y = (i - x) / GW, k = rep[i];
     return [-180 + (x + 0.5) / RES + ((k % 3) - 1) * SUB, LAT0 - (y + 0.5) / RES - (((k / 3) | 0) - 1) * SUB];
   }
+  var polarPass = null;
+  function polarCell(i) { return G.Geo.inPackLatitudes(LAT0 - (Math.floor(i / GW) + 0.5) / RES); }
+  function waterCell(i) {
+    if (!pass[i]) return false;
+    if (!polarCell(i)) return true;
+    // 극지 칸은 항로에 쓸 때만 확인한다. 얼음 위 대표점은 같은 칸의 물로 옮긴다.
+    if (!polarPass) polarPass = new Uint8Array(pass.length);
+    if (polarPass[i]) return polarPass[i] === 1;
+    var geo = G.Geo, water = geo.baseIsSea || geo.isSea, p = repPoint(i);
+    if (water(p[0], p[1], .2)) { polarPass[i] = 1; return true; }
+    var lon = -180 + (i % GW + .5) / RES, lat = LAT0 - (Math.floor(i / GW) + .5) / RES;
+    var best = -1, distance = Infinity;
+    for (var k = 0; k < 9; k++) {
+      var dx = ((k % 3) - 1) * SUB, dy = (((k / 3) | 0) - 1) * SUB, d = dx * dx + dy * dy;
+      if (d < distance && water(lon + dx, lat - dy, .2)) { best = k; distance = d; }
+    }
+    if (best >= 0) rep[i] = best;
+    polarPass[i] = best >= 0 ? 1 : 2;
+    return best >= 0;
+  }
   var OPP = [1, 0, 3, 2, 7, 6, 5, 4];
   var edgeT = null;         // 배가 실제로 지나갈 수 있는 물(N.TIGHT)로 따진 길목 캐시 — N.pathTight
   /** 물가 칸이 낀 길목: 두 대표점을 잇는 선이 뭍을 가로지르지 않아야 한다.
@@ -52,9 +72,12 @@
   function edgeOK(a, b, k, tight) {
     var E = tight ? (edgeT || (edgeT = new Uint8Array(GW * GH * 8))) : edge, c = E[a * 8 + k];
     if (c) return c === 1;
-    var p = repPoint(a), q = repPoint(b), lim = tight ? N.TIGHT : 0.15;
+    var p = repPoint(a), q = repPoint(b), ice = polarCell(a) || polarCell(b), lim = ice ? -.2 : tight ? N.TIGHT : 0.15;
     var dx = G.Geo.wrapLon(q[0] - p[0]), dy = q[1] - p[1], n = Math.max(2, Math.ceil(Math.sqrt(dx * dx + dy * dy) / 0.025)), ok = true;
-    for (var j = 1; j < n && ok; j++) if (G.Geo.sdf(p[0] + dx * j / n, p[1] + dy * j / n) > lim) ok = false;
+    for (var j = 1; j < n && ok; j++) {
+      var lon = p[0] + dx * j / n, lat = p[1] + dy * j / n;
+      ok = G.Geo.sdf(lon, lat) <= lim && !(ice && G.Geo.seaIce(lon, lat));
+    }
     E[a * 8 + k] = E[b * 8 + OPP[k]] = ok ? 1 : 2;
     return ok;
   }
@@ -90,7 +113,11 @@
   function wetLine(lon, lat, p, lim) {
     if (lim == null) lim = 0.15;
     var dx = G.Geo.wrapLon(p[0] - lon), dy = p[1] - lat, n = Math.max(2, Math.ceil(Math.sqrt(dx * dx + dy * dy) / 0.02));
-    for (var j = 1; j < n; j++) if (G.Geo.sdf(lon + dx * j / n, lat + dy * j / n) > lim) return false;
+    var ice = G.Geo.inPackLatitudes(lat) || G.Geo.inPackLatitudes(p[1]);
+    for (var j = 1; j < n; j++) {
+      var x = lon + dx * j / n, y = lat + dy * j / n;
+      if (G.Geo.sdf(x, y) > lim || ice && G.Geo.seaIce(x, y)) return false;
+    }
     return true;
   }
   /** 배가 (lon,lat)에서 곧게(배가 다니는 물로) 닿을 수 있는 가장 가까운 칸 — 둘레 r칸 안 */
@@ -101,7 +128,7 @@
       for (var dy = -k; dy <= k; dy++) for (var dx = -k; dx <= k; dx++) {
         if (Math.max(Math.abs(dx), Math.abs(dy)) !== k) continue;
         var x = ((c[0] + dx) % GW + GW) % GW, y = c[1] + dy; if (y < 0 || y >= GH) continue;
-        var i = y * GW + x; if (!pass[i] || (want && comp[i] !== want)) continue;
+        var i = y * GW + x; if (!waterCell(i) || (want && comp[i] !== want)) continue;
         var rp = repPoint(i); cand.push([G.Geo.dist(lon, lat, rp[0], rp[1]), i, rp]);
       }
       cand.sort(function (a, b) { return a[0] - b[0]; });
@@ -114,8 +141,9 @@
   N.nearestSea = function (lon, lat, r, want, wet) {
     N.init();
     var c = cellOf(lon, lat); r = r || 24;
-    function ok(i) { return pass[i] && (!want || comp[i] === want); }
-    if (ok(c[1] * GW + c[0])) return [lon, lat];
+    function ok(i) { return waterCell(i) && (!want || comp[i] === want); }
+    var start = c[1] * GW + c[0];
+    if (ok(start)) return polarCell(start) && !G.Geo.isSea(lon, lat, .2) ? repPoint(start) : [lon, lat];
     var first = null;
     for (var k = 1; k <= r; k++) {
       var cand = [];
@@ -178,6 +206,7 @@
       느슨한 길은 지도 자료의 가느다란 틈(파나마 지협 등)을 뱃길로 잘못 볼 수 있으므로,
       엄격한 길이 한 방향에서만 찾아지면 반대 방향의 길을 뒤집어 쓴다. 둘 다 없을 때만 N.path로 물러난다. */
   N.seaPath = function (lon0, lat0, lon1, lat1, maxNodes) {
+    if (G.Geo.inPackLatitudes(lat0) && G.Geo.seaIce(lon0, lat0)) return null;
     var b = N.pathTight(lon0, lat0, lon1, lat1, maxNodes, true);
     if (!b) {
       var back = N.pathTight(lon1, lat1, lon0, lat0, maxNodes, true);
@@ -192,9 +221,13 @@
     var s = cellOf(lon0, lat0), t = cellOf(lon1, lat1);
     var si = s[1] * GW + s[0], ti = t[1] * GW + t[0];
     var s0 = null;
-    if (tight) { var rc = reachCell(lon0, lat0, 3); if (rc) { si = rc[1]; s = [si % GW, (si - si % GW) / GW]; if (rc[0] > 0.02) s0 = rc[2]; } else if (!pass[si]) return null; }
-    else if (!pass[si]) { s0 = N.nearestSea(lon0, lat0, 8, 0, true); if (!s0) return null; s = cellOf(s0[0], s0[1]); si = s[1] * GW + s[0]; }
-    if (!pass[ti] || comp[ti] !== comp[si]) { var ns = N.nearestSea(lon1, lat1, 60, comp[si], true); if (!ns) return null; t = cellOf(ns[0], ns[1]); ti = t[1] * GW + t[0]; lon1 = ns[0]; lat1 = ns[1]; }
+    var polarStart = polarCell(si);
+    if (polarStart && G.Geo.seaIce(lon0, lat0)) return null;
+    if (tight || polarStart) { var rc = reachCell(lon0, lat0, 3); if (rc) { si = rc[1]; s = [si % GW, (si - si % GW) / GW]; if (rc[0] > 0.02) s0 = rc[2]; } else if (polarStart || !waterCell(si)) return null; }
+    else if (!waterCell(si)) { s0 = N.nearestSea(lon0, lat0, 8, 0, true); if (!s0) return null; s = cellOf(s0[0], s0[1]); si = s[1] * GW + s[0]; }
+    if (!waterCell(ti) || comp[ti] !== comp[si]) { var ns = N.nearestSea(lon1, lat1, 60, comp[si], true); if (!ns) return null; t = cellOf(ns[0], ns[1]); ti = t[1] * GW + t[0]; lon1 = ns[0]; lat1 = ns[1]; }
+    var polarEnd = polarCell(ti), end = polarEnd && repPoint(ti);
+    if (end && (!G.Geo.isSea(lon1, lat1, .2) || !wetLine(lon1, lat1, end, -.2))) { lon1 = end[0]; lat1 = end[1]; }
     var tx = t[0], ty = t[1];
     function h(x, y) { var dx = Math.abs(x - tx); if (dx > GW / 2) dx = GW - dx; var dy = Math.abs(y - ty); return (dx + dy) + (1.4142 - 2) * Math.min(dx, dy); }
     var open = new Heap();
@@ -214,9 +247,9 @@
         if (ny < 0 || ny >= GH) continue;
         if (nx < 0) nx += GW; else if (nx >= GW) nx -= GW;
         var ni = ny * GW + nx;
-        if (!pass[ni]) continue;
-        if (k >= 4 && (!pass[cy * GW + nx] || !pass[ny * GW + cx])) continue; // no corner cutting
-        if (strict && (pass[cur] === 1 || pass[ni] === 1 || near[cur] || near[ni]) && !edgeOK(cur, ni, k, tight)) continue;   // 곶·지협·작은 섬을 가로지르지 않는다
+        if (!waterCell(ni)) continue;
+        if (k >= 4 && (!waterCell(cy * GW + nx) || !waterCell(ny * GW + cx))) continue; // no corner cutting
+        if ((polarCell(cur) || polarCell(ni) || strict && (pass[cur] === 1 || pass[ni] === 1 || near[cur] || near[ni])) && !edgeOK(cur, ni, k, tight)) continue;
         // 물가 칸(1)은 조금 비싸게: 되도록 트인 바다로 간다
         var ng = g0 + DC[k] * (pass[ni] === 1 ? N.COAST : 1);
         if (closed[ni] === curStamp || (stamp[ni] === curStamp && ng >= gScore[ni])) continue;
@@ -229,9 +262,10 @@
     for (var c = ti; c !== -1; c = came[c]) cells.push(c);
     cells.reverse();
     var pts = cells.map(repPoint);
-    pts[0] = [lon0, lat0]; pts[pts.length - 1] = [lon1, lat1];
+    if (polarStart) pts.unshift([lon0, lat0]); else pts[0] = [lon0, lat0];
+    if (polarEnd) pts.push([lon1, lat1]); else pts[pts.length - 1] = [lon1, lat1];
     // 배가 칸 밖(얕은 물가)에 있어 가까운 칸으로 붙였는데 곧게 닿지 않으면, 그 칸의 대표점을 먼저 들르게 한다
-    if (s0 && (tight || !wetLine(lon0, lat0, cells.length > 1 ? repPoint(cells[1]) : [lon1, lat1]))) pts.splice(1, 0, s0);
+    if (!polarStart && s0 && (tight || !wetLine(lon0, lat0, cells.length > 1 ? repPoint(cells[1]) : [lon1, lat1]))) pts.splice(1, 0, s0);
     return viaChannels(N.smooth(unwrap(pts)));
   }
   /** 칸(0.25°)보다 좁은 뱃길 수로(G.Geo.CHANNELS — 트리니다드의 원숭이 입·뱀의 입 같은 해협)를 지나는 토막은 수로의 꺾은선을 따라가게 고친다.

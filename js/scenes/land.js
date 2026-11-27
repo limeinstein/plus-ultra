@@ -47,6 +47,7 @@
       if (!st.pfx) { st.pfx = G.Party.newFx(); st.unit = {}; st.gph = 0; st.gdist = 0; st.gather = 1; st.face = 1; }
     }
     st.alive = true; st.busy = 0; st.keys = {}; st.dir = null;
+    if(G.Rain)G.Rain.resume('land');
     buildUI();
     // 스코틀랜드의 작은 섬에 상륙: 견습 아이가 피터를 찾아 사라진다 (js/systems/peterpan.js)
     if (arg.landing && G.Peter) { var st0 = st; st0.busy++; setTimeout(function () { (st0.alive ? G.Peter.onLanding(S().loc.lon, S().loc.lat) : Promise.resolve()).catch(function (e) { console.error(e); }).then(function () { st0.busy--; if (st0.alive) refreshHud(); }); }, 700); }
@@ -79,7 +80,7 @@
   function cleanMount(m) { return m && m.id && m.id !== 'walk' && m.n > 0 ? { id: m.id, n: m.n, draft: m.draft || 'horse', style: m.style || null } : { id: 'walk', n: 0 }; }
   function MT() { var l = S().loc; return l.mount || (l.mount = { id: 'walk', n: 0 }); }
   L.mount = MT;
-  L.exit = function () { if (G.Audio && G.Audio.travel) { G.Audio.travel('walk', 0); G.Audio.travel('run', 0); G.Audio.travel('horse', 0); G.Audio.travel('wagon', 0); } if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
+  L.exit = function () { if(G.Rain)G.Rain.leave(); if (G.Audio && G.Audio.travel) { G.Audio.travel('walk', 0); G.Audio.travel('run', 0); G.Audio.travel('horse', 0); G.Audio.travel('wagon', 0); } if (st) { st.alive = false; if (st.unkey) st.unkey(); } };
 
   // ---------------------------------------------------------------- UI
   var el = {};
@@ -389,6 +390,7 @@
     if (!l || l.mode !== 'land' || !l.base) return;   // 장면을 바꾸는 사이(도시로 들어가는 중·불러오기) 한 장면만큼 위치가 뭍이 아닐 수 있다
     st.t += dt;
     var px0 = l.lon, py0 = l.lat, daysMoved = 0;
+    var weatherDays = !st.busy && !UI.busy() ? dt * (st.paused ? 1 : st.speed) / DAY_SEC : 0;
     if (!st.paused && !st.busy && !UI.busy()) pointerTurn(dt);
     if (!st.paused && !st.busy && !UI.busy() && (st.path || st.dir)) {
       if (!walkable(l.lon, l.lat)) { var lp1 = landPoint(l.lon, l.lat); l.lon = lp1[0]; l.lat = lp1[1]; }   // 물 위에 서 있으면(옛 저장·지도 경계) 먼저 뭍으로 — 끼여서 못 움직이지 않게
@@ -396,6 +398,8 @@
       var terr = G.Geo.terrain(l.lon, l.lat), tv = (TERR[terr] || TERR.grass).spd;
       var mk = G.Mounts.speed(MT(), terr, l.party);
       var v = tv * mk * (1 + R.skill('ops') * 0.1) * (s.fleet.fatigue > 70 ? 0.7 : 1) * (l.party > 20 ? 0.9 : 1) * (st.fastDays > 0 ? 1.45 : 1) * (G.Disaster ? G.Disaster.slow(l.lon, l.lat) : 1);   // 재해의 자취 안에서는 느리다
+      if(G.Disaster)v*=G.Disaster.travelSlow(l);
+      if(G.Rain)v*=G.Rain.landEffect().speed;
       var riverEffect=G.Hydro&&G.Hydro.ready?G.Hydro.landEffect(l.lon,l.lat):null;
       if(riverEffect&&riverEffect.river)v*=riverEffect.speed;
       st.mk = mk;
@@ -435,6 +439,7 @@
       st.dayAcc += days;
       if (st.dayAcc >= 1) { st.dayAcc -= 1; runDay(); }
     }
+    if (G.Disaster && s.loc === l && weatherDays && G.Disaster.travelStep(weatherDays, px0, py0, daysMoved > 0 && (l.lon !== px0 || l.lat !== py0))) refreshHud();
     if ((l.lon !== px0 || l.lat !== py0) && G.Hydro&&G.Hydro.ready) G.Hydro.movedLand(s,[px0,py0],[l.lon,l.lat]);
     if (l.lon !== px0 || l.lat !== py0) {
       refreshCampButton(l);
@@ -528,7 +533,7 @@
     }
     if (G.Audio && G.Audio.amb && Date.now() >= (st.ambAt || 0)) {   // 배경 소리: 땅에 따라 새·밀림 · 야영하는 밤엔 부엉이 · 가끔 짐승·새 소리 (0.4초마다)
       st.ambAt = Date.now() + 400;
-      var aTerr = G.Geo.terrain(l.lon, l.lat), wet = aTerr === 'jungle' && (S().day || 0) % 3 === 0, cold = /snow|tundra|ice|desert/.test(aTerr);
+      var aTerr = G.Geo.terrain(l.lon, l.lat), wet = aTerr === 'jungle' && G.Rain && G.Rain.raining('land'), cold = /snow|tundra|ice|desert/.test(aTerr);
       G.Audio.amb({ meadow: !st.camping && /grass|steppe|mountain/.test(aTerr) ? 1 : 0, forest: !st.camping && aTerr === 'forest' ? 1 : 0,
         jungle: aTerr === 'jungle' && !wet ? 1 : 0, jungle_rain: wet ? 1 : 0, night: st.camping && !cold && aTerr !== 'jungle' ? 1 : 0 });
       if (G.Audio.wild) G.Audio.wild(aTerr, { beasts: G.EventFx && G.EventFx.beastsHere ? G.EventFx.beastsHere() : null, mount: MT().id, camping: !!st.camping });
@@ -573,6 +578,7 @@
       var landFat = G.SkillCombos ? G.SkillCombos.factor('landFatigue') : 1;
       f.fatigue = U.clamp(f.fatigue + ((1.4 + (T.thirst ? 0.6 : 0)) * M.fatigue(mt, terr, l.party) + (T.cold ? 1 : 0) * M.cold(mt, l.party)) * landFat - R.skill('ops') * 0.3, 0, 100);
       f.fatigue = Math.max(0, f.fatigue - R.skillRead('cook') * ((((G.BALANCE || {}).crewCare || {}).landCook) || 0.15));   // 요리: 야영지 끼니
+      if(G.Rain)G.Rain.landDay(msgs,terr,false);
       // 알맞지 않은 땅에서는 짐승을 잃는다
       var rk = M.risk(mt, terr);
       if (rk > 0 && mt.n > 0 && U.chance(Math.min(0.5, rk * (1 + mt.n / 8)))) {
@@ -868,9 +874,12 @@
   /** 얻은 식량·물을 배의 짐칸에 싣는다 (남는 칸만큼). 실제로 실은 양을 돌려준다 */
   function stow(kind, n) { var f = S().fleet, room = Math.max(0, Math.floor(R.free())), q = Math.max(0, Math.min(Math.round(n), room)); f[kind] = (f[kind] || 0) + q; return q; }
   /** 야영지에서 며칠을 보낸다 (날마다 경비를 내고 날이 간다) */
-  function spendDays(n) {
+  function spendDays(n,sheltered) {
     var s = S(), l = s.loc, msgs = [];
-    for (var i = 0; i < n; i++) { G.Game.newDay(); l.days++; payDay(msgs); }
+    for (var i = 0; i < n; i++) {
+      G.Game.newDay(); l.days++; payDay(msgs);
+      if(G.Rain)G.Rain.landDay(msgs,G.Geo.terrain(l.lon,l.lat),sheltered);
+    }
     msgs.forEach(function (m) { UI.toast(m.text, m.icon); });
   }
   async function camp() {
@@ -897,7 +906,7 @@
       if ((v === 'hunt' || v === 'water') && far) { UI.toast('배가 보이지 않는 곳이라 식량·물을 배로 나를 수 없다. 배 가까이(' + (((G.BALANCE || {}).landPack || {}).near || 1.2) + '° 안)로 가자.', 'anchor', 4600); v = null; }
       if (v === 'rest') {
         var wb = G.Castaway ? G.Castaway.restBonus() : 0;   // 윌슨과 함께 쉬면 더 풀린다
-        spendDays(3); f.fatigue = Math.max(0, f.fatigue - 25 - wb - R.skill('ops') * 5 - (R.skillRead('cook') + R.skillRead('music')) * ((((G.BALANCE || {}).crewCare || {}).restBonus) || 3));
+        spendDays(3,true); f.fatigue = Math.max(0, f.fatigue - 25 - wb - R.skill('ops') * 5 - (R.skillRead('cook') + R.skillRead('music')) * ((((G.BALANCE || {}).crewCare || {}).restBonus) || 3));
         UI.toast(wb ? '푹 쉬었다. 대원들이 윌슨을 둘러싸고 수다를 떨며 피로를 풀었다.' : '푹 쉬었다. 피로가 풀렸다.', 'tent');
       } else if (v === 'repair') {
         await repairAtCamp(LR);
@@ -1236,7 +1245,8 @@
     // 땅 셰이더는 어느 자리든 그리므로 가장자리에 빈 곳이 드러나지 않는다 (캐시 판도 화면보다 1.45배 넓다)
     st.qo = G.Quake ? G.Quake.camera() : null;
     var qx = st.qo ? st.qo[0] : 0, qy = st.qo ? st.qo[1] : 0;
-    if (r) r.draw({ lon: st.cam.lon - qx / st.cam.zoom, lat: st.cam.lat + qy / st.cam.zoom, zoom: st.cam.zoom, time: st.t, wind: [0.4, 0.2], cloud: 0.25, edge: 0.6, mode: 0, dusk: 0, storm: 0, quality: 1, cssWidth: 1600 });
+    var clear={cloud:.25,storm:0}, weather=G.Rain?G.Rain.weather(clear,'land'):clear;
+    if (r) r.draw({ lon: st.cam.lon - qx / st.cam.zoom, lat: st.cam.lat + qy / st.cam.zoom, zoom: st.cam.zoom, time: st.t, wind: [0.4, 0.2], cloud: weather.cloud, cloudOpacity: weather.cloudOpacity, edge: 0.6, mode: 0, dusk: 0, storm: weather.storm, quality: 1, cssWidth: 1600 });
     var cv = G.Game.canvases().overlay, ctx = cv.getContext('2d'), k = G.Game.overlayScale || 1;
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, cv.width, cv.height); ctx.setTransform(k, 0, 0, k, 0, 0);
     var ff = fontFam();
@@ -1328,6 +1338,7 @@
       ctx.font = '700 17px ' + ff;
       G.CityIcon.nameplate(ctx,c.name,label);
     });
+    if(G.Rain)G.Rain.draw(ctx,st.t,Math.atan2(.2,.4),false,null,'land',pp);
     // status
     if ((st.f = (st.f || 0) + 1) % 8 === 0 && el.status) {
       refreshFollow();
@@ -1337,7 +1348,10 @@
       var effTxt = mt2.id === 'walk' ? '' : ' — 걸음 ×' + M.speed(mt2, tK, l.party).toFixed(1) + ' · 피로 ×' + M.fatigue(mt2, tK, l.party).toFixed(2) + (M.cover(mt2, l.party) < 1 ? ' (짐승이 모자라 효과가 ' + Math.round(M.cover(mt2, l.party) * 100) + '%)' : '') + ' · 이 땅 <span class="suit ' + su2.cls + '">' + su2.mark + '</span>';
       var walkStatus = st.dir ? U.dirName(Math.atan2(st.dir[1], st.dir[0])) + '쪽으로 걷는 중' + (st.pointerWalk ? ' (마우스를 따라감)' : '') + ' · Space 정지' : st.path ? '클릭한 곳으로 이동 중 — 도착하면 정지' : followOn() ? '마우스 따라가기 켬 — 가려는 쪽 땅을 누르면 따라 걷습니다' : '땅을 누르면 그곳까지 걷습니다 · 방향키로도 걷습니다';
       var activity = st.camping ? '<b>야영 중</b>' : (st.paused ? '<b>⏸ 정지</b> · ' : '') + walkStatus;
-      var statusHtml = activity + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
+      var weatherTag=G.Rain?G.Rain.tag('land'):'';
+      var windTag=G.Disaster?G.Disaster.travelTag(l):'';
+      if(windTag)weatherTag=windTag+(weatherTag?' · '+weatherTag:'');
+      var statusHtml = (weatherTag?weatherTag+' · ':'') + activity + ' · 탐험 ' + (l.days || 0) + '일째 · ' + how + effTxt + '<br><span class="coord">' + (TERR[tN] || TERR.grass).name + ' · ' + (l.base.type === 'ship' ? '배까지 ' : '출발 도시까지 ') + G.Geo.dist(l.lon, l.lat, l.base.lon, l.base.lat).toFixed(1) + '°' + (near ? ' · ' + near.name + ' 근처' + (function () { var of = G.Mounts.offers(near, S().date.y).map(function (id) { return G.Mounts.get(id).name; }); return of.length ? ' (성문 마구간: ' + of.join('·') + ')' : ''; })() : '') + '</span>';
       refreshDestinations(near);
       if (el.status._landHtml !== statusHtml) { el.status._landHtml = statusHtml; el.status.innerHTML = statusHtml; }
     }

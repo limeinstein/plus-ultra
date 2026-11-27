@@ -353,11 +353,13 @@
   Geo.channelSdf = channelSdf;
   var sdfTex = Geo.sdfRaw;
   Geo.sdfRaw = function (lon, lat) { var v = sdfTex(lon, lat); if (v > -1.5) { var c = channelSdf(wrapLon(lon), lat); if (c != null && c < v) v = c; } return v; };
+  // 강 자체를 뚫기 전의 해안선. 하천 범람과 열린 바다를 구분한다.
+  Geo.landmassSdf = function (lon, lat) { return sdfTex(lon, lat) + coastNoise(wrapLon(lon), lat); };
   /** signed distance including the coast perturbation — matches rendered coastline */
-  Geo.sdf = function (lon, lat) { var v = sdfTex(lon, lat) + coastNoise(wrapLon(lon), lat); if (v > -1.5) { var c = channelSdf(wrapLon(lon), lat); if (c != null && c < v) v = c; } return v; };
+  Geo.sdf = function (lon, lat) { var v = Geo.landmassSdf(lon, lat); if (v > -1.5) { var c = channelSdf(wrapLon(lon), lat); if (c != null && c < v) v = c; } return v; };
   Geo.isLand = function (lon, lat) { return Geo.sdf(lon, lat) > 0; };
   /** navigable water with a safety margin (texels) */
-  Geo.isSea = function (lon, lat, margin) { return Geo.sdf(lon, lat) < -(margin || 0.25) && !Geo.berg(lon, lat); };
+  Geo.isSea = function (lon, lat, margin) { return Geo.sdf(lon, lat) < -(margin || 0.25) && !Geo.seaIce(lon, lat); };
   /** 가장 가까운 강까지 거리 (칸, 8 이상이면 8) */
   Geo.river = function (lon, lat) {
     var fx = (wrapLon(lon) + 180) / 360 * W, fy = (90 - lat) / 180 * H;
@@ -393,6 +395,33 @@
     }
     return false;
   };
+  Geo.inPackLatitudes = function (lat) {
+    var cfg=G.FX&&G.FX.water&&G.FX.water.packIce;
+    return !!cfg&&Math.abs(lat)>=cfg.latitude;
+  };
+  // renderer.js의 packIceField와 같은 값. 양수는 굳은 유빙, 음수는 열린 물이다.
+  Geo.packIceField = function (lon, lat) {
+    if (!Geo.inPackLatitudes(lat)) return -1;
+    var cfg = G.FX.water.packIce, px = wrapLon(lon) + 180, py = lat + 90;
+    var ice = lat < -55 ? (lat + (vnoise(px*.5+3,py*.5+3)-.5)*7+57)/-10 : Geo.climate(lon,lat).ice;
+    if(lat < -55){ice=Math.max(0,Math.min(1,ice));ice=ice*ice*(3-2*ice);}
+    var density=Math.max(0,Math.min(1,(ice+(vnoise(px*1.2,py*1.2)-.5)*.25-.50)/.45));
+    if(density<=0)return -1;
+    density=density*density*(3-2*density);
+    var x=px*cfg.scale+(vnoise(px*.8,py*.8)-.5)*.32;
+    var y=py*cfg.scale+(vnoise(px*.8+37,py*.8+17)-.5)*.32;
+    var ix=Math.floor(x), iy=Math.floor(y), first=8, second=8, id=0;
+    for(var j=-1;j<=1;j++)for(var i=-1;i<=1;i++){
+      var cx=ix+i, cy=iy+j;
+      var dx=cx+hash2(cx,cy)-x, dy=cy+hash2(cx+37,cy+17)-y, d=dx*dx+dy*dy;
+      if(d<first){second=first;first=d;id=hash2(cx+11,cy+91);}
+      else if(d<second)second=d;
+    }
+    if(id>density*cfg.fill)return -1;
+    return (Math.sqrt(second)-Math.sqrt(first)-cfg.gap)/(2*cfg.scale);
+  };
+  Geo.packIce = function (lon, lat) { return Geo.inPackLatitudes(lat)&&Geo.packIceField(lon,lat)>=-G.FX.water.packIce.clearance; };
+  Geo.seaIce = function (lon, lat) { return Geo.packIce(lon,lat)||Geo.berg(lon,lat); };
   /** climate: {t, m, e, ice} 0..1 */
   Geo.climate = function (lon, lat) {
     var fx = (wrapLon(lon) + 180) / 360 * CW, fy = (90 - lat) / 180 * CH;

@@ -9,7 +9,12 @@
 const path = require('path');
 const fs = require('fs');
 const { pathToFileURL } = require('url');
-const { chromium } = require('playwright');
+let playwright;
+try { playwright = require('playwright'); } catch (err) {
+  if (err.code !== 'MODULE_NOT_FOUND') throw err;
+  playwright = require('../tools/procedural_art/node_modules/playwright-core');
+}
+const { chromium } = playwright;
 
 const ROOT = path.resolve(__dirname, '..');
 const GAME = pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href;
@@ -18,12 +23,13 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
 
 (async function () {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined,
-    args: ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader', '--allow-file-access-from-files'] });
+  const win = process.platform === 'win32';
+  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || (win ? 'C:/Program Files/Google/Chrome/Application/chrome.exe' : undefined),
+    args: ['--allow-file-access-from-files', ...(win ? ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist'] : ['--use-gl=swiftshader', '--no-sandbox', '--enable-unsafe-swiftshader'])] });
   const page = await browser.newPage({ viewport: { width: 1300, height: 900 } });
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load|net::/.test(m.text() + ' ' + ((m.location() || {}).url || ''))) errors.push('console: ' + m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
   try {
     await page.goto(GAME);
     await page.waitForFunction(() => window.G && G.Game && G.Disaster && G.DISASTERS, null, { timeout: 90000 });
@@ -60,7 +66,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       G.BALANCE.disaster.random = 0;
       s.date = { y: 1755, m: 10, d: 30 };
       var hp0 = s.fleet.ships[0].hp;
-      var msgs = G.Game.passDays(3);
+      // 1755년 자료는 캠페인의 수명·종료 조건 밖에서 재해의 날짜만 직접 진행한다.
+      var msgs = [];
+      for (var i = 0; i < 3; i++) { s.date = G.U.addDays(s.date, 1); s.day++; msgs = msgs.concat(G.Disaster.daily()); }
       var act = s.dis.act.map(function (e) { return e.kind; });
       return { act: act, hp0: hp0, hp1: s.fleet.ships[0].hp, news: msgs.some(function (m) { return /모든 성인의 날/.test(m.text) && m.history; }), mk: G.R.market(0).ev, hit: G.Disaster.cityHit(0), slow: G.Disaster.slow(-9.14, 38.7), far: G.Disaster.slow(10, 50) };
     });

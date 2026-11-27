@@ -18,7 +18,10 @@
     volcano:   { name: '화산 분화', icon: 'skull', days: 30, r: [1.2, 2, 3.2], slow: 0.6, color: '90,80,80' },
     landslide: { name: '산사태', icon: 'skull', days: 25, r: [0.5, 0.8, 1.2], slow: 0.55, color: '130,95,55' },
     tsunami:   { name: '쓰나미', icon: 'drop', days: 10, r: [2, 3.5, 6], slow: 0.75, color: '60,110,150' },
-    flood:     { name: '홍수', icon: 'drop', days: 25, r: [1, 1.6, 2.4], slow: 0.5, color: '70,120,160' }
+    flood:     { name: '홍수', icon: 'drop', days: 25, r: [1, 1.6, 2.4], slow: 0.5, color: '70,120,160' },
+    fire:      { name: '산불', icon: 'fire', days: 11, r: [.34,.47,.61], slow: .66, color: '191,109,54' },
+    tornado:   { name: '토네이도', icon: 'wind', days: 7, r: [.24,.33,.43], slow: .53, color: '136,111,90' },
+    hurricane: { name: '허리케인', icon: 'wind', days: 16, r: [.82,1.1,1.42], slow: .61, color: '99,155,174' }
   };
 
   var L = [];

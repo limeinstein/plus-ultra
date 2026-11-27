@@ -131,6 +131,28 @@
     }
     return best;
   };
+  /** 실제 강줄기를 따라 범람 구간을 잘라 온다. 바다에 닿는 부분은 육상 범람에서 뺀다. */
+  H.floodReach=function(lon,lat,reach){
+    var q=H.at(lon,lat), shore=G.Geo.landmassSdf;if(!q||q.strait||shore(q.point[0],q.point[1])<=0)return null;
+    var points=q.segment.r.pts;
+    function limb(dir){
+      var from=q.point, room=reach, part=[];
+      for(var i=q.index+(dir>0?1:0);i>=0&&i<points.length&&room>1e-5;i+=dir){
+        var node=points[i], dx=wrap(node[0]-from[0]),dy=node[1]-from[1], len=Math.hypot(dx,dy);
+        if(len<1e-5)continue;
+        var used=Math.min(room,len), count=Math.ceil(used/.065);
+        for(var j=1;j<=count;j++){
+          var v=used*j/count/len, x=wrap(from[0]+dx*v),y=from[1]+dy*v;
+          if(shore(x,y)<=0)return part;
+          part.push([x,y]);
+        }
+        room-=used;from=node;
+      }
+      return part;
+    }
+    var path=limb(1).reverse().concat([q.point],limb(-1));
+    return path.length>1?{points:path,name:q.name,half:q.half,center:q.point}:null;
+  };
   H.isWater=function(q,lon,lat){
     if(!q)return false;
     return q.signed<=0;
@@ -334,10 +356,10 @@
     original={sdf:geo.sdf,sdfRaw:geo.sdfRaw,isSea:geo.isSea,climate:geo.climate,terrain:geo.terrain};
     var noisy=original.sdf;original.sdf=function(lon,lat){return T.nearLake(lon,lat)?original.sdfRaw(lon,lat):noisy(lon,lat);};
     // 옛 isSea 함수도 Geo.sdf를 참조하므로 그대로 붙잡으면 새 강을 바다로 오인한다.
-    original.isSea=function(lon,lat,margin){return original.sdf(lon,lat)<-(margin||.25)&&!geo.berg(lon,lat);};
+    original.isSea=function(lon,lat,margin){return original.sdf(lon,lat)<-(margin||.25)&&!geo.seaIce(lon,lat);};
     geo.baseSdf=original.sdf;geo.baseSdfRaw=original.sdfRaw;geo.baseIsSea=original.isSea;
     // 운하는 제작 단계에서 제외한다. 가는 강도 표시와 도보 판정에 공용한다.
-    D.rivers.forEach(function(row){var r={name:row[0]||'개울',rank:row[1],half:clamp(.031-row[1]*.002,.012,.028)};for(var j=1;j<row[2].length;j++)add(row[2][j-1],row[2][j],r,j-1,false);});
+    D.rivers.forEach(function(row){var r={name:row[0]||'개울',rank:row[1],half:clamp(.031-row[1]*.002,.012,.028),pts:row[2]};for(var j=1;j<row[2].length;j++)add(row[2][j-1],row[2][j],r,j-1,false);});
     routes.forEach(function(r){byId[r.id]=r;r.crossings=[];r.full=r.pts;});
     routes.forEach(function(r){
       if(r.parent){var p=byId[r.parent],q=projectRoute(p,r.pts[0]);r.full=p.full.slice(0,q.index+1).concat([q.point],r.pts);r.connected=!!p.connected;}

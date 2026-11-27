@@ -1,4 +1,4 @@
-/* 자연재해 (G.Disaster) — 지진·화산·산사태·쓰나미·홍수
+/* 자연재해 (G.Disaster) — 고정된 재해와 지도 위를 이동하는 토네이도·허리케인
    · 역사에 남은 재해(G.DISASTERS, js/data/disasters.js)는 그해 그 날 그 자리에서 일어난다.
    · 재해가 잦은 땅(G.HAZARD_ZONES)과 화산(G.VOLCANOES)에서는 이름 없는 재해가 가끔 일어난다. 탐험대가 그 땅을 걸으면 더 잦게 맞닥뜨린다(localK).
    · 한 번 일어난 재해는 며칠(갈래마다·사건마다 다르다) 이어진다 — 그 안에서는 탐험대의 걸음이 느려지고(slow) 지친다.
@@ -15,6 +15,7 @@
   function S() { return G.Game.state; }
   function cfg() { return (G.BALANCE && G.BALANCE.disaster) || {}; }
   function K(kind) { return G.DISASTER_KINDS[kind]; }
+  function ground(kind) { return G.GroundDisaster && G.GroundDisaster.handles(kind); }
   function st() {
     var s = S(); if (!s) return null;
     return s.dis || (s.dis = { act: [], hp: -1, city: {}, seq: 0 });
@@ -28,13 +29,14 @@
   function today() { return U.dayIndex(S().date); }
 
   // 시장 사건 (js/core/rules.js EVENTS) — 재해가 덮친 도시
-  var MKT = { quake: '지진 피해', volcano: '화산재', landslide: '산사태 피해', tsunami: '해일 피해', flood: '홍수 피해' };
+  var MKT = { quake: '지진 피해', volcano: '화산재', landslide: '산사태 피해', tsunami: '해일 피해', flood: '홍수 피해', fire: '산불 피해' };
   if (R && R.MARKET_EVENTS) {
     R.MARKET_EVENTS['지진 피해'] = { cats: { food: 1.3 }, goods: { timber: 1.7, iron: 1.3 } };
     R.MARKET_EVENTS['화산재'] = { cats: { food: 1.5 }, all: 0.95 };
     R.MARKET_EVENTS['산사태 피해'] = { cats: { food: 1.25 }, goods: { timber: 1.3 } };
     R.MARKET_EVENTS['해일 피해'] = { cats: { food: 1.4 }, goods: { timber: 1.6 }, all: 0.95 };
     R.MARKET_EVENTS['홍수 피해'] = { cats: { food: 1.6 }, all: 0.95 };
+    R.MARKET_EVENTS['산불 피해'] = { goods: { timber: 1.4 }, cats: { food: 1.15 } };
   }
 
   // ---------------------------------------------------------------- 재해 하나 일으키기
@@ -45,12 +47,25 @@
     var sev = U.clamp(def.sev || 1, 1, 3), now = today();
     var ev = { id: 'ds' + (++T.seq), hid: def.id || null, kind: def.kind, name: def.name || (def.place ? def.place + ' ' : '') + k.name, place: def.place || '', lon: def.lon, lat: def.lat, sev: sev,
       r: def.r || k.r[sev - 1], start: now, end: now + (def.days || Math.round(k.days * (0.7 + sev * 0.3))), hist: !!def.hist, t: def.t || '', y: S().date.y, m: S().date.m };
+    if(ground(ev.kind)){
+      var field=G.GroundDisaster.ensure(ev);
+      if(!field&&!ev.hist&&(def.localField||ev.kind==='landslide'||ev.kind==='fire'||ev.kind==='flood')&&G.Hydro&&G.Hydro.ready)return null;
+    }
     T.act.push(ev);
+    var windRule = cfg().moving && cfg().moving[ev.kind];
+    if (windRule) {
+      ev.wind = { age: 0, offSurface: 0, hitWait: 0, originalR: ev.r, life: ev.end - now,
+        heading: def.heading == null ? U.rf(-Math.PI, Math.PI) : def.heading,
+        speed: def.speed == null ? U.rf(windRule.speed[0], windRule.speed[1]) : def.speed,
+        curve: def.curve == null ? U.rf(-windRule.curve, windRule.curve) : def.curve };
+      ev.known = true; ev.out = [];
+      return ev;
+    }
     var out = [];
     if (def.tsu) { var tw = D.start({ kind: 'tsunami', name: (def.name || '') + ' 해일', place: def.place, lon: def.lon, lat: def.lat, sev: Math.max(1, sev - (sev > 2 ? 0 : 1)), r: Math.max(K('tsunami').r[sev - 1], (def.r || 0) * 1.2), hist: def.hist, sub: 1 }, true); if (tw) tw.parent = ev.id; }
     if (def.slide) { var sl = D.start({ kind: 'landslide', name: (def.name || '') + ' 산사태', place: def.place, lon: def.lon, lat: def.lat, sev: Math.max(1, sev - 1), r: K('landslide').r[2] * 1.4, hist: def.hist, sub: 1 }, true); if (sl) sl.parent = ev.id; }
     if (!def.sub) {
-      cityHits(ev);
+      if(!def.localField)cityHits(ev);
       fleetHit(ev, out);
       var s = S(), d = dist(s.loc.lon, s.loc.lat, ev.lon, ev.lat), near = d < (cfg().news || 15);
       ev.known = near || ev.hist && sev >= 3;
@@ -59,6 +74,8 @@
         out.unshift({ icon: k.icon, text: txt.trim(), history: ev.hist || d < 6 });
         if (ev.hist) G.State.log(ev.name + ' — ' + (ev.place || '') + ' (' + k.name + ')');
       } else if (!quiet && ev.hist && G.Journal) G.Journal.add(ev.name + ' — ' + (ev.place || '') + '에서 ' + k.name + U.jx(k.name, '이/가') + ' 일어났다는 소식이 들려온다.', 'C');   // 일지 (2026-10-23)
+    } else if(ground(ev.kind)) {
+      var l0=S().loc;ev.known=dist(l0.lon,l0.lat,ev.lon,ev.lat)<(cfg().news||15);
     }
     ev.out = out;
     return ev;
@@ -121,15 +138,14 @@
     var sev = sevRoll(), tsu = false;
     if (kind === 'tsu') { kind = 'quake'; tsu = true; if (coastDist(p[0], p[1]) > 1.2) return null; sev = Math.max(2, sev); }
     var mt = G.Geo && G.Geo.terrain ? G.Geo.terrain(p[0], p[1]) : 'grass';
-    if (kind === 'landslide' && mt !== 'mountain' && mt !== 'forest' && mt !== 'jungle') return null;
-    if (kind === 'flood' && (mt === 'mountain' || mt === 'desert' || mt === 'snow' || mt === 'ice')) return null;
+    if (kind === 'landslide' && mt !== 'mountain') return null;
     return D.start({ kind: kind, place: z.name, lon: p[0], lat: p[1], sev: sev, tsu: tsu, slide: kind === 'quake' && mt === 'mountain' && sev >= 2 });
   }
   D.daily = function () {
     var T = st(), s = S(); if (!T || !G.DISASTERS) return [];
     var cf = cfg(); if (cf.on === false) return [];
     var now = today(), out = [];
-    T.act = T.act.filter(function (e) { delete e.out; return e.end >= now; });
+    T.act = T.act.filter(function (e) { delete e.out; return e.end >= now && (!e.field || now-e.start<=Math.ceil(e.field.life)); });
     Object.keys(T.city).forEach(function (id) { if (T.city[id].until < now) delete T.city[id]; });
     // 역사에 남은 재해
     var H = G.DISASTERS;
@@ -146,10 +162,10 @@
     if (cf.random !== 0 && G.Geo && G.Geo.isLand) {
       var mult = cf.random == null ? 1 : cf.random, m = s.date.m;
       (G.HAZARD_ZONES || []).forEach(function (z) {
-        ['quake', 'tsu', 'landslide', 'flood'].forEach(function (kind) {
+        ['quake', 'tsu', 'landslide'].forEach(function (kind) {
           var rate = z[kind]; if (!rate) return;
           if (!inSeason(z, kind, m)) return;
-          var p = rate * mult / ((kind === 'flood' || kind === 'landslide') && z.months ? z.months.length * 30.4 : 365);
+          var p = rate * mult / (kind === 'landslide' && z.months ? z.months.length * 30.4 : 365);
           if (U.chance(p)) { var e = randomOne(z, kind); if (e) out = out.concat(e.out || []); }
         });
       });
@@ -160,9 +176,9 @@
       if (s.loc.mode === 'land') {
         var l = s.loc, lk = cf.localK == null ? 4 : cf.localK, terr = G.Geo.terrain(l.lon, l.lat);
         zonesAt(l.lon, l.lat).forEach(function (z) {
-          ['quake', 'landslide', 'flood'].forEach(function (kind) {
+          ['quake', 'landslide'].forEach(function (kind) {
             var rate = z[kind]; if (!rate || !inSeason(z, kind, m)) return;
-            if (kind === 'landslide' && terr !== 'mountain' && terr !== 'forest' && terr !== 'jungle') return;
+            if (kind === 'landslide' && terr !== 'mountain') return;
             if (U.chance(rate * lk * mult / 365)) {
               var a = U.rand() * 6.283, rr = U.rf(0.05, 0.4), p = [l.lon + Math.cos(a) * rr, l.lat + Math.sin(a) * rr];
               if (!isLand(p[0], p[1])) p = [l.lon, l.lat];
@@ -170,6 +186,7 @@
             }
           });
         });
+        if(G.GroundDisaster)G.GroundDisaster.spawnLand(T,l,mult);
         // 화산 곁을 지나면: 땅이 울리고, 드물게 터진다
         (G.VOLCANOES || []).forEach(function (v) {
           var dv = dist(l.lon, l.lat, v[1], v[2]); if (dv > 1.2) return;
@@ -191,10 +208,106 @@
   /** 탐험대 걸음: 재해 한가운데일수록 느리다 (1 = 보통) */
   D.slow = function (lon, lat) {
     var v = 1;
-    D.at(lon, lat).forEach(function (e) { var k = K(e.kind), c = 1 - dist(lon, lat, e.lon, e.lat) / e.r; v = Math.min(v, 1 - (1 - k.slow) * Math.min(1, 0.4 + c)); });
+    D.at(lon, lat).forEach(function (e) { if (!e.wind&&!ground(e.kind)) { var k = K(e.kind), c = 1 - dist(lon, lat, e.lon, e.lat) / e.r; v = Math.min(v, 1 - (1 - k.slow) * Math.min(1, 0.4 + c)); } });
     return v;
   };
   D.active = function () { var T = st(); return T ? T.act.slice() : []; };
+
+  // ---------------------------------------------------------------- 항해·탐험 중 움직이는 바람 재해
+  function windAt(e, days) {
+    var w = e.wind, turn = w.curve * days / 2, h = w.heading + turn;
+    var distance = w.speed * days * (turn ? Math.sin(turn) / turn : 1);
+    return [G.Geo.wrapLon(e.lon + Math.cos(h) * distance), U.clamp(e.lat + Math.sin(h) * distance, -86, 86)];
+  }
+  function threatens(e, mode) { return e.wind && (mode === 'land' || e.kind === 'hurricane'); }
+  function localWind(l) {
+    var T = st(), rules = cfg().moving, closest = null, margin = Infinity;
+    if (!T || !rules || cfg().on === false) return null;
+    for (var i = 0; i < T.act.length; i++) {
+      var e = T.act[i]; if (!threatens(e, l.mode)) continue;
+      var gap = dist(l.lon, l.lat, e.lon, e.lat) - e.r;
+      if (gap <= rules[e.kind].warn && gap < margin) { closest = e; margin = gap; }
+    }
+    return closest ? { event: closest, margin: margin } : null;
+  }
+  D.travelTag = function (l) {
+    if(cfg().on===false)return '';
+    var field=G.GroundDisaster?G.GroundDisaster.tag(st(),l):'';
+    var near = localWind(l); if (!near) return field;
+    var e = near.event, direction = U.dirName(Math.atan2(e.lat - l.lat, G.Geo.wrapLon(e.lon - l.lon)));
+    var txt = near.margin <= 0 ? e.name + ' 위험 구역 · 범위 밖으로' : direction + '쪽 ' + e.name + ' · 경계까지 ' + (near.margin < .1 ? '0.1° 미만' : near.margin.toFixed(1) + '°');
+    return field+(field?' · ':'')+'<span style="color:#ffc28f" title="지도에 표시된 진행 방향을 보고 옆으로 우회하십시오.">' + U.esc(txt) + '</span>';
+  };
+  D.travelSlow = function (l) {
+    if(cfg().on===false)return 1;
+    var field=G.GroundDisaster?G.GroundDisaster.slow(st(),l):1;
+    var near = localWind(l);
+    if (!near || near.margin >= 0) return field;
+    return Math.min(field,U.lerp(1, K(near.event.kind).slow, U.clamp(.22 - near.margin / near.event.r, 0, 1)));
+  };
+  function spawnWind(T, s, days, rules) {
+    var l = s.loc, kind = l.mode === 'sea' ? 'hurricane' : 'tornado', c = rules[kind];
+    var lat = Math.abs(l.lat), month = l.lat < 0 ? (s.date.m + 5) % 12 + 1 : s.date.m;
+    if (T.windRest > 0 || T.act.some(function (e) { return e.kind === kind; }) ||
+        lat < c.lat[0] || lat > c.lat[1] || month < c.months[0] || month > c.months[1] ||
+        c.grounds.indexOf(G.Geo.terrain(l.lon, l.lat)) < 0 || !U.chance(1 - Math.exp(-c.rate * days * (cfg().random == null ? 1 : cfg().random)))) return;
+    var severity = sevRoll(), radius = K(kind).r[severity - 1];
+    for (var i = 0; i < 8; i++) {
+      var bearing = (l.heading || 0) + U.rf(-.83, .83), lead = radius + U.rf(c.lead[0], c.lead[1]);
+      var x = G.Geo.wrapLon(l.lon + Math.cos(bearing) * lead), y = l.lat + Math.sin(bearing) * lead;
+      if (c.grounds.indexOf(G.Geo.terrain(x, y)) < 0 || isLand(x, y) !== (kind === 'tornado')) continue;
+      var moving = bearing + (U.chance(.5) ? 1 : -1) * U.rf(1.35, 2.28);
+      D.start({ kind: kind, sev: severity, lon: x, lat: y, heading: moving }, true);
+      T.windRest = rules.cooldown;
+      break;
+    }
+  }
+  function approachDistance(l, lon0, lat0, e, ex, ey) {
+    // 상대 이동을 선분으로 검사해 빠른 배속에도 회오리와 탐험대가 서로 통과하지 않게 한다.
+    var x = G.Geo.wrapLon(lon0 - ex), y = lat0 - ey;
+    var dx = G.Geo.wrapLon(l.lon - lon0) - G.Geo.wrapLon(e.lon - ex), dy = l.lat - lat0 - (e.lat - ey);
+    var n = dx * dx + dy * dy, at = n ? U.clamp(-(x * dx + y * dy) / n, 0, 1) : 0;
+    return Math.hypot(x + at * dx, y + at * dy);
+  }
+  function hitWind(s, e, rule, distance) {
+    var f = s.fleet, k = (.67 + .19 * e.sev) * (1 - .55 * distance / e.r);
+    f.fatigue = U.clamp(f.fatigue + rule.fatigue * k, 0, 100);
+    f.discipline = U.clamp(f.discipline - rule.discipline * k, 0, 100);
+    var sailing = s.loc.mode === 'sea';
+    if (sailing) f.ships.forEach(function (ship) { if (ship.hp > 0) ship.hp = Math.max(1, ship.hp - ship.maxHp * rule.hull * k); });
+    var txt = e.name + '에 휘말렸다. ' + (sailing ? '선체 손상 · ' : '') + '피로 증가 · 규율 저하. 위험 범위 밖으로 벗어나십시오.';
+    UI.toast(txt, 'wind', 4200);G.State.log(txt);
+  }
+  /** 키·마우스 조작을 계속 받으며, 현재 걸음과 재해의 움직임을 같은 시간 구간에서 검사한다. */
+  D.travelStep = function (days, lon0, lat0, moving) {
+    var T = st(), s = S(), rules = cfg().moving;
+    if (!T || !rules || cfg().on === false || !(days > 0)) return false;
+    var l = s.loc, hit = G.GroundDisaster ? G.GroundDisaster.step(T,s,days,lon0,lat0,moving) : false;
+    T.windRest = Math.max(0, (T.windRest || 0) - days);
+    if (moving && cfg().random !== 0) spawnWind(T, s, days, rules);
+    for (var i = T.act.length - 1; i >= 0; i--) {
+      var e = T.act[i], w = e.wind; if (!w) continue;
+      var rule = rules[e.kind], ex = e.lon, ey = e.lat, next = windAt(e, days);
+      e.lon = next[0]; e.lat = next[1];
+      w.heading += w.curve * days;w.age += days;w.hitWait -= days;
+      if (isLand(e.lon, e.lat) !== (e.kind === 'tornado')) w.offSurface += days;
+      else w.offSurface = Math.max(0, w.offSurface - days * .58);
+      if (w.age >= w.life || w.offSurface >= rule.wrongSurface) { T.act.splice(i, 1); continue; }
+      e.r = w.originalR * (1 - .53 * Math.max(w.offSurface / rule.wrongSurface, U.clamp((w.age / w.life - .75) * 4, 0, 1)));
+      if (!threatens(e, l.mode)) continue;
+      if (!w.warned && dist(l.lon, l.lat, e.lon, e.lat) - e.r <= rule.warn) {
+        w.warned = true;
+        var direction = U.dirName(Math.atan2(e.lat - l.lat, G.Geo.wrapLon(e.lon - l.lon)));
+        UI.toast(direction + '쪽에 ' + e.name + '. 지도에 표시된 범위와 이동 방향을 보고 우회하십시오.', 'wind', 4400);
+      }
+      var distance = approachDistance(l, lon0, lat0, e, ex, ey);
+      if (distance <= e.r && w.hitWait <= 0) {
+        w.hitWait = rules.contact;
+        hitWind(s, e, rule, distance);hit = true;
+      }
+    }
+    return hit;
+  };
 
   // ---------------------------------------------------------------- 탐험대
   var LINES = {
@@ -221,15 +334,16 @@
     var now = today();
     for (var i = 0; i < T.act.length; i++) {
       var ev = T.act[i];
-      if (ev.metLand || now - ev.start > 2) continue;
+      if (ev.wind || ground(ev.kind) || ev.metLand || now - ev.start > 2) continue;
       var d = dist(l.lon, l.lat, ev.lon, ev.lat); if (d > ev.r) continue;
       ev.metLand = 1;
-      if (ev.parent) continue;                                  // 함께 온 해일·산사태는 본 재해 안에서 함께 겪는다
+      if (ev.parent && ev.kind!=='tsunami') continue;
       await onset(ev, d, ctx);
       if (l.party <= 0) return;
     }
     // 이어지는 재해 안을 걷는다: 재·흙탕물에 지친다 (재해마다 한 번 알린다)
     D.at(l.lon, l.lat).forEach(function (ev) {
+      if (ev.wind || ground(ev.kind)) return;
       var f = s.fleet, kk = ev.kind;
       if (kk === 'volcano' || kk === 'flood' || kk === 'landslide') f.fatigue = Math.min(100, f.fatigue + (cfg().stayFatigue || 1.2) * ev.sev);
       if (!ev.toldLand) { ev.toldLand = 1; UI.toast((ev.name || K(kk).name) + '의 자취 안이다 — ' + { quake: '무너진 길을 돌아가느라 걸음이 더디다.', volcano: '재가 내려 숨쉬기 힘들고 걸음이 무겁다.', landslide: '흙더미가 길을 막아 돌아가야 한다.', tsunami: '해안이 온통 부서진 것들로 덮였다.', flood: '물이 빠지지 않은 들판이라 걸음이 무척 더디다.' }[kk], 'skull', 4600); }
@@ -365,7 +479,7 @@
     if (T.seaNote && today() - T.seaNote.day <= 1) { var n = T.seaNote; T.seaNote = null; var fx0 = G.DisasterFx ? G.DisasterFx.show(n.kind) : null; await UI.say(n.text, G.Scenes.mateSpeaker('nav')); if (fx0) fx0.stop(); }
     if (h.seen) return;
     h.seen = true;
-    var look = { quake: '무너진 집과 갈라진 길이 그대로다. 교회 종탑이 기울었다.', volcano: '지붕마다 잿빛 재가 두껍게 쌓였다. 사람들이 천으로 입을 가리고 다닌다.', landslide: '도시 한쪽이 흙더미에 묻혔다. 사람들이 삽으로 길을 내고 있다.', tsunami: '부두가 부서지고, 배들이 거리 한복판까지 밀려 올라와 있다.', flood: '거리에 흙탕물 자국이 어깨 높이까지 남았다. 곳간의 곡식이 다 젖었다.' }[h.kind];
+    var look = { quake: '무너진 집과 갈라진 길이 그대로다. 교회 종탑이 기울었다.', volcano: '지붕마다 잿빛 재가 두껍게 쌓였다. 사람들이 천으로 입을 가리고 다닌다.', landslide: '도시 한쪽이 흙더미에 묻혔다. 사람들이 삽으로 길을 내고 있다.', tsunami: '부두가 부서지고, 배들이 거리 한복판까지 밀려 올라와 있다.', flood: '거리에 흙탕물 자국이 어깨 높이까지 남았다. 곳간의 곡식이 다 젖었다.', fire: '마을 밖 그을린 숲에서 연기가 오른다.' }[h.kind];
     var fx = G.DisasterFx ? G.DisasterFx.show(h.kind, { title: h.name }) : null;
     await UI.say(c.name + U.jx(c.name, '은/는') + ' 얼마 전 ' + h.name + U.jx(h.name, '을/를') + ' 겪었다. ' + look + ' ' + (h.kind === 'volcano' || h.kind === 'flood' ? '먹을 것 값이 크게 뛰었다.' : '먹을 것과 목재 값이 크게 뛰었다.'), {});
     if (fx) fx.stop();
@@ -389,11 +503,163 @@
     for (var n = 0; n < 6; n++) { var hit = used.some(function (b) { return Math.abs(b[0] - x) < (b[2] + w) / 2 + 6 && Math.abs(b[1] - y) < 26; }); if (!hit) break; y -= 28; }
     used.push([x, y, w]); return y;
   }
+  var windTextures = null;
+  function windNoise(grid, w, h, u, v) {
+    var x = u * (w - 1), y = v * (h - 1), ix = Math.min(w - 2, Math.floor(x)), iy = Math.min(h - 2, Math.floor(y));
+    var fx = x - ix, fy = y - iy, i = iy * w + ix;
+    fx *= fx * (3 - 2 * fx);fy *= fy * (3 - 2 * fy);
+    return U.lerp(U.lerp(grid[i], grid[i+1], fx), U.lerp(grid[i+w], grid[i+w+1], fx), fy);
+  }
+  function buildWindTextures() {
+    var palettes = [
+      [[45,66,83],[121,153,174]], [[100,131,155],[222,237,242]],
+      [[43,42,41],[110,104,90]], [[87,62,42],[189,153,111]], [[115,135,148],[229,231,223]]
+    ];
+    var rng = U.makeRng(7351);
+    return palettes.map(function (pair, variant) {
+      var canvas = document.createElement('canvas');canvas.width = 160;canvas.height = 44;
+      var ctx = canvas.getContext('2d'), tex = ctx.createImageData(canvas.width, canvas.height), data = tex.data;
+      var broad = Float32Array.from({length: 7*5}, rng), fine = Float32Array.from({length: 21*9}, rng), specks = Float32Array.from({length: 55*17}, rng);
+      // 길게 찢어진 바람 결을 한 번 만들어 두고, 매 장면에 나선의 접선 방향으로 돌려 그린다.
+      for (var x = 0; x < tex.width; x++) {
+        var u = x / (tex.width - 1), ends = Math.sin(Math.PI * u), width = .19 + .26 * Math.pow(ends, .87);
+        var center = .18 * Math.sin(u * 5.7 + variant) + .33 * (windNoise(broad, 7, 5, u, .38) - .5);
+        for (var y = 0; y < tex.height; y++) {
+          var vv = y / (tex.height - 1), v = vv * 2 - 1;
+          var cross = (v - center) / width;
+          var grain = .54 * windNoise(broad, 7, 5, u, vv) + .32 * windNoise(fine, 21, 9, u, vv) + .14 * windNoise(specks, 55, 17, u, vv);
+          var side = Math.exp(-cross * cross * 1.2), split = Math.exp(-Math.pow((v - center - .29) / .15, 2));
+          var taper = Math.pow(ends, .82) * (1 - Math.pow(Math.abs(v), 4));
+          var tone = U.clamp(grain + side * .30, 0, 1), i = (y * tex.width + x) * 4;
+          data[i] = U.lerp(pair[0][0], pair[1][0], tone);data[i+1] = U.lerp(pair[0][1], pair[1][1], tone);data[i+2] = U.lerp(pair[0][2], pair[1][2], tone);
+          data[i+3] = 255 * taper * (side * (.31 + .74 * grain) + split * .16);
+        }
+      }
+      ctx.putImageData(tex, 0, 0);return canvas;
+    });
+  }
+  function windFiber(ctx, tile, x, y, length, width, angle, alpha) {
+    ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.globalAlpha *= alpha;
+    ctx.drawImage(windTextures[tile], -length / 2, -width / 2, length, width);
+    ctx.restore();
+  }
+  function cyclonePoint(x, y, radius, angle) {
+    return [x + Math.cos(angle) * radius, y + Math.sin(angle) * radius * .84];
+  }
+  function drawCyclone(ctx, x, y, r, t, e) {
+    var fx = G.FX.movingDisaster, eye = r * fx.eye;
+    var rotation = e.lat >= 0 ? -1 : 1, spin = t * fx.spin.hurricane * rotation;
+    for (var arm = 0; arm < 3; arm++) {
+      var tilt = spin + [0,2.36,4.32][arm], turn = rotation * [4.65,4.1,4.38][arm];
+      for (var i = 0; i < 33; i++) {
+        var v = (i + (t * .78 + arm * .28) % 1) / 33;
+        var noise = Math.sin(i * 2.31 + arm * 6.6), ripple = Math.cos(i * 1.17 + arm * 3.1);
+        var a = tilt + turn * v + .18 * ripple * v, d = eye + r * (.79 + arm * .038) * Math.pow(v, 1.17);
+        var center = cyclonePoint(x, y, d, a), next = cyclonePoint(x, y, d + r * .029, a + turn * .034);
+        var angle = Math.atan2(next[1] - center[1], next[0] - center[0]);
+        var length = r * (.105 + .17 * v + .029 * noise), width = r * (.075 + .049 * v + .027 * ripple);
+        var alpha = (.74 + noise * .16) * (1 - v * .60);
+        windFiber(ctx, 0, center[0], center[1], length * 1.52, width * 1.60, angle, alpha);
+        windFiber(ctx, 1, center[0] + Math.sin(a) * width * .22, center[1] - width * .20, length, width, angle, alpha);
+      }
+    }
+    // 폭풍의 눈 주위는 짧게 꺾이는 결만 남기고, 그 바깥으로 빗바람이 더 멀리 뻗는다.
+    for (var j = 0; j < 12; j++) {
+      var a0 = spin * 1.23 + j * .524, d0 = eye * (1.08 + .14 * Math.sin(j * 2.3));
+      var q = cyclonePoint(x,y,d0,a0), q1 = cyclonePoint(x,y,d0,a0 + .22 * rotation);
+      windFiber(ctx, 1, q[0], q[1], eye * .92, eye * .53, Math.atan2(q1[1]-q[1],q1[0]-q[0]), .65);
+    }
+    ctx.lineCap = 'butt';ctx.beginPath();
+    for (var n = 0; n < 70; n++) {
+      var f = (n * .618034 + t * (.56 + n % 7 * .037)) % 1;
+      var a1 = n * 2.39996 + spin * (1.58 - f * .77) + rotation * f * 1.8;
+      var d1 = r * (.23 + 1.03 * f), tail = (.048 + (n % 6) * .021) * (.41 + f * .7);
+      var p = cyclonePoint(x,y,d1,a1), a2 = a1 - rotation * tail;
+      var back = cyclonePoint(x,y,d1 - r * tail * .48,a2);
+      var bend = cyclonePoint(x,y,d1 - r * tail * .16,a1 - rotation * tail * .43);
+      ctx.moveTo(back[0],back[1]);ctx.quadraticCurveTo(bend[0],bend[1],p[0],p[1]);
+    }
+    ctx.lineWidth = Math.max(.9, r * .005);ctx.strokeStyle='rgba(198,225,233,.58)';ctx.stroke();
+  }
+  function funnelPoint(x, y, h, lean, z, angle, time) {
+    var width = h * (.035 + .238 * Math.pow(z, 1.68));
+    var bend = lean * z * z + Math.sin(z * 5 - time * 3) * h * z * .058;
+    return [x + bend + Math.cos(angle) * width, y - h * z + Math.sin(angle) * width * .28];
+  }
+  function drawFunnel(ctx, x, y, r, t, e) {
+    var fx = G.FX.movingDisaster, h = U.clamp(r * 1.48, fx.funnel[0], fx.funnel[1]);
+    var lean = Math.cos(e.wind.heading) * h * .24, spin = t * fx.spin.tornado * (e.lat >= 0 ? -1 : 1);
+    // 부드러운 회오리 기둥 뒤로 지형이 비치고, 가장 밝은 먼지 띠는 앞면을 감으며 올라간다.
+    for (var layer = 0; layer < 18; layer++) {
+      var height = (layer + .25 + .5 * Math.sin(t * 8 + layer * .77)) / 18;
+      height = U.clamp(height, 0, 1);
+      var center = funnelPoint(x,y,h,lean,height,Math.PI*.5,t), top = funnelPoint(x,y,h,lean,height+.035,Math.PI*.5,t);
+      var width0 = h * (.107 + .57 * Math.pow(height, 1.6));
+      var axis = Math.atan2(top[1]-center[1],top[0]-center[0]);
+      var flutter = Math.sin(spin * .65 + layer * .91);
+      windFiber(ctx, height < .36 ? 3 : 2, center[0] + width0 * flutter * .09, center[1], h * .31, width0, axis, .64 + .16 * flutter);
+    }
+    // 어두운 뒷면 위를 더 밝은 앞면이 가로지르게 그려 깔때기의 회전과 깊이를 보여 준다.
+    for (var side = 0; side < 2; side++) for (var arm = 0; arm < 4; arm++) {
+      for (var i = 0; i < 21; i++) {
+        var z = (i + (t * 1.95 + arm * .27) % 1) / 21;
+        var twist = 12.4 + arm * .44, angle = spin + arm * 1.59 + z * twist;
+        if ((Math.sin(angle) > 0 ? 1 : 0) !== side) continue;
+        var p = funnelPoint(x,y,h,lean,z,angle,t), ahead = funnelPoint(x,y,h,lean,z+.022,angle+twist*.022,t);
+        var direction = Math.atan2(ahead[1]-p[1],ahead[0]-p[0]);
+        var edge = Math.sin(Math.PI * z), width = h * (.070 + .071 * z) * (.79 + .21 * Math.sin(i * 2.7 + arm));
+        windFiber(ctx, side ? (z < .46 ? 3 : 4) : 2, p[0], p[1], h * (.075 + .19 * z), width, direction, side ? .42 + .41 * edge : .66);
+      }
+    }
+    ctx.beginPath();
+    for (var n = 0; n < 36; n++) {
+      var f = (n * .618 + t * (.82 + n % 5 * .18)) % 1, a = spin * (.67 - .22 * f) + n * 2.39996;
+      var d = r * (.10 + .61 * f), back = cyclonePoint(x,y,d,a - .27), front = cyclonePoint(x,y,d + r * .055,a);
+      var lift = f * h * .16;
+      ctx.moveTo(back[0],y + (back[1]-y)*.56 - lift);
+      ctx.lineTo(front[0],y + (front[1]-y)*.56 - lift - (n%3+1));
+    }
+    ctx.lineWidth = Math.max(1,h * .011);ctx.strokeStyle='rgba(190,155,109,.64)';ctx.stroke();
+    for (var k = 0; k < 12; k++) {
+      var f0 = (k * .618 + t * .61) % 1, a0 = k * 2.396 + spin * .42;
+      var q0 = cyclonePoint(x,y,r * (.21 + .54 * f0),a0);
+      windFiber(ctx, 3, q0[0], y + (q0[1]-y)*.60, r * (.18 + .29 * f0), r * .105, Math.sin(a0)*.28, .63 * (1-f0));
+    }
+  }
+  function drawMoving(ctx, e, toScreen, zoom, t, ff, used) {
+    if (cfg().on === false) return;
+    var p = toScreen(e.lon, e.lat), r = e.r * zoom, fx = G.FX.movingDisaster;
+    if (p[0] + r < -55 || p[0] - r > 1655 || p[1] + r < -55 || p[1] - r > 1135) return;
+    var x = p[0], y = p[1], w = e.wind, ahead = Math.min(fx.pathDays, w.life - w.age), horizon = windAt(e, ahead);
+    var q = toScreen(horizon[0], horizon[1]);
+    ctx.save();
+    if (!windTextures) windTextures = buildWindTextures();
+    if (e.kind === 'hurricane') drawCyclone(ctx, x, y, r, t, e); else drawFunnel(ctx, x, y, r, t, e);
+    // 고리는 실제 피해 반경, 점선은 지금 방향대로 이동할 때의 중심 경로다.
+    ctx.lineWidth = 2;ctx.strokeStyle = fx.ring;ctx.setLineDash([9,7]);ctx.beginPath();ctx.arc(x, y, r, 0, Math.PI * 2);ctx.stroke();
+    if (Math.hypot(q[0]-x, q[1]-y) > 17 && Math.abs(q[0]-x) < 1300) {
+      ctx.setLineDash([4, 6]);ctx.lineWidth = 2.5;ctx.beginPath();ctx.moveTo(x,y);
+      for (var i = 1; i <= 5; i++) { var m = windAt(e, ahead * i / 5), sp = toScreen(m[0], m[1]);ctx.lineTo(sp[0],sp[1]); }
+      ctx.stroke();ctx.setLineDash([]);
+      var back = windAt(e, ahead * .95), b = toScreen(back[0],back[1]), a = Math.atan2(q[1]-b[1],q[0]-b[0]);
+      ctx.beginPath();ctx.moveTo(q[0],q[1]);ctx.lineTo(q[0]-Math.cos(a-.55)*16,q[1]-Math.sin(a-.55)*16);ctx.lineTo(q[0]-Math.cos(a+.55)*16,q[1]-Math.sin(a+.55)*16);ctx.closePath();ctx.fillStyle=fx.ring;ctx.fill();
+    }
+    ctx.setLineDash([]);ctx.font = '700 15px ' + (ff || 'serif');
+    var label = e.name + ' · ' + U.dirName(w.heading) + '쪽 이동', tw = ctx.measureText(label).width;
+    var head = e.kind === 'tornado' ? U.clamp(r * 1.48, fx.funnel[0], fx.funnel[1]) : r * .73;
+    var ly = labelY(used, x, Math.max(117, y - head - 16), tw + 18);
+    ctx.fillStyle = 'rgba(25,28,35,.84)';ctx.fillRect(x - tw / 2 - 8, ly - 11, tw + 16, 23);
+    ctx.strokeStyle = fx.ring;ctx.lineWidth = 1;ctx.strokeRect(x - tw / 2 - 8, ly - 11, tw + 16, 23);
+    ctx.fillStyle = fx.warning;ctx.textAlign = 'center';ctx.fillText(label, x, ly + 5);
+    ctx.restore();
+  }
   D.drawLand = function (ctx, toScreen, zoom, t, ff) {
     var T = st(); if (!T) return;
     var used = [];
     T.act.forEach(function (e) {
+      if(ground(e.kind)){if(cfg().on!==false&&G.GroundDisasterFx)G.GroundDisasterFx.draw(ctx,e,toScreen,zoom,t,ff);return;}
       if (e.parent || !e.known) return;
+      if (e.wind) { drawMoving(ctx, e, toScreen, zoom, t, ff, used); return; }
       var p = toScreen(e.lon, e.lat), rr = e.r * zoom;
       if (p[0] + rr < -50 || p[0] - rr > 1650 || p[1] + rr < -50 || p[1] - rr > 950) return;
       var col = K(e.kind).color, g = ctx.createRadialGradient(p[0], p[1], rr * 0.1, p[0], p[1], rr);
@@ -409,13 +675,24 @@
       ctx.fillStyle = '#ffd9b0'; ctx.textAlign = 'center'; ctx.fillText(lbl, p[0], ly + 5); ctx.textAlign = 'left';
     });
   };
+  /** 움직이는 회오리는 기함이 가리지 않도록 함대 아래층에 그린다. */
+  D.drawTravelSea = function (ctx, toScreen, zoom, t, ff) {
+    var T = st(); if (!T) return;
+    var used = [];
+    T.act.forEach(function (e) {
+      if(e.wind&&e.known)drawMoving(ctx,e,toScreen,zoom,t,ff,used);
+      else if(ground(e.kind)&&cfg().on!==false&&G.GroundDisasterFx)G.GroundDisasterFx.draw(ctx,e,toScreen,zoom,t,ff);
+    });
+  };
   /** 바다 화면 (sea.js): 알려진 재해 가운데 바다에서 보이는 것 — 해일·화산(바닷가)·해안의 지진·홍수 — 의 움직이는 그림과 이름 */
   D.drawSea = function (ctx, toScreen, zoom, t, ff) {
-    var T = st(); if (!T || !G.DisasterFx || !G.DisasterFx.sprite) return;
+    var T = st(); if (!T) return;
     var byId = {}, used = []; T.act.forEach(function (e) { byId[e.id] = e; });
     T.act.forEach(function (e) {
       var root = e.parent ? byId[e.parent] : e;
       if (!root || !root.known) return;
+      if (e.wind || ground(e.kind)) return;
+      if (!G.DisasterFx || !G.DisasterFx.sprite) return;
       if (e.parent && e.kind !== 'tsunami') return;                 // 딸린 재해는 해일만 바다에 보인다
       var size = U.clamp(e.r * zoom * 0.3, 70, 130), lon = e.lon, lat = e.lat;
       if (e.parent) {                                                // 해일은 지진 자리에서 바다 쪽으로 비켜 그린다
