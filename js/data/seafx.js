@@ -885,7 +885,7 @@
   // 자연재해 그림창 (js/art/disasterfx.js): 크기·위치는 사건 그림과 같게, shake = 지진 때 화면이 흔들리는 초
   G.FX.disaster = { on: true, w: 640, h: 280, bottom: 205, shake: 1.6 };
   G.FX.movingDisaster = { pathDays:1.75, funnel:[70,205], eye:.12, spin:{ tornado:14.2, hurricane:1.68 }, ring:'#ffc386', warning:'#ffe1ae' };
-  G.FX.groundDisaster = { route:'#ffc88b', label:'#ffe3b8', ash:'#55504b', ember:'#ffae53',
+  G.FX.groundDisaster = { route:'#ffc88b', label:'#ffe3b8', ember:'#ffae53',
     sediment:'#699897', wetSand:'#8d8472', waterFoam:'#d7eee8', lava:'#f56a2a', lavaHot:'#ffe59b' };
   // 거리를 걷는 마을 사람 (js/systems/streetfolk.js · 그림 js/art/streetfolk.js): 거리에 나올 때마다 min~max명,
   //   걷는 빠르기 speed(짐승 animalSpeed) px/초, 멈춰 쉬는 시간 idle초, 바닥선 아래 깊이 depth px(멀수록 작게 scale), 말을 걸 때 제독이 서는 거리 talkGap px
