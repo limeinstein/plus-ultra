@@ -533,6 +533,9 @@
   I.heroLook = function (p) {
     if (!p) { var s = G.Game && G.Game.state; p = s && s.player; }
     if (!p) return 'admiral';
+    // 황금의 바다 옛 저장은 귀족 학자로 시작했다. 초상·거리 동작을 검은 외투로 함께 바로잡는다.
+    var state = G.Game && G.Game.state;
+    if (state && p === state.player && state.gold && !(p.generation > 1) && (!p.look || p.look === 'noble_scholar')) return 'blackcoat_captain';
     if (p.look) return p.look;
     // 뒤를 이은 아들(옛 저장): 아버지의 생김새 폴더에서 온 그림이면 그 생김새를 잇는다
     var hk = I.heirKid(p);

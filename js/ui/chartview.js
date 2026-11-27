@@ -143,8 +143,10 @@
       // 도시: 지역별 건축 양식과 규모를 작은 실루엣으로 표시한다.
       var labels = [];
       cityMarks = {};
+      var cityMargin = G.FX.cityModels.chart[3] * cityScale * .6;
       cities().forEach(function (c) {
-        var p = px(c.lon, c.lat, b); if (p[0] < -12 || p[0] > W + 12 || p[1] < -12 || p[1] > H + 12) return;
+        var p = px(c.lon, c.lat, b);
+        if (p[0] < -cityMargin || p[0] > W + cityMargin || p[1] < -cityMargin || p[1] > H + cityMargin) return;
         var f = G.CityInfo.flags(c, ref), visited = s.visited && s.visited[c.id];
         var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { scale: cityScale, visited: visited, auto: f.auto, pending: pendingCityImage });
         cityMarks[c.id] = mark;
@@ -155,7 +157,7 @@
         else if (view.span <= 16 && c.port) labels.push([c, p, r, true]);
       });
       // 이름: 고른 도시·마우스를 올린 도시, 아주 크게 확대했을 때만 항구 이름
-      ctx.font = '600 ' + fs + 'px ' + font; ctx.textBaseline = 'middle';
+      ctx.font = '700 ' + fs + 'px ' + font; ctx.textBaseline = 'middle';
       var rects = [];
       labels.sort(function (a, b2) { return (a[3] ? 1 : 0) - (b2[3] ? 1 : 0); }).forEach(function (L) {
         var c = L[0], p = L[1], tw = ctx.measureText(c.name).width + 10, x = p[0] + L[2] + 5, y = p[1];
@@ -166,6 +168,7 @@
         ctx.fillStyle = L[3] ? 'rgba(242,231,204,.8)' : 'rgba(30,20,12,.82)'; ctx.fillRect(rc[0], rc[1], rc[2], rc[3]);
         ctx.fillStyle = L[3] ? '#3a2410' : '#f2e7cc'; ctx.fillText(c.name, x + 5, y + 1);
       });
+      ctx.font = '600 ' + fs + 'px ' + font;
       landmarkLabels.forEach(function (L) {
         var d = L[0], p = L[1], tw = ctx.measureText(d.name).width + 10, x = p[0] + L[2] + 5, y = p[1];
         if (x + tw > W) x = p[0] - L[2] - 5 - tw;

@@ -590,12 +590,10 @@
   function cityAt(x, y) {
     var pick = pickCfg().cityPickPx || 30, np = portNear(), best = null, bd = Infinity;
     knownCities().forEach(function (c) {
-      var p = toScreen(c.lon, c.lat), dx = x - p[0], dy = y - p[1], d = dx * dx + dy * dy, hit = d < pick * pick;
       var mark = st.cityMarks && st.cityMarks[c.id], label = mark && mark.label;
-      if (mark && G.CityIcon.hit && G.CityIcon.hit(mark, x, y)) {
-        hit = true;
-        d = Math.min(d, Math.pow(x - mark.anchorX, 2) + Math.pow(y - mark.y, 2));
-      }
+      var p = mark && mark.anchorX != null ? [mark.anchorX, mark.y] : toScreen(c.lon, c.lat);
+      var dx = x - p[0], dy = y - p[1], d = dx * dx + dy * dy, hit = d < pick * pick;
+      if (mark && G.CityIcon.hit && G.CityIcon.hit(mark, x, y)) hit = true;
       if (label && x >= label[0] && x <= label[0] + label[2] && y >= label[1] && y <= label[1] + label[3]) hit = true;
       var met = mark || (G.CityIcon && G.CityIcon.metrics ? G.CityIcon.metrics(c) : null);
       if (!hit && met && !met.boxes) hit = Math.abs(dx) <= met.width / 2 + 4 && dy >= met.top - 6 && dy <= met.base + 4;
@@ -2523,22 +2521,21 @@
       if(layout)G.DiscoveryIcon.draw(ctx,d,layout.x,layout.y,{zoom:st.cam.zoom,layout:layout});
     });
     knownCities().forEach(function (c) {
-      var p = toScreen(c.lon, c.lat);
-      if (p[0] < -130 || p[0] > 1730 || p[1] < -130 || p[1] > 1030) return;
+      var p = toScreen(c.lon, c.lat), pad = G.CityIcon.cullPadding ? G.CityIcon.cullPadding(c, st.cam.zoom) : 130;
+      if (p[0] < -pad || p[0] > 1600 + pad || p[1] < -pad || p[1] > 900 + pad) return;
       var visited = s.visited && s.visited[c.id], fl = G.CityInfo.flags(c, refPort);
       var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { visited: visited, auto: fl.auto, zoom: st.cam.zoom });
       st.cityMarks[c.id] = mark;
-      var right = mark.right == null ? p[0] + mark.radius : mark.right, ay = mark.y == null ? p[1] : mark.y;
-      if (fl.sponsor) { var dx = p[0] + mark.width / 2, dy = p[1] + mark.top, dz = 5; ctx.fillStyle = '#d9b040'; ctx.strokeStyle = '#3a2a10'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(dx, dy - dz); ctx.lineTo(dx + dz, dy); ctx.lineTo(dx, dy + dz); ctx.lineTo(dx - dz, dy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
-      if (fl.contract) { var fx = p[0] - mark.width * 0.18, fy = p[1] + mark.top; ctx.strokeStyle = '#f2e7cc'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 20); ctx.stroke(); ctx.fillStyle = '#c0281e'; ctx.beginPath(); ctx.moveTo(fx, fy - 20); ctx.lineTo(fx - 14, fy - 15.5); ctx.lineTo(fx, fy - 11); ctx.closePath(); ctx.fill(); }
+      var right = mark.right == null ? p[0] + mark.radius : mark.right, ay = mark.y == null ? p[1] : mark.y, ax = mark.anchorX == null ? p[0] : mark.anchorX;
+      if (fl.sponsor) { var dx = ax + mark.width / 2, dy = p[1] + mark.top, dz = 5; ctx.fillStyle = '#d9b040'; ctx.strokeStyle = '#3a2a10'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(dx, dy - dz); ctx.lineTo(dx + dz, dy); ctx.lineTo(dx, dy + dz); ctx.lineTo(dx - dz, dy); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      if (fl.contract) { var fx = ax - mark.width * 0.18, fy = p[1] + mark.top; ctx.strokeStyle = '#f2e7cc'; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 20); ctx.stroke(); ctx.fillStyle = '#c0281e'; ctx.beginPath(); ctx.moveTo(fx, fy - 20); ctx.lineTo(fx - 14, fy - 15.5); ctx.lineTo(fx, fy - 11); ctx.closePath(); ctx.fill(); }
       // 이름은 가고 있는 곳과 곁의 항구만 (나머지는 마우스를 올리면)
       if ((st.target && st.target.city === c) || c === nearPort) {
-        ctx.font = (c.size >= 3 ? '700 17px ' : '600 15px ') + fontFam();
+        ctx.font = '700 17px ' + fontFam();
         var tw = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width);
         var lx = right + 4, ly = ay - 11;
         mark.label = [lx, ly, tw + 10, 21];
-        ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(lx, ly, tw + 10, 21);
-        ctx.fillStyle = '#f2e7cc'; ctx.fillText(c.name, lx + 5, ly + 16);
+        G.CityIcon.nameplate(ctx,c.name,mark.label);
       }
     });
   }

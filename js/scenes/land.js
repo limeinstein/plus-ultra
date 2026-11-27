@@ -325,13 +325,11 @@
   function cityAt(x, y) {
     var best = null, bd = Infinity;
     knownInland().forEach(function (c) {
-      var p = toScreen(c.lon, c.lat), d = Math.pow(p[0] - x, 2) + Math.pow(p[1] - y, 2);
       var mark = st.cityMarks && st.cityMarks[c.id], label = mark && mark.label;
+      var p = mark && mark.anchorX != null ? [mark.anchorX, mark.y] : toScreen(c.lon, c.lat);
+      var d = Math.pow(p[0] - x, 2) + Math.pow(p[1] - y, 2);
       var hit = d <= Math.pow(mark && mark.boxes ? 24 : Math.max(24, G.CityIcon.metrics(c, 1.15).radius + 5), 2);
-      if (G.CityIcon.hit && G.CityIcon.hit(mark, x, y)) {
-        hit = true;
-        d = Math.min(d, Math.pow(x - mark.anchorX, 2) + Math.pow(y - mark.y, 2));
-      }
+      if (G.CityIcon.hit && G.CityIcon.hit(mark, x, y)) hit = true;
       if (label && x >= label[0] && x <= label[0]+label[2] && y >= label[1] && y <= label[1]+label[3]) hit = true;
       if (hit && d < bd) { bd = d; best = c; }
     });
@@ -1262,14 +1260,15 @@
     if (G.CityIcon.beginModels) G.CityIcon.beginModels();
     st.cityMarks = {};
     knownInland().forEach(function (c) {
-      var p = toScreen(c.lon, c.lat); if (p[0] < -130 || p[0] > 1730 || p[1] < -130 || p[1] > 1030) return;
+      var p = toScreen(c.lon, c.lat), pad = G.CityIcon.cullPadding ? G.CityIcon.cullPadding(c, st.cam.zoom) : 130;
+      if (p[0] < -pad || p[0] > 1600 + pad || p[1] < -pad || p[1] > 900 + pad) return;
       var mark = G.CityIcon.draw(ctx, c, p[0], p[1], { zoom: st.cam.zoom, scale: 1.15, visited: s.visited && s.visited[c.id] });
-      ctx.font = '700 16px ' + ff;
+      ctx.font = '700 17px ' + ff;
       var tw = labelW[c.id] || (labelW[c.id] = ctx.measureText(c.name).width);
       var lx = (mark.right == null ? p[0] + mark.radius : mark.right) + 4, ly = (mark.y == null ? p[1] : mark.y) - 11;
       mark.label = [lx,ly,tw+10,21];
       st.cityMarks[c.id] = mark;
-      ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect(lx,ly,tw+10,21); ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name,lx+5,ly+16);
+      G.CityIcon.nameplate(ctx,c.name,mark.label);
     });
     // contract zone
     var ct = s.contract && G.DISC[s.contract.disc];
@@ -1326,8 +1325,8 @@
     knownInland().forEach(function (c) {
       var mark = st.cityMarks[c.id], label = mark && mark.label;
       if (!label || Math.abs(label[0] - pp[0]) > 160 || Math.abs(label[1] - pp[1]) > 90) return;
-      ctx.font = '700 16px ' + ff; ctx.fillStyle = 'rgba(20,14,8,.62)'; ctx.fillRect.apply(ctx,label);
-      ctx.fillStyle = '#f2e7cc'; ctx.textAlign = 'left'; ctx.fillText(c.name,label[0]+5,label[1]+16);
+      ctx.font = '700 17px ' + ff;
+      G.CityIcon.nameplate(ctx,c.name,label);
     });
     // status
     if ((st.f = (st.f || 0) + 1) % 8 === 0 && el.status) {

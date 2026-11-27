@@ -8,15 +8,26 @@
     162:['phrasisanphet'],193:['kinkakuji'],200:['templomayor']};
   var HERO={notredame:'paris',colosseum:'rome',hagiasophia:'istanbul',whitetower:'london',giralda:'seville'};
   var COURT={fr_king:'louvre',ot_sultan:'topkapi',ru_prince:'kremlin',cn_emperor:'forbidden'};
+  var FALLBACK={landmark:'library',gate:'trade',lairwatch:'trade',lairhq:'trade',govhall:'palace'};
   // 대청·가게의 발치, 화면 안의 비중. y가 작은 건물부터 그려 겹친 지붕을 정리한다.
-  var SLOTS={landmark:[-.095,-.145,.54],palace:[.23,-.079,.41],manor:[.22,-.068,.32],
+  var SLOTS=Object.assign({landmark:[-.095,-.145,.54],palace:[.23,-.079,.41],manor:[.22,-.068,.32],
     home:[-.15,.045,.195],library:[.322,.06,.23],trade:[-.355,.04,.25],
-    market:[-.02,.10,.205],tavern:[-.235,.20,.19],inn:[.161,.227,.177],gate:[0,0,.31]};
+    market:[-.02,.10,.205],tavern:[-.235,.20,.19],inn:[.161,.227,.177],gate:[0,0,.31]},fx().settlementSlots);
   var modelMemo=new WeakMap(), shoreMemo=new WeakMap(), discoverySource, discoveryCount=-1, discoveries={};
-  var offsets=[], budget=0, until=0;
+  var offsets=[], budget=0, until=0, principalCache=new Map();
   function fx(){return G.FX.cityModels;}
   function state(){return G.Game&&G.Game.state;}
   function size(c){return Math.max(1,Math.min(3,c.size||1));}
+  // 정착지 성장의 지도 외관은 기존 진행 상태에서 판정한다.
+  function mapSize(c,s,colony){
+    if(c.lair){
+      var lair=s&&s.lair;
+      if(lair&&lair.held&&lair.held[c.lair]!=null)return 3;
+      return lair&&lair.beat&&lair.beat[c.lair]>0?2:1;
+    }
+    if(colony)return colony.stage>=4?3:colony.stage>=3?2:1;
+    return size(c);
+  }
   function dateNow(){var s=state();return s&&s.date||{y:1480,m:1};}
   function clamp(x,a,b){return Math.min(b,Math.max(a,x));}
   function asset(key,opts){
@@ -27,6 +38,10 @@
   function atlas(group,name){
     var r=D.sheets[group]&&D.sheets[group][name];
     return r?{key:'map-cities/'+group,r:r}:null;
+  }
+  function settlementArt(id){
+    var r=id&&G.CITY_PROPS&&G.CITY_PROPS[id];
+    return r?{key:'map-settlements/'+id,r:r}:null;
   }
   function photo(id){
     var p=D.photos[id];
@@ -98,9 +113,12 @@
   }
   CI.plan=function(c,date){
     date=date||dateNow();
-    var s=state(), seat=s&&s.player&&(G.R.seat?G.R.seat():s.player.home), n=size(c);
+    var s=state(), seat=s&&s.player&&(G.R.seat?G.R.seat():s.player.home);
     var contract=s&&s.contract&&s.contract.sponsor, col=c.colony!=null&&G.Colony&&G.Colony.of(c);
-    var key=[date.y,date.m,seat,contract,n,c.flags,c.port,col&&col.stage,(G.SPONSORS||[]).length].join(':');
+    var n=mapSize(c,s,col);
+    var prop=c.lair?'skull-cave':c.colony!=null?'supply-wagon':null;
+    var lair=c.lair&&G.Lair&&G.Lair.of(c), hideBuildings=!!(lair&&lair.mapHideBuildings);
+    var key=[date.y,date.m,seat,contract,n,c.flags,c.port,col&&col.stage,prop,hideBuildings,(G.SPONSORS||[]).length].join(':');
     var memo=modelMemo.get(c);
     if(memo&&memo.key===key&&memo.state===s)return memo;
     var culture=CI.culture(c);
@@ -109,7 +127,7 @@
     var d=c.outpost?null:landmark(c,date,royal);
     var parts=[];
     function add(role,art,id){
-      if(!art)return;
+      if(!art||hideBuildings)return;
       var slot=SLOTS[role];
       parts.push({role:role,id:id||role,art:art,x:slot[0],y:slot[1],w:slot[2]});
     }
@@ -118,6 +136,12 @@
     var court=n===3&&(sp&&sp.bld==='palace'||!sp&&f.palace&&c.flags&&c.flags.indexOf('P')>=0);
     if(court)add('palace',royal?direct(royal):atlas(culture,'palace'),royal||sp&&sp.id);
     else if(sp)add('manor',atlas(culture,'manor'),sp.id);
+    // 두 번째 두목의 수비대가 남아 있는 소굴은 깃발과 돌 망루로 표시한다.
+    var watch=c.lair&&n===2&&settlementArt('pirate-watch');
+    if(watch)add('lairwatch',watch);
+    if(c.lair&&n===3)add('lairhq',settlementArt('pirate-hq'));
+    if(f.govhall)add('govhall',settlementArt('governors-hall'));
+    if(f.inspector)add('inspector',atlas(culture,'manor'));
     if(seat===c.id&&!c.outpost)add('home',atlas(culture,'home'));
     if(n>=2&&f.market)add('market',atlas(culture,'market'));
     if(n>=2&&f.trade)add('trade',atlas(culture,'trade'));
@@ -125,36 +149,88 @@
     if(f.tavern)add('tavern',atlas(culture,'tavern'));
     if(f.inn)add('inn',atlas(culture,'inn'));
     if(!parts.length&&f.gate&&c.outpost) add('gate',atlas('heritage','gate'));
-    if(!d&&parts.length){
-      var roles=['palace','manor','trade','tavern','inn','home'];
-      var main=roles.map(function(role){return parts.find(function(p){return p.role===role;});}).find(Boolean);
-      if(main){main.x=-.067;main.y=-.12;main.w=n===3?.58:n===2?.47:.55;}
-    }else if(n<3&&d){
-      parts[0].w=n===1?.63:.55;
+    var main=parts[0];
+    if(!d&&parts.length&&!watch){
+      var roles=['lairhq','govhall','palace','inspector','manor','trade','tavern','inn','home'];
+      main=roles.map(function(role){return parts.find(function(p){return p.role===role;});}).find(Boolean)||main;
+      if(main&&main.role!=='gate'){main.x=-.067;main.y=-.12;main.w=fx().principal[n];}
+    }else if(d&&main){
+      main.w=fx().landmark[n];
     }
     parts.sort(function(a,b){return a.y-b.y;});
     var access=!!c.port&&!!f.harbor;
-    var layout=parts.map(function(part){return part.role+':'+part.id+':'+part.art.key;}).join('|')+'@'+n+'@'+access;
-    memo={key:key,layout:layout,state:s,culture:culture,n:n,parts:parts,harbor:access,
-      landmark:d?d.id:royal||null,sponsor:sp&&sp.id,palace:!!court,seat:seat===c.id};
+    var layout=parts.map(function(part){return part.role+':'+part.id+':'+part.art.key;}).join('|')+'@'+n+'@'+access+'@'+prop+'@'+hideBuildings;
+    memo={key:key,layout:layout,state:s,culture:culture,n:n,parts:parts,main:main,harbor:access,
+      landmark:d?d.id:royal||null,sponsor:sp&&sp.id,palace:!!court,seat:seat===c.id,prop:prop,hideBuildings:hideBuildings};
     modelMemo.set(c,memo);
     return memo;
   };
 
   function geometry(model,width){
     return model.parts.map(function(p){
-      var r=p.art.r, rise=r[5], cap=p.role==='landmark'?width*.66:width*.52;
+      var rise=p.art.r[5], cap=width*(p.role==='lairwatch'?fx().watchRise:p===model.main?fx().principalRise:.52);
       var w=Math.min(p.w*width,cap/Math.max(.17,rise));
       return {p:p,x:p.x*width,y:p.y*width,w:w};
     });
+  }
+  function propGeometry(model,width,chart){
+    var id=model.prop, art=settlementArt(id);
+    if(!art)return null;
+    var cfg=fx().props, style=cfg[id];
+    var w=chart?clamp(width*cfg.chartWidth,cfg.chartMin,cfg.chartMax):clamp(width*style.width,style.min,style.max);
+    return {id:id,art:art,x:model.hideBuildings?0:width*cfg.x,y:model.hideBuildings?0:width*cfg.y,w:w};
+  }
+  function* findProp(prop,center,buildings,quay,dry,solid,connected){
+    if(!prop)return null;
+    var cfg=fx().props, tx=center.x+prop.x,ty=center.y+prop.y;
+    function place(x,y,w){
+      var a=w*cfg.foot[0],b=w*cfg.foot[1];
+      if(!solid(x,y))return null;
+      for(var k=0;k<12;k++){
+        var angle=k*Math.PI/6;
+        if(!solid(x+Math.cos(angle)*a,y+Math.sin(angle)*b))return null;
+      }
+      return {id:prop.id,art:prop.art,x:x,y:y,w:w,foot:[a,b]};
+    }
+    for(var i=0;i<cfg.scale.length;i++){
+      var w=prop.w*cfg.scale[i], a=w*cfg.foot[0], b=w*cfg.foot[1];
+      for(var j=0;j<offsets.length;j++){
+        var o=offsets[j];
+        if(o[2]>cfg.search)break;
+        if(j&&j%16===0)yield;
+        var x=tx+o[0],y=ty+o[1];
+        if(!dry(x,y)||!connected(x,y))continue;
+        if(quay&&Math.hypot(x-quay.land[0],y-quay.land[1])<a+quay.w*.16)continue;
+        if(buildings.some(function(item){
+          return Math.abs(x-item.x)<a+item.w*.31&&Math.abs(y-item.y)<b+item.w*.23;
+        }))continue;
+        var spot=place(x,y,w);
+        if(spot)return spot;
+      }
+    }
+    // 아주 작은 섬에서는 기존 도시 발치부터 더 촘촘히 살피며 모형을 줄인다.
+    for(var i=0;i<cfg.compact.length;i++){
+      var w=prop.w*cfg.compact[i];
+      for(var j=0;j<cfg.compactRings.length;j++){
+        if(j)yield;
+        var radius=cfg.compactRings[j];
+        for(var k=0;k<(radius?12:1);k++){
+          var angle=k*Math.PI/6;
+          var x=center.x+Math.cos(angle)*radius,y=center.y+Math.sin(angle)*radius;
+          var spot=place(x,y,w);
+          if(spot&&(radius<=2||connected(x,y)))return spot;
+        }
+      }
+    }
+    return null;
   }
   function dockPoint(i,x,y,r){
     // 부두 원본의 땅 쪽 입구와 배의 발치를 지도 카메라에 사영한다.
     var rad=i*Math.PI/4, a=Math.cos(rad), b=Math.sin(rad), u=a*x-b*y, v=b*x+a*y;
     return [(.83205*u+.55470*v)*r,(.39253*u-.58880*v)*r];
   }
-  function* findQuay(dry,wet,sign,sail,connected,home,direction,width,limit,shore){
-    var best=null, scale=clamp(width*.20,13,27);
+  function* findQuay(dry,wet,sign,sail,connected,home,direction,width,limit,unit,shore,cave){
+    var best=null, scale=clamp(width*.20,13,27)*unit;
     var origin=[home.x,home.y], cx=shore?shore[0]:0, cy=shore?shore[1]:0;
     for(var i=0;i<8;i++){
       var art=atlas('quays',String(i)), r=scale*256*1.75/(5.4*art.r[2]);
@@ -164,11 +240,12 @@
       if(align<-.3)continue;
       for(var j=0;j<offsets.length;j++){
         if(j&&j%24===0)yield;
-        var o=offsets[j],x=cx+o[0],y=cy+o[1],d=o[2];
+        var o=offsets[j],x=cx+o[0]*unit,y=cy+o[1]*unit,d=o[2];
         if(d>limit)break;
-        var score=d+Math.max(0,Math.hypot(x-origin[0],y-origin[1])-width)*.44+(1-align)*9;
+        var score=d+Math.max(0,Math.hypot(x-origin[0],y-origin[1])/unit-width)*.44+(1-align)*9;
         if(best&&score>=best.score)continue;
         var a=[x+bank[0],y+bank[1]], p=[x+tip[0],y+tip[1]];
+        if(cave&&Math.hypot(a[0]-cave.x,a[1]-cave.y)<cave.foot[0]+scale*.16)continue;
         if(!dry(a[0],a[1])||!wet(p[0],p[1])||!wet(x+bow[0],y+bow[1])||!wet(x+stern[0],y+stern[1]))continue;
         if((!shore&&!connected(a[0],a[1]))||sign(a[0],a[1])<=0||sign(p[0],p[1])>=0||
             sign(x+bow[0],y+bow[1])>=0||sign(x+stern[0],y+stern[1])>=0||!sail(x+boat[0],y+boat[1]))continue;
@@ -223,13 +300,15 @@
       if(score<best&&dry(o[0],o[1])&&sign(o[0],o[1])>0){best=score;home={x:o[0],y:o[1]};if(!o[2])break;}
     }
     if(!home)return {buildings:[],dock:null,dry:false};
-    function connected(x,y){
-      var d=Math.hypot(x-home.x,y-home.y),n=Math.max(1,Math.ceil(d/4));
-      for(var k=1;k<=n;k++)if(!dry(home.x+(x-home.x)*k/n,home.y+(y-home.y)*k/n))return false;
+    function connected(x,y,check,from){
+      check=check||dry;
+      from=from||home;
+      var dx=x-from.x,dy=y-from.y,n=Math.max(1,Math.ceil(Math.hypot(dx,dy)/4));
+      for(var k=1;k<=n;k++)if(!check(from.x+dx*k/n,from.y+dy*k/n))return false;
       return true;
     }
-    function fits(x,y,w,check){
-      var f=clamp(w*.19,2.2,9);
+    function fits(x,y,w,check,min){
+      var f=clamp(w*.19,min==null?2.2:min,9);
       return check(x,y)&&check(x-f,y)&&check(x+f,y)&&check(x,y-f*.60)&&check(x,y+f*.52);
     }
     function solid(x,y){return sign(x,y)>0;}
@@ -243,8 +322,55 @@
         center={x:x,y:y};break;
       }
     }
-    var buildings=[];
-    parts.forEach(function(a){
+    var propMargin=model.hideBuildings?0:fx().props.margin;
+    function propLand(x,y){
+      var s=sign(x,y);
+      if(s<=0||s<propMargin)return false;
+      var p=world(x,y);
+      return !G.Terrain.isLake(p[0],p[1]);
+    }
+    // 쌍서는 동굴 발치를 먼저 잡아 두고, 부두는 그 자리를 피해 물가에 붙인다.
+    var prop=null, template=propGeometry(model,width,false), buildings=[];
+    if(model.hideBuildings){
+      prop=yield* findProp(template,center,buildings,null,dry,propLand,function(x,y){return connected(x,y,propLand);});
+    }
+    // 부두는 확대해도 같은 지면 폭을 덮어야 입구와 배가 서로 다른 쪽에 놓인다.
+    var harbor=fx().harbor, quay=null;
+    if(model.harbor){
+      var ref=lod(model.n,{zoom:harbor.referenceZoom}), unit=Math.max(1,zoom/ref.zoom);
+      var size=model.hideBuildings?1:model.n, start=harbor.width[size], end=harbor.close[size];
+      var quayWidth=start+(end-start)*zoomProgress(zoom/unit), limit=fx().shoreSearch;
+      quay=yield* findQuay(dry,wet,sign,sail,connected,center,direction,quayWidth,limit,unit,null,prop);
+      if(!quay&&c.dock){
+        var dock=[dx,(originY-c.dock[0]-lift(c.dock[1],c.dock[0]))*zoom];
+        quay=yield* findQuay(dry,wet,sign,sail,connected,center,direction,quayWidth,limit,unit,dock,prop);
+      }
+    }
+    // 해안에 땅이 비좁으면 시설 사이 간격과 크기를 함께 줄여 같은 물가를 바라보게 한다.
+    var bank=quay&&{x:quay.land[0],y:quay.land[1]}, coastal=false;
+    if(bank&&!model.hideBuildings&&(parts.length||model.prop)&&Math.hypot(center.x-bank.x,center.y-bank.y)>width*harbor.landward){
+      var bx=bank.x-quay.water[0],by=bank.y-quay.water[1],bl=Math.hypot(bx,by)||1;
+      var tx=bank.x+bx/bl*width*harbor.landward,ty=bank.y+by/bl*width*harbor.landward;
+      coast:for(var i=0;i<harbor.scales.length;i++){
+        var scale=harbor.scales[i];
+        for(var j=0;j<offsets.length;j++){
+          var o=offsets[j];
+          if(o[2]>harbor.coastSearch)break;
+          if(j&&j%16===0)yield;
+          var x=tx+o[0],y=ty+o[1];
+          if(Math.hypot(x-home.x,y-home.y)>harbor.moveMax*zoom||!dry(x,y))continue;
+          if(!parts.every(function(a){
+            var ax=x+a.x*scale,ay=y+a.y*scale,w=a.w*scale;
+            return Math.hypot(ax-bank.x,ay-bank.y)>w*.28&&fits(ax,ay,w,dry)&&fits(ax,ay,w,solid)&&connected(ax,ay,solid,bank);
+          }))continue;
+          center={x:x,y:y};
+          buildings=parts.map(function(a){return {p:a.p,x:x+a.x*scale,y:y+a.y*scale,w:a.w*scale};});
+          coastal=true;
+          break coast;
+        }
+      }
+    }
+    if(!coastal)parts.forEach(function(a){
       for(var k=0;k<4;k++){
         var factor=1-k*.25, x=center.x+a.x*factor,y=center.y+a.y*factor;
         if(fits(x,y,a.w,dry)&&connected(x,y)&&fits(x,y,a.w,solid)){buildings.push({p:a.p,x:x,y:y,w:a.w});return;}
@@ -254,25 +380,77 @@
         if(fits(center.x,center.y,w,solid)){buildings.push({p:a.p,x:center.x,y:center.y,w:w});return;}
       }
     });
-    // 작은 섬에서는 지붕은 뚜렷하게 두고 발치가 들어갈 수 있는 자리만 조밀하게 붙인다.
-    var quay=model.harbor?yield* findQuay(dry,wet,sign,sail,connected,center,direction,width,fx().shoreSearch):null;
-    if(!quay&&model.harbor&&c.dock){
-      var dock=[dx,(originY-c.dock[0]-lift(c.dock[1],c.dock[0]))*zoom];
-      quay=yield* findQuay(dry,wet,sign,sail,connected,center,direction,width,fx().shoreSearch,dock);
+    // 땅이 좁을 때는 건물별로 겹쳐 놓기보다 시가지 전체를 줄여 다시 맞춘다.
+    var cfg=fx().settlementCompact, scales=fx().compactBlocks;
+    if(buildings.length<parts.length){
+      block:for(var i=0;i<scales.length;i++){
+        var scale=scales[i];
+        for(var j=0;j<offsets.length;j++){
+          var o=offsets[j];
+          if(o[2]>width*cfg.search)break;
+          if(j&&j%16===0)yield;
+          var x=center.x+o[0],y=center.y+o[1];
+          if(!solid(x,y)||!parts.every(function(a){
+            var ax=x+a.x*scale,ay=y+a.y*scale,w=a.w*scale;
+            return fits(ax,ay,w,solid,0)&&connected(ax,ay,solid);
+          }))continue;
+          center={x:x,y:y};
+          buildings=parts.map(function(a){return {p:a.p,x:x+a.x*scale,y:y+a.y*scale,w:a.w*scale};});
+          break block;
+        }
+      }
     }
-    return {buildings:buildings,dock:quay,dry:true,center:center};
+    // 아주 작은 섬에서는 같은 육지에 대표 건물부터 놓는다.
+    var main=parts.find(function(a){return a.p===model.main;});
+    if(main&&!buildings.some(function(a){return a.p===main.p;})){
+      compact:for(var i=0;i<cfg.scales.length;i++){
+        var w=main.w*cfg.scales[i];
+        for(var j=0;j<offsets.length;j++){
+          var o=offsets[j];
+          if(o[2]>width*cfg.search)break;
+          if(j&&j%16===0)yield;
+          var x=home.x+o[0],y=home.y+o[1];
+          if(!fits(x,y,w,solid,0)||!connected(x,y,solid))continue;
+          buildings=buildings.filter(function(a){
+            return Math.abs(a.x-x)>(a.w+w)*cfg.spacing[0]||Math.abs(a.y-y)>(a.w+w)*cfg.spacing[1];
+          });
+          buildings.push({p:main.p,x:x,y:y,w:w});
+          buildings.sort(function(a,b){return a.y-b.y;});
+          break compact;
+        }
+      }
+    }
+    if(!model.hideBuildings){
+      prop=yield* findProp(template,center,buildings,quay,dry,propLand,function(x,y){
+        return coastal?connected(x,y,solid,bank):connected(x,y);
+      });
+    }
+    return {buildings:buildings,dock:quay,dry:true,center:center,prop:prop};
   }
-  function lod(c,opts){
-    var n=size(c),t=opts.zoom;
+  CI.cullPadding=function(c,zoom){
+    return 160+(c.port?fx().harbor.moveMax*zoom:0);
+  };
+  function zoomProgress(z){
+    var cfg=fx();
+    return clamp((z-cfg.zoomStart)/(cfg.zoomEnd-cfg.zoomStart),0,1);
+  }
+  function lod(n,opts){
+    var t=opts.zoom;
     if(!t)return {zoom:0,width:fx().chart[n]*(opts.scale||1)};
     var band=Math.round(Math.log2(Math.max(1,t))*fx().zoomBands), z=Math.pow(2,band/fx().zoomBands);
-    var f=clamp((z-fx().zoomStart)/(fx().zoomEnd-fx().zoomStart),0,1);
+    var f=zoomProgress(z);
     return {band:band,zoom:z,width:fx().width[n]+(fx().close[n]-fx().width[n])*f};
   }
   CI.beginModels=function(){budget=fx().plansPerFrame;until=performance.now()+fx().prepareMs;};
   CI.site=function(c,model,view,force){
     if(!view.zoom||!G.Terrain||!G.Terrain.ready){
-      return {buildings:geometry(model,view.width),dock:model.harbor&&!view.zoom?{art:atlas('quays','0'),x:.22*view.width,y:.23*view.width,w:view.width*.26}:null};
+      var prop=!view.zoom?propGeometry(model,view.width,true):null, dock=null;
+      if(model.harbor&&!view.zoom){
+        var small=fx().harbor.smallChart;
+        dock=model.hideBuildings&&prop?{art:atlas('quays','0'),x:small.x*prop.w,y:small.y*prop.w,w:small.width*prop.w}:
+          {art:atlas('quays','0'),x:.22*view.width,y:.23*view.width,w:view.width*.26};
+      }
+      return {buildings:geometry(model,view.width),prop:prop,dock:dock};
     }
     var memo=shoreMemo.get(c);
     var key=view.band+':'+model.layout+':'+c.lon+':'+c.lat;
@@ -293,19 +471,38 @@
     return null;
   };
 
-  function paint(ctx,art,im,x,y,w,bounds,shadow){
+  // 매 장면 다시 보정하지 않고 화면에 들어온 대표 건물의 색과 명암을 한 번만 다듬는다.
+  function principalSprite(art,im){
+    var r=art.r,key=art.key+':'+r[0]+':'+r[1]+':'+r[2]+':'+r[3], saved=principalCache.get(key);
+    if(saved&&saved.source===im)return saved.canvas;
+    if(typeof document==='undefined')return null;
+    var cfg=fx().principalCache, limit=Math.min(1,cfg.side/Math.max(r[2],r[3]));
+    var cv=document.createElement('canvas');
+    cv.width=Math.max(1,Math.round(r[2]*limit));cv.height=Math.max(1,Math.round(r[3]*limit));
+    var cx=cv.getContext('2d');
+    if(cx&&'filter' in cx){
+      cx.filter=fx().principalFilter;cx.imageSmoothingQuality='high';
+      cx.drawImage(im,r[0],r[1],r[2],r[3],0,0,cv.width,cv.height);
+    }else cv=null;
+    principalCache.set(key,{source:im,canvas:cv});
+    if(principalCache.size>cfg.limit)principalCache.delete(principalCache.keys().next().value);
+    return cv;
+  }
+  function paint(ctx,art,im,x,y,w,bounds,shadow,highlight){
     var r=art.r, l=x-r[4]*w, t=y-r[5]*w, h=w*r[3]/r[2];
     if(shadow){
-      ctx.fillStyle='rgba(33,24,17,.22)';ctx.beginPath();
+      ctx.fillStyle=fx().shade;ctx.beginPath();
       ctx.ellipse(x+w*.03,y+w*.032,w*.31,w*.105,-.23,0,Math.PI*2);ctx.fill();
     }
-    ctx.drawImage(im,r[0],r[1],r[2],r[3],l,t,w,h);
+    var sprite=highlight&&principalSprite(art,im);
+    if(sprite)ctx.drawImage(sprite,l,t,w,h);
+    else ctx.drawImage(im,r[0],r[1],r[2],r[3],l,t,w,h);
     bounds.push([l,t,l+w,t+h]);
   }
-  function boundsOf(all,x,y,artX,artY,width){
-    var a={left:x-7,top:-7,right:x+7,bottom:7};
+  function boundsOf(all,y,artX,artY,width){
+    var a={left:artX-7,top:artY-y-7,right:artX+7,bottom:artY-y+7};
     all.forEach(function(r){a.left=Math.min(a.left,r[0]);a.top=Math.min(a.top,r[1]-y);a.right=Math.max(a.right,r[2]);a.bottom=Math.max(a.bottom,r[3]-y);});
-    return {width:width,height:a.bottom-a.top,radius:Math.max(9,a.right-x),
+    return {width:width,height:a.bottom-a.top,radius:Math.max(9,a.right-artX),
       top:a.top,base:a.bottom,left:a.left,right:a.right,y:artY,anchorX:artX,boxes:all};
   }
   CI.hit=function(mark,x,y){
@@ -316,12 +513,13 @@
     ctx.fillStyle='#d9b36f';ctx.strokeStyle='#3e3021';ctx.lineWidth=1.2;
     ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();ctx.stroke();
     ctx.restore();
-    return boundsOf([],x,y,x,y,width);
+    return boundsOf([],y,x,y,width);
   }
   CI.draw=function(ctx,c,x,y,opts){
     opts=opts||{};
-    var model=CI.plan(c), view=lod(c,opts), im=asset('map-cities/'+model.culture,opts);
-    if(!im)return view.zoom?waiting(ctx,x,y,view.width):oldDraw(ctx,c,x,y,opts);
+    var model=CI.plan(c), view=lod(model.n,opts);
+    var im=model.hideBuildings?null:asset('map-cities/'+model.culture,opts);
+    if(!model.hideBuildings&&!im)return view.zoom?waiting(ctx,x,y,view.width):oldDraw(ctx,c,x,y,opts);
     var plan=CI.site(c,model,view,false);
     if(!plan)return waiting(ctx,x,y,view.width);
     var ratio=view.zoom?opts.zoom/view.zoom:1, all=[], center=plan.center||{x:0,y:0};
@@ -331,19 +529,30 @@
     plan.buildings.forEach(function(item){
       var art=item.p.art, pic=asset(art.key,opts);
       // 외관이 읽히기 전에는 같은 역할의 지역 모형을 쓴다.
-      if(!pic){art=atlas(model.culture,item.p.role==='landmark'?'library':item.p.role==='gate'?'trade':item.p.role);pic=im;}
-      if(art)paint(ctx,art,pic,x+item.x*ratio,y+item.y*ratio,item.w,all,true);
+      if(!pic){art=atlas(model.culture,FALLBACK[item.p.role]||item.p.role);pic=im;}
+      if(art)paint(ctx,art,pic,x+item.x*ratio,y+item.y*ratio,item.w,all,true,!!view.zoom&&item.p===model.main);
     });
-    var mark=boundsOf(all,x,y,ax,ay,view.width);
+    var prop=plan.prop, propBox=null;
+    if(prop){
+      var propImage=asset(prop.art.key,opts);
+      if(propImage){
+        paint(ctx,prop.art,propImage,x+prop.x*ratio,y+prop.y*ratio,prop.w,all,!!view.zoom);
+        propBox=all[all.length-1];
+      }
+    }
+    // 쌍서에서는 부두까지 포함해 이름표가 가리지 않도록 한다.
+    var mark=model.hideBuildings?null:boundsOf(all,y,ax,ay,view.width);
     var q=plan.dock;
     if(q&&q.art){var qm=asset(q.art.key,opts);if(qm)paint(ctx,q.art,qm,x+q.x*ratio,y+q.y*ratio,q.w,all,false);}
-    var own=opts.owner!==false&&G.Dominion&&G.R.cityOwner(c), color=own&&G.Dominion.color(own);
+    if(!mark)mark=boundsOf(all,y,ax,ay,view.width);
+    if(propBox)mark.prop={id:prop.id,box:propBox};
+    var own=!model.hideBuildings&&opts.owner!==false&&G.Dominion&&G.R.cityOwner(c), color=own&&G.Dominion.color(own);
     if(color&&all.length){
       var w=clamp(view.width*.23,9,23), base=ay+3;
       ctx.fillStyle='rgba(20,14,8,.68)';ctx.fillRect(ax-w/2-1,base-1,w+2,4);
       ctx.fillStyle=color;ctx.fillRect(ax-w/2,base,w,2);
     }
-    if(opts.auto&&all.length){
+    if(!model.hideBuildings&&opts.auto&&all.length){
       ctx.strokeStyle='#74c6bb';ctx.lineWidth=1.45;ctx.beginPath();
       ctx.ellipse(ax,ay+3,Math.max(6,view.width*.15),3.5,0,0,Math.PI*2);ctx.stroke();
     }
@@ -354,5 +563,5 @@
     ctx.restore();
     return mark;
   };
-  CI.view=lod;
+  CI.view=function(c,opts){return lod(CI.plan(c).n,opts);};
 })(window.G=window.G||{});

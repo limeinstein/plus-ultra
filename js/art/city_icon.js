@@ -5,6 +5,14 @@
   var CI = {};
   G.CityIcon = CI;
 
+  CI.nameplate = function (ctx, name, label) {
+    var x = label[0], y = label[1], w = label[2], h = label[3];
+    var style = G.FX.cityModels.label;
+    ctx.fillStyle = style.paper; ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = style.edge; ctx.fillRect(x, y, 2, h);
+    ctx.fillStyle = style.ink; ctx.textAlign = 'left'; ctx.fillText(name, x + 6, y + 16);
+  };
+
   var PAL = {
     iberia: ['#eadfc9', '#b6532d', '#5b3525'], italy: ['#dfbd83', '#a94f2d', '#5a3423'],
     greek: ['#eee9dc', '#738594', '#554437'], france: ['#ddd2bd', '#9b4d32', '#49372e'],
@@ -32,7 +40,11 @@
   function has(s, words) { s = s || ''; for (var i = 0; i < words.length; i++) if (s.indexOf(words[i]) >= 0) return true; return false; }
   function capital(c) { return !!(c.flags && c.flags.indexOf('P') >= 0); }
   CI.tier = function (c) { return capital(c) ? 4 : Math.max(1, Math.min(3, c.size || 1)); };
-  CI.label = function (c) { return c.flags && c.flags.indexOf('T') >= 0 ? '부족 마을' : ['', '소도시', '중도시', '대도시', '수도'][CI.tier(c)]; };
+  CI.label = function (c) {
+    if (c.flags && c.flags.indexOf('T') >= 0) return '부족 마을';
+    var tier = (c.lair || c.colony != null) && CI.plan ? CI.plan(c).n : CI.tier(c);
+    return ['', '소도시', '중도시', '대도시', '수도'][tier];
+  };
 
   /** 큰 도시 양식 안에서도 나라와 위치를 보아 지도용 문화권을 고른다. iconCulture는 시험·특수 도시용 덮어쓰기다. */
   CI.culture = function (c) {

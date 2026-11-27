@@ -28,6 +28,11 @@
     if (!id) return [];
     if (age == null) age = G.R.age();
     var stage = G.Img.heroAgeStage(p, age);
+    // 아드리안은 젊은·중년·노년 모두 검은 외투의 전용 원화를 쓴다.
+    if (id === 'adrian') {
+      var adrian = 'portraits/story-player/' + (stage === 'young' ? 'adrian' : 'adrian_reference_' + (stage === 'elderly' ? 'elderly' : 'thirties')) + (half ? '_half' : '');
+      return G.Img.has(adrian) ? [adrian] : [];
+    }
     if (stage === 'young') return [];
     var key = 'portraits/story-player/' + id + (stage === 'elderly' ? '_elderly' : '_thirties') + (half ? '_half' : '');
     return G.Img.has(key) ? [key] : [];

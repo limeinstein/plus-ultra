@@ -11,11 +11,18 @@
   'use strict';
   var U = G.U, UI = G.UI;
   var SL = G.StorySelect = {};
+  var starting = null;
   SL.begin = async function (story) {
-    if (!G.Game.renderer) {
-      await G.Loader.during('항해를 준비하는 중…', function () { return G.Game.prepareRenderer(); });
-    }
-    return story.begin();
+    if (starting) return starting;
+    // 선택창이 닫힌 뒤 연대 진행·첫 장면까지 준비한다. 그동안 타이틀을 다시 보이지 않는다.
+    starting = G.Loader.during('이야기를 준비하는 중…', async function () {
+      await G.Loader.frames(2);
+      await G.Game.prepareRenderer();
+      await story.begin();
+      if (G.Game.sceneName !== 'title') await G.Game.sceneShown();
+    });
+    try { return await starting; }
+    finally { starting = null; }
   };
   G.STORY_MODES = [
     { id: 'photo', hero: '마테우스 다 코스타', title: '아버지의 사진', city: 0, page: 'eu', year: '1480년 · 리스본', bg: '#2f6b3a', dx: -171, dy: -196,
@@ -29,7 +36,7 @@
       synopsis: '사략선장 로저 후크가 왕실의 동맹 거래에 버려져 교수대에 오른다. 딸 제시카는 늙은 선원 스미스와 그 아들 윌리엄과 함께 도망쳐 바다로 나간다. 왕을 죽이러 떠난 항해는, 끝내 자신이 지킬 가족과 나라를 만드는 항해가 된다.',
       ok: function () { return !!(G.JHook && G.JHook.begin); }, begin: function () { return G.JHook.begin(true); } },
     { id: 'gold', hero: '아드리안 판데르펠더', title: '황금의 바다', sub: '세계를 잇는 상인', city: 24, page: 'eu', year: '1598년 · 암스테르담', bg: '#8a5a1a', dx: 150, dy: -60,
-      face: 'portraits/player/noble_scholar', half: 'characters/player_half_noble_scholar',
+      face: 'portraits/story-player/adrian', half: 'portraits/story-player/adrian_half',
       party: '엘리너르 더비트 · 마리커 판레이우언 · 브람 판호른 …', tag: '세상의 길을 사러 가는 항해',
       synopsis: '아버지는 해적에게 배를 잃고 빚만 남긴 채 죽었다. 스물두 살 상인에게 남은 것은 작은 배 한 척과 장부 마지막 줄의 한 문장. 밀린 급료를 받으러 온 공증인의 딸, 소문을 파는 소꿉친구, 돈을 빌려준 친구와 함께 — 연합 동인도 회사와 해적섬, 배신과 사랑을 지나 세계에서 가장 부유한 사람이 되는 서른 해.',
       ok: function () { return !!(G.GoldSea && G.GoldSea.begin); }, begin: function () { return G.GoldSea.begin(true); } },

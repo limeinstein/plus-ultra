@@ -147,7 +147,7 @@
     s.contract = null;
     try {
       var A = G.Art;
-      p.portrait = A.withImg(A.portraitSpec({ seed: 'gs_adrian', culture: 'north', g: 'm', age: 'young', cloth: '#1c2a52', beard: 0 }), ['portraits/player/' + D.look]);
+      p.portrait = A.withImg(A.portraitSpec({ seed: 'gs_adrian', culture: 'north', g: 'm', age: 'young', cloth: '#202020', beard: 0 }), ['portraits/story-player/adrian', 'portraits/player/' + D.look]);
       p.look = D.look;
     } catch (e) { console.error(e); }
     s.mates = [];

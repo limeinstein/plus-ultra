@@ -10,7 +10,7 @@
   'use strict';
   var GD = G.GOLD = {
     id: 'gold', title: '황금의 바다 — 세계를 잇는 상인', short: '황금의 바다',
-    name: '아드리안 판데르펠더', given: '아드리안', surname: '판데르펠더', g: 'm', look: 'noble_scholar', nation: 'NL',
+    name: '아드리안 판데르펠더', given: '아드리안', surname: '판데르펠더', g: 'm', look: 'blackcoat_captain', nation: 'NL',
     home: 24, start: { y: 1598, m: 4, d: 12 }, born: { y: 1576, m: 2, d: 20 }, ship: '새벽별', shipType: 'fluyt', gold: 1400, crew: 16,
     mates0: ['gs_eleonore', 'gs_marieke', 'gs_pieter'], roles: { gs_eleonore: 'purser', gs_marieke: 'interp', gs_pieter: 'none' },
     worthGoal: 3000000,   // 「세계에서 가장 부유한 사람」 — 금화·은행·배·주식·창고를 더한 순자산 (닢)
