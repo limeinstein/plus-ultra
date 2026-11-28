@@ -21,10 +21,10 @@ const SHOTS = process.env.SHOT_DIR || '';
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => {
-    if (message.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load resource/.test(message.text())) errors.push(message.text());
+    if (message.type() === 'error') errors.push(message.text());
   });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href);
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href));
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title' && G.Sponsor && !G.Scenes.title.bootPending, null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
       await G.Game.ensureGeo();
@@ -92,7 +92,7 @@ const SHOTS = process.env.SHOT_DIR || '';
       out.az = { contract: s.contract, news: news.filter(t => /계약/.test(t)), gold: s.player.gold - g0 };
       // 뉴암스테르담(1664 뉴욕) — 빌린 배는 제독의 배가 된다
       s.date = { y: 1665, m: 1, d: 1 }; mk('nl_stuyvesant'); const sh = s.fleet.ships[0]; s.contract.loan = sh.uid; s.contract.loanName = sh.name; sh.loan = true;
-      out.ny = { news: G.Succession.year().map(m => m.text).filter(t => /계약/.test(t)), contract: s.contract, loanFlag: !!sh.loan };
+      out.ny = { news: G.Succession.year().map(m => m.text).filter(t => /계약/.test(t)), contract: s.contract, loanFlag: !!sh.loan, city:G.SPONSOR.nl_stuyvesant.city, caretaker:SP.caretaker(G.SPONSOR.nl_stuyvesant) };
       // 도시가 있으면 건드리지 않는다
       s.date = { y: 1484, m: 1, d: 1 }; mk('pt_braganza'); out.keep = !!G.Sponsor.orphanContract() || !s.contract;
       s.contract = null;
@@ -109,7 +109,7 @@ const SHOTS = process.env.SHOT_DIR || '';
     assert(/아라곤 국왕의 시종장/.test(o.ara.steward) && o.ara.open);
     assert.strictEqual(o.az.contract, null, '테노치티틀란이 사라지면 계약은 없던 일'); assert(o.az.news.length === 1 && /테노치티틀란이 사라져/.test(o.az.news[0]), o.az.news.join(' / '));
     assert.strictEqual(o.az.gold, 0, '선금은 돌려주지 않는다');
-    assert.strictEqual(o.ny.contract, null); assert.strictEqual(o.ny.loanFlag, false, '빌린 배는 제독의 배'); assert(/뉴암스테르담이 사라져.*제독의 배다/.test(o.ny.news[0]), o.ny.news.join(' / '));
+    assert.strictEqual(o.ny.city,255,'같은 도시의 뉴욕 후원자 자리로 이어진다');assert.strictEqual(o.ny.contract.sponsor,'nl_stuyvesant','이전한 후원자의 계약 ID 유지');assert.strictEqual(o.ny.loanFlag,true,'계약이 이어지므로 대여선 표식 유지');assert.strictEqual(o.ny.caretaker,true,'공백기에 서기관에게 보고');assert.deepStrictEqual(o.ny.news,[],'도시가 없어졌다는 취소 소식을 만들지 않는다');
     assert.strictEqual(o.keep, false, '도시가 있으면 계약은 그대로');
     assert.deepStrictEqual(r.y1482, { present: true, mansion: 1 });
     assert.strictEqual(r.y1484.present, false, '1483~1497 공작 자리가 비어 있다');

@@ -938,6 +938,11 @@
   /** holder: 1-based index into sp.holders (the person holding the title at that time) */
   K.sponsor = function (sp, holder, pose) {
     var out = [], history = G.CourtHistory;
+    if (sp.governorOffice && typeof holder === 'string' && holder.indexOf('governors/') === 0) {
+      var person = holder.slice('governors/'.length);
+      if (person === 'desk') return K.npc('butler', G.CITY_DATA[sp.city]);
+      out.push(G.GOVERNOR_PORTRAITS[person] || 'portraits/sponsors/' + holder);
+    }
     var eventFace = history && history.eventPortraits && history.eventPortraits[holder];
     if (eventFace) out.push(eventFace);
     else if (pose === 'listen' && typeof holder === 'string' && holder.indexOf('court1580/') === 0) {

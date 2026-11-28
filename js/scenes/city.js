@@ -105,7 +105,7 @@
       // 이름 있는 왕궁은 지금 주인이 있는 곳마다 따로 (한양: 국왕의 경복궁, 세자의 창덕궁)
       var pals = R.namedPalaces(c) ? G.SPONSORS.filter(function (x) { return x.city === c.id && x.bld === 'palace' && G.Sponsor && G.Sponsor.open(x); }) : [];   // open: 자리가 비었어도 계약 중이면 (G.Sponsor.caretaker)
       if (pals.length) pals.forEach(function (x) { out.push({ kind: 'palace', arg: x.id, name: R.palaceName(c, x), icon: 'crown' }); });
-      else out.push({ kind: 'palace', name: R.palaceName(c), icon: 'crown' });
+      else if (!G.Governors || !G.Governors.onlyHistoricalPalace(c)) out.push({ kind: 'palace', name: R.palaceName(c), icon: 'crown' });
     }
     f.mansion.forEach(function (sid) {
       var sp = G.SPONSOR[sid]; if (!G.Sponsor || !G.Sponsor.open(sp)) return;   // 자리가 비었어도 계약 중이면 집사가 맞는다 (2026-10-25)
@@ -350,6 +350,10 @@
     UI.add(ban);
     var items = C.buildings(c).map(function (b) {
       return { label: b.name, icon: b.icon, onClick: function () { C.visit(b.kind, b.arg); } };
+    });
+    if (G.Governors && G.Governors.canFound(c)) items.push({
+      label: c.colony != null ? '총독부 대리 임명' : '총독부 설립', icon:'crown',
+      sub: G.U.num(G.BALANCE.colonySp.officeCost) + '닢', onClick: function () { return G.Governors.permit(c); }
     });
     // 도시 안 건물 발견물: 그 건물을 눌러야 찾는다 (거리의 볼거리를 눌러도 같다)
     if (G.Disc.cityBuildings) G.Disc.cityBuildings(c.id).forEach(function (d) {

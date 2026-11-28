@@ -5,7 +5,7 @@ const path = require('path'), fs = require('fs');
 const { pathToFileURL } = require('url');
 const { chromium } = require('playwright');
 const ROOT = path.resolve(__dirname, '..');
-const PAGE = process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : process.env.PAGE ? (/^http/.test(process.env.PAGE) ? process.env.PAGE : pathToFileURL(path.resolve(process.env.PAGE)).href) : (process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href);
+const PAGE = process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : process.env.PAGE ? (/^http/.test(process.env.PAGE) ? process.env.PAGE : pathToFileURL(path.resolve(process.env.PAGE)).href) : (process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : (process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href));
 const OUT = process.env.OUT || path.join(ROOT, 'tmp', 'colony_shots');
 fs.mkdirSync(OUT, { recursive: true });
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
@@ -14,7 +14,7 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
 (async function () {
   const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
-  if (process.env.FONTS !== 'keep') await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.fulfill({ contentType: 'text/css', body: '' }));
+
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
@@ -25,7 +25,7 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
       await page.waitForTimeout(250);
       if (i === 159) console.log('COLONY_WAIT '+JSON.stringify(await page.evaluate(()=>({busy:G.Scenes.city.isBusy(),uiBusy:G.UI.busy(),scene:G.Game.sceneName,cur:G.Scenes.city.current()?.kind,body:document.body.innerText.slice(-1000)}))));
       if (stopFn && await stopFn()) return;
-      const st = await page.evaluate(() => { const b = [...document.querySelectorAll('.modal-back')].pop(); if (!b) return null; return { ask: !!b.querySelector('.askrow'), win: !!b.querySelector('.win'), site: !!b.querySelector('.cp-item'), text: (b.innerText || '').slice(0, 160), btns: [...b.querySelectorAll('.askrow button')].map(x => x.innerText) }; });
+      const st = await page.evaluate(() => { const b = [...document.querySelectorAll('.modal-back')].pop(); if (!b) return null; return { ask: !!b.querySelector('.askrow'), win: !!b.querySelector('.win'), site: !!b.querySelector('.cp-item'), nameInput: !!b.querySelector('input.nfield[type="text"]'), text: (b.innerText || '').slice(0, 160), btns: [...b.querySelectorAll('.askrow button')].map(x => x.innerText) }; });
       if (!st) { const busy = await page.evaluate(() => G.UI.busy() || (G.Scenes.city.isBusy && G.Scenes.city.isBusy())); if (!busy) return; continue; }
       trace.push(st);
       if (pickFn) { const r = await pickFn(st); if (r === 'handled') continue; }
@@ -100,11 +100,12 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
       G.Game.go('land', { from: 0 });
       // 긴 이동을 생략하고, 개척지 곁까지 걸어온 탐험대로 실제 입장 단추를 누른다.
       Object.assign(G.Game.state.loc, { lon: c.lon, lat: c.lat });
+      G.Scenes.land.refreshBar();
     }, cid);
-    await page.getByRole('button', { name: '도시에 들어간다', exact: true }).click();
+    await page.locator('.land-bar .btn').filter({hasText:'도시 입장'}).click();
     let named = false, bannerShot = false;
     await drain(60, async st => {
-      if (st.win && /이름을 지어/.test(st.text) && !named) {
+      if (st.win && st.nameInput && !named) {
         await shot(page, 'name_prompt');
         await page.evaluate(() => { const i = document.querySelector('.modal-back .win input'); i.value = '노바 리스보아'; [...document.querySelectorAll('.modal-back .foot button')].find(x => /결정/.test(x.innerText)).click(); });
         named = true; return 'handled';
@@ -241,6 +242,6 @@ async function shot(page, name) { shotN++; const f = path.join(OUT, String(shotN
     await page.waitForTimeout(500);
     ok(!errors.length, '콘솔 오류 없음 ' + errors.slice(0, 4).join(' | '));
     console.log('    스크린샷: ' + OUT);
-  } catch (e) { console.error('✗', e.message); console.error(errors.slice(0, 5).join('\n')); process.exitCode = 1; }
+  } catch (e) { console.error('COLONY_TRACE '+JSON.stringify({trace:trace.slice(-12),state:await page.evaluate(()=>({scene:G.Game.sceneName,body:document.body.innerText.slice(-3000),cl:G.Game.state.colony}))}));console.error('✗', e.message); console.error(errors.slice(0, 5).join('\n')); process.exitCode = 1; }
   finally { await browser.close(); }
 })();

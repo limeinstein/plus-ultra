@@ -146,6 +146,7 @@
   }
   /** 새 게임·일지를 열 때 (js/core/state.js · js/scenes/common.js): 이 일지의 식민지 후원자를 넣고, 이미 식민지인 곳에 아직 없으면 조용히 짓는다 */
   CS.apply = function () {
+    if (G.Governors) G.Governors.restore();
     eject();
     var b = st(); if (!b) return;
     b.groups.forEach(inject);
@@ -193,7 +194,7 @@
     return [{ icon: 'mansion', history: true, text: text }];
   };
   /** 이 도시의 식민지 후원자 (지금 자리에 있는) */
-  CS.at = function (cid) { return G.SPONSORS.filter(function (o) { return o.colonial && o.city === cid && G.Sponsor && G.Sponsor.open(o); }); };
+  CS.at = function (cid) { return G.SPONSORS.filter(function (o) { return (o.colonial || o.appointedGovernor) && o.city === cid && G.Sponsor && G.Sponsor.open(o); }); };
 
   // ================================================================ 걸기
   (function hookDaily() {

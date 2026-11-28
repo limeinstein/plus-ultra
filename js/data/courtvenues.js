@@ -70,6 +70,7 @@
       sp = local.find(G.Sponsor.present) || local.find(G.Sponsor.caretaker);
     }
     if (!sp || sp.city !== c.id || sp.bld !== kind) return null;
+    if (sp.governorOffice && G.Governors) return { folder:'governors', profile:G.Governors.profile(sp), role:kind };
     var role = sp.id === 'sm_yongli' && c.id === 158 ? 'mansion' : civicKind[sp.type] || kind;
     return { profile:building(sp, c), role:role };
   };

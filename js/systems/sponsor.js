@@ -20,6 +20,7 @@
   function yearOf(date) { return date.y + ((date.m || 1) - 1) / 12; }
   SP.yearOf = yearOf;
   SP.holder = function (sp, date) {
+    if (sp.governorOffice && G.Governors.displaced(sp, date)) return null;
     var y = yNow(date, sp);
     for (var i = 0; i < sp.holders.length; i++) { var h = sp.holders[i]; if (y >= h[0] && y < h[1]) return h[2]; }
     return null;
@@ -34,7 +35,7 @@
   };
   function yNow(date, sp) {
     date = date || S().date;
-    return (sp.historicalCourt && G.CourtHistory.inPeriod(date)) ? G.CourtHistory.time(date) : yearOf(date);
+    return sp.governorOffice || (sp.historicalCourt && G.CourtHistory.inPeriod(date)) ? G.CourtHistory.time(date) : yearOf(date);
   }
   /** 지금 비어 있는 자리의 앞 사람(마지막으로 자리에 있던 사람)과 다음 사람 — holders 항목 그대로 (없으면 null) */
   SP.lastHolder = function (sp, date) { var y = yNow(date, sp), best = null; sp.holders.forEach(function (h) { if (h[1] <= y && (!best || h[1] > best[1])) best = h; }); return best; };
@@ -72,6 +73,7 @@
   SP.open = function (sp) { return !!sp && (SP.present(sp) || SP.caretaker(sp)); };
   /** 0-based index of the current title holder in sp.holders (-1 when vacant) */
   SP.holderIndex = function (sp, date) {
+    if (sp.governorOffice && G.Governors.displaced(sp, date)) return -1;
     var y = yNow(date, sp);
     for (var i = 0; i < sp.holders.length; i++) { var h = sp.holders[i]; if (y >= h[0] && y < h[1]) return i; }
     return -1;
@@ -79,7 +81,13 @@
   SP.holderName = function (sp) { return SP.holder(sp) || sp.title; };
   SP.rel = function (id) { var s = S(); return s.sponsors[id] || (s.sponsors[id] = { trust: 20, done: 0, fail: 0, anger: 0, met: 0 }); };
   var HONOR = { king: '폐하', pope: '성하', gov: '각하', noble: '각하', priest: '신부님', official: '각하', scholar: '박사님', merchant: '회장님' };
-  SP.honor = function (sp) { if (G.CourtHistory && G.CourtHistory.civilOffice(sp)) return '각하'; if (sp.honor) return sp.honor; if (/왕비|왕대비/.test(SP.holder(sp) || '')) return '전하'; return HONOR[sp.type] || '님'; };   // honor: 조선 국왕 「전하」처럼 자료에서 정한 호칭
+  SP.honor = function (sp) {
+    if (sp.governorOffice && SP.holder(sp) === '총독부 접견 서기관') return '님';
+    if (G.CourtHistory && G.CourtHistory.civilOffice(sp)) return '각하';
+    if (sp.honor) return sp.honor;
+    if (/왕비|왕대비/.test(SP.holder(sp) || '')) return '전하';
+    return HONOR[sp.type] || '님';
+  };
   /** 후원자 얼굴: 흉상(portrait) + 무릎상(half — portraits/sponsors/<그림>_half, 있을 때만) */
   SP.face = function (sp, pose) {
     var who;

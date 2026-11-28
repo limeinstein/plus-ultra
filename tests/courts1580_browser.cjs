@@ -127,7 +127,7 @@ const {chromium} = require('../tools/procedural_art/node_modules/playwright-core
       eq(SP.holder(magistrate),'이수광','관아 후원자');
       return {dates:entries.length,boundaries:numbers.size,capitals:H.capitals.length,min,portraitPairs:imgs.length,officials,royalListeningPoses:alts.length,eventRoles:Object.keys(H.eventPortraits).length,venuePairs:buildings.length};
     });
-    fs.mkdirSync(process.env.OUT,{recursive:true});fs.writeFileSync(path.join(process.env.OUT,'browser-checks.json'),JSON.stringify({...await page.evaluate(()=>({version:G.Scenes.title.version,channel:window.PU_WEB_CHANNEL||'stable'})),report,errors},null,2));
+    const output=process.env.OUT||path.join(__dirname,'../artifacts/courts1580_browser');fs.mkdirSync(output,{recursive:true});fs.writeFileSync(path.join(output,'browser-checks.json'),JSON.stringify({...await page.evaluate(()=>({version:G.Scenes.title.version,channel:window.PU_WEB_CHANNEL||'stable'})),report,errors},null,2));
     assert.deepEqual(errors,[]); console.log(JSON.stringify(report));
   } finally { await browser.close(); }
 })().catch(e=>{console.error(e);process.exitCode=1;});
