@@ -129,6 +129,13 @@ if os.path.isfile(player_age_overrides):
         PREFERRED_FILES.update(json.load(player_age_file))
 
 
+# 컷신 액자 9:4 재작화(2026-11-28). 기존 논리 키와 원본을 보존한다.
+event_frame_overrides = os.path.join(TOOLS, 'event_frame_20261128', 'asset-overrides.json')
+if os.path.isfile(event_frame_overrides):
+    with open(event_frame_overrides, encoding='utf-8') as event_frame_file:
+        PREFERRED_FILES.update(json.load(event_frame_file))
+
+
 def read(rel):
     with open(os.path.join(ROOT, rel), encoding='utf-8') as f:
         return f.read()

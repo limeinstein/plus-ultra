@@ -188,7 +188,7 @@
   /** 제독 만들기에서 고른 나라의 자료(G.NATIONS). 이야기 모드의 주인공(제시카·아드리안·소영)은 그 이야기의 규칙을 따르므로 null —
       궁정의 제 나라 작위·외교·이슬람 항구 출입처럼 나라에 따라 달라지는 새 규칙은 이것으로 가린다 */
   R.myNation = function () {
-    var S = R.S(), p = S && S.player; if (!p || S.jhook || S.gold || S.song) return null;
+    var S = R.S(), p = S && S.player; if (!p || S.jhook || S.gold || S.song || S.arslan) return null;
     return (G.NATIONS && G.NATIONS[p.nation]) || null;
   };
   /** 제독의 믿음: 'C' 그리스도교(기본) · 'I' 이슬람 · 'K' 유교 */

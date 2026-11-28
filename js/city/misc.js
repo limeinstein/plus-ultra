@@ -1059,7 +1059,7 @@
     else if (s.player.wife) await UI.say(U.pick(['어서 와요, 당신! 무사히 돌아와서 다행이에요.', '아, 당신. 오늘은 무엇이 좋겠어요?', '오늘은 당신이 좋아하는 스튜예요.']), G.Family.wifeSpeaker());
     if (story) { try { var intro = await G.Story.motherGreet(c); await G.Story.allowance(c); if (G.Story.grandmaVisit && !(G.Story.heirMode && G.Story.heirMode() && intro === 'intro')) await G.Story.grandmaVisit(c); } catch (e) { console.error(e); } }   // 어머니가 맞고, 빈손이면 비상금, 대를 이은 뒤면 할머니가 가끔 들른다
     else if (!s.player.wife && !(G.Husbands && await G.Husbands.homeGreet())) await UI.say('오랜만의 집이다. 먼지가 조금 쌓여 있다.', {});   // 여성 제독은 남편들과 함께 돌아온다 (js/systems/husbands.js)
-    if (s.player.wife && G.FamEv) { try { await G.FamEv.homeReturn(); } catch (e) { console.error(e); } }   // 오래 떠났다 돌아온 날 (familyevent.js)
+    if ((s.player.wife || (G.Husbands && G.Husbands.count())) && G.FamEv) { try { await G.FamEv.homeReturn(); } catch (e) { console.error(e); } }
     if (s.player.wife && G.Family.homeVisit) await G.Family.homeVisit(false);   // 아기 이름 짓기·임신 소식·아이가 생김
     if (G.Mother) G.Mother.homeVisit();                                           // 여성 제독: 집에 들르면 아이들과 가까워진다 (js/systems/motherhood.js)
     if (G.DiscStories) await G.DiscStories.home(c, false);
@@ -1067,7 +1067,7 @@
     if (G.HeirPlan) { try { await G.HeirPlan.homeEvents(c); } catch (e) { console.error(e); } }
     if (G.Ball) { try { await G.Ball.homeHint(c); } catch (e) { console.error(e); } }
     if (G.KidCrew) { try { await G.KidCrew.homeCheck(c); } catch (e) { console.error(e); } }   // 서른이 넘은 아들은 제 살 길을 찾아 떠난다 (js/systems/kidcrew.js)   // 작위를 받으면 집사가 무도회를, 딸이 열다섯이 되면 아내가 데뷔탕트를 귀띔한다 (js/systems/ball.js)   // 아들의 소꿉친구가 찾아온다 · 후계를 위한 안배를 권한다 (js/systems/heirplan.js)
-    if (s.player.wife && G.FamEv) { try { await G.FamEv.homeDay(); } catch (e) { console.error(e); } }      // 임신 중의 한때 · 가족의 일상 (familyevent.js)
+    if ((s.player.wife || G.R.heroFemale()) && G.FamEv) { try { await G.FamEv.homeDay(); } catch (e) { console.error(e); } }
     if (story) { try { await G.Story.family(c, 'home'); } catch (e) { console.error(e); } }                  // 아내와 어머니 (이야기 모드)
   };
   HM.sub = function (c) { var s = S(), st = G.Story && G.Story.atHome && G.Story.atHome(c); return s.player.wife ? (st ? '어머니와 가족이 기다리는 집' : '가족이 기다리는 집') : st ? '어머니가 계신 집' : G.Siblings && G.Siblings.home().length ? '동생들과 사는 집' : '혼자 사는 집'; };

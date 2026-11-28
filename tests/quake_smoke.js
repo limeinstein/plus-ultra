@@ -23,7 +23,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|Failed to load|net::/.test(m.text() + ' ' + ((m.location() || {}).url || ''))) errors.push('console: ' + m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
   const clear = async () => { for (let i = 0; i < 12 && await page.evaluate(() => G.UI.busy()); i++) { await page.keyboard.press('Escape'); await page.waitForTimeout(250); } };
   // 장면을 rAF마다 기록한다 (효과 시작부터 sec초)
   const record = (sceneExpr, sec) => page.evaluate(([expr, sec]) => new Promise(res => {
@@ -115,7 +115,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     const click = await page.evaluate(() => {
       const st = G.Scenes.land.runtime(), l = G.Game.state.loc, z = st.cam.zoom, qo = st.qo ? st.qo.slice() : [0, 0];
       const lx = l.lon - 0.3, ly = l.lat - 0.05;                                   // 탐험대 옆 땅
-      const sx = 800 + G.Geo.wrapLon(lx - st.cam.lon) * z + qo[0], sy = 450 - (ly - st.cam.lat) * z + qo[1];
+      const screen = G.Scenes.land.toScreen(lx, ly), sx = screen[0], sy = screen[1];
       const cv = G.Game.canvases().overlay.getBoundingClientRect(), cx = cv.left + sx / 1600 * cv.width, cy = cv.top + sy / 900 * cv.height;
       const el = document.elementFromPoint(cx, cy); st.paused = true;
       el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, button: 0, clientX: cx, clientY: cy }));

@@ -2,7 +2,7 @@
 (function (G) {
   'use strict';
   var SB = G.StoryBattle = {};
-  var MODES = { jhook: ['JHOOK', 'jh_'], gold: ['GOLD', 'gs_'], song: ['SONG', 'song_'] };
+  var MODES = { jhook: ['JHOOK', 'jh_'], gold: ['GOLD', 'gs_'], song: ['SONG', 'song_'], arslan: ['ARSLAN', 'ar_'] };
   function state(mode) { var s = G.Game && G.Game.state; return s && s[mode]; }
   function beats(mode) { var d = G[MODES[mode][0]]; return d && d.beats || []; }
   function battleBeat(mode, option) {

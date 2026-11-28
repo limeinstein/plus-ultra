@@ -644,6 +644,7 @@
     //   (base + perMan × 대원 수) × 탈것 보정(먹이·물 덜 드는 짐승은 싸다) × (1 + thirsty × 메마른 땅)
     //   못 내면 피로 +unpaidFatigue, 대원이 desert 확률로 떠난다. 물 긷기(야영)는 water × 하루 쓰는 양 × 땅의 물 많음
     // 항해·육상 탐험의 일일 피로와 규율, 이동 속력에 적용되는 강수 효과.
+    arslan: { fleetNeed:3, fleetMax:10, wedDays:365, redoDays:40 },
     travelWeather: {
       landChance: .8, campShelter: .35, seaHeavyRainDiscipline: .4,
       snow: { polarLatitude:65, winterLatitude:44, coldTemperature:.26, winterTemperature:.52, iceCover:.65,

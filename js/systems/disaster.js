@@ -44,12 +44,19 @@
   D.start = function (def, quiet) {
     var T = st(); if (!T) return null;
     var k = K(def.kind); if (!k) return null;
+    var vent=def.kind==='volcano'&&G.volcanoSite(def.volcanoId,def.lon,def.lat);
+    if(def.kind==='volcano'&&!vent)return null;
+    if(vent&&!def.hist&&T.act.some(function(e){return e.volcanoId===vent.id&&G.GroundDisaster.open(e);}))return null;
     var sev = U.clamp(def.sev || 1, 1, 3), now = today();
     var ev = { id: 'ds' + (++T.seq), hid: def.id || null, kind: def.kind, name: def.name || (def.place ? def.place + ' ' : '') + k.name, place: def.place || '', lon: def.lon, lat: def.lat, sev: sev,
       r: def.r || k.r[sev - 1], start: now, end: now + (def.days || Math.round(k.days * (0.7 + sev * 0.3))), hist: !!def.hist, t: def.t || '', y: S().date.y, m: S().date.m };
+    if(vent){
+      ev.volcanoId=vent.id;ev.lon=vent.lon;ev.lat=vent.lat;
+      if(!def.name)ev.name=vent.name+' 분화';
+    }
     if(ground(ev.kind)){
       var field=G.GroundDisaster.ensure(ev);
-      if(!field&&!ev.hist&&(def.localField||ev.kind==='landslide'||ev.kind==='fire'||ev.kind==='flood')&&G.Hydro&&G.Hydro.ready)return null;
+      if(!field&&!ev.hist&&(def.localField||vent||ev.kind==='landslide'||ev.kind==='fire'||ev.kind==='flood')&&G.Hydro&&G.Hydro.ready)return null;
     }
     T.act.push(ev);
     var windRule = cfg().moving && cfg().moving[ev.kind];
@@ -133,6 +140,9 @@
     return null;
   }
   function sevRoll() { var r = U.rand(); return r < 0.62 ? 1 : r < 0.92 ? 2 : 3; }
+  function startVolcano(vent) {
+    return D.start({ kind:'volcano', volcanoId:vent.id, place:vent.name, sev:sevRoll() });
+  }
   function randomOne(z, kind, at) {
     var p = at || landPoint(z); if (!p) return null;
     var sev = sevRoll(), tsu = false;
@@ -170,7 +180,7 @@
         });
       });
       (G.VOLCANOES || []).forEach(function (v) {
-        if (U.chance((cf.volcanoRate || 0.012) * mult / 365)) { var e = D.start({ kind: 'volcano', name: v[0] + ' 분화', place: v[0], lon: v[1], lat: v[2], sev: sevRoll() }); if (e) out = out.concat(e.out || []); }
+        if (U.chance((cf.volcanoRate || 0.012) * mult / 365)) { var e = startVolcano(v); if (e) out = out.concat(e.out || []); }
       });
       // 탐험대 둘레: 그 땅을 걷는 동안은 더 잦게 맞닥뜨린다
       if (s.loc.mode === 'land') {
@@ -189,9 +199,9 @@
         if(G.GroundDisaster)G.GroundDisaster.spawnLand(T,l,mult);
         // 화산 곁을 지나면: 땅이 울리고, 드물게 터진다
         (G.VOLCANOES || []).forEach(function (v) {
-          var dv = dist(l.lon, l.lat, v[1], v[2]); if (dv > 1.2) return;
-          if (!T.rumble || T.rumble[v[0]] !== s.date.y) { T.rumble = T.rumble || {}; T.rumble[v[0]] = s.date.y; out.push({ icon: 'skull', text: v[0] + ' 가까이에 왔다. 땅이 웅웅 울리고, 산꼭대기에서 흰 김이 오른다.' }); }
-          if (U.chance((cf.volcanoNear || 0.5) * mult / 365)) { var e = D.start({ kind: 'volcano', name: v[0] + ' 분화', place: v[0], lon: v[1], lat: v[2], sev: sevRoll() }); if (e) out = out.concat(e.out || []); }
+          var dv = dist(l.lon, l.lat, v.lon, v.lat); if (dv > 1.2) return;
+          if (!T.rumble || T.rumble[v.name] !== s.date.y) { T.rumble = T.rumble || {}; T.rumble[v.name] = s.date.y; out.push({ icon: 'skull', text: v.name + ' 가까이에 왔다. 산기슭이 낮게 울린다.' }); }
+          if (U.chance((cf.volcanoNear || 0.5) * mult / 365)) { var e = startVolcano(v); if (e) out = out.concat(e.out || []); }
         });
       }
     }
@@ -683,6 +693,18 @@
       if(e.wind&&e.known)drawMoving(ctx,e,toScreen,zoom,t,ff,used);
       else if(ground(e.kind)&&cfg().on!==false&&G.GroundDisasterFx)G.GroundDisasterFx.draw(ctx,e,toScreen,zoom,t,ff);
     });
+  };
+  D.drawVolcanicAsh = function (ctx, toScreen, wind) {
+    var T=st(), fx=G.GroundDisasterFx;
+    if(!T||!fx||cfg().on===false)return;
+    var best, strength=0, location, proximity, pad=G.FX.groundDisaster.volcano.front.edge;
+    T.act.forEach(function(e){
+      if(e.kind!=='volcano'||!G.GroundDisaster.open(e))return;
+      var p=toScreen(e.lon,e.lat), outside=Math.max(-p[0],p[0]-1600,-p[1],p[1]-900,0);
+      var near=1-U.smooth(0,pad,outside), density=fx.ashDensity(e)*near;
+      if(density>strength){best=e;strength=density;location=p;proximity=near;}
+    });
+    if(best)fx.drawAshFront(ctx,best,location,proximity,wind);
   };
   /** 바다 화면 (sea.js): 알려진 재해 가운데 바다에서 보이는 것 — 해일·화산(바닷가)·해안의 지진·홍수 — 의 움직이는 그림과 이름 */
   D.drawSea = function (ctx, toScreen, zoom, t, ff) {

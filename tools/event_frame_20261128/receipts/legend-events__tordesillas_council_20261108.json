@@ -1,0 +1,18 @@
+{
+  "id": "legend-events__tordesillas_council_20261108",
+  "key": "legend-events/tordesillas_council_20261108",
+  "aliases": [
+    "legend-events/tordesillas_council_20261108"
+  ],
+  "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\tordesillas_council_20261108.webp",
+  "originalFile": "legend-events/tordesillas_council_20261108.webp",
+  "originalSize": [
+    1672,
+    941
+  ],
+  "sourceSha256": "ab4abf010dc4c5ec564e70257e05ec26ca5fe158bf35204403672078104453e0",
+  "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape.",
+  "mode": "built-in image_gen edit",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-5b5665cf-0094-40e1-b4e5-398184927b8b.png",
+  "output_hint": "Generated images are saved to C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5 as C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-5b5665cf-0094-40e1-b4e5-398184927b8b.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+}

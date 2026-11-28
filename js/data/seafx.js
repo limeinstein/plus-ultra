@@ -886,6 +886,12 @@
   G.FX.disaster = { on: true, w: 640, h: 280, bottom: 205, shake: 1.6 };
   G.FX.movingDisaster = { pathDays:1.75, funnel:[70,205], eye:.12, spin:{ tornado:14.2, hurricane:1.68 }, ring:'#ffc386', warning:'#ffe1ae' };
   G.FX.groundDisaster = { route:'#ffc88b', label:'#ffe3b8', ember:'#ffae53',
+    quake:{ lift:1.38, sink:.22, slip:.68, opening:.31, shoulder:2.15, maxWidth:48, samples:48, grains:94,
+      dust:{ spacing:36, limit:10, rise:.47, drift:.87, opacity:.70,
+        soil:[154,123,90], sand:[189,151,103], stone:[148,136,118], frost:[190,187,175] } },
+    volcano:{ minZoom:68, fullZoom:132, scale:.144, maxRadius:70, terrainCache:36, ventHeight:3.75,
+      projectiles:74, ash:[18,18,21], ashLayers:15, bursts:[0,.62,1.52],
+      front:{ start:.78, full:4.2, clear:7.4, opacity:.84, edge:390 } },
     sediment:'#699897', wetSand:'#8d8472', waterFoam:'#d7eee8', lava:'#f56a2a', lavaHot:'#ffe59b' };
   // 거리를 걷는 마을 사람 (js/systems/streetfolk.js · 그림 js/art/streetfolk.js): 거리에 나올 때마다 min~max명,
   //   걷는 빠르기 speed(짐승 animalSpeed) px/초, 멈춰 쉬는 시간 idle초, 바닥선 아래 깊이 depth px(멀수록 작게 scale), 말을 걸 때 제독이 서는 거리 talkGap px

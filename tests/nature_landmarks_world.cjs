@@ -19,7 +19,7 @@ fs.mkdirSync(out,{recursive:true});
     page.on('pageerror',error=>errors.push(error.message));
     page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
     await page.addInitScript(()=>requestAnimationFrame=()=>0);
-    await page.goto(pathToFileURL(path.join(root,'index.html')).href,{waitUntil:'domcontentloaded'});
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(root,'index.html')).href),{waitUntil:'domcontentloaded'});
     await page.evaluate(()=>document.fonts.ready);
     const report=await page.evaluate(async()=>{
       await G.Game.ensureGeo();
@@ -36,6 +36,16 @@ fs.mkdirSync(out,{recursive:true});
       const byAsset=new Set(Object.values(marks).map(r=>r[0]));
       await Promise.all([...byAsset].map(key=>G.Img.load(key)));
       const problems=[],checks=[],moves=[],times=[];
+      const volcanoChecks=[];
+      function volcanic(d,view,zoom){
+        const ids={fuji:283030,vesuvius:211020,hawaii:332010,krakatau:262000},site=G.volcanoSite(ids[d.id]);
+        const m=view.metrics, max=G.FX.groundDisaster.volcano.maxRadius;
+        const at=(lon,lat)=>[800+G.Geo.wrapLon(lon-view.point[0])*zoom,450-(lat-view.point[1])*zoom];
+        const selected=icon.at([d],at,800+(m.left+m.right)/2,450+(m.top+m.base)/2,1.15,zoom)===d;
+        const ok=!!site&&view.point[0]===site.lon&&view.point[1]===site.lat&&G.Geo.isLand(...view.point)&&
+          Number.isFinite(m.radius)&&m.radius>0&&m.radius<=max&&m.width<=max*2.5&&m.left<0&&m.right>0&&m.base>m.top&&selected;
+        volcanoChecks.push({id:d.id,site:site&&site.id,zoom,point:view.point,radius:m.radius,selected,ok});return ok;
+      }
       let sea=0,land=0,markers=0;
       for(const d of rows){
         const r=marks[d.id];
@@ -45,7 +55,8 @@ fs.mkdirSync(out,{recursive:true});
         const original=[d.lon,d.lat];
         if(d.how==='sea'||d.how==='special'){
           const view=icon.layout(d,1,110);
-          if(view.point.join()!==original.join()||view.marker||view.hidden)problems.push([d.id,'수상 위치']);
+          if(view.volcano?!volcanic(d,view,110):(view.point.join()!==original.join()||view.marker||view.hidden))problems.push([d.id,'수상 위치']);
+          if(d.lon!==original[0]||d.lat!==original[1])problems.push([d.id,'발견 좌표 변경']);
           sea++;
           continue;
         }
@@ -59,7 +70,7 @@ fs.mkdirSync(out,{recursive:true});
         for(const [zoom,chart] of [[80,0],[110,0],[290,0],[560,0],[0,100],[0,4]]){
           const view=icon.layout(d,1.15,zoom,chart);
           if(view.marker)markers++;
-          const ok=!view.hidden&&G.NatureLandmark.verify(view.point,r,view.marker?0:view.metrics.width,zoom||chart);
+          const ok=view.volcano?volcanic(d,view,zoom):!view.hidden&&G.NatureLandmark.verify(view.point,r,view.marker?0:view.metrics.width,zoom||chart);
           if(!ok)problems.push([d.id,zoom||chart,view.point,view.metrics.width,G.Geo.sdf(view.point[0],view.point[1])]);
           checks.push(ok);
         }
@@ -72,7 +83,7 @@ fs.mkdirSync(out,{recursive:true});
       times.sort((a,b)=>a-b);
       return {count:rows.length,blender:Object.values(marks).filter(r=>r[8]==='blender').length,atlases:byAsset.size,
         baked:Object.keys(G.NATURE_FOOTINGS||{}).length,
-        land,sea,checks:checks.length,markers,initiallyHidden,selectable,problems,
+        land,sea,checks:checks.length,markers,initiallyHidden,selectable,problems,volcanoChecks,
         coldMs:{median:times[Math.floor(times.length/2)],max:times[times.length-1]},
         moves:moves.sort((a,b)=>b.move-a.move).slice(0,20)};
     });

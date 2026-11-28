@@ -6,7 +6,7 @@
    · 모양: 이어지는 노이즈(fBm, 좌우가 주, 상하는 절반 남짓) + 짧은 충격(감쇠 진동, 좌우로 치우침).
      같은 폭의 사인파나 장면마다 새로 뽑는 난수(순간이동)는 쓰지 않는다.
    · 끝나면 어긋남은 정확히 0으로 돌아간다(끝 0.4초에 걸쳐 줄이고, 끝난 효과는 지운다). 값을 어디에도 누적하지 않는다.
-   · 지진(땅): 전조 1초(아주 약한 떨림 · 먼지 · 잔돌 · 나무 윗부분과 풀의 떨림) → 본진 3.5초 → 잦아듦 1.2초
+   · 지진(땅): 전조 1초(아주 약한 떨림 · 흙먼지) → 본진 3.5초 → 잦아듦 1.2초
    · 해일(바다): 전조 1초(물이 떨림) → 큰 물결이 화면을 가로지르며 배를 들어 올렸다 내리고 민다(그림만) → 잦아듦
    조정값: G.FX.quake (없으면 아래 기본값) */
 (function (G) {
@@ -76,9 +76,9 @@
     quake: { pre: 1.0, main: 3.6, tail: 1.2, preAmp: 1.1, amp: 9, yk: 0.55, freq: 8.5, kickRate: 5.5, kickMin: 0.35, kickMax: 1.0, bigKicks: 2 },
     tsunami: { pre: 1.0, main: 3.9, tail: 1.4, preAmp: 0.45, amp: 4.5, yk: 0.6, freq: 1.7, lift: 34, liftScale: 0.2, push: 30, width: 190, pitch: 0.16, roll: 0.12 },
     staggerK: 0.35,          // 탐험대가 땅보다 늦게 따라가는 비율 (그림만)
-    dust: 1, trees: 1, pebbles: 1
+    dust: 1
   };
-  function CF() { var f = (G.FX && G.FX.quake) || {}; return { quake: Object.assign({}, DEF.quake, f.quake || {}), tsunami: Object.assign({}, DEF.tsunami, f.tsunami || {}), staggerK: f.staggerK != null ? f.staggerK : DEF.staggerK, dust: f.dust != null ? f.dust : 1, trees: f.trees != null ? f.trees : 1, pebbles: f.pebbles != null ? f.pebbles : 1 }; }
+  function CF() { var f = (G.FX && G.FX.quake) || {}; return { quake: Object.assign({}, DEF.quake, f.quake || {}), tsunami: Object.assign({}, DEF.tsunami, f.tsunami || {}), staggerK: f.staggerK != null ? f.staggerK : DEF.staggerK, dust: f.dust != null ? f.dust : 1 }; }
   /** 설정 「화면 흔들림·번쩍임」을 끄면(또는 움직임 줄이기) 카메라는 흔들지 않는다 — 먼지·물결 같은 그림은 그대로 */
   function motionOn() {
     var s = G.Game && G.Game.state, v = s && s.settings ? s.settings.shake : undefined;
@@ -98,7 +98,7 @@
     var seed = o.seed != null ? o.seed : (Math.random() * 1e9) | 0;
     var e = { id: seq++, kind: kind, t0: now(), C: C, power: power, sev: sev, seed: seed, rng: rngOf(seed + 99),
       sh: G.Shake.make(seed, { freq: C.freq, yk: C.yk }), nextKick: 0, big: 0, dir: o.dir == null ? Math.random() * TAU : o.dir,
-      end: C.pre + C.main + C.tail, parts: [], anchors: null, lastT: 0 };
+      end: C.pre + C.main + C.tail, groundField: !!o.groundField, dustAnchors: null };
     act.push(e);
     return e;
   };
@@ -133,7 +133,6 @@
       if (big) e.big++;
       var px = C.amp * e.power * (big ? 1.35 : C.kickMin + e.rng() * (C.kickMax - C.kickMin));
       e.sh.kick(px, { t0: e.nextKick, f: big ? 5 + e.rng() * 3 : undefined, tau: big ? 0.22 : undefined });
-      e.kickLog = (e.kickLog || 0) + 1; e.lastKick = { t: e.nextKick, big: big };
       var gap = -Math.log(1 - e.rng() * 0.95) / C.kickRate;
       e.nextKick += clamp(gap, 0.07, 0.55);
     }
@@ -162,108 +161,32 @@
   /** 탐험대가 흔들리는 땅을 늦게 따라가 휘청이는 느낌 (그림만 — 실제 자리는 그대로) */
   Q.stagger = function (qo) { if (!qo) return [0, 0]; var k = CF().staggerK; return [-qo[0] * k, -qo[1] * k]; };
 
-  // ---------------------------------------------------------------- 땅: 먼지 · 잔돌 · 나무 윗부분 · 풀
-  var DUSTC = { desert: [222, 196, 148], steppe: [206, 188, 142], grass: [196, 180, 140], forest: [168, 152, 118], jungle: [150, 140, 110], mountain: [150, 144, 134], snow: [246, 250, 252], tundra: [220, 226, 222], ice: [236, 244, 250] };
-  var TREE = { forest: ['#2f4a24', '#3f5f2c', '#587a3a'], jungle: ['#22401e', '#2f5a26', '#477a34'] };
-  var GRASS = { grass: '#6f8a3c', steppe: '#9a9a52', tundra: '#7f8c62', forest: '#4f6f2e', jungle: '#3f6a2a' };
-  /** 탐험대 둘레(화면 안)의 땅에 나무·풀·잔돌 자리를 한 번 정해 둔다 (세상 좌표 — 카메라가 움직여도 땅에 붙어 있다) */
-  function anchorsFor(e, toWorld, zoom) {
-    if (e.anchors) return e.anchors;
-    var r = rngOf(e.seed + 7), out = { trees: [], grass: [], pebbles: [] }, CF0 = CF();
-    var geo = G.Geo;
-    for (var i = 0; i < 420; i++) {
-      var sx = 40 + r() * 1520, sy = 60 + r() * 780, w = toWorld(sx, sy);
-      var terr = geo && geo.terrain ? geo.terrain(w[0], w[1]) : 'grass';
-      if (terr === 'sea') continue;
-      if (TREE[terr] && out.trees.length < 110 * CF0.trees) out.trees.push({ lon: w[0], lat: w[1], terr: terr, s: 0.7 + r() * 0.6, ph: r() * 100 });
-      else if (GRASS[terr] && out.grass.length < 110 * CF0.trees && r() < 0.8) out.grass.push({ lon: w[0], lat: w[1], terr: terr, s: 0.7 + r() * 0.6, ph: r() * 100, n: 3 + Math.floor(r() * 3) });
-      if (out.pebbles.length < 80 * CF0.pebbles && r() < 0.35) out.pebbles.push({ lon: w[0], lat: w[1], terr: terr, r: 1 + r() * 1.8, ph: r() * 100, hop: 0, hv: 0, ox: 0 });
-    }
-    e.anchors = out; e.zoom0 = zoom;
-    return out;
-  }
-  function puff(e, lon, lat, terr, big) {
-    var r = e.rng, c = DUSTC[terr] || DUSTC.grass;
-    var zk = e.zk || 1;   // 확대에 맞춰 먼지 크기도 (멀리 볼 때 너무 작지 않게)
-    e.parts.push({ lon: lon, lat: lat, ox: (r() - 0.5) * 14 * zk, oy: (r() - 0.5) * 6 * zk, age: 0, life: (big ? 1.5 : 1.0) + r() * 0.7, r0: (big ? 5 : 3) * zk, r1: ((big ? 20 : 10) + r() * 12) * zk, c: c, rise: (6 + r() * 12) * zk, vx: (r() - 0.5) * 18 * zk });
-    if (e.parts.length > 320) e.parts.shift();
-  }
-  /** 이번 장면에 그려진 땅 그림을 2D 판에 한 번 옮겨 둔다 (WebGL 캔버스에서 조각마다 읽지 않게) */
-  var snap = null, snapCtx = null;
-  function snapshot(wc) {
-    var w = wc.width, h = wc.height;
-    if (!snap) { snap = document.createElement('canvas'); snapCtx = snap.getContext('2d'); }
-    if (snap.width !== w || snap.height !== h) { snap.width = w; snap.height = h; }
-    try { snapCtx.drawImage(wc, 0, 0, w, h); } catch (e) { return null; }
-    return snap;
-  }
-  /** 탐험 지도 위에 땅의 떨림을 그린다 (탐험대 그림 전에). toScreen·toWorld는 장면의 것(흔들림 포함) */
+  // 지도에 균열이 있는 지진은 균열 자체에서 먼지를 낸다. 나머지는 탐험대 근처 지면에서 솟는다.
   Q.drawLand = function (ctx, toScreen, toWorld, zoom) {
+    var fx = G.GroundDisasterFx, t = now(), density = CF().dust;
+    if (!fx || density <= 0) return;
     prune();
-    var t = now(), C0 = CF();
     act.forEach(function (e) {
-      if (e.kind !== 'quake') return;
-      var dt = Math.min(0.1, Math.max(0, t - (e.lastT || t))); e.lastT = t;
-      var p = phaseOf(e, t), A = anchorsFor(e, toWorld, zoom), env = envelope(e, t), fade = endFade(e, t), r = e.rng;
-      e.zk = clamp(zoom / 200, 0.9, 1.8);
-      var tremble = (p.ph === 'pre' ? 0.35 + 0.25 * p.k : p.ph === 'main' ? 1 : 1 - smooth(p.k)) * fade;
-      // 먼지: 전조에는 띄엄띄엄 작게, 본진에는 많이, 큰 충격마다 한꺼번에
-      var rate = (p.ph === 'pre' ? 7 : p.ph === 'main' ? 46 * e.power : 10 * (1 - p.k)) * C0.dust;
-      e.dacc = (e.dacc || 0) + rate * dt;
-      var pool = A.pebbles.length ? A.pebbles : A.grass;
-      while (e.dacc >= 1 && pool.length) { e.dacc -= 1; var a = pool[Math.floor(r() * pool.length)]; puff(e, a.lon + (r() - 0.5) * 18 / zoom, a.lat + (r() - 0.5) * 10 / zoom, a.terr, false); }
-      if (e.lastKick && e.lastKick.t !== e.seenKick) { e.seenKick = e.lastKick.t; for (var b = 0; b < (e.lastKick.big ? 14 : 5) * C0.dust && pool.length; b++) { var a2 = pool[Math.floor(r() * pool.length)]; puff(e, a2.lon, a2.lat, a2.terr, e.lastKick.big); } }
-      // 나무 윗부분·풀: 이미 그려진 땅 그림(세상 캔버스)에서 우듬지·풀숲 조각을 떠서 조금씩 흔들어 다시 얹는다.
-      // 새 나무를 그려 넣지 않으므로 지진 때 나무가 갑자기 생겨 보이지 않는다. 조각의 아래(줄기·뿌리)는 덜, 위는 더 흔들린다
-      var wc0 = G.Game && G.Game.canvases ? G.Game.canvases().world : null, wc = wc0 ? snapshot(wc0) : null, ks = wc ? wc.width / 1600 : 1;
-      if (wc && tremble > 0.01) {
-        ctx.save();
-        [A.trees, A.grass].forEach(function (list, gi) {
-          var R0 = (gi ? 7 : 11) * e.zk, amp = (gi ? 1.6 : 2.6) * e.zk;
-          list.forEach(function (tr) {
-            var q = toScreen(tr.lon, tr.lat); if (q[0] < R0 || q[0] > 1600 - R0 || q[1] < R0 + 56 || q[1] > 900 - R0) return;
-            var sw = (noise1(t * (gi ? 13 : 7.5) + tr.ph, 41) * 0.75 + noise1(t * 21 + tr.ph, 43) * 0.35) * amp * tremble * tr.s;
-            var sv = noise1(t * 9 + tr.ph, 47) * 0.35 * amp * tremble;
-            if (Math.abs(sw) + Math.abs(sv) < 0.15) return;
-            ctx.save(); ctx.beginPath(); ctx.ellipse(q[0] + sw * 0.5, q[1] - R0 * 0.25, R0, R0 * 0.8, 0, 0, TAU); ctx.clip();
-            // 위쪽 절반은 sw만큼, 아래쪽은 절반만 (위가 더 흔들린다)
-            var sx0 = (q[0] - R0) * ks, sy0 = (q[1] - R0 * 1.1) * ks, sw0 = R0 * 2 * ks, sh0 = R0 * 1.1 * ks;
-            ctx.globalAlpha = 0.92;
-            try {
-              ctx.drawImage(wc, sx0, sy0, sw0, sh0, q[0] - R0 + sw, q[1] - R0 * 1.1 + sv, R0 * 2, R0 * 1.1);
-              ctx.drawImage(wc, sx0, sy0 + sh0, sw0, R0 * 0.8 * ks, q[0] - R0 + sw * 0.45, q[1], R0 * 2, R0 * 0.8);
-            } catch (er) { /* 캔버스를 읽을 수 없으면 건너뛴다 */ }
-            ctx.restore();
-          });
-        });
-        ctx.restore();
-        // 본진: 숲에서 잎이 떨어진다
-        if (p.ph === 'main') A.trees.forEach(function (tr) { if (r() < 0.015 * e.power) e.parts.push({ lon: tr.lon, lat: tr.lat, leaf: 1, ox: 0, oy: -8 * e.zk, age: 0, life: 1.2 + r() * 0.8, c: [92, 120, 52], vx: (r() - 0.5) * 30, rise: -18 - r() * 10 }); });
+      if (e.kind !== 'quake' || e.groundField) return;
+      if (!e.dustAnchors) {
+        var rng = rngOf(e.seed + 7);
+        e.dustAnchors = [];
+        for (var i = 0; i < 9; i++) {
+          var spot = toWorld(800 + (rng() - .5) * 470, 460 + (rng() - .5) * 325);
+          var terrain = G.Geo.terrain(spot[0], spot[1]);
+          if (terrain !== 'sea') e.dustAnchors.push({ spot: spot, start: e.C.pre * (.68 + rng() * .75),
+            angle: rng() * TAU, size: 27 + rng() * 38, tone: fx.dustTone(terrain) });
+        }
       }
-      ctx.save();
-      // 잔돌: 전조에는 제자리에서 달달 떨고, 충격이 오면 튀어 오르며 미끄러진다
-      A.pebbles.forEach(function (pb) {
-        var q = toScreen(pb.lon, pb.lat); if (q[0] < -10 || q[0] > 1610 || q[1] < -10 || q[1] > 910) return;
-        if (e.lastKick && pb.kick !== e.lastKick.t && r() < (e.lastKick.big ? 0.8 : 0.35)) { pb.kick = e.lastKick.t; pb.hv = 30 + r() * 60 * e.power; pb.vx = (r() - 0.5) * 50; }
-        pb.hv -= 380 * dt; pb.hop = Math.max(0, pb.hop + pb.hv * dt); if (pb.hop === 0) pb.hv = 0;
-        pb.ox = clamp((pb.ox || 0) + (pb.vx || 0) * dt * (pb.hop > 0 ? 1 : 0.15), -24, 24); pb.vx = (pb.vx || 0) * Math.exp(-dt * 3);
-        var jx = noise1(t * 19 + pb.ph, 53) * 0.9 * tremble, c = pb.terr === 'snow' || pb.terr === 'ice' ? [170, 176, 182] : [104, 96, 86];
-        ctx.fillStyle = 'rgba(0,0,0,' + (0.18 * fade).toFixed(3) + ')'; var pr = pb.r * e.zk; ctx.beginPath(); ctx.ellipse(q[0] + pb.ox + jx, q[1] + 1, pr * 1.2, pr * 0.5, 0, 0, TAU); ctx.fill();
-        ctx.fillStyle = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; ctx.globalAlpha = fade;
-        ctx.beginPath(); ctx.ellipse(q[0] + pb.ox + jx, q[1] - pb.hop, pr, pr * 0.8, 0, 0, TAU); ctx.fill(); ctx.globalAlpha = 1;
+      var fade = endFade(e, t), scale = clamp(zoom / 260, .64, 1.55);
+      e.dustAnchors.forEach(function (a, i) {
+        var elapsed = t - e.t0 - a.start, gap = 1.65 + .14 * (i % 5);
+        if (elapsed < 0) return;
+        var burst = Math.floor(elapsed / gap), age = (elapsed - burst * gap) / (gap * .88);
+        var opacity = density * fade * e.power * (burst === 0 ? .92 : .58);
+        fx.drawDust(ctx, toScreen(a.spot[0], a.spot[1]), a.size * scale, age,
+          a.angle + burst * .34, e.seed + i * 71 + burst, a.tone, opacity);
       });
-      // 먼지·잎
-      var j = 0;
-      for (var i = 0; i < e.parts.length; i++) {
-        var d = e.parts[i]; d.age += dt; if (d.age >= d.life) continue; e.parts[j++] = d;
-        var u = d.age / d.life, sp = toScreen(d.lon, d.lat), x = sp[0] + d.ox + d.vx * u, y = sp[1] + d.oy;
-        if (d.leaf) { ctx.fillStyle = 'rgba(' + d.c.join(',') + ',' + (0.85 * (1 - u)).toFixed(3) + ')'; ctx.fillRect(x + Math.sin(u * 9 + i) * 4, y - d.rise * u, 2.2, 1.4); continue; }
-        var rr = d.r0 + (d.r1 - d.r0) * Math.sqrt(u), al = 0.46 * (1 - u) * Math.min(1, u * 5 + 0.2);
-        ctx.fillStyle = 'rgba(' + d.c[0] + ',' + d.c[1] + ',' + d.c[2] + ',' + al.toFixed(3) + ')';
-        ctx.beginPath(); ctx.ellipse(x, y - d.rise * u, rr, rr * 0.6, 0, 0, TAU); ctx.fill();
-      }
-      e.parts.length = j;
-      ctx.restore();
     });
   };
 

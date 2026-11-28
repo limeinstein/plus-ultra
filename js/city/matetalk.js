@@ -139,6 +139,7 @@
       // 이벤트로 얻은 부하는 저만의 옛이야기를 하나씩 들려준다 (js/systems/voice.js · js/data/voices_a·b·c.js)
       if (VO() && VO().hasStories(d)) opts.push({ label: '옛이야기를 청한다', value: 'tale' });
       opts.push({ label: '한잔 산다', value: 'drink' });
+      if (G.FamEv && G.FamEv.canMateDate(d)) opts.push({ label: wedH ? '둘이서 시간을 보낸다' : '데이트를 청한다', value: 'familyDate' });
       if (d.witch) opts.push({ label: '점괘를 본다', value: 'fortune' });
       var w2 = G.Wives && G.Wives.of(d.id);     // 둘째 부인으로 함께 다니는 사람 (js/systems/wives.js)
       opts.push({ label: '선물한다', value: 'gift' });   // 수첩의 물건 전달과 같은 창
@@ -148,6 +149,7 @@
       opts.push({ label: '그만둔다', value: null });
       var v = await ask(turn++ ? ((VO() && VO().again(d)) || U.pick(f ? ['또 무슨 이야기를 할까요?', '더 하실 말씀 있으세요?', '다른 건요, 제독?'] : ['또 무슨 이야기를 할까?', '더 할 말이 있소?', '다른 용건은 없소, 제독?'])) : ((VO() && VO().greet(d, m)) || greet(d, m, f)), opts);
       if (!v) return;
+      if (v === 'familyDate') { await G.FamEv.mateDate(c, d); continue; }
       if (v === 'chat') {
         var hl = !f && love && G.Husbands && G.R.heroFemale() ? G.Husbands.chatLine(d, m) : null;   // 여성 제독에게 마음이 있는 남성 부하·남편의 말
         await say(hl || (VO() && VO().chat(d, m)) || U.pick(lines(d, m)), love && (m.aff || 0) >= 50 ? 'happy' : 'warm');

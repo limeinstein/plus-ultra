@@ -123,6 +123,10 @@
       s.player.jailed = (s.player.jailed || 0) + 1;
       var lost = Math.round(s.player.fame * 0.1); if (G.Fame) lost = -G.Fame.add(null, -lost); else s.player.fame -= lost;
       await UI.fade(function () { G.Game.passDays(days); });
+      if (G.Life && G.R.age() >= G.Life.maxAge() && !(G.EraEnd && G.EraEnd.over(s))) {
+        await UI.say('돌벽 안에서 긴 세월을 보낸 제독은 끝내 아침의 빛을 보지 못했다.', {});
+        return G.Family.retire(true, 'prison');
+      }
       G.State.log('모조품이 들통나 ' + days + '일 동안 옥살이를 했다. (명성 −' + lost + ')');
       await UI.alert('모조품이 들통나 붙잡혔다.<br>' + days + '일 동안 옥에 갇혀 있다가 풀려났다. 명성 −' + lost + '<br><span class="muted">' + G.Sponsor.holderName(sp) + U.jx(G.Sponsor.holderName(sp), '은/는') + ' 한 해 동안 만나 주지 않는다.</span>');
     } else {

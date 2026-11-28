@@ -10,13 +10,13 @@ const OUT = process.env.OUT || path.join(require('os').tmpdir(), 'family_shots')
 function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg); }
 (async function () {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ executablePath: process.env.BROWSER_EXE || undefined, args: ['--no-sandbox', '--allow-file-access-from-files', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts\.(googleapis|gstatic)|ERR_TUNNEL|ERR_FILE_NOT_FOUND|Failed to load|net::/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href);
+    await page.goto(pathToFileURL(path.join(ROOT, process.env.PAGE || 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 90000 });
     await page.evaluate(() => G.Game.ensureGeo());
     await page.waitForFunction(() => G.Game.geoReady, null, { timeout: 120000, polling: 200 });
@@ -52,7 +52,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return { n: E.length, imgs: new Set(E.map(e => e.img)).size, missing: E.filter(e => !G.Img.file(e.img)).map(e => e.id), ats };
     });
     console.log(JSON.stringify(data));
-    ok(data.n === 35 && data.imgs === 30 && !data.missing.length, '가족 사건 35가지(같이 돌아온 집 3가지 포함), 그림 30장 모두 쓰고 모두 등록됨 — ' + JSON.stringify(data.ats));
+    ok(data.n === 38 && data.imgs === 32 && !data.missing.length, '가족 사건 38가지(교육·병간호·가족여행 포함), 그림 32장 모두 등록됨 — ' + JSON.stringify(data.ats));
 
     // ② 등장인물에 따라 대화가 늘고 준다 — 같은 귀환 장면, 아이 없음 / 어린 아이 둘 / 큰 아이·갓난아기
     const casts = await page.evaluate(() => {
@@ -173,7 +173,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       window.__said = []; await G.FamEv.homeReturn(); const c = window.__said.length;
       return { a, b, c };
     });
-    ok(port.a === 'fam_laundry' && port.b === 'dock_embrace' && port.c === 0, '항구: 견습 아이와 「정박한 배의 빨래」 · 200일 만의 고향 부두 마중 (그날 집에서는 귀환 장면을 되풀이하지 않음)');
+    ok(['fam_laundry', 'fam_holiday'].includes(port.a) && port.b === 'dock_embrace' && port.c === 0, '항구: 견습 아이와 빨래·가족여행 · 200일 만의 고향 부두 마중 (그날 집에서는 귀환 장면을 되풀이하지 않음)');
 
     // ⑦-2 아내와 함께 항해하고 돌아온 집 (2026-10-21): 기다린 사람의 마중·「야위었어요」가 아니라 같이 돌아온 부부의 장면
     const tg = await page.evaluate(async () => {

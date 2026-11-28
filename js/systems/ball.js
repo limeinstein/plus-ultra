@@ -416,6 +416,7 @@
     var dowry = k.dowry[l.rank] || 0;
     if (l.g === 'm') {   // 여성 제독: 귀공자는 남편이 되어 부하로 배에 오른다 (js/systems/husbands.js H.wedGuest)
       var hno = G.Husbands.wedGuest(l.id), hord = G.Husbands.count() > 1 ? G.Husbands.ordinal(hno) : '남편';
+      if (hno && G.FamEv) await G.FamEv.wedding({ id: l.id, city: s.loc.city });
       r.wed = 'p';
       G.State.log(fill(GL().wedLog, { name: l.name, ord: hord }));
       ctx.out.push(fill(GL().wedOut, { name: l.name }));

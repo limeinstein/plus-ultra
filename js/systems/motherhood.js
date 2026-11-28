@@ -81,6 +81,7 @@
     }
     if (!pr.told && s.day - pr.since >= (k.tellDays || 40)) {
       pr.told = true;
+      (s.motherTodo || (s.motherTodo = {})).news = 1;
       var o = { dad: nm(pr.dad), m: Math.max(1, Math.round((pr.due - s.day) / 30)) };
       out.push({ icon: 'heart', text: fill(L.told, o) });
       G.State.log(fill(L.toldLog, o));
@@ -167,6 +168,7 @@
     await UI.alert(t, L.lieTitle);
     if (lie.deputy) await UI.say(U.pick(L.deputySay), speaker(lie.deputy, 'warm'));
     if (lie.nurse) await UI.say(U.pick(G.MATE[lie.nurse].g === 'f' ? L.nurseSayF : L.nurseSayM), speaker(lie.nurse, 'warm'));
+    if (G.FamEv) await G.FamEv.play('preg_cradle', G.FamEv.cast({ love: G.FamEv.husband(pr.dad), kids: [], babies: [] }));
     G.State.log(fill(L.lieLog, o));
   };
   /** 지금 산실에 들어 있나 (수첩·다른 사건이 본다) */
@@ -189,6 +191,8 @@
   M.birth = async function (todo) {
     var s = S(), p = P(), k = K(), L = D(), lie = todo.lie || { kind: 'captain' }, dad = todo.dad;
     var kids = p.kids.filter(function (x) { return todo.birth.indexOf(kidKey(x)) >= 0; }); if (!kids.length) return;
+    var pic = G.FamEv ? G.FamEv.showPic({ img: 'family-events/19_birth_newborn_hands', title: '어머니의 품에 안긴 첫 항해', noStand: true }) : null;
+    try {
     var twins = kids.length > 1, what = twins ? '쌍둥이가' : kids[0].sex === 'f' ? '딸이' : '아들이', word = twins ? '쌍둥이' : kids[0].sex === 'f' ? '따님' : '아드님';
     // 제독의 몸
     var hk = k.hp || {}, med = lie.nurse && row(lie.nurse) && R.mateSkill ? R.mateSkill(row(lie.nurse), 'med') : 0;
@@ -208,6 +212,7 @@
     var atSea = G.SeaNest && G.SeaNest.afterBirth ? await G.SeaNest.afterBirth(kids) : false;   // 내 배에서 직접 키운다 · 고향 집 (js/systems/seanest.js)
     if (!atSea) await UI.alert(fill(L.after, { home: hc ? hc.name : '' }), L.birthTitle);
     if (G.Game.refreshHud) G.Game.refreshHud();
+    } finally { if (pic) await pic.stop(); }
   };
 
   function ready() {
@@ -223,13 +228,14 @@
   /** 날마다 화면 틈에 (main.js loop) — 산실로 옮기기 · 해산 */
   M.tick = function () {
     var s = S(); if (!s || !s.motherTodo) return;
-    var T = s.motherTodo; if (!T.lie && !T.birth) { delete s.motherTodo; return; }
+    var T = s.motherTodo; if (!T.news && !T.lie && !T.birth) { delete s.motherTodo; return; }
     if (!ready()) return;
     M.running = s;
     (async function () {
       try {
+        if (T.news && !T.birth && G.FamEv) { delete T.news; await G.FamEv.pregNews(); }
         if (T.birth) { delete s.motherTodo; await M.birth(T); }
-        else { delete s.motherTodo; await M.lieIn(); }
+        else { delete s.motherTodo; if (T.lie) await M.lieIn(); }
       } catch (e) { console.error(e); }
       if (M.running === s) M.running = null;
     })();

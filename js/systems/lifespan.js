@@ -185,6 +185,7 @@
     try { await dieNow(s, T, name, age); } finally { if (LF.dying === s) LF.dying = null; var T2 = st(); if (T2.end && R.age() < LF.maxAge()) delete T2.end; }
   };
   async function dieNow(s, T, name, age) {
+    if (G.Ending && G.Ending.noteDeath && !s.player.deathScene) G.Ending.noteDeath(s.loc.mode === 'sea' ? 'peace_sea' : s.loc.mode === 'land' ? 'peace_land' : 'peace_home');
     var heirs = G.Family && G.Family.heirs ? G.Family.heirs() : [];
     var seat = R.seat ? R.seat() : s.player.home, cc = G.CITY_DATA[s.loc.city];
     var where = s.loc.mode === 'sea' ? '흔들리는 선실에서' : s.loc.mode === 'land' ? '야영지의 모닥불 곁에서' : !cc ? '조용한 방에서'

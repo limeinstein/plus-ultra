@@ -14,9 +14,9 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
-  page.on('console', m => { if (m.type() === 'error' && !/fonts|ERR_|net::|Failed to load/.test(m.text())) errors.push(m.text()); });
+  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   try {
-    await page.goto(pathToFileURL(path.join(ROOT, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href), { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
       const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -98,7 +98,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
     ok(r.overlay && r.busy, '온 화면 나레이션이 뜨고 다른 창은 기다린다 (UI.busy)');
     ok(r.firstLine === '한때 우리의 미지는 수평선 너머에 있었다.' && r.dateLabel === '1700년 1월 1일', '첫 줄 「' + r.firstLine + '」 · ' + r.dateLabel);
     ok(r.afterPoke >= 2, '누르면 다음 줄로 (' + r.afterPoke + '줄)');
-    ok(/대항해시대의 마지막 항해가 끝났다\. 다음 시대의 첫 번째 여명이 밝아오고 있었다\./.test(r.lastLines) && r.dawn && /FINIS/.test(r.finis), '건너뛰면 마지막 두 줄 · 여명 · FINIS');
+    ok(/1700년 1월 1일\. 우리의 마지막 항해가 끝났다\. 새로운 세기의 첫 번째 여명이 밝아오고 있었다\./.test(r.lastLines) && r.dawn && /GAME OVER/.test(r.finis), '건너뛰면 새 세기 마지막 세 줄 · 여명 · GAME OVER');
     ok(/대항해시대가 막을 내리다/.test(r.fin) && /1700년 1월 1일/.test(r.fin) && r.scene === 'title' && r.gone, '「항해의 끝」 결산(대항해시대가 막을 내리다 · 1700년 1월 1일) → 타이틀');
     ok(r.lifeEnd && r.flag4 && !r.sawDeath && /대항해시대가 막을 내리다/.test(r.fin4) && r.scene4 === 'title', '같은 날 80세가 되어도 시대의 끝이 먼저 (눈을 감는 창 없이)');
     ok(r.late && r.date5 === 17120303 && r.fin5 && r.scene5 === 'title', '1712년 저장을 바다에서 불러와도 끝난다');

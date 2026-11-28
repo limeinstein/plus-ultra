@@ -544,7 +544,9 @@
   };
   F.heirs = function () { var ad = cfg().adult || 16; return S().player.kids.filter(function (k) { return !k.unnamed && !k.lost && (k.sex !== 'f' || !k.married) && F.kidAge(k) >= ad; }); };
 
-  F.retire = async function (forced) {
+  F.retire = async function (forced, cause) {
+    if (forced && G.EraEnd && G.EraEnd.over(S())) return;
+    if (forced && G.Ending && G.Ending.playDeath) await G.Ending.playDeath(cause);
     // 이야기 모드는 엔딩 전까지 후손에게 넘길 수 없다 (2026-11-23): 스스로 물러날 수 없고, 쓰러지면 이야기가 끝난다
     if (G.Story && G.Story.noHeirs && G.Story.noHeirs()) {
       if (!forced) { await UI.alert(G.Story.kin() + '를 찾는 여정을 끝내기 전에는 제독의 자리를 물려줄 수 없다.', '은퇴'); return; }
@@ -795,6 +797,38 @@
   // ---------------------------------------------------------------- endings
   var E = {};
   G.Ending = E;
+  /** 원인은 죽는 순간 확정한다. 후계자가 된 뒤에는 이전 제독의 원인이 넘어가지 않는다. */
+  E.cause = function (reason, cause, s) {
+    s = s || S(); var p = s.player, l = s.loc || {}, f = s.fleet || {};
+    var keys = (G.ENDING_SCENES || []).map(function (x) { return x[0]; });
+    if (reason === 'era') return 'era';
+    if (cause && keys.indexOf(cause) >= 0 && cause !== 'era') return cause;
+    if (p.deathScene && keys.indexOf(p.deathScene.cause) >= 0 && p.deathScene.cause !== 'era') return p.deathScene.cause;
+    if (l.mode === 'sea') {
+      if (G.Geo && G.Geo.packIceField && G.Geo.packIceField(l.lon, l.lat) > 0) return 'ice';
+      if (f.food <= 0 || f.water <= 0) return 'starvation';
+      if (f.scurvy > 18 || p.hp <= 0) return 'sea_illness';
+      return 'peace_sea';
+    }
+    if (p.hp <= 0) return 'illness';
+    return l.mode === 'land' ? 'peace_land' : 'peace_home';
+  };
+  E.scene = function (reason, cause, s) {
+    s = s || S(); var code = E.cause(reason, cause, s);
+    var row = (G.ENDING_SCENES || []).filter(function (x) { return x[0] === code; })[0];
+    return { cause: code, img: 'endings/' + (R.heroFemale(s.player) ? 'f' : 'm') + '/' + (row && row[2] || code), title: row ? row[1] : '항해의 끝', noStand: true };
+  };
+  E.noteDeath = function (cause) { var p = S().player; p.deathScene = { cause: E.cause('death', cause), day: S().day }; return p.deathScene; };
+  E.playDeath = async function (cause) {
+    var p = S().player;
+    if (p.deathScene && p.deathScene.shown) return;
+    var ev = E.scene('death', cause); E.noteDeath(ev.cause);
+    var pic = G.FamEv ? G.FamEv.showPic(ev) : null;
+    try {
+      await UI.say(ev.title + ' — ' + p.name + '의 항해가 여기서 멈추었다.', {});
+      p.deathScene.shown = true;
+    } finally { if (pic) await pic.stop(); }
+  };
   E.check = async function () {
     var s = S();
     var list = G.Disc.forVoyage(), found = list.filter(function (d) { return G.Disc.foundByMe(d.id); }).length;
@@ -807,11 +841,13 @@
     if (l.mode === 'land') return '탐험 길에서 생을 마치다';
     return '바다 위에서 생을 마치다';
   }
-  E.show = async function (reason) {
+  E.show = async function (reason, cause) {
     var s = S(), p = s.player;
+    var ev = reason === 'death' || reason === 'era' ? E.scene(reason, cause) : null;
+    var art = ev && G.Img && G.Img.has(ev.img) ? '<figure class="ending-event" style="margin:0 0 16px"><img style="display:block;width:100%;aspect-ratio:9/4;object-fit:cover;border-radius:5px" src="' + U.esc(G.Img.src(ev.img)) + '" alt="' + U.esc(ev.title) + '"><figcaption class="center muted">' + U.esc(ev.title) + '</figcaption></figure>' : '';
     var list = G.Disc.forVoyage(), found = list.filter(function (d) { return G.Disc.foundByMe(d.id); });
     var title = R.fameTitle(p.fame);
-    var html = '<div class="center" style="font-family:var(--latin);letter-spacing:.4em;color:#7a5c33;font-size:20px">FINIS</div>' +
+    var html = art + '<div class="center" style="font-family:var(--latin);letter-spacing:.4em;color:#7a5c33;font-size:20px">' + (ev ? 'GAME OVER · FINIS' : 'FINIS') + '</div>' +
       '<div class="center" style="font-size:34px;font-weight:800;margin:10px 0">' + U.esc(p.name) + '</div>' +
       '<div class="center muted" style="font-size:18px">' + (reason === 'era' ? '대항해시대가 막을 내리다' : reason === 'death' ? deathPlace(s) : '은퇴하여 여생을 보내다') + ' · ' + U.fmtDate(s.date) + '</div>' +
       '<div class="sep brass"></div><div class="kv" style="grid-template-columns:200px 1fr;font-size:19px">' +

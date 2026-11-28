@@ -673,8 +673,17 @@
   SS.concertArt = function (c) {
     if (!c || !G.Img) return null;
     var key = 'song/concerts/' + regionKey(c);
-    if (PLAYERS.every(function (x) { return aboard(x[0]); })) return G.Img.has(key) ? key : null;
-    if (aboard('sy_woldam') && aboard('sy_hwanggyu') && !aboard('sy_imcheosa') && G.Img.has(key + '_trio')) return key + '_trio';
+    var full = PLAYERS.every(function (x) { return aboard(x[0]); }), variants = [];
+    // 카디를 모티브로 한 기존 지역 공연과 신규 공연을 함께 순환한다. 배에 없는 연주자는 그림에도 나오지 않는다.
+    if (full) {
+      if (G.Img.has(key)) variants.push(key);
+      if (regionKey(c) === 'kr' && G.Img.has(key + '_fan_20261127')) variants.push(key + '_fan_20261127');
+      if (D.concert.regions[regionKey(c)] && c.region <= 2 && regionKey(c) !== 'kr' && G.Img.has('song/concerts/europe_20261127')) variants.push('song/concerts/europe_20261127');
+    } else if (aboard('sy_woldam') && aboard('sy_hwanggyu') && !aboard('sy_imcheosa')) {
+      if (G.Img.has(key + '_trio')) variants.push(key + '_trio');
+      if (regionKey(c) === 'kr' && G.Img.has(key + '_trio_20261127')) variants.push(key + '_trio_20261127');
+    }
+    if (variants.length) return variants[((T() && T().concerts) || 0) % variants.length];
     return null;
   };
   /** 공연을 열 수 있나 {ok, why} */

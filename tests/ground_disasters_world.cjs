@@ -6,7 +6,7 @@ const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('../tools/procedural_art/node_modules/playwright-core');
 const root = path.resolve(__dirname, '..');
-const out = process.env.OUT || path.join(root, 'artifacts/field-disasters-20261127');
+const out = path.resolve(process.env.OUT || process.env.GROUND_DISASTER_OUT || path.join(root, 'artifacts/field-disasters-20261127'));
 
 (async () => {
   fs.mkdirSync(out, { recursive: true });
@@ -20,7 +20,7 @@ const out = process.env.OUT || path.join(root, 'artifacts/field-disasters-202611
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error' || m.text().includes('GL_INVALID')) errors.push(m.text()); });
     await page.addInitScript(() => { window.requestAnimationFrame = () => 0; });
-    await page.goto(process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(root, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 120000 });
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(root, 'index.html')).href), { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.evaluate(async () => {
       await G.Game.ensureGeo();await G.TerrainArt.ready;
       G.State.save = () => false;G.State.saveAsync = async () => ({ ok: false });
@@ -86,6 +86,37 @@ const out = process.env.OUT || path.join(root, 'artifacts/field-disasters-202611
     assert(quake.crossing && quake.stopped > 0 && Math.abs(quake.moving - 2*quake.stopped)<1e-8);
     await page.waitForFunction(()=>{fieldFrames(1,0);return fieldGame.st.unitItems?.length > 0;},null,{polling:100,timeout:15000});
     await page.screenshot({ path: path.join(out,'quake.png') });
+    observed.quakeDust=await page.evaluate(()=>{
+      const fx=G.GroundDisasterFx, q=G.Quake, ctx=G.Game.canvases().overlay.getContext('2d');
+      const ellipse=ctx.ellipse, arc=ctx.arc, dust=fx.drawDust, field=fx.draw, ground=q.drawLand;
+      const settings=fieldGame.s.settings;
+      let earthquake=false,circles=0,wisps=0;
+      const inspect=draw=>function(...args){
+        earthquake=true;
+        try{return draw.apply(this,args);}finally{earthquake=false;}
+      };
+      const circle=draw=>function(...args){
+        if(earthquake)circles++;
+        return draw.apply(this,args);
+      };
+      fx.draw=inspect(field);q.drawLand=inspect(ground);
+      ctx.ellipse=circle(ellipse);ctx.arc=circle(arc);
+      fx.drawDust=function(...args){
+        if(args[3]>0&&args[3]<1&&args[7]>0)wisps++;
+        return dust.apply(this,args);
+      };
+      try{
+        fieldFrames(1,0);
+        const withShake=wisps;
+        settings.shake=false;
+        fieldFrames(1,0);
+        return {circles,withShake,withoutShake:wisps-withShake};
+      }finally{
+        settings.shake=true;ctx.ellipse=ellipse;ctx.arc=arc;
+        fx.drawDust=dust;fx.draw=field;q.drawLand=ground;
+      }
+    });
+    assert(observed.quakeDust.circles===0 && observed.quakeDust.withShake>0 && observed.quakeDust.withoutShake>0);
     observed.quake={...quake,...await page.evaluate(()=>{
       const e=window.quakeFixture,{s,l}=fieldGame;
       G.Quake.clear();G.Quake._clock(null);s.fleet.fatigue=20;e.field.hit=false;e.field.wait=0;
@@ -189,37 +220,76 @@ const out = process.env.OUT || path.join(root, 'artifacts/field-disasters-202611
     assert(recovery.noDamage && recovery.smoke);
     observed.fire={...fire,...recovery};await page.screenshot({path:path.join(out,'fire-recovery.png')});
 
+    observed.volcanoSites=await page.evaluate(()=>{
+      resetField();
+      const sites=G.VOLCANOES;
+      const failures=sites.flatMap(v=>{
+        const f=G.GroundDisaster.ensure({kind:'volcano',id:v.id,volcanoId:v.id,lon:v.lon,lat:v.lat});
+        const land=G.Geo.isLand(v.lon,v.lat)&&!G.Terrain.isLake(v.lon,v.lat);
+        return land&&f?.line.length>0&&f.line.points.every(p=>G.Geo.isLand(...p)&&!G.Terrain.isLake(...p))
+          ? [] : [{name:v.name,land,length:f?.line.length}];
+      });
+      const history=G.DISASTERS.filter(h=>h.kind==='volcano');
+      const missingHistory=history.filter(h=>!G.volcanoSite(null,h.lon,h.lat)).map(h=>h.name);
+      const rejected=!G.Disaster.start({kind:'volcano',lon:-100,lat:36,localField:true},true);
+      const v=G.volcanoSite(341090);
+      if(!v)throw Error('포포카테페틀 화산이 빠짐');
+      placeField([v.lon+.26,v.lat-.23],[v.lon+.12,v.lat-.07],440);
+      fieldFrames(8,0);
+      return {count:sites.length,unique:new Set(sites.map(v=>v.id)).size,failures,missingHistory,rejected};
+    });
+    assert.equal(observed.volcanoSites.count,100);
+    assert.equal(observed.volcanoSites.unique,100);
+    assert.deepEqual(observed.volcanoSites.failures,[]);
+    assert.deepEqual(observed.volcanoSites.missingHistory,[]);
+    assert(observed.volcanoSites.rejected);
+    await page.screenshot({path:path.join(out,'volcano-dormant.png')});
+
     const volcano=await page.evaluate(()=>{
-      resetField();placeField([14.6,40.81]);
-      let e;
-      for(const v of G.VOLCANOES.slice(0,23)){
-        const candidate=G.Disaster.start({kind:'volcano',name:v[0]+' 분화',lon:v[1],lat:v[2],sev:2,localField:true},true);
-        if(!candidate)continue;
-        if(candidate.field.line.length>.49){e=candidate;break;}
-        G.Game.state.dis.act.pop();
-      }
-      if(!e)throw Error('용암이 흐를 화산을 찾지 못함');
+      const e=G.Disaster.start({kind:'volcano',volcanoId:341090,sev:3,localField:true},true);
+      if(!e?.field)throw Error('용암이 흐를 화산을 찾지 못함');
       const gd=G.GroundDisaster,f=e.field,{s,l}=fieldGame;
       const a=gd.lavaDistance(e,f.warning+.55),b=gd.lavaDistance(e,f.warning+1.05);
       f.age=f.warning+1.8;
-      const earlier=gd.pointAt(f.line,.10), ahead=gd.pointAt(f.line,f.line.length), head=gd.lavaDistance(e,f.age);
+      const earlier=gd.pointAt(f.line,.10), ahead=gd.pointAt(f.line,f.line.length);
       placeField(ahead);
       const away=gd.lavaDistance(e,f.age)<f.line.length-.03&&!G.Disaster.travelStep(.014,l.lon,l.lat,false);
       placeField(earlier);
       const hit=G.Disaster.travelStep(.021,l.lon,l.lat,false), damage=s.fleet.fatigue-20;
-      const midway=gd.pointAt(f.line,head/2);
-      placeField([e.lon+.24,e.lat-.23],midway,460);
+      placeField([e.lon+.26,e.lat-.23],[e.lon+.12,e.lat-.07],440);
       f.age=f.warning+2.15;fieldFrames(8,0);
+      window.volcanoFixture=e;
+      const drawnSparks=[], canvas=document.createElement('canvas'), ctx=canvas.getContext('2d');
+      let round=0, ash=0;
+      ctx.arc=ctx.ellipse=ctx.createRadialGradient=()=>{round++;};
+      const stroke=ctx.stroke, draw=ctx.drawImage;
+      ctx.stroke=function(...args){if(this.strokeStyle==='#ff912b')drawnSparks.push(this.lineWidth);return stroke.apply(this,args);};
+      ctx.drawImage=function(...args){if(args[0]?.width===108&&args[0]?.height===60)ash++;return draw.apply(this,args);};
+      G.GroundDisasterFx.draw(ctx,e,(x,y)=>[800+(x-e.lon)*440,450-(y-e.lat)*440],440,14,'sans-serif');
+      canvas.width=1600;canvas.height=900;ctx.clearRect(0,0,1600,900);
+      const fx=G.GroundDisasterFx, age=f.age;
+      const ashCoverage=at=>{
+        f.age=at;ctx.clearRect(0,0,1600,900);
+        fx.drawAshFront(ctx,e,[745,400],1,.48);
+        return [80,420,830].flatMap(y=>[90,800,1510].map(x=>ctx.getImageData(x,y,1,1).data[3]));
+      };
+      const clearBefore=ashCoverage(f.warning), screenAsh=ashCoverage(f.warning+5.1), clearAfter=ashCoverage(f.life);
+      f.age=age;
+      const origin=f.line.points[0];
       return {name:e.name,constantSpeed:(b-a)/.5,expected:G.BALANCE.disaster.ground.volcano.speed,
-        hit,away,damage,path:f.line.length,drop:G.Terrain.sample(e.lon,e.lat).elevation-G.Terrain.sample(...ahead).elevation};
+        hit,away,damage,path:f.line.length,drop:G.Terrain.sample(e.lon,e.lat).elevation-G.Terrain.sample(...ahead).elevation,
+        atVent:origin[0]===e.lon&&origin[1]===e.lat,round,ash,projectiles:drawnSparks.length,
+        clearBefore,screenAsh,clearAfter};
     });
     assert(volcano.hit && volcano.away && volcano.damage>0 && volcano.drop>0 && Math.abs(volcano.constantSpeed-volcano.expected)<1e-9);
+    assert(volcano.atVent && volcano.round===0 && volcano.ash>0 && volcano.projectiles>12);
+    assert(volcano.clearBefore.every(a=>a===0) && volcano.screenAsh.every(a=>a>=80) && volcano.clearAfter.every(a=>a===0),JSON.stringify(volcano.screenAsh));
     observed.volcano=volcano;await page.screenshot({path:path.join(out,'volcano.png')});
+    await page.evaluate(()=>{const f=window.volcanoFixture.field;f.age=f.warning+5.1;fieldFrames(2,0);});
+    await page.screenshot({path:path.join(out,'volcano-ash.png')});
 
-    const meta=await page.evaluate(()=>({version:G.Scenes.title.version,channel:window.PU_WEB_CHANNEL||'stable'}));
-    if(process.env.EXPECT_VERSION)assert.equal(meta.version,process.env.EXPECT_VERSION);
-    fs.writeFileSync(path.join(out,'verification.json'),JSON.stringify({...meta,observed,errors},null,2));
+    fs.writeFileSync(path.join(out,'verification.json'),JSON.stringify({...await page.evaluate(()=>({version:G.Scenes.title.version,channel:window.PU_WEB_CHANNEL||'stable'})),observed,errors},null,2));
     assert.deepEqual(errors,[]);
-    console.log(JSON.stringify({...meta,observed,errors}));
+    console.log(JSON.stringify({...await page.evaluate(()=>({version:G.Scenes.title.version,channel:window.PU_WEB_CHANNEL||'stable'})),observed,errors}));
   } finally { await browser.close(); }
 })().catch(e=>{console.error(e);process.exitCode=1;});

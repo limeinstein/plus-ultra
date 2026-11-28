@@ -17,7 +17,7 @@
   EE.LINES = [
     ['한때 우리의 미지는 수평선 너머에 있었다.', '용기는 그 너머로 배를 이끌었고,', '우리는 바다의 끝을 찾아 돛을 올렸다.', '그러나 발견한 것은 끝이 없는 세계였다.'],
     ['세계는 멈추지 않고,', '후세는 우리의 어깨 위에 서서', '지식이 닿은 자리 너머를 상상할 것이다.'],
-    ['대항해시대의 마지막 항해가 끝났다.', '다음 시대의 첫 번째 여명이 밝아오고 있었다.']
+    ['1700년 1월 1일.', '우리의 마지막 항해가 끝났다.', '새로운 세기의 첫 번째 여명이 밝아오고 있었다.']
   ];
 
   /** 시대가 끝났는가 (그날이 되었거나 지났다) */
@@ -70,7 +70,9 @@
   // ---------------------------------------------------------------- 온 화면 나레이션
   EE.mount = function () {
     var ov = U.el('div', 'era-end');
-    var bg = G.Img && G.Img.has('title') ? G.Img.src('title') : '';
+    var shot = G.Ending && G.Ending.scene ? G.Ending.scene('era') : null;
+    var bgKey = shot && G.Img && G.Img.has(shot.img) ? shot.img : 'title';
+    var bg = G.Img && G.Img.has(bgKey) ? G.Img.src(bgKey) : '';
     ov.innerHTML = '<div class="ee-bg"' + (bg ? ' style="background-image:url(\'' + U.esc(bg) + '\')"' : '') + '></div><div class="ee-dawn"></div><div class="ee-veil"></div>' +
       '<div class="ee-date"></div><div class="ee-text"></div><div class="ee-finis"></div>' +
       '<button class="ee-skip" type="button">건너뛰기 ▸▸</button><button class="ee-next" type="button" hidden>항해의 끝</button>';
@@ -112,7 +114,7 @@
         ov.classList.toggle('lift', si >= 1);
         for (var li = 0; li < EE.LINES[si].length; li++) {
           if (ctl.skip) break;
-          if (last && li === 1) { ov.classList.add('dawn'); if (G.Audio && G.Audio.sfx) { try { G.Audio.sfx('discover'); } catch (e) { /* 소리 없음 */ } } await wait(T.dawn, ctl); }
+          if (last && li === EE.LINES[si].length - 1) { ov.classList.add('dawn'); if (G.Audio && G.Audio.sfx) { try { G.Audio.sfx('discover'); } catch (e) { /* 소리 없음 */ } } await wait(T.dawn, ctl); }
           var p = U.el('p', 'ee-line'); p.textContent = EE.LINES[si][li]; text.appendChild(p);
           requestAnimationFrame(function (q) { return function () { q.classList.add('in'); }; }(p));
           await wait(T.line, ctl);
@@ -127,7 +129,7 @@
         text.className = 'ee-text last';
         text.innerHTML = EE.LINES[EE.LINES.length - 1].map(function (l) { return '<p class="ee-line in">' + U.esc(l) + '</p>'; }).join('');
       }
-      ov.querySelector('.ee-finis').textContent = 'FINIS · ' + EE.date().y;
+      ov.querySelector('.ee-finis').textContent = 'GAME OVER · ' + EE.date().y;
       ov.classList.add('done');
       var skip = ov.querySelector('.ee-skip'), next = ov.querySelector('.ee-next');
       skip.hidden = true; next.hidden = false;

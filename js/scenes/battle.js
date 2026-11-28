@@ -1862,6 +1862,7 @@
     var finishing = st;
     await U.sleep(900);
     if (st !== finishing || S() !== s) return;
+    if (s.player.hp <= 0) { await G.Family.retire(true, st.npc.kind === 'navy' ? 'navy' : 'pirate'); return; }
     if (G.StoryBattle) G.StoryBattle.finish(st.npc, res);
     // apply damage & crew back to state
     var survivors = [], recovered = [], seizedLost = [];

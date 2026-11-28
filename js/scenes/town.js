@@ -983,7 +983,7 @@
     if (!s || !s.date) return false;
     // 이야기 모드는 준비 단계에서 수십 년을 넘기기도 한다. 그때 늘어난 day 대신 실제 이야기 시작일을 쓴다.
     var started = 0;
-    [s.story, s.song, s.jhook, s.gold].forEach(function (t) {
+    [s.story, s.song, s.jhook, s.gold, s.arslan].forEach(function (t) {
       if (t && typeof t.started === 'number' && t.started <= U.dateNum(s.date)) started = Math.max(started, t.started);
     });
     var start = started ? { y: Math.floor(started / 10000), m: Math.floor(started / 100) % 100, d: started % 100 } : U.addDays(s.date, -Math.max(0, s.day || 0));

@@ -8,7 +8,7 @@
 const path = require('path');
 const { pathToFileURL } = require('url');
 let chromium; try { ({ chromium } = require('playwright')); } catch (e) { ({ chromium } = require('../tools/procedural_art/node_modules/playwright-core')); }
-const BASE = pathToFileURL(path.join(__dirname, '..', process.env.PAGE || 'index.html')).href;
+const BASE = (process.env.WEB_BASE ? new URL(process.env.PAGE||'index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(__dirname, '..', process.env.PAGE || 'index.html')).href);
 let passed = 0;
 function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.log('  ✓ ' + msg); }
 
@@ -22,14 +22,14 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
   try {
     // ── 공개일 잠금
     const p0 = await browser.newPage({ viewport: { width: 1280, height: 720 } }); watch(p0);
-    await p0.goto(BASE);
+    await p0.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await p0.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const t0 = await p0.evaluate(() => ({ list: G.StorySelect.list().map(m => m.id), rel: G.SONG.release, now: Date.now(), released: G.SongStory.released() }));
     if (Date.now() < Date.parse(t0.rel)) ok(!t0.list.includes('song') && !t0.released, '공개일(' + t0.rel + ') 전: 이야기 고르기 지도에 소영이 없다 — ' + t0.list.join(' · '));
     await p0.close();
 
     const page = await browser.newPage({ viewport: { width: 1280, height: 720 } }); watch(page);
-    await page.goto(BASE + '?song=1');
+    await page.goto(BASE + '?song=1', { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const btns = await page.evaluate(() => G.StorySelect.list().map(m => m.id));
     ok(btns.includes('song'), '?song=1 미리 보기: 이야기 고르기 지도에 소영 — ' + btns.join(' · '));
@@ -224,12 +224,13 @@ function ok(v, msg) { if (!v) throw new Error('✗ ' + msg); passed++; console.l
     // 공연 원화: 넷이 모이면 네 명 원화, 임처사가 오기 전의 셋은 <지역>_trio 가 있을 때만
     const art = await page.evaluate(() => {
       const s = G.Game.state, c = G.CITY_DATA[229], keep = s.mates.slice(), F = G.IMAGE_FILES, A = G.SongStory.concertArt;
+      const concertCount = s.song.concerts; s.song.concerts = 0;
       const four = A(c);
         s.mates = keep.filter(m => m.id !== 'sy_imcheosa'); const trio0 = A(c);
-        const has0 = G.Img.has; G.Img.has = k => k !== 'song/concerts/kr_trio' && has0.call(G.Img, k); const trioAbsent = A(c); G.Img.has = has0;
+        const has0 = G.Img.has; G.Img.has = k => !/^song\/concerts\/kr_trio/.test(k) && has0.call(G.Img, k); const trioAbsent = A(c); G.Img.has = has0;
       const has = G.Img.has; G.Img.has = k => k === 'song/concerts/kr_trio' || has.call(G.Img, k); const trio1 = A(c);
       s.mates = keep.filter(m => m.id !== 'sy_imcheosa' && m.id !== 'sy_woldam'); const duo = A(c);
-      G.Img.has = has; s.mates = keep; void F;
+      G.Img.has = has; s.mates = keep; s.song.concerts = concertCount; void F;
         return { four, trio0, trioAbsent, trio1, duo };
     });
       ok(art.four === 'song/concerts/kr' && art.trio0 === 'song/concerts/kr_trio' && art.trioAbsent === null && art.trio1 === 'song/concerts/kr_trio' && art.duo === null, '공연 원화: 넷 → ' + art.four + ' · 셋(임처사 전) → ' + art.trio0 + ' · 그림이 없는 묶음은 무릎상 무대');

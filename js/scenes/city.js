@@ -157,6 +157,7 @@
       if (arg.story && G.Story) { try { await G.Story.prologue(c); } catch (e) { console.error(e); } }   // 이야기 모드의 프롤로그 (js/systems/story.js)
       if (G.SongStory && G.SongStory.active()) { try { await G.SongStory.arrive(c, arg); } catch (e) { console.error(e); } }
       if (G.JHook && G.JHook.active()) { try { await G.JHook.arrive(c, arg); } catch (e) { console.error(e); } }
+      if (G.Arslan && G.Arslan.active()) { try { await G.Arslan.arrive(c, arg); } catch (e) { console.error(e); } }   // 이야기 모드 「돌아오는 배의 값」 (js/systems/arslan.js)
       if (G.GoldSea && G.GoldSea.active()) { try { await G.GoldSea.arrive(c, arg); } catch (e) { console.error(e); } }   // 이야기 모드 「황금의 바다」 (js/systems/gold.js)   // 이야기 모드 「해적여제」 (js/systems/jhook.js)   // 이야기 모드 「바닷길 노래」: 프롤로그·도시에서 일어나는 사건 (js/systems/song.js)
       if (arg.arrive) await C.arrival(c, arg);
       if (!arg.load && G.DiscStories) await G.DiscStories.arrive(c);
@@ -404,6 +405,7 @@
       if (G.Story && G.Story.todo) out = G.Story.todo(c).concat(out);   // 이야기 모드: 아버지의 흔적 — 다음 갈 곳 (맨 위에)
       if (G.SongStory && G.SongStory.active()) out = G.SongStory.todo(c).concat(out);
       if (G.JHook && G.JHook.active()) out = G.JHook.todo(c).concat(out);
+      if (G.Arslan && G.Arslan.active()) out = G.Arslan.todo(c).concat(out);   // 「돌아오는 배의 값」: 지금 할 일
       if (G.GoldSea && G.GoldSea.active()) out = G.GoldSea.todo(c).concat(out);   // 「황금의 바다」: 지금 할 일 · 대단한 거래   // 「해적여제」: 지금 할 일   // 「바닷길 노래」: 바닷길 공연 · 지금 할 일 (맨 위에)
       if (G.Colony) out = out.concat(G.Colony.todo(c));   // 개척 도시: 물자 · 국왕의 부름   // 사라진 왕녀: 부르심 · 모셔 간다
       // 알리지 않은 발견과 이 도시의 후원자
@@ -496,6 +498,7 @@
     var ok = true;
     // 이야기 모드 「바닷길 노래」의 도입부: 건물에 들어설 때 그 자리의 장면이 일어난다. false 면 장면만 보고 거리로 (js/systems/song.js SS.enter)
     if (G.SongStory && G.SongStory.active() && G.SongStory.enter) { try { ok = (await G.SongStory.enter(c, kind)) !== false; } catch (e) { console.error(e); } }
+    if (ok && G.Arslan && G.Arslan.active() && G.Arslan.enter) { try { ok = (await G.Arslan.enter(c, kind)) !== false; } catch (e) { console.error(e); } }   // 「돌아오는 배의 값」의 도입부: 조선소·도서관·항구의 장면 (js/systems/arslan.js AR.enter)
     try { if (ok && B.enter) ok = (await B.enter(c, arg)) !== false; } catch (e) { console.error(e); }
     busy = false;
     if (!ok) { if (cur && G.Game.scene === C) C.main(); return; }

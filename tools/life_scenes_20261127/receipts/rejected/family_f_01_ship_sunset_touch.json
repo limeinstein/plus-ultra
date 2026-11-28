@@ -1,0 +1,8 @@
+{
+  "id": "family_f_01_ship_sunset_touch",
+  "key": "family-events/female/01_ship_sunset_touch",
+  "prompt": "Use case: historical-scene. ONE full bleed landscape 9:4 hand-painted narrative illustration for historical sailing RPG, natural fabric, warm painterly light, no text, logo, grid or panels. Sunset on a 16th century wooden sailing ship: an ADULT FEMALE CAPTAIN is the player protagonist, wearing a long navy captain coat and cream blouse, seen from behind, standing at the rail with her adult MALE husband in a simple linen shirt. Their hands gently overlap on the rail. Sea fills the distance, tender reciprocal affection, faces obscured, suitable for any player ethnicity. Clear anatomically correct hands. Final landscape image.",
+  "mode": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-24ab23e0-3c26-4663-8b24-25808f8a008f.png",
+  "output_hint": "Generated images are saved to C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5 as C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-24ab23e0-3c26-4663-8b24-25808f8a008f.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+}

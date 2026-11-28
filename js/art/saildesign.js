@@ -70,7 +70,7 @@
     else if(d.motif&&d.motif!=='ragged'){if(d.pattern==='seal'){g.strokeStyle=ink;g.lineWidth=.028;g.beginPath();g.arc(.5,.5,.36,0,PI*2);g.stroke();}at(g,.5,.49,d.pattern==='seal'?.58:.55,function(){motif(g,d.motif,d.emblemInk||ink,d);});}
     g.restore();
   };
-  SA.decorate=function(material,opt,baseColor,T){
+  SA.decorate=function(material,opt,baseColor,T,sailKind){
     var d=G.SailDesign.design(opt.sailDesign),active=d.id!=='plain',key=d.id+'|'+(opt.sailInk||'')+'|'+(opt.sailColor||'');
     if(!material.sailBaseMap)material.sailBaseMap=material.map;
     if(!active){if(material.map!==material.sailBaseMap)material.map=material.sailBaseMap;material.userData.sailDecorKey=null;return;}
@@ -79,7 +79,13 @@
     if(!cv){cv=material.sailDecorCanvas=document.createElement('canvas');layer=material.sailLayerCanvas=document.createElement('canvas');cv.width=cv.height=layer.width=layer.height=n;
       // Texture.clone()은 r147에서 Source를 공유한다. 독립 지도여야 원래 천을 지우지 않는다.
       var map=material.sailDecorMap=new T.CanvasTexture(cv);['encoding','wrapS','wrapT','anisotropy','flipY','minFilter','magFilter'].forEach(function(k){map[k]=material.sailBaseMap[k];});}
-    var g=cv.getContext('2d'),lg=layer.getContext('2d');g.clearRect(0,0,n,n);g.drawImage(material.sailBaseMap.image,0,0,n,n);SA.paint(lg,opt,n,true);
+    var g=cv.getContext('2d'),lg=layer.getContext('2d');g.clearRect(0,0,n,n);g.drawImage(material.sailBaseMap.image,0,0,n,n);
+    // 대나무 살돛은 v=1이 돛머리이고, 다른 돛은 v=0이 돛머리다.
+    var headAtV1=sailKind==='batten';
+    lg.save();
+    if(material.sailDecorMap.flipY!==headAtV1){lg.translate(0,n);lg.scale(1,-1);}
+    SA.paint(lg,opt,n,true);
+    lg.restore();
     var pix=g.getImageData(0,0,n,n),ink=lg.getImageData(0,0,n,n).data,base=rgb(baseColor),target=rgb(opt.sailColor||(!['shield','roundel'].includes(d.pattern)&&d.field)||baseColor);
     for(var i=0;i<pix.data.length;i+=4){var shade=Math.max(.35,Math.min(1.2,(pix.data[i]/base[0]+pix.data[i+1]/base[1]+pix.data[i+2]/base[2])/3)),alpha=ink[i+3]/255;
       for(var c=0;c<3;c++)pix.data[i+c]=Math.min(255,pix.data[i+c]*target[c]/base[c]*(1-alpha)+ink[i+c]*shade*alpha);}

@@ -31,6 +31,7 @@
     o.lang = 3; o.li = null; o.emotion = emotion || 'warm';
     return o;
   }
+  H.speaker = speaker;
 
   // ---------------------------------------------------------------- 누구인가
   /** 남편들 (배에 있는 사람만). 부하 명단에서 사라진 남편(전사·실종 등)은 여기서 정리한다 */
@@ -87,6 +88,7 @@
     m.aff = 100; R.setLoyal(m, Math.max(m.loyal == null ? 70 : m.loyal, K().wedLoyal || 95));
     if (G.Growth) G.Growth.once('wed', 'cha', 1, '혼인 — 한 집안의 가장이 되었다');   // 첫 혼인: 매력 +1 (js/systems/growth.js)
     G.State.log(d.name + U.jx(d.name, '을/를') + ' ' + (n ? ordWord(no) + ' 남편' : '남편') + '으로 맞았다.');
+    if (G.FamEv) await G.FamEv.wedding({ id: d.id, city: s.loc.city });
     await UI.alert(d.name + U.jx(d.name, '과/와') + ' 혼인했다! ' + (n ? ordWord(no) + ' 남편이 되어 ' : '') + '부하로 남아 함께 항해한다.', n ? ordWord(no) + ' 남편' : '혼인');
     if (G.Achieve && G.Achieve.afterWed) { try { await G.Achieve.afterWed(d.id); } catch (e) { console.error(e); } }   // 혼인 업적 (팜므파탈·측천무후 — js/systems/achieve.js)
     if (G.Game.refreshHud) G.Game.refreshHud();

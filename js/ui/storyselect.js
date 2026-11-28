@@ -40,6 +40,11 @@
       party: '엘리너르 더비트 · 마리커 판레이우언 · 브람 판호른 …', tag: '세상의 길을 사러 가는 항해',
       synopsis: '아버지는 해적에게 배를 잃고 빚만 남긴 채 죽었다. 스물두 살 상인에게 남은 것은 작은 배 한 척과 장부 마지막 줄의 한 문장. 밀린 급료를 받으러 온 공증인의 딸, 소문을 파는 소꿉친구, 돈을 빌려준 친구와 함께 — 연합 동인도 회사와 해적섬, 배신과 사랑을 지나 세계에서 가장 부유한 사람이 되는 서른 해.',
       ok: function () { return !!(G.GoldSea && G.GoldSea.begin); }, begin: function () { return G.GoldSea.begin(true); } },
+    { id: 'arslan', hero: '아르슬란 젬오을루', title: '돌아오는 배의 값', sub: '어머니가 치른 뱃삯', city: 112, page: 'eu', year: '1494년 · 이스탄불', bg: '#27407a', dx: 60, dy: -150,
+      face: 'portraits/player/casanova', half: 'characters/player_half_casanova',   // 전용 그림(portraits/story-player/arslan · arslan_half)이 생기면 이 두 열쇠를 바꾼다
+      party: '피루제 · 귈리자르 · 아일린 … 세계에서 만나는 열세 동료', tag: '아버지가 지나간 바다를 거슬러 가는 항해',
+      synopsis: '시장의 반쪽 해도 뒷면에서 죽은 어머니의 글씨가 나온다 — 「돌아오는 배 한 사람 몫. 젬. 지불을 마침.」 빈털터리 아르슬란은 어머니의 보석을 팔아 물 새는 연안선 한 척을 사고, 값을 깎는 소꿉친구와 속을 감춘 사서, 따귀부터 때리던 조선소 언니와 함께 떠난다. 묻고 싶은 것은 하나 — 돌아올 수 있었는데 안 돌아온 날이, 하루라도 있었는지.',
+      ok: function () { return !!(G.Arslan && G.Arslan.begin); }, begin: function () { return G.Arslan.begin(true); } },
     { id: 'song', hero: '김소영', title: '바닷길 노래', sub: '바다에 길을 내는 노래', city: 229, page: 'ea', year: '1480년 · 한산도', bg: '#22558a', dx: -126, dy: 52,
       face: 'portraits/player/soyoung', half: 'characters/player_half_soyoung',
       party: '황규 · 박월담 · 임처사 …', tag: '들려준 세상을 직접 만나러 가는 항해',

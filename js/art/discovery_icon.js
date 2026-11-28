@@ -250,6 +250,13 @@
   };
 
   DI.layout = function(d,scale,zoom,chartZoom){
+    var volcano=!chartZoom&&G.VolcanoArt&&G.VolcanoArt.landmark(d.id,zoom);
+    if(volcano){
+      var radius=G.VolcanoArt.radius(volcano,zoom);
+      return {point:[volcano.lon,volcano.lat],volcano:true,
+        metrics:{width:radius*2.5,height:radius*1.7,left:-radius*1.25,right:radius*1.25,
+          top:-radius*.18,base:radius*1.52,radius:radius}};
+    }
     var r=nature(d);
     if(!r)return {point:DI.position(d),metrics:DI.metrics(d,scale,zoom)};
     var visual=G.NatureLandmark.place(d,r,modelWidth(r,scale||1,zoom,G.FX.natureLandmark),zoom,chartZoom);
@@ -270,7 +277,7 @@
     if(p[0]<box[0]-pad||p[0]>box[2]+pad||p[1]<box[1]-pad||p[1]>box[3]+pad)return null;
     var view=DI.layout(d,scale,zoom,chartZoom);
     if(view.hidden)return null;
-    if(!fixed)p=toScreen(view.point[0],view.point[1]);
+    if(!fixed||view.volcano)p=toScreen(view.point[0],view.point[1]);
     var size=view.metrics, left=size.left==null?-size.width/2:size.left, right=size.right==null?size.width/2:size.right;
     if(p[0]+right<box[0]-12||p[0]+left>box[2]+12||p[1]+size.base<box[1]-12||p[1]+size.top>box[3]+12)return null;
     view.x=p[0];view.y=p[1];return view;
@@ -305,6 +312,7 @@
     opts = opts || {};
     var p = d && POS[d.id], scale = opts.scale || 1, view=opts.layout;
     var met = view?view.metrics:DI.metrics(d, scale, opts.zoom);
+    if(view&&view.volcano)return met;
     if(view&&view.marker){
       ctx.save();ctx.fillStyle=opts.selected?'#f9d889':'#d3b980';ctx.strokeStyle='#473922';ctx.lineWidth=1;
       ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore();return met;

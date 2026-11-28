@@ -1,5 +1,9 @@
 # images — 그림 교체 폴더
 
+제독 29종 거리 동작·추가 여성 13종 전투(2026-11-24): 남성 14·여성 15종의 모든 거리 동작을 전용 시트로 맞췄다. 직업별 여성 13종의 세 단계 얼굴·무릎상 78개와 일기토·필살기 그림 104개를 추가했다. 배경 잔여 원화 18장을 수정했다. [거리 동작·667개 묶음](../artifacts/hero-street-20261124/index.html) · [추가 여성 전체·481개 묶음](../artifacts/hero-women-20261124/index.html) · [제작·지시문·검사](../docs/art/hero-women-20261124.md) · [배경 수정 전후](../artifacts/hero-background-20261124/index.html). [최종 투명 원화·기본 파일명 51개 수정](../artifacts/hero-background-followup-20261124/index.html) — 초기 원화가 남은 기본 경로도 최종 투명본으로 교체했다.
+
+제독 16종 새 동작(2026-11-24): 여성 제시카·김소영과 남성 14종의 `characters/<외형>/motion/{walk,stride_walk}.webp`, `duel/fighters/`·`fighters_ext/` 전투 시트와 `duel/cutins/` 필살기 GIF·`events-20261124/` 정지 사건샷. 제시카의 칼과 소영의 칼·부채 손 모양 수정본을 포함한다. [전체 미리보기·ZIP](../artifacts/hero-motion-20261124/index.html) · [원본·프롬프트·검사](../docs/art/hero-motion-20261124.md).
+
 현상수배 전단지(2026-11-21): 현상금 대상 156명의 `wanted/<id>.webp` 초상을 `ui/wanted/parchment-20261121.png` 양피지 틀에 얹는다. 게시판 원화는 `ui/wanted/board-20261121.png`이며 두 파일 모두 manifest에 등록했다. 개별 이름·해적단·현재 현상금은 게임에서 표시한다. [156명 전체 미리보기](../artifacts/wanted-style-20261121/index.html) · [제작·검증](../docs/art/wanted-style-20261121.md) · [원화 생성 지시문](ui/wanted/prompts-20261121.json).
 
 식물 증거·새 원주민 마을 전체 시설(2026-11-19)은 `plant-native-20261119/<ID>.webp`의 261개 전용 원화를 쓴다. 식물 96개는 256×256 투명, 마을 11개와 시설 외부·내부 154개는 1536×864다. `tools/plant_native_art_20261119/asset-overrides.json`으로 논리 키 368개를 우선 연결한다. [전체 갤러리](../artifacts/plant-native-art-20261119/index.html) · [원본·프롬프트·ZIP·검증](../docs/art/plant-native-art-20261119.md).
@@ -123,9 +127,11 @@
 | 제독 — 거리에서 걷는 모습 | `characters/walk_1.webp` … `walk_8.webp` (옆모습, 발끝이 아래) | 높이 430 |
 | 제독 — 수첩 반신상 | `characters/player_half.webp` | 512×512 |
 | 제독 — 대화창 얼굴 | `portraits/player/이름.webp` (가슴 위) | 512×512 |
-| 제독 — 40세 이상 얼굴 | `portraits/player-aged/이름.png` (젊은 얼굴과 같은 이름, 수염 난 모습) | 512×512 |
+| 제독 — 40~69세 중년 얼굴 | `portraits/player-aged/이름` (젊은 얼굴과 같은 이름, 수염 난 모습). 새 교체본은 `portraits/player-ages-20261123/middle/`에 연결 | 512×512 |
+| 제독 — 70세 이상 노년 얼굴 | `portraits/player-elderly/이름` → `portraits/player-ages-20261123/elderly/이름.webp`. 없으면 같은 인물의 중년·젊은 그림 순서로 대신 표시 | 512×512 |
 | 제독 — 생김새별 그림 | 만들기 화면에서 얼굴 `portraits/player/<이름>`을 고르면 반신상 `characters/player_half_<이름>`, 걷는 그림 `characters/<이름>/walk_1…8`, 일기토 시트 `duel/fighters/<이름>`을 쓴다(없으면 기본 제독 그림). 테스트 캐릭터 이강희 = `ganghui` | 위와 같음 |
-| 제독 — 40세 이상 무릎상 | 기본 `characters/player_half_old.png`, 그 밖 `characters/player_half_<이름>_old.png`. 현재 나이가 40세가 되는 날부터 얼굴과 함께 자동 교체 | 512×512 |
+| 제독 — 40~69세 중년 무릎상 | 기본 `characters/player_half_old`, 그 밖 `characters/player_half_<이름>_old`. 40세가 되는 날 얼굴과 함께 자동 교체 | 512×512 |
+| 제독 — 70세 이상 노년 무릎상 | 기본 `characters/player_half_elderly`, 그 밖 `characters/player_half_<이름>_elderly` → `characters/player-ages-20261123/elderly/이름.webp`. 전환 나이는 `G.FX.heroPortraitAge`, 교체 별칭은 `tools/player_portrait_ages_20261123/asset-overrides.json` | 512×512 |
 | 도시 풍경 | `cities/도시번호.jpg` (예: `cities/0.jpg` = 리스본) | 1600×900 |
 | 도시 풍경 — 해질녘·저녁 | `cities/0_golden.jpg`, `cities/0_dusk.jpg` | 1600×900 |
 | 같은 양식의 도시 모두 | `city-styles/양식.jpg` (예: `city-styles/ib.jpg` = 이베리아 양식) | 1600×900 |
@@ -244,3 +250,9 @@
 ## 「바닷길 노래」 인물 이벤트와 지역별 공연 (2026-11-20)
 
 인물 사건 7장과 후크 피아노 특별 장면 1장, 조선·11개 지역의 네 사람 공연 12장을 추가했다. `song/cuts/`와 `song/concerts/`에 게임용 WebP를 두며 네 명이 동승할 때 지역별 공연 원화를 표시한다. 후크 동승 후 「소영의 지도」에서 피아노 특별 원화를 볼 수 있다. [그림·참고·원본·ZIP·게임 연결·검증](../docs/art/song-events-performances-20261120.md).
+
+## 「바닷길 노래」 초반 공연 — 셋의 원화 자리 (2026-11-24, 그림은 아직 없음)
+
+네 명 공연 원화(`song/concerts/kr`·`0`~`10`)에는 탈 쓴 임처사가 있어, 그가 합류하는 3막 전에는 띄우지 않는다. 그 전(1~2막)의 공연은 소영·황규·박월담 **셋**이다.
+`images/song/concerts/<지역>_trio.webp`(`kr_trio` · `0_trio` … `10_trio`, 네 명 원화와 같은 크기·구도, 임처사 없이 소영 노래·월담 거문고·황규 꽹과리)를 두고 manifest에 올리면 코드 수정 없이 초반 공연에 쓰인다 (`js/systems/song.js` `SS.concertArt`).
+1~2막의 이야기가 도는 곳은 조선(`kr_trio`)·중국(`6_trio`)·일본(`9_trio`)이므로 이 세 장이 먼저다 (다른 지역으로 먼저 나가는 것도 막혀 있지는 않다). 그림이 없는 지역은 지금처럼 무릎상 무대로 나온다.

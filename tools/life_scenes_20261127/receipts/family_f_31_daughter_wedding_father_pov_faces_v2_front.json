@@ -1,0 +1,13 @@
+{
+  "id": "family_f_31_daughter_wedding_father_pov_faces_v2_front",
+  "key": "family-events/female/31_daughter_wedding_father_pov",
+  "title": "family_f_31_daughter_wedding_father_pov",
+  "prompt": "Use case: identity-preserve. Edit ONLY the elderly gray-haired captain MOTHER in the far LEFT foreground of this supplied wedding painting. Her face is still too turned away and partly hidden by her hand. Turn her head and shoulders gently toward the viewer into a natural CLEAR THREE-QUARTER face with BOTH EYES, nose and mouth fully visible. Lower her raised hand from her face to rest over her heart. Give her a beautiful dignified aged face, gentle wrinkles, bright eyes with a tear of happiness and a proud tender smile as she watches her adult daughter's wedding. Keep her gray braided bun, age, navy gold embroidered captain coat and position on the LEFT. Preserve EVERY other person, their newly rendered faces, wedding interaction, hands, clothes, harbor, ships, warm lighting, painterly style and panoramic composition exactly. No new people, no de-aging, no text, no cropping. The viewer must clearly read the elderly mother's entire expression.",
+  "refs": [
+    "C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-bbcec73b-2753-4b34-aaa4-0c2fa71b9aae.png"
+  ],
+  "replaces": "family_f_31_daughter_wedding_father_pov",
+  "mode": "built-in image_gen edit",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-81d90090-c7e3-412d-b68a-4b73cad9bb90.png",
+  "output_hint": "Generated images are saved to C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5 as C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-81d90090-c7e3-412d-b68a-4b73cad9bb90.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+}

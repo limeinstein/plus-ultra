@@ -1,0 +1,11 @@
+{
+  "id": "concert_kr_trio_new",
+  "key": "song/concerts/kr_trio_20261127",
+  "prompt": "Use case: historical-scene. ONE single full-bleed ultrawide 9:4 narrative event painting for a historical Age of Sail RPG, 1500-1700. Rich hand-painted semi-realistic game illustration, painted fabric and natural materials, atmospheric layered depth, believable anatomy, hands and emotions, main action within central 80 percent. No text, captions, watermark, UI, collage, grid, panels, modern objects. Reference image defines these fictional GAME characters identities, hairstyles and clothes, not real musicians. Preserve Soyoungs dark braided hair, flower hairpin, cream blossom embroidered outfit and navy jacket. Exactly THREE band members: Kim Soyoung singing with blossom fan, Woldam playing geomungo, Hwanggyu striking gong and janggu. NO masked man, no fourth performer. Dawn harbor market on Joseon coast, exuberant street performance, smiling fishermen and children, lively NEW composition.",
+  "refs": [
+    "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\concerts\\kr.webp"
+  ],
+  "mode": "built-in image_gen",
+  "source": "C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-bcda34ec-3df2-4458-9fb6-4e801e6d5204.png",
+  "output_hint": "Generated images are saved to C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5 as C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-bcda34ec-3df2-4458-9fb6-4e801e6d5204.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+}

@@ -36,8 +36,16 @@
   // ---------------------------------------------------------------- 누가 있나
   /** 아내·애인 → {kind:'wife'|'wife2'|'lover', id, name, speaker, mate, maid, preg, w, m} */
   FE.mainWife = function () {
+    if (G.R.heroFemale()) return FE.husband();
     var p = P(); if (!p.wife) return null;
     return { kind: 'wife', id: p.wife, name: Fm().wifeName(), speaker: Fm().wifeSpeaker(), mate: !!Fm().wifeMate(), maid: !!G.MAID[p.wife], preg: !!(p.preg && p.preg.told) };
+  };
+  /** 여성 제독의 동반자. 배우자도 기존 사건의 조건·효과·재생 간격을 함께 쓴다. */
+  FE.husband = function (id, lover) {
+    var hs = G.Husbands ? G.Husbands.list() : [], h = id ? hs.filter(function (x) { return x.id === id; })[0] : hs[0];
+    id = id || (h && h.id); var d = id && G.MATE[id];
+    if (!d) return null;
+    return { kind: lover ? 'lover' : 'husband', male: true, id: id, name: d.name, speaker: G.Husbands.speaker(id), mate: true, maid: false, preg: !!(P().pregSelf && P().pregSelf.told) };
   };
   FE.wife2 = function (w) {
     if (!w || !G.Wives) return null;
@@ -50,6 +58,11 @@
   /** 배에 탄 아내 (본처가 먼저). 둘째 부인이 여럿 타고 있으면 돌아가며 — kind('tavern'·'sea'·'port')마다 가장 오래 함께하지 못한 사람.
       한 번도 함께하지 않은 사람이 먼저, 같으면 먼저 맞은 사람부터. 기록: p.famEv.turn = {'tavern:id': 날} */
   FE.aboardWife = function (kind) {
+    if (G.R.heroFemale()) {
+      var hs = G.Husbands ? G.Husbands.list().slice() : [], turns = mem().turn || {}, prefix = (kind || 'sea') + ':';
+      hs.sort(function (a, b) { return (turns[prefix + a.id] == null ? -1 : turns[prefix + a.id]) - (turns[prefix + b.id] == null ? -1 : turns[prefix + b.id]); });
+      return hs.length ? FE.husband(hs[0].id) : null;
+    }
     var p = P();
     if (p.wife && p.wifeAboard) return FE.mainWife();
     var ab = G.Wives ? G.Wives.aboard() : []; if (!ab.length) return null;
@@ -69,7 +82,11 @@
       .filter(function (k) { return !k.married && !k.lost; });   // 시집간 딸·섬에서 사라진 아이는 집 장면에 나오지 않는다 (2026-10-26)
     return { kids: list.filter(named).sort(byAge), babies: list.filter(function (k) { return !named(k); }) };
   };
-  FE.aboardKids = function () { return (Fm().aboard() || []).filter(named).sort(byAge); };
+  FE.aboardKids = function () {
+    var list = (Fm().aboard() || []).slice();
+    if (G.R.heroFemale() && G.SeaNest) G.SeaNest.list().forEach(function (k) { if (list.indexOf(k) < 0) list.push(k); });
+    return list.filter(named).sort(byAge);
+  };
   function hasMate() { var s = S(); return (s.mates || []).some(function (m) { return m.role === 'first' && !(G.R.mateHidden && G.R.mateHidden(m)); }); }
 
   /** 장면에 나오는 사람들 */
@@ -86,7 +103,7 @@
   function test(tok, cs) {
     var not = tok.charAt(0) === '!', t = not ? tok.slice(1) : tok, L = cs.love, k1 = cs.kids[0], r;
     switch (t) {
-      case 'wife': r = !!L && L.kind === 'wife'; break;
+      case 'wife': r = !!L && (L.kind === 'wife' || L.kind === 'husband'); break;
       case 'wife2': r = !!L && L.kind === 'wife2'; break;
       case 'lover': r = !!L && L.kind === 'lover'; break;
       case 'married': r = !!L && L.kind !== 'lover'; break;
@@ -123,7 +140,7 @@
       if (!pickK) return null;
       c2 = Object.assign({}, cs, { kids: [pickK].concat(cs.kids.filter(function (k) { return k !== pickK; })) });
     }
-    if (!c2.love && ev.at !== 'home' && ev.at !== 'port') return null;     // 집·항구 밖의 장면은 아내·애인이 있어야
+    if (!c2.love && ev.at !== 'home' && ev.at !== 'port' && !(G.R.heroFemale() && (ev.at === 'preg' || ev.at === 'birth'))) return null;
     return all(ev.need, c2) ? c2 : null;
   };
   /** 어울리는 사건 하나를 고른다 (많이 본 것일수록 덜, 바로 앞에 본 것은 빼고) */
@@ -145,7 +162,7 @@
   FE.fill = function (t, cs) {
     var L = cs.love, k = cs.kids, p = P();
     var V = {
-      me: p.name, love: L ? L.name : '', you: L && L.kind === 'lover' ? '선장님' : '당신',
+      me: p.name, love: L ? L.name : '가족', you: L && L.kind === 'lover' ? '선장님' : '당신',
       k1: kname(k[0]), k2: kname(k[1]), k3: kname(k[2]), kids: k.map(kname).join('·') || '얘들아', child: k[0] ? (k[0].sex === 'f' ? '딸' : '아들') : '',
       baby: cs.babies.length ? kname(cs.babies[0]) : '아기', mate: (function () { var sp = G.Scenes.mateSpeaker('first'); return sp ? sp.name : ''; })(),
       city: cs.city, home: cs.home, days: String(cs.days || '')
@@ -175,7 +192,8 @@
   /** 실제로 나올 줄들 [[화자, 글]] (시험·미리보기) */
   FE.lines = function (ev, cs) {
     var out = [];
-    (ev.lines || []).forEach(function (ln) {
+    var femaleLines = G.R.heroFemale() && G.FAMILY_FEMALE_LINES && G.FAMILY_FEMALE_LINES[ev.id];
+    (femaleLines || ev.lines || []).forEach(function (ln) {
       if (!all(ln.if, cs)) return;
       var sp = FE.speaker(ln.w, cs); if (!sp) return;
       out.push([FE.face(sp), FE.fill(ln.t, cs), ln.w]);
@@ -185,7 +203,16 @@
 
   // ---------------------------------------------------------------- 그림
   var curPic = null;
+  /** 다른 가족 사건(성인 자녀·후계자 포함)도 같은 성별 규칙으로 그림을 고른다. */
+  FE.imageKey = function (key) {
+    if (G.R.heroFemale() && /^family-events\/(?!female\/)/.test(key || '')) {
+      var fk = key.replace('family-events/', 'family-events/female/');
+      if (G.Img && G.Img.file(fk)) return fk;
+    }
+    return key;
+  };
   FE.showPic = function (ev) {
+    ev = Object.assign({}, ev, { img: FE.imageKey(ev.img) });
     var root = document.getElementById('ui'), I = G.Img;
     if (!root || (!ev.canvas && (!ev.img || !I || !I.file(ev.img)))) return { stop: function () { return Promise.resolve(); } };   // ev.canvas: 꾸린 장면 (js/art/eventshot.js)
     if (curPic) curPic.stop();
@@ -257,7 +284,8 @@
   // ---------------------------------------------------------------- 효과
   function addLove(L, n) {
     if (!L || !n) return;
-    if (L.kind === 'lover') { var st = S().maids[L.id] || (S().maids[L.id] = { aff: 0, met: 0 }); st.aff = Math.min(100, (st.aff || 0) + n); }
+    if (L.male) { var mate = (S().mates || []).filter(function (x) { return x.id === L.id; })[0]; if (mate) mate.aff = Math.min(100, (mate.aff || 0) + n); }
+    else if (L.kind === 'lover') { var st = S().maids[L.id] || (S().maids[L.id] = { aff: 0, met: 0 }); st.aff = Math.min(100, (st.aff || 0) + n); }
     else if (L.kind === 'wife2' && L.w) L.w.love = Math.min(100, (L.w.love == null ? 70 : L.w.love) + n);
     else { var p = P(); p.wifeLove = Math.min(100, (p.wifeLove == null ? 70 : p.wifeLove) + n); }
   }
@@ -281,7 +309,7 @@
     var m = mem(), s = S();
     m.seen[ev.id] = (m.seen[ev.id] || 0) + 1; m.last = s.day; m.lastId = ev.id;
     FE.busy = true;
-    if (G.Img && G.Img.preload) { try { await G.Img.preload([[ev.img]], 1200); } catch (e) { /* 그림이 늦으면 글부터 */ } }
+    if (G.Img && G.Img.preload) { try { await G.Img.preload([[FE.imageKey(ev.img)]], 1200); } catch (e) { /* 그림이 늦으면 글부터 */ } }
     var pic = FE.showPic(ev), res = '', fx = Object.assign({}, ev.fx || {});
     try {
       var ls = FE.lines(ev, c2);
@@ -331,6 +359,21 @@
     mem().dates[maid.id] = s.day;
     return FE.run('tavern', FE.cast({ city: c.id, love: FE.lover(maid), kids: [], mate: false }));
   };
+  FE.canMateDate = function (d) {
+    if (!G.R.heroFemale() || !G.Husbands || !G.Husbands.loveable(d)) return false;
+    var m = (S().mates || []).filter(function (x) { return x.id === d.id; })[0], last = mem().dates['mate:' + d.id];
+    var shared = (mem().turn || {})['tavern:' + d.id];
+    if (shared != null) last = last == null ? shared : Math.max(last, shared);
+    var pair = G.Romance && G.Romance.pairOf ? G.Romance.pairOf(d.id) : null;
+    return !!(m && !(G.R.mateHidden && G.R.mateHidden(m)) && (!pair || (pair.stage !== 'wed' && pair.stage !== 'lover')) && (G.Husbands.is(d.id) || (m.aff || 0) >= (K().dateAff || 40)) && (last == null || S().day - last >= (K().dateGap || 7)));
+  };
+  FE.mateDate = async function (c, d) {
+    if (!FE.canMateDate(d)) return false;
+    mem().dates['mate:' + d.id] = S().day;
+    var L = FE.husband(d.id, !G.Husbands.is(d.id));
+    markTurn('tavern', L);
+    return FE.run('tavern', FE.cast({ city: c.id, love: L, mate: false }));
+  };
   /** 술집: 배에 탄 아내와 한잔 — 둘째 부인이 여럿이면 돌아가며, 저마다 dateGap일에 한 번 (본처·한 사람뿐이면 예전처럼) */
   function wifeLast(L) { var m = mem(), t = m.turn || {}, v = t['tavern:' + L.id]; return v != null ? v : (G.Wives && G.Wives.aboard().length > 1 ? null : m.dates._wife); }
   FE.canWifeDate = function () { var L = FE.aboardWife('tavern'), s = S(); if (!L) return false; var d = wifeLast(L); return d == null || s.day - d >= (K().dateGap || 7); };
@@ -339,6 +382,7 @@
   FE.wifeDate = async function (c) {
     var L = FE.aboardWife('tavern'); if (!L) return false;
     mem().dates._wife = S().day; markTurn('tavern', L);
+    if (L.male) mem().dates['mate:' + L.id] = S().day;
     return FE.run('tavern', FE.cast({ city: c.id, love: L, kids: FE.aboardKids(), aboard: true, mate: hasMate() }));
   };
   function awayDays() { var p = P(), m = mem(); var last = Math.max(p.homeSeen == null ? -1 : p.homeSeen, m.home == null ? -1 : m.home); return last < 0 ? 0 : S().day - last; }
@@ -374,22 +418,23 @@
     if (!w && m.ret != null && s.day - m.ret <= 5) { m.home = s.day; return false; }   // 부두에서 막 마중을 받았다
     if (!w) m.home = s.day;
     if (away < (k.returnDays == null ? 45 : k.returnDays)) return false;
-    var hk = FE.homeKids(w), together = w ? !!w.aboard : !!p.wifeAboard;   // 아내가 배에 함께 탔다면 기다린 사람의 마중이 아니라, 오랜만에 같이 집에 돌아온 부부의 장면 (2026-10-21)
+    var hk = FE.homeKids(w), together = w ? !!w.aboard : (G.R.heroFemale() ? true : !!p.wifeAboard);
     var ok = await FE.run('return', FE.cast({ love: L, kids: hk.kids, babies: hk.babies, days: away, together: together }));
     if (ok) { FE.entry.played = true; if (!w) m.ret = s.day; }
     return ok;
   };
   /** 아기 소식을 들은 날 (family.js·wives.js 의 「아기가 생겼어요」 대신) */
   FE.pregNews = async function (w) {
-    var L = w ? FE.wife2(w) : FE.mainWife(); if (!L) return false;
-    L.preg = true;
+    var pr = P().pregSelf;
+    var L = G.R.heroFemale() && pr ? FE.husband(pr.dad) : w ? FE.wife2(w) : FE.mainWife(); if (!L && !G.R.heroFemale()) return false;
+    if (L) L.preg = true;
     var hk = FE.homeKids(w), ok = await FE.play('preg_news', FE.cast({ at: 'preg', love: L, kids: hk.kids, babies: hk.babies }));
     if (ok && FE.entry) FE.entry.played = true;
     return ok;
   };
   /** 해산 뒤 (family.js birthScene · firstMeet, wives.js) */
   FE.birth = async function (born, witness, w) {
-    var L = w ? FE.wife2(w) : FE.mainWife(); if (!L) return false;
+    var L = w ? FE.wife2(w) : FE.mainWife(); if (!L && !G.R.heroFemale()) return false;
     var hk = FE.homeKids(w), others = hk.kids.filter(function (k) { return born.indexOf(k) < 0; });
     var ok = await FE.play(witness ? 'birth_hands' : 'birth_night', FE.cast({ at: 'birth', love: L, kids: others, babies: born, witness: witness }));
     if (ok && FE.entry) FE.entry.played = true;
@@ -399,12 +444,14 @@
   FE.homeDay = async function (w) {
     var s = S(), p = P(), k = K(), m = mem(), e = FE.entry;
     if (e && e.day === s.day && e.played) return false;
-    var L = w ? FE.wife2(w) : FE.mainWife(); if (!L) return false;
-    var hk = FE.homeKids(w), pr = w ? w.preg : p.preg;
+    var L = w ? FE.wife2(w) : FE.mainWife();
+    if (!L && !G.R.heroFemale()) return false;
+    var hk = FE.homeKids(w), pr = w ? w.preg : G.R.heroFemale() ? p.pregSelf : p.preg;
+    if (G.R.heroFemale() && pr && pr.dad) L = FE.husband(pr.dad);
     if (pr && pr.told) {
       pr.fe = pr.fe || {};
       var id = pr.due - s.day <= (k.cradleDays == null ? 60 : k.cradleDays) ? (pr.fe.cradle ? null : 'preg_cradle') : (pr.fe.touch ? null : 'preg_touch');
-      if (id) { pr.fe[id === 'preg_cradle' ? 'cradle' : 'touch'] = 1; L.preg = true; var ok0 = await FE.play(id, FE.cast({ at: 'preg', love: L, kids: hk.kids, babies: hk.babies })); if (ok0 && e) e.played = true; return ok0; }
+      if (id) { pr.fe[id === 'preg_cradle' ? 'cradle' : 'touch'] = 1; if (L) L.preg = true; var ok0 = await FE.play(id, FE.cast({ at: 'preg', love: L, kids: hk.kids, babies: hk.babies })); if (ok0 && e) e.played = true; return ok0; }
     }
     if (!hk.kids.length) return false;
     if (!w && p.homeEvt === s.day) return false;                  // 아이와 얽힌 다른 일(homelife.js)이 오늘 있었다
@@ -418,7 +465,8 @@
   /** 혼례 (청혼을 받아들인 직후) — o: {id, second, city} */
   FE.wedding = async function (o) {
     var s = S(), c = G.CITY_DATA[o.city != null ? o.city : s.loc.city], L;
-    if (o.second && G.Wives) L = FE.wife2(G.Wives.of(o.id)); else L = FE.mainWife();
+    if (G.R.heroFemale()) L = FE.husband(o.id);
+    else if (o.second && G.Wives) L = FE.wife2(G.Wives.of(o.id)); else L = FE.mainWife();
     if (!L) return false;
     var A = G.Art, npc = L.maid
       ? { name: '술집 주인', portrait: A.withImg(A.npcSpec('wedkeeper' + (c ? c.id : 0), 'keeper', c ? G.Img.folkStyle(c) : 'ib', 'm'), G.Img.chain.npc('innkeeper', c)), lang: 3 }

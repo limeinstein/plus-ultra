@@ -153,7 +153,7 @@
     }
     r.rig.sails.forEach(function(a){var m=a.mesh.material;if(!m.userData.shipBaseColor)m.userData.shipBaseColor=m.color.clone();
       var active=G.SailDesign&&G.SailDesign.design(spec.sailDesign).id!=='plain',p=r.ship.artProfile,base=p.sail||G.FX.shipArt.families[p.family].sail;
-      if(G.SailArt)G.SailArt.decorate(m,spec,base,G.Three);
+      if(G.SailArt)G.SailArt.decorate(m,spec,base,G.Three,a.kind);
       m.color.copy(m.userData.shipBaseColor);if(!active)m.color.multiply(r.tint);
     });
     var pose=spec.pose||{};r.body.rotation.set(clamp(pose.roll||0,-.3,.3),0,clamp(pose.pitch||0,-.16,.16));r.body.position.y=clamp(pose.heave||0,-.1,.1)*c.heave;

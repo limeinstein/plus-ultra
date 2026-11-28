@@ -1026,7 +1026,7 @@
     var low = !!(root && !UI.busy() && screenEl && screenEl.querySelector('.cmdmenu, .city-banner'));
     var menuEl = low ? screenEl.querySelector('.cmdmenu') : null;
     // 이야기 모드(「아버지의 사진」)는 사건이다 — 어느 화면(술집·도서관·바다·뭍)에서든 마주 선 무릎상 둘로 (얼굴 ↔ 무릎상으로 바뀌지 않게)
-    var story = !!(root && S && S.player && ((G.Story && G.Story.active && G.Story.active()) || (G.SongStory && G.SongStory.active && G.SongStory.active()) || (G.JHook && G.JHook.active && G.JHook.active()) || (G.GoldSea && G.GoldSea.active && G.GoldSea.active())));   // 「바닷길 노래」도 (js/systems/song.js)
+    var story = !!(root && S && S.player && ((G.Story && G.Story.active && G.Story.active()) || (G.SongStory && G.SongStory.active && G.SongStory.active()) || (G.JHook && G.JHook.active && G.JHook.active()) || (G.GoldSea && G.GoldSea.active && G.GoldSea.active()) || (G.Arslan && G.Arslan.active && G.Arslan.active())));   // 「바닷길 노래」도 (js/systems/song.js)
     var keep = !story && keepScene();
     // 이야기 모드에서 제독 혼자의 말·물음(진행기 밖의 대사): 이 장면에서 방금 마주했던 사람과 둘이 선다. 사람 없는 내레이션이 오면 장면이 바뀐 것으로 본다
     if (story && !opts.portrait && !opts.name) storyPartner = null;

@@ -2,7 +2,7 @@
 'use strict';
 const assert=require('assert'),fs=require('fs'),path=require('path'),{pathToFileURL}=require('url');
 let pw;try{pw=require('playwright');}catch(_){pw=require('../tools/procedural_art/node_modules/playwright-core');}
-const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'artifacts/sail-workshop-20261123');fs.mkdirSync(OUT,{recursive:true});
+const ROOT=path.resolve(__dirname,'..'),OUT=process.env.OUT||path.join(ROOT,'artifacts/sail-workshop-20261123');fs.mkdirSync(OUT,{recursive:true});
 (async()=>{
  const browser=await pw.chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--no-sandbox','--allow-file-access-from-files','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const errors=[],report={};
@@ -15,6 +15,29 @@ const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'artifacts/sail-works
     const cv=document.createElement('canvas');cv.width=720;cv.height=560;const ctx=cv.getContext('2d'),out={shapes:[],patterns:[],fallback:[]};
     function hash(){const d=ctx.getImageData(0,0,720,560).data;let h=0,n=0;for(let i=0;i<d.length;i+=4){h=(Math.imul(h,31)+d[i]*3+d[i+1]*5+d[i+2]*7+d[i+3])|0;if(d[i+3])n++;}return{hash:h,n};}
     function draw(id,opt={},len=230){ctx.clearRect(0,0,720,560);const spec=G.Art.shipLook(id,Object.assign({rig:{fill:.9,brace:.14,lee:1},flag:'#315c99'},opt));if(!G.Ship3D.draw(ctx,360,450,.55,len,spec,1.25))throw Error(JSON.stringify(G.Ship3D.stats()));return hash();}
+    // 실제로 그린 돛마다 위쪽은 주황, 아래쪽은 파랑인지 확인한다.
+    const renderedSails=new Set(),meshProto=G.Three.Mesh.prototype,originalRender=meshProto.onBeforeRender;
+    meshProto.onBeforeRender=function(...args){if(this.userData.sailKind)renderedSails.add(this);return originalRender.apply(this,args);};
+    try{
+     for(const shape of G.SAIL_SHAPES){
+      renderedSails.clear();draw('galleon',{sailShape:shape.id,sailDesign:'nation_dutch'});
+      if(!renderedSails.size)throw Error('삼색 돛 누락 '+shape.id);
+      for(const mesh of renderedSails){
+       const {position,uv}=mesh.geometry.attributes,map=mesh.material.map,canvas=map.image;
+       const bands=[.15,.85].map(v=>{
+        let idx=0,best=Infinity;
+        for(let i=0;i<uv.count;i++){
+         const dist=Math.abs(uv.getX(i)-.5)+Math.abs(uv.getY(i)-v);
+         if(dist<best){best=dist;idx=i;}
+        }
+        const point=map.transformUv(new G.Three.Vector2().fromBufferAttribute(uv,idx));
+        const [r,,b]=canvas.getContext('2d').getImageData(Math.floor(point.x*canvas.width),Math.floor(point.y*canvas.height),1,1).data;
+        return {height:position.getY(idx),redMinusBlue:r-b};
+       }).sort((a,b)=>b.height-a.height);
+       if(bands[0].redMinusBlue<=0||bands[1].redMinusBlue>=0)throw Error('거꾸로 된 문양 '+shape.id+' '+mesh.userData.sailKind);
+      }
+     }
+    }finally{meshProto.onBeforeRender=originalRender;}
     let original=draw('galleon').hash;
     for(const shape of G.SAIL_SHAPES){const h=draw('galleon',{sailShape:shape.id}).hash,ship=G.ShipModels.create(G.Three,'galleon',{sailShape:shape.id}),hull=ship.buildHull(),rig=G.ShipModels.makeRig(ship,G.Three,g=>g,G.FX.ship3d);
      for(const furl of [0,.5,1])for(const lee of [-1,1]){rig.update({furl,rig:{brace:lee*.6,fill:.9,lee}},2);for(const a of rig.sails)if(!Array.from(a.mesh.geometry.attributes.position.array).every(Number.isFinite))throw Error('돛 좌표 '+shape.id);}
@@ -44,7 +67,7 @@ const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'artifacts/sail-works
    console.log('6가지 범장 · 국가/왕실/가문/해적 · 같은 선종 격리 · 2D 대체 · 반복 문양 자원 검사 통과');
    if(process.argv.includes('--visual-only')){fs.writeFileSync(path.join(OUT,'visual-report.json'),JSON.stringify(report,null,2));return;}
   }
-  await page.goto(pathToFileURL(path.join(ROOT,'index.html')).href,{waitUntil:'domcontentloaded',timeout:120000});await page.waitForFunction(()=>G.Scenes.city.B.shipyard.sailWorkshop,null,{timeout:90000});await page.evaluate(()=>G.Game.ensureGeo());
+  await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT,'index.html')).href),{waitUntil:'domcontentloaded',timeout:120000});await page.waitForFunction(()=>G.Scenes.city.B.shipyard.sailWorkshop,null,{timeout:90000});await page.evaluate(()=>G.Game.ensureGeo());
   report.setup=await page.evaluate(()=>{const s=G.State.newGame({name:'돛 작업실 검사',nation:'PT',job:'explorer',age:25,birth:{m:1,d:1},st:{str:60,int:60,mar:60,cha:60},sk:{},lg:[],diff:'normal'});G.Game.state=s;s.settings.res=.35;s.settings.music=0;s.settings.sound=0;s.date.y=1670;s.player.gold=1000000;s.fleet.ships=[G.R.newShip('sloop','작업실'),G.R.newShip('geobukseon','거북선')];s.fleet.crew=80;G.Game.go('city',{cityId:0});return{designs:G.SAIL_DESIGNS.length,groups:Object.fromEntries(Object.keys(G.SAIL_DESIGN_GROUPS).map(k=>[k,G.SAIL_DESIGNS.filter(d=>d.group===k).length])),uncovered:Object.keys(G.NATION_COLORS).filter(n=>!G.SAIL_DESIGNS.some(d=>d.id==='nation:'+n)&&!['포르투갈','에스파냐','카스티야','아라곤','잉글랜드','영국','스코틀랜드','프랑스','네덜란드','덴마크','스웨덴','베네치아','제노바','교황령','러시아','모스크바 대공국','폴란드','조선','명','남명','청','후금','일본','오스만 제국'].includes(n))};});assert.equal(report.setup.uncovered.length,0);
   async function open(i=0){await page.evaluate(i=>{window.__work=G.Scenes.city.B.shipyard.sailWorkshop(G.CITY_DATA[0],G.Game.state.fleet.ships[i]);},i);await page.locator('.sail-work-preview').waitFor();}
   async function choose(group,id){await page.locator('[data-sail-group="'+group+'"]').click();await page.locator('.work-list').selectOption(id);}

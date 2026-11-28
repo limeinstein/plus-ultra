@@ -586,7 +586,7 @@
         if (mt.n <= 0) { msgs.push({ icon: 'boot', text: '이제 모두 걸어서 간다.' }); l.mount = { id: 'walk', n: 0 }; }
       }
       var sickK = G.SkillCombos ? G.SkillCombos.factor('landSick') : 1;
-      if (T.sick && U.chance((0.04 - R.skill('med') * 0.01) * (st.herbs > 0 ? 0.3 : 1) * sickK)) { var sk = U.ri(1, 2); l.party = Math.max(0, l.party - sk); f.crew = Math.max(0, f.crew - sk); msgs.push({ icon: 'skull', text: '열병으로 대원 ' + sk + '명을 잃었다.' }); }
+      if (T.sick && U.chance((0.04 - R.skill('med') * 0.01) * (st.herbs > 0 ? 0.3 : 1) * sickK)) { var sk = U.ri(1, 2); l.party = Math.max(0, l.party - sk); f.crew = Math.max(0, f.crew - sk); if (f.crew <= 0) st.deathCause = 'illness'; msgs.push({ icon: 'skull', text: '열병으로 대원 ' + sk + '명을 잃었다.' }); }
       G.State.revealChart(l.lon, l.lat, 0.6 + R.skill('survey') * 0.2 + G.Mounts.scout(MT(), l.party));
       // discover inland cities
       G.CITY_DATA.forEach(function (c) { if (!R.cityExists(c) || s.known.indexOf(c.id) >= 0) return; if (G.Geo.dist(l.lon, l.lat, c.lon, c.lat) < 0.8) { s.known.push(c.id); UI.toast('새로운 도시 「' + c.name + '」' + U.jx(c.name, '을/를') + ' 발견했다!', 'castle', 4000); G.Fame.add('ex', 5); } });
@@ -594,7 +594,8 @@
       refreshHud();
       if (G.Quest && G.Quest.showNotes) await G.Quest.showNotes();   // 기한을 넘긴·거둬들인 조합 의뢰 (js/systems/quest.js)
       // 자연재해: 지진·화산·산사태·쓰나미·홍수가 탐험대를 덮친다 (js/systems/disaster.js)
-      if (G.Disaster) { await G.Disaster.land({ spend: spendDays, dailyCost: function () { return dailyCost(); }, mount: MT, refresh: refreshHud }); if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy = Math.max(0, st.busy - 1); await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); st.busy = Math.max(0, st.busy - 1); return; } }
+      var beforeDisasterCrew = f.crew;
+      if (G.Disaster) { await G.Disaster.land({ spend: spendDays, dailyCost: function () { return dailyCost(); }, mount: MT, refresh: refreshHud }); if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy = Math.max(0, st.busy - 1); await G.Family.retire(true, beforeDisasterCrew > 0 ? 'disaster' : (st.deathCause || 'abandoned')); return; } l.party = 0; await returnToBase(true); st.busy = Math.max(0, st.busy - 1); return; } }
       // discoveries
       var chk = G.Disc.checkLand(l.lon, l.lat);
       for (var i = 0; i < chk.hits.length; i++) {
@@ -647,7 +648,7 @@
           if (te) { if (G.Pace) G.Pace.mark(tk); } else await encounter(terr);
         }
       }   // 튜토리얼에서는 우연한 만남을 재운다
-      if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy = Math.max(0, st.busy - 1); await G.Family.retire(true); return; } l.party = 0; await returnToBase(true); }
+      if (l.party <= 0 || f.crew <= 0) { await UI.say('탐험대가 전멸했다...', {}); if (f.crew <= 0) { st.busy = Math.max(0, st.busy - 1); await G.Family.retire(true, st.deathCause || 'abandoned'); return; } l.party = 0; await returnToBase(true); }
     } catch (e) { console.error(e); }
     st.busy = Math.max(0, st.busy - 1);
   }
@@ -1252,6 +1253,7 @@
     var ff = fontFam();
     var soilTrail=G.TerrainArt&&G.TerrainArt.drawSoilTrail(ctx,st.trail,st.cam,toScreen,st.t);
     var cover = G.TerrainArt && G.TerrainArt.draw(ctx, st.cam, toScreen, l);
+    if(G.VolcanoArt)G.VolcanoArt.map(ctx,st.cam,toScreen);
     // base marker
     var bp = toScreen(l.base.lon, l.base.lat);
     if (G.LandSea) G.LandSea.draw(ctx, toScreen, st.cam.zoom, st.t, ff);   // 바다를 오가는 배들 (내 배보다 아래)
@@ -1291,7 +1293,8 @@
         ctx.strokeStyle = 'rgba(200,40,30,.6)'; ctx.setLineDash([8, 8]); ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(zc[0], zc[1], 1.3 * zk * st.cam.zoom, 0, 7); ctx.stroke(); ctx.setLineDash([]);
       }
     }
-    // 자연재해의 자취 (알려진 것만)
+    // 흙먼지는 탐험대와 재해 안내 밑에 그린다.
+    if (G.Quake && st.qo) G.Quake.drawLand(ctx, toScreen, toWorld, st.cam.zoom);
     if (G.Disaster) G.Disaster.drawLand(ctx, toScreen, st.cam.zoom, st.t, ff);
     // 정찰대가 알아챈 것
     if (!st.marks || (st.f || 0) % 20 === 0 || st.marksVer !== G.Explore.ver) { st.marks = G.Explore.markers(l.lon, l.lat, 'land'); st.marksVer = G.Explore.ver; }
@@ -1314,8 +1317,6 @@
     if (!G.ExpeditionTracks || G.FX.sprites.expedition.formation.enabled === false) G.Party.drawTracks(ctx, tp.slice(0, 140), mt.id, terrNow, psz, st.t);
     // destination
     if (st.path) { var dp = toScreen(st.path[0], st.path[1]), pp0 = toScreen(l.lon, l.lat); ctx.strokeStyle = 'rgba(255,245,220,.8)'; ctx.setLineDash([6, 7]); ctx.beginPath(); ctx.moveTo(pp0[0], pp0[1]); ctx.lineTo(dp[0], dp[1]); ctx.stroke(); ctx.setLineDash([]); ctx.beginPath(); ctx.arc(dp[0], dp[1], 8, 0, 7); ctx.stroke(); }
-    // 지진: 땅에서 피어오르는 먼지 · 튀는 잔돌 · 떨리는 우듬지와 풀 (탐험대 아래)
-    if (G.Quake && st.qo) G.Quake.drawLand(ctx, toScreen, toWorld, st.cam.zoom);
     // 흔들리는 땅 위에서 탐험대는 조금 늦게 따라가 휘청인다 (그림만 — 실제 자리·발밑 먼지 자리는 그대로)
     if (st.qo && G.Quake) { var stg = G.Quake.stagger(st.qo); tp = tp.map(function (q) { return [q[0] + stg[0], q[1] + stg[1]]; }); }
     // 발밑 먼지와 대원들 뒤에, 조종하는 대장의 발표시를 한 번 그린다.
@@ -1338,6 +1339,7 @@
       ctx.font = '700 17px ' + ff;
       G.CityIcon.nameplate(ctx,c.name,label);
     });
+    if(G.Disaster)G.Disaster.drawVolcanicAsh(ctx,toScreen,Math.atan2(.2,.4));
     if(G.Rain)G.Rain.draw(ctx,st.t,Math.atan2(.2,.4),false,null,'land',pp);
     // status
     if ((st.f = (st.f || 0) + 1) % 8 === 0 && el.status) {

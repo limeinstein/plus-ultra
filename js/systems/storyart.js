@@ -24,7 +24,7 @@
     var s = G.Game && G.Game.state;
     p = p || (s && s.player);
     if (!s || p !== s.player || p.generation > 1) return [];
-    var id = s.gold ? 'adrian' : s.jhook ? 'jessica' : s.song ? 'soyoung' : null;
+    var id = s.gold ? 'adrian' : s.jhook ? 'jessica' : s.song ? 'soyoung' : s.arslan ? 'arslan' : null;
     if (!id) return [];
     if (age == null) age = G.R.age();
     var stage = G.Img.heroAgeStage(p, age);

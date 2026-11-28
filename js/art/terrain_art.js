@@ -340,6 +340,7 @@
     var expedition=actor&&actor.mode==='land',ap=actor&&!expedition&&toScreen(actor.lon,actor.lat);
     ctx.save();ctx.globalAlpha=fade;
     plate.formations.forEach(function(r){
+      if(r.discovery&&G.VolcanoArt&&G.VolcanoArt.landmark(r.discovery,cam.zoom))return;
       if(r.discovery&&G.DiscoveryIcon&&G.DiscoveryIcon.replacesFormation(r.discovery))return;
       A.sprite(ctx,r.id,r.x+dx,r.y+dy,r.w,r.h);
     });

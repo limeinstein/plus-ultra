@@ -1695,6 +1695,7 @@
         var SV = (G.BALANCE && G.BALANCE.starve) || [0.03, 0.07];
         var dx = f.crew * U.rf(SV[0], SV[1]), dead = Math.floor(dx) + (U.chance(dx % 1) ? 1 : 0);   // 작은 배라고 날마다 꼭 한 명씩 쓰러지지는 않는다 (괴혈병과 같은 셈)
         f.crew = Math.max(0, f.crew - dead); f.fatigue = Math.min(100, f.fatigue + 4); f.discipline = Math.max(0, f.discipline - 4);
+        if (f.crew <= 0) st.deathCause = G.Ending ? G.Ending.cause('death') : 'starvation';
         if (dead) msgs.push({ icon: 'skull', text: (f.food <= 0 ? '식량' : '물') + '이 떨어져 선원 ' + dead + '명이 쓰러졌다!' });
         else if (U.chance(0.34)) msgs.push({ icon: 'skull', text: (f.food <= 0 ? '식량' : '물') + '이 떨어졌다. 선원들이 쓰러지기 직전이다!' });
       }
@@ -1742,6 +1743,7 @@
           var sx = f.crew * (BAL.scurvyDeath || 0.012) * f.scurvy / 18, sd = Math.floor(sx) + (U.chance(sx % 1) ? 1 : 0);   // 작은 배라고 매번 한 명씩 쓰러지지는 않는다
           if (G.FigFx) sd = G.FigFx.crewLoss(sd);
           f.crew = Math.max(0, f.crew - sd);
+          if (f.crew <= 0 && !st.deathCause) st.deathCause = 'sea_illness';
           if (!st.scurvyWarned) { msgs.push({ icon: 'skull', text: '괴혈병이 번지고 있다! 선원이 하나둘 쓰러진다...' }); st.scurvyWarned = true; }
         }
       }
@@ -1832,6 +1834,7 @@
       if (G.OttoEu && G.OttoEu.seaPending()) await G.OttoEu.atSea();   // 프레베자 앞바다: 바르바로사와 신성 동맹 (js/systems/ottomaneurope.js)
       if (G.SongStory && G.SongStory.seaPending()) await G.SongStory.atSea();
       if (G.JHook && G.JHook.seaPending()) await G.JHook.atSea();
+      if (G.Arslan && G.Arslan.seaPending()) await G.Arslan.atSea();   // 「돌아오는 배의 값」: 바다에서 일어나는 사건 (js/systems/arslan.js)
       if (G.GoldSea && G.GoldSea.seaPending()) await G.GoldSea.atSea();   // 「황금의 바다」: 바다에서 일어나는 사건 (js/systems/gold.js)   // 「해적여제」: 바다에서 일어나는 사건 (js/systems/jhook.js)   // 「바닷길 노래」: 바다에서 일어나는 사건 (js/systems/song.js)
       if (G.WangMerch && G.WangMerch.seaPending()) await G.WangMerch.atSea();   // 중국 근해: 마대인과 딸 지나의 금봉호 (js/systems/wangmerchant.js)
       if (G.ColonyCo && G.ColonyCo.seaPending()) await G.ColonyCo.atSea();   // 트랑케바르·퐁디셰리·토바고·다리엔 앞바다 (js/systems/colonyco.js)
@@ -1971,6 +1974,7 @@
       lostCrew = Math.round(f.crew * U.rf(0, 0.06) * dmgK);
       if (G.FigFx) lostCrew = G.FigFx.crewLoss(lostCrew);   // 전설 「어머니의 품」
       f.crew = Math.max(0, f.crew - lostCrew);
+      if (f.crew <= 0 && !st.deathCause) st.deathCause = 'disaster';
       f.fatigue = Math.min(100, f.fatigue + 12);
       var lostFood = Math.round(f.food * U.rf(0, 0.1) * dmgK); f.food -= lostFood; if (lostFood) st.warnedFor = null;
       sunk.forEach(function (sh) {
@@ -2007,11 +2011,11 @@
     // death of all crew / ships
     if (f.crew <= 0) {
       await UI.say('마지막 선원마저 쓰러졌다... 배는 주인 없이 바다를 떠돈다.', {});
-      await G.Family.retire(true);
+      await G.Family.retire(true, st.deathCause);
       return;
     }
     // player health
-    if (s.player.hp <= 0) { await UI.say('제독이 병으로 쓰러졌다...', {}); await G.Family.retire(true); }
+    if (s.player.hp <= 0) { await UI.say('제독이 병으로 쓰러졌다...', {}); await G.Family.retire(true, 'sea_illness'); }
   }
   /** 반란: 주동자와 교섭하거나, 일기토로 결판을 낸다 (부관에게 맡길 수도 있다) */
   async function mutiny() {
@@ -2036,6 +2040,7 @@
         var gone = Math.max(1, Math.round(f.crew * (res === 'flee' ? 0.12 : 0.2)));
         f.crew = Math.max(0, f.crew - gone); f.discipline = Math.min(100, f.discipline + 12);
         if (fm && res === 'lose') fm.hurt = s.day + 20;
+        if (!fm && s.player.hp <= 0) { await G.Family.retire(true, 'mutiny'); return; }
         await UI.say((res === 'flee' ? '결판을 내지 못했다. ' : '주동자에게 지고 말았다! ') + '주동자와 선원 ' + gone + '명이 보트를 내려 떠났다. 남은 선원들은 일단 조용해졌다.', {});
         G.Scenes.city.B.harbor.trimCrew && G.Scenes.city.B.harbor.trimCrew();
       }
@@ -2309,6 +2314,7 @@
     ctx.setTransform(k, 0, 0, k, 0, 0);
     var s = S(), l = s.loc, z = st.cam.zoom;
     if(G.TerrainArt)G.TerrainArt.draw(ctx,st.cam,toScreen,l);
+    if(G.VolcanoArt)G.VolcanoArt.map(ctx,st.cam,toScreen);
     drawCities(ctx);
     // 작은 일거리 — 해도 작성 목표 해역
     var tk = s.contract && s.contract.task;
@@ -2441,6 +2447,7 @@
     if (G.Disaster && G.Disaster.drawSea) G.Disaster.drawSea(ctx, toScreen, st.cam.zoom, st.t, fontFam());   // 알려진 재해의 움직이는 그림 (해일·화산 …)
     if (G.VoyageFX) G.VoyageFX.drawSky(st, ctx, pp, l.heading, SP, toScreen);      // 모항 배웅 갈매기
     if (G.CrewPets) G.CrewPets.drawFlight(st, ctx, pp, SP);   // 동물 사건이 모두 끝난 뒤 기함 위를 돌고 돌아오는 앵무새
+    if (G.Disaster) G.Disaster.drawVolcanicAsh(ctx, toScreen, st.windVis ? st.windVis.dir : 0);
     if (G.Rain) G.Rain.draw(ctx, st.t, st.windVis ? st.windVis.dir : 0, st.storm > 0, function (x, y) { var w = toWorld(x, y); return !G.Geo.isLand(w[0], w[1]); }, null, pp);
     // hover tooltip
     if (st.mouse && !UI.busy()) {

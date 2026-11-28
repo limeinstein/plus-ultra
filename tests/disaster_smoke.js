@@ -31,7 +31,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
   try {
-    await page.goto(GAME);
+    await page.goto(GAME, { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Disaster && G.DISASTERS, null, { timeout: 90000 });
     const data = await page.evaluate(() => {
       var bad = G.DISASTERS.filter(function (d, i, a) {

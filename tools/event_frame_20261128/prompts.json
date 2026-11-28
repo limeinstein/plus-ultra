@@ -1,0 +1,1592 @@
+[
+  {
+    "id": "gold__cuts__01-childhood",
+    "key": "gold/cuts/01-childhood",
+    "aliases": [
+      "gold/cuts/01-childhood"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\01-childhood.webp",
+    "originalFile": "gold/cuts/01-childhood.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "1e28062fea0bd3d44e9487981423b8d71f16360015325d539ac668cafd70571a",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__01_gift",
+    "key": "jhook/cuts/01_gift",
+    "aliases": [
+      "jhook/cuts/01_gift"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\01_gift.webp",
+    "originalFile": "jhook/cuts/01_gift.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "ec286b8c8d3522dbdccf394236f7787d58946794a64907ebacdfe4b5cf97d947",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_all",
+    "key": "achievement-events/complete_all",
+    "aliases": [
+      "achievement-events/complete_all"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_all.png",
+    "originalFile": "achievement-events/complete_all.png",
+    "originalSize": [
+      1922,
+      818
+    ],
+    "sourceSha256": "d9c448352370a6993fe32fff9da302a7fb12ea79f98457de42dfe38cd6a1bee5",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_animal",
+    "key": "achievement-events/complete_animal",
+    "aliases": [
+      "achievement-events/complete_animal"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_animal.png",
+    "originalFile": "achievement-events/complete_animal.png",
+    "originalSize": [
+      1923,
+      818
+    ],
+    "sourceSha256": "4f079a56d979506ff598c55f9c78c4040f2022f53ac28586225ef2c7127daab7",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_art",
+    "key": "achievement-events/complete_art",
+    "aliases": [
+      "achievement-events/complete_art"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_art.png",
+    "originalFile": "achievement-events/complete_art.png",
+    "originalSize": [
+      1922,
+      818
+    ],
+    "sourceSha256": "fc4dd7355cf8cca54a4feeadae3243de14bf37e8557ff64995ecab793d324c3e",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_creature",
+    "key": "achievement-events/complete_creature",
+    "aliases": [
+      "achievement-events/complete_creature"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_creature.png",
+    "originalFile": "achievement-events/complete_creature.png",
+    "originalSize": [
+      1921,
+      819
+    ],
+    "sourceSha256": "ac7a4169c307656c61402e8af02091d3f7059e40c143c0fde06b254464d9a516",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_faith",
+    "key": "achievement-events/complete_faith",
+    "aliases": [
+      "achievement-events/complete_faith"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_faith.png",
+    "originalFile": "achievement-events/complete_faith.png",
+    "originalSize": [
+      1918,
+      820
+    ],
+    "sourceSha256": "556056ca8e613702274c4be3bc4ccd400cd3795636be5721e925a6c278ad581f",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_geo",
+    "key": "achievement-events/complete_geo",
+    "aliases": [
+      "achievement-events/complete_geo"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_geo.png",
+    "originalFile": "achievement-events/complete_geo.png",
+    "originalSize": [
+      1918,
+      820
+    ],
+    "sourceSha256": "57fb566edbe3ed9934bc5cb75d9f67f12aa045e87a18d88e1f5a1435f719da0a",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_myth",
+    "key": "achievement-events/complete_myth",
+    "aliases": [
+      "achievement-events/complete_myth"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_myth.png",
+    "originalFile": "achievement-events/complete_myth.png",
+    "originalSize": [
+      1921,
+      819
+    ],
+    "sourceSha256": "04ad1b745ec7f27c888a853b9c7f0d44ec40fa92b3811e9fbbd3f0b9ffb068ff",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_nature",
+    "key": "achievement-events/complete_nature",
+    "aliases": [
+      "achievement-events/complete_nature"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_nature.png",
+    "originalFile": "achievement-events/complete_nature.png",
+    "originalSize": [
+      1877,
+      838
+    ],
+    "sourceSha256": "ddebba927f20de5608183b3463a448a2960ed04ff02acd460c3e2290447ae577",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_people",
+    "key": "achievement-events/complete_people",
+    "aliases": [
+      "achievement-events/complete_people"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_people.png",
+    "originalFile": "achievement-events/complete_people.png",
+    "originalSize": [
+      1889,
+      832
+    ],
+    "sourceSha256": "e0660a6acfd249e7df1a49669a0965095d0ec5491f5cf44c6101e36452846919",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_plant",
+    "key": "achievement-events/complete_plant",
+    "aliases": [
+      "achievement-events/complete_plant"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_plant.png",
+    "originalFile": "achievement-events/complete_plant.png",
+    "originalSize": [
+      1923,
+      818
+    ],
+    "sourceSha256": "bff8bd90a7d85b14f7eec0f5fd8f0fa93e2fc51bdfa66434acdcdec4328deee6",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_ruin",
+    "key": "achievement-events/complete_ruin",
+    "aliases": [
+      "achievement-events/complete_ruin"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_ruin.png",
+    "originalFile": "achievement-events/complete_ruin.png",
+    "originalSize": [
+      1923,
+      817
+    ],
+    "sourceSha256": "62d754594b1f3b25fdbe35c3ae183f259d9cd8ca63c43877a9c50e7a656d6062",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_trade",
+    "key": "achievement-events/complete_trade",
+    "aliases": [
+      "achievement-events/complete_trade"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_trade.png",
+    "originalFile": "achievement-events/complete_trade.png",
+    "originalSize": [
+      1922,
+      818
+    ],
+    "sourceSha256": "39dd2e51758194ef7851034de828ad50a181e48a63966dbfcf5ad1dd68a46442",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__complete_treasure",
+    "key": "achievement-events/complete_treasure",
+    "aliases": [
+      "achievement-events/complete_treasure"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\complete_treasure.png",
+    "originalFile": "achievement-events/complete_treasure.png",
+    "originalSize": [
+      1920,
+      819
+    ],
+    "sourceSha256": "10ebae5a00fdf9620c1533175e065ee5f6a0679af2e6c2fe67c146dbca68b2f6",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__fame_balanced",
+    "key": "achievement-events/fame_balanced",
+    "aliases": [
+      "achievement-events/fame_balanced"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\fame_balanced.png",
+    "originalFile": "achievement-events/fame_balanced.png",
+    "originalSize": [
+      1880,
+      837
+    ],
+    "sourceSha256": "6a611abb4851d7fb9d1715fe67f9cff4dbf079d7d7326ff4c59b5d3931dbfef1",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__fame_bt_650000",
+    "key": "achievement-events/fame_bt_650000",
+    "aliases": [
+      "achievement-events/fame_bt_650000"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\fame_bt_650000.png",
+    "originalFile": "achievement-events/fame_bt_650000.png",
+    "originalSize": [
+      1880,
+      837
+    ],
+    "sourceSha256": "468acef03fd2c5b574bd2d672cdfd3dd6dede901e577fbb33898508ca0689867",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__fame_so_650000",
+    "key": "achievement-events/fame_so_650000",
+    "aliases": [
+      "achievement-events/fame_so_650000"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\fame_so_650000.png",
+    "originalFile": "achievement-events/fame_so_650000.png",
+    "originalSize": [
+      1879,
+      837
+    ],
+    "sourceSha256": "7db186c4f4c70c97520f6b636e5073e89d02d6e29a45c772090ea8b1481eb2a6",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__fame_total_1000000",
+    "key": "achievement-events/fame_total_1000000",
+    "aliases": [
+      "achievement-events/fame_total_1000000"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\fame_total_1000000.png",
+    "originalFile": "achievement-events/fame_total_1000000.png",
+    "originalSize": [
+      1880,
+      837
+    ],
+    "sourceSha256": "06041620b93460fab468b193adfa6d98f15a1b7ecefdb4a0ba498721f3117d52",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__fame_total_2000000",
+    "key": "achievement-events/fame_total_2000000",
+    "aliases": [
+      "achievement-events/fame_total_2000000"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\fame_total_2000000.png",
+    "originalFile": "achievement-events/fame_total_2000000.png",
+    "originalSize": [
+      1880,
+      837
+    ],
+    "sourceSha256": "f282b26b87a114c731dcbaddb091318f2be5088e57395211c7acd3c725be9ff2",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__fame_total_60000",
+    "key": "achievement-events/fame_total_60000",
+    "aliases": [
+      "achievement-events/fame_total_60000"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\fame_total_60000.png",
+    "originalFile": "achievement-events/fame_total_60000.png",
+    "originalSize": [
+      1880,
+      837
+    ],
+    "sourceSha256": "1fbd88ecabdf79bc7390efb16e3f9c494d0dfcb2ae15ecde35a103c4015eef08",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__fame_tr_650000",
+    "key": "achievement-events/fame_tr_650000",
+    "aliases": [
+      "achievement-events/fame_tr_650000"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\fame_tr_650000.png",
+    "originalFile": "achievement-events/fame_tr_650000.png",
+    "originalSize": [
+      1880,
+      837
+    ],
+    "sourceSha256": "0269e448a01ade921ea7beebf5d296550fbddf7ef520257ac962b661d2c2ebf1",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__olympian_companions",
+    "key": "achievement-events/olympian_companions",
+    "aliases": [
+      "achievement-events/olympian_companions"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\olympian_companions.webp",
+    "originalFile": "achievement-events/olympian_companions.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "762d7796d77477e8847878f5dbed2a10e2729545763e4e2447062bfcdfb2aa67",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "achievement-events__olympian_pilgrim",
+    "key": "achievement-events/olympian_pilgrim",
+    "aliases": [
+      "achievement-events/olympian_pilgrim"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\achievement-events\\olympian_pilgrim.webp",
+    "originalFile": "achievement-events/olympian_pilgrim.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "fc56216aa240364391a141df2b6d642bd6cfa86cd9efed56b8548425f86148cf",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "crew-pet-events__monkey_dog_spat_men",
+    "key": "crew-pet-events/monkey_dog_spat_men",
+    "aliases": [
+      "crew-pet-events/monkey_dog_spat_men"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\crew-pet-events\\monkey_dog_spat_men.webp",
+    "originalFile": "crew-pet-events/monkey_dog_spat_men.webp",
+    "originalSize": [
+      1870,
+      841
+    ],
+    "sourceSha256": "838f8f3da0673aad0baa91dc9b9b0d830cd18dfd5be9ef223b975bde4a592e8d",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__02-fathers-debt",
+    "key": "gold/cuts/02-fathers-debt",
+    "aliases": [
+      "gold/cuts/02-fathers-debt"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\02-fathers-debt.webp",
+    "originalFile": "gold/cuts/02-fathers-debt.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "01411de4292431a17cb85339f9e4129bf4b3361c63db64c0973b3b8bab9f76d9",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__03-first-voyage",
+    "key": "gold/cuts/03-first-voyage",
+    "aliases": [
+      "gold/cuts/03-first-voyage"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\03-first-voyage.webp",
+    "originalFile": "gold/cuts/03-first-voyage.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "550568a863418eb192545e71867c58eeb57893b21439b5cc353f239241a3ffa8",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__04-pirate-empress",
+    "key": "gold/cuts/04-pirate-empress",
+    "aliases": [
+      "gold/cuts/04-pirate-empress"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\04-pirate-empress.webp",
+    "originalFile": "gold/cuts/04-pirate-empress.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "a92f82e14137f3c315d7c70a4a1e2b5de38df03e1f539b6dec7e07e6245b8202",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__05-storm-rescue",
+    "key": "gold/cuts/05-storm-rescue",
+    "aliases": [
+      "gold/cuts/05-storm-rescue"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\05-storm-rescue.webp",
+    "originalFile": "gold/cuts/05-storm-rescue.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "bad07292a0149f51e0f889eb55c674eda1b4daa991f8ac082e7d25bcd82ed287",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__06-three-seas",
+    "key": "gold/cuts/06-three-seas",
+    "aliases": [
+      "gold/cuts/06-three-seas"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\06-three-seas.webp",
+    "originalFile": "gold/cuts/06-three-seas.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "a85cc0896dcc500654e3035493ab48e1c751e966dcfd2c936dd98278a121d24e",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__07-five-keys",
+    "key": "gold/cuts/07-five-keys",
+    "aliases": [
+      "gold/cuts/07-five-keys"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\07-five-keys.webp",
+    "originalFile": "gold/cuts/07-five-keys.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "48d9a260899826b6f393f13bd44486cae06818fa02e284f4e9590f1307783d5e",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__08-medicine",
+    "key": "gold/cuts/08-medicine",
+    "aliases": [
+      "gold/cuts/08-medicine"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\08-medicine.webp",
+    "originalFile": "gold/cuts/08-medicine.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "aceb1e725f19a0fa2b121e8f065c64a2b6be194d522d6f2367391a6e56ae2b01",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__09-stars",
+    "key": "gold/cuts/09-stars",
+    "aliases": [
+      "gold/cuts/09-stars"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\09-stars.webp",
+    "originalFile": "gold/cuts/09-stars.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "27792bdb26a3253437c1296909d17d7be6ebf4975927b95976816ae4a10a235b",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__10-grey-seal",
+    "key": "gold/cuts/10-grey-seal",
+    "aliases": [
+      "gold/cuts/10-grey-seal"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\10-grey-seal.webp",
+    "originalFile": "gold/cuts/10-grey-seal.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "3762718acc24256702ddcd31c88c6ccb1e3d8b7d8f9e9a13fc79eb44fef9f36f",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__11-contract",
+    "key": "gold/cuts/11-contract",
+    "aliases": [
+      "gold/cuts/11-contract"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\11-contract.webp",
+    "originalFile": "gold/cuts/11-contract.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "f1ddb0290da39507d68431422630470b6a3c7593fd09645c819ddd0e76f42a6b",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__12-last-oath",
+    "key": "gold/cuts/12-last-oath",
+    "aliases": [
+      "gold/cuts/12-last-oath"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\12-last-oath.webp",
+    "originalFile": "gold/cuts/12-last-oath.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "b77df52b7c67aacd2250d4b520301dcdc0d0817fa6bf739bde94c5c38e0b0bde",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__13-eleonore-abduction",
+    "key": "gold/cuts/13-eleonore-abduction",
+    "aliases": [
+      "gold/cuts/13-eleonore-abduction"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\13-eleonore-abduction.webp",
+    "originalFile": "gold/cuts/13-eleonore-abduction.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "b157f35c4741217f112657d414d8c60517e8f23ccf482770fc8989a2ff12653a",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "gold__cuts__14-lovers-embrace",
+    "key": "gold/cuts/14-lovers-embrace",
+    "aliases": [
+      "gold/cuts/14-lovers-embrace"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\gold\\cuts\\14-lovers-embrace.webp",
+    "originalFile": "gold/cuts/14-lovers-embrace.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "2b69ecf30aa38e81026e72581ae10dd1ccbd4053477e36b556f24de17b5ee6b8",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__02_permit",
+    "key": "jhook/cuts/02_permit",
+    "aliases": [
+      "jhook/cuts/02_permit"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\02_permit.webp",
+    "originalFile": "jhook/cuts/02_permit.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "ae73b67ef9ab477bfe507e5dd31ec8ee6a81b1bb61686293908a4889ebbd36e0",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__03_escape",
+    "key": "jhook/cuts/03_escape",
+    "aliases": [
+      "jhook/cuts/03_escape"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\03_escape.webp",
+    "originalFile": "jhook/cuts/03_escape.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "ac1152a984eaf2db7242ec3a0e80415e15eac37480cefdebc56bac7c290b8bf8",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__04_table",
+    "key": "jhook/cuts/04_table",
+    "aliases": [
+      "jhook/cuts/04_table"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\04_table.webp",
+    "originalFile": "jhook/cuts/04_table.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "a71dbb473b2c723ab500cb9af667db109180f4adb918816c091ac2c328c1810c",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__05_grace",
+    "key": "jhook/cuts/05_grace",
+    "aliases": [
+      "jhook/cuts/05_grace"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\05_grace.webp",
+    "originalFile": "jhook/cuts/05_grace.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "c139bbbb1627bd4486a16b6947498a1deeb072c9053330766d3e7f5716031b7e",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__06_lucia",
+    "key": "jhook/cuts/06_lucia",
+    "aliases": [
+      "jhook/cuts/06_lucia"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\06_lucia.webp",
+    "originalFile": "jhook/cuts/06_lucia.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "d319489944f7f606902fcb0c7856ec07a62bf884a15e8f47668bfb494495c3ed",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__07_kofi",
+    "key": "jhook/cuts/07_kofi",
+    "aliases": [
+      "jhook/cuts/07_kofi"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\07_kofi.webp",
+    "originalFile": "jhook/cuts/07_kofi.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "c11b6185a09a926bc153f4ba08eb75a69e6be32f2033fe16c5068ef75766747a",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__08_mariam",
+    "key": "jhook/cuts/08_mariam",
+    "aliases": [
+      "jhook/cuts/08_mariam"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\08_mariam.webp",
+    "originalFile": "jhook/cuts/08_mariam.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "588034154813bc9e18c058a6743c730cbb3bfafb5856dd95067419f80a3645c9",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__09_chenlei",
+    "key": "jhook/cuts/09_chenlei",
+    "aliases": [
+      "jhook/cuts/09_chenlei"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\09_chenlei.webp",
+    "originalFile": "jhook/cuts/09_chenlei.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "33c4e49efbccd41ca4d63ca9fb142e8f08152b77b6660ddd6a104e4b388afcf1",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__10_atlantis",
+    "key": "jhook/cuts/10_atlantis",
+    "aliases": [
+      "jhook/cuts/10_atlantis"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\10_atlantis.webp",
+    "originalFile": "jhook/cuts/10_atlantis.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "40abdd05f1f1a168cc84492fe21583e224a73d862a3d05dcebebdecafb329dc4",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__11_palace",
+    "key": "jhook/cuts/11_palace",
+    "aliases": [
+      "jhook/cuts/11_palace"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\11_palace.webp",
+    "originalFile": "jhook/cuts/11_palace.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "82955eb05a0f7308f2bfaeb96b54221a17bc6fb87b80d04cb7d9242f0750126c",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__12_jane_rescue",
+    "key": "jhook/cuts/12_jane_rescue",
+    "aliases": [
+      "jhook/cuts/12_jane_rescue"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\12_jane_rescue.webp",
+    "originalFile": "jhook/cuts/12_jane_rescue.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "33146ccd1aa9bbca675bda59ded900bd7a018fd50907c251f349d0ae0cfde203",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__13_tower_rescue",
+    "key": "jhook/cuts/13_tower_rescue",
+    "aliases": [
+      "jhook/cuts/13_tower_rescue"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\13_tower_rescue.webp",
+    "originalFile": "jhook/cuts/13_tower_rescue.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "c8ad20a53508cde6bed998aab265317eddc383b56045b1e689d116804f48be96",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__14_york",
+    "key": "jhook/cuts/14_york",
+    "aliases": [
+      "jhook/cuts/14_york"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\14_york.webp",
+    "originalFile": "jhook/cuts/14_york.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "13b2ff7fb8124325bf1c6df01c50bb04d74494f8d62f7c444006daa316172a72",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__15_island",
+    "key": "jhook/cuts/15_island",
+    "aliases": [
+      "jhook/cuts/15_island"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\15_island.webp",
+    "originalFile": "jhook/cuts/15_island.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "640cf99be24363c4233166cbe99e375aee092587b2b07fe8ea4a86ff2979beb4",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__16_armada",
+    "key": "jhook/cuts/16_armada",
+    "aliases": [
+      "jhook/cuts/16_armada"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\16_armada.webp",
+    "originalFile": "jhook/cuts/16_armada.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "7cc50a3c750049f57adc0f800ef11b5fdfa493f1fffadb87da45081f89295dc5",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__17_pardon",
+    "key": "jhook/cuts/17_pardon",
+    "aliases": [
+      "jhook/cuts/17_pardon"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\17_pardon.webp",
+    "originalFile": "jhook/cuts/17_pardon.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "1929a8607687a39952302c846d7eb4c911a5a629d410b772f9498a9d47776b1c",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__18_table",
+    "key": "jhook/cuts/18_table",
+    "aliases": [
+      "jhook/cuts/18_table"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\18_table.webp",
+    "originalFile": "jhook/cuts/18_table.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "2d0c3f8735fde52b053e5e1c94e32407b16f9e0e9444c4261a0af1ff0104100c",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__01_blackwell_broadside",
+    "key": "jhook/cuts/extra-20261122/01_blackwell_broadside",
+    "aliases": [
+      "jhook/cuts/extra-20261122/01_blackwell_broadside"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\01_blackwell_broadside.webp",
+    "originalFile": "jhook/cuts/extra-20261122/01_blackwell_broadside.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "6cad48542ac248cdd8716111c0b43534940dba68b43c2cd772e2dc29897b6787",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__02_blackwell_boarding",
+    "key": "jhook/cuts/extra-20261122/02_blackwell_boarding",
+    "aliases": [
+      "jhook/cuts/extra-20261122/02_blackwell_boarding"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\02_blackwell_boarding.webp",
+    "originalFile": "jhook/cuts/extra-20261122/02_blackwell_boarding.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "391d18349000300bec8fb7b40907be92d009969cee62b9fcb83fd9ea7b130c5a",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__03_blackwell_harbor",
+    "key": "jhook/cuts/extra-20261122/03_blackwell_harbor",
+    "aliases": [
+      "jhook/cuts/extra-20261122/03_blackwell_harbor"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\03_blackwell_harbor.webp",
+    "originalFile": "jhook/cuts/extra-20261122/03_blackwell_harbor.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "b1ed69233beb9066986a062fbfcb451f3d67a1a5121943109b2d2bd1fad179b1",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__04_blackwell_fortress",
+    "key": "jhook/cuts/extra-20261122/04_blackwell_fortress",
+    "aliases": [
+      "jhook/cuts/extra-20261122/04_blackwell_fortress"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\04_blackwell_fortress.webp",
+    "originalFile": "jhook/cuts/extra-20261122/04_blackwell_fortress.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "695983cb0847bdd86ed1e38f126d45976e876ced3f10a9de5ff18926ab208aa7",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__05_mary_bad_news",
+    "key": "jhook/cuts/extra-20261122/05_mary_bad_news",
+    "aliases": [
+      "jhook/cuts/extra-20261122/05_mary_bad_news"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\05_mary_bad_news.webp",
+    "originalFile": "jhook/cuts/extra-20261122/05_mary_bad_news.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "a00c082b56bbe94e92d6388909488e32c5293575cea5b7f73e7c5c2d095f2d98",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__06_mary_council",
+    "key": "jhook/cuts/extra-20261122/06_mary_council",
+    "aliases": [
+      "jhook/cuts/extra-20261122/06_mary_council"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\06_mary_council.webp",
+    "originalFile": "jhook/cuts/extra-20261122/06_mary_council.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "e140ebc4c67e2ea4da9d7cb18e80f58b4de15ab6adf7865c093068654e6cce79",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__07_mary_mirror",
+    "key": "jhook/cuts/extra-20261122/07_mary_mirror",
+    "aliases": [
+      "jhook/cuts/extra-20261122/07_mary_mirror"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\07_mary_mirror.webp",
+    "originalFile": "jhook/cuts/extra-20261122/07_mary_mirror.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "db6f992856c0e726905e87698593447c4a7ac6e0d0f8477e6b36e04646f6321c",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__08_armada_line",
+    "key": "jhook/cuts/extra-20261122/08_armada_line",
+    "aliases": [
+      "jhook/cuts/extra-20261122/08_armada_line"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\08_armada_line.webp",
+    "originalFile": "jhook/cuts/extra-20261122/08_armada_line.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "541c7132e426304614dfd89260a9584caa4ae06cc9e292a3262beace05715feb",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__09_armada_gunnery",
+    "key": "jhook/cuts/extra-20261122/09_armada_gunnery",
+    "aliases": [
+      "jhook/cuts/extra-20261122/09_armada_gunnery"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\09_armada_gunnery.webp",
+    "originalFile": "jhook/cuts/extra-20261122/09_armada_gunnery.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "879a94fe6a9da3d08dd373b7cba377e93756728b6232ffd47095c0681e102c25",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "jhook__cuts__extra-20261122__10_armada_fireships",
+    "key": "jhook/cuts/extra-20261122/10_armada_fireships",
+    "aliases": [
+      "jhook/cuts/extra-20261122/10_armada_fireships"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\extra-20261122\\10_armada_fireships.webp",
+    "originalFile": "jhook/cuts/extra-20261122/10_armada_fireships.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "bc33ebec43da4c1098fb92f6fade4ddf47483ecf4198696fcfe2a4d3a252c638",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "legend-events__geppetto_farewell",
+    "key": "legend-events/geppetto_farewell",
+    "aliases": [
+      "legend-events/geppetto_farewell"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\geppetto_farewell.png",
+    "originalFile": "legend-events/geppetto_farewell.png",
+    "originalSize": [
+      1875,
+      839
+    ],
+    "sourceSha256": "c21e5588175b67706aa39ffc633283956cfb21b1734ba1aa0fa208fec86b50ad",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "legend-events__little_prince_campfire",
+    "key": "legend-events/little_prince_campfire",
+    "aliases": [
+      "legend-events/little_prince_campfire"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\little_prince_campfire.png",
+    "originalFile": "legend-events/little_prince_campfire.png",
+    "originalSize": [
+      1877,
+      838
+    ],
+    "sourceSha256": "f65ff83f5daf4c8ca96484089f02ae0d0f801af8aca4c4046486ef54f6db174d",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "legend-events__little_prince_map",
+    "key": "legend-events/little_prince_map",
+    "aliases": [
+      "legend-events/little_prince_map"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\little_prince_map.png",
+    "originalFile": "legend-events/little_prince_map.png",
+    "originalSize": [
+      1877,
+      838
+    ],
+    "sourceSha256": "f1a34c4d959e549ed9e35d051c7e908498a917558b6e72b4bdabf5bbbccb7a09",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "legend-events__little_prince_well",
+    "key": "legend-events/little_prince_well",
+    "aliases": [
+      "legend-events/little_prince_well"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\little_prince_well.png",
+    "originalFile": "legend-events/little_prince_well.png",
+    "originalSize": [
+      1880,
+      837
+    ],
+    "sourceSha256": "2eaa7ccd19119137b19a9329c491ace03636b6585341e1b4bfe8c9acaeb7a225",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "legend-events__quixote_bazacle",
+    "key": "legend-events/quixote_bazacle",
+    "aliases": [
+      "legend-events/quixote_bazacle"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\quixote_bazacle.png",
+    "originalFile": "legend-events/quixote_bazacle.png",
+    "originalSize": [
+      1879,
+      837
+    ],
+    "sourceSha256": "61c59da719e173cce93bbf9a8824a3c931bb59e0f5ccfc64db6deea811f5ccd5",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "legend-events__tarzan_heal",
+    "key": "legend-events/tarzan_heal",
+    "aliases": [
+      "legend-events/tarzan_heal"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\tarzan_heal.png",
+    "originalFile": "legend-events/tarzan_heal.png",
+    "originalSize": [
+      1891,
+      831
+    ],
+    "sourceSha256": "2456dec10817dabf958d320bee3588841e2e8ca7de5eef9dc51d42ae8f711dc7",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "legend-events__tarzan_human",
+    "key": "legend-events/tarzan_human",
+    "aliases": [
+      "legend-events/tarzan_human"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\tarzan_human.png",
+    "originalFile": "legend-events/tarzan_human.png",
+    "originalSize": [
+      1870,
+      841
+    ],
+    "sourceSha256": "f303069fbd5c943347a6dbc2321e9c0e8b0b34b54d1d9d6b980a65a1c112a20b",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "legend-events__tordesillas_council_20261108",
+    "key": "legend-events/tordesillas_council_20261108",
+    "aliases": [
+      "legend-events/tordesillas_council_20261108"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\tordesillas_council_20261108.webp",
+    "originalFile": "legend-events/tordesillas_council_20261108.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "ab4abf010dc4c5ec564e70257e05ec26ca5fe158bf35204403672078104453e0",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "legend-events__tordesillas_council_20261108_v2",
+    "key": "legend-events/tordesillas_council_20261108_v2",
+    "aliases": [
+      "legend-events/tordesillas_council_20261108_v2"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\legend-events\\tordesillas_council_20261108_v2.webp",
+    "originalFile": "legend-events/tordesillas_council_20261108_v2.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "52ba135ac078a632500ede91bcfdb91304f53098fbf95214b8c27ca3d69f2636",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_aphrodite",
+    "key": "olympian-events/meet_aphrodite",
+    "aliases": [
+      "olympian-events/meet_aphrodite"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_aphrodite.webp",
+    "originalFile": "olympian-events/meet_aphrodite.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "d7e2e01f0c0d7f22e6bdcfadc8ab13b4b6e867087834c76b5ec37bf6065ed7ad",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_apollo",
+    "key": "olympian-events/meet_apollo",
+    "aliases": [
+      "olympian-events/meet_apollo"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_apollo.webp",
+    "originalFile": "olympian-events/meet_apollo.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "e0e27ff00f9d05546b159d8bd0fa445de8c5141abf548f0ed073a24ce69ee732",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_ares",
+    "key": "olympian-events/meet_ares",
+    "aliases": [
+      "olympian-events/meet_ares"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_ares.webp",
+    "originalFile": "olympian-events/meet_ares.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "f1907d72898fe21c41d5475a6281ebcdd0ae0fb57e92397003056fe98bdfeefe",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_artemis",
+    "key": "olympian-events/meet_artemis",
+    "aliases": [
+      "olympian-events/meet_artemis"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_artemis.webp",
+    "originalFile": "olympian-events/meet_artemis.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "72fedab81d258d705b8efd362563d89ebad8358f2e8cc227cfc636c056e6bf3c",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_athena",
+    "key": "olympian-events/meet_athena",
+    "aliases": [
+      "olympian-events/meet_athena"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_athena.webp",
+    "originalFile": "olympian-events/meet_athena.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "b63407f9120205257d3f35c329b0f18822cb795c4b1fc1ecec8578e46c24a362",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_demeter",
+    "key": "olympian-events/meet_demeter",
+    "aliases": [
+      "olympian-events/meet_demeter"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_demeter.webp",
+    "originalFile": "olympian-events/meet_demeter.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "74d488a65550b226ca9d5c7d39875f5bab02d66cab3e2d1c494d67bff106b71f",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_hephaestus",
+    "key": "olympian-events/meet_hephaestus",
+    "aliases": [
+      "olympian-events/meet_hephaestus"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_hephaestus.webp",
+    "originalFile": "olympian-events/meet_hephaestus.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "98c09084a82cb93a86de5cbcadb0d418aafe098866fba12a7b6c73dbe354551b",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_hera",
+    "key": "olympian-events/meet_hera",
+    "aliases": [
+      "olympian-events/meet_hera"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_hera.webp",
+    "originalFile": "olympian-events/meet_hera.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "e7fd1eeab211431c8666b8a78b5188c71b4e9c36b023c832678a4d75b010800d",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_hermes",
+    "key": "olympian-events/meet_hermes",
+    "aliases": [
+      "olympian-events/meet_hermes"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_hermes.webp",
+    "originalFile": "olympian-events/meet_hermes.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "e885477c72b2f6c4d804a639833ba3e13f255e12a366050d6a59e475351d60fa",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_hestia",
+    "key": "olympian-events/meet_hestia",
+    "aliases": [
+      "olympian-events/meet_hestia"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_hestia.webp",
+    "originalFile": "olympian-events/meet_hestia.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "a149d51dbcd10ea0b558388be82380f28e62f6d6edc9f738591f0ab9c1610ee7",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_poseidon",
+    "key": "olympian-events/meet_poseidon",
+    "aliases": [
+      "olympian-events/meet_poseidon"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_poseidon.webp",
+    "originalFile": "olympian-events/meet_poseidon.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "69960bfadb9dfe09fc29101de2bf6faa629f6796dd074a0b161a53e97b439eb4",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__meet_zeus",
+    "key": "olympian-events/meet_zeus",
+    "aliases": [
+      "olympian-events/meet_zeus"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\meet_zeus.webp",
+    "originalFile": "olympian-events/meet_zeus.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "c4bfc667bcab6c439c748a087426a8bee478cf8ea5a930ed9fdadb6b35931537",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__men_fellowship",
+    "key": "olympian-events/men_fellowship",
+    "aliases": [
+      "olympian-events/men_fellowship"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\men_fellowship.webp",
+    "originalFile": "olympian-events/men_fellowship.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "fe102ceaafe4e83002aefea91bd529e0e7d20317ea55001467c13af6100851f1",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__uninvited_covenant",
+    "key": "olympian-events/uninvited_covenant",
+    "aliases": [
+      "olympian-events/uninvited_covenant"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\uninvited_covenant.webp",
+    "originalFile": "olympian-events/uninvited_covenant.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "72eef7f5c168796cf89585ddd9dafa49771d6db2b17e88688587b5edf05d99de",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__uninvited_poseidon_highfive",
+    "key": "olympian-events/uninvited_poseidon_highfive",
+    "aliases": [
+      "olympian-events/uninvited_poseidon_highfive"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\uninvited_poseidon_highfive.webp",
+    "originalFile": "olympian-events/uninvited_poseidon_highfive.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "35925fa735115b1dffaf609366a580a1e2db458c4af8cb41cc0fa11cfd64be90",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__uninvited_reconciliation",
+    "key": "olympian-events/uninvited_reconciliation",
+    "aliases": [
+      "olympian-events/uninvited_reconciliation"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\uninvited_reconciliation.webp",
+    "originalFile": "olympian-events/uninvited_reconciliation.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "32254121326a98b4ad38a60f48542543b251974ecffa76c0e12df54f5d8df78d",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__uninvited_three",
+    "key": "olympian-events/uninvited_three",
+    "aliases": [
+      "olympian-events/uninvited_three"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\uninvited_three.webp",
+    "originalFile": "olympian-events/uninvited_three.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "9984855e89e1a44c83b99b08a883aff1c0ca713189265a73eab2823cc7360f99",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__uninvited_two",
+    "key": "olympian-events/uninvited_two",
+    "aliases": [
+      "olympian-events/uninvited_two"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\uninvited_two.webp",
+    "originalFile": "olympian-events/uninvited_two.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "f4b515e4777ca071ea897a772a9e697f47b80df46d30944bf1c7888f9472e14a",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "olympian-events__women_fellowship",
+    "key": "olympian-events/women_fellowship",
+    "aliases": [
+      "olympian-events/women_fellowship"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\olympian-events\\women_fellowship.webp",
+    "originalFile": "olympian-events/women_fellowship.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "cbaea88dbeabaa884ac6918d6fa4dee9b8658df56f1d84adaa575425d9dfe389",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "song__concerts__0",
+    "key": "song/concerts/0",
+    "aliases": [
+      "song/concerts/0"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\concerts\\0.webp",
+    "originalFile": "song/concerts/0.webp",
+    "originalSize": [
+      1883,
+      835
+    ],
+    "sourceSha256": "66a57dd882ba663d183db06b6e58700264ca888a5565a1c19ce291f06e806271",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "song__concerts__4",
+    "key": "song/concerts/4",
+    "aliases": [
+      "song/concerts/4"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\concerts\\4.webp",
+    "originalFile": "song/concerts/4.webp",
+    "originalSize": [
+      1859,
+      846
+    ],
+    "sourceSha256": "94d8c5a7e6d93d2667822c7a6d656a95bb81d5f0c9a1ccc8075ad4360af1ad82",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "song__concerts__5",
+    "key": "song/concerts/5",
+    "aliases": [
+      "song/concerts/5"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\concerts\\5.webp",
+    "originalFile": "song/concerts/5.webp",
+    "originalSize": [
+      1859,
+      846
+    ],
+    "sourceSha256": "54cdecb41f0c1c45e8881aae90edb5eeccd1e5f7730b7d319a08de7b80c792b2",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "song__concerts__kr",
+    "key": "song/concerts/kr",
+    "aliases": [
+      "song/concerts/kr"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\song\\concerts\\kr.webp",
+    "originalFile": "song/concerts/kr.webp",
+    "originalSize": [
+      1885,
+      834
+    ],
+    "sourceSha256": "6eaf97bd8839357d370a24ed702daaa243ba9b628352d18dec21ad044174e60e",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. VERTICAL CANVAS EXPANSION. Keep the full original width and extend the top and bottom background edges slightly. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "story__cuts__atlantis",
+    "key": "story/cuts/atlantis",
+    "aliases": [
+      "story/cuts/atlantis"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\story\\cuts\\atlantis.webp",
+    "originalFile": "story/cuts/atlantis.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "0dcca9060c43f425bad4b32d2fb17a6f67846056a85efd1b0cc21be950857fa0",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "story__cuts__cairo",
+    "key": "story/cuts/cairo",
+    "aliases": [
+      "story/cuts/cairo"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\story\\cuts\\cairo.webp",
+    "originalFile": "story/cuts/cairo.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "b5c86ededfe2ec70e23d2bde55173cc84859e3af460fb9a1d83aa5f78e254c5f",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "story__cuts__cuzco",
+    "key": "story/cuts/cuzco",
+    "aliases": [
+      "story/cuts/cuzco"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\story\\cuts\\cuzco.webp",
+    "originalFile": "story/cuts/cuzco.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "884e7ff34d47053a20c407823c946bd1ce40383b69b23e3d97555ce8b93e5ea9",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "story__cuts__delhi",
+    "key": "story/cuts/delhi",
+    "aliases": [
+      "story/cuts/delhi"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\story\\cuts\\delhi.webp",
+    "originalFile": "story/cuts/delhi.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "d909ea9383368b8d049f65c97e08f24a82f6886a45b8a0a55d7f28b55cc4e4be",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "story__cuts__granada",
+    "key": "story/cuts/granada",
+    "aliases": [
+      "story/cuts/granada"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\story\\cuts\\granada.webp",
+    "originalFile": "story/cuts/granada.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "e26c9deed47ef909ac4b43cc57c7f6d9cec23288df0b0b97b3614426c1b9edf2",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "story__cuts__hangzhou",
+    "key": "story/cuts/hangzhou",
+    "aliases": [
+      "story/cuts/hangzhou"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\story\\cuts\\hangzhou.webp",
+    "originalFile": "story/cuts/hangzhou.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "a8f1ac32e1ab05d39f6980ec4b6389dd201643cce6b80013317ddff6fef917e9",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "story__cuts__hanyang",
+    "key": "story/cuts/hanyang",
+    "aliases": [
+      "story/cuts/hanyang"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\story\\cuts\\hanyang.webp",
+    "originalFile": "story/cuts/hanyang.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "feb99f0483a759a8591f6f7eb61515ea0e7319b1511b981e01840b224ed50f38",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "story__cuts__prologue",
+    "key": "story/cuts/prologue",
+    "aliases": [
+      "story/cuts/prologue"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\story\\cuts\\prologue.webp",
+    "originalFile": "story/cuts/prologue.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "d13b3ede6b3a47361852ad424dfd445386d80d71c5a8d4c413af61788def8902",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  },
+  {
+    "id": "story__cuts__sakai",
+    "key": "story/cuts/sakai",
+    "aliases": [
+      "story/cuts/sakai"
+    ],
+    "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\story\\cuts\\sakai.webp",
+    "originalFile": "story/cuts/sakai.webp",
+    "originalSize": [
+      1672,
+      941
+    ],
+    "sourceSha256": "bd8abeebae7d0bd3e33cbf3f7a0336211a208eae141546b5daf4a2827b14f328",
+    "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape."
+  }
+]

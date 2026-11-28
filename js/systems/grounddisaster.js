@@ -44,6 +44,20 @@
     }
     return out.length>1?route(out):null;
   }
+  // 지형 칸보다 작은 화산섬은 정상과 기슭의 높이가 같을 수 있어 해안까지 짧게 진행시킨다.
+  function islandSlope(x,y) {
+    var best=[];
+    for(var i=0;i<12;i++){
+      var ray=[];
+      for(var j=1;j<=8;j++){
+        var p=point(x,y,i*Math.PI/6,.009*j);
+        if(!land(p[0],p[1]))break;
+        ray.push(p);
+      }
+      if(ray.length>best.length)best=ray;
+    }
+    return best.length?route([[x,y]].concat(best)):null;
+  }
   function faults(e,c,rng) {
     var list=[], a=rng()*Math.PI*2, span=Math.min(c.reach,e.r*.84);
     for(var branch=0;branch<3;branch++){
@@ -93,6 +107,10 @@
     }else{
       if(e.kind==='landslide'&&G.Geo.terrain(e.lon,e.lat)!=='mountain')return null;
       f.line=downhill(e.lon,e.lat,c.reach);
+      if(!f.line&&e.kind==='volcano'){
+        var vent=G.volcanoSite(e.volcanoId,e.lon,e.lat);
+        if(vent&&vent.smallIsland)f.line=islandSlope(e.lon,e.lat);
+      }
       if(!f.line)return null;
       if(e.kind==='landslide'){
         f.rocks=[];
@@ -242,7 +260,7 @@
         G.UI.toast(GD.label(e)+'. '+tips[e.kind],G.DISASTER_KINDS[e.kind].icon,4700);
       }
       if(e.kind==='quake'&&l.mode==='land'&&!f.shook&&f.age<f.warning+1.6&&gap(l.lon,l.lat,e.lon,e.lat)<f.extent+.22&&G.Quake&&!G.Quake.active('quake')){
-        f.shook=true;G.Quake.start('quake',{sev:e.sev,close:.84,seed:f.seed});
+        f.shook=true;G.Quake.start('quake',{sev:e.sev,close:.84,seed:f.seed,groundField:true});
       }
       if(f.wait>0||(e.kind==='quake'&&f.hit))continue;
       for(var k=0;k<=samples;k++){

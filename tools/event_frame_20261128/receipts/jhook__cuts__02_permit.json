@@ -1,0 +1,18 @@
+{
+  "id": "jhook__cuts__02_permit",
+  "key": "jhook/cuts/02_permit",
+  "aliases": [
+    "jhook/cuts/02_permit"
+  ],
+  "source": "D:\\Git\\대항해2 CLAUDE\\WebGame\\images\\jhook\\cuts\\02_permit.webp",
+  "originalFile": "jhook/cuts/02_permit.webp",
+  "originalSize": [
+    1672,
+    941
+  ],
+  "sourceSha256": "ae73b67ef9ab477bfe507e5dd31ec8ee6a81b1bb61686293908a4889ebbd36e0",
+  "prompt": "Use case: precise-object-edit. Image 1 is the EDIT TARGET, a painted game cutscene. Repaint and outpaint this SAME scene onto a NEW ULTRAWIDE canvas with aspect ratio EXACTLY 9:4 (2.25:1), for example 1881x836. The output shape must be 9:4, even though the input has a different ratio. HORIZONTAL CANVAS EXPANSION. Keep the full original height and extend the left and right background edges. Preserve the ENTIRE original image content: same people and number of people, faces, ages, expressions, hairstyles, clothing, poses, hands, every prop, ships, architecture, action, lighting and painted art style. Only add seamless adjacent environment that continues the same scene and perspective, not new people or narrative objects. All original faces, heads, hands, held objects and scene-defining details must remain fully visible. Do not invent blank faces. NO stretching, squeezing or distorting. NO cropping original content to fake the new ratio. Full-bleed continuous painting from edge to edge: no empty padding, black bars, wooden side strips, blurred extensions, mirror copies, borders, frames, panels, text, logo or watermark. This is production art for a fixed 9:4 in-game frame; the painting itself must fill that exact ultrawide shape.",
+  "mode": "built-in image_gen edit",
+  "generated": "C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-0cf11b5a-7411-4d0c-8565-813b91c9b866.png",
+  "output_hint": "Generated images are saved to C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5 as C:\\Users\\User\\.codex\\generated_images\\01a21cfe-a7b0-7952-a564-ec8de18ed2e5\\exec-0cf11b5a-7411-4d0c-8565-813b91c9b866.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+}
