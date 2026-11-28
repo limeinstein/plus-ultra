@@ -57,7 +57,9 @@
   function lin(a, x) { return Math.min(a[2] == null ? 1e9 : a[2], Math.floor(a[0] + a[1] * x)); }
 
   // ================================================================ 나라·작위
-  CT.realmOf = function (sp) { var k = sp && G.COURT.bySponsor[sp.id]; return k ? G.COURT.realms[k] : null; };
+  CT.realmOf = function (sp) {
+    if (G.CourtHistory && G.CourtHistory.civilOffice(sp)) return null;
+    var k = sp && G.COURT.bySponsor[sp.id]; return k ? G.COURT.realms[k] : null; };
   /** 작위를 선포하는 군주별 전속 신하. 얼굴과 무릎상은 반드시 같은 생성 그림을 쓴다. */
   CT.courtier = function (sp) {
     var row = sp && G.COURT.courtiers && G.COURT.courtiers[sp.id];

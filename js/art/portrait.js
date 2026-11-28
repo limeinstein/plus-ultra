@@ -226,7 +226,8 @@
   A.mateSpec = function (id) {
     var d = G.MATE[id]; if (!d) return null;
     // 불러온 게임에서는 같은 철새·친족 ID라도 정의와 얼굴이 달라질 수 있다.
-    if (mateSpecCache[id] && !d.wd && !d.kin && !d.youngFace) return mateSpecCache[id];
+    var faceKeys = G.Img.chain.mate(id), cacheKey = faceKeys[0];
+    if (mateSpecCache[cacheKey] && !d.wd && !d.kin && !d.youngFace) return mateSpecCache[cacheKey];
     if (d.wd && G.Wander && G.Wander.fixPortrait) G.Wander.fixPortrait(d);
     var sk = d.sk || {}, role = 'sailor';
     if (d.role) role = d.role;
@@ -240,21 +241,21 @@
     if (d.native) sp.facePool = d.facePool;
     if (id === 'rocco') { sp.beard = 2; sp.hat = 'cap'; sp.age = 'mid'; }
     var face = A.pairedMateFace(d, role, style);
-    A.withImg(sp, G.Img.chain.mate(id).concat(face ? [face] : []));   // 철새·마녀는 이미 있는 얼굴을 빌린다
-    return (mateSpecCache[id] = sp);
+    A.withImg(sp, faceKeys.concat(face ? [face] : []));   // 철새·마녀는 이미 있는 얼굴을 빌린다
+    return (mateSpecCache[cacheKey] = sp);
   };
   A.maidSpec = function (m) {
     var c = G.CITY_DATA[m.city];
     return A.withImg(A.npcSpec('maid_' + m.id, 'maid', G.Img.folkStyle(c), 'f'), G.Img.chain.maid(m.id, c));
   };
   /** sponsor portrait; holder = 0-based index into sp.holders (-1 → title only) */
-  A.sponsorSpec = function (sp, holder) {
+  A.sponsorSpec = function (sp, holder, pose) {
     var h = sp.holders[holder], name = h ? h[2] : sp.title;
     var role = sp.type === 'official' || sp.type === 'gov' ? 'noble' : sp.type;
     var c = G.CITY_DATA[sp.city];
-    var female = (G.SPONSOR_FEMALE || /이사벨|엘리자베스|여왕|왕비|왕대비|공작부인|여제|수녀/).test(name);
+    var female = h && h[5] ? h[5] === 'f' : (G.SPONSOR_FEMALE || /이사벨|엘리자베스|여왕|왕비|왕대비|공작부인|여제|수녀/).test(name);
     var spec = A.npcSpec('sp_' + sp.id + '_' + name, role, sp.style || c.style, female ? 'f' : 'm');   // sp.style: 식민지에 건너온 유럽 사람은 그 나라 얼굴 (js/systems/colonysponsor.js)
-    var chain = G.Img.chain.sponsor(sp, A.sponsorPic(sp, holder));
+    var chain = G.Img.chain.sponsor(sp, A.sponsorPic(sp, holder), pose);
     // 자리 공통 그림(<ID>.webp)은 한 사람의 얼굴이다 — 성별이 다른 대(代)에는 쓰지 않는다 (잉글랜드 국왕 그림이 메리 1세·앤 여왕에게 붙지 않게)
     if (female !== A.sponsorBaseFemale(sp)) chain = chain.filter(function (k) { return k !== 'portraits/sponsors/' + sp.id; });
     // 그림이 없는 여왕·여제는 그 고장 귀부인 그림(npc-roles/<양식>/noble — 여성)으로

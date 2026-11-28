@@ -44,6 +44,12 @@
   };
   /** 그 해 그 나라의 지도자 {name(모르면 null), title, text} */
   D.leader = function (n, y) {
+    var state = S(), date = y && typeof y === 'object' ? y : state && state.date && (y == null || y === state.date.y) ? state.date : { y: y || 1480, m: 1, d: 1 };
+    if (G.CourtHistory && G.CourtHistory.inPeriod(date)) {
+      var office = G.CourtHistory.nations[n], seat = office && G.SPONSOR[office];
+      if (seat) return G.CourtHistory.leader(seat, date);
+    }
+    y = date.y;
     var l = G.NATION_LEADERS && G.NATION_LEADERS[n], hit = null;
     if (y == null) { var s = S(); y = s ? s.date.y : 1480; }
     // 알현할 수 있는 군주 자리(rulers.js)가 있는 나라는 그 자리의 사람 — 왕궁·계승 소식과 이름이 같도록

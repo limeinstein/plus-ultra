@@ -669,7 +669,14 @@
     if (G.Frontier) wrap(G.Frontier, 'mateReady', function (orig) { return function (m) { if (m && m.tale && !T()) return false; return orig.apply(this, arguments); }; });
     if (SP) wrap(SP, 'present', function (orig) { return function (sp) { if (sp && sp.tale && !T()) return false; return orig.apply(this, arguments); }; });
     // 자코모의 무릎상: 카사노바 그림
-    if (G.Img && G.Img.chain) wrap(G.Img.chain, 'mateHalf', function (orig) { return function (id) { var out = orig.apply(this, arguments), d = G.MATE[id]; return d && d.halfKey ? [d.halfKey].concat(out) : out; }; });
+    if (G.Img && G.Img.chain) wrap(G.Img.chain, 'mateHalf', function (orig) {
+      return function (id) {
+        var out = orig.apply(this, arguments), d = G.MATE[id];
+        var storyFace = G.StoryArt && G.StoryArt.mate && G.StoryArt.mate(id);
+        if (storyFace && out[0] === storyFace + '_half' && G.Img.has(out[0])) return out;
+        return d && d.halfKey ? [d.halfKey].concat(out) : out;
+      };
+    });
     // 끝난 뒤 아틀란티스에 다시 들르면 (바다 발견물 자리 — checkSea 가 찾은 것은 다시 찾지 않으므로 여기서 본다)
     if (G.Scenes.sea && G.Scenes.sea.update) wrap(G.Scenes.sea, 'update', function (orig) {
       return function () {

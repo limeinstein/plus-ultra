@@ -127,6 +127,10 @@
     if (G.Colony) out = out.concat(G.Colony.daily());       // 새 도시 개척 (명성 200,000 · 400,000) · 개척민의 청   // 사라진 에스파냐 왕녀 (명성 50,000 · 총각)
     // 후원자의 대(代) — 옛 저장이면 지금 자리에 있는 사람들을 기억해 둔다
     if (!s.spHolder && G.Succession) G.Succession.sync();
+    if (G.CourtHistory && G.Succession) {
+      var changed = G.CourtHistory.changes[U.dateNum(s.date)];
+      if (changed) out = out.concat(G.Succession.year(changed));
+    }
     return out;
   };
 

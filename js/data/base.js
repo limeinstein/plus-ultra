@@ -799,7 +799,7 @@
     // 거리 조작 안내는 게임 시작 후 석 달 안에만 보인다. 이후에는 설정의 키 설명을 쓴다.
     townControlsMonths: 3,
     // 대항해시대의 끝 (js/systems/eraend.js): 이날이 되면 세월이 멈추고 나레이션과 「항해의 끝」 결산으로 게임이 끝난다
-    eraEnd: { y: 1700, m: 1, d: 1 },
+    eraEnd: { y: 1701, m: 1, d: 1 },
     // 야영지에서 배 고치기 (js/scenes/land.js camp): 배가 보이는 곳(landPack.near)에서, 자재가 있을 때.
     //   days일 동안 날마다 배마다 최대 내구 × (perDay + perSkill × 조선 특기). 인원이 최저 승원 수보다 적으면 그 비율만큼 덜 고친다(crewFloor 아래로는 안 줄임).
     //   자재는 바다 위 수리와 같이 내구 1마다 matPerHp통. 하루마다 피로 +fatigue

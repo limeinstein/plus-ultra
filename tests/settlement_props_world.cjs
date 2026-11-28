@@ -74,10 +74,8 @@ fs.mkdirSync(out,{recursive:true});
       }
       for(const c of standard){if(ci.plan(c).prop)problems.push([c.name,'일반 도시의 잘못된 표식']);}
       await Promise.all(Object.keys(G.CITY_PROPS).map(id=>G.Img.load('map-settlements/'+id)));
-      const limits=G.FX.ship.zoom, bands=G.FX.cityModels.zoomBands;
-      const bandOf=zoom=>Math.round(Math.log2(zoom)*bands);
-      const caveZooms=Array.from({length:bandOf(limits.max)-bandOf(limits.min)+1},(_,i)=>
-        Math.max(limits.min,Math.min(limits.max,2**((bandOf(limits.min)+i)/bands))));
+      const limits=G.FX.ship.zoom;
+      const caveZooms=[limits.min,limits.reference,limits.start,limits.reference*limits.shipPreset,G.FX.party.zoom.max,limits.max];
       function auditPlacement(c){
         const model=ci.plan(c), kind=c.lair?'skull-cave':'supply-wagon';
         const shuangyu=c.lair==='east';

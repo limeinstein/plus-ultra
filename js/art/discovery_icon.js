@@ -219,6 +219,7 @@
   function modelWidth(r, scale, zoom, fx) {
     var tier = r[7], width = fx.chart[tier];
     if (zoom) {
+      if(fx.worldWidth)return fx.worldWidth[tier]*zoom;
       var t = Math.max(0, Math.min(1, (zoom-fx.zoomStart)/(fx.zoomEnd-fx.zoomStart)));
       width = fx.width[tier] + t*(fx.close[tier]-fx.width[tier]);
     }
@@ -269,6 +270,10 @@
     var r=nature(d), fixed=r&&G.NatureLandmark.bakedPoint(d,r), z=zoom||chartZoom||0;
     var p=fixed?toScreen(fixed[0],fixed[1]):toScreen(d.lon,d.lat);
     var pad=120;
+    if(r&&zoom){
+      var extent=modelMetrics(r,modelWidth(r,scale||1,zoom,G.FX.natureLandmark));
+      pad=Math.max(pad,-extent.left,extent.right,-extent.top,extent.base);
+    }
     if(r&&!fixed&&d.how!=='sea'&&d.how!=='special'){
       var f=G.FX.natureLandmark, local=f.local[f.local.length-1];
       var needsBank=G.Geo&&G.Geo.ready&&(G.Geo.sdf(d.lon,d.lat)<f.bankMargin||G.Terrain.isLake(d.lon,d.lat));

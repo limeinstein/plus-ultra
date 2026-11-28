@@ -516,7 +516,13 @@
   K.exterior = function (kind, c, variant) {
     var out = [];
     if (variant) out.push('exteriors/' + kind + '@' + variant);
+    var venue = G.CourtHistory && G.CourtHistory.venue && G.CourtHistory.venue(kind, c, variant);
+    if (venue && venue.profile) out.push('exteriors/' + (venue.folder || 'court1580') + '/' + venue.profile);
     out.push('exteriors/' + kind + '@' + c.id);
+    if (venue && !venue.profile && venue.role !== kind) {
+      var style = I.extStyle(c);
+      if (style) out.push('exterior-styles/' + style + '/' + venue.role);
+    }
     var es = I.extStyle(c);
     if (es) {
       out.push('exterior-styles/' + es + '/' + kind);
@@ -675,7 +681,11 @@
   K.interior = function (kind, c, variant) {
     var out = [];
     if (variant) out.push('interiors/' + kind + '@' + variant);
-    out.push('interiors/' + kind + '@' + c.id, 'interiors/' + kind + '_' + cul(c), 'interiors/' + kind);
+    var venue = G.CourtHistory && G.CourtHistory.venue && G.CourtHistory.venue(kind, c, variant);
+    if (venue && venue.profile) out.push('interiors/' + (venue.folder || 'court1580') + '/' + venue.profile);
+    out.push('interiors/' + kind + '@' + c.id);
+    if (venue && !venue.profile && venue.role !== kind) out.push('interiors/' + venue.role + '_' + cul(c));
+    out.push('interiors/' + kind + '_' + cul(c), 'interiors/' + kind);
     return out;
   };
   /** 같은 역할이라도 도시마다 다른 얼굴이 나오도록: _f(여) _m(남) _2 _3 가 있으면 도시 번호로 하나를 고른다 */
@@ -716,7 +726,11 @@
     if (k && k.indexOf('portraits/npc-roles/') === 0 && G.Art && G.Art.rolePortraitGender) return G.Art.rolePortraitGender(NPC_ROLE_PORTRAIT[id], I.folkStyle(c));
     return !k ? null : /_f$/.test(k) ? 'f' : /_m$/.test(k) ? 'm' : null;
   };
-  K.mate = function (id) { return ['portraits/mates/' + id]; };
+  K.mate = function (id) {
+    var own = 'portraits/mates/' + id;
+    var story = G.StoryArt && G.StoryArt.mate ? G.StoryArt.mate(id) : null;
+    return story && I.has(story) ? [story, own] : [own];
+  };
   /** 동료의 전용 보행 시트: 동료 ID로 같은 인물의 4열×2줄 그림을 찾는다. */
   K.mateWalk = function (id) {
     var d = (G.MATE_WALKS || {})[typeof id === 'string' ? id : id && id.id];
@@ -874,7 +888,7 @@
   /** 대화에서 쓰는 무릎상 (머리부터 무릎까지 서 있는 모습, 1024×1536, 투명) — 흉상 그림 이름 + _half.
       두 사람 다 무릎상이 있으면 대화창이 서 있는 모습으로 크게 바뀐다 (js/ui/ui.js dialogShell) */
   K.mateHalf = function (id) {
-    var out = ['portraits/mates/' + id + '_half'];
+    var out = K.halfOf(K.mate(id));
     var d = G.MATE && G.MATE[id];
     // 얼굴을 먼저 교정해야 옛 저장의 잘못된 무릎상이 앞에서 선택되지 않는다.
     var spec = G.Art && G.Art.mateSpec ? G.Art.mateSpec(id) : null;
@@ -922,8 +936,14 @@
     return K.halfOf(G.Art.portraitKeys(G.Art.townSpec(id, c)));
   };
   /** holder: 1-based index into sp.holders (the person holding the title at that time) */
-  K.sponsor = function (sp, holder) {
-    var out = [];
+  K.sponsor = function (sp, holder, pose) {
+    var out = [], history = G.CourtHistory;
+    var eventFace = history && history.eventPortraits && history.eventPortraits[holder];
+    if (eventFace) out.push(eventFace);
+    else if (pose === 'listen' && typeof holder === 'string' && holder.indexOf('court1580/') === 0) {
+      var alternate = 'portraits/sponsors/court1580-poses/' + holder.slice(10) + '_listen';
+      if (I.has(alternate) && I.has(alternate + '_half')) out.push(alternate);
+    }
     if (sp.face) out.push(sp.face);   // 사건 화자와 후원자가 같은 인물일 때 전용 초상을 이어 쓴다.
     if (typeof holder === 'string' && holder) out.push('portraits/sponsors/' + holder);   // 다른 후원자의 그림을 빌림 (포르투갈 펠리페 1세 = 에스파냐 펠리페 2세)
     else if (holder) out.push('portraits/sponsors/' + sp.id + '_' + holder);

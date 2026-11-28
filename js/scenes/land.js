@@ -10,7 +10,7 @@
   function S() { return G.Game.state; }
   function walkable(lon,lat) { return G.Hydro&&G.Hydro.ready ? G.Hydro.canWalk(lon,lat) : G.Geo.isLand(lon,lat); }
   function walkSegment(a,b) { return G.LandNav ? G.LandNav.clear(a,b) : walkable(b[0],b[1]); }
-  function zoomBy(k) { st.cam.zoomT = U.clamp((st.cam.zoomT || st.cam.zoom) * k, 80, 700); }
+  function zoomBy(k) { var z = G.FX.party.zoom; st.cam.zoomT = U.clamp((st.cam.zoomT || st.cam.zoom) * k, z.min, z.max); }
   var TERR = {
     grass: { name: '초원', spd: 0.34 }, steppe: { name: '스텝', spd: 0.36 }, desert: { name: '사막', spd: 0.26, thirst: 2 }, forest: { name: '숲', spd: 0.2 },
     jungle: { name: '밀림', spd: 0.14, sick: 1 }, mountain: { name: '산악', spd: 0.1 }, snow: { name: '설원', spd: 0.1, cold: 1 }, tundra: { name: '툰드라', spd: 0.2, cold: 1 }, ice: { name: '빙원', spd: 0.07, cold: 2 }, river: { name:'강 도하', spd:0.34 }, frozenriver: { name:'얼어붙은 강', spd:0.34, cold:1 }, sea: { name: '바다', spd: 0 }
@@ -74,7 +74,7 @@
     if (G.SeaBar) G.SeaBar.sync(el.bar);
   }
   L.setSpeed = setSpeed;
-  function newSt(start) { return { cam: { lon: start[0], lat: start[1], zoom: 170 }, path: null, t: 0, busy: 0, paused: true, dayAcc: 0, speed: landSpeed0(), trail: [], seen: {}, near: null, lastHint: -99, gph: 0, gdist: 0, gather: 1, face: 1, pfx: G.Party.newFx(), unit: {} }; }
+  function newSt(start) { return { cam: { lon: start[0], lat: start[1], zoom: G.FX.party.zoom.start }, path: null, t: 0, busy: 0, paused: true, dayAcc: 0, speed: landSpeed0(), trail: [], seen: {}, near: null, lastHint: -99, gph: 0, gdist: 0, gather: 1, face: 1, pfx: G.Party.newFx(), unit: {} }; }
   L.runtime = function () { return st; };
   L.refreshBar = function () { if (st && st.alive) refreshBar(); };
   function cleanMount(m) { return m && m.id && m.id !== 'walk' && m.n > 0 ? { id: m.id, n: m.n, draft: m.draft || 'horse', style: m.style || null } : { id: 'walk', n: 0 }; }

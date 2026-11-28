@@ -1,8 +1,8 @@
 /* 이야기 모드 「돌아오는 배의 값」 — 아르슬란 젬오을루 편 진행기 (G.Arslan) — 자료·대사: js/data/arslan.js  2026-11-28 사용자 요청
    ■ 하는 일 (틀은 js/systems/gold.js · jhook.js 와 같다)
      · 이야기 고르기 지도에서 아르슬란을 고르면 → 1480년의 세상을 다달이 1494년 4월까지 넘긴다. 고정된 제독(아르슬란 젬오을루 · 오스만 · 18세)으로
-       이스탄불 거리에서 시작한다. 저장 s.arslan = { act, beats, flags, pro, fleet: {isl, por, ita}, wed: {동료: 날}, cool: {사건: 날} }.
-     · 프롤로그는 이스탄불을 걸으며 네 장면 — 거리(시장의 해도) → 조선소(배·피루제·아일린) → 도서관(귈리자르) → 항구(〈달무리〉).
+       이스탄불 거리에서 시작한다. 저장 s.arslan = { act, beats, flags, pro, fleet: {rho, ott, pap}, wed: {동료: 날}, cool: {사건: 날} }.
+     · 프롤로그는 이스탄불을 걸으며 네 장면 — 거리(시장의 해도) → 조선소(배·훈디·마흐) → 도서관(니사이) → 항구(〈달무리〉).
        장면은 그 건물에 들어설 때(js/scenes/city.js C.visit → AR.enter) 일어난다. 마치기 전에는 출항할 수 없다.
      · 사건(G.ARSLAN.beats)은 도시에 들어설 때 · 바다의 하루 끝에 조건을 보고 하나씩.
        조건: where · box(하나 또는 여럿) · after · gap · date · battles · days(출항 뒤 날수) · with(배에 있어야 하는 동료) · needGold
@@ -10,7 +10,7 @@
        then: join · items · fame · gold · loseGold · crew · discipline · notoriety · flag · title · battle · chain · wed · base · reveal · sche · redo · finale
        고르는 대답의 셋째 칸도 then 과 같은 꼴 — 고른 쪽의 일이 사건의 then 보다 먼저 일어난다.
      · 남성은 부하로 들이지 않는다: 술집 고용(T.hireMate)과 사건 합류(G.Legend.join)에서 아르슬란이 「난 남자는 안 믿는 주의라.」 하고 거절한다.
-     · 세 세력의 10대 함대: 선주회의 보증(a4_guild) 뒤, 세 바다(G.ARSLAN.fleets 의 box)에서 해전을 이길 때마다 그 세력의 선단이 하나씩 꺾인다.
+     · 세 세력의 10대 함대(로도스 구호기사단 · 오스만 · 교황청과 프랑스): 선주회의 보증(a4_guild) 뒤, 세 바다(G.ARSLAN.fleets 의 box)에서 해전을 이길 때마다 그 세력의 선단이 하나씩 꺾인다.
        G.BALANCE.arslan.fleetNeed 척을 꺾으면 우두머리 사건이 열린다.
      · 혼약(then.wed)은 이 이야기 안의 약속이다 — 충성 100 · 수첩에 적힌다. 둘째 부인 규칙(js/systems/wives.js)과는 따로 간다.
      · arslan: true 가 붙은 동료는 이 모드가 아니면 나오지 않는다. */
@@ -22,7 +22,43 @@
   if (!D) return;
 
   function S() { return G.Game && G.Game.state; }
-  function T() { var s = S(); return s && s.arslan ? s.arslan : null; }
+  // 1판(가공의 세력) 저장을 2판 이름으로 옮긴다 — 사건 여섯 · 세 바다의 표식 · 선단 집계. 한 번만.
+  var OLD = { beats: { a4_yunus: 'a4_kemal', a4_isl_head: 'a4_rho_head', a4_isl_after: 'a4_rho_after', a4_por_anchor: 'a4_ott_anchor', a4_por_head: 'a4_ott_head', a4_por_after: 'a4_ott_after', a4_ita_head: 'a4_pap_head', a4_ita_after: 'a4_pap_after' },
+    sea: { isl: 'rho', por: 'ott', ita: 'pap' } };
+  function mend(t) {
+    if (t.v >= 2) return t;
+    var move = function (o, a, b) { if (o && o[a] != null) { if (o[b] == null) o[b] = o[a]; delete o[a]; } };
+    Object.keys(OLD.beats).forEach(function (k) { move(t.beats, k, OLD.beats[k]); move(t.cool, k, OLD.beats[k]); move(t.battleWins, k, OLD.beats[k]); });
+    Object.keys(OLD.sea).forEach(function (k) { move(t.fleet, k, OLD.sea[k]); move(t.flags, 'sea_' + k, 'sea_' + OLD.sea[k]); });
+    t.v = 2; return t;
+  }
+  function T() { var s = S(); return s && s.arslan ? mend(s.arslan) : null; }
+  // 구판에서는 동료 명단이 선원 수를 덮어써 보급량도 저장할 때 null이 될 수 있었다.
+  AR.restoreSave = function (s) {
+    var t = mend(s.arslan), f = s.fleet;
+    if (!Number.isFinite(f.crew)) {
+      var crew = D.startingCrew;
+      D.beats.forEach(function (b) { if (t.beats[b.id] != null && b.then.crew) crew += b.then.crew; });
+      f.crew = Math.min(crew, U.sum(f.ships, function (ship) { return ship.crewMax; }));
+    }
+    if (!Number.isFinite(f.food) || !Number.isFinite(f.water)) {
+      var supply = Math.ceil(R.dailyUse(f.crew, f) * D.supplyDays);
+      if (!Number.isFinite(f.food)) f.food = supply;
+      if (!Number.isFinite(f.water)) f.water = supply;
+    }
+    var pending = t.battlePending, npc = s.battle && s.battle.npc;
+    if (pending) {
+      var b = beatOf(OLD.beats[pending.beat] || pending.beat);
+      if (b && b.then.battle) {
+        if (npc && npc.id === pending.id) {
+          npc.id = 'ar_' + b.then.battle.label;
+          npc.storyBattle = { mode: 'arslan', beat: b.id };
+        }
+        pending.beat = b.id;
+        pending.id = 'ar_' + b.then.battle.label;
+      }
+    }
+  };
   function K() { return G.BALANCE.arslan; }
   function today() { return U.dayIndex(S().date); }
   function inCity() { var s = S(); return G.Game.sceneName === 'city' && s && s.loc.mode === 'city'; }
@@ -35,6 +71,7 @@
   // ================================================================ 말하는 사람
   var MATE_OF = { F: 'ar_firuze', G: 'ar_gulizar', A: 'ar_aylin', LP: 'little_prince', SH: 'scheherazade', IN: 'ar_inaya', MH: 'ar_mahina',
     LE: 'ar_leonor', YS: 'ar_yasin', DV: 'ar_devi', VI: 'ar_viola', KY: 'ar_kya', SA: 'ar_sayo' };
+  Object.keys(D.speak || {}).forEach(function (k) { MATE_OF[k] = D.speak[k]; });   // 자료에서 늘어난 동료의 말하는 기호
   var GUEST = { HG: 'sy_hwanggyu', WD: 'sy_woldam' };   // 「바닷길 노래」의 두 사람 (자료가 있으면 그 얼굴로)
   function mateWho(id, name) {
     var d = G.MATE[id]; if (!d) return { name: name || id };
@@ -50,19 +87,30 @@
     } catch (e) { /* 그림이 없어도 말은 한다 */ }
     return sp;
   }
-  function who(k) {
+  function who(k, beat) {
     try {
       if (k === 'P') return me();
-      var artSpeaker = G.StoryArt && G.StoryArt.speaker ? G.StoryArt.speaker('arslan', k) : null; if (artSpeaker) return artSpeaker;
       if (k === 'N' || !k) return {};
-      if (MATE_OF[k]) return mateWho(MATE_OF[k]);
+      beat = beat || AR.currentBeat;
+      var key = 'portraits/npc/ar_' + k;
+      if (k === 'DL' && beat === 'pro_market') key += '_late';
+      if (k === 'JM' && (beat === 'f_bed' || beat === 'f_soup')) key += '_ward';
+      if (k === 'KR' && (beat === 'a4_ott_head' || beat === 'a4_ott_after')) key += '_admiral';
+      if (MATE_OF[k]) {
+        var mate = mateWho(MATE_OF[k]);
+        if (k === 'IN' && beat === 'f_rome' && G.Img.has('portraits/mates/ar_inaya_solemn')) {
+          key = 'portraits/mates/ar_inaya_solemn';
+          mate.portrait = G.Art.withImg(Object.assign({}, mate.portrait), [key]);
+          mate.half = [key + '_half'];
+        }
+        return mate;
+      }
       var n = (D.npcs || {})[k];
-      if (GUEST[k] && G.MATE[GUEST[k]]) return mateWho(GUEST[k], n ? n[0] : null);
+      var has = G.Img.has(key);
+      if (!has && GUEST[k] && G.MATE[GUEST[k]]) return mateWho(GUEST[k], n ? n[0] : null);
       if (n) {
-        // 전용 그림 images/portraits/npc/ar_<기호> 가 생기면 그것이 먼저
-        var ownKey = 'portraits/npc/ar_' + k, has = G.Img && G.Img.has && G.Img.has(ownKey);
         if (!n[1] && !has) return { name: n[0] };
-        var x = npcFace('ar_' + k, n[1] || 'native', n[2], n[3], has ? ownKey : n[4]); x.name = n[0]; return x;
+        var x = npcFace('ar_' + k, n[1] || 'native', n[2], n[3], has ? key : n[4]); x.name = n[0]; return x;
       }
     } catch (e) { console.error(e); }
     return { name: k };
@@ -80,9 +128,15 @@
     for (j = i + 1; j < lines.length; j++) { k = speakerOf(lines[j]); if (!k || k === 'N') break; if (k !== 'P' && k !== 'YA') return k; }
     return null;
   }
-  function facing(k, lines, i) {
-    var sp = who(k); if (k !== 'P') return sp;
-    var pk = partnerKey(lines, i), pt = pk ? who(pk) : null;
+  function facing(k, lines, i, beat) {
+    var sp = who(k, beat);
+    if (beat === 'pro_market' && (k === 'DL' || k === 'YA')) {
+      sp.layout = 'duo'; sp.side = k === 'YA' ? 'left' : 'right';
+      sp.partner = who(k === 'YA' ? 'DL' : 'YA', beat);
+      return sp;
+    }
+    if (k !== 'P') return sp;
+    var pk = partnerKey(lines, i), pt = pk ? who(pk, beat) : null;
     if (pt && pt.portrait) { sp.layout = 'duo'; sp.side = 'left'; sp.choiceSide = 'left'; sp.partner = pt; sp.emotion = 'neutral'; }
     return sp;
   }
@@ -95,9 +149,9 @@
       for (var i = 0; i < lines.length; i++) {
         var ln = lines[i];
         if (beat && G.StoryArt) await G.StoryArt.line('arslan', beat, ln, branch ? -1 : i);
-        if (Array.isArray(ln)) await UI.say(fmt(ln[1]), facing(ln[0], lines, i));
+        if (Array.isArray(ln)) await UI.say(fmt(ln[1]), facing(ln[0], lines, i, beat));
         else if (ln && ln.ask) {
-          var v = await UI.ask(fmt(ln.ask), ln.opts.map(function (o, k) { return { label: o[0], value: k }; }), facing(ln.by || 'P', lines, i));
+          var v = await UI.ask(fmt(ln.ask), ln.opts.map(function (o, k) { return { label: o[0], value: k }; }), facing(ln.by || 'P', lines, i, beat));
           var o = ln.opts[v == null ? 0 : v];
           var t = T(); if (t) (t.picks || (t.picks = [])).push(o[0]);
           if (Array.isArray(o[1])) await play(o[1], beat, true, fx);
@@ -147,8 +201,8 @@
     var home = G.CITY_DATA[D.home];
     p.nation = D.nation; p.home = D.home; p.g = D.g; p.gold = D.gold; p.bank = 0; p.fame = 0; p.notoriety = 0;
     s.loc = { mode: 'city', city: D.home, lon: home.lon, lat: home.lat, heading: Math.PI };
-    s.fleet.ships[0].name = D.ship; s.fleet.crew = D.crew; s.fleet.fatigue = 0; s.fleet.discipline = 80;
-    s.fleet.food = Math.ceil(R.dailyUse(s.fleet.crew, s.fleet) * 14); s.fleet.water = Math.ceil(R.dailyUse(s.fleet.crew, s.fleet) * 14);
+    s.fleet.ships[0].name = D.ship; s.fleet.crew = D.startingCrew; s.fleet.fatigue = 0; s.fleet.discipline = 80;
+    s.fleet.food = s.fleet.water = Math.ceil(R.dailyUse(s.fleet.crew, s.fleet) * D.supplyDays);
     s.contract = null;
     try {
       var A = G.Art;
@@ -159,7 +213,8 @@
     (D.mates0 || []).forEach(function (id) { s.mates.push({ id: id, role: (D.roles || {})[id] || 'none', joined: U.dateNum(s.date), loyal: 92, ev: 1, from: D.home }); });
     if (s.known.indexOf(D.home) < 0) s.known.push(D.home);
     s.log = [];
-    s.arslan = { act: 1, beats: {}, flags: {}, pro: 0, fleet: { isl: 0, por: 0, ita: 0 }, wed: {}, cool: {}, started: U.dateNum(s.date), startDay: U.dayIndex(s.date) };
+    var fl = {}; Object.keys(D.fleets || {}).forEach(function (k) { fl[k] = 0; });
+    s.arslan = { v: 2, act: 1, beats: {}, flags: {}, pro: 0, fleet: fl, wed: {}, cool: {}, started: U.dateNum(s.date), startDay: U.dayIndex(s.date) };
     G.State.log(D.start.y + '년 ' + D.start.m + '월, 이스탄불. 아르슬란 젬오을루의 이야기가 시작된다.');
     if (G.Frontier && G.Frontier.invalidate) G.Frontier.invalidate();
     return s;
@@ -241,13 +296,20 @@
   function wedCount() { var t = T(); return t && t.wed ? Object.keys(t.wed).length : 0; }
   function daysNeed(b) { return b.days || K().wedDays; }
   function sailed() { var t = T(); return today() - (t.startDay || today()); }
+  function gapLeft(b) {
+    return b.gap && b.after && b.after.length ? b.gap + Math.max.apply(null, b.after.map(doneDay)) - today() : 0;
+  }
+  function beforeDate(date) {
+    var d = S().date;
+    return date && d.y * 12 + d.m < date[0] * 12 + date[1];
+  }
   /** 사건이 열리는 조건 가운데 「자리」가 아닌 것 (지금 할 일에 무엇이 모자란지 적을 때도 쓴다) */
   function gate(b) {
     var s = S(), t = T();
     if (b.after && !b.after.every(done)) return 'after';
     if (t.cool && t.cool[b.id] > today()) return 'cool';
-    if (b.gap && b.after && b.after.length) { var last = Math.max.apply(null, b.after.map(doneDay)); if (today() - last < b.gap) return 'gap'; }
-    if (b.date && s.date.y * 12 + s.date.m < b.date[0] * 12 + b.date[1]) return 'date';
+    if (gapLeft(b) > 0) return 'gap';
+    if (beforeDate(b.date)) return 'date';
     if (b.days != null && sailed() < daysNeed(b)) return 'days';
     if (b.with && !b.with.every(aboard)) return 'with';
     if (b.fleet && fleetCount(b.fleet[0]) < fleetNeed(b)) return 'fleet';
@@ -271,7 +333,9 @@
     t.beats[b.id] = today();
     if (b.act) t.act = Math.max(t.act || 1, b.act);
     var fx = [];
+    AR.currentBeat = b.id;
     try { fx = await play(b.lines, b.id); } catch (e) { console.error(e); }
+    finally { AR.currentBeat = null; }
     ctx.beat = b;
     for (var i = 0; i < fx.length; i++) await AR.apply(fx[i], ctx);     // 고른 대답의 일이 먼저
     G.State.log('「' + D.short + '」 — ' + (b.title || TITLES[b.id] || '이야기가 한 걸음 나아갔다.'));
@@ -301,7 +365,7 @@
     if (th.notoriety) s.player.notoriety = Math.max(0, (s.player.notoriety || 0) + th.notoriety);
     if (th.flag) {
       (t.flags || (t.flags = {}))[th.flag] = today();
-      if (th.flag === 'helm') UI.toast('선장이 키에서 손을 뗐다 — 이제 폭풍과 추격전 앞에서 아일린에게 지휘를 맡길 수 있다.', 'anchor', 5600);
+      if (th.flag === 'helm') UI.toast('선장이 키에서 손을 뗐다 — 이제 폭풍과 추격전 앞에서 마흐에게 지휘를 맡길 수 있다.', 'anchor', 5600);
       if (/^sea_/.test(th.flag)) { var fk = th.flag.slice(4); if (t.fleet) t.fleet[fk] = K().fleetMax; UI.toast(D.fleets[fk].name + '의 우두머리를 꺾었다.', 'laurel', 5200); }
     }
     if (th.base) { t.base = today(); UI.toast('비자고스 제도의 섬이 사람들의 거점이 되었다.', 'anchor', 5200); }
@@ -340,14 +404,21 @@
     if (inCity() && G.Game.cityHud) G.Game.cityHud();
     return true;
   };
+  // 옛 항해에서 이미 지난 모사건에 3판의 합류 장면이 추가됐으면 다음 바닷날에 이어 본다.
+  function nextSeaBeat() {
+    var t = T();
+    if (!t || !t.prologue) return null;
+    var missed = D.beats.find(function (b) { return b.act === 4 && b.at === 'chain' && b.then.join && !done(b.id) && b.after.every(done); });
+    return missed || D.beats.find(function (b) { return ready(b, 'sea'); });
+  }
   AR.seaPending = function () {
     if (G.StoryBattle) G.StoryBattle.recover('arslan');
     var t = T(), s = S(); if (!t || !t.prologue || AR._busy || !s || s.loc.mode !== 'sea') return false;
-    return (D.beats || []).some(function (b) { return ready(b, 'sea'); });
+    return !!nextSeaBeat();
   };
   AR.atSea = async function () {
     if (AR._busy) return false; AR._busy = true;
-    try { var b = (D.beats || []).filter(function (x) { return ready(x, 'sea'); })[0]; if (b) await run(b, {}); }
+    try { var b = nextSeaBeat(); if (b) await run(b, {}); }
     catch (e) { console.error(e); } finally { AR._busy = false; }
     return true;
   };
@@ -364,11 +435,67 @@
   // ================================================================ 지금 할 일 · 수첩
   function kindOf(b) { return /^r_/.test(b.id) ? 'crew' : /^w_/.test(b.id) ? 'wed' : /^s_/.test(b.id) ? 'scene' : 'main'; }
   function openBeats() { return (D.beats || []).filter(function (x) { return x.guide && !done(x.id) && (!x.after || x.after.every(done)); }); }
+  function cityLead(b, c) {
+    var place = '아무 도시';
+    if (Array.isArray(b.where)) {
+      place = b.where.map(R.city).filter(function (city) { return city && R.cityExists(city); }).map(function (city) { return city.name; }).join('·');
+      if (!place) return '지금 갈 수 있는 도시는 없네.';
+    } else if (b.where === 'away') place = G.CITY_DATA[D.home].name + ' 밖의 도시';
+    return place + '에 들어갈 때 이야기가 이어지네.' + (c && whereOk(b, c) ? ' 이미 여기 있다면 도시 밖으로 나갔다 다시 들어오게.' : '');
+  }
+  function chartRange(lo, hi, plus, minus) {
+    if (lo >= 0) return plus + ' ' + lo + '∼' + hi + '도';
+    if (hi <= 0) return minus + ' ' + (-hi) + '∼' + (-lo) + '도';
+    return minus + ' ' + (-lo) + '도에서 ' + plus + ' ' + hi + '도';
+  }
+  function seaLead(b) {
+    if (!b.box) return '항해 중 바다에서 하루가 지날 때 이야기가 이어지네.';
+    return boxes(b.box).map(function (box) {
+      return chartRange(box[0], box[1], '동경', '서경') + ', ' + chartRange(box[2], box[3], '북위', '남위');
+    }).join(' 또는 ') + ' 범위의 바다에서 항해하며 하루를 넘겨 보게.';
+  }
+  function leadConditions(b) {
+    var t = T(), lines = [], wait = gapLeft(b), cool = ((t.cool && t.cool[b.id]) || 0) - today();
+    if (beforeDate(b.date)) lines.push(b.date[0] + '년 ' + b.date[1] + '월부터 들을 수 있는 소식일세.');
+    if (wait > 0) lines.push('앞선 일로부터 ' + b.gap + '일이 차야 하네. 이제 ' + wait + '일 남았어.');
+    if (b.days != null && sailed() < daysNeed(b)) lines.push('이스탄불 시장에서 해도를 집어 든 날부터 ' + daysNeed(b) + '일이 차야 하네. 아직 ' + (daysNeed(b) - sailed()) + '일 남았어.');
+    if (cool > 0) lines.push('지난번 대답을 미뤘으니 ' + cool + '일 뒤에 다시 말을 꺼내 보게.');
+    if (b.needGold) lines.push('금화 ' + U.num(b.needGold) + '닢을 가져가게.' + (S().player.gold < b.needGold ? ' 지금은 ' + U.num(b.needGold - S().player.gold) + '닢이 모자라네.' : ''));
+    if (b.fleet && fleetCount(b.fleet[0]) < fleetNeed(b)) {
+      var wins = fleetCount(b.fleet[0]), need = fleetNeed(b);
+      lines.push(D.fleets[b.fleet[0]].sea + '에서 일반 해전을 ' + need + '번 이기게. 그 바다에서는 지금 ' + wins + '승이네.');
+    }
+    if (b.with) {
+      var missing = b.with.filter(function (id) { return !aboard(id); }).map(function (id) { return G.MATE[id].short || G.MATE[id].name; });
+      if (missing.length) lines.push('이 얘기를 이어 가려면 배에 ' + missing.join('·') + U.jx(missing[missing.length - 1], '이/가') + ' 함께 있어야 하네.');
+    }
+    if (b.wedMin && wedCount() < b.wedMin) lines.push('일행과 맺은 혼약이 ' + b.wedMin + '건은 있어야 하네. 훈디, 니사이, 마흐와 나누다 만 이야기를 먼저 돌아보게.');
+    return lines;
+  }
+  AR.tavernLeads = function (c) {
+    var t = T();
+    if (!t || t.finale) return [];
+    if (!t.prologue) {
+      var st = AR.stage(), clue = st && D.tavern['pro_' + st.id], home = G.CITY_DATA[D.home];
+      if (!clue) return [];
+      var place = { start: '거리', shipyard: '조선소', library: '도서관', harbor: '항구', tavern: '술집' }[stageKind(st, home)];
+      return [{ id: 'pro_' + st.id, label: clue[0], right: home.name + ' ' + place, text: clue[1] + '\f' + home.name + ' ' + place + '에서 이야기를 이어 가게.' }];
+    }
+    return openBeats().reduce(function (out, b) {
+      var why = gate(b), clue = D.tavern[b.id], city = b.at === 'city';
+      if (!clue || why === 'battle') return out;
+      var where = city ? cityLead(b, c) : seaLead(b);
+      out.push({ id: b.id, label: clue[0], right: (city ? '도시' : '항해') + (why ? ' · 준비 필요' : ''),
+        text: [clue[1], where].concat(leadConditions(b)).join('\f'), blocked: !!why });
+      return out;
+    }, []).sort(function (a, b) { return Number(a.blocked) - Number(b.blocked); });
+  };
   function guideText(b) {
     var g = U.esc(b.guide), s = S(), why = gate(b);
     if (b.fleet) g += ' <span class="muted">(' + U.esc(D.fleets[b.fleet[0]].sea) + '에서 선단 ' + Math.min(fleetCount(b.fleet[0]), fleetNeed(b)) + '/' + fleetNeed(b) + ')</span>';
     if (why === 'date') g += ' <span class="muted">(' + b.date[0] + '년 ' + b.date[1] + '월 무렵)</span>';
-    if (why === 'days') g += ' <span class="muted">(출항 ' + daysNeed(b) + '일 뒤 — ' + (daysNeed(b) - sailed()) + '일 남음)</span>';
+    if (why === 'gap') g += ' <span class="muted">(' + gapLeft(b) + '일 남음)</span>';
+    if (why === 'days') g += ' <span class="muted">(이야기 시작 ' + daysNeed(b) + '일 뒤 — ' + (daysNeed(b) - sailed()) + '일 남음)</span>';
     if (why === 'gold') g += ' <span class="muted">(금화 ' + U.num(b.needGold) + '닢이 있어야 한다 — 지금 ' + U.num(s.player.gold) + '닢)</span>';
     if (why === 'wed') g += ' <span class="muted">(혼약이 아직 없다 — 첫 동료들의 이야기를 먼저)</span>';
     if (why === 'with') g += ' <span class="muted">(그 동료가 배에 있어야 한다)</span>';
@@ -379,7 +506,7 @@
   AR.guide = function () {
     if (G.StoryBattle) G.StoryBattle.recover('arslan');
     var t = T(); if (!t || t.finale) return '';
-    if (!t.prologue) { var st = AR.stage(); return st && st.at !== 'start' ? U.esc({ shipyard: '조선소로 — 아일린 누나네 헐값 배', library: '도서관으로 — 어머니의 편지를 읽어 주던 사서', harbor: '항구로 — 배에 이름을 붙인다' }[st.at] || '') : ''; }
+    if (!t.prologue) { var st = AR.stage(); return st && st.at !== 'start' ? U.esc({ shipyard: '조선소로 — 마흐 누나네 헐값 배', library: '도서관으로 — 어머니의 편지를 읽어 주던 사서', harbor: '항구로 — 배에 이름을 붙인다' }[st.at] || '') : ''; }
     var b = firstOpen('main');
     return b ? guideText(b) : '';
   };
@@ -406,7 +533,7 @@
       var w = t.wed && t.wed[id] != null;
       return '<span class="tag' + (aboard(id) ? ' good-text' : '') + '" style="margin:2px">' + U.esc(m.short || m.name) + (w ? ' ♥' : '') + (aboard(id) ? '' : ' …') + '</span>';
     }).join('');
-    var seas = t.flags && t.flags.guild ? ['isl', 'por', 'ita'].map(function (k) {
+    var seas = t.flags && t.flags.guild ? Object.keys(D.fleets).map(function (k) {
       var f = D.fleets[k], n = Math.min(K().fleetMax, fleetCount(k)), head = t.flags['sea_' + k];
       return '<div style="margin:3px 0"><b>' + U.esc(f.name) + '</b> ' + (head ? '<span class="tag good-text">우두머리를 꺾었다</span>' : '<span class="tag warn-text">' + n + '/' + K().fleetMax + '</span> <span class="muted">' + Math.min(K().fleetNeed, K().fleetMax - 1) + '척을 꺾으면 우두머리가 나선다</span>') +
         '<div class="muted" style="font-size:13px">' + U.esc(f.sea) + ' — ' + f.list.map(function (nm, i) { return i < n || head ? '<s>' + U.esc(nm) + '</s>' : U.esc(nm); }).join(' · ') + '</div></div>';
@@ -415,7 +542,7 @@
     el.innerHTML = '<div class="grid2" style="grid-template-columns:300px 1fr;gap:24px"><div><div class="ar-face"></div>' +
       '<h4 style="margin:10px 0 4px">' + U.esc(D.title) + '</h4><div class="muted" style="font-size:14px;line-height:1.6">' + U.esc(D.synopsis) + '</div>' +
       '<div class="sep"></div><b>바다가 부른 이름</b> — ' + (t.titles && t.titles.length ? U.esc(t.titles.join(' · ')) : '<span class="muted">아직 없다</span>') +
-      '<div class="sep"></div><b>〈달무리〉의 열세 동료</b> <span class="muted">(♥ 혼약)</span><div>' + mates + '</div>' +
+      '<div class="sep"></div><b>〈달무리〉의 동료 ' + D.crew.length + '명</b> <span class="muted">(♥ 혼약)</span><div>' + mates + '</div>' +
       '<div class="muted" style="font-size:13px;margin-top:6px">남성은 부하로 들이지 않는다 — 「' + U.esc(D.refuse.line) + '」</div></div><div>' +
       (todo ? '<div style="margin-bottom:10px"><b>지금 할 일</b>' + todo + '</div>' : '') +
       '<div style="margin-bottom:10px"><b>세 바다의 10대 함대</b><div>' + seas + '</div></div>' +

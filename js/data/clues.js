@@ -53,7 +53,7 @@
     (G.DISCOVERIES || []).forEach(function (d) {
       if (G.CLUE[d.id] !== 'book' || (d.built && d.built >= K.after) || d.alwaysMirage) return;
       var bs = by[d.id];
-      if (!bs || !bs.length || bs.some(function (b) { return (b.y || 0) < K.after; })) return;   // 게임이 1700년 1월 1일에 끝나므로 1700년 책도 읽을 수 없다
+      if (!bs || !bs.length || bs.some(function (b) { return (b.y || 0) < K.after; })) return;   // 설정된 기준 연도 이후에만 출간되는 책은 조기 열람 대상으로 삼는다
       var first = bs.slice().sort(function (a, b) { return (a.y || 0) - (b.y || 0); })[0];
       if ((first.y || 0) > K.from) earlyMap[first.id] = K.from;
     });

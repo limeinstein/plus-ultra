@@ -1,4 +1,4 @@
-/* 남녀 가족 장면 동등성·실제 재생·출산 연결·사망 원인·공연 교대·1700년 종료. */
+/* 남녀 가족 장면 동등성·실제 재생·출산 연결·사망 원인·공연 교대·1701년 종료. */
 'use strict';
 const fs = require('fs'), path = require('path'), assert = require('assert/strict');
 const { pathToFileURL } = require('url');
@@ -16,7 +16,7 @@ fs.mkdirSync(OUT, { recursive: true });
       localStorage.setItem('pu.lang', 'ko');
       window.requestAnimationFrame = cb => (cb.name === 'loop'||String(cb).includes('.frameDue(')&&String(cb).includes('.scene.update(')) ? 0 : setTimeout(() => cb(performance.now()), 16);
     });
-    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href), { waitUntil: 'domcontentloaded', timeout: 120000 });
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : (process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href)), { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game.sceneName === 'title', null, { timeout: 120000 });
     await page.evaluate(() => {
       window.qaFresh = function (g) {
@@ -114,7 +114,7 @@ fs.mkdirSync(OUT, { recursive: true });
       await page.waitForFunction(()=>document.querySelector('.ending-event img')?.naturalWidth>0);
       await page.screenshot({path:path.join(OUT,`game-death-${sex}.png`)});
       await page.getByRole('button',{name:'타이틀로',exact:true}).click();await page.evaluate(()=>qaEnding);
-      await page.evaluate(sex=>{qaFresh(sex);G.Game.state.date={y:1700,m:1,d:1};window.qaEra=G.EraEnd.mount();qaEra.classList.add('on','dated','lift','dawn','done');qaEra.querySelector('.ee-text').innerText=G.EraEnd.LINES.at(-1).join('\n');qaEra.querySelector('.ee-finis').textContent='GAME OVER · 1700';qaEra.querySelector('.ee-skip').hidden=true;qaEra.querySelector('.ee-next').hidden=false;},sex);
+      await page.evaluate(sex=>{qaFresh(sex);G.Game.state.date={y:1701,m:1,d:1};window.qaEra=G.EraEnd.mount();qaEra.classList.add('on','dated','lift','dawn','done');qaEra.querySelector('.ee-text').innerText=G.EraEnd.LINES.at(-1).join('\n');qaEra.querySelector('.ee-finis').textContent='GAME OVER · 1701';qaEra.querySelector('.ee-skip').hidden=true;qaEra.querySelector('.ee-next').hidden=false;},sex);
       await page.waitForTimeout(800);await page.screenshot({path:path.join(OUT,`game-era-${sex}.png`)});await page.evaluate(()=>qaEra.remove());
     }
     // 모든 파일은 브라우저에서도 실제로 해독 가능해야 한다.

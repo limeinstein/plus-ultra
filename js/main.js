@@ -158,7 +158,7 @@
     }
     if (lon == null || lat == null) return null;
     var res = s.settings && s.settings.res;
-    return { lon: lon, lat: lat, zoom: land ? 170 : 110, time: 0, wind: [0.5, 0.3], cloud: 0.3, edge: 0.75, mode: 0, quality: land ? 1 : (res && res < 1 ? 0.5 : 1), cssWidth: 1600 };
+    return { lon: lon, lat: lat, zoom: land ? G.FX.party.zoom.start : G.FX.ship.zoom.start, time: 0, wind: [0.5, 0.3], cloud: 0.3, edge: 0.75, mode: 0, quality: land ? 1 : (res && res < 1 ? 0.5 : 1), cssWidth: 1600 };
   };
   /** 게임 상태가 정해진 뒤 첫 장면 전에 (Loader 가 떠 있는 동안) */
   Game.prepare = async function (s) {
@@ -264,7 +264,7 @@
       try { Game.scene.update(dt); } catch (e) { console.error(e); }
     }
     if (!pausedScene && G.Birds) { try { G.Birds.update(dt); } catch (e) { console.error(e); } }
-    if (G.EraEnd && Game.state) { try { G.EraEnd.tick(); } catch (e) { console.error(e); } }   // 1700년 1월 1일 대항해시대의 끝 — 수명·이별보다 먼저 (js/systems/eraend.js)
+    if (G.EraEnd && Game.state) { try { G.EraEnd.tick(); } catch (e) { console.error(e); } }   // 1701년 1월 1일 대항해시대의 끝 — 수명·이별보다 먼저 (js/systems/eraend.js)
     if (G.Life && Game.state) { try { G.Life.tick(); } catch (e) { console.error(e); } }
     if (G.DiscoveryGuides && Game.state) { try { G.DiscoveryGuides.tick(); } catch (e) { console.error(e); } }
     if (G.Mother && Game.state) { try { G.Mother.tick(); } catch (e) { console.error(e); } }   // 여성 제독: 산실로 옮기기 · 해산 (js/systems/motherhood.js)
@@ -406,7 +406,7 @@
     for (var i = 0; i < n; i++) {
       // 수명이 다한 날에서 멈춘다. 후계를 정하기 전에 남은 날의 급료·계약 기한을 처리하지 않는다.
       if (Game.state.life && Game.state.life.end) break;
-      if (G.EraEnd && G.EraEnd.over(Game.state)) break;   // 1700년 1월 1일 — 대항해시대가 끝났다 (js/systems/eraend.js)
+      if (G.EraEnd && G.EraEnd.over(Game.state)) break;   // 1701년 1월 1일 — 대항해시대가 끝났다 (js/systems/eraend.js)
       var m = Game.newDay(); if (m && m.length) msgs = msgs.concat(m);
     }
     return msgs;
@@ -414,7 +414,7 @@
   /** one day passes: world-level processing. returns array of notices */
   Game.newDay = function () {
     var S = Game.state; var out = [];
-    if (G.EraEnd && G.EraEnd.over(S)) return out;   // 대항해시대가 끝난 날(1700년 1월 1일)에서 세월이 멈춘다 — 끝 장면은 loop의 G.EraEnd.tick
+    if (G.EraEnd && G.EraEnd.over(S)) return out;   // 대항해시대가 끝난 날(1701년 1월 1일)에서 세월이 멈춘다 — 끝 장면은 loop의 G.EraEnd.tick
     var prev = S.date;
     S.date = U.addDays(S.date, 1); S.day++;
     if (S.date.m !== prev.m) out = out.concat(G.World.newMonth());

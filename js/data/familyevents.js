@@ -411,7 +411,7 @@
   G.ENDING_SCENES = [
     ['mutiny', '반란으로 끝난 항해'], ['pirate', '해적의 포화 속에서'], ['navy', '군함의 포화 속에서'], ['prison', '돌벽 안의 마지막 밤'],
     ['illness', '병상에서의 이별'], ['peace_home', '집에서 맞은 평온한 마지막'], ['peace_sea', '바다에서 맞은 평온한 마지막'], ['peace_land', '탐험길의 평온한 마지막'],
-    ['ice', '빙하 속에 멈춘 항해'], ['starvation', '빈 식량통 곁의 마지막'], ['sea_illness', '바다의 병이 남긴 침묵'], ['disaster', '재해가 휩쓴 자리'], ['abandoned', '아무도 돌아오지 않은 탐험'], ['era', '1700년 1월 1일 — 새로운 세기의 여명']
+    ['ice', '빙하 속에 멈춘 항해'], ['starvation', '빈 식량통 곁의 마지막'], ['sea_illness', '바다의 병이 남긴 침묵'], ['disaster', '재해가 휩쓴 자리'], ['abandoned', '아무도 돌아오지 않은 탐험'], ['era', '1701년 1월 1일 — 새로운 세기의 여명']
   ];
   G.ENDING_SCENES.forEach(function (row, i) { if (i < 8) row[2] = row[0] + '_human_v2'; });
 })(window.G = window.G || {});

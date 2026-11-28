@@ -92,7 +92,8 @@
     var ground=baked(d,r)||site(d,r,!markerOnly), cap=markerOnly?0:z?ground.width*z:width;
     width=Math.min(width,cap);
     // 아주 작은 섬과 세계 해도에서는 접지 가능한 크기의 위치 점을 쓴다.
-    return {point:ground.point,width:width>=fx().markerMin?width:0,marker:width<fx().markerMin&&ground.dry,hidden:!ground.dry};
+    var min=zoom?fx().worldMarkerMin:fx().markerMin;
+    return {point:ground.point,width:width>=min?width:0,marker:width<min&&ground.dry,hidden:!ground.dry};
   };
 
   N.scan=function(d,r){return site(d,r,true);};

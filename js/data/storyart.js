@@ -465,4 +465,135 @@
     }
   }
 };
+
+  // 원문 대사에 붙여 두어 동승하지 않은 동료의 대사를 건너뛰어도 같은 장면이 열린다.
+  var arslan = G.STORY_ART.arslan = { title: '돌아오는 배의 값', beats: {}, gallery: [], portraits: [] };
+  [
+    ['pro_market', '……이 3.', '01-fare', '어머니가 치른 뱃삯'],
+    ['pro_market', '내가 장부의 3을 8로', '01b-ledger-memory', '어머니의 긴 마지막 획'],
+    ['pro_name', '가자. 아버지가 지나간 길을 거꾸로.', '02-first-sailing', '달무리의 첫 출항'],
+    ['a2_rhodes', '문을 부수고 들어간 방', '03-empty-bed', '로도스의 빈방'],
+    ['a2_rhodes_after', '선장은 부선장의 장화 끈을 맸다', '04-boot', '장화 끈'],
+    ['a3_dinner', '네 아버지 욕해도 되는 사람이랑', '05-supper', '욕해도 되는 저녁'],
+    ['a3_after', '다 풀어. 물부터.', '06-forty', '마흔 명의 빵'],
+    ['a4_crown', '종이 왕관을 씌운다', '07-crown', '밀가루 묻은 종이 왕관'],
+    ['j_diouma', '창고의 물문은', '07b-water', '물밑의 빗장'],
+    ['j_ceiba', '저 애 거. (잠든 아이를 눕힌다)', '08-hammock', '왕좌 대신 그물 침대'],
+    ['j_yunxian', '첫 곡물선은 밤 암초 앞에서', '08b-signal', '암초 사이의 신호'],
+    ['j_wulan', '야자나무 꼭대기의 여자였다', '08c-lookout', '야자나무 꼭대기'],
+    ['j_soyara', '달 계산을 암산으로 해?', '08d-tide', '문밖의 셈'],
+    ['a4_rho_head', '가려낸 사람을 노에 묶는다', '09-oar', '노에 묶인 사람들'],
+    ['a4_rho_after', '피란선 원장이 나왔어요', '10-ledger', '딜샤드의 원장'],
+    ['a4_pap_after', '관 뚜껑이 열렸다', '11-coffin', '빈 관'],
+    ['a4_ransom', '서른한 집이 모았어요', '12-ransom', '서른한 집의 영수증'],
+    ['a5_storm', '두 배가 함께 폭풍에 갇혔다', '13-storm', '수심을 부르는 두 배'],
+    ['a5_after', '베아트리체가 준 무대의상이에요', '14-red-costume', '붉은 옷과 소개 편지'],
+    ['r_prince', '길을 잃은 일행을 우물까지', '15-stars', '별길잡이'],
+    ['r_sche', '맞은편의 여인이 그 이름들을', '15b-names', '이야기로 외운 이름들'],
+    ['r_mahina', '열두 명 몫!', '16-chart', '열두 명 몫의 선물'],
+    ['s_devi', '한 손으로 잠급니다', '16b-prescription', '한 손으로 잠그는 버클'],
+    ['r_kya2', '흉작 소식에', '16c-potatoes', '다음 해의 씨감자'],
+    ['w_firuze', '훈디가 낡은 장부를 폈다', '17-credit', '훈디의 외상 장부'],
+    ['w_gulizar', '봉투를 도로 건넨다', '18-letter', '니사이의 읽지 않은 편지'],
+    ['w_aylin', '청혼 선물은 반지 대신', '19-buckle', '마흐의 새끼 물범 선수상'],
+    ['f_offer', '체사레 보르자요', '20-offer', '체사레의 거래'],
+    ['f_rome', '야유와 썩은 양배추가', '21-stage', '썩은 양배추'],
+    ['f_rome', '품에서 서고 열쇠를 꺼낸다', '21b-keys', '두 개의 열쇠'],
+    ['f_bed', '뒤채의 침상', '22-bed', '아버지에게 묻다'],
+    ['f_bed', '갈 수 있었던 날이 있었다', '22b-quay', '1482년, 돌아갈 수 있었던 나루'],
+    ['f_soup', '빵의 탄 귀퉁이만 골라 먹습니다', '23-crust', '탄 빵 귀퉁이'],
+    ['f_roster', '승객. 편도 한 사람.', '24-passenger', '승객, 편도 한 사람']
+  ].forEach(function (row) {
+    var shot = { img: 'arslan/cuts/' + row[2], title: row[3], text: row[1] };
+    (arslan.beats[row[0]] || (arslan.beats[row[0]] = [])).push(shot);
+    arslan.gallery.push(shot);
+  });
+
+  // 회상이나 병동 장면이 끝나고 대사가 현재로 돌아오면 같은 원화를 다시 건다.
+  [
+    ['pro_market', '「돌아오는 배 한 사람 몫.', '01-fare'],
+    ['f_rome', '무대 위. 야유는 멎지 않았다.', '21-stage'],
+    ['f_bed', '아르슬란은 그 자리에서 용서하지 않았다.', '22-bed']
+  ].forEach(function (row) {
+    var beats = arslan.beats[row[0]];
+    var shot = beats.find(function (s) { return s.img === 'arslan/cuts/' + row[2]; });
+    beats.push({ img: shot.img, title: shot.title, text: row[1] });
+  });
+
+  [
+    ['portraits/npc/ar_JM', '젬'],
+    ['portraits/npc/ar_DL', '딜샤드'],
+    ['portraits/mates/ar_devi', '바사비 칸호파트라'],
+    ['portraits/mates/ar_viola', '에스텔리나 페델레'],
+    ['portraits/mates/ar_kya', '촉토 침보'],
+    ['portraits/mates/ar_emotan', '에모탄 아베나'],
+    ['portraits/npc/ar_KR', '케말 레이스'],
+    ['portraits/npc/ar_AY', '아야스 파샤'],
+    ['portraits/npc/ar_OR', '오루츠 레이스'],
+    ['portraits/npc/ar_KN', '필리프 빌리에 드 릴아담'],
+    ['portraits/npc/ar_AM', '에메리 당부아즈'],
+    ['portraits/npc/ar_CB', '체사레 보르자'],
+    ['portraits/npc/ar_MC', '미켈레 다 쿠네오'],
+    ['portraits/npc/ar_MB', '마메 쿰바'],
+    ['portraits/npc/ar_BT', '베아트리체'],
+    ['portraits/npc/ar_CT', '카탈리나'],
+    ['portraits/npc/ar_JM_ward', '젬 · 병동'],
+    ['portraits/npc/ar_DL_late', '딜샤드 · 말년'],
+    ['portraits/npc/ar_KR_admiral', '케말 레이스 · 제독'],
+    ['portraits/npc/ar_YA', '아르슬란 · 1491년'],
+    ['portraits/npc/ar_YA_child', '아르슬란 · 어린 시절'],
+    ['portraits/npc/ar_KD', '섬의 아이'],
+    ['portraits/npc/ar_MK', '맘루크 수송 관리'],
+    ['portraits/npc/ar_BK', '제빵사'],
+    ['portraits/npc/ar_IC', '얼음 장수'],
+    ['portraits/npc/ar_HN', '현상금 사냥꾼'],
+    ['portraits/npc/ar_JW', '보석상'],
+    ['portraits/npc/ar_PD', '피에르 도뷔송'],
+    ['portraits/npc/ar_GB', '조반니 보르자 추기경'],
+    ['portraits/npc/ar_JB', '후안 보르자'],
+    ['portraits/npc/ar_GR', '루이 말레 드 그라빌'],
+    ['portraits/npc/ar_BZ', '바예지드 2세'],
+    ['portraits/npc/ar_KB', '카슴 베이'],
+    ['portraits/npc/ar_QB', '카이트베이'],
+    ['portraits/npc/ar_AP', '알렉산데르 6세'],
+    ['portraits/npc/ar_CH', '샤를 8세'],
+    ['portraits/npc/ar_MU', '무라트'],
+    ['portraits/npc/ar_PR', '피리 레이스'],
+    ['portraits/npc/ar_AL', '프란체스코 알비치'],
+    ['portraits/npc/ar_BA', '베르나르도 아이랄디'],
+    ['portraits/npc/ar_LM', '로도비코 모스카'],
+    ['portraits/npc/ar_MN', '마르키온니'],
+    ['portraits/npc/ar_BR', '부라크 레이스'],
+    ['portraits/npc/ar_MT', '마테우스 다 코스타 · 폭풍'],
+    ['portraits/npc/ar_SY', '김소영 · 사카이'],
+    ['portraits/npc/ar_HG', '황규 · 사카이'],
+    ['portraits/npc/ar_WD', '박월담 · 사카이'],
+    ['portraits/mates/ar_inaya_solemn', '카라야 바과 · 종막'],
+    ['portraits/npc/ar_LP', '별에서 온 소년 · 별길잡이'],
+    ['portraits/npc/ar_SH', '셰헤라자드 · 이야기꾼'],
+    ['portraits/mates/ar_firuze', '훈디 뒤르다네'],
+    ['portraits/mates/ar_gulizar', '니사이 투티'],
+    ['portraits/mates/ar_aylin', '미흐뤼마흐 바우니'],
+    ['portraits/mates/ar_inaya', '카라야 바과'],
+    ['portraits/mates/ar_mahina', '마히나'],
+    ['portraits/mates/ar_leonor', '브리트스 호드리게스'],
+    ['portraits/mates/ar_yasin', '펜다 티암'],
+    ['portraits/mates/ar_sayo', '모리노 오토즈루'],
+    ['portraits/mates/ar_soyara', '소야라 팀마카'],
+    ['portraits/mates/ar_diouma', '시가 디우마'],
+    ['portraits/mates/ar_ceiba', '세이바 카오나'],
+    ['portraits/mates/ar_yunxian', '당윤현'],
+    ['portraits/mates/ar_wulan', '울란 라라스'],
+    ['portraits/story-player/arslan', '아르슬란 · 청년'],
+    ['portraits/story-player/arslan_thirties', '아르슬란 · 중년'],
+    ['portraits/story-player/arslan_elderly', '아르슬란 · 노년'],
+    ['portraits/story-player/arslan_cardinal', '아르슬란 · 청년 무대의상'],
+    ['portraits/story-player/arslan_cardinal_thirties', '아르슬란 · 중년 무대의상'],
+    ['portraits/story-player/arslan_crown_thirties', '아르슬란 · 종이 왕관'],
+    ['portraits/story-player/arslan_turban', '아르슬란 · 청년 터번'],
+    ['portraits/story-player/arslan_crown_turban_middle', '아르슬란 · 중년 터번과 종이 왕관'],
+    ['portraits/story-player/arslan_crown', '아르슬란 · 청년 종이 왕관']
+  ].forEach(function (row) {
+    arslan.portraits.push({ img: row[0], title: row[1] });
+  });
 })(window.G = window.G || {});

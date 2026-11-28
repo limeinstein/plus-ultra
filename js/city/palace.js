@@ -9,7 +9,7 @@
     var B = { paint: kind, icon: kind === 'palace' ? 'crown' : 'mansion' };
     B.title = function (c, arg) { return kind === 'palace' ? R.palaceName(c, arg && G.SPONSOR[arg]) : C.mansionName(G.SPONSOR[arg]); };
     B.variant = function (c, arg) { return arg || ''; };
-    B.exitLabel = kind === 'palace' ? '물러난다' : '저택을 나온다';
+    B.exitLabel = kind === 'palace' ? '물러난다' : '밖으로 나온다';
     B.sp = function (c, arg) { if (kind !== 'palace') return G.SPONSOR[arg]; var own = arg && G.SPONSOR[arg]; return own ? (SP.open(own) ? own : null) : palaceSponsor(c); };
     B.enter = async function (c, arg) {
       var sp = B.sp(c, arg);
@@ -24,7 +24,7 @@
       var who = SP.speaker(sp), rel = SP.rel(sp.id), s = S();
       var first = rel.met <= 1 || (G.Succession && G.Succession.firstMeetingBefore);
       var succ = G.Succession && G.Succession.newHolderBefore;
-      var greet = SP.line(sp, succ ? 'greetSucc' : first ? 'greetFirst' : 'greetAgain');
+      var greet = first && sp.historicalGreeting ? sp.historicalGreeting : SP.line(sp, succ ? 'greetSucc' : first ? 'greetFirst' : 'greetAgain');
       if (!(G.Tudor && ((G.Tudor.knightDue && G.Tudor.knightDue(sp)) || (G.Tudor.calaisDue && G.Tudor.calaisDue(sp)))) && !(G.Barb && G.Barb.callDue(sp))) await C.say(who, greet);   // 엘리자베스 1세의 서임·칼레 해전의 부름: 여왕이 먼저 말을 꺼낸다   // 엘리자베스 1세의 서임: 여왕이 먼저 「…그 얼굴, 잊을 리가」로 말을 꺼낸다
       // 다른 후원자에게 먼저 보고한 일·이중 보고를 꺼낸다 (시샘 — G.Sponsor.jealousy). 쫓겨나면 알현은 여기서 끝
       if (!(await SP.jealousy(sp))) return false;
@@ -73,7 +73,7 @@
     return out.length ? U.weighted(out, function (x) { return x.w; }) : null;
   }
   async function chat(sp) {
-    var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
+    var s = S(), who = SP.speaker(sp, 'listen'), rel = SP.rel(sp.id);
     var L = function (k, ctx) { return SP.line(sp, k, ctx); };
     var lines = [];
     var tasteTxt = sp.taste.map(G.tasteName).join('·');

@@ -42,9 +42,10 @@
     var homeTier = kind === 'home' && G.HomeBuilding ? G.HomeBuilding.tier() : 0;
     var drawingKind = kind === 'home' && G.HomeBuilding ? G.HomeBuilding.roomKind(homeTier) : kind;
     var drawingVariant = drawingKind === kind ? variant : '';
-    var k = kind + ':' + c.id + ':' + (variant || '') + ':' + homeTier;
+    var keys = C.interiorKeys(drawingKind, c, drawingVariant);
+    var k = kind + ':' + c.id + ':' + (variant || '') + ':' + homeTier + ':' + (G.Img.pick(keys) || '');
     if (intCache[k]) return intCache[k];
-    var cv = G.Img.make(C.interiorKeys(drawingKind, c, drawingVariant), 1600, 900, function () { return A.interior(drawingKind, c, drawingVariant); });
+    var cv = G.Img.make(keys, 1600, 900, function () { return A.interior(drawingKind, c, drawingVariant); });
     if (kind === 'home' && G.HomeBuilding) cv = G.HomeBuilding.interior(cv, c, homeTier);
     return cachePut(intCache, intKeys, k, cv, 6);
   };

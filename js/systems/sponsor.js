@@ -20,7 +20,7 @@
   function yearOf(date) { return date.y + ((date.m || 1) - 1) / 12; }
   SP.yearOf = yearOf;
   SP.holder = function (sp, date) {
-    date = date || S().date; var y = yearOf(date);
+    var y = yNow(date, sp);
     for (var i = 0; i < sp.holders.length; i++) { var h = sp.holders[i]; if (y >= h[0] && y < h[1]) return h[2]; }
     return null;
   };
@@ -32,13 +32,16 @@
   SP.VACANCY = {
     pt_braganza: [[1483, 1497, '1483년 6월, 국왕 주앙 2세께서 반역의 죄를 물어 페르난두 2세 공작님을 에보라에서 처형하시고 공작령을 왕실로 거두셨습니다. 어린 도련님들은 카스티야로 몸을 피하셨지요. 마누엘 왕께서 즉위하시면 자이미 도련님이 돌아와 공작 자리를 잇게 됩니다 — 그때까지 이 집은 제가 지킵니다.']]
   };
-  function yNow(date) { return SP.yearOf ? SP.yearOf(date || S().date) : (date || S().date).y; }
+  function yNow(date, sp) {
+    date = date || S().date;
+    return (sp.historicalCourt && G.CourtHistory.inPeriod(date)) ? G.CourtHistory.time(date) : yearOf(date);
+  }
   /** 지금 비어 있는 자리의 앞 사람(마지막으로 자리에 있던 사람)과 다음 사람 — holders 항목 그대로 (없으면 null) */
-  SP.lastHolder = function (sp, date) { var y = yNow(date), best = null; sp.holders.forEach(function (h) { if (h[1] <= y && (!best || h[1] > best[1])) best = h; }); return best; };
-  SP.nextHolder = function (sp, date) { var y = yNow(date), best = null; sp.holders.forEach(function (h) { if (h[0] > y && (!best || h[0] < best[0])) best = h; }); return best; };
+  SP.lastHolder = function (sp, date) { var y = yNow(date, sp), best = null; sp.holders.forEach(function (h) { if (h[1] <= y && (!best || h[1] > best[1])) best = h; }); return best; };
+  SP.nextHolder = function (sp, date) { var y = yNow(date, sp), best = null; sp.holders.forEach(function (h) { if (h[0] > y && (!best || h[0] < best[0])) best = h; }); return best; };
   /** 빈 자리의 사연 — SP.VACANCY 에 적은 말, 없으면 앞 사람이 언제 세상을 떠났는지(물러났는지)와 뒤를 이을 사람이 있는지로 (2026-10-25) */
   SP.vacancyNote = function (sp, date) {
-    var y = yNow(date), L = SP.VACANCY[sp.id] || sp.vacancy || [];
+    var y = yNow(date, sp), L = SP.VACANCY[sp.id] || sp.vacancy || [];
     for (var i = 0; i < L.length; i++) if (y >= L[i][0] && y < L[i][1]) return L[i][2];
     var last = SP.lastHolder(sp, date), next = SP.nextHolder(sp, date);
     if (!last) return null;
@@ -69,19 +72,19 @@
   SP.open = function (sp) { return !!sp && (SP.present(sp) || SP.caretaker(sp)); };
   /** 0-based index of the current title holder in sp.holders (-1 when vacant) */
   SP.holderIndex = function (sp, date) {
-    date = date || S().date; var y = yearOf(date);
+    var y = yNow(date, sp);
     for (var i = 0; i < sp.holders.length; i++) { var h = sp.holders[i]; if (y >= h[0] && y < h[1]) return i; }
     return -1;
   };
   SP.holderName = function (sp) { return SP.holder(sp) || sp.title; };
   SP.rel = function (id) { var s = S(); return s.sponsors[id] || (s.sponsors[id] = { trust: 20, done: 0, fail: 0, anger: 0, met: 0 }); };
   var HONOR = { king: '폐하', pope: '성하', gov: '각하', noble: '각하', priest: '신부님', official: '각하', scholar: '박사님', merchant: '회장님' };
-  SP.honor = function (sp) { if (sp.honor) return sp.honor; if (/왕비|왕대비/.test(SP.holder(sp) || '')) return '전하'; return HONOR[sp.type] || '님'; };   // honor: 조선 국왕 「전하」처럼 자료에서 정한 호칭
+  SP.honor = function (sp) { if (G.CourtHistory && G.CourtHistory.civilOffice(sp)) return '각하'; if (sp.honor) return sp.honor; if (/왕비|왕대비/.test(SP.holder(sp) || '')) return '전하'; return HONOR[sp.type] || '님'; };   // honor: 조선 국왕 「전하」처럼 자료에서 정한 호칭
   /** 후원자 얼굴: 흉상(portrait) + 무릎상(half — portraits/sponsors/<그림>_half, 있을 때만) */
-  SP.face = function (sp) {
+  SP.face = function (sp, pose) {
     var who;
     if (SP.present(sp)) {
-      who = { name: SP.holderName(sp), portrait: A.sponsorSpec(sp, SP.holderIndex(sp)), lang: SP.langLv(sp), li: SP.langLi(sp) };
+      who = { name: SP.holderName(sp), portrait: A.sponsorSpec(sp, SP.holderIndex(sp), pose), lang: SP.langLv(sp), li: SP.langLi(sp) };
     } else {
       who = SP.butler(sp);
       who.name = SP.stewardName(sp);
@@ -91,13 +94,13 @@
   };
   function playerFace() { var p = S().player; return { name: p.name, rigId: 'player', portrait: p.portrait, half: G.Img.chain.heroHalf() }; }
   /** 후원자와 마주 보는 대화 (왼쪽 제독 · 오른쪽 후원자). 두 사람 다 무릎상이 있으면 서 있는 모습으로 크게 */
-  SP.speaker = function (sp) {
-    var o = SP.face(sp); o.layout = 'duo'; o.side = 'right'; o.partner = playerFace(); o.emotion = 'neutral';
+  SP.speaker = function (sp, pose) {
+    var o = SP.face(sp, pose); o.layout = 'duo'; o.side = 'right'; o.partner = playerFace(); o.emotion = 'neutral';
     return o;
   };
   /** 같은 자리에서 제독이 하는 말 */
-  SP.me = function (sp) {
-    var o = playerFace(); o.layout = 'duo'; o.side = 'left'; o.partner = SP.face(sp); o.emotion = 'neutral'; o.choiceSide = 'left';
+  SP.me = function (sp, pose) {
+    var o = playerFace(); o.layout = 'duo'; o.side = 'left'; o.partner = SP.face(sp, pose); o.emotion = 'neutral'; o.choiceSide = 'left';
     return o;
   };
   SP.langLv = function (sp) { return Math.max(R.lang(sp.lang), R.cityLang(G.CITY_DATA[sp.city]).lv); };
@@ -125,7 +128,10 @@
   SP.fameNeed = function (sp) { return G.POWER_FAME[sp.pw] || 0; };
   // ---------------------------------------------------------------- 말투 (js/data/sponsorvoice.js) · 성품
   function femRe() { return G.SPONSOR_FEMALE || /이사벨|엘리자베스|여왕|왕비|왕대비|공작부인|여제|수녀/; }
-  SP.female = function (sp) { return femRe().test(SP.holder(sp) || sp.title); };
+  SP.female = function (sp) {
+    var h = sp.holders[SP.holderIndex(sp)];
+    return h && h[5] ? h[5] === 'f' : femRe().test(h ? h[2] : sp.title);
+  };
   /** 이 후원자의 말투: king · queen · noble · merchant · scholar · priest · official (왕궁의 왕명·특허장 대사도 군주 말투(하오체)로 맞췄다 — js/systems/court.js) */
   SP.voiceKey = function (sp) {
     if (!SP.present(sp)) return 'official';   // 빈 자리: 집사·시종장·서기관이 대신 말한다 (높임말 — SP.caretaker)
@@ -317,7 +323,7 @@
   };
   SP.apologyCost = function (sp, left) { return Math.max(2000, Math.round((left == null ? SP.angerLeft(sp) : left) * 100 * Math.max(1, sp.pw || 1) / 100) * 100); };
   SP.propose = async function (sp) {
-    var s = S(), who = SP.speaker(sp), rel = SP.rel(sp.id);
+    var s = S(), who = SP.speaker(sp, 'listen'), rel = SP.rel(sp.id);
     var L = function (k, ctx) { return SP.line(sp, k, ctx); };
     if (s.contract) {
       await UI.say(L(s.contract.sponsor === sp.id ? 'busyMine' : 'busyOther'), who);
@@ -339,7 +345,7 @@
       await UI.say(L('rude'), who);
       var left = SP.angerLeft(sp), cost = SP.apologyCost(sp, left);
       var av = await UI.ask(SP.angerText(sp) + ' — ' + U.fmtDate(SP.angerUntil(sp)) + '(앞으로 ' + left + '일)부터 다시 모험을 제안할 수 있습니다.',
-        [{ label: '사죄의 뜻으로 금화 ' + U.num(cost) + '닢을 바친다', value: 'pay', dis: s.player.gold < cost }, { label: '물러난다', value: 'go' }], SP.me(sp));
+        [{ label: '사죄의 뜻으로 금화 ' + U.num(cost) + '닢을 바친다', value: 'pay', dis: s.player.gold < cost }, { label: '물러난다', value: 'go' }], SP.me(sp, 'listen'));
       if (av !== 'pay' || s.player.gold < cost) return;
       s.player.gold -= cost; rel.anger = 0; delete rel.angerWhy;
       G.Game.refreshHud();
@@ -376,7 +382,7 @@
       var x = list[pick], d = x.d;
       if (x.errand) return G.Errand.offerDialog(sp, who);
       if (x.batch) { var bd = await SP.batchReport(sp); if (bd) return; continue; }
-      await UI.say((x.circ ? '저는 지구를 한 바퀴 돌아 이곳으로 돌아오는 항해를 하고자 합니다.' : x.found || x.fake ? '저는 이미 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아냈습니다. 여기 그 증거가 있습니다.' : G.Disc.hintText(d) + '\n저는 그것을 찾아내고 싶습니다.'), SP.me(sp));
+      await UI.say((x.circ ? '저는 지구를 한 바퀴 돌아 이곳으로 돌아오는 항해를 하고자 합니다.' : x.found || x.fake ? '저는 이미 「' + d.name + '」' + U.jx(d.name, '을/를') + ' 찾아냈습니다. 여기 그 증거가 있습니다.' : G.Disc.hintText(d) + '\n저는 그것을 찾아내고 싶습니다.'), SP.me(sp, 'listen'));
       if (tutDuke(sp) && d.id === G.TUTORIAL.disc && !x.found && !x.fake) { await UI.say(L('like'), who); return SP.negotiate(sp, d, 1.1, false); }   // 튜토리얼: 공작은 늘 응한다
       // too heavy?
       var need = G.POWER_FAME[d.pw] || 0;
@@ -884,7 +890,7 @@
 
   // ---------------------------------------------------------------- report
   SP.report = async function (sp) {
-    var s = S(), k = s.contract, who = SP.speaker(sp), rel = SP.rel(sp.id);
+    var s = S(), k = s.contract, who = SP.speaker(sp, 'listen'), rel = SP.rel(sp.id);
     var L = function (key, ctx) { return SP.line(sp, key, ctx); }, tp = SP.temper(sp);
     if (!k || k.sponsor !== sp.id) { await UI.say(L('noContract'), who); return; }
     if (k.small && G.Errand) return G.Errand.report(sp, who);

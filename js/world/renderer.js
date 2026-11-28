@@ -42,6 +42,8 @@ uniform vec2 uOceanTime; // 장수, 재생 주기
 uniform vec2 uRes;
 uniform vec2 uCenter;
 uniform float uZoom;
+uniform float uLandZoom; // 무대 좌표의 지형 배율. 창 크기·화질과 무관하다.
+uniform vec2 uForestZoom;
 uniform float uTime;
 uniform vec2 uWind;
 uniform float uCloud;
@@ -350,7 +352,7 @@ vec3 landCol(vec2 ll, vec2 p, float s, float rivD, float rivC, vec2 gS, vec2 gR,
   if (wDes > 0.01) {
     erg = smoothstep(0.44, 0.54, gfbm(p*0.17 + vec2(2.0, 9.0), 3) + (gfbm(p*0.9, 2) - 0.5)*0.12);
     vec2 wd = normalize(vec2(-0.85, lat > 0.0 ? -0.4 : 0.4)); vec2 wpd = vec2(-wd.y, wd.x);
-    float DF = pxD < 90.0 ? 4.5 : 9.0;                 // 멀면 굵은 사구, 가까우면 잔 사구
+    float DF = 9.0; // 같은 자리에 있는 사구 능선을 따라 확대한다.
     float x = dot(p, wd)*DF + (fbm(p*1.1 + 5.0, 2) - 0.5)*5.0 + sin(dot(p, wpd)*4.0)*0.35;
     float fx = fract(x);
     float mo = 0.55 + 0.45*sin(dot(p, wpd)*DF*0.8 + fbm(p*2.0, 2)*5.0);
@@ -600,8 +602,10 @@ vec3 landCol(vec2 ll, vec2 p, float s, float rivD, float rivC, vec2 gS, vec2 gR,
       }
       vec3 near = mix(col*(1.0 - 0.55*gsh), tl.rgb*(1.0 - 0.45*msh), tl.a);
       col = mix(near, farC, smoothstep(4.0, 2.4, tpx));
+    } else if(uDetailOn>.5 && uMode<.5){
+      // 개별 나무는 항해·탐험 공통의 수종 그림으로만 그리고, 먼 숲에는 군락의 명암을 남긴다.
+      col=mix(col,farC,mix(.82,.18,smoothstep(uForestZoom.x,uForestZoom.y,pxD)));
     } else if(uDetailOn>.5){
-      // 군락 아래를 수관 잡음으로 덮으면 이끼처럼 보인다. 먼 시점만 읽기 쉬운 수관 덩어리를 쓴다.
       float gsh=0.0;vec4 tl=treeLayer(p,dens,.085,conif,trop,sav,gsh);
       vec3 grouped=mix(col*(1.0-gsh*.25),tl.rgb*(1.0-.30*msh),tl.a);
       col=mix(grouped,col,smoothstep(105.0,235.0,pxD));
@@ -982,7 +986,7 @@ void main(){
   ll=groundCoordinate(ll);
   vec2 p = ll + vec2(180.0, 90.0);
   vec2 uv = uvOf(ll);
-  float pxT = uZoom / TPD, pxD = uZoom;
+  float pxT = uZoom / TPD, pxD = uLandZoom;
   vec4 g0 = texture(uGeo, uv);
   float s = sdfTex(g0);
   float sn = terrainSdf(ll,s);
@@ -1002,7 +1006,7 @@ void main(){
   }
   vec2 gS = vec2(sdfTex(gx1) - sdfTex(gx0), sdfTex(gy1) - sdfTex(gy0)) * 0.5;
   vec2 gR = vec2(rivTex(gx1) - rivTex(gx0), rivTex(gy1) - rivTex(gy0)) * 0.5;
-  vec3 col = landCol(ll, p, max(sn, 0.0), rivD, rivC, gS, gR, pxT, pxD);
+  vec3 col = landCol(ll, p, max(sn, 0.0), rivD, rivC, gS, gR, pxD / TPD, pxD);
   outColor = vec4(col, smoothstep(-aa, aa, sn));
 }
 `;
@@ -1181,7 +1185,7 @@ void main(){
     throw new Error('지도 셰이더 연결 실패: ' + [gl.getProgramInfoLog(program)].concat(logs).join('\n'));
   }
   var UNIFORMS = ['uGeo', 'uClim', 'uRes', 'uCenter', 'uZoom', 'uTime', 'uWind', 'uCloud', 'uEdge', 'uMode', 'uDusk', 'uStorm', 'uQuality', 'uBattleOrigin', 'uBattleZoom', 'uSurface', 'uSheen', 'uCoastSurface', 'uWaterSun',
-    'uT0', 'uT1', 'uLandLook', 'uRiverBank', 'uEstuaryMix', 'uLandProjection', 'uReliefCell', 'uReliefMax', 'uW0', 'uW1', 'uW2', 'uW3', 'uW4', 'uW5', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize', 'uCloudK', 'uCloudDir', 'uCloudForm'];
+    'uT0', 'uT1', 'uLandZoom', 'uForestZoom', 'uLandLook', 'uRiverBank', 'uEstuaryMix', 'uLandProjection', 'uReliefCell', 'uReliefMax', 'uW0', 'uW1', 'uW2', 'uW3', 'uW4', 'uW5', 'uCache', 'uCacheC', 'uCacheZ', 'uCacheSize', 'uCloudK', 'uCloudDir', 'uCloudForm'];
 
   UNIFORMS = UNIFORMS.concat(['uOcean', 'uOptics', 'uAbsorption', 'uOceanFlow', 'uOceanTime','uTerrainDetail','uDetailSize','uDetailOn','uHydro','uHydroRect','uHydroOn','uCalendar','uTerrainPatches','uPatchRects[0]','uPatchLayers[0]','uTreeLevels','uSnowLevels','uLatitudeBands','uPatchCount','uPatchSide','uInlandRects[0]','uInlandCount','uInlandFeather','uGround','uGroundLook','uPlainLook','uSeasonSnow','uSnowFeather']);
 
@@ -1442,6 +1446,9 @@ void main(){
     gl.useProgram(this.progLand);
     gl.bindVertexArray(this.vao);
     this._common(u, view, c.w, c.h, c.zoom);
+    gl.uniform1f(u.uLandZoom, view.zoom);
+    gl.uniform2f(u.uForestZoom, G.FX.terrainWorld.farZoom, G.FX.terrainWorld.nearZoom);
+    gl.uniform1f(u.uMode, view.mode || 0);
     gl.uniform2f(u.uCenter, c.lon, c.lat);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     gl.disable(gl.SCISSOR_TEST);
@@ -1449,9 +1456,9 @@ void main(){
   };
   /** 판 c가 이 화면을 덮는가 — 세상 좌표(°)로 따진다. 확대가 조금 달라도(ZOOM_KEEP 배 안) 늘이거나 줄여서 쓴다 */
   function seasonKey(){var d=G.Game&&G.Game.state&&G.Game.state.date;return d?d.m+':'+(d.d<=G.BALANCE.waterways.floodDays?1:0):'';}
-  function cacheKey(view) {
+  function cacheKey(view, canvasWidth) {
     var fx = G.FX || {};
-    return JSON.stringify(fx.terrain || {}) + JSON.stringify(fx.terrainWorld || {}) + JSON.stringify(fx.terrainBiomes || {}) + JSON.stringify(fx.terrainCoast || {}) + '|' + (view.quality == null ? 1 : view.quality) + '|' + seasonKey();
+    return JSON.stringify(fx.terrain || {}) + JSON.stringify(fx.terrainWorld || {}) + JSON.stringify(fx.terrainBiomes || {}) + JSON.stringify(fx.terrainCoast || {}) + '|' + (view.quality == null ? 1 : view.quality) + '|' + seasonKey() + '|' + (view.mode || 0) + '|' + canvasWidth/(view.cssWidth || canvasWidth);
   }
   var ZOOM_KEEP = 2;
   Renderer.prototype._covers = function (c, lon, lat, zoom, W, H, key, slack) {
@@ -1463,7 +1470,7 @@ void main(){
   /** 뒤에서 판을 몇 줄로 나눠 그릴지: 판이 클수록 잘게 (한 장면에 무거운 육지 패스를 조금씩) */
   function stripsFor(cw, ch) { return Math.max(4, Math.min(10, Math.round(cw * ch / 450000))); }
   Renderer.prototype._ensureCache = function (view, W, H, zoom) {
-    var gl = this.gl, self = this, key = cacheKey(view);
+    var gl = this.gl, self = this, key = cacheKey(view,W);
     var cw = Math.min(this.maxTex, Math.ceil(W * 1.45)), ch = Math.min(this.maxTex, Math.ceil(H * 1.45));
     // 뒤 판은 늘 지금 크기로 — 앞 판은 크기가 달라도(해상도를 막 바꿨을 때) 화면을 덮는 동안 그대로 쓴다
     var bk = this.caches[1];
@@ -1507,7 +1514,7 @@ void main(){
   };
   Renderer.prototype.prepared = function (view) {
     var cv = this.canvas, zoom = view.zoom * (cv.width / (view.cssWidth || cv.width)), front = this.caches[0];
-    return !this.lost && front && front.zoom === zoom && this._covers(front, view.lon, view.lat, zoom, cv.width, cv.height, cacheKey(view), 1);
+    return !this.lost && front && front.zoom === zoom && this._covers(front, view.lon, view.lat, zoom, cv.width, cv.height, cacheKey(view,cv.width), 1);
   };
   /** 셰이더를 미리 컴파일·연결해 둔다 — 아주 작은 판에 육지·바다 패스를 한 번씩 그린다 (불러오는 동안, 첫 바다 장면이 멈칫하지 않게) */
   Renderer.prototype.warmShaders = function () {
@@ -1527,7 +1534,7 @@ void main(){
       바다·탐험 장면이 그리고 있지 않을 때만 부른다 (도시·타이틀·불러오기 중) */
   Renderer.prototype.prewarm = function (view, step) {
     var gl = this.gl, cv = this.canvas; if (this.lost || gl.isContextLost()) return true;
-    var W = cv.width, H = cv.height, zoom = view.zoom * (W / (view.cssWidth || W)), key = cacheKey(view);
+    var W = cv.width, H = cv.height, zoom = view.zoom * (W / (view.cssWidth || W)), key = cacheKey(view,W);
     if (this.prepared(view)) return true;
     var cw = Math.min(this.maxTex, Math.ceil(W * 1.45)), ch = Math.min(this.maxTex, Math.ceil(H * 1.45)), bk = this.caches[1];
     if (!bk || bk.w !== cw || bk.h !== ch) { if (bk) { gl.deleteTexture(bk.tex); gl.deleteFramebuffer(bk.fbo); if(bk.hydro){gl.deleteTexture(bk.hydro.tex);gl.deleteFramebuffer(bk.hydro.fbo);gl.deleteRenderbuffer(bk.hydro.depth);} } bk = this.caches[1] = this._newCache(cw, ch); this.job = null; }

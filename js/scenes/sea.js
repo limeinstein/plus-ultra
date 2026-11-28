@@ -41,7 +41,7 @@
       s.flags.fromEurope = c.region <= 3 && c.lon < 20;
       if (c.region === 10) s.flags.fromEurope = false;
       st.lastPort = c.id;
-      st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: st.cam ? st.cam.zoom : 110 };
+      st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: st.cam ? st.cam.zoom : FXS().zoom.start };
       st.paused = false; st.vel = [0, 0]; st.stopping = false;
       st.portPromptBlock = c.id;                         // 막 나온 항구를 곧바로 다시 들어갈지 묻지 않는다
       G.State.revealChart(s.loc.lon, s.loc.lat, chartR());
@@ -53,7 +53,7 @@
       if (gullSendoff && G.Audio) G.Audio.sfx('gull');
     } else {
       s.loc.mode = 'sea';
-      if (!st.cam) st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: 110 };
+      if (!st.cam) st.cam = { lon: s.loc.lon, lat: s.loc.lat, zoom: FXS().zoom.start };
       st.paused = true;
       // 상륙했다가 배로 돌아왔다: 내리기 전의 침로·손키·속도를 털고, 배가 뭍에 걸려 있거나 뱃머리가 뭍을 보고 있으면 물 쪽으로 (QA 2026-10-21 「상륙했다가 배가 껴 있다」)
       if (arg.fromLand) clearHelm();
@@ -182,10 +182,10 @@
     var zb = U.el('div', 'sea-zoom wood brass-frame'); zb.setAttribute('role', 'group'); zb.setAttribute('aria-label', '지도 확대');
     function zoomButton(label, title, fn) { var b = U.el('button', 'btn small', label); b.title = title; b.setAttribute('aria-label', title); b.onclick = function (e) { e.stopPropagation(); b.blur(); fn(); }; zb.appendChild(b); }
     zoomButton('－', '지도 축소', function () { zoomBy(0.8); });
-    hudEl.zoom = U.el('output', '', '1.0×'); hudEl.zoom.title = '지도 배율 · 휠 또는 +/− 키로 조절'; zb.appendChild(hudEl.zoom);
+    hudEl.zoom = U.el('output', '', (st.cam.zoom / FXS().zoom.reference).toFixed(1) + '×'); hudEl.zoom.title = '지도 배율 · 휠 또는 +/− 키로 조절'; zb.appendChild(hudEl.zoom);
     zoomButton('＋', '지도 확대', function () { zoomBy(1.25); });
     zoomButton('선박 확대', '선박을 ' + FXS().zoom.shipPreset + '배율로 보기', function () { var z = FXS().zoom; st.cam.zoomT = z.reference * z.shipPreset; });
-    zoomButton('기본', '기본 배율로 돌아가기', function () { st.cam.zoomT = FXS().zoom.reference; });
+    zoomButton('기본', '기본 배율로 돌아가기', function () { st.cam.zoomT = FXS().zoom.start; });
     UI.add(zb);
     if (G.SeaInstruments) G.SeaInstruments.mount(wb, zb);
     hudEl.settings = G.Info.settingsButton('', function () { return !st.busy; }, function () { st.busy++; }, function () { st.busy = Math.max(0, st.busy - 1); });
@@ -1325,7 +1325,7 @@
         st.slams = (st.slams || 0) + 1;
       }
       // 따르는 배: 제 자리의 파도를 탄다 (자리는 기함 기준 화면 px — 세상 좌표로 바꾼다)
-      var z = st.cam ? st.cam.zoom : 110, fsR = seaShips();
+      var z = st.cam ? st.cam.zoom : FXS().zoom.start, fsR = seaShips();
       st.rideF = st.rideF || [];
       for (var si = 1; si < fsR.length; si++) {
         var sp0 = st.slotPos && st.slotPos[si]; if (!sp0) continue;
@@ -1363,7 +1363,7 @@
   }
   /** 이 자리의 파도가 미는 흔들림 (G.FX.ride.sea 배율을 곱한 값) — 배 그림 길이 lenPx의 선체 위 다섯 점 */
   function rideWave(lon, lat, heading, lenPx) {
-    var WV = G.Waves, RD = G.FX.ride, K = RD.sea, z = st.cam ? st.cam.zoom : 110, r = G.Game.renderer;
+    var WV = G.Waves, RD = G.FX.ride, K = RD.sea, z = st.cam ? st.cam.zoom : FXS().zoom.start, r = G.Game.renderer;
     var pxD = z * (r && r.canvas ? r.canvas.width / 1600 : 1);
     var wind = st.windVis ? [Math.cos(st.windVis.dir) * st.windVis.spd, Math.sin(st.windVis.dir) * st.windVis.spd] : [0.5, 0.3];
     var Lb = Math.min(lenPx / z, 0.45 * WV.seaSwell()), cst = WV.coast(lon, lat), t = st.t;
@@ -1615,7 +1615,7 @@
     UI.toast('뱃길이 막혀 배를 세웠습니다. ' + (tg.city ? U.j(tg.city.name, '을/를') + ' 다시 누르면 뱃길을 새로 찾습니다.' : '목적지를 다시 잡아 주십시오.'), 'map', 6000);
   }
   /** 물보라·항적용 기함 크기 (세상 좌표 °): 화면의 배 그림 크기 ÷ 확대 */
-  function shipGeom() { var z = st.cam ? st.cam.zoom : 110, L = shipViewPx() / z; return { len: L, wid: L * 0.34, ref: FXS().refSpeed, zoom: z }; }
+  function shipGeom() { var z = st.cam ? st.cam.zoom : FXS().zoom.start, L = shipViewPx() / z; return { len: L, wid: L * 0.34, ref: FXS().refSpeed, zoom: z }; }
   /** 기본 크기: 기존 충돌·해안 접근과 육상 표시에서 쓰는 값은 확대 연출과 분리한다. */
   function shipPx() { return FXS().size || 95; }
   function followPx() { return FXS().followSize || 76; }
@@ -1623,9 +1623,9 @@
   SEA.shipPx = shipPx;
   function shipViewScale() {
     var z = FXS().zoom;
-    return U.clamp(Math.pow((st.cam ? st.cam.zoom : z.reference) / z.reference, z.power), z.minScale, z.maxScale);
+    return U.clamp(Math.pow((st.cam ? st.cam.zoom : z.start) / z.reference, z.power), z.minScale, z.maxScale);
   }
-  function navigationZoom() { return Math.min(st.cam ? st.cam.zoom : FXS().zoom.reference, FXS().zoom.navigationMax); }
+  function navigationZoom() { return Math.min(st.cam ? st.cam.zoom : FXS().zoom.start, FXS().zoom.navigationMax); }
   function shipViewPx() { return shipPx() * shipViewScale(); }
   function followViewPx() { return followPx() * shipViewScale(); }
   function npcViewPx() { return npcPx() * shipViewScale(); }

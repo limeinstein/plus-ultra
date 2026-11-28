@@ -53,6 +53,10 @@ fs.mkdirSync(out,{recursive:true});
         const im=G.Img.get(r[0]);
         if(!im||r[1]+r[3]>im.width||r[2]+r[4]>im.height)problems.push([d.id,'그림 범위']);
         const original=[d.lon,d.lat];
+        const wide=icon.layout(d,1,110),close=icon.layout(d,1.15,330);
+        if(!wide.volcano&&!close.volcano&&!wide.hidden&&!wide.marker&&!close.marker&&
+            (wide.point.join()!==close.point.join()||Math.abs(close.metrics.width-3*wide.metrics.width)>.001))
+          problems.push([d.id,'항해·탐험 지면 배율',wide.metrics.width,close.metrics.width]);
         if(d.how==='sea'||d.how==='special'){
           const view=icon.layout(d,1,110);
           if(view.volcano?!volcanic(d,view,110):(view.point.join()!==original.join()||view.marker||view.hidden))problems.push([d.id,'수상 위치']);

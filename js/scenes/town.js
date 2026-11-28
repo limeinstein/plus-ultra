@@ -150,6 +150,13 @@
     return { direct: direct, chain: substitute ? direct.concat(I.chain.exterior(substitute, c, '')) : direct };
   }
 
+  function patronBuilding(b) { return b.kind === 'palace' || b.kind === 'mansion'; }
+  function patronStreet(c, buildings) {
+    return buildings.filter(patronBuilding).map(function (b) {
+      return [b.kind, b.arg, b.name, I.pick(streetExterior(b.kind, c, b.arg).chain)].join(':');
+    }).join('|');
+  }
+
   /** 도시의 거리를 준비한다. buildings: G.Scenes.city.buildings(c) */
   T.open = function (c, buildings) {
     var landmarks = landmarksFor(c), chains = [I.chain.bg(c), I.chain.hero()];
@@ -198,14 +205,19 @@
       st.hidden = !!v; st.keys = {}; if (!st.hidden) { st.hero.fade = 1; st.hero.enterT = 0; st.hero.entering = false; st.dirty = true; }
       if (st.hidden && G.Audio && G.Audio.travel) { G.Audio.travel('townstep', 0); G.Audio.travel('run', 0); }
       if (back) spawnFolk();
-      // 왕궁에서 작위를 받아 나오면 같은 도시에서도 새 집이 곧바로 선다.
-      if (back && G.HomeBuilding && st.homeTier !== G.HomeBuilding.tier()) {
-        var old = st, c = st.city, buildings = G.Scenes.city.buildings(c);
-        var nextKind = G.HomeBuilding.baseKind(G.HomeBuilding.tier(), c);
-        var pre = [streetExterior(nextKind, c, '').chain];
-        if (G.HomeBuilding.tier() === 1 || G.HomeBuilding.tier() === 3 || nextKind === 'home') pre.push(I.chain.exterior('home', c, ''));
+      // 건물 안에서 하루가 지나 후견인·궁궐이 바뀌거나, 작위를 받아 새 집이 생긴 경우.
+      var c = st.city, buildings = back && G.Scenes.city.buildings(c);
+      var courtChanged = back && st.patronStreet !== patronStreet(c, buildings);
+      var homeChanged = back && G.HomeBuilding && st.homeTier !== G.HomeBuilding.tier();
+      if (courtChanged || homeChanged) {
+        var old = st, pre = courtChanged ? buildings.filter(patronBuilding).map(function (b) { return streetExterior(b.kind, c, b.arg).chain; }) : [];
+        if (homeChanged) {
+          var nextKind = G.HomeBuilding.baseKind(G.HomeBuilding.tier(), c);
+          pre.push(streetExterior(nextKind, c, '').chain);
+          if (G.HomeBuilding.tier() === 1 || G.HomeBuilding.tier() === 3 || nextKind === 'home') pre.push(I.chain.exterior('home', c, ''));
+        }
         I.preload(pre, 5000).then(function () {
-          if (st !== old) return;
+          if (st !== old || st.hidden) return;
           var keep = { x: old.hero.x / Math.max(1, old.streetW), dir: old.hero.dir, onPick: old.onPick, cam: old.cam / Math.max(1, old.streetW) };
           build(c, buildings, landmarksFor(c));
           st.onPick = keep.onPick; st.hero.dir = keep.dir;
@@ -427,6 +439,7 @@
     var ground = groundStrip(c, rng);
     marks.forEach(function (m) { m.pull = pullOf(m.cv, m.base, m.foot); m.plaza = plazaCanvas(m.cv, m.base, m.foot, ground, gs, m.pull); });   // 조감 그림 발치 아래 마당 (떠 보이지 않게)
     st = {
+      patronStreet: patronStreet(c, buildings),
       city: c, items: items, marks: marks, streetW: streetW, homeTier: G.HomeBuilding ? G.HomeBuilding.tier() : 0,
       bg: bgKey ? I.get(bgKey) : cityBackdrop(c), ground: ground, groundStyle: ground._style, hidden: false,
       cam: 0, camTo: 0, hover: null, focus: null, t: 0,

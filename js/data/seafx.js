@@ -5,9 +5,10 @@
 (function (G) {
   'use strict';
   G.FX = {
-    cityModels: { width:[0,86,114,172], close:[0,118,152,218], chart:[0,47,64,91],
-      zoomStart:180, zoomEnd:520, zoomBands:6, search:132, shoreSearch:68, plansPerFrame:3, prepareMs:3, cachedBands:4,
-      harbor:{referenceZoom:330, width:[0,42,56,112], close:[0,52,70,132],
+    // 항해·탐험의 시가지와 부두는 3배 시점에서 한 번 배치한 뒤 지면과 함께 확대한다.
+    cityModels: { referenceZoom:330, width:[0,100,130,192], chart:[0,47,64,91],
+      search:132, shoreSearch:68, plansPerFrame:3, prepareMs:3,
+      harbor:{width:[0,46,62,121],
         smallChart:{x:.90,y:.35,width:.68},
         landward:.40, moveMax:.49, coastSearch:56, scales:[1,.86,.72,.60,.49]},
       principal:[0,.67,.61,.62], landmark:[0,.67,.62,.58], principalRise:.67,
@@ -22,17 +23,18 @@
         compact:[.60,.48,.36,.27],compactRings:[0,2,4,6,9,13],foot:[.45,.21],margin:.08} },
     mapRuins: { width:[32,43,57], close:[43,56,69], chart:[24,30,35], zoomStart:165, zoomEnd:480,
       shoreStep:.025, shoreBands:8, shadowOpacity:.19, stonehengeClearing:[.22,.15] },
-    natureLandmark: { width:[34,46,59], close:[46,63,81], chart:[24,30,35], zoomStart:160, zoomEnd:490,
-      shadowOpacity:.16, bankMargin:.18, sampleStep:.023, markerMin:12, fitWidth:.33,
+    natureLandmark: { worldWidth:[.12,.165,.215], chart:[24,30,35],
+      shadowOpacity:.16, bankMargin:.18, sampleStep:.023, markerMin:12, worldMarkerMin:3, fitWidth:.33,
       widths:[.96,.72,.54,.42,.33,.26,.20,.15,.10,.07,.04], local:[.08,.17,.28],
       search:[.05,.10,.17,.25,.34,.45,.59,.76,.95,1.18,1.45,1.75,2.10,2.55,3.05,3.65,4.35,5.1] },
     // 지역별 숲은 같은 녹색 계열 안에서 작은 명암 차이만 쓴다. 수종은 윤곽·높이로 나눈다.
-    terrainWorld: { enabled:true, atlasSide:768, forestDensity:.92, nearZoom:260, farZoom:140, chunkBudgetMs:4,
-      maxTrees:1800, treeCell:.047, treeWorld:.113, tropicalDensity:1.28, tropicalScale:1.13, forestCacheMargin:120,
+    terrainWorld: { enabled:true, atlasSide:768, forestDensity:.92, nearZoom:96, farZoom:52, chunkBudgetMs:4,
+      plantsPerChunk:760, forestTileZoom:160, forestDetailZoom:330, forestDetailTiles:32, forestZoomReuse:1.22,
+      treeCell:.047, treeWorld:.113, tropicalDensity:1.28, tropicalScale:1.13, forestCacheMargin:120,
       groundBump:.14, rockSlope:[.23,.68], riverShallows:.039, riverBank:.023, landmarkMax:260,
       estuaryMix:[.14,.075,.47], // 해안에서 담수색이 사라지는 거리·수로 밖 혼합 폭·바다 쪽 담수색 상한
       reliefLift:.000025, reliefBase:250, reliefCell:.35, reliefMax:.075, reliefShoreStart:.06, reliefShoreSlope:.60,
-      bridgeMaxSpan:.16, ferryPierLength:.028, ferrySearch:1.2, ferryStep:.012,
+      bridgeMaxSpan:.16, ferryPierLength:.028, ferrySearch:1.2, ferryStep:.012, bridgeWidth:.024,
       inlandWaterRegions:[[-61,-4.8,-49.5,.5],[-75,44,-66,50]], inlandWaterFeather:.24 },
     terrainBiomes:{tileDegrees:.72,materialBlend:.42,decorCell:.16,detailMaxPx:260,
       ridgeChance:.012,ridgeWorld:.24,stoneMinSlope:.24,shrubChance:.48,shrubWorld:.060,grassChance:.31,grassWorld:.040,
@@ -262,7 +264,7 @@
       miniTerrAge: 1.5, miniTerrMove: 4, // 작은 해도의 양피지 지형은 새로 살핀 바다가 생기면 이 초마다, 이 °만큼 움직이면 바로 새로 그린다 (그 사이는 옮겨 그린다 — 항해 버벅임 2026-11-01)
       zoomEase: 12,       // 확대·축소가 목표에 다가가는 빠르기 (1/초) — 휠 한 칸이 한 번에 뛰지 않고 부드럽게
       zoom: {
-        min: 26, max: 2400, reference: 110, navigationMax: 420, // 새 확대 구간에서도 기존 해안 판정 크기 유지
+        min: 26, max: 2400, reference: 110, start: 154, navigationMax: 420, // 출항은 1.4배, 1배의 기준은 110px/도
         shipPreset: 3,     // 선박 확대 단추의 기본 배율
         power: 0.55, minScale: 0.45, maxScale: 5.5, // 지도와 함께 커지는 배 그림 — 충돌 크기와 별개
         fleetGap: 2.2,     // 가장 가까이 볼 때 동행선 사이 간격 배수
@@ -297,6 +299,7 @@
       }
     },
     party: {              // 육상 탐험대 모형 (js/art/party.js) — 지원 동물의 속력·피로 수치는 js/data/mounts.js
+      zoom: { min:80, start:220, max:700 }, // 탐험을 시작할 때 항해 2배와 같은 지면 폭
       size: 1.3,          // 크기 (1 = 사람 키 약 34px — 1.3이면 사람 44px, 말 탄 대원 약 70px: 예전 탐험대의 약 2.5배)
       spacing: 1.0,       // 줄 선 대원 사이 간격
       dust: 1.0,          // 발밑 먼지·눈보라·풀잎의 양

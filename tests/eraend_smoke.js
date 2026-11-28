@@ -1,6 +1,6 @@
-/* 대항해시대의 끝 — 1700년 1월 1일 (js/systems/eraend.js) — node tests/eraend_smoke.js
-   2026-10-31 사용자 요청: 1700년 1월 1일이 되면 나레이션과 함께 게임이 끝난다 (시간의 Game Over).
-   · 1699년 1월 1일 · 12월 1일에 귀띔 소식 · 1699년 12월 31일에서 여관에 닷새 묵어도 1700년 1월 1일에서 세월이 멈춘다
+/* 대항해시대의 끝 — 1701년 1월 1일 (js/systems/eraend.js) — node tests/eraend_smoke.js
+   1580~1700년 궁정 연표: 1701년 1월 1일이 되면 나레이션과 함께 게임이 끝난다 (시간의 Game Over).
+   · 1700년 1월 1일 · 12월 1일에 귀띔 소식 · 1700년 12월 31일에서 여관에 닷새 묵어도 1701년 1월 1일에서 세월이 멈춘다
    · 도시에서 온 화면 나레이션(세 연 아홉 줄) → 「항해의 끝」 결산(대항해시대가 막을 내리다 · FINIS) → 타이틀
    · 같은 날 80세 수명이 다해도 시대의 끝이 먼저 (눈을 감는 창 없이) · 그날을 넘긴 저장을 바다에서 불러와도 끝난다 · 콘솔 오류 0 */
 'use strict';
@@ -16,7 +16,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   try {
-    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href), { waitUntil: 'domcontentloaded', timeout: 120000 });
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : (process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(ROOT, 'index.html')).href)), { waitUntil: 'domcontentloaded', timeout: 120000 });
     await page.waitForFunction(() => window.G && G.Game && G.Game.sceneName === 'title', null, { timeout: 120000 });
     const r = await page.evaluate(async () => {
       const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -36,10 +36,10 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       let s = start();
       const lis = G.CITY_DATA.find(c => c.name === '리스본');
       s.loc = { mode: 'city', city: lis.id, lon: lis.lon, lat: lis.lat }; s.player.born = { y: 1669, m: 3, d: 3 };   // 서른 살 (1480년생이면 수명이 다한다)
-      s.date = { y: 1698, m: 12, d: 31 }; out.y1 = G.Game.newDay().map(m => m.text).join(' / ');
-      s.date = { y: 1699, m: 11, d: 30 }; out.m1 = G.Game.newDay().map(m => m.text).join(' / ');
-      // 2) 1699년 12월 31일 리스본 — 닷새 묵는다
-      s.date = { y: 1699, m: 12, d: 31 };
+      s.date = { y: 1699, m: 12, d: 31 }; out.y1 = G.Game.newDay().map(m => m.text).join(' / ');
+      s.date = { y: 1700, m: 11, d: 30 }; out.m1 = G.Game.newDay().map(m => m.text).join(' / ');
+      // 2) 1700년 12월 31일 리스본 — 닷새 묵는다
+      s.date = { y: 1700, m: 12, d: 31 };
       G.Game.go('city', { cityId: lis.id }); await sleep(300); await clear();
       out.busyBefore = G.UI.busy();
       G.Game.passDays(5);
@@ -68,7 +68,7 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       out.fin = fin.slice(0, 160); out.scene = G.Game.sceneName; out.gone = !document.querySelector('.era-end');
       // 4) 같은 날 80세 — 시대의 끝이 먼저
       s = start(); s.player.kids = []; s.loc = { mode: 'city', city: lis.id, lon: lis.lon, lat: lis.lat };
-      s.date = { y: 1699, m: 12, d: 31 }; s.player.born = { y: 1620, m: 1, d: 1 };
+      s.date = { y: 1700, m: 12, d: 31 }; s.player.born = { y: 1621, m: 1, d: 1 };
       G.Game.go('city', { cityId: lis.id }); await sleep(300); await clear();
       G.Game.passDays(1);
       out.lifeEnd = !!(s.life && s.life.end); out.flag4 = !!s.eraEnd;
@@ -93,13 +93,13 @@ function ok(v, msg) { if (!v) throw new Error(msg); console.log('  ✓ ' + msg);
       return out;
     });
     console.log(JSON.stringify(r, null, 1));
-    ok(/한 해뿐/.test(r.y1) && /마지막 항해/.test(r.m1), '1699년 1월 1일 · 12월 1일 귀띔 소식');
-    ok(!r.busyBefore && r.date === 17000101 && r.flag && r.date2 === 17000101, '1699-12-31에서 닷새 묵어도 1700년 1월 1일에서 세월이 멈춘다');
+    ok(/한 해뿐/.test(r.y1) && /마지막 항해/.test(r.m1), '1700년 1월 1일 · 12월 1일 귀띔 소식');
+    ok(!r.busyBefore && r.date === 17010101 && r.flag && r.date2 === 17010101, '1700-12-31에서 닷새 묵어도 1701년 1월 1일에서 세월이 멈춘다');
     ok(r.overlay && r.busy, '온 화면 나레이션이 뜨고 다른 창은 기다린다 (UI.busy)');
-    ok(r.firstLine === '한때 우리의 미지는 수평선 너머에 있었다.' && r.dateLabel === '1700년 1월 1일', '첫 줄 「' + r.firstLine + '」 · ' + r.dateLabel);
+    ok(r.firstLine === '한때 우리의 미지는 수평선 너머에 있었다.' && r.dateLabel === '1701년 1월 1일', '첫 줄 「' + r.firstLine + '」 · ' + r.dateLabel);
     ok(r.afterPoke >= 2, '누르면 다음 줄로 (' + r.afterPoke + '줄)');
-    ok(/1700년 1월 1일\. 우리의 마지막 항해가 끝났다\. 새로운 세기의 첫 번째 여명이 밝아오고 있었다\./.test(r.lastLines) && r.dawn && /GAME OVER/.test(r.finis), '건너뛰면 새 세기 마지막 세 줄 · 여명 · GAME OVER');
-    ok(/대항해시대가 막을 내리다/.test(r.fin) && /1700년 1월 1일/.test(r.fin) && r.scene === 'title' && r.gone, '「항해의 끝」 결산(대항해시대가 막을 내리다 · 1700년 1월 1일) → 타이틀');
+    ok(/1701년 1월 1일\. 우리의 마지막 항해가 끝났다\. 새로운 세기의 첫 번째 여명이 밝아오고 있었다\./.test(r.lastLines) && r.dawn && /GAME OVER/.test(r.finis), '건너뛰면 새 세기 마지막 세 줄 · 여명 · GAME OVER');
+    ok(/대항해시대가 막을 내리다/.test(r.fin) && /1701년 1월 1일/.test(r.fin) && r.scene === 'title' && r.gone, '「항해의 끝」 결산(대항해시대가 막을 내리다 · 1701년 1월 1일) → 타이틀');
     ok(r.lifeEnd && r.flag4 && !r.sawDeath && /대항해시대가 막을 내리다/.test(r.fin4) && r.scene4 === 'title', '같은 날 80세가 되어도 시대의 끝이 먼저 (눈을 감는 창 없이)');
     ok(r.late && r.date5 === 17120303 && r.fin5 && r.scene5 === 'title', '1712년 저장을 바다에서 불러와도 끝난다');
     ok(!errors.length, '콘솔 오류 0 ' + errors.join(' | '));

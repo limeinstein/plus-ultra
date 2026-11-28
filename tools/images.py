@@ -593,6 +593,8 @@ def write_manifest(found):
 
 
 def is_valid(key, keys):
+    if key.startswith(('arslan/cuts/', 'portraits/npc/ar_', 'portraits/mates/ar_')):
+        return True
     family_age = re.match(r'^portraits/family/(?:[a-z0-9_]+/)?(?:son|daughter)_age(?:5|10|15|20|40)(?:_v[1-5])?(?:_half)?$', key)
     return key in keys or family_age or key.startswith(('map-cities/', 'map-ruins/', 'map-ruin-additions/', 'map-nature/', 'map-settlements/', 'portraits/story-player/', 'gold/cuts/', 'jhook/cuts/', 'portraits/player/', 'portraits/player-aged/', 'portraits/player-elderly/', 'portraits/player-ages-20261123/', 'portraits/courtiers/', 'portraits/building-managers/', 'portraits/gardeners/', 'interiors/royal-gardens/', 'landmarks/', 'map-discoveries/', 'characters/',
                                           'items/', 'item-kinds/', 'goods/', 'good-kinds/', 'figureheads/', 'relics/', 'relic-kinds/',

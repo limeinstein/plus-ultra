@@ -15,7 +15,7 @@ const out = process.env.EXPEDITION_TERRAIN_OUT || path.join(root, 'artifacts/wor
     page.setDefaultTimeout(35000);
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-    await page.goto(pathToFileURL(path.join(root, 'index.html')).href, { waitUntil: 'domcontentloaded', timeout: 180000 });
+    await page.goto((process.env.WEB_BASE ? new URL('index.html',process.env.WEB_BASE).href : pathToFileURL(path.join(root, 'index.html')).href), { waitUntil: 'domcontentloaded', timeout: 180000 });
     await page.waitForFunction(() => G.Game.geoReady && document.querySelector('.title-wrap .loading.done') && !G.Loader.shown());
     await page.evaluate(async () => {
       await G.Game.prepareRenderer();

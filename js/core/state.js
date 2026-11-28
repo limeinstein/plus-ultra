@@ -363,6 +363,7 @@
   };
   ST.deserialize = function (json) {
     var S = ST.migrateAlias(JSON.parse(json));
+    if (S.arslan && G.Arslan) G.Arslan.restoreSave(S);
     if (G.VoyagePlans) G.VoyagePlans.migrate(S);   // 옛 일지에서 지워졌던 경쟁자 발표 단서를 재조사 정보로 복구한다.
     if (G.TradeGoods) G.TradeGoods.migrate(S);     // 나뉜 교역품 (도자기 → 중국 도자기·유럽 도기 …)
     if (G.R && G.R.mergeItemList && S.player && S.player.items) G.R.mergeItemList(S.player.items);   // 같은 물건은 한 칸 (2026-10-20)

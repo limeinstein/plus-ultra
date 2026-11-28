@@ -13,9 +13,9 @@
   function cfg() { return (G.BALANCE && G.BALANCE.succession) || {}; }
 
   /** 그 대(代) 사람의 열쇠 — 이름이 같아도 시작 해가 다르면 다른 사람 */
-  SC.key = function (sp, idx) { var h = sp.holders[idx]; return h ? sp.id + ':' + h[0] + ':' + h[2] : null; };
+  SC.key = function (sp, idx) { var h = sp.holders[idx]; return h ? (h[7] || sp.id + ':' + h[0] + ':' + h[2]) : null; };
   SC.curKey = function (sp, date) { return SC.key(sp, G.Sponsor.holderIndex(sp, date)); };
-  function holderOf(sp, key) { for (var i = 0; i < sp.holders.length; i++) if (SC.key(sp, i) === key) return { h: sp.holders[i], i: i }; return null; }
+  function holderOf(sp, key) { for (var i = sp.holders.length - 1; i >= 0; i--) if (SC.key(sp, i) === key) return { h: sp.holders[i], i: i }; return null; }
 
   /** 새 게임·옛 저장: 지금 자리에 있는 사람들을 조용히 기억해 둔다 */
   SC.sync = function () {
@@ -39,7 +39,7 @@
   function ended(h) { return h[4] === 'x' ? '자리에서 물러나셨다' : '세상을 떠나셨다'; }
   function endedPlain(sp, h) {
     if (h[4] === 'x') return '자리에서 물러났다';
-    return sp.type === 'king' || sp.type === 'pope' || h[4] !== 'g' ? '세상을 떠났다' : '자리를 내주었다';
+    return h[4] === 'g' ? '자리를 내주었다' : '세상을 떠났다';
   }
 
   /** 제독이 떠올리는 말 */
@@ -114,12 +114,12 @@
   }
 
   /** 해마다 (W.newYear) — 대가 바뀐 자리를 찾아 처리한다 */
-  SC.year = function () {
+  SC.year = function (seats) {
     var s = S(), out = [], c = cfg();
-    var orph = G.Sponsor && G.Sponsor.orphanContract ? G.Sponsor.orphanContract() : null;   // 후원자의 도시가 사라진 계약 (2026-10-25)
+    var orph = !seats && G.Sponsor && G.Sponsor.orphanContract ? G.Sponsor.orphanContract() : null;   // 후원자의 도시가 사라진 계약 (2026-10-25)
     if (orph) out.push(orph);
     if (!s.spHolder) { SC.sync(); return out; }
-    G.SPONSORS.forEach(function (sp) {
+    (seats || G.SPONSORS).forEach(function (sp) {
       var prev = s.spHolder[sp.id], cur = SC.curKey(sp);
       if (prev === undefined) { s.spHolder[sp.id] = cur; return; }
       if (prev === cur) return;
@@ -134,7 +134,8 @@
       var h = old.h, rel = s.sponsors[sp.id];
       var nxt = cur ? G.Sponsor.holder(sp) : null;
       var base = function (n) { return String(n || '').replace(/\(.*?\)/g, '').replace(/\s/g, ''); };
-      if (nxt && base(h[2]) === base(nxt)) {          // 섭정·수렴청정이 끝나 몸소 다스리기 시작 (같은 사람)
+      var nextRow = cur && sp.holders[G.Sponsor.holderIndex(sp)];
+      if (nxt && (base(h[2]) === base(nxt) || (h[6] && nextRow && h[6] === nextRow[6]))) {          // 섭정·수렴청정이 끝나 몸소 다스리기 시작 (같은 사람)
         if (/섭정|수렴청정/.test(h[2]) && (rel || ((sp.type === 'king' || sp.type === 'pope') && sp.pw >= 4)))
           out.push({ icon: 'crown', history: true, text: sp.title + ' ' + nxt + U.jx(nxt, '이/가') + ' 섭정을 거두고 몸소 다스리기 시작했다.' });
         if (rel && rel.know && rel.know[prev]) rel.know[cur] = rel.know[prev];

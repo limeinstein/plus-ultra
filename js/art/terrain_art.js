@@ -1,7 +1,8 @@
-/* 가까운 숲은 Blender에서 구운 수종, 먼 숲은 지형 셰이더. 위치·수종은 같은 지리 자료에서 고른다. */
+/* 지도 배율이 달라져도 같은 좌표의 수목과 지형 부품을 같은 원화로 그린다. */
 (function(G){
   'use strict';
   var A=G.TerrainArt={},data=G.TERRAIN_ART,images=[],chunks=new Map(),crossingArt=new Map(),last=null,plate=null,scratch=null;
+  var chunkStyle=null,detailTiles=new Map();
   var unitCanvas=null,plantsCanvas=null,stats={trees:0,candidates:0,buildMs:0,drawMs:0};
   var foliage=/^(?:tree-|detail-(?:grass|shrub|snowshrub|fern|broadleaf|reeds|reed-tall|miscanthus|wheat|barley|cactus)-)/;
   var soilPatterns=new WeakMap();
@@ -21,25 +22,32 @@
     c.clearRect(0,0,w,h);c.setTransform(scale,0,0,scale,-x*scale,-y*scale);return c;
   }
   // 앞에 서 있는 나무와 풀만 대원의 윤곽 안에 겹친다. 옆의 숲과 뒤쪽 나무의 명암은 이어진다.
-  function coverMember(ctx,it,rect,draw,grid,dx,dy,fade){
+  function coverMember(ctx,it,rect,draw,tiles,dx,dy,ratio,fade){
     var padding=it.leader?2:0;
     var l=Math.floor(rect[0])-padding,t=Math.floor(rect[1])-padding;
     var w=Math.ceil(rect[0]+rect[2])-l+padding,h=Math.ceil(rect[1]+rect[3])-t+padding;
-    var look=G.FX.party.cover,plants=new Set();
-    coverCells(l-dx,t-dy,w,h,function(key){
-      var list=grid.get(key);if(!list)return;
-      list.forEach(function(prop){
-        var x=prop.x+dx,y=prop.y+dy;
-        if(prop.foot+dy>it.y+look.footGap&&x<l+w&&x+prop.w>l&&y<t+h&&y+prop.h>t)plants.add(prop);
+    var look=G.FX.party.cover,plants=[];
+    tiles.forEach(function(view){
+      var s=view.scale*ratio,ox=view.x*ratio+dx,oy=view.y*ratio+dy;
+      var left=(l-ox)/s,top=(t-oy)/s,right=left+w/s,bottom=top+h/s;
+      var tile=view.tile;
+      if(right<tile.left||left>tile.right||bottom<tile.top||top>tile.bottom)return;
+      var seen=new Set();
+      coverCells(left,top,w/s,h/s,function(key){
+        var list=tile.grid.get(key);
+        if(list)list.forEach(function(p){
+          if(seen.has(p)||oy+p.foot*s<=it.y+look.footGap||p.x>=right||p.x+p.w<=left||p.y>=bottom||p.y+p.h<=top)return;
+          seen.add(p);plants.push({id:p.id,x:ox+p.x*s,y:oy+p.y*s,w:p.w*s,h:p.h*s,foot:oy+p.foot*s,opacity:p.opacity});
+        });
       });
     });
-    if(!plants.size){draw(ctx);return false;}
+    if(!plants.length){draw(ctx);return false;}
     if(!unitCanvas){unitCanvas=document.createElement('canvas');plantsCanvas=document.createElement('canvas');}
     var scale=G.Game&&G.Game.overlayScale||1,sw=Math.ceil(w*scale),sh=Math.ceil(h*scale);
     var unit=prepareLayer(unitCanvas,sw,sh,scale,l,t),leaves=prepareLayer(plantsCanvas,sw,sh,scale,l,t);
     draw(unit);
-    Array.from(plants).sort(function(a,b){return a.foot-b.foot;}).forEach(function(prop){
-      leaves.globalAlpha=prop.opacity;A.sprite(leaves,prop.id,prop.x+dx,prop.y+dy,prop.w,prop.h);
+    plants.sort(function(a,b){return a.foot-b.foot;}).forEach(function(prop){
+      leaves.globalAlpha=prop.opacity;A.sprite(leaves,prop.id,prop.x,prop.y,prop.w,prop.h);
     });
     if(it.camp||it.onFoot===false){
       var mask=leaves.createLinearGradient(0,t,0,t+h);
@@ -102,9 +110,8 @@
     }
     return null;
   }
-  function width(t,zoom){return clamp(zoom*(t.worldSize||fx().treeWorld*t.size),t.worldSize?5:9,t.worldSize?G.FX.terrainBiomes.detailMaxPx:76);}
   A.ready=Promise.all(data?data.sheets.map(function(src,i){return new Promise(function(resolve){var im=new Image();images[i]=im;im.onload=resolve;im.onerror=resolve;im.src=src;});}):[]);
-  A.ready.then(function(){plate=null;});
+  A.ready.then(function(){A.invalidate();});
   A.has=function(id){return !!(data&&data.sprites['wonder-'+id]);};
   A.sprite=function(ctx,id,x,y,w,h){
     var r=data&&data.sprites[id],im=r&&images[r.sheet];if(!im||!im.complete||!im.naturalWidth)return false;
@@ -198,8 +205,7 @@
     return base;
   }
   function chunk(cx,cy){
-    cx=((cx+90)%180+180)%180-90;
-    var f=fx(),key=[cx,cy,f.treeCell,f.forestDensity,f.tropicalDensity,f.tropicalScale,yearKey(),seasonKey(),JSON.stringify(G.FX.terrainBiomes),JSON.stringify(G.FX.terrainCoast)].join(':'),got=chunks.get(key);if(got)return got;
+    var f=fx();
     var out=[],N=Math.round(2/f.treeCell),cell=2/N,coastFx=G.FX.terrainCoast;
     var dfx=G.FX.terrainBiomes,style=dfx.vegetation,plains=dfx.plains,rocks=dfx.rocks;
     var tall=plains.tall,grainPlaces=cropCenters(cx,cy,tall);
@@ -298,76 +304,158 @@
         out.push({lon:lon,lat:lat,id:id,size:1,worldSize:size,opacity:opacity,priority:hash(ix+13,iy+19)});
       }
     }
-    chunks.set(key,out);if(chunks.size>160)chunks.delete(chunks.keys().next().value);return out;
+    // 한 구역의 수목을 한 번 정해 두면 줌이나 이웃 구역의 밀도가 달라져도 같은 나무가 남는다.
+    if(out.length>f.plantsPerChunk){out.sort(function(a,b){return a.priority-b.priority;});out.length=f.plantsPerChunk;}
+    var lon=cx*2+1,lat=cy*2+1,origin=lat+G.Terrain.lift(lon,lat),z=f.forestTileZoom;
+    var tile={lon:lon,lat:lat,plants:[],grid:new Map(),left:Infinity,top:Infinity,right:-Infinity,bottom:-Infinity};
+    out.forEach(function(t){
+      var w=z*(t.worldSize||f.treeWorld*t.size),m=A.metrics(t.id,w);if(!m)return;
+      var x=G.Geo.wrapLon(t.lon-lon)*z,foot=(origin-t.lat-G.Terrain.lift(t.lon,t.lat))*z;
+      var p={id:t.id,x:x-w/2,y:foot-m.height*.93,foot:foot,w:w,h:m.height,tree:!t.worldSize,opacity:t.opacity==null?1:t.opacity};
+      tile.plants.push(p);
+      tile.left=Math.min(tile.left,p.x);tile.top=Math.min(tile.top,p.y,p.foot-p.w*.24);
+      tile.right=Math.max(tile.right,p.x+p.w*1.1);tile.bottom=Math.max(tile.bottom,p.y+p.h,p.foot+p.w*.24);
+      if(foliage.test(p.id))coverCells(p.x,p.y,p.w,p.h,function(key){
+        if(!tile.grid.has(key))tile.grid.set(key,[]);tile.grid.get(key).push(p);
+      });
+    });
+    tile.plants.sort(function(a,b){return a.foot-b.foot;});
+    return tile;
+  }
+  function paintPlants(ctx,plants){
+    ctx.fillStyle='#101c0b';ctx.globalAlpha=.17;ctx.beginPath();
+    plants.forEach(function(p){
+      if(!p.tree)return;
+      var x=p.x+p.w*.62;
+      ctx.moveTo(x+p.w*.44*Math.cos(-.4),p.foot+p.w*.44*Math.sin(-.4));
+      ctx.ellipse(x,p.foot,p.w*.44,p.w*.16,-.4,0,Math.PI*2);ctx.closePath();
+    });
+    ctx.fill();
+    plants.forEach(function(p){ctx.globalAlpha=p.opacity;A.sprite(ctx,p.id,p.x,p.y,p.w,p.h);});
+    ctx.globalAlpha=1;
+  }
+  function rasterTile(tile,res){
+    var cv=document.createElement('canvas');
+    cv.width=Math.ceil((tile.right-tile.left+2)*res);cv.height=Math.ceil((tile.bottom-tile.top+2)*res);
+    var tc=cv.getContext('2d');tc.setTransform(res,0,0,res,(1-tile.left)*res,(1-tile.top)*res);
+    paintPlants(tc,tile.plants);return cv;
+  }
+  // 두 해상도의 판은 같은 수목과 같은 발치를 쓴다. 더 가까이에서는 원화를 직접 그린다.
+  function paintTile(ctx,tile,scale,left,top,right,bottom){
+    var f=fx(),detail=f.forestDetailZoom/f.forestTileZoom,cv,res;
+    if(scale<=1){
+      res=1;cv=tile.canvas||(tile.canvas=rasterTile(tile,res));
+    }else if(scale<=detail){
+      res=detail;cv=detailTiles.get(tile);
+      if(cv)detailTiles.delete(tile);else cv=rasterTile(tile,res);
+      detailTiles.set(tile,cv);
+      if(detailTiles.size>f.forestDetailTiles)detailTiles.delete(detailTiles.keys().next().value);
+    }
+    if(cv){
+      ctx.drawImage(cv,tile.left-1,tile.top-1,cv.width/res,cv.height/res);
+    }else{
+      paintPlants(ctx,tile.plants.filter(function(p){
+        return p.x+p.w*1.1>=left&&p.x<=right&&Math.max(p.y+p.h,p.foot+p.w*.24)>=top&&p.y<=bottom;
+      }));
+    }
   }
   A.draw=function(ctx,cam,toScreen,actor){
-    var f=fx();if(!data||!G.Terrain.ready||!f.enabled||cam.zoom<=f.farZoom){stats.trees=0;stats.candidates=0;stats.drawMs=0;stats.pendingChunks=0;return;}
+    var f=fx();if(!data||!G.Terrain.ready||!f.enabled||cam.zoom<=f.farZoom){stats.trees=0;stats.candidates=0;stats.visibleChunks=0;stats.drawMs=0;stats.pendingChunks=0;return;}
     var now=performance.now(),margin=f.forestCacheMargin,fade=clamp((cam.zoom-f.farZoom)/(f.nearZoom-f.farZoom),0,1),sx=(1800+margin*2)/cam.zoom,sy=(1100+margin*2)/cam.zoom;
-    var left=Math.floor((cam.lon-sx/2)/2),right=Math.floor((cam.lon+sx/2)/2),bottom=Math.floor((cam.lat-sy/2)/2),top=Math.floor((cam.lat+sy/2)/2);
-    var key=[left,right,bottom,top,f.treeCell,f.forestDensity,f.tropicalDensity,f.tropicalScale,yearKey(),seasonKey(),JSON.stringify(G.FX.terrainBiomes),JSON.stringify(G.FX.terrainCoast)].join(':');
+    fade=fade*fade*(3-2*fade);
+    var left=Math.floor((cam.lon-sx/2)/2),right=Math.floor((cam.lon+sx/2)/2);
+    var bottom=Math.max(-41,Math.floor((cam.lat-sy/2-f.reliefMax-f.treeWorld*3)/2)),top=Math.min(40,Math.floor((cam.lat+sy/2)/2));
+    var style=[yearKey(),seasonKey(),JSON.stringify(f),JSON.stringify(G.FX.terrainBiomes),JSON.stringify(G.FX.terrainCoast)].join(':');
+    if(style!==chunkStyle){A.invalidate();chunkStyle=style;}
+    var key=[left,right,bottom,top].join(':');
     if(!last||last.key!==key){
-      var pending=[];for(var y=bottom;y<=top;y++)for(var x=left;x<=right;x++)pending.push([x,y]);
-      pending.sort(function(a,b){return Math.hypot(a[0]*2+1-cam.lon,a[1]*2+1-cam.lat)-Math.hypot(b[0]*2+1-cam.lon,b[1]*2+1-cam.lat);});last={key:key,list:[],pending:pending};
-    }
-    var changed=false,buildStart=performance.now();while(last.pending.length){var c=last.pending.shift();last.list=last.list.concat(chunk(c[0],c[1]));changed=true;if(performance.now()-buildStart>f.chunkBudgetMs)break;}
-    if(changed){last.list=last.list.filter(function(t){return !t.formation;});(G.LANDSCAPE_FORMATIONS||[]).forEach(function(r){if(Math.abs(G.Geo.wrapLon(r.lon-cam.lon))<sx&&Math.abs(r.lat-cam.lat)<sy)last.list.push({lon:r.lon,lat:r.lat,id:A.formationId(r),size:1,worldSize:r.width,priority:-1,formation:true,discovery:r.discovery});});last.list.sort(function(a,b){return a.priority-b.priority;});}stats.buildMs=performance.now()-buildStart;stats.pendingChunks=last.pending.length;
-    stats.candidates=last.list.length;var draw=[],cacheKey=last.key+':'+last.list.length+':'+f.treeWorld+':'+f.maxTrees,anchor=plate&&toScreen(plate.lon,plate.lat),dx=plate?anchor[0]-plate.anchor[0]:0,dy=plate?anchor[1]-plate.anchor[1]:0;
-    if(!plate||plate.key!==cacheKey||plate.zoom!==cam.zoom||Math.abs(dx)>margin*.6||Math.abs(dy)>margin*.6){
-    var cap=Math.round(f.maxTrees*Math.min(1,Math.pow(cam.zoom/f.nearZoom,2)));
-    for(var i=0;i<last.list.length;i++){var t=last.list[i],p=toScreen(t.lon,t.lat);if(p[0]<-margin||p[0]>1600+margin||p[1]<-margin||p[1]>1000+margin)continue;draw.push({t:t,p:p});if(draw.length>=cap)break;}
-    draw.sort(function(a,b){return a.p[1]-b.p[1];});
-    var canvas=plate?plate.canvas:document.createElement('canvas');canvas.width=1600+margin*2;canvas.height=900+margin*2;var pc=canvas.getContext('2d');pc.translate(margin,margin);pc.imageSmoothingEnabled=true;
-    pc.fillStyle='#101c0b';pc.globalAlpha=.17;pc.beginPath();
-    for(var i=0;i<draw.length;i++){
-      var t=draw[i].t,p=draw[i].p,w=width(t,cam.zoom),m=A.metrics(t.id,w);if(!m)continue;
-      if(t.worldSize)continue; // 암벽·모래에는 나무용 타원 그림자를 붙이지 않는다.
-      pc.moveTo(p[0]+w*(.12+.44*Math.cos(-.4)),p[1]+w*.44*Math.sin(-.4));pc.ellipse(p[0]+w*.12,p[1],w*.44,w*.16,-.4,0,Math.PI*2);pc.closePath();
-    }
-    var formations=[],coverGrid=new Map();
-    pc.fill();pc.globalAlpha=1;for(var i=0;i<draw.length;i++){
-      var t=draw[i].t,p=draw[i].p,w=width(t,cam.zoom),m=A.metrics(t.id,w);if(!m)continue;
-      if(t.formation)formations.push({id:t.id,discovery:t.discovery,x:p[0]-w/2,y:p[1]-m.height*.93,w:w,h:m.height});
-      else{
-        var prop={id:t.id,x:p[0]-w/2,y:p[1]-m.height*.93,foot:p[1],w:w,h:m.height,opacity:t.opacity==null?1:t.opacity};
-        pc.globalAlpha=prop.opacity;
-        if(A.sprite(pc,prop.id,prop.x,prop.y,prop.w,prop.h)&&foliage.test(prop.id))coverCells(prop.x,prop.y,prop.w,prop.h,function(key){
-          if(!coverGrid.has(key))coverGrid.set(key,[]);coverGrid.get(key).push(prop);
-        });
+      var pending=[],tiles=[];
+      for(var y=bottom;y<=top;y++)for(var x=left;x<=right;x++){
+        var cx=((x+90)%180+180)%180-90, id=cx+':'+y, saved=chunks.get(id);
+        if(saved){chunks.delete(id);chunks.set(id,saved);if(saved.plants.length)tiles.push(saved);}
+        else pending.push({x:cx,y:y,id:id,distance:Math.hypot(x*2+1-cam.lon,y*2+1-cam.lat)});
       }
+      pending.sort(function(a,b){return a.distance-b.distance;});
+      last={key:key,tiles:tiles,pending:pending,keep:Math.max(160,(right-left+1)*(top-bottom+1))};
+      while(chunks.size>last.keep)chunks.delete(chunks.keys().next().value);
     }
-    plate={canvas:canvas,key:cacheKey,zoom:cam.zoom,lon:cam.lon,lat:cam.lat,anchor:toScreen(cam.lon,cam.lat),trees:draw.length,formations:formations,coverGrid:coverGrid};dx=dy=0;stats.plateBuilds=(stats.plateBuilds||0)+1;
+    var buildStart=performance.now();
+    while(last.pending.length){
+      var cell=last.pending.shift(),tile=chunk(cell.x,cell.y);
+      chunks.set(cell.id,tile);
+      if(chunks.size>last.keep)chunks.delete(chunks.keys().next().value);
+      if(tile.plants.length)last.tiles.push(tile);
+      if(performance.now()-buildStart>f.chunkBudgetMs)break;
     }
+    stats.buildMs=performance.now()-buildStart;stats.pendingChunks=last.pending.length;
+    var cacheKey=last.key+':'+last.tiles.length,anchor=plate&&toScreen(plate.lon,plate.lat);
+    var ratio=plate?cam.zoom/plate.zoom:1;
+    var dx=plate?anchor[0]-plate.anchor[0]*ratio:0,dy=plate?anchor[1]-plate.anchor[1]*ratio:0;
+    // 확대 애니메이션 동안은 완성된 숲 판을 지면에 맞춰 옮긴다. 화면 끝이 드러나거나 확대가 끝나면 원화로 다시 그린다.
+    var reuse=plate&&plate.complete&&cam.zoomT&&ratio!==1&&ratio<=f.forestZoomReuse&&ratio>=1/f.forestZoomReuse&&
+      dx-margin*ratio<=0&&dy-margin*ratio<=0&&dx+(1600+margin)*ratio>=1600&&dy+(900+margin)*ratio>=900;
+    if(!reuse&&(!plate||plate.key!==cacheKey||plate.zoom!==cam.zoom||Math.abs(dx)>margin*.6||Math.abs(dy)>margin*.6)){
+      var canvas=plate?plate.canvas:document.createElement('canvas'),w=1600+margin*2,h=900+margin*2;
+      if(canvas.width!==w)canvas.width=w;
+      if(canvas.height!==h)canvas.height=h;
+      var pc=canvas.getContext('2d');pc.setTransform(1,0,0,1,0,0);pc.clearRect(0,0,w,h);
+      var scale=cam.zoom/f.forestTileZoom,views=[],count=0,candidates=0;
+      last.tiles.sort(function(a,b){return b.lat-a.lat||a.lon-b.lon;});
+      last.tiles.forEach(function(tile){
+        candidates+=tile.plants.length;
+        var p=toScreen(tile.lon,tile.lat),left=(-margin-p[0])/scale,top=(-margin-p[1])/scale;
+        var right=left+w/scale,bottom=top+h/scale;
+        if(tile.right<left||tile.bottom<top||tile.left>right||tile.top>bottom)return;
+        pc.setTransform(scale,0,0,scale,margin+p[0],margin+p[1]);
+        paintTile(pc,tile,scale,left,top,right,bottom);
+        views.push({tile:tile,x:p[0],y:p[1],scale:scale});count+=tile.plants.length;
+      });
+      var formations=[];
+      (G.LANDSCAPE_FORMATIONS||[]).forEach(function(r){
+        if(Math.abs(G.Geo.wrapLon(r.lon-cam.lon))>sx||Math.abs(r.lat-cam.lat)>sy)return;
+        var p=toScreen(r.lon,r.lat),w=Math.min(r.width*cam.zoom,G.FX.terrainBiomes.detailMaxPx);
+        var id=A.formationId(r),m=A.metrics(id,w);if(!m)return;
+        var x=p[0]-w/2,y=p[1]-m.height*.93;
+        if(x+w>=-margin&&x<=1600+margin&&y+m.height>=-margin&&y<=900+margin)
+          formations.push(r);
+      });
+      plate={canvas:canvas,key:cacheKey,zoom:cam.zoom,lon:cam.lon,lat:cam.lat,anchor:toScreen(cam.lon,cam.lat),trees:count,formations:formations,tiles:views,complete:!last.pending.length};
+      stats.candidates=candidates;stats.visibleChunks=views.length;stats.plateBuilds=(stats.plateBuilds||0)+1;dx=dy=0;ratio=1;
+    }
+    if(plate.key===cacheKey&&!last.pending.length)plate.complete=true;
     var expedition=actor&&actor.mode==='land',ap=actor&&!expedition&&toScreen(actor.lon,actor.lat);
     ctx.save();ctx.globalAlpha=fade;
     plate.formations.forEach(function(r){
       if(r.discovery&&G.VolcanoArt&&G.VolcanoArt.landmark(r.discovery,cam.zoom))return;
       if(r.discovery&&G.DiscoveryIcon&&G.DiscoveryIcon.replacesFormation(r.discovery))return;
-      A.sprite(ctx,r.id,r.x+dx,r.y+dy,r.w,r.h);
+      var p=toScreen(r.lon,r.lat),id=A.formationId(r),w=Math.min(r.width*cam.zoom,G.FX.terrainBiomes.detailMaxPx),m=A.metrics(id,w);
+      A.sprite(ctx,id,p[0]-w/2,p[1]-m.height*.93,w,m.height);
     });
     if(ap){
       if(!scratch){scratch=document.createElement('canvas');scratch.width=1600;scratch.height=900;}
-      var sc=scratch.getContext('2d');sc.clearRect(0,0,1600,900);sc.drawImage(plate.canvas,dx-margin,dy-margin);
+      var sc=scratch.getContext('2d');sc.clearRect(0,0,1600,900);sc.drawImage(plate.canvas,dx-margin*ratio,dy-margin*ratio,plate.canvas.width*ratio,plate.canvas.height*ratio);
       var fadeActor=sc.createRadialGradient(ap[0],ap[1],25,ap[0],ap[1],95);fadeActor.addColorStop(0,'rgba(0,0,0,.78)');fadeActor.addColorStop(1,'rgba(0,0,0,0)');
       sc.globalCompositeOperation='destination-out';sc.fillStyle=fadeActor;sc.fillRect(ap[0]-95,ap[1]-95,190,190);sc.globalCompositeOperation='source-over';
       ctx.drawImage(scratch,0,0);
-    }else ctx.drawImage(plate.canvas,dx-margin,dy-margin);
+    }else ctx.drawImage(plate.canvas,dx-margin*ratio,dy-margin*ratio,plate.canvas.width*ratio,plate.canvas.height*ratio);
     ctx.restore();stats.trees=plate.trees;stats.drawMs=performance.now()-now;
     // 건널 수 있는 도시의 다리·나루도 통행 판정에 등록된 위치를 쓴다.
-    ctx.save();ctx.lineCap='round';G.Hydro.routes().forEach(function(r){r.crossings.forEach(function(c){
+    ctx.save();ctx.globalAlpha*=fade;ctx.lineCap='round';G.Hydro.routes().forEach(function(r){r.crossings.forEach(function(c){
       if(!G.Hydro.crossingOpen(c))return;
       var p=toScreen(c.lon,c.lat);if(p[0]<-500||p[0]>2100||p[1]<-500||p[1]>1400)return;
       var art=crossingBanks(r,c);if(!art)return;
       var a=toScreen(art.banks[0][0],art.banks[0][1]),b=toScreen(art.banks[1][0],art.banks[1][1]),dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy),pier=Math.min(.18,f.ferryPierLength/Math.max(.01,art.span));
       // 넓은 강은 물 위의 긴 막대 다리 대신 두 물가에 붙은 나루를 그린다.
-      ctx.strokeStyle='#393125';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(a[0]+dx*(art.span<=f.bridgeMaxSpan?1:pier),a[1]+dy*(art.span<=f.bridgeMaxSpan?1:pier));
-      if(art.span>f.bridgeMaxSpan){ctx.moveTo(b[0],b[1]);ctx.lineTo(b[0]-dx*pier,b[1]-dy*pier);}ctx.stroke();ctx.strokeStyle='#a38c64';ctx.lineWidth=5;ctx.stroke();
-      if(length>3){ctx.strokeStyle='#64543d';ctx.lineWidth=1;for(var t=0;t<=1;t+=Math.max(.015,5/length)){if(art.span>f.bridgeMaxSpan&&t>pier&&t<1-pier)continue;var x=a[0]+dx*t,y=a[1]+dy*t;ctx.beginPath();ctx.moveTo(x-dy/length*3,y+dx/length*3);ctx.lineTo(x+dy/length*3,y-dx/length*3);ctx.stroke();}}
+      var deck=f.bridgeWidth*cam.zoom,plank=deck*.375;
+      ctx.strokeStyle='#393125';ctx.lineWidth=deck;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(a[0]+dx*(art.span<=f.bridgeMaxSpan?1:pier),a[1]+dy*(art.span<=f.bridgeMaxSpan?1:pier));
+      if(art.span>f.bridgeMaxSpan){ctx.moveTo(b[0],b[1]);ctx.lineTo(b[0]-dx*pier,b[1]-dy*pier);}ctx.stroke();ctx.strokeStyle='#a38c64';ctx.lineWidth=deck*.625;ctx.stroke();
+      if(length>plank){ctx.strokeStyle='#64543d';ctx.lineWidth=deck*.125;for(var t=0;t<=1;t+=Math.max(.015,deck*.625/length)){if(art.span>f.bridgeMaxSpan&&t>pier&&t<1-pier)continue;var x=a[0]+dx*t,y=a[1]+dy*t;ctx.beginPath();ctx.moveTo(x-dy/length*plank,y+dx/length*plank);ctx.lineTo(x+dy/length*plank,y-dx/length*plank);ctx.stroke();}}
     });});ctx.restore();
     if(expedition){
-      var grid=plate.coverGrid;
-      return function(target,member,bounds,draw){return coverMember(target,member,bounds,draw,grid,dx,dy,fade);};
+      var views=plate.tiles;
+      return function(target,member,bounds,draw){return coverMember(target,member,bounds,draw,views,dx,dy,ratio,fade);};
     }
   };
   A.stats=function(){return Object.assign({},stats,{chunks:chunks.size});};
-  A.invalidate=function(){chunks.clear();crossingArt.clear();last=null;plate=null;};
+  A.invalidate=function(){chunks.clear();detailTiles.clear();crossingArt.clear();last=null;plate=null;};
 })(window.G=window.G||{});

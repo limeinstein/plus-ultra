@@ -229,8 +229,8 @@
     var rad=i*Math.PI/4, a=Math.cos(rad), b=Math.sin(rad), u=a*x-b*y, v=b*x+a*y;
     return [(.83205*u+.55470*v)*r,(.39253*u-.58880*v)*r];
   }
-  function* findQuay(dry,wet,sign,sail,connected,home,direction,width,limit,unit,shore,cave){
-    var best=null, scale=clamp(width*.20,13,27)*unit;
+  function* findQuay(dry,wet,sign,sail,connected,home,direction,width,limit,shore,cave){
+    var best=null, scale=clamp(width*.20,13,27);
     var origin=[home.x,home.y], cx=shore?shore[0]:0, cy=shore?shore[1]:0;
     for(var i=0;i<8;i++){
       var art=atlas('quays',String(i)), r=scale*256*1.75/(5.4*art.r[2]);
@@ -240,9 +240,9 @@
       if(align<-.3)continue;
       for(var j=0;j<offsets.length;j++){
         if(j&&j%24===0)yield;
-        var o=offsets[j],x=cx+o[0]*unit,y=cy+o[1]*unit,d=o[2];
+        var o=offsets[j],x=cx+o[0],y=cy+o[1],d=o[2];
         if(d>limit)break;
-        var score=d+Math.max(0,Math.hypot(x-origin[0],y-origin[1])/unit-width)*.44+(1-align)*9;
+        var score=d+Math.max(0,Math.hypot(x-origin[0],y-origin[1])-width)*.44+(1-align)*9;
         if(best&&score>=best.score)continue;
         var a=[x+bank[0],y+bank[1]], p=[x+tip[0],y+tip[1]];
         if(cave&&Math.hypot(a[0]-cave.x,a[1]-cave.y)<cave.foot[0]+scale*.16)continue;
@@ -337,13 +337,11 @@
     // 부두는 확대해도 같은 지면 폭을 덮어야 입구와 배가 서로 다른 쪽에 놓인다.
     var harbor=fx().harbor, quay=null;
     if(model.harbor){
-      var ref=lod(model.n,{zoom:harbor.referenceZoom}), unit=Math.max(1,zoom/ref.zoom);
-      var size=model.hideBuildings?1:model.n, start=harbor.width[size], end=harbor.close[size];
-      var quayWidth=start+(end-start)*zoomProgress(zoom/unit), limit=fx().shoreSearch;
-      quay=yield* findQuay(dry,wet,sign,sail,connected,center,direction,quayWidth,limit,unit,null,prop);
+      var quayWidth=harbor.width[model.hideBuildings?1:model.n], limit=fx().shoreSearch;
+      quay=yield* findQuay(dry,wet,sign,sail,connected,center,direction,quayWidth,limit,null,prop);
       if(!quay&&c.dock){
         var dock=[dx,(originY-c.dock[0]-lift(c.dock[1],c.dock[0]))*zoom];
-        quay=yield* findQuay(dry,wet,sign,sail,connected,center,direction,quayWidth,limit,unit,dock,prop);
+        quay=yield* findQuay(dry,wet,sign,sail,connected,center,direction,quayWidth,limit,dock,prop);
       }
     }
     // 해안에 땅이 비좁으면 시설 사이 간격과 크기를 함께 줄여 같은 물가를 바라보게 한다.
@@ -428,18 +426,14 @@
     return {buildings:buildings,dock:quay,dry:true,center:center,prop:prop};
   }
   CI.cullPadding=function(c,zoom){
-    return 160+(c.port?fx().harbor.moveMax*zoom:0);
+    var cfg=fx(), extent=cfg.search+cfg.width[3];
+    if(c.port&&c.dock)extent+=cfg.shoreSearch+cfg.referenceZoom*Math.max(Math.abs(G.Geo.wrapLon(c.dock[1]-c.lon)),Math.abs(c.dock[0]-c.lat));
+    return 24+extent*zoom/cfg.referenceZoom;
   };
-  function zoomProgress(z){
+  function modelView(n,opts){
     var cfg=fx();
-    return clamp((z-cfg.zoomStart)/(cfg.zoomEnd-cfg.zoomStart),0,1);
-  }
-  function lod(n,opts){
-    var t=opts.zoom;
-    if(!t)return {zoom:0,width:fx().chart[n]*(opts.scale||1)};
-    var band=Math.round(Math.log2(Math.max(1,t))*fx().zoomBands), z=Math.pow(2,band/fx().zoomBands);
-    var f=zoomProgress(z);
-    return {band:band,zoom:z,width:fx().width[n]+(fx().close[n]-fx().width[n])*f};
+    if(!opts.zoom)return {zoom:0,width:cfg.chart[n]*(opts.scale||1),scale:1};
+    return {zoom:cfg.referenceZoom,width:cfg.width[n],scale:opts.zoom/cfg.referenceZoom};
   }
   CI.beginModels=function(){budget=fx().plansPerFrame;until=performance.now()+fx().prepareMs;};
   CI.site=function(c,model,view,force){
@@ -452,21 +446,19 @@
       }
       return {buildings:geometry(model,view.width),prop:prop,dock:dock};
     }
-    var memo=shoreMemo.get(c);
-    var key=view.band+':'+model.layout+':'+c.lon+':'+c.lat;
-    if(!memo){memo=new Map();shoreMemo.set(c,memo);}
-    var job=memo.get(key);
+    var key=[model.layout,c.lon,c.lat,c.dock,view.width,view.zoom].join(':');
+    var job=shoreMemo.get(c);
+    if(job&&job.key!==key)job=null;
     if(job&&job.done)return job.value;
     if(!force&&(budget<=0||performance.now()>=until))return null;
     if(!force)budget--;
     if(!job){
-      job={iterator:groundPlan(c,model,view.width,view.zoom)};
-      memo.set(key,job);
-      if(memo.size>fx().cachedBands)memo.delete(memo.keys().next().value);
+      job={key:key,iterator:groundPlan(c,model,view.width,view.zoom)};
+      shoreMemo.set(c,job);
     }
     do {
       var next=job.iterator.next();
-      if(next.done){memo.set(key,next);return next.value;}
+      if(next.done){job.value=next.value;job.done=true;delete job.iterator;return job.value;}
     }while(force||performance.now()<until);
     return null;
   };
@@ -517,12 +509,12 @@
   }
   CI.draw=function(ctx,c,x,y,opts){
     opts=opts||{};
-    var model=CI.plan(c), view=lod(model.n,opts);
+    var model=CI.plan(c), view=modelView(model.n,opts), ratio=view.scale, width=view.width*ratio;
     var im=model.hideBuildings?null:asset('map-cities/'+model.culture,opts);
-    if(!model.hideBuildings&&!im)return view.zoom?waiting(ctx,x,y,view.width):oldDraw(ctx,c,x,y,opts);
+    if(!model.hideBuildings&&!im)return view.zoom?waiting(ctx,x,y,width):oldDraw(ctx,c,x,y,opts);
     var plan=CI.site(c,model,view,false);
-    if(!plan)return waiting(ctx,x,y,view.width);
-    var ratio=view.zoom?opts.zoom/view.zoom:1, all=[], center=plan.center||{x:0,y:0};
+    if(!plan)return waiting(ctx,x,y,width);
+    var all=[], center=plan.center||{x:0,y:0};
     var ax=x+center.x*ratio,ay=y+center.y*ratio;
     ctx.save();
     ctx.imageSmoothingEnabled=true;
@@ -530,31 +522,32 @@
       var art=item.p.art, pic=asset(art.key,opts);
       // 외관이 읽히기 전에는 같은 역할의 지역 모형을 쓴다.
       if(!pic){art=atlas(model.culture,FALLBACK[item.p.role]||item.p.role);pic=im;}
-      if(art)paint(ctx,art,pic,x+item.x*ratio,y+item.y*ratio,item.w,all,true,!!view.zoom&&item.p===model.main);
+      var main=model.main,highlight=view.zoom&&main&&item.p.role===main.role&&item.p.id===main.id;
+      if(art)paint(ctx,art,pic,x+item.x*ratio,y+item.y*ratio,item.w*ratio,all,true,highlight);
     });
     var prop=plan.prop, propBox=null;
     if(prop){
       var propImage=asset(prop.art.key,opts);
       if(propImage){
-        paint(ctx,prop.art,propImage,x+prop.x*ratio,y+prop.y*ratio,prop.w,all,!!view.zoom);
+        paint(ctx,prop.art,propImage,x+prop.x*ratio,y+prop.y*ratio,prop.w*ratio,all,!!view.zoom);
         propBox=all[all.length-1];
       }
     }
     // 쌍서에서는 부두까지 포함해 이름표가 가리지 않도록 한다.
-    var mark=model.hideBuildings?null:boundsOf(all,y,ax,ay,view.width);
+    var mark=model.hideBuildings?null:boundsOf(all,y,ax,ay,width);
     var q=plan.dock;
-    if(q&&q.art){var qm=asset(q.art.key,opts);if(qm)paint(ctx,q.art,qm,x+q.x*ratio,y+q.y*ratio,q.w,all,false);}
-    if(!mark)mark=boundsOf(all,y,ax,ay,view.width);
+    if(q&&q.art){var qm=asset(q.art.key,opts);if(qm)paint(ctx,q.art,qm,x+q.x*ratio,y+q.y*ratio,q.w*ratio,all,false);}
+    if(!mark)mark=boundsOf(all,y,ax,ay,width);
     if(propBox)mark.prop={id:prop.id,box:propBox};
     var own=!model.hideBuildings&&opts.owner!==false&&G.Dominion&&G.R.cityOwner(c), color=own&&G.Dominion.color(own);
     if(color&&all.length){
-      var w=clamp(view.width*.23,9,23), base=ay+3;
+      var w=clamp(width*.23,9,23), base=ay+3;
       ctx.fillStyle='rgba(20,14,8,.68)';ctx.fillRect(ax-w/2-1,base-1,w+2,4);
       ctx.fillStyle=color;ctx.fillRect(ax-w/2,base,w,2);
     }
     if(!model.hideBuildings&&opts.auto&&all.length){
       ctx.strokeStyle='#74c6bb';ctx.lineWidth=1.45;ctx.beginPath();
-      ctx.ellipse(ax,ay+3,Math.max(6,view.width*.15),3.5,0,0,Math.PI*2);ctx.stroke();
+      ctx.ellipse(ax,ay+3,Math.max(6,width*.15),3.5,0,0,Math.PI*2);ctx.stroke();
     }
     if(!all.length){
       ctx.fillStyle=color||'#d9b36f';ctx.strokeStyle='#3e3021';
@@ -563,5 +556,5 @@
     ctx.restore();
     return mark;
   };
-  CI.view=function(c,opts){return lod(CI.plan(c).n,opts);};
+  CI.view=function(c,opts){return modelView(CI.plan(c).n,opts);};
 })(window.G=window.G||{});
